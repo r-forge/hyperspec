@@ -1,11 +1,15 @@
 require (lattice) 
+## TODO: delete old generics
+## TODO: seq_along
+## TODO: convert for roxygen
+## TODO: label -> expression doc
 
 setClass ("hyperSpec",
           representation = representation (
             wavelength = "numeric",     # spectral abscissa
             data = "data.frame",        # data: spectra & information related to
                                         # each spectrum
-            label = "list",             # labels and units of the stored 
+            label = "expression",       # labels and units of the stored data 
             log = "data.frame"          # log of transformations etc.
             ),
           prototype = prototype (
@@ -24,16 +28,16 @@ setClass ("hyperSpec",
             if (length (object@wavelength) != ncol)
               return ("Length of wavelength vector differs from number of data points per spectrum.")
 
-##            if (any (order (object@wavelength) != sequence (length (object@wavelength))))
-##              return ("wavelength must be ordered.")
-
             if (any (is.na (match (colnames (object@log),
                                    c("short.description", "long.description",  "date", "user")))))
               return ("Slot log does not have the correct columns.")
+		  
+		  	if (class (object@label) == "list")
+				return ("old style object with list label. Please update to expression via update (object).")
             return (TRUE)
           }
           )
-
+		  
 ###-----------------------------------------------------------------------------
 ###
 ###  initialize -- initialization, called by new ("hyperSpec", ...)
@@ -64,17 +68,17 @@ setMethod ("initialize", "hyperSpec",
             
   if (is.null (wavelength)){
     if (is.null (colnames (.Object@data$spc)))
-      colnames (.Object@data$spc) <- sequence (ncol (.Object@data$spc))
+      colnames (.Object@data$spc) <- seq_len (ncol (.Object@data$spc))
     .Object@wavelength <- as.numeric (colnames (.Object@data$spc))
   } else {
     .Object@wavelength <- wavelength
     long$wavelength <- wavelength
   }
   if (any (is.na (.Object@wavelength)))
-    .Object@wavelength <- sequence (ncol (.Object@data$spc))
+    .Object@wavelength <- seq_len (ncol (.Object@data$spc))
 
   if (is.null (label)){
-    .Object@label <- vector ("list", length (colnames (.Object@data)) + 1)
+    .Object@label <- rep (expression (), ncol(.Object@data) + 1)
     names (.Object@label) <- c(".wavelength", colnames (.Object@data))  
   } else{
     .Object@label <- label
@@ -102,7 +106,7 @@ setMethod ("initialize", "hyperSpec",
 orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
                      short = "orderwl", date = NULL, user = NULL){
   ord <- order (x@wavelength, na.last = na.last, decreasing = decreasing)
-  if (any (ord != sequence (length (x@wavelength)))){
+  if (any (ord != seq_len (length (x@wavelength)))){
     x@wavelength <- x@wavelength [ord]
     x@data$spc <-  x@data$spc [, ord, drop = FALSE]
   }
@@ -322,6 +326,7 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 ###  .paste.row
 ###  
 ###  
+## TODO: test
 .paste.row <- function (x, label = "", name = "", ins = 0, i = NULL, val = FALSE, range = TRUE,
                        digits = getOption ("digits"), max.print = 15, shorten.to = c (3,3)){
   if (is.null (name)) name = ""
@@ -339,10 +344,10 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
         val <- x
       if (length (val) > max.print)
         dummy <- c(
-                   format (val [1 : shorten.to[1]],
+                   format (val [seq_len (shorten.to[1])], # was 1 :
                            digits = digits, trim = TRUE),
                    "...",
-                   format (val [-(1 : (length (val) - shorten.to[2]))],
+                   format (val [-seq_len (length (val) - shorten.to[2])], # was 1 :
                            digits = digits, trim = TRUE)
                    )
       else
@@ -409,11 +414,11 @@ setMethod (as.character, "hyperSpec", function (x,
   n.cols <- ncol (x@data)
 
   chr <- c(chr, paste ("data: ",
-                   as.character (x@label$.data), 
+                   #as.character (x@label$.data), 
                    " (", nrow(x@data), " rows x ", n.cols, " columns)", sep = ""))
   if (n.cols > 0)
     for (n in names (x@data))
-      chr <- c(chr, .paste.row (x@data[[n]], x@label[[n]], n, ins = 3,
+      chr <- c(chr, .paste.row (x@data[[n]], x@label[n], n, ins = 3, ###
                            i = match (n, names (x@data)), val = TRUE))
 
   chr <- c(chr, "log:")
@@ -441,7 +446,7 @@ setMethod (as.character, "hyperSpec", function (x,
                     sep = "   ")
           )
   
-  for (i in sequence (nrow (x@log)))
+  for (i in seq_len (nrow (x@log)))
     chr <- c (chr, paste (format (i, justify = "right", width = width [1]),
                       format (as.character (x@log[i, 1]), justify = "right", width = width [2]),
                       format (long [i], justify = "right", width = width [3]),
@@ -659,7 +664,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
            function (x, y){
              validObject (x)
              x@data$spc <-  x@data$spc %*% y@data$spc 
-             x@wavelength = 1 : ncol (y) 
+             x@wavelength = seq_len (ncol (y)) 
              x@label$.wavelength = NA
              x@log <- logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
              return (x)
@@ -750,7 +755,7 @@ setMethod("rbind2", signature (x = "hyperSpec", y = "missing"), function (x, y) 
 ### cbind & rbind
 ###  
 ###  
-
+## TODO: test
 bind <- function (direction = stop ("direction ('c' or 'r') required"),
                   ..., short = NULL, user = NULL, date = NULL){
   dots <- list (...)
@@ -771,7 +776,7 @@ bind <- function (direction = stop ("direction ('c' or 'r') required"),
 
     logs <- list() 
 
-    for (i in 2 : length (dots)){
+    for (i in seq_len (length (dots)) [-1]){
       if (! is (dots[[i]], "hyperSpec"))
         stop ("bind only works on hyperSpec objects.")
       validObject (dots[[i]])
@@ -933,7 +938,7 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
   long <- list (MARGIN = MARGIN, FUN = FUN, ...,
                 call = deparse (sys.call()[])
                   )
-  if (all (MARGIN == 1:2)){
+  if (all (MARGIN == 1 : 2)){
     X@data$spc <- do.call (FUN, list (X@data$spc, ...)) 
   } else {
     X@data <- .apply(X@data, MARGIN = MARGIN, FUN = FUN, ...)
@@ -944,7 +949,7 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
       if (ncol (X@data$spc) != length (X@wavelength)){ 
         wl <- as.numeric (colnames (X@data$spc))
         if (length (wl) != ncol (X@data$spc) || any (is.na (wl)))
-          X@wavelength <- sequence (ncol (X@data$spc))
+          X@wavelength <- seq_len (ncol (X@data$spc))
         else
           X@wavelength <- wl
         
@@ -968,12 +973,12 @@ setMethod ("split", "hyperSpec", function (x, f, drop = TRUE, #...,
                                            short = NULL, user = NULL, date = NULL){
   validObject (x)
 
-  hyperlist <- split (sequence (nrow (x@data)), f, drop) 
+  hyperlist <- split (seq_len (nrow (x@data)), f, drop) 
 
   log <-  logentry (x, short = short, long = list (f = f, drop = drop),
                     user = user, date = date)
   
-  for (i in sequence (length (hyperlist))){
+  for (i in seq_len (length (hyperlist))){
     hyperlist[[i]] <- x[hyperlist[[i]],]
   
     hyperlist[[i]]@log <- log
@@ -1042,7 +1047,7 @@ setMethod ("aggregate", "hyperSpec", function (x,
                 append.rows = append.rows, ...)
 
   if (!is.list (by))
-      by <- split (sequence (nrow (x)), by, drop = TRUE)
+      by <- split (seq_len (nrow (x)), by, drop = TRUE)
 
   if (is.null (out.rows)){
     dummy <- .apply (data = x@data[by [[1]], , drop = FALSE], MARGIN = 2, FUN = FUN, ...)
@@ -1079,8 +1084,8 @@ setMethod ("aggregate", "hyperSpec", function (x,
     }
   }
 
-  x@data <- data[sequence (r - 1), , drop = FALSE]
-  x@data[, col.aggregate] <- factor (x@data[, col.aggregate], levels = sequence (length (by)))
+  x@data <- data[seq_len (r - 1), , drop = FALSE]
+  x@data[, col.aggregate] <- factor (x@data[, col.aggregate], levels = seq_len (length (by)))
 
   if (!is.null (names (by)) && !any (is.na (names (by)))) 
     levels (x@data[, col.aggregate]) <- names (by) 
@@ -1157,6 +1162,8 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 ###
 ###  plotmap - plot map 
 ###
+
+## TODO: test trellis.args$at
 ##setGeneric ("plotmap", function (object, ...) standardGeneric("plotmap"))
 
 ##setMethod ("plotmap", "hyperSpec", function (object,
@@ -1209,20 +1216,21 @@ plotmap <- function (object,
   }
 
   if (is.null (trellis.args$at) && is.factor (z)){
-    trellis.args$at <- (0 : nlevels (z)) + 0.5
+    trellis.args$at <- seq_len (nlevels (z) + 1) - 0.5
   }
 
   if (is.null (trellis.args$aspect))
       trellis.args$aspect = "iso"
 
   if (is.null (trellis.args$xlab)){
-    trellis.args$xlab <- object@label[[names(object@data)[ix]]] 
+	  ## TODO check
+    trellis.args$xlab <- object@label[names(object@data)[ix]] 
     if (is.null (trellis.args$xlab))
       trellis.args$xlab <- use.x  
   }
 
   if (is.null (trellis.args$ylab)){
-    trellis.args$ylab = object@label[[names(object@data)[iy]]] 
+    trellis.args$ylab = object@label[names(object@data)[iy]] 
     if (is.null (trellis.args$ylab))
       trellis.args$ylab <- use.y
   }
@@ -1366,7 +1374,7 @@ plotc <- function (object, use.c = "c", func = sum, ...,
       if (is.na (match (z, colnames (object@data))))
         stop ("z did not evaluate to a column in object@data.")
       if (is.null (zlab))
-        zlab <- object@label[[z]]
+        zlab <- object@label[z]
       if (is.null (zlab))
         zlab <- z
       z <- object@data[, z]
@@ -1388,7 +1396,7 @@ plotc <- function (object, use.c = "c", func = sum, ...,
             plot.dots)
         
   if (is.null (plot.dots$xlab)){
-    plot.dots$xlab <- object@label[[names(object@data)[ic]]] 
+    plot.dots$xlab <- object@label[names(object@data)[ic]] 
     if (is.null (plot.dots$xlab))
       plot.dots$xlab <- use.c  
   }
@@ -1494,7 +1502,7 @@ plotspc <- function  (object,
     x [[i]] <- x [[i]] - xoffset[i]
 
   ## indices into columns of spectra matrix spc 
-  ispc <- relist (1 : length (u.wl.range), wavelength.range)
+  ispc <- relist (seq_len (length (u.wl.range)), wavelength.range)
 
   rm (wavelength.range)
   spc <- object[[,, u.wl.range, drop = FALSE, index = TRUE, warn = FALSE]]
@@ -1515,7 +1523,7 @@ plotspc <- function  (object,
                    )
     if (nrow (spc) == 0)
       stop ("No spectra after func was applied.")
-    ##    spc.range <- 1 : nrow (spc)
+    ##    spc.range <- seq_len (nrow (spc))
   }
 
 
@@ -1530,8 +1538,8 @@ plotspc <- function  (object,
   if (nrow (spc) > spc.nmax){
     warning (paste ("Number of spectra exceeds spc.nmax. Only the first",
                     spc.nmax, "are plotted."))
-    spc <- spc [1 : spc.nmax, , drop = FALSE]
-    yoffset <- yoffset[1 : spc.nmax]
+    spc <- spc [seq_len (spc.nmax), , drop = FALSE]
+    yoffset <- yoffset [seq_len (spc.nmax)]
   }
   
   ## stacked plot
@@ -1539,9 +1547,11 @@ plotspc <- function  (object,
     yoffset <- apply (spc, 1, range, na.rm = TRUE)
     yoffset [2,] <- yoffset[2,] - yoffset [1,]
     yoffset <- c(-yoffset[1,], 0) + c(0, cumsum (yoffset[2,]))
-    yoffset <- yoffset [sequence (nrow (spc))]
-  }
+    #if (is.null () ) 
+    yoffset <- yoffset [seq_len (nrow (spc))]
+    #print (yoffset)
   spc <- sweep (spc, 1, yoffset, "+")
+  }
 
   if (! add){
     ## Plot area
@@ -1637,7 +1647,7 @@ plotspc <- function  (object,
         axis.dots$y$side <- 2
       if (is.null (axis.dots$y$at) & stacked){
         axis.dots$y$at <- apply (spc, 1, min)
-        axis.dots$y$labels <- sequence (nrow (spc))
+        axis.dots$y$labels <- seq_len (nrow (spc))
       }
       
       do.call (axis, axis.dots$y)
@@ -1676,15 +1686,17 @@ plotspc <- function  (object,
   col <- rep (col, nrow(spc))
 
   ## start loop over wavelength ranges
-  for (i in seq (along = x)){
+  for (i in seq_along (x)){
     if (!is.null (fill)){
+		## TODO: fill -> grouping for fill, col -> fill color, border -> border color
+		## 
       if (!is.vector (fill) || !is.character(fill))
         stop ("fill must be a character vector.")
 
       if (nrow (spc) < 2)
         stop ("Nothing to fill: at least 2 spectra are required")
 
-      ifill <- 1 : nrow (spc)
+      ifill <- seq_len (nrow (spc))
 
       if (nrow (spc) %% 2) {
         ifill <- ifill [- (floor (nrow (spc) / 2) + 1)]
@@ -2112,7 +2124,7 @@ write.txt.long <- function (object,
   validObject (object)
 
   col.spc <- match ("spc", colnames (object@data))
-  i <- sequence (ncol (object@data))
+  i <- seq_len (ncol (object@data))
 
 
   X <- array2df (object@data$spc, levels = list (n = NA, .wavelength = object@wavelength),
@@ -2237,12 +2249,12 @@ spc.fit.poly <- function (fit, apply, poly.order = 1){
 
 ###-----------------------------------------------------------------------------
 ###
-###  spc.fit.poly.cb -> .below
+###  spc.fit.poly.below
 ###  
 ###
 ##setGeneric ("spc.fit.poly.below", function (fit, ...) standardGeneric("spc.fit.poly.below"))
 ##setMethod ("spc.fit.poly.below", "hyperSpec", function (fit, apply,
-spc.fit.poly.below <- function (fit, apply,
+spc.fit.poly.below <- function (fit, apply = fit,
                                 poly.order = 1,
                                 npts.min = NULL,
                                 noise = numeric (nrow (fit)) 
@@ -2264,7 +2276,7 @@ spc.fit.poly.below <- function (fit, apply,
   
   p <- matrix (nrow = nrow(fit) , ncol = poly.order + 1)
   use.range <- list () #matrix (nrow = nrow(fit) , ncol = 2) 
-  for (i in sequence (nrow (fit))){
+  for (i in seq_len (nrow (fit))){
     use.old <- logical (nwl (fit))
     use <- !use.old
     
@@ -2299,6 +2311,8 @@ spc.fit.poly.below <- function (fit, apply,
 }
 #)
 
+## TODO: eval.poly
+
 ### ****************************************************************************
 ###
 ###  some more convenient functions, not operating on hyperSpec objects
@@ -2319,7 +2333,7 @@ vec2array <- function (ivec, dim) {
   colnames (iarr) <- letters[9 : (9 + ndim - 1)]       # i, j, k, ...
 
   ivec <- (ivec - 1)
-  for (j in sequence (ndim))
+  for (j in seq_len (ndim))
     iarr [, j] <- (ivec %% pdim [j + 1]) / pdim [j]
   
   1 + floor(iarr)
@@ -2360,7 +2374,7 @@ array2df <- function (x, levels = rep (NA, length (dims)),
   dims  <- c(dim (x))
   cprod <- c(1, cumprod (dims))
   rprod <- c(rev (cumprod (rev (dims))), 1)[-1]
-  idim  <- sequence (length (dims)) [! sapply (levels, is.null)]
+  idim  <- seq_len (length (dims)) [! sapply (levels, is.null)]
   
   df <- matrix (x, nrow = length (x), ncol = length (idim) + 1)
   
