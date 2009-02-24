@@ -4,7 +4,10 @@
 ###############################################################################
 
 file = "~/Uni/Projekte/Alois-cartilage/080606/080606c.txt"
-system.time (spc <- scan.txt.Renishaw (file))
+file = "~/Uni/Projekte/Spikes/static-high.txt"
+
+system.time (spc2 <- scan.txt.Renishaw (file, "ts"))
+system.time (spc <- read.txt.Renishaw (file, "ts"))
 ###-----------------------------------------------------------------------------
 ###
 ###  read.txt.Renishaw - import Raman measurements from Renishaw .txt file
@@ -25,7 +28,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 					ts = 	c(t= "t / s"),
 					stop ("unknown format for Renishaw .txt files.")
 			),
-			wavelength = expression (tilde(nu) / cm^-1) ,
+			.wavelength = expression (tilde(nu) / cm^-1) ,
 			spc = "I / a.u.")	
 
 	first <- scan(file, nlines = 1, quiet = TRUE)
@@ -67,7 +70,8 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 		spc [pos.spc + seq_len (nrow (fbuf))] <- fbuf [, ncol]
 		pos.spc <- pos.spc + nrow (fbuf)
 		
-		dummy <- fbuf [fbuf[,3] == wl [1], seq_len (ncol - 2)]
+		dummy <- fbuf [fbuf[, ncol - 1] == wl [1], seq_len (ncol - 2), drop = FALSE]
+		
 		data [pos.data + seq_len (nrow (dummy)), ] <- dummy
 		pos.data <- pos.data + nrow (dummy)
 		

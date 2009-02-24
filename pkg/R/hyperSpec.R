@@ -9,7 +9,7 @@ setClass ("hyperSpec",
             wavelength = "numeric",     # spectral abscissa
             data = "data.frame",        # data: spectra & information related to
                                         # each spectrum
-            label = "expression",       # labels and units of the stored data 
+            label = "list",             # labels and units of the stored 
             log = "data.frame"          # log of transformations etc.
             ),
           prototype = prototype (
@@ -78,7 +78,7 @@ setMethod ("initialize", "hyperSpec",
     .Object@wavelength <- seq_len (ncol (.Object@data$spc))
 
   if (is.null (label)){
-    .Object@label <- rep (expression (), ncol(.Object@data) + 1)
+    .Object@label <- vector ("list", length (colnames (.Object@data)) + 1)
     names (.Object@label) <- c(".wavelength", colnames (.Object@data))  
   } else{
     .Object@label <- label
@@ -418,7 +418,7 @@ setMethod (as.character, "hyperSpec", function (x,
                    " (", nrow(x@data), " rows x ", n.cols, " columns)", sep = ""))
   if (n.cols > 0)
     for (n in names (x@data))
-      chr <- c(chr, .paste.row (x@data[[n]], x@label[n], n, ins = 3, ###
+      chr <- c(chr, .paste.row (x@data[[n]], x@label[[n]], n, ins = 3,
                            i = match (n, names (x@data)), val = TRUE))
 
   chr <- c(chr, "log:")
@@ -1223,14 +1223,13 @@ plotmap <- function (object,
       trellis.args$aspect = "iso"
 
   if (is.null (trellis.args$xlab)){
-	  ## TODO check
-    trellis.args$xlab <- object@label[names(object@data)[ix]] 
+    trellis.args$xlab <- object@label[[names(object@data)[ix]]] 
     if (is.null (trellis.args$xlab))
       trellis.args$xlab <- use.x  
   }
 
   if (is.null (trellis.args$ylab)){
-    trellis.args$ylab = object@label[names(object@data)[iy]] 
+    trellis.args$ylab = object@label[[names(object@data)[iy]]] 
     if (is.null (trellis.args$ylab))
       trellis.args$ylab <- use.y
   }
@@ -1374,7 +1373,7 @@ plotc <- function (object, use.c = "c", func = sum, ...,
       if (is.na (match (z, colnames (object@data))))
         stop ("z did not evaluate to a column in object@data.")
       if (is.null (zlab))
-        zlab <- object@label[z]
+        zlab <- object@label[[z]]
       if (is.null (zlab))
         zlab <- z
       z <- object@data[, z]
@@ -1396,7 +1395,7 @@ plotc <- function (object, use.c = "c", func = sum, ...,
             plot.dots)
         
   if (is.null (plot.dots$xlab)){
-    plot.dots$xlab <- object@label[names(object@data)[ic]] 
+    plot.dots$xlab <- object@label[[names(object@data)[ic]]] 
     if (is.null (plot.dots$xlab))
       plot.dots$xlab <- use.c  
   }
@@ -1547,11 +1546,9 @@ plotspc <- function  (object,
     yoffset <- apply (spc, 1, range, na.rm = TRUE)
     yoffset [2,] <- yoffset[2,] - yoffset [1,]
     yoffset <- c(-yoffset[1,], 0) + c(0, cumsum (yoffset[2,]))
-    #if (is.null () ) 
-    yoffset <- yoffset [seq_len (nrow (spc))]
-    #print (yoffset)
-  spc <- sweep (spc, 1, yoffset, "+")
+    yoffset <- yoffset [sequence (nrow (spc))]
   }
+  spc <- sweep (spc, 1, yoffset, "+")
 
   if (! add){
     ## Plot area
