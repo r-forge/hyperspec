@@ -1,0 +1,202 @@
+\name{[-methods}
+\docType{methods}
+\alias{[-methods}
+\alias{[,hyperSpec-method}
+\alias{[}
+\alias{[[-methods}
+\alias{[[,hyperSpec-method}
+\alias{[[}
+\alias{$-methods}
+\alias{$,hyperSpec-method}
+\alias{$}
+\alias{[[<--methods}
+\alias{[[<-,hyperSpec-method}
+\alias{[[<-}
+\alias{[<--methods}
+\alias{[<-,hyperSpec-method}
+\alias{[<-}
+\alias{$<--methods}
+\alias{$<-,hyperSpec-method}
+\alias{$<-}
+
+\title{Extract and Replace Methods for hyperSpec}
+\description{
+  These Methods allow to extract and replace parts of the
+  \code{hyperSpec} object. 
+  
+  They work with respect to the spectra (rows of \code{x}), the columns
+  of the data matrix, and the wavelengths (columns of the spectra
+  matrix).
+
+  Thus, they can be used for selecting/deleting spectra, cutting the
+  spectral range, and extracting or setting the data belonging to the
+  spectra.
+
+  Convenient shortcuts for access of the spectra matrix and the
+  \code{data.frame} in slot \code{data} are provided.
+}
+\usage{
+## Extaction
+\S4method{[}{hyperSpec}(x, i, j, l, ..., index = FALSE, short = NULL, drop = FALSE)
+
+\S4method{[[}{hyperSpec}(x, i, j, l, ..., index = FALSE, drop = FALSE)
+
+\S4method{$}{hyperSpec}(x, name)
+
+## Shortcuts
+
+\S4method{[[}{hyperSpec}(x) 
+
+\S4method{$}{hyperSpec}(x, .)  
+
+\S4method{$}{hyperSpec}(x, ..) 
+
+## Replacement functions
+
+## S4 method for signature 'hyperSpec':
+x[i, j, short = NULL, \dots] <- value
+
+## S4 method for signature 'hyperSpec':
+x[[i, j, index = FALSE, short = NULL, \dots]] <- value
+
+## S4 method for signature 'hyperSpec':
+x$name <- value
+}
+\arguments{
+
+  \item{x}{ a \code{hyperSpec} Object}
+  
+  \item{i}{ row index: selects spectra}
+
+  \item{j, name}{selecting columns of \code{x@data}, for \code{[[<-}: see \code{l}}
+  \item{. ,..}{shortcut \code{name}s expanding to "all columns" and "all
+  columns except \code{spc}", respectively.}
+    
+  \item{l}{selecting columns of the spectra matrix. The default
+    behaviour is treating the \code{l} as wavelength, \emph{not} as
+    column index.}
+
+  \item{index}{If \code{TRUE}, the value(s) in \code{l} are treated as
+    column indices for the spectral matrix. Otherwise the numbers in
+    \code{l} are treated as wavelengths and the corresponding column
+    indices are looked up first via \code{\link{wl2i}}.}
+
+  \item{short}{short description for \code{\link{logentry}}.}
+  
+  \item{drop}{For \code{[[}: drop unnecessary dimensions, see
+    \code{\link[base]{drop}} and \code{\link[base]{Extract}}. Ignored for
+    \code{[}, as otherwise invalid \code{hyperSpec} objects might result.} 
+
+  \item{value}{the values to be assigned}
+  
+  \item{\dots}{ignored}
+}
+\details{
+  \emph{Extracting: \code{[}, \code{[[}, and \code{$}}.
+  
+  The version with single square brackets (\code{[}) returns the
+  resulting \code{hyperSpec} object.
+
+  \code{[[} yields \code{data.frame} of slot \code{@data} of that
+  corresponding \code{hyperSpec} object returned with the same arguments
+  by \code{[} if columns were selected (i.e. \code{j} is given),
+  otherwise the spectra \code{matrix} \code{x@data$spc}.
+  
+  \code{$} returns the selected column of the \code{data.frame} in slot
+  \code{@data}.
+  
+  \emph{Shortcuts.} Three shortcuts to conveniently extract much needed
+  parts of the object are defined:
+
+  \code{x[[]]} returns the spectra matrix.
+
+  \code{x$.}  returns the complete slot \code{@data}, including the
+  spectra matrix in column \code{$spc}, as a \code{data.frame}.
+
+  \code{x$..} returns a \code{data.frame} like \code{x$.} but without
+  the spectra matrix.
+
+  \emph{Replacing: \code{[<-}, \code{[[<-}, and \code{$<-}}.
+
+  \code{[[<-} replaces parts of the spectra matrix.
+
+  \code{[<-} replaces parts of the \code{data.frame} in slot
+  \code{x@data}.
+
+  \code{$<-} replaces a column of the \code{data.frame} in slot \code{x@data}.
+}
+\value{
+    For \code{[}, \code{[<-}, and \code{$<-} a \code{hyperSpec} object,
+    fot \code{[[} a matrix or \code{data.frame}, and for and \code{$}
+    the column of the \code{data.frame} \code{@data}.
+
+    \code{x[[]]} returns the complete spectra matrix.
+
+    \code{x$.} returns the complete slot \code{@data},
+
+    \code{x$..} returns the \code{data.frame} in \code{@data} but
+    without the column \code{@data$spc} containing the spectra matrix.
+}
+\seealso{\code{\link{wl2i}} on conversion of wavelength ranges to
+  indices.
+  
+  \code{\link[base]{drop}} and \code{\link[base]{Extract}} on \code{drop}.
+}
+  \examples{
+## index into the rows (spectra) -------------------------------------
+## make some "spectra"
+
+## numeric index
+plot (flu, "spc", lines.dots = list (lty = 2))
+plot (flu[1:3], "spc", add = TRUE, col = "red")     # select spectra
+plot (flu[-(1:3)], "spc", add = TRUE, col = "blue") # delete spectra
+
+## logic index
+plot (flu, "spc", lines.dots = list (lty = 2))
+index <- rnorm (6) > 0
+index
+plot (flu[index], "spc", add = TRUE, col = "red")   # select spectra
+plot (flu[!index], "spc", add = TRUE, col = "blue") # select spectra
+
+## index into the data columns ---------------------------------------
+range (chondro[[,"x"]])
+colnames (chondro[[,1]])
+dim (chondro[[,c(TRUE, FALSE, FALSE)]])
+chondro$x
+
+
+## the shortcut functions --------------------------------------------
+
+## extract the spectra matrix
+flu[[]]
+pca <- prcomp (flu[[]])
+
+## extract the data.frame including the spectra matrix
+flu$.
+dim(flu$.)
+colnames (flu$.)
+flu$.$spc
+
+calibration <- lm (spc ~ c, data = flu[,,450]$.)
+calibration
+
+flu$..
+colnames (flu$..)
+
+## replacement functions
+spc <- flu
+spc$.
+spc[, "c"] <- 16:11
+spc$.
+spc$z <- 1:6
+
+## be careful:
+spc[] <- 6:1
+spc$.
+
+spc[[]]
+spc[[3,]] <- -spc[[3,]]
+spc[[]]
+}
+\keyword{methods}
+\keyword{ ~~ other possible keyword(s)}

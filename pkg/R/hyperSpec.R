@@ -1967,15 +1967,15 @@ read.txt.wide <- function (file = stop ("filename is required"),
 }
 
 #' import Raman measurements from Renishaw .txt file
+#'  
+#' Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
+#' They come in a "long" format with columns (y x | time | z) wavelength intensity. 
+#' The first columns depend on the data type.
 #' @param file file name 
 #' @param data type of file, one of "spc", "xyspc", "zspc", "depth", "ts", see details. 
 #' @param nlines number of lines to read in each chunk, if 0 or less read whole file at once
 #' @param nspc number of spectra in the file
 #' @param ... passed to logentry
-#' @details 
-#' Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
-#' They come in a "long" format with columns (y x | time | z) wavelength intensity. 
-#' The first columns depend on the data type.
 #' @returnType 
 #' @return the \code{hyperSpec} object 
 #' @seealso \code{\link{read.txt.long}}, \code{\link{read.txt.wide}}, \code{\link[bae]{scan}}
@@ -2475,11 +2475,13 @@ mean_sd <- function (x, na.rm = TRUE)
 
 
 #' wc (word count) 
+#' 
+#' wc uses the system command wc
+#' 
 #' @param file the file name or pattern
-#' @param flags the parameters to count, character vector of the long form, e.g. c("lines", "words") 
+#' @param flags the parameters to count, character vector with the long form of the parameters 
 #' @returnType 
 #' @return data.frame with the counts and file names, or }\code{NULL} if wc is not available
-#' @details wc uses the system command wc
 #' @author cb
 #' @warning stops with an error if wc does not exist
 #' @export

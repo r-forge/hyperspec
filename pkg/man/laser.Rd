@@ -1,0 +1,24 @@
+\name{laser}
+\alias{laser}
+\docType{data}
+\title{Laser Emission}
+\description{
+A time series of an unstable laser emission.
+}
+\usage{data(laser)}
+\format{
+ The data set has 84 emission spectra measured during 95 min.
+ Each spectrum has 36 data points in the range of 404.5 nm to 405.8 nm. 
+}
+\details{
+  see \link{Vignette}
+}
+\author{C. Beleites}
+\examples{
+laser
+
+plot (laser)
+
+plot (laser[,,405], "ts", plot.dots = list (type = "b"))
+}
+\keyword{datasets}
