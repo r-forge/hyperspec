@@ -2,7 +2,6 @@ require (lattice)
 ## TODO: delete old generics
 ## TODO: seq_along
 ## TODO: convert for roxygen
-## TODO: label -> expression doc
 
 setClass ("hyperSpec",
           representation = representation (
@@ -31,9 +30,7 @@ setClass ("hyperSpec",
             if (any (is.na (match (colnames (object@log),
                                    c("short.description", "long.description",  "date", "user")))))
               return ("Slot log does not have the correct columns.")
-		  
-		  	if (class (object@label) == "list")
-				return ("old style object with list label. Please update to expression via update (object).")
+  
             return (TRUE)
           }
           )
@@ -1968,59 +1965,99 @@ read.txt.wide <- function (file = stop ("filename is required"),
          )
        ) 
 }
-#)
 
-###-----------------------------------------------------------------------------
-###
-###  read.txt.Renishaw - import Raman measurements from Renishaw .txt file
-###  
-###  Renishaw .wxd files are converted to .txt ASCII files by their batch converter. 
-###  Format:
-###  (y x) wl int
-###  
-#setGeneric ("read.txt.Renishaw", function (file, ...) standardGeneric("read.txt.Renishaw"))
-#setMethod ("read.txt.Renishaw", "character",  function (file = stop ("filename is required"), data = "xyspc", ...){
-read.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", ...){
-  switch (data,
-          xyspc = read.txt.long (
-            file = file,
-            cols = list (
-              y = expression ("/" (y, mu * m)), 
-              x = expression ("/" (x, mu * m)), 
-              wavelength = expression (tilde(nu) / cm^-1) ,
-              spc = "I / a.u."),
-            header = FALSE,
-            ...
-            ),
-          spc = read.txt.long (file = file,
-            cols = list (
-              wavelength = expression (tilde(nu) / cm^-1) ,
-              spc = "I / a.u."),
-            header = FALSE,
-            ...
-            ),
-          zspc = ,
-          depth = read.txt.long (
-            file = file,
-            cols = list (
-              z = expression ("/" (z, mu * m)),
-              wavelength = expression (tilde(nu) / cm^-1) ,
-              spc = "I / a.u."),
-            header = FALSE,
-            ...
-            ),
-          ts = read.txt.long (
-            file = file,
-            cols = list (
-              t = "t / s",
-              wavelength = expression (tilde(nu) / cm^-1) ,
-              spc = "I / a.u."),
-            header = FALSE,
-            ...
-            ),
-          stop ("unknown format for Renishaw .txt files."))
+#' import Raman measurements from Renishaw .txt file
+#' @param file file name 
+#' @param data type of file, one of "spc", "xyspc", "zspc", "depth", "ts", see details. 
+#' @param nlines number of lines to read in each chunk, if 0 or less read whole file at once
+#' @param nspc number of spectra in the file
+#' @param ... passed to logentry
+#' @details 
+#' Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
+#' They come in a "long" format with columns (y x | time | z) wavelength intensity. 
+#' The first columns depend on the data type.
+#' @returnType 
+#' @return the \code{hyperSpec} object 
+#' @seealso \code{\link{read.txt.long}}, \code{\link{read.txt.wide}}, \code{\link[bae]{scan}}
+#' @author cb
+#' @export
+scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", 
+		nlines = 0, nspc = NULL, ...){
+	cols <- switch (data,
+			spc = NULL,   
+			xyspc = list (y = expression ("/" (y, mu * m)), 
+					x = expression ("/" (x, mu * m))), 
+			zspc = ,
+			depth = list (z = expression ("/" (z, mu * m))),
+			ts = 	list (t = "t / s"),
+			stop ("unknown format for Renishaw .txt files.")
+	)
+	cols <- c  (cols, list (.wavelength = expression (tilde(nu) / cm^-1) ,
+					spc = "I / a.u."))	
+	
+	first <- scan(file, nlines = 1, quiet = TRUE)
+	ncol <- length (first)
+	
+	if (ncol != length (cols))
+		stop (paste ("File has", ncol, "columns, while 'cols' gives", length (cols)))
+	
+	file <- file (file, "r")
+	on.exit(close(file))
+	
+	fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
+	
+	wl <- unique (fbuf[, ncol - 1])
+	
+	## if the file is to be read in chunks
+	## try to find out how many lines it has 
+	if (is.null (nspc))
+		if (nlines > 0){ 
+			nspc <- wc (summary(file)$description, "lines")
+			if (is.null (nspc))
+				stop ("failed guessing nspc.")
+			else {
+				cat ("Counted", nspc[1,1], "lines or ")
+				nspc <- nspc[1,1] / length (wl)
+				cat (nspc, "spectra.\n")
+			}
+		} else {
+			nspc <- nrow (fbuf) / length (wl)
+		}
+	
+	data <- matrix (NA, ncol = ncol - 2, nrow = nspc)
+	colnames (data) <- head (names (cols), -2) 
+	pos.data <- 0
+	
+	spc <- numeric (nspc * length (wl))
+	pos.spc <- 0
+	
+	while (length (fbuf > 0)){
+		cat (".")
+		spc [pos.spc + seq_len (nrow (fbuf))] <- fbuf [, ncol]
+		pos.spc <- pos.spc + nrow (fbuf)
+		
+		dummy <- fbuf [fbuf[, ncol - 1] == wl [1], seq_len (ncol - 2), drop = FALSE]
+		
+		data [pos.data + seq_len (nrow (dummy)), ] <- dummy
+		pos.data <- pos.data + nrow (dummy)
+		
+		fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
+		
+		if (length (fbuf > 0) & ! all(unique (fbuf[, ncol - 1]) %in% wl))
+			stop ("Wavelengths do not correspond to that of the other chunks. Is the size of the first chunk large enough to cover a complete spectrum?")
+	}
+	cat ("\n")
+	
+	spc <- matrix (spc, ncol = length (wl), nrow = nspc, byrow = TRUE)
+	
+	orderwl (new ("hyperSpec", spc = spc, data = as.data.frame (data), 
+					wavelength = wl, label = cols, 
+					log = list (short = "scan.txt.Renishaw",
+							long = list (file = file, cols = I (cols)), ...)
+			)
+	)
 }
-#)
+
 
 ###-----------------------------------------------------------------------------
 ###
@@ -2437,6 +2474,24 @@ mean_sd <- function (x, na.rm = TRUE)
 
 
 
+#' wc (word count) 
+#' @param file the file name or pattern
+#' @param flags the parameters to count, character vector of the long form, e.g. c("lines", "words") 
+#' @returnType 
+#' @return data.frame with the counts and file names, or }\code{NULL} if wc is not available
+#' @details wc uses the system command wc
+#' @author cb
+#' @warning stops with an error if wc does not exist
+#' @export
+wc <- function (file, flags = c("lines", "words", "bytes")){
+	if (length (system ("wc --help", intern = TRUE)) == 0)
+		return (NULL)
+	
+	wc <- paste ("wc", paste ("--", flags, sep = "", collapse = ", "), file)
+	wc <- read.table(pipe (wc))
+	colnames (wc) <- c(flags, "file")
+	wc
+} 
 
 
 
