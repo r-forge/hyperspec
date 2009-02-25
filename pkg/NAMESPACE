@@ -1,0 +1,77 @@
+#import(methods)
+importFrom (methods, initialize)
+importFrom (methods, Arith)
+importFrom (methods, show)
+importFrom (methods, cbind2)
+importFrom (methods, rbind2)
+importFrom (stats, aggregate)
+importFrom (graphics, plot)
+importFrom (lattice, trellis.focus)
+importFrom (lattice, panel.identify)
+importFrom (lattice, levelplot)
+importFrom (grDevices, rainbow) 
+#import(graphics)
+
+export (bind,
+        cbind.hyperSpec,
+        rbind.hyperSpec,
+        logentry,
+        plotmap, 
+##      plotc.lattice", 
+        plotc, 
+        plotspc, 
+        nwl, 
+        wl2i,
+        i2wl,
+        decomposition, 
+        read.txt.long,
+        read.txt.wide,
+        scan.txt.Renishaw,
+        write.txt.wide, 
+        write.txt.long, 
+        reduce.spc.resolution, 
+        spc.fit.poly, 
+        spc.fit.poly.below,
+        orderwl,
+        index.grid,
+        map.identify,
+        vec2array,
+        array2vec,
+        array2df,
+        matlab.palette,
+        pearson.dist,
+        mean_pm_sd,
+        mean_sd
+#        chondro,
+#        flu,
+#        laser
+        )
+
+exportClass (hyperSpec)
+
+exportMethods ("initialize",
+               "cbind2",
+               "rbind2",
+               "print",
+               "show",
+               "[", 
+               "$", 
+               "[[",
+               "as.data.frame",
+               "as.matrix",
+               "as.character",
+               "ncol", 
+               "nrow", 
+               "[<-", 
+               "[[<-", 
+               "$<-", 
+               "Arith",
+	            "%*%",
+               "apply", 
+               "split", 
+               "sweep", 
+               "aggregate", 
+               "plot"
+               ) 
+
+
