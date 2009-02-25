@@ -72,5 +72,5 @@ plotmap (chondro, z = z)
 
 plotmap (chondro, z = as.factor (z))
 }
-\keyword{plot}
+\keyword{hplot}
 

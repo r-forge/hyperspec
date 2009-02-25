@@ -82,4 +82,4 @@ plot (spc, "spcprctl5")
 }
 
 \keyword{methods}
-\keyword{plot}
+\keyword{hplot}

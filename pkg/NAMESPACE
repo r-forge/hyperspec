@@ -41,10 +41,8 @@ export (bind,
         matlab.palette,
         pearson.dist,
         mean_pm_sd,
-        mean_sd
-#        chondro,
-#        flu,
-#        laser
+        mean_sd,
+        wc
         )
 
 exportClass (hyperSpec)

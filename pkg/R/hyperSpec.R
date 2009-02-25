@@ -1976,7 +1976,6 @@ read.txt.wide <- function (file = stop ("filename is required"),
 #' @param nlines number of lines to read in each chunk, if 0 or less read whole file at once
 #' @param nspc number of spectra in the file
 #' @param ... passed to logentry
-#' @returnType 
 #' @return the \code{hyperSpec} object 
 #' @seealso \code{\link{read.txt.long}}, \code{\link{read.txt.wide}}, \code{\link[bae]{scan}}
 #' @author cb
@@ -2474,16 +2473,14 @@ mean_sd <- function (x, na.rm = TRUE)
 
 
 
-#' wc (word count) 
+#' word count 
 #' 
 #' wc uses the system command wc
 #' 
 #' @param file the file name or pattern
 #' @param flags the parameters to count, character vector with the long form of the parameters 
-#' @returnType 
-#' @return data.frame with the counts and file names, or }\code{NULL} if wc is not available
+#' @return data.frame with the counts and file names, or \code{NULL} if wc is not available
 #' @author cb
-#' @warning stops with an error if wc does not exist
 #' @export
 wc <- function (file, flags = c("lines", "words", "bytes")){
 	if (length (system ("wc --help", intern = TRUE)) == 0)

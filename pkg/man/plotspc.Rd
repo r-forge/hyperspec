@@ -159,5 +159,5 @@ plotspc (laser, func = mean_pm_sd,
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{plot}
+\keyword{hplot}
 

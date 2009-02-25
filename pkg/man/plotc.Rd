@@ -63,5 +63,5 @@ for (i in seq_along (wl)[-1]){
 }
 
 }
-\keyword{plot}
+\keyword{hplot}
 
