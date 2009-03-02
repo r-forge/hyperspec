@@ -1,7 +1,7 @@
 \name{scan.txt.Renishaw}
 \alias{scan.txt.Renishaw}
-\title{import Raman measurements from Renishaw...}
-\usage{scan.txt.Renishaw(file=stop("filename is required"), data=xyspc,
+\title{import Raman measurements from Renishaw ASCII-files	}
+\usage{scan.txt.Renishaw(file=stop("filename is required"), data="xyspc",
     nlines=0, nspc, ...)}
 \description{import Raman measurements from Renishaw .txt file}
 \details{Renishaw .wxd files are converted to .txt ASCII files by their batch converter.

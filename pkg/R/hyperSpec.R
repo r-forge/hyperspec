@@ -1966,7 +1966,7 @@ read.txt.wide <- function (file = stop ("filename is required"),
        ) 
 }
 
-#' import Raman measurements from Renishaw .txt file
+#' import Raman measurements from Renishaw ASC file
 #'  
 #' Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
 #' They come in a "long" format with columns (y x | time | z) wavelength intensity. 
