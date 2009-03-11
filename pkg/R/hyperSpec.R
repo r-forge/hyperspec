@@ -2,6 +2,7 @@ require (lattice)
 ## TODO: delete old generics
 ## TODO: seq_along
 ## TODO: convert for roxygen
+## TODO: sweep logentry
 
 setClass ("hyperSpec",
           representation = representation (

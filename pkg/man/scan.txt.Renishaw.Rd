@@ -1,6 +1,7 @@
+## TODO:
 \name{scan.txt.Renishaw}
 \alias{scan.txt.Renishaw}
-\title{import Raman measurements from Renishaw ASCII-files	}
+\title{import Raman measurements from Renishaw ASCII-files}
 \usage{scan.txt.Renishaw(file=stop("filename is required"), data="xyspc",
     nlines=0, nspc, ...)}
 \description{import Raman measurements from Renishaw .txt file}
