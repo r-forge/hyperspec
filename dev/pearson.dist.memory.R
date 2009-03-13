@@ -1,22 +1,27 @@
-# TODO: Add comment
+# more memory efficient version of pearson.dist
+# uses roughly half the memory compared to pearson.dist,
+# but is far slower.
+# Written completely in R. 
 # 
 # Author: Claudia Beleites
 #
 # Created: 2:43:16 PM Feb 26, 2009
 ###############################################################################
 
+## TODO: C version
+
 pearson.dist.memory <- function (x, mod = 1000){
 dummy <- apply (x, 1, sum)
 x <- sweep (x, 1, dummy / ncol (x))
 
-#cov <- (x %*% t(x)) / (ncol (x) - 1)
+## cov <- (x %*% t(x)) / (ncol (x) - 1)
 
 dummy <- x^2 
 dummy <- sqrt (apply (dummy, 1, sum) / (ncol (x) - 1))
 x <- sweep (x, 1, dummy, "/")
 
-#cor <- (x %*% t(x)) / (ncol (x) - 1)
-#cor [1, 2] <- sum (x [1,] * x[2,]) / (ncol (x) - 1) 
+## cor <- (x %*% t(x)) / (ncol (x) - 1)
+## cor [i, j] <- sum (x [i,] * x[j,]) / (ncol (x) - 1) 
 
 n <- nrow (x)
 dist <- numeric (n * (n - 1) / 2)	

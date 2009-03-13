@@ -738,7 +738,10 @@ setMethod("rbind2",
     function (x, y) {
        validObject (x)
        validObject (y)
-
+	
+	   if (any (x@wavelength != y@wavelength))
+		   error ("The wavelengths of the objects differ.")
+	   
        x@data <- rbind (x@data, y@data)
        x@log <- logentry (x, short = "rbind2", long = list (y = as.character (y)))
 

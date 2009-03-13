@@ -57,6 +57,10 @@ bind(direction = stop("direction ('c' or 'r') required"), ...,
 
   \code{bind} does the common work for both column- and row-wise binding.
 }
+\note{
+You might have to make sure that the objects either all have or all do not have
+rownames and/or colnames.   
+}
 \value{
   a \code{hyperSpec} object, possibly with different row order (for
   \code{bind ("c", \dots)} and \code{cbind2}).
