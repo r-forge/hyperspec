@@ -6,8 +6,8 @@
   An image or map of a summary value of each spectrum is plotted. 
 }
 \usage{
-plotmap (object, use.x = "x", use.y = "y", func = sum, z = NULL,
-         do.print = FALSE, print.args = NULL, trellis.args = NULL,
+plotmap (object, use.x = "x", use.y = "y", func = mean, cond = NULL, 
+         z = NULL, do.print = FALSE, print.args = NULL, trellis.args = NULL,
          ...)
 }
 
@@ -19,6 +19,8 @@ plotmap (object, use.x = "x", use.y = "y", func = sum, z = NULL,
   
   \item{func}{function to apply to compute the summary statistic that is
 	 displayed if \code{z} is not given.}
+  
+  \item{cond}{conditioning factor (for \code{\| cond} in the levelplot formula)}
   
   \item{z}{summary value to be displayed. If \code{z} is a
 	 \code{factor}, and the default color scheme (returned by

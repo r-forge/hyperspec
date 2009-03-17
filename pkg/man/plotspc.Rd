@@ -74,11 +74,11 @@ plotspc(object, wavelength.range = NULL, wavelength.index = FALSE,
   \code{\link[graphics]{axis}}. \code{axis.dots$x} should contain
   arguments for plotting the abscissa, \code{axis.dots$y} those for the
   ordinate (again as \code{lists}).}
-## TODO: ~~Describe \code{fill} here~~ 
+%% TODO: ~~Describe \code{fill} here~~ 
   \item{fill}{ }
 
   \item{border}{
-## TODO:   ~~Describe \code{border} here~~ 
+%% TODO:   ~~Describe \code{border} here~~ 
    }
 
   \item{title.dots}{list with further arguments to

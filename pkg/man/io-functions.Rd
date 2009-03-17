@@ -1,7 +1,7 @@
+%% TODO
 \name{import}
 \alias{read.txt.long}
 \alias{read.txt.wide}
-\alias{read.txt.Renishaw}
 \alias{write.txt.long}
 \alias{write.txt.wide}
 \alias{import}
@@ -30,8 +30,6 @@ read.txt.wide (file = stop ("filename is required"),
    cols = list (spc = "I / a.u.", .wavelength = expression (lambda / nm)),
    \dots)
 
-read.txt.Renishaw (file = stop ("filename is required"), data = "xyspc", \dots)
-
 write.txt.long (object,  file = stop ("filename required"),
    order = NULL, na.last = TRUE, decreasing = FALSE, quote = FALSE,
    sep = "\t", row.names = FALSE, col.names = TRUE,
@@ -50,8 +48,6 @@ write.txt.wide (object, file = stop ("filename required"),
   \item{header}{}
 
   \item{\dots}{}
-
-  \item{data}{}
 
   \item{object}{}
 
@@ -80,6 +76,7 @@ For further information, see the
   example below and the documentation of
   \code{\link[R.matlab]{R.matlab}}.
 }
+\seealso{\code{\link{scan.txt.Renishaw}}}
 \examples{
 ## export & import matlab files
 if (require (R.matlab)){

@@ -178,13 +178,8 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
                                        ...,
                                        index = FALSE,
                                        short = NULL,
-                                       warn = TRUE,
                                        drop = FALSE
                                        ){
-
-  if (warn)
-    warning ("check extract wavelength")           
-
   if (drop)
     warning ("Ignoring drop = TRUE.")
   
@@ -267,8 +262,7 @@ setMethod ("$", "hyperSpec", function (x, name){
 ###
 setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
                                         drop = FALSE,
-                                        index = FALSE,
-                                        warn = TRUE){
+                                        index = FALSE){
   validObject (x)
 
   if (missing (i) & missing (j) & missing (l)) ## shortcut
@@ -281,8 +275,7 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
   if (! missing (l)) dots$l <- l
   
   dots$index <- index
-  dots$warn <- warn
-
+  
   x <- do.call ("[", dots) 
   
   if (!missing (j)){
@@ -501,7 +494,6 @@ nwl <- function (x){
 
 setReplaceMethod ("[", "hyperSpec", function (x, i, j,
                                               short = NULL,
-                                              warn = TRUE,
                                               ...,
                                               value){
   validObject (x)
@@ -536,7 +528,6 @@ setReplaceMethod ("[", "hyperSpec", function (x, i, j,
 setReplaceMethod ("[[", "hyperSpec", function (x, i, j,
                                                index = FALSE,
                                                short = NULL,
-                                               warn = TRUE,
                                                ...,
                                                value){
   validObject (x)
@@ -608,7 +599,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
              validObject (e2)
              if (.Generic %in% c ("*", "^", "%%", "%/%", "/"))
                warning (paste ("Do you really want to use", .Generic, "on 2 hyperSpec objects?"))
-             e1 [[warn = F]] <- callGeneric (e1[[warn=F]], e2[[warn = F]])
+             e1 [[]] <- callGeneric (e1[[]], e2[[]])
              e1@log <- logentry (e1, short = .Generic, long = as.character (e2))
              return (e1)
            }
@@ -616,14 +607,14 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 
 .arithx <- function (e1, e2){
   validObject (e1)
-  e1  [[warn = F]] <- callGeneric (e1 [[warn = F]], e2)
+  e1  [[]] <- callGeneric (e1 [[]], e2)
   e1@log <- logentry (e1, short = .Generic, long = list (e2 = .paste.row (e2, val = TRUE))) 
   return (e1)
 }
 
 .arithy <- function (e1, e2){ 
   validObject (e2)
-  e2  [[warn = F]] <- callGeneric (e1, e2 [[warn = F]])
+  e2  [[]] <- callGeneric (e1, e2 [[]])
   e2@log <- logentry (e2, short = .Generic, long = list (e1 = .paste.row (e1, val = TRUE)))
   return (e2)
 }
@@ -740,7 +731,7 @@ setMethod("rbind2",
        validObject (y)
 	
 	   if (any (x@wavelength != y@wavelength))
-		   error ("The wavelengths of the objects differ.")
+		   stop ("The wavelengths of the objects differ.")
 	   
        x@data <- rbind (x@data, y@data)
        x@log <- logentry (x, short = "rbind2", long = list (y = as.character (y)))
@@ -1170,7 +1161,8 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 plotmap <- function (object,                                             
                      use.x = "x",
                      use.y = "y",
-                     func = sum,
+                     func = mean,
+					 cond = NULL,
                      z = NULL,
                      do.print = FALSE,
                      print.args = NULL,
@@ -1196,16 +1188,19 @@ plotmap <- function (object,
       z <- object@data[, z]
     } 
   } else {
-    z <- apply (object [[warn = F]], 1, func, ...)
+    z <- apply (object [[]], 1, func, ...)
     if (length (z) != nrow (object))
       warning ("func did not yield one value per spectrum.")
   }
-
  
-  grid <- index.grid (object[[, c(ix, iy), , warn = F]]) 
+  grid <- index.grid (object[[, c(ix, iy)]]) 
   z <- z [grid$grid]
 
-  dots <- list (x = formula (as.numeric (z) ~ grid$x * grid$y))
+  if (! is.null (cond)){
+	  cond <- cond [grid$grid]
+	  dots <- list (x = formula (as.numeric (z) ~ grid$x * grid$y | cond))
+  } else
+	  dots <- list (x = formula (as.numeric (z) ~ grid$x * grid$y))
   
   n <- length (unique (as.numeric (z)))
   if (is.null (trellis.args$col.regions)){
@@ -1379,7 +1374,7 @@ plotc <- function (object, use.c = "c", func = sum, ...,
       z <- object@data[, z]
     } 
   } else {
-    z <- apply (object [[warn = F]], 1, func, ...)
+    z <- apply (object [[]], 1, func, ...)
 
     if (is.null (zlab)){
       zlab <- as.expression (substitute (func))
@@ -1390,7 +1385,7 @@ plotc <- function (object, use.c = "c", func = sum, ...,
     }
   }
 
-  plot.dots <- c(list (x = unlist (object[[, ic, warn = FALSE]]),
+  plot.dots <- c(list (x = unlist (object[[, ic]]),
                        y  = as.numeric (z)),
             plot.dots)
         
@@ -1504,7 +1499,7 @@ plotspc <- function  (object,
   ispc <- relist (seq_len (length (u.wl.range)), wavelength.range)
 
   rm (wavelength.range)
-  spc <- object[[,, u.wl.range, drop = FALSE, index = TRUE, warn = FALSE]]
+  spc <- object[[,, u.wl.range, drop = FALSE, index = TRUE]]
   rm (u.wl.range)
   
 
@@ -2308,7 +2303,7 @@ spc.fit.poly.below <- function (fit, apply = fit,
   }
   
   vdm <- outer(fit@wavelength, 0 : poly.order, "^")
-  y <- t(fit [[warn = F]])
+  y <- t(fit [[]])
   
   p <- matrix (nrow = nrow(fit) , ncol = poly.order + 1)
   use.range <- list () #matrix (nrow = nrow(fit) , ncol = 2) 
