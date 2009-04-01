@@ -72,9 +72,9 @@ x$name <- value
   \item{. ,..}{shortcut \code{name}s expanding to "all columns" and "all
   columns except \code{spc}", respectively.}
     
-  \item{l}{selecting columns of the spectra matrix. The default
-    behaviour is treating the \code{l} as wavelength, \emph{not} as
-    column index.}
+  \item{l}{selecting columns of the spectra matrix. If \code{l} is numeric, the default
+    behaviour is treating \code{l} as wavelengths, \emph{not} as
+    indices.}
 
   \item{index}{If \code{TRUE}, the value(s) in \code{l} are treated as
     column indices for the spectral matrix. Otherwise the numbers in

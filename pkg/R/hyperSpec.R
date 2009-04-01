@@ -228,7 +228,7 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
     #if (length (x@wavelength) == 0)
     #  warning ("Selected columns do not contain specta.")
     #else {
-      if (!index)
+      if (!index &&fit is.numeric (l))
         l <- wl2i (x, l)
       x@wavelength <- x@wavelength[l]
       x@data$spc <- x@data$spc[,l, drop = FALSE]
@@ -921,14 +921,15 @@ i2wl <- function (x, i){
 ###  
 
 setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
-                                           short = NULL, user = NULL, date = NULL){
+                                           short = NULL, long = NULL, user = NULL, date = NULL){
   validObject (X)
 
   if (is.null (short))
     short <- "apply"
-  long <- list (MARGIN = MARGIN, FUN = FUN, ...,
-                call = deparse (sys.call()[])
-                  )
+  if (is.null (long))
+	  long <- list (MARGIN = MARGIN, FUN = FUN, ...,
+			  call = deparse (sys.call()[])
+	  )
   if (all (MARGIN == 1 : 2)){
     X@data$spc <- do.call (FUN, list (X@data$spc, ...)) 
   } else {
@@ -2255,27 +2256,58 @@ reduce.spc.resolution <- function (hyperSpec,
 ###
 ##setGeneric ("spc.fit.poly", function (fit, ...) standardGeneric("spc.fit.poly"))
 ##setMethod ("spc.fit.poly", "hyperSpec", function (fit, apply, poly.order = 1){
-spc.fit.poly <- function (fit, apply, poly.order = 1){
-  validObject (fit)
-  validObject (apply)
-  
-  x <- fit@wavelength
-  x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
-  p <- apply (fit, 1, function (y, x){qr.solve (x, y)},
-              x, short = "spc.fit.poly: coefficients")
-  
-  colnames (p@data$spc) <- paste ("x^", 0 : poly.order, sep="")
-  
-  ## now apply the baseline polynomas
-  wl <- apply@wavelength;
-  x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
-  
-  apply <- apply (p, 1, function (p, x) {return (x %*% p)}, x, short = "spc.fit.poly: spectra")
-  apply@wavelength <- wl
-  colnames (apply@data$spc) <- format (wl, digits = 4)
-  
-  list (bl = apply, p = p) 
+#spc.fit.poly <- function (fit, apply = NULL, poly.order = 1){
+#  validObject (fit)
+#  validObject (apply)
+#  
+#  x <- fit@wavelength
+#  x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
+#  p <- apply (fit, 1, function (y, x){qr.solve (x, y)},
+#              x, short = "spc.fit.poly: coefficients")
+#  
+#  colnames (p@data$spc) <- paste ("x^", 0 : poly.order, sep="")
+#  
+#  ## now apply the baseline polynomas
+#  wl <- apply@wavelength;
+#  x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
+#  
+#  apply <- apply (p, 1, function (p, x) {return (x %*% p)}, x, short = "spc.fit.poly: spectra")
+#  apply@wavelength <- wl
+#  colnames (apply@data$spc) <- format (wl, digits = 4)
+#  
+#  list (bl = apply, p = p) 
+#}
+spc.fit.poly <- function (fit, apply = NULL, poly.order = 1, short = NULL, user = NULL, date = NULL){
+	validObject (fit)
+	validObject (apply)
+	
+	x <- fit@wavelength
+	x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
+	p <- apply (fit, 1, function (y, x){qr.solve (x, y)}, x,
+			short = if (is.null (short)) "spc.fit.poly: coefficients" else short,
+			user = user, date = date)
+	
+	if (is.null (apply)){
+		colnames (p@data$spc) <- paste ("x^", 0 : poly.order, sep="")
+		
+		p
+	} else {
+		wl <- apply@wavelength;
+		x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
+		apply@data$spc <- I (t (apply (p[[]], 1, function (p, x) {return (x %*% p)}, x)))
+		apply@log <- logentry (apply, 		
+				short = if (is.null (short)) "spc.fit.poly: spectra" else short,
+				long = list (apply = match.call()$apply, poly.order = poly.order), 
+				user = user, date = date)
+		
+		
+		apply@wavelength <- wl
+		colnames (apply@data$spc) <- format (wl, digits = 4)
+		
+		apply
+	}
 }
+
 #)
 
 ###-----------------------------------------------------------------------------
@@ -2285,64 +2317,120 @@ spc.fit.poly <- function (fit, apply, poly.order = 1){
 ###
 ##setGeneric ("spc.fit.poly.below", function (fit, ...) standardGeneric("spc.fit.poly.below"))
 ##setMethod ("spc.fit.poly.below", "hyperSpec", function (fit, apply,
-spc.fit.poly.below <- function (fit, apply = fit,
-                                poly.order = 1,
-                                npts.min = NULL,
-                                noise = numeric (nrow (fit)) 
-                                ){
+#spc.fit.poly.below <- function (fit, apply =  NULL,
+#                                poly.order = 1,
+#                                npts.min = NULL,
+#                                noise = numeric (nrow (fit)),  
+#								short = NULL, user = NULL, date = NULL){
+#
+#  validObject (fit)
+#  validObject (apply)
+#
+#  if (is.null (npts.min)){
+#    npts.min <- max (round (nwl(fit) * 0.05), poly.order + 1)
+#    cat ("Fitting with npts.min = ",  npts.min, "\n") 
+#  } else  if (npts.min < poly.order + 1){
+#    npts.min <- poly.order + 1
+#	 warning (paste ("npts.min too small: adjusted to", npts.min))
+#  }
+#  
+#  vdm <- outer(fit@wavelength, 0 : poly.order, "^")
+#  y <- t(fit [[]])
+#  
+#  p <- matrix (nrow = nrow(fit) , ncol = poly.order + 1)
+#  use.range <- list () #matrix (nrow = nrow(fit) , ncol = 2) 
+#  for (i in seq_len (nrow (fit))){
+#    use.old <- logical (nwl (fit))
+#    use <- !use.old
+#    
+#    repeat {
+#      p[i,] <- qr.solve (vdm[use,], y[use, i]) 
+#      bl <- vdm %*% p [i,]
+#      
+#      ##lines (x, bl, col ="blue")
+#      use.old <- use
+#      use <- y[, i] < bl + noise [i]
+#                                        # show (sum (fit))
+#      if ((sum (use) < npts.min) || all (use == use.old))
+#        break
+#    }
+#    use.range [[i]] = fit@wavelength [use]
+#    #if (i %% 100 == 0) cat (".")
+#  }
+#  
+#  fit@data$spc <- p
+#  fit@wavelength <- 0 : poly.order
+#  colnames (fit@data$spc) <- paste ("x^", 0 : poly.order, sep="")
+#  
+#  x <- apply@wavelength
+#  
+#  vdm <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
+#  
+#  apply <- apply (fit, 1, function (p, x) {return (x %*% p)}, vdm, short = "spc.bl.cb: spectra")
+#  apply@wavelength <- x
+#  colnames (apply@data$spc) <- format (x, digits = 4)
+#  
+#  list (bl = apply, p = fit, use.range = use.range) 
+#}
 
-  validObject (fit)
-  validObject (apply)
-
-  if (is.null (npts.min)){
-    npts.min <- max (round (nwl(fit) * 0.05), poly.order + 1)
-    cat ("Fitting with npts.min = ",  npts.min, "\n") 
-  } else  if (npts.min < poly.order + 1){
-    npts.min <- poly.order + 1
-	 warning (paste ("npts.min too small: adjusted to", npts.min))
-  }
-  
-  vdm <- outer(fit@wavelength, 0 : poly.order, "^")
-  y <- t(fit [[]])
-  
-  p <- matrix (nrow = nrow(fit) , ncol = poly.order + 1)
-  use.range <- list () #matrix (nrow = nrow(fit) , ncol = 2) 
-  for (i in seq_len (nrow (fit))){
-    use.old <- logical (nwl (fit))
-    use <- !use.old
-    
-    repeat {
-      p[i,] <- qr.solve (vdm[use,], y[use, i]) 
-      bl <- vdm %*% p [i,]
-      
-      ##lines (x, bl, col ="blue")
-      use.old <- use
-      use <- y[, i] < bl + noise [i]
-                                        # show (sum (fit))
-      if ((sum (use) < npts.min) || all (use == use.old))
-        break
-    }
-    use.range [[i]] = fit@wavelength [use]
-    #if (i %% 100 == 0) cat (".")
-  }
-  
-  fit@data$spc <- p
-  fit@wavelength <- 0 : poly.order
-  colnames (fit@data$spc) <- paste ("x^", 0 : poly.order, sep="")
-  
-  x <- apply@wavelength
-  
-  vdm <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
-  
-  apply <- apply (fit, 1, function (p, x) {return (x %*% p)}, vdm, short = "spc.bl.cb: spectra")
-  apply@wavelength <- x
-  colnames (apply@data$spc) <- format (x, digits = 4)
-  
-  list (bl = apply, p = fit, use.range = use.range) 
+spc.fit.poly.below <- function (fit, apply = fit, poly.order = 1, npts.min = NULL,
+		noise = numeric (nrow (fit)), short = NULL, user = NULL, date = NULL){
+	
+	validObject (fit)
+	validObject (apply)
+	
+	if (is.null (npts.min)){
+		npts.min <- max (round (nwl(fit) * 0.05), 3 * (poly.order + 1))
+		cat ("Fitting with npts.min = ",  npts.min, "\n") 
+	} else  if (npts.min <= poly.order){
+		npts.min <- poly.order + 1
+		warning (paste ("npts.min too small: adjusted to", npts.min))
+	}
+	
+	vdm <- outer(fit@wavelength, 0 : poly.order, "^")
+	y <- t(fit [[]])
+	
+	p <- matrix (nrow = nrow(fit) , ncol = poly.order + 1)
+	for (i in seq_len (nrow (fit))){
+		use.old <- logical (nwl (fit))
+		use <- !use.old
+		
+		repeat {
+			p[i,] <- qr.solve (vdm[use,], y[use, i]) 
+			bl <- vdm %*% p [i,]
+			use.old <- use
+			use <- y[, i] < bl + noise [i]
+			if ((sum (use) < npts.min) || all (use == use.old))
+				break
+		}
+	}
+	if (is.null (apply)){
+		fit@data$spc <- p
+		fit@wavelength <- 0 : poly.order
+		colnames (fit@data$spc) <- paste ("x^", 0 : poly.order, sep="")
+		fit@log <- logentry (fit, short = if (is.null (short)) "spc.fit.poly.below: coefficients" else short, 
+				long = list (apply = NULL, poly.order = poly.order,
+						npts.min = npts.min, noise = noise), 
+				user = user, date = date)
+		fit
+	} else {
+		x <- apply@wavelength
+		
+		vdm <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
+		
+		apply@data$spc <- I (t (apply (p, 1, function (p, x) {return (x %*% p)}, vdm)))
+		apply@log <- logentry (apply, 		
+				short = if (is.null (short)) "spc.fit.poly.below: spectra" else short,
+				long = list (apply = match.call()$apply, poly.order = poly.order,
+						npts.min = npts.min, noise = noise), 
+				user = user, date = date)
+		
+		apply@wavelength <- x
+		colnames (apply@data$spc) <- format (x, digits = 4)
+		apply
+	}
 }
-#)
 
-## TODO: eval.poly
 
 ### ****************************************************************************
 ###
