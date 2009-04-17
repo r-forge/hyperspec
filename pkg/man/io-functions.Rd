@@ -76,7 +76,9 @@ For further information, see the
   example below and the documentation of
   \code{\link[R.matlab]{R.matlab}}.
 }
-\seealso{\code{\link{scan.txt.Renishaw}}}
+\seealso{
+For manufacturer specific file formats: \code{\link{scan.txt.Renishaw}}
+}
 \examples{
 ## export & import matlab files
 if (require (R.matlab)){
