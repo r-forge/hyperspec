@@ -610,7 +610,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 	validObject (e1)
 	e1  [[]] <- callGeneric (e1 [[]], e2)
 	e1@log <- logentry (e1, short = .Generic, 
-			long = list (if (exists (e2)) e2 = .paste.row (e2, val = TRUE))) 
+			long = list (if (exists ("e2")) e2 = .paste.row (e2, val = TRUE))) 
 	e1
 }
 
@@ -686,30 +686,30 @@ setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
 ###  
 ###  
 
-setMethod ("Compare", signature (x = "hyperSpec", y = "hyperSpec"),
-		function (x, y){
-			validObject (x)
-			validObject (y)
+setMethod ("Compare", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
+		function (e1, e2){
+			validObject (e1)
+			validObject (e2)
 			
-			callGeneric (x[[]], y[[]])
+			callGeneric (e1[[]], e2[[]])
 		}
 )
 
-.compx <- function (x, y){
-	validObject (x)
-	callGeneric (x [[]], y)
+.compx <- function (e1, e2){
+	validObject (e1)
+	callGeneric (e1 [[]], e2)
 }
 
-.compy <- function (x, y){
-	validObject (y)
-	callGeneric (x, y [[]])
+.compy <- function (e1, e2){
+	validObject (e2)
+	callGeneric (e1, e2 [[]])
 }
 
-setMethod ("Compare", signature (x = "hyperSpec", y = "numeric"), .compx)
-setMethod ("Compare", signature (x = "hyperSpec", y = "matrix"), .compx)
+setMethod ("Compare", signature (e1 = "hyperSpec", e2 = "numeric"), .compx)
+setMethod ("Compare", signature (e1 = "hyperSpec", e2 = "matrix"), .compx)
 
-setMethod ("Compare", signature (x = "numeric", y = "hyperSpec"), .compy)
-setMethod ("Compare", signature (x = "matrix", y = "hyperSpec"), .compy)
+setMethod ("Compare", signature (e1 = "numeric", e2 = "hyperSpec"), .compy)
+setMethod ("Compare", signature (e1 = "matrix", e2 = "hyperSpec"), .compy)
 
 ###-----------------------------------------------------------------------------
 ###
@@ -754,15 +754,15 @@ setMethod ("log", signature (x = "hyperSpec"),
 ###  
 
 setMethod ("Math2", signature (x = "hyperSpec"),
-		function (x){
+		function (x, digits){
 			validObject (x)
 
-			if (exists (digits))
+			if (exists ("digits"))
 				x [[]] <- callGeneric (x[[]], digits)
 			else
 				x [[]] <- callGeneric (x[[]])
 			x@log <- logentry (x, short = .Generic, 
-					long = list(if (exists (digits)) digits = digits))
+					long = list(if (exists ("digits")) digits = digits))
 			x
 		}
 )

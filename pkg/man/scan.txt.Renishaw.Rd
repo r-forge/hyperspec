@@ -10,7 +10,7 @@ They come in a "long" format with columns (y x | time | z)? wavelength intensity
 The first columns depend on the data type.
 
 The corresponding possibilities for the \code{data} argument are:
-tabular{lll}{
+\tabular{lll}{
 \code{data}                   \tab columns    \tab \cr
 \code{"spc"}                  \tab wl int     \tab single spectrum \cr
 \code{"zspc"}, \code{"depth"} \tab z wl int   \tab depth profile\cr
