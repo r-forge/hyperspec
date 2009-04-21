@@ -2364,36 +2364,32 @@ write.txt.long <- function (object,
 ##setGeneric ("spc.bin", function (hyperSpec, ...) standardGeneric("spc.bin"))
 ##setMethod ("spc.bin", "hyperSpec", function (hyperSpec,
 spc.bin <- function (spc,
-		by = stop ("reduction factor needed"),
+		by = stop ("reduction factor needed"), na.rm = TRUE,
 		...) {
 	validObject (spc)
 	
-	long.description <- list (by = deparse (by))
-	
+	long.description <- list (by = deparse (by), na.rm = na.rm)
+
 	n <- ceiling (nwl (spc) / by)
-	index <- matrix (1 : (n * by), nrow = by)
 	
-	small <- nwl (spc) %% by
-	if (small != 0) {
-		spc <- cbind (spc@data$spc, matrix (NA, nrow = nrow (spc), ncol = by - small))
-		wavelength <- c (spc@wavelength, rep (NA, by - small))
+	small <- nwl (spc) %% by 
+	if (small != 0) 
 		warning (paste (c("Last data point averages only ", small, " points.")))
-	} else {
-		small <- by
-		spc <- spc@data$spc
-		wavelength <- spc@wavelength
+
+	bin <- rep (seq_len (n), each = by, length.out = nwl (spc))	
+
+	spc@wavelength <- tapply (spc@wavelength, bin, mean, na.rm = na.rm)
+
+	na <- is.na (spc [[]])
+	
+	if (na.rm && any (na)) {
+		na <- apply (!na, 1, tapply, bin, sum, na.rm = FALSE)
+		spc@data$spc <- apply (spc@data$spc, 1, tapply, bin, sum, na.rm = TRUE)
+		spc@data$spc <- spc@data$sp / na
+	} else {  # considerably faster
+		spc@data$spc <- apply (spc@data$spc, 1, tapply, bin, sum, na.rm = FALSE)
+		spc@data$spc <- sweep (spc@data$spc, 2, rle (bin)$lengths, "/")
 	}
-	
-	dim (wavelength) <- c(by, n)
-	resultwl <- apply (wavelength, c(2), mean, na.rm = TRUE)
-	names (resultwl) <- format (resultwl, digits = 4)
-	spc@wavelength <- resultwl
-	
-	
-	dim (spc) <- c(nrow (spc@data), by, n)
-	result <- apply (spc, c(1, 3), mean, na.rm = TRUE)
-	colnames (result) <- names (resultwl)
-	spc@data$spc <- result
 	
 	spc@log <- logentry (spc,
 			long = long.description,
