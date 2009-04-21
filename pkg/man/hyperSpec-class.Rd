@@ -114,7 +114,7 @@
 	 Spectra-related:
     \item{wli}{\code{signature(x = "hyperSpec")}: ... }
 	 \item{orderwl}{\code{signature(x = "hyperSpec")}: ... }
-	 \item{reduce.spc.resolution}{\code{signature(hyperSpec = "hyperSpec")}: ... }
+	 \item{spc.reduce.resolution}{\code{signature(hyperSpec = "hyperSpec")}: ... }
     \item{spc.fit.poly.below}{\code{signature(fit = "hyperSpec")}: ... }
     \item{spc.fit.poly}{\code{signature(fit = "hyperSpec")}: ... }
 	 

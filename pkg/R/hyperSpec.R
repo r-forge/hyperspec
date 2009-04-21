@@ -2,6 +2,7 @@ require (lattice)
 ## TODO: delete old generics
 ## TODO: seq_along
 ## TODO: sweep logentry
+## TODO: get rid of return
 
 setClass ("hyperSpec",
 		representation = representation (
@@ -608,19 +609,21 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 .arithx <- function (e1, e2){
 	validObject (e1)
 	e1  [[]] <- callGeneric (e1 [[]], e2)
-	e1@log <- logentry (e1, short = .Generic, long = list (e2 = .paste.row (e2, val = TRUE))) 
-	return (e1)
+	e1@log <- logentry (e1, short = .Generic, 
+			long = list (if (exists (e2)) e2 = .paste.row (e2, val = TRUE))) 
+	e1
 }
 
 .arithy <- function (e1, e2){ 
 	validObject (e2)
 	e2  [[]] <- callGeneric (e1, e2 [[]])
 	e2@log <- logentry (e2, short = .Generic, long = list (e1 = .paste.row (e1, val = TRUE)))
-	return (e2)
+	e2
 }
 
 setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "numeric"), .arithx)
 setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "matrix"), .arithx)
+setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "missing"), .arithx)
 
 setMethod ("Arith", signature (e1 = "numeric", e2 = "hyperSpec"), .arithy)
 setMethod ("Arith", signature (e1 = "matrix", e2 = "hyperSpec"), .arithy)
@@ -675,6 +678,109 @@ setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
 			
 			y@log <- logentry (y, short = "%*%", long = list (x = .paste.row (x, val = TRUE)))
 			return (y)
+		}
+)
+###-----------------------------------------------------------------------------
+###
+###  compare functions
+###  
+###  
+
+setMethod ("Compare", signature (x = "hyperSpec", y = "hyperSpec"),
+		function (x, y){
+			validObject (x)
+			validObject (y)
+			
+			callGeneric (x[[]], y[[]])
+		}
+)
+
+.compx <- function (x, y){
+	validObject (x)
+	callGeneric (x [[]], y)
+}
+
+.compy <- function (x, y){
+	validObject (y)
+	callGeneric (x, y [[]])
+}
+
+setMethod ("Compare", signature (x = "hyperSpec", y = "numeric"), .compx)
+setMethod ("Compare", signature (x = "hyperSpec", y = "matrix"), .compx)
+
+setMethod ("Compare", signature (x = "numeric", y = "hyperSpec"), .compy)
+setMethod ("Compare", signature (x = "matrix", y = "hyperSpec"), .compy)
+
+###-----------------------------------------------------------------------------
+###
+###  math functions
+###  
+###  
+
+setMethod ("Math", signature (x = "hyperSpec"),
+		function (x){
+			validObject (x)
+			
+			if (grepl ("^cum", Generic) || grepl ("gamma$", Generic))
+			warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
+			
+			x [[]] <- callGeneric (x[[]])
+			x@log <- logentry (x, short = .Generic, long = list())
+			x
+		}
+)
+
+
+###-----------------------------------------------------------------------------
+###
+###  log
+###  
+###
+
+setMethod ("log", signature (x = "hyperSpec"),
+		function (x, base = exp (1)){
+			validObject (x)
+			
+			x [[]] <-  log (x[[]], base = base) 
+			x@log <- logentry (x, short = "log", long = list (base = base))
+			x
+		}
+)
+
+###-----------------------------------------------------------------------------
+###
+###  math functions
+###  
+###  
+
+setMethod ("Math2", signature (x = "hyperSpec"),
+		function (x){
+			validObject (x)
+
+			if (exists (digits))
+				x [[]] <- callGeneric (x[[]], digits)
+			else
+				x [[]] <- callGeneric (x[[]])
+			x@log <- logentry (x, short = .Generic, 
+					long = list(if (exists (digits)) digits = digits))
+			x
+		}
+)
+
+###-----------------------------------------------------------------------------
+###
+###  summary functions
+###  
+###  
+
+setMethod ("Summary", signature (x = "hyperSpec"),
+		function (x, ..., na.rm = FALSE){
+			validObject (x)
+			
+			if ((.Generic == "prod") || (.Generic == "sum"))
+				warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
+			
+			callGeneric (x[[]], ..., na.rm = na.rm)
 		}
 )
 
@@ -954,6 +1060,55 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
 			X
 		})
 
+###-----------------------------------------------------------------------------
+###
+###  spcapply
+###  
+###  
+
+spcapply <- function (spc, FUN, ..., 
+		label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
+		short = NULL, long = NULL, user = NULL, date = NULL){
+	validObject (spc)
+	
+	if (is.null (short))
+		short <- "spcapply"
+	if (is.null (long))
+		long <- list (FUN = FUN, ...,
+				label.wl = label.wl, label.spc = label.spc, new.wavelength = new.wavelength,
+				call = deparse (sys.call()[])
+		)
+	spc@data <- .apply(spc@data, MARGIN = 1, FUN = FUN, ...)
+	
+	if (!is.null (new.wavelength))
+		if (is.numeric (new.wavelength))
+			spc@wavelength <- new.wavelength
+		else {
+			dots <- list (...)
+			spc@wavelength <- dots[[new.wavelength]]
+		}
+	else if (ncol (spc@data$spc) != length (spc@wavelength)){ 
+		wl <- as.numeric (colnames (spc@data$spc))
+		if (length (wl) != ncol (spc@data$spc) || any (is.na (wl)))
+			spc@wavelength <- seq_len (ncol (spc@data$spc))
+		else
+			spc@wavelength <- wl
+	}
+	
+	if (!is.null (label.wl))
+		spc@label$.wavelength <- label.wl	
+	else if (ncol (spc@data$spc) != length (spc@wavelength)) 
+		spc@label$.wavelength <- NULL
+	
+	if (!is.null (label.spc))
+		spc@label$spc <- label.spc	
+	
+	spc@log <- logentry(spc, short = short, long = long, user = user, date = date)
+	
+	validObject (spc)
+	
+	spc
+}
 
 
 ###-----------------------------------------------------------------------------
@@ -2205,11 +2360,11 @@ write.txt.long <- function (object,
 
 ###-----------------------------------------------------------------------------
 ###
-###  reduce.spc.resolution
+###  spc.reduce.resolution
 ###
-##setGeneric ("reduce.spc.resolution", function (hyperSpec, ...) standardGeneric("reduce.spc.resolution"))
-##setMethod ("reduce.spc.resolution", "hyperSpec", function (hyperSpec,
-reduce.spc.resolution <- function (hyperSpec,
+##setGeneric ("spc.reduce.resolution", function (hyperSpec, ...) standardGeneric("spc.reduce.resolution"))
+##setMethod ("spc.reduce.resolution", "hyperSpec", function (hyperSpec,
+spc.reduce.resolution <- function (hyperSpec,
 		by = stop ("reduction factor needed"),
 		...) {
 	validObject (hyperSpec)
@@ -2434,6 +2589,33 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
 	}
 }
 
+###-----------------------------------------------------------------------------
+###
+###  spc.loess
+###  
+###  
+spc.loess <- function (spc, newx, ..., 
+		short = NULL, user = NULL, date = NULL){
+validObject (spc)	
+
+dots <- list (...)
+if (is.null (dots$enp.target))
+	dots$enp.target <- 300
+
+loess <- apply (t (spc[[]]), 2, 
+		function (y, x) loess (y ~ x, enp.target = enp.target, ...), 
+		spc@wavelength)
+
+spc@data$spc <- t (sapply (loess, predict, newx))
+spc@wavelength <- newx
+
+spc@log <- logentry (spc, 		
+		short = if (is.null (short)) "spc.loess" else short,
+		long = list (newx = newx, enp.target = enp.target, statistics = statistics, ...),  
+		user = user, date = date)
+
+spc
+}
 
 ### ****************************************************************************
 ###
