@@ -1,10 +1,8 @@
 \name{aggregate-methods}
 \docType{methods}
-\alias{aggregate}
-\alias{ave}
-\alias{aggregate-methods}
 \alias{aggregate,hyperSpec-method}
 \alias{ave,hyperSpec-method}
+\alias{tapply,hyperSpec-method}
 \title{aggregate}
 \description{
   Computes summary statistics for subsets of a \code{hyperSpec}
@@ -44,7 +42,7 @@ append.rows = NULL, date = NULL, user = NULL)
 \details{
   \code{aggregate} applies \code{FUN} to each of the subgroups given by
   \code{by}. It combines the functionality of
-  \code{\link[stats]{aggregate}} and \code{\link[stats]{ave}} for
+  \code{\link[stats]{aggregate}}, \code{\link[base]{tapply}}, and \code{\link[stats]{ave}} for
   hyperSpec objects. 
   
   \code{aggregate} avoids splitting \code{x@data}.
@@ -59,8 +57,7 @@ append.rows = NULL, date = NULL, user = NULL)
 \references{
 }
 \seealso{
-  \code{\link[stats]{aggregate}}, \code{\link[stats]{ave}}
-  
+  \code{\link[base]{tapply}}, \code{\link[stats]{aggregate}}, \code{\link[stats]{ave}}
 }
 \examples{
 

@@ -2,7 +2,6 @@ require (lattice)
 ## TODO: delete old generics
 ## TODO: seq_along
 ## TODO: sweep logentry
-## TODO: get rid of return
 
 setClass ("hyperSpec",
 		representation = representation (
@@ -32,7 +31,7 @@ setClass ("hyperSpec",
 									c("short.description", "long.description",  "date", "user")))))
 				return ("Slot log does not have the correct columns.")
 			
-			return (TRUE)
+			TRUE
 		}
 )
 
@@ -249,11 +248,11 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
 setMethod ("$", "hyperSpec", function (x, name){
 			validObject (x)
 			if (name == ".") ## shortcut
-				return(x@data)
+				x@data
 			else if (name == "..") 
-				return(x@data[, -match ("spc", colnames (x@data))]) 
+				x@data[, -match ("spc", colnames (x@data))] 
 			else
-				return (x@data[[name]])
+				x@data[[name]]
 		})
 
 
@@ -458,7 +457,7 @@ setMethod (as.character, "hyperSpec", function (x,
 
 setMethod ("ncol", "hyperSpec", function (x){
 			validObject (x)
-			return (ncol (x@data)) 
+			ncol (x@data) 
 		})
 
 
@@ -470,7 +469,7 @@ setMethod ("ncol", "hyperSpec", function (x){
 
 setMethod ("nrow", "hyperSpec", function (x){
 			validObject (x)
-			return (nrow (x@data)) 
+			nrow (x@data) 
 		})
 
 
@@ -484,7 +483,7 @@ setMethod ("nrow", "hyperSpec", function (x){
 #setMethod ("nwl", "hyperSpec", function (x){
 nwl <- function (x){
 	validObject (x)
-	return (ncol (x@data$spc))
+	ncol (x@data$spc)
 }
 #)
 
@@ -585,7 +584,7 @@ setReplaceMethod ("$", "hyperSpec", function (x, name, value){
 					long = list (name = name, value = .paste.row (value, val = TRUE))
 			)
 			
-			return (x)
+			x
 		})
 
 ###-----------------------------------------------------------------------------
@@ -602,7 +601,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 				warning (paste ("Do you really want to use", .Generic, "on 2 hyperSpec objects?"))
 			e1 [[]] <- callGeneric (e1[[]], e2[[]])
 			e1@log <- logentry (e1, short = .Generic, long = as.character (e2))
-			return (e1)
+			e1
 		}
 )
 
@@ -647,7 +646,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "hyperSpec"),
 			x@wavelength = y@wavelength
 			x@label$.wavelength = y@label$.wavelength
 			x@log <- logentry (x, short = "%*%", long = as.character (y))
-			return (x)
+			x
 		}
 )
 
@@ -658,7 +657,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
 			x@wavelength = seq_len (ncol (y)) 
 			x@label$.wavelength = NA
 			x@log <- logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
-			return (x)
+			x
 		}
 )
 
@@ -677,7 +676,7 @@ setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
 			)
 			
 			y@log <- logentry (y, short = "%*%", long = list (x = .paste.row (x, val = TRUE)))
-			return (y)
+			y
 		}
 )
 ###-----------------------------------------------------------------------------
@@ -863,10 +862,10 @@ bind <- function (direction = stop ("direction ('c' or 'r') required"),
 	#objnames <- sapply(match.call()[-1], deparse)
 	
 	if (length (dots) == 0)
-		return (NULL)
+		NULL
 	else if (length (dots) == 1){
 		validObject (dots[[1]])
-		return (dots[[1]])
+		dots[[1]]
 	} else {
 		if (! is (dots[[1]], "hyperSpec"))
 			stop ("bind only works on hyperSpec objects.")
@@ -1017,7 +1016,7 @@ i2wl <- function (x, i){
 		}
 	}
 	
-	return (data) 
+	data 
 }
 
 ###-----------------------------------------------------------------------------
@@ -1169,7 +1168,7 @@ setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-", check.ma
 			)  
 			
 			
-			return (x) 
+			x 
 			
 		})
 
@@ -1239,7 +1238,7 @@ setMethod ("aggregate", "hyperSpec", function (x,
 			
 			x@log <- logentry (x, long = long, date = date, user = user)
 			
-			return (x) 
+			x 
 			
 		})
 
@@ -2360,48 +2359,48 @@ write.txt.long <- function (object,
 
 ###-----------------------------------------------------------------------------
 ###
-###  spc.reduce.resolution
+###  spc.bin
 ###
-##setGeneric ("spc.reduce.resolution", function (hyperSpec, ...) standardGeneric("spc.reduce.resolution"))
-##setMethod ("spc.reduce.resolution", "hyperSpec", function (hyperSpec,
-spc.reduce.resolution <- function (hyperSpec,
+##setGeneric ("spc.bin", function (hyperSpec, ...) standardGeneric("spc.bin"))
+##setMethod ("spc.bin", "hyperSpec", function (hyperSpec,
+spc.bin <- function (spc,
 		by = stop ("reduction factor needed"),
 		...) {
-	validObject (hyperSpec)
+	validObject (spc)
 	
 	long.description <- list (by = deparse (by))
 	
-	n <- ceiling (nwl (hyperSpec) / by)
+	n <- ceiling (nwl (spc) / by)
 	index <- matrix (1 : (n * by), nrow = by)
 	
-	small <- nwl (hyperSpec) %% by
+	small <- nwl (spc) %% by
 	if (small != 0) {
-		spc <- cbind (hyperSpec@data$spc, matrix (NA, nrow = nrow (hyperSpec), ncol = by - small))
-		wavelength <- c (hyperSpec@wavelength, rep (NA, by - small))
+		spc <- cbind (spc@data$spc, matrix (NA, nrow = nrow (spc), ncol = by - small))
+		wavelength <- c (spc@wavelength, rep (NA, by - small))
 		warning (paste (c("Last data point averages only ", small, " points.")))
 	} else {
 		small <- by
-		spc <- hyperSpec@data$spc
-		wavelength <- hyperSpec@wavelength
+		spc <- spc@data$spc
+		wavelength <- spc@wavelength
 	}
 	
 	dim (wavelength) <- c(by, n)
 	resultwl <- apply (wavelength, c(2), mean, na.rm = TRUE)
 	names (resultwl) <- format (resultwl, digits = 4)
-	hyperSpec@wavelength <- resultwl
+	spc@wavelength <- resultwl
 	
 	
-	dim (spc) <- c(nrow (hyperSpec@data), by, n)
+	dim (spc) <- c(nrow (spc@data), by, n)
 	result <- apply (spc, c(1, 3), mean, na.rm = TRUE)
 	colnames (result) <- names (resultwl)
-	hyperSpec@data$spc <- result
+	spc@data$spc <- result
 	
-	hyperSpec@log <- logentry (hyperSpec,
+	spc@log <- logentry (spc,
 			long = long.description,
 			...            # date and user?
 	);
 	
-	hyperSpec
+	spc
 }
 #)
 ###-----------------------------------------------------------------------------
@@ -2449,7 +2448,7 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1, short = NULL,
 	} else {
 		wl <- apply.to@wavelength;
 		x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
-		apply.to@data$spc <- I (t (applyo (p[[]], 1, function (p, x) {return (x %*% p)}, x)))
+		apply.to@data$spc <- I (t (applyo (p[[]], 1, function (p, x) {x %*% p}, x)))
 		apply.to@log <- logentry (apply.to, 		
 				short = if (is.null (short)) "spc.fit.poly: spectra" else short,
 				long = list (apply = match.call()$apply, poly.order = poly.order), 
@@ -2576,7 +2575,7 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
 		
 		vdm <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
 		
-		apply.to@data$spc <- I (t (apply (p, 1, function (p, x) {return (x %*% p)}, vdm)))
+		apply.to@data$spc <- I (t (apply (p, 1, function (p, x) {x %*% p}, vdm)))
 		apply.to@log <- logentry (apply.to, 		
 				short = if (is.null (short)) "spc.fit.poly.below: spectra" else short,
 				long = list (apply = match.call()$apply, poly.order = poly.order,
@@ -2730,7 +2729,7 @@ pearson.dist <- function (x) {
 mean_pm_sd <- function (x, na.rm = TRUE){
 	m <- mean (x, na.rm = na.rm)
 	s <- sd (x, na.rm = na.rm)
-	return (c(m - s, m, m + s))
+	c(m - s, m, m + s)
 }
 
 ###-----------------------------------------------------------------------------
