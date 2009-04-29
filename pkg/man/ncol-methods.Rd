@@ -1,10 +1,9 @@
 \name{ncol-methods}
 \docType{methods}
-\alias{ncol}
 \alias{ncol,hyperSpec-method}
-\alias{nrow}
 \alias{nrow,hyperSpec-method}
 \alias{nwl}
+\alias{dim,hyperSpec-method}
 
 \title{The Number of Rows (Spectra), Columns, and Data Points per
   Spectrum of an hyperSpec Object)}
@@ -18,27 +17,33 @@
 
   \code{nwl} returns the number of columns in \code{x@data$spc},
   i.e. the length of each spectrum.
+
+  \code{dim} returns all three values in a vector.
 }
 \usage{
-ncol (x)
-nrow (x)
+\S4method{ncol}{hyperSpec}(x)
+\S4method{nrow}{hyperSpec}(x)
 nwl (x)
+\S4method{dim}{hyperSpec}(x)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
 }
 \value{
-  an \code{integer} of length 1 or \code{NULL}.
+  \code{nrow}, \code{ncol}, and \code{nwl} return an \code{integer}.
+  
+   \code{dim} return a vector of length 3.
 }
 
 \references{
 }
 \author{C. Beleites}
-\seealso{\code{\link[base]{nrow}} and \code{\link[base]{ncol}}}
+\seealso{\code{\link[base]{nrow}}, \code{\link[base]{ncol}}, and \code{\link[base]{dim}}}
 \examples{
 nrow (chondro)
 ncol (chondro)
 nwl  (chondro)
+dim (chondro)
 }
 
 \keyword{methods}

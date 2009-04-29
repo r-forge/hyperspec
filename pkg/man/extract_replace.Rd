@@ -1,23 +1,11 @@
 \name{[-methods}
 \docType{methods}
-\alias{[-methods}
 \alias{[,hyperSpec-method}
-\alias{[}
-\alias{[[-methods}
 \alias{[[,hyperSpec-method}
-\alias{[[}
-\alias{$-methods}
 \alias{$,hyperSpec-method}
-\alias{$}
-\alias{[[<--methods}
 \alias{[[<-,hyperSpec-method}
-\alias{[[<-}
-\alias{[<--methods}
 \alias{[<-,hyperSpec-method}
-\alias{[<-}
-\alias{$<--methods}
 \alias{$<-,hyperSpec-method}
-\alias{$<-}
 
 \title{Extract and Replace Methods for hyperSpec}
 \description{
@@ -54,10 +42,10 @@
 ## Replacement functions
 
 ## S4 method for signature 'hyperSpec':
-x[i, j, short = NULL, \dots] <- value
+x[i, j, l, short = NULL, \dots] <- value
 
 ## S4 method for signature 'hyperSpec':
-x[[i, j, index = FALSE, short = NULL, \dots]] <- value
+x[[i, j, l, index = FALSE, short = NULL, \dots]] <- value
 
 ## S4 method for signature 'hyperSpec':
 x$name <- value
@@ -68,7 +56,7 @@ x$name <- value
   
   \item{i}{ row index: selects spectra}
 
-  \item{j, name}{selecting columns of \code{x@data}, for \code{[[<-}: see \code{l}}
+  \item{j, name}{selecting columns of \code{x@data}}
   \item{. ,..}{shortcut \code{name}s expanding to "all columns" and "all
   columns except \code{spc}", respectively.}
     
@@ -76,8 +64,8 @@ x$name <- value
     behaviour is treating \code{l} as wavelengths, \emph{not} as
     indices.}
 
-  \item{index}{If \code{TRUE}, the value(s) in \code{l} are treated as
-    column indices for the spectral matrix. Otherwise the numbers in
+  \item{index}{If \code{TRUE} (default), the value(s) in \code{l} are treated as
+    column indices for the spectral matrix. Otherwise, the numbers in
     \code{l} are treated as wavelengths and the corresponding column
     indices are looked up first via \code{\link{wl2i}}.}
 
@@ -142,7 +130,7 @@ x$name <- value
   
   \code{\link[base]{drop}} and \code{\link[base]{Extract}} on \code{drop}.
 }
-  \examples{
+    \examples{
 ## index into the rows (spectra) -------------------------------------
 ## make some "spectra"
 
@@ -186,16 +174,18 @@ colnames (flu$..)
 ## replacement functions
 spc <- flu
 spc$.
-spc[, "c"] <- 16:11
+spc[, "c"] <- 16 : 11
 spc$.
-spc$z <- 1:6
+spc$z <- 1 : 6
 
 ## be careful:
-spc[] <- 6:1
+spc[] <- 6 : 1
 spc$.
 
 spc[[]]
-spc[[3,]] <- -spc[[3,]]
+spc[[3]] <- -spc[[3]]
+spc[[]]
+spc[[,,405 : 410]] <- -spc[[,,405 : 410]]
 spc[[]]
 }
 \keyword{methods}

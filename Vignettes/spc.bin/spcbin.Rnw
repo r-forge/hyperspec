@@ -1,0 +1,141 @@
+\documentclass[a4paper, 10pt, smallheadings, DIV15]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\pgfrealjobname{spcbin}
+\usepackage[labelformat=parens, font=footnotesize]{subfig}
+\usepackage{amsmath}
+\usepackage{upgreek}
+\usepackage{xspace}
+\usepackage{hyphenat}
+\usepackage{fancyvrb}
+
+\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+
+\newcommand{\R}{\proglang{R}\xspace}
+\newcommand{\hy}{\code{hyperSpec}\xspace}
+
+\newcommand{\mum}[1]{\ensuremath{#1\;\upmu}m\xspace}
+\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+
+\author{C.~Beleites,\\DMRN, Università degli Studi di Trieste, Trieste/I}
+\title{Performance of hyperSpec::spc.bin}
+
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+
+\begin{document}
+\SweaveOpts{eval=TRUE, strip.white=TRUE, echo=TRUE, cache = TRUE}
+\SweaveOpts{pdf = FALSE, pgf = TRUE, external = TRUE}
+\SweaveOpts{width=6,height=3} 
+\SweaveOpts{prefix.string=fig/fig}
+\setkeys{Gin}{width = \textwidth}
+<<sweavesetup, cache = FALSE, echo = FALSE>>=
+options(SweaveHooks=list(fig=function()
+          par(mar=c(5.1, 4.1, 1.1, 2.1))))
+setCacheDir ("cache")
+ptm <- proc.time()
+@ 
+\maketitle
+<<init, cache = FALSE>>=
+library (hyperSpec)
+@ 
+
+This vignette discusses \hy's \code{spc.bin} function, and runs checks on the correctness of the 
+three possible values for \code{na.rm}.   
+
+\section*{Syntax \& Parameters}  
+\code{spc.bin (spc, by = stop ("reduction factor needed"), na.rm = TRUE, ...)}
+
+\begin{labeling}{\code{na.rm}:~~~}
+\item[\code{spc}:] \code{hyperSpec} object 
+\item[\code{by}:] the number of data points to bin into a new data point.
+\item[\code{na.rm}:] one of \code{0} or \code{FALSE}, \code{1} or \code{TRUE}, or \code{2}.\\ 
+\code{0} or \code{FALSE} has the usual meaning: any \code{NA} in \code{spc} will lead to a \code{NA} in the result.\\
+for positive values, \code{NA}s are removed. \code{NaN} results if all elements to bin are \code{NA}.\\ 
+\code{1} or \code{TRUE}: takes ca. twice the time compared to \code{na.rm = FALSE}. 
+For each bin, the not \code{NA} values are summed up, and divided by their number.\\
+\code{2}: This is faster than \code{na.rm = 1} if not the spectra matrix does not contain too many \code{NA}s.\\ 
+First, the binning is done with \code{na.rm = FALSE}. Then \code{NA}s are replaced using \code{mean (..., na.rm = TRUE)}.
+\item[\code{short}, \code{user}, \code{date}:] are handed to \code{logentry}
+\end{labeling}
+
+<<setup>>=
+wls <- c (100, 250, 500, 1000, 2500, 5000)
+rows <- c (10, 25, 50, 100, 250, 500, 1000)
+nas <- c (0, 5, 10, 50, 100, 500, 1000, 2500, 5000, 10000, 25000, 50000)
+bys <-  c (2, 5, 10, 25, 50)
+alg <- 1 : 3
+
+df <- expand.grid (alg = alg, by = bys, na = nas, nrow = rows, nwl = wls)
+df$time <- NA
+
+df <- df [df$na <= df$nwl * df$nrow / 10, ] 
+@
+
+
+
+<<calc>>=
+for (i in seq (1, nrow (df), 3)){
+	spc <- new ("hyperSpec", spc = matrix (runif (df[i, "nrow"] * df[i, "nwl"]), ncol = df[i, "nwl"]))
+	
+	spc@data$spc [sample (df[i, 4] * df[i, 5], df[i, 3])] <- NA
+	
+	df [i    , 6] <- system.time (d1 <- spc.bin (spc, df [i, 2], 0))[1]	
+	df [i + 1, 6] <- system.time (d2 <- spc.bin (spc, df [i, 2], 1))[1]	
+	df [i + 2, 6] <- system.time (d3 <- spc.bin (spc, df [i, 2], 2))[1]
+	
+	stopifnot (sum (is.nan (d2[[]])) == sum (is.na (d2[[]])))
+	stopifnot (sum (is.nan (d3[[]])) == sum (is.na (d3[[]])))
+	stopifnot (all.equal (d1@data$spc[! is.na (d1@data$spc)], d2@data$spc[! is.na (d1@data$spc)]))
+	stopifnot (all.equal (d1@data$spc[! is.na (d1@data$spc)], d3@data$spc[! is.na (d1@data$spc)]))
+	stopifnot (all.equal (d2@data$spc, d3@data$spc))
+}
+@
+
+\setkeys{Gin}{width = \textwidth}
+<<ausw, cache = FALSE>>=
+save (df, file = "df.RData")
+
+df <- df [nrow == 1000]
+
+print (summary (lm (time ~ nrow *nwl, data = df[df$alg == 1,])))
+summary (lm (time ~ alg, data = df))
+
+ind <- df$time [df$alg == 3] > df$time [df$alg == 2] 
+
+qt <- df$time [df$alg == 3] / df$time [df$alg == 2] 
+dt <- df$time [df$alg == 3] - df$time [df$alg == 2]
+
+sum (ind)
+
+names (df)
+
+xyplot (qt ~ na, data = df [df$alg == 3,])
+xyplot (dt ~ na | by * nwl, data = df [df$alg == 3,])
+
+
+print (summary (lm (qt ~ nrow, data = df[df$alg == 1,])))
+
+td3 <- df$time [df$alg == 3] - df$time [df$alg == 1]
+td2 <- df$time [df$alg == 2] - df$time [df$alg == 1]
+
+tq <- td3/td2
+
+tq [abs (tq) > 1e10] <- NA
+tq [df$na[df$alg == 3]  < 10 ] <- NA
+
+Alg 3
+xyplot (tq * nwl/by~ na, data = df[df$alg == 3 ,])
+print (summary (lm (td ~ by*nwl*nrow*na, data = df[df$alg == 3,])))
+
+
+
+#boxplot (df$time [df$alg == 2] / df$time [df$alg == 1] ~ (df$na / df$nrow / df$nwl) [df$alg == 1])
+#xyplot (df$time [df$alg == 3] - df$time [df$alg == 1] ~ (df$na) [df$alg == 1])
+
+#df$time [df$alg == 3 & ] - df$time [df$alg == 1]
+@
+
+
+pgfSweave took \Sexpr{round (proc.time() - ptm)} seconds.
+\end{document}
