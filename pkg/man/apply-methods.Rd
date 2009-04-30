@@ -1,18 +1,14 @@
 \name{apply-methods}
 \docType{methods}
 \alias{apply,hyperSpec-method}
-\alias{spcapply}
-\alias{wlapply}
 \title{apply}
 \description{
  Computes summary statistics for the spectra of a \code{hyperSpec} object. 
 }
 \usage{
 \S4method{apply}{hyperSpec}(X, MARGIN, FUN, ...,
+ 	label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
    short = NULL, user = NULL, date = NULL)
-spcapply (spc, FUN, ..., 
-		label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
-		short = NULL, long = NULL, user = NULL, date = NULL)
 }
 \arguments{
   \item{X, spc}{a \code{hyperSpec} object}
@@ -24,8 +20,8 @@ spcapply (spc, FUN, ...,
   \item{FUN}{function to compute the summary statistics}
   \item{\dots}{further arguments passed to \code{FUN}}
   \item{label.wl,label.spc}{new labels for wavelength and spectral intensity axes}
-  \item{new.wavelength}{numeric vector or name of the argument in \dots 
-  that is to be used (character)}
+  \item{new.wavelength}{for \code{MARGIN = 2}: numeric vector or name of the argument in \dots 
+  that is to be used (character) as wavelength axis of the resulting object.}
   \item{short, user, date}{aguments passed to \code{logentry}}
 }
 \value{

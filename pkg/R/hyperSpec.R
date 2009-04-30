@@ -1137,77 +1137,68 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
 							X@wavelength <- wl
 					}
 				
-				if (!is.null (label.wl))
-					X@label$.wavelength <- label.wl	
-				else if (ncol (X@data$spc) != length (X@wavelength)) 
+				if (ncol (X@data$spc) != length (X@wavelength)) 
 					X@label$.wavelength <- NULL
 				
-				if (!is.null (label.spc))
-					X@label$spc <- label.spc	
-
-#				if (ncol (X@data$spc) != length (X@wavelength)){ 
-#						wl <- as.numeric (colnames (X@data$spc))
-#						if (length (wl) != ncol (X@data$spc) || any (is.na (wl)))
-#							X@wavelength <- seq_len (ncol (X@data$spc))
-#						else
-#							X@wavelength <- wl
-#						
-#						X@label$.wavelength <- NULL
-#					}
 				}
 			}
 			
+			if (!is.null (label.wl))
+				X@label$.wavelength <- label.wl	
+			
+			if (!is.null (label.spc))
+				X@label$spc <- label.spc				
 			X@log <- logentry(X, short = short, long = long, user = user, date = date)
 			
 			X
 		})
 
-###-----------------------------------------------------------------------------
-###
-###  spc.apply
-###  
-###  
+####-----------------------------------------------------------------------------
+####
+####  spc.apply
+####  
+####  
+#
+#spc.apply <- function (spc, FUN, ..., 
+#		label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
+#		short = NULL, long = NULL, user = NULL, date = NULL){
+#	validObject (spc)
+#	
+#	if (is.null (short))
+#		short <- "spc.apply"
+#	if (is.null (long))
+#		long <- list (FUN = FUN, ...,
+#				label.wl = label.wl, label.spc = label.spc, new.wavelength = new.wavelength,
+#				call = deparse (sys.call()[])
+#		)
+#	
+#	apply (spc, MARGIN = 1, FUN = FUN, ...,
+#			label.wl = label.wl, label.spc = label.spc, new.wavelength = new.wavelength,
+#			short = short, long = long, user = user, date = date
+#			)
+#}
 
-spc.apply <- function (spc, FUN, ..., 
-		label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
-		short = NULL, long = NULL, user = NULL, date = NULL){
-	validObject (spc)
-	
-	if (is.null (short))
-		short <- "spc.apply"
-	if (is.null (long))
-		long <- list (FUN = FUN, ...,
-				label.wl = label.wl, label.spc = label.spc, new.wavelength = new.wavelength,
-				call = deparse (sys.call()[])
-		)
-	
-	apply (spc, MARGIN = 1, FUN = FUN, ...,
-			label.wl = label.wl, label.spc = label.spc, new.wavelength = new.wavelength,
-			short = short, long = long, user = user, date = date
-			)
-}
-
-###-----------------------------------------------------------------------------
-###
-###  wl.apply
-###  
-###  
-
-wl.apply <- function (spc, FUN, ..., 
-		short = NULL, long = NULL, user = NULL, date = NULL){
-	validObject (spc)
-	
-	if (is.null (short))
-		short <- "wl.apply"
-	if (is.null (long))
-		long <- list (FUN = FUN, ...,
-				call = deparse (sys.call()[])
-		)
-	
-	apply (spc, MARGIN = 2, FUN = FUN, ...,
-			short = short, long = long, user = user, date = date
-	)
-}
+####-----------------------------------------------------------------------------
+####
+####  wl.apply
+####  
+####  
+#
+#wl.apply <- function (spc, FUN, ..., 
+#		short = NULL, long = NULL, user = NULL, date = NULL){
+#	validObject (spc)
+#	
+#	if (is.null (short))
+#		short <- "wl.apply"
+#	if (is.null (long))
+#		long <- list (FUN = FUN, ...,
+#				call = deparse (sys.call()[])
+#		)
+#	
+#	apply (spc, MARGIN = 2, FUN = FUN, ...,
+#			short = short, long = long, user = user, date = date
+#	)
+#}
 
 
 ###-----------------------------------------------------------------------------
