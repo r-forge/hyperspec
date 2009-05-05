@@ -2,6 +2,9 @@ require (lattice)
 ## TODO delete old generics
 # TODO: seq_along
 ## TODO: sweep logentry
+## TODO: slice_map
+## TODO: stopifnot
+## TODO test log10
 
 setClass ("hyperSpec",
 		representation = representation (
@@ -97,9 +100,6 @@ setMethod ("initialize", "hyperSpec",
 ###
 ###  orderwl - order the wavelength axis ascending
 ###
-
-##setGeneric ("orderwl", function (x, ...) standardGeneric("orderwl"))
-##setMethod ("orderwl", "hyperSpec", function (x,
 orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
 		short = "orderwl", date = NULL, user = NULL){
 	ord <- order (x@wavelength, na.last = na.last, decreasing = decreasing)
@@ -113,8 +113,6 @@ orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
 			date = date, user = user) 
 	x
 }
-##)
-
 
 ###-----------------------------------------------------------------------------
 ###
@@ -139,8 +137,6 @@ setMethod ("show", "hyperSpec", function (object){
 ###  logentry - create new log item (hyperSpec)
 ###
 ###
-##setGeneric ("logentry", function (x, ...) standardGeneric("logentry"))
-##setMethod ("logentry", "hyperSpec", function (x,
 logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 	validObject (x)
 	
@@ -167,7 +163,6 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 			)
 	)
 }
-##)
 
 ###-----------------------------------------------------------------------------
 ###
@@ -364,6 +359,11 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 			sep ="")
 	dummy
 }
+###-----------------------------------------------------------------------------
+###
+###  as.character
+###  
+###  
 
 setMethod (as.character, "hyperSpec", function (x,
 				digits = getOption ("digits"),
@@ -809,7 +809,7 @@ setMethod ("Math", signature (x = "hyperSpec"),
 		function (x){
 			validObject (x)
 			
-			if (grepl ("^cum", Generic) || grepl ("gamma$", Generic))
+			if (grepl ("^cum", .Generic) || grepl ("gamma$", .Generic))
 			warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
 			
 			x [[]] <- callGeneric (x[[]])
@@ -917,7 +917,6 @@ setMethod("cbind2", signature (x = "hyperSpec", y = "missing"), function (x, y)x
 ### rbind2
 ###  
 ###  
-#setGeneric ("r", function (x, ...) standardGeneric("nwl"))
 setMethod("rbind2",
 		signature(x = "hyperSpec", y = "hyperSpec"),
 		function (x, y) {
@@ -1147,8 +1146,11 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
 				X@label$.wavelength <- label.wl	
 			
 			if (!is.null (label.spc))
-				X@label$spc <- label.spc				
+				X@label$spc <- label.spc
+			
 			X@log <- logentry(X, short = short, long = long, user = user, date = date)
+			
+			validObject (X)
 			
 			X
 		})
@@ -1432,7 +1434,7 @@ plotmap <- function (object,
 			warning ("func did not yield one value per spectrum.")
 	}
 	
-	grid <- index.grid (object[[, c(ix, iy)]]) 
+	grid <- index.grid (object[, c(ix, iy)]) 
 	z <- z [grid$grid]
 	
 	if (! is.null (cond)){
@@ -1481,7 +1483,6 @@ plotmap <- function (object,
 ### index.grid
 ###  
 ###  
-
 index.grid <- function (x, y, z){
 	if (is (x, "hyperSpec")){
 		validObject (x)
@@ -1647,8 +1648,6 @@ plotc <- function (object, use.c = "c", func = sum, ...,
 	else
 		do.call(plot, plot.dots)
 }
-#)
-
 
 ###-----------------------------------------------------------------------------
 ###
@@ -1779,15 +1778,14 @@ plotspc <- function  (object,
 	if (! add){
 		## Plot area
 		plot.dots$x <- unlist (x)
-		plot.dots$y <- spc[1,,drop=FALSE] 
-		plot.dots <- c (plot.dots,
-				type = "n",
-				bty = bty,
-				xaxt = "n",
-				yaxt = "n",
-				xlab = NA,     # title is called later
-				ylab = NA
-		)
+		plot.dots$y <- spc[1,,drop=FALSE]
+		plot.dots$type <- "n"
+		plot.dots$bty <- bty
+		plot.dots$xaxt <- "n"
+		plot.dots$yaxt <- "n"
+		plot.dots$xlab <- NA     # title is called later
+		plot.dots$ylab <- NA
+
 		if (is.null (plot.dots$xlim))
 			plot.dots$xlim <- range (unlist (x), na.rm = TRUE)
 		
@@ -2496,7 +2494,7 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1, short = NULL,
 	} else {
 		wl <- apply.to@wavelength;
 		x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
-		apply.to@data$spc <- I (t (applyo (p[[]], 1, function (p, x) {x %*% p}, x)))
+		apply.to@data$spc <- I (t (apply (p[[]], 1, function (p, x) {x %*% p}, x)))
 		apply.to@log <- logentry (apply.to, 		
 				short = if (is.null (short)) "spc.fit.poly: spectra" else short,
 				long = list (apply = match.call()$apply, poly.order = poly.order), 
@@ -2592,8 +2590,13 @@ dots <- list (...)
 if (is.null (dots$enp.target))
 	dots$enp.target <- 300
 
+if (is.null (dots$enp.target))
+	dots$enp.target <- 300
+
 loess <- apply (t (spc[[]]), 2, 
-		function (y, x) loess (y ~ x, enp.target = dots$enp.target, ...), 
+		function (y, x){
+			do.call (loess, c(y ~ x, dots))	
+		}, 
 		spc@wavelength)
 
 spc@data$spc <- t (sapply (loess, predict, newx))
