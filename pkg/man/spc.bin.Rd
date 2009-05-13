@@ -45,3 +45,5 @@ spc.bin(spc, by = stop ("reduction factor needed"), na.rm = TRUE, ...)
  nwl (flu)
  nwl (spc)
 }
+\keyword{manip}
+\keyword{datagen}

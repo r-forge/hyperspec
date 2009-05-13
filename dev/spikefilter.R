@@ -72,7 +72,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     k <- ind[1] + (-nspc : nspc) # suspicious spectrum plus the spectra around
     k <- k [k > 0]
     k <- k [k <= nrow (spc)]
-    isna <- apply (spc[k,], 1, function (x) all (is.na (x)))
+    isna <- apply (spc[k,,drop = FALSE], 1, function (x) all (is.na (x)))
     k <- k[! isna]
 ##     plot (spc[k,                  ], "spc", 
 ##           col = c("black", "blue", "black"))
@@ -93,7 +93,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     x <- range (wavelength[j], na.rm = TRUE)
     x <- c(x[1], (x[2] - x[1]) * 1.1 + x[1])
     
-    y <- range (spc[k,j], na.rm = TRUE)
+    y <- range (spc[k,j,drop = FALSE], na.rm = TRUE)
 
 ##     plot (spc[k, , j, index = TRUE], "spc", 
 ##           col = c("black", "blue", "black"), pch = 20, type = "p",

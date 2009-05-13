@@ -25,9 +25,9 @@
 }
 \usage{
 ## Extaction
-\S4method{[}{hyperSpec}(x, i, j, l, ..., index = FALSE, short = NULL, drop = FALSE)
+\S4method{[}{hyperSpec}(x, i, j, l, ..., wl.index = FALSE, short = NULL, drop = FALSE)
 
-\S4method{[[}{hyperSpec}(x, i, j, l, ..., index = FALSE, drop = FALSE)
+\S4method{[[}{hyperSpec}(x, i, j, l, ..., wl.index = FALSE, drop = FALSE)
 
 \S4method{$}{hyperSpec}(x, name)
 
@@ -45,7 +45,7 @@
 x[i, j, l, short = NULL, \dots] <- value
 
 ## S4 method for signature 'hyperSpec':
-x[[i, j, l, index = FALSE, short = NULL, \dots]] <- value
+x[[i, j, l, wl.index = FALSE, short = NULL, \dots]] <- value
 
 ## S4 method for signature 'hyperSpec':
 x$name <- value
@@ -64,7 +64,7 @@ x$name <- value
     behaviour is treating \code{l} as wavelengths, \emph{not} as
     indices.}
 
-  \item{index}{If \code{TRUE} (default), the value(s) in \code{l} are treated as
+  \item{wl.index}{If \code{TRUE} (default), the value(s) in \code{l} are treated as
     column indices for the spectral matrix. Otherwise, the numbers in
     \code{l} are treated as wavelengths and the corresponding column
     indices are looked up first via \code{\link{wl2i}}.}

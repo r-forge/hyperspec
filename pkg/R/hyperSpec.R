@@ -5,6 +5,7 @@ require (lattice)
 ## TODO: slice_map
 ## TODO: stopifnot
 ## TODO test log10
+## is.na
 
 setClass ("hyperSpec",
 		representation = representation (
@@ -171,7 +172,7 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 
 setMethod ("[", "hyperSpec", function (x, i, j, l, #
 				...,
-				index = FALSE,
+				wl.index = FALSE,
 				short = NULL,
 				drop = FALSE
 		){
@@ -200,7 +201,7 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
 										""
 									else
 										deparse (substitute (l, env)),
-							index = index,
+							wl.index = wl.index,
 							data = data))
 			
 			## rows
@@ -223,7 +224,7 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
 				#if (length (x@wavelength) == 0)
 				#  warning ("Selected columns do not contain specta.")
 				#else {
-				if (!index && is.numeric (l))
+				if (!wl.index && is.numeric (l))
 					l <- wl2i (x, l)
 				x@wavelength <- x@wavelength[l]
 				x@data$spc <- x@data$spc[,l, drop = FALSE]
@@ -257,7 +258,8 @@ setMethod ("$", "hyperSpec", function (x, name){
 ###
 setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 				drop = FALSE,
-				index = FALSE){
+				wl.index = FALSE,
+				matrix.index = FALSE){
 			validObject (x)
 			
 			if (missing (i) & missing (j) & missing (l)) ## shortcut
@@ -272,7 +274,7 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 
 			if (! missing (l)) dots$l <- l
 			
-			dots$index <- index
+			dots$index <- wl.index
 			
 			x <- do.call ("[", dots) 
 			
@@ -548,10 +550,19 @@ wl <- function (x){
 ###  wl 
 ###  
 ###
-"wl<-" <- function (x, digits = 6, short = "wl<-", user = NULL, date = NULL, value){
+"wl<-" <- function (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value){
 	validObject (x)
 	
+	if (is.numeric (value))
+		warning ("D onot forget to adjust the label of the wavelength axis.")
+	else if (is.list (value)){
+		label <- value$label
+		value <- value$wl
+	}
+	
 	.wl (x) <- value
+	
+	x@label <- label
 	
 	validObject (x)
 	x@log <- logentry (x, short = short, long = list (value = value, digits = digits), 
@@ -619,7 +630,8 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 					l = if (missing (l)) "" else l,
 					index = index,
 					...,
-					value = .paste.row (value, val = TRUE)
+					value = if (is (value, "hyperSpec")) as.character (value)
+						else .paste.row (value, val = TRUE)
 			) 
 			
 			if (! missing (j))
@@ -1797,6 +1809,11 @@ plotspc <- function  (object,
 			plot.dots$xlim <- rev(plot.dots$xlim)
 		
 		do.call (plot, plot.dots)
+
+		## reversed x axis ? => would lead to trouble with tick positions
+		if (diff (plot.dots$xlim) < 0)
+			plot.dots$xlim <- rev(plot.dots$xlim)
+		
 		
 		## Axes
 		## x-axis labels & ticks
@@ -2588,10 +2605,10 @@ validObject (spc)
 
 dots <- list (...)
 if (is.null (dots$enp.target))
-	dots$enp.target <- 300
+	dots$enp.target <- nwl (spc) / 4
 
-if (is.null (dots$enp.target))
-	dots$enp.target <- 300
+if (is.null (dots$surface))
+	dots$surface <- "direct"
 
 loess <- apply (t (spc[[]]), 2, 
 		function (y, x){
@@ -2703,6 +2720,19 @@ matlab.palette <- function (n = 100) {
 	rev (rainbow (n, start = 0, end = 4/6))
 }
 
+###-----------------------------------------------------------------------------
+###
+###  matlab.dark.palette
+###  
+###  
+
+matlab.dark.palette <- function (n = 100) {
+	pal <- rev (rainbow (n, start = 0, end = 4/6))
+	pal <- col2rgb(pal)
+	pal ["green",] <- pal ["green",] / 2
+	
+	rgb (t (pal)/255)
+}
 
 ###-----------------------------------------------------------------------------
 ###

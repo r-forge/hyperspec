@@ -1,6 +1,5 @@
-\name{initialize-methods}
+\name{initialize}
 \docType{methods}
-\alias{initialize-methods}
 \alias{initialize,hyperSpec-method}
 \title{Creating a hyperSpec Object}
 \description{

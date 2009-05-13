@@ -1,6 +1,5 @@
 \name{Arithmetical Operators}
 \docType{methods}
-\alias{Arith}
 \alias{hyperSpec Arith}
 \alias{hyperSpec Arithmetical}
 \alias{hyperSpec Arithmetical Operators}
@@ -16,6 +15,7 @@
 \alias{/,hyperSpec,hyperSpec-method}
 \alias{Arith,hyperSpec,matrix-method} 
 \alias{Arith,hyperSpec,numeric-method}
+\alias{Arith,hyperSpec,missing-method}
 \alias{Arith,matrix,hyperSpec-method}
 \alias{Arith,numeric,hyperSpec-method}
 \alias{\%*\%}
@@ -41,6 +41,8 @@ e1 + e2
 #S4 method for signature 'numeric,hyperSpec':
 x \%*\% y
 `\%*\%`(x, y)
+#S4 method for signature 'hyperSpec,missing':
+-x
 }
 }
 \arguments{
@@ -72,7 +74,6 @@ x \%*\% y
 
 \author{C. Beleites}
 
-
 \examples{
 chondro + chondro
 1 / chondro
@@ -87,7 +88,10 @@ all((chondro + chondro - 2 * chondro)[[]] == 0)
   \code{\link[base]{Arithmetic}} for the base arithmetic functions.
 
   \code{\link[base]{matmult}} for matrix multiplications with \code{\%*\%}.
+  
+  \code{\link[hyperSpec]{Comparison}} for comparison operators, 
+  \code{\link[hyperSpec]{Math}} and \code{\link[hyperSpec]{Math2}} for mathematical group generic 
+  functions working on \code{hyperSpec} objects.  
 }
-
 \keyword{methods}
 \keyword{arith}
