@@ -31,7 +31,7 @@
 
   Supported values for \code{y} are:
 
-  \description{
+  \details{
 	 \item{"spc"}{calls \code{\link{plotspc}} to produce a spectra plot.}
 	 
 	 \item{"spcmeansd"}{plots mean spectrum +/- one standard deviation}

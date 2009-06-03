@@ -271,8 +271,8 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 			
 			if (! missing (i)) dots$i <- i
 
-			if (!missing (j))
-				warning ("Column selection ignored.") 
+			if (!missing (j)) dots$j <- j
+				#warning ("Column selection ignored.")
 
 			if (! missing (l)) dots$l <- l
 			
@@ -280,8 +280,10 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 			
 			x <- do.call ("[", dots) 
 			
-			x@data$spc[,, drop = drop]
-			
+			if (missing (j))
+				x@data$spc[,, drop = drop]
+			else 
+				x@data[,, drop = drop]
 		})
 
 
@@ -555,9 +557,10 @@ wl <- function (x){
 "wl<-" <- function (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value){
 	validObject (x)
 	
-	if (is.numeric (value))
-		warning ("D onot forget to adjust the label of the wavelength axis.")
-	else if (is.list (value)){
+	if (is.numeric (value)){
+		if (is.null (label))
+			warning ("Do not forget to adjust the label of the wavelength axis.")
+	} else if (is.list (value)){
 		label <- value$label
 		value <- value$wl
 	}

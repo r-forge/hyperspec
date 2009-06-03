@@ -9,7 +9,7 @@
 map.identify(x, lattice = NULL)
 }
 \arguments{
-  \item{x} {a hyperSpec object}
+  \item{x}{a hyperSpec object}
   
   \item{lattice}{a lattice object as returned by
 	 \code{\link{plotmap}}. If missing, \code{\link{plotmap} (x)} is
@@ -18,7 +18,6 @@ map.identify(x, lattice = NULL)
 \value{
   A vector with the row indices into \code{x} of the identified points.
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \seealso{\code{\link{plotmap}}, \code{\link[lattice]{panel.identify}}}
 \examples{
