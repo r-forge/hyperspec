@@ -43,7 +43,14 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> No content added. </p>
+<p> At the moment, the package is accessible for the listed admins only. 
+However, if you send me an email, I'll send you the zipped source.<br/>
+Claudia Beleites<br/>
+CENMAT, Materials and Natural Resources Dept.<br/> 
+University of Trieste<br/>
+e-mail: cbeleites at units.it
+</p>
+
 
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 

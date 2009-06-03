@@ -5,6 +5,8 @@ require (lattice)
 ## TODO: slice_map
 ## TODO: stopifnot
 ## TODO test log10
+
+## TODO plotc z ./. c
 ## is.na
 
 setClass ("hyperSpec",
@@ -274,7 +276,7 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 
 			if (! missing (l)) dots$l <- l
 			
-			dots$index <- wl.index
+			dots$wl.index <- wl.index
 			
 			x <- do.call ("[", dots) 
 			
@@ -620,7 +622,7 @@ setReplaceMethod ("[", "hyperSpec", function (x, i, j,
 ###
 
 setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l, 
-				index = FALSE,
+				wl.index = FALSE,
 				short = NULL,
 				...,
 				value){
@@ -628,7 +630,7 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 			
 			long <- list (i = if (missing (i)) "" else i ,
 					l = if (missing (l)) "" else l,
-					index = index,
+					wl.index = wl.index,
 					...,
 					value = if (is (value, "hyperSpec")) as.character (value)
 						else .paste.row (value, val = TRUE)
@@ -642,7 +644,7 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 			
 			if (missing (l))
 				l <- seq_len (ncol (x@data$spc))
-			else if (!index)
+			else if (!wl.index)
 				l <- wl2i (x, l)
 			
 			if (is (value, "hyperSpec")){
@@ -1382,7 +1384,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 		
 		if (!retain.columns) {
 			cols <- which(is.na(object@data[1, -spc]))
-			cols[cols > spc] <- cols + 1
+			cols[cols > spc] <- cols [cols > spc] + 1
 			object@data <- object@data[, -cols, drop = FALSE]
 		}
 		
@@ -1741,7 +1743,7 @@ plotspc <- function  (object,
 	ispc <- relist (seq_len (length (u.wl.range)), wavelength.range)
 	
 	rm (wavelength.range)
-	spc <- object[[,, u.wl.range, drop = FALSE, index = TRUE]]
+	spc <- object[[,, u.wl.range, drop = FALSE, wl.index = TRUE]]
 	rm (u.wl.range)
 	
 	
@@ -2602,6 +2604,9 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
 spc.loess <- function (spc, newx, ..., 
 		short = NULL, user = NULL, date = NULL){
 validObject (spc)	
+
+if (any (newx < min (spc@wavelength)) || any (newx > max (spc@wavelength)))
+	warning ("newx outside spectral range of spc. NAs will be generated.")
 
 dots <- list (...)
 if (is.null (dots$enp.target))
