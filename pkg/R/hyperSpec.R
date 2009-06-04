@@ -169,6 +169,36 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 
 ###-----------------------------------------------------------------------------
 ###
+### .extract - internal function doing the work for extracting with [] and [[]]
+###
+
+
+.extract <- function (x, i, j, l, 
+		...,
+		wl.index = FALSE
+){
+	if (! missing (i))
+		x@data <- x@data[i,, drop = FALSE]
+	
+	if (!missing (j)) 
+		x@data <- x@data[, j, drop = FALSE]
+
+	if (!missing (l)) {
+		if (is.null (x@data$spc))
+			warning ("Selected columns do not contain specta. l ignored.")
+		else {
+			if (!wl.index && is.numeric (l))
+				l <- wl2i (x, l)
+			x@wavelength <- x@wavelength[l]
+			x@data$spc <- x@data$spc[,l, drop = FALSE]
+		}
+	}
+	
+	x
+}
+
+###-----------------------------------------------------------------------------
+###
 ### extractsquare - extracting with []
 ###
 
@@ -205,32 +235,14 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
 										deparse (substitute (l, env)),
 							wl.index = wl.index,
 							data = data))
+	
+			call <- match.call ()
+			call [[1]] <- .extract
+			x <- eval (call)
 			
-			## rows
-			if (! missing (i))
-				x@data <- x@data[i,, drop = FALSE]
-			
-			## columns
-			if (!missing (j)) {
-				#if (data) {
-				x@data <- x@data[, j, drop = FALSE]
-				##  valid hyperSpec objects need to have @data$spc
-				if (is.na (match ("spc", colnames (x@data)))){ 
-					x@data$spc <- matrix (NA, nrow (x@data), 0)
-					x@wavelength <- numeric (0)
-				}
-			}
-			
-			## wavelengths
-			if (!missing (l)) {
-				#if (length (x@wavelength) == 0)
-				#  warning ("Selected columns do not contain specta.")
-				#else {
-				if (!wl.index && is.numeric (l))
-					l <- wl2i (x, l)
-				x@wavelength <- x@wavelength[l]
-				x@data$spc <- x@data$spc[,l, drop = FALSE]
-				#}
+			if (is.null (x@data$spc)){ 
+				x@data$spc <- matrix (NA, nrow (x@data), 0)
+				x@wavelength <- numeric (0)
 			}
 			
 			x
@@ -260,30 +272,21 @@ setMethod ("$", "hyperSpec", function (x, name){
 ###
 setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 				drop = FALSE,
-				wl.index = FALSE,
-				matrix.index = FALSE){
+				wl.index = FALSE){
 			validObject (x)
 			
 			if (missing (i) & missing (j) & missing (l)) ## shortcut
 				return (x@data$spc)
 			
-			dots <- list (x = x) 
-			
-			if (! missing (i)) dots$i <- i
-
-			if (!missing (j)) dots$j <- j
-				#warning ("Column selection ignored.")
-
-			if (! missing (l)) dots$l <- l
-			
-			dots$wl.index <- wl.index
-			
-			x <- do.call ("[", dots) 
+			call <- match.call ()
+			call [[1]] <- .extract
+			x <- eval (call)
 			
 			if (missing (j))
 				x@data$spc[,, drop = drop]
-			else 
+			else {
 				x@data[,, drop = drop]
+			}
 		})
 
 
