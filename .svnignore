@@ -1,3 +1,5 @@
 hyperSpec_*.tar.gz
 *.Rcheck
 *~
+.project
+.settings
