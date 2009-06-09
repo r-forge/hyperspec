@@ -114,9 +114,11 @@ x$name <- value
   \code{$<-} replaces a column of the \code{data.frame} in slot \code{x@data}.
 }
 \value{
-    For \code{[}, \code{[<-}, and \code{$<-} a \code{hyperSpec} object,
-    fot \code{[[} a matrix or \code{data.frame}, and for and \code{$}
-    the column of the \code{data.frame} \code{@data}.
+    For \code{[}, \code{[<-}, \code{[[<-}, and \code{$<-} a \code{hyperSpec} object,
+    
+    for \code{[[} a matrix or \code{data.frame}, and 
+    
+    for \code{$} the column of the \code{data.frame} \code{@data}.
 
     \code{x[[]]} returns the complete spectra matrix.
 

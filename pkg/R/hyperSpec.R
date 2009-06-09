@@ -586,7 +586,6 @@ wl <- function (x){
 ###
 
 setReplaceMethod ("[", "hyperSpec", function (x, i, j,
-				drop = FALSE,
 				short = NULL,
 				...,
 				value){
@@ -607,9 +606,9 @@ setReplaceMethod ("[", "hyperSpec", function (x, i, j,
 			
 			if (is (value, "hyperSpec")){
 				validObject (value)
-				x@data [i, j, ..., drop = drop] <- value@data
+				x@data [i, j, ...] <- value@data
 			} else
-				x@data [i, j, ..., drop = drop] <- value
+				x@data [i, j, ...] <- value
 			
 			x@log <- logentry (x,
 					short = if (is.null (short)) "[<-"
