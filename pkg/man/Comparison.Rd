@@ -1,4 +1,4 @@
-\name{Cmparison Operators}
+\name{Compare}
 \docType{methods}
 \alias{hyperSpec Comparison}
 \alias{hyperSpec compare}
@@ -57,10 +57,10 @@ e1 != e2
 
 \value{a logical matrix
 
-As code{hyperSpec} objects must have numeric spectra matrices, 
+As \code{hyperSpec} objects must have numeric spectra matrices, 
 the resulting matrix of the comparison is returned directly.
 
-This also allows indexing 
+This also allows indexing with 
 }
 
 \author{C. Beleites}
@@ -81,4 +81,4 @@ This also allows indexing
   functions working on \code{hyperSpec} objects.  
 }
 \keyword{methods}
-\keyword{compare}
+\keyword{arith}

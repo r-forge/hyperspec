@@ -1,4 +1,4 @@
-\name{show-methods}
+\name{show}
 \docType{methods}
 \alias{show}
 \alias{show-methods}

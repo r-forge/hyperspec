@@ -6,7 +6,7 @@
  Computes summary statistics for the spectra of a \code{hyperSpec} object. 
 }
 \usage{
-\S4method{apply}{hyperSpec}(X, MARGIN, FUN, ...,
+\S4method{apply}{hyperSpec}(X, MARGIN, FUN, \dots,
  	label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
    short = NULL, user = NULL, date = NULL)
 }
@@ -62,5 +62,5 @@ all (apply (flu, 1:2, log)[[]] - log(flu[[]]) == 0)
 \author{C. Beleites}
 
 \keyword{methods}
-
+\keyword{iteration}
 

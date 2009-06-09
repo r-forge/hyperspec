@@ -1,7 +1,6 @@
 \name{plot-methods}
 \docType{methods}
 \alias{plot}
-\alias{plot-methods}
 \alias{plot,ANY,ANY-method}
 \alias{plot,hyperSpec,character-method}
 \alias{plot,hyperSpec,missing-method}
@@ -31,7 +30,7 @@
 
   Supported values for \code{y} are:
 
-  \details{
+  \describe{
 	 \item{"spc"}{calls \code{\link{plotspc}} to produce a spectra plot.}
 	 
 	 \item{"spcmeansd"}{plots mean spectrum +/- one standard deviation}

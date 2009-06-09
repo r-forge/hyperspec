@@ -236,9 +236,7 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
 							wl.index = wl.index,
 							data = data))
 	
-			call <- match.call ()
-			call [[1]] <- .extract
-			x <- eval (call)
+			x <- .extract (x, i, j, l, ..., wl.index = wl.index)
 			
 			if (is.null (x@data$spc)){ 
 				x@data$spc <- matrix (NA, nrow (x@data), 0)
@@ -275,12 +273,16 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 				wl.index = FALSE){
 			validObject (x)
 			
-			if (missing (i) & missing (j) & missing (l)) ## shortcut
-				return (x@data$spc)
+#			browser()
 			
-			call <- match.call ()
-			call [[1]] <- .extract
-			x <- eval (call)
+#			if (missing (i) & missing (j) & missing (l)) ## shortcut
+#				return (x@data$spc)
+			
+			x <- .extract (x, i, j, l, ..., wl.index = wl.index)
+			
+#			call <- match.call ()
+#			$call [[1]] <- .extract
+#			x <- eval (call)
 			
 			if (missing (j))
 				x@data$spc[,, drop = drop]
@@ -570,7 +572,7 @@ wl <- function (x){
 	
 	.wl (x) <- value
 	
-	x@label <- label
+	x@label$.wavelength <- label
 	
 	validObject (x)
 	x@log <- logentry (x, short = short, long = list (value = value, digits = digits), 
@@ -644,19 +646,21 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 			if (! missing (j))
 				stop ("The spectra matrix may only be indexed by i (spectra) and l (wavlengths). j (data column) must be missing.")
 			
-			if (missing (i))
-				i <- seq_len (nrow (x@data$spc))
+#			if (missing (i))
+#				i <- seq_len (nrow (x@data$spc))
 			
-			if (missing (l))
-				l <- seq_len (ncol (x@data$spc))
-			else if (!wl.index)
+#			if (missing (l))
+#				l <- seq_len (ncol (x@data$spc))
+#			else 
+			if  (!missing (l) && !wl.index)
 				l <- wl2i (x, l)
 			
 			if (is (value, "hyperSpec")){
 				validObject (value)
-				x@data$spc[i, l, ...] <- value@data$spc
-			} else
-				x@data$spc[i, l, ...] <- value
+				value <- value@data$spc
+			} 
+				
+			x@data$spc[i, l, ...] <- value
 			
 			x@log <- logentry (x,
 					short = if (is.null (short))
@@ -864,10 +868,8 @@ setMethod ("Math2", signature (x = "hyperSpec"),
 		function (x, digits){
 			validObject (x)
 
-			if (exists ("digits"))
-				x [[]] <- callGeneric (x[[]], digits)
-			else
-				x [[]] <- callGeneric (x[[]])
+			x [[]] <- callGeneric (x[[]], digits)
+
 			x@log <- logentry (x, short = .Generic, 
 					long = list(if (exists ("digits")) digits = digits))
 			x
@@ -887,10 +889,12 @@ setMethod ("Summary", signature (x = "hyperSpec"),
 			if ((.Generic == "prod") || (.Generic == "sum"))
 				warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
 			
-			callGeneric (x[[]], ..., na.rm = na.rm)
+			## dispatch also on the objects in ...
+			x <- sapply (list (x[[]], ...), .Generic, na.rm = na.rm) 
+			
+			callGeneric (x, na.rm = na.rm)
 		}
 )
-
 
 ###-----------------------------------------------------------------------------
 ###

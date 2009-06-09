@@ -7,7 +7,7 @@
   the spectral resolution can be reduced.
 }
 \usage{
-spc.bin(spc, by = stop ("reduction factor needed"), na.rm = TRUE, ...)
+spc.bin(spc, by = stop ("reduction factor needed"), na.rm = TRUE, \dots)
 }
 \arguments{
   \item{spc}{the \code{hyperSpec} object}
@@ -19,7 +19,7 @@ spc.bin(spc, by = stop ("reduction factor needed"), na.rm = TRUE, ...)
         if  \code{TRUE} or \code{1}, the binning is done using \code{na.rm = TRUE} 
 
         if  \code{2}, the binning is done using \code{na.rm = FALSE}, and resulting \code{NA}s
-        are corrected with \code{mean(..., na.rm = TRUE)}.  
+        are corrected with \code{mean(\dots, na.rm = TRUE)}.  
      	}	 
   \item{\dots}{handed to \code{logentry}.}
 }

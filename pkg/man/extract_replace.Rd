@@ -1,4 +1,4 @@
-\name{[-methods}
+\name{Extract and Replace}
 \docType{methods}
 \alias{[,hyperSpec-method}
 \alias{[[,hyperSpec-method}
@@ -25,9 +25,9 @@
 }
 \usage{
 ## Extaction
-\S4method{[}{hyperSpec}(x, i, j, l, ..., wl.index = FALSE, short = NULL, drop = FALSE)
+\S4method{[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE, short = NULL, drop = FALSE)
 
-\S4method{[[}{hyperSpec}(x, i, j, l, ..., wl.index = FALSE, drop = FALSE)
+\S4method{[[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE, drop = FALSE)
 
 \S4method{$}{hyperSpec}(x, name)
 

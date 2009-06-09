@@ -5,11 +5,18 @@
 \description{
 \code{wl} returns the wavelength axis, \code{wl<-} sets it.
 }
-\usage{
-wl(x)
-`wl<-` (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value)
-wl (x, label) <- value
-wl (x) <- list (wl =  value, label = label)
+\section{Usage}{
+\code{wl (x)}
+
+\code{## Replacement method}
+
+\code{wl (x, label) <- value}
+
+\code{wl (x) <- list (wl =  value, label = label)}
+
+\code{wl (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL) <- value}
+
+\code{`wl<-` (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value)}
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
@@ -65,6 +72,6 @@ interpolation along the spectral axis: \code{\link[hyperSpec]{spc.loess}}
 	# convert from Raman shift to wavelength
 	# excitation was at 785 nm
 	plot (chondro [1])
-	wl (chondro) <- list (x = 1e7 / (1e7/785 - wl (chondro)), label = expression (lambda / nm))
+	wl (chondro) <- list (wl = 1e7 / (1e7/785 - wl (chondro)), label = expression (lambda / nm))
 	plot (chondro [1])
 }

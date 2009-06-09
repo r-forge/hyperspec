@@ -24,7 +24,7 @@ rbind.hyperSpec (\dots, deparse.level)
 \S4method{cbind2}{hyperSpec,missing}(x)
 \S4method{rbind2}{hyperSpec,missing}(x)
 
-bind(direction = stop("direction ('c' or 'r') required"), ...,
+bind(direction = stop("direction ('c' or 'r') required"), \dots,
    short = NULL, user = NULL, date = NULL)
 }
 \arguments{
@@ -42,7 +42,7 @@ bind(direction = stop("direction ('c' or 'r') required"), ...,
   \item{direction}{"r" or "c" to bind rows or columns}
 }
 \details{
-  While it is now possible to do S4 despatch  on \code{...}, defining
+  While it is now possible to do S4 despatch  on \code{\dots}, defining
   such S4 methods for \code{cbind} and \code{rbind} breaks the binding
   of \code{Matrix} objects. Therefore, two S3 methods
   \code{rbind.hyperSpec} and \code{cbind.hyperSpec} are defined.
@@ -94,4 +94,4 @@ try (cbind2 (x, y)) # error
 
 }
 \keyword{methods}
-
+\keyword{manip}

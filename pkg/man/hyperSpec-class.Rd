@@ -10,14 +10,14 @@
 
 \section{hyperSpec Objects}{
   Objects can be created by calls of the form
-  \code{new("hyperSpec", wavelength, data, label, log, spc, ...)}, for
+  \code{new("hyperSpec", wavelength, data, label, log, spc, \dots)}, for
   details see \code{\link[hyperSpec]{initialize}}.
 }
 
 \section{Slots}{
 	 \describe{
     \item{\code{wavelength}:}{Numeric vector giving the wavelengths
-      (or wavenumbers, frequencies, m/z, ...) for
+      (or wavenumbers, frequencies, m/z, \dots) for
       each data point of the spectrum.
 	
 		\code{wavelength} wavelength axis of the spectra.
@@ -47,11 +47,11 @@
 		\code{\link[hyperSpec]{initialize}}}
 
 	 Loading and Saving ASCII Data: \link{import}
-    \item{write.txt.long}{\code{signature(object = "hyperSpec")}: ... }
-    \item{write.txt.wide}{\code{signature(object = "hyperSpec")}: ... }
-	 \item{read.txt.long}{\code{signature (file = "character")}: ... }
-    \item{read.txt.wide}{\code{signature(file = "character")}: ... }
-	 \item{read.txt.Renishaw}{\code{signature(object = "hyperSpec")}: ... }
+    \item{write.txt.long}{\code{signature(object = "hyperSpec")}: \dots }
+    \item{write.txt.wide}{\code{signature(object = "hyperSpec")}: \dots }
+	 \item{read.txt.long}{\code{signature (file = "character")}: \dots }
+    \item{read.txt.wide}{\code{signature(file = "character")}: \dots }
+	 \item{read.txt.Renishaw}{\code{signature(object = "hyperSpec")}: \dots }
 	 
 	 Arithmetical Operators:  "+", "-", "*", "\^", "\%\%", "\%/\%", "/"
 	 
@@ -65,58 +65,58 @@
 	 Conversion:
     \item{\link{as.character}}{\code{signature(x = "hyperSpec")}}
     \item{as.data.frame}{\code{signature(x = "hyperSpec", row.names = "missing", optional = "missing")}}
-    \item{as.matrix}{\code{signature(x = "hyperSpec")}: ... }
+    \item{as.matrix}{\code{signature(x = "hyperSpec")}: \dots }
 	 
 	 Indexing:
-    \item{[}{\code{signature(x = "hyperSpec")}: ... }
-    \item{[[<-}{\code{signature(x = "hyperSpec")}: ... }
-    \item{[[}{\code{signature(x = "hyperSpec")}: ... }
-    \item{\$<-}{\code{signature(x = "hyperSpec")}: ... }
-    \item{\$}{\code{signature(x = "hyperSpec")}: ... }
+    \item{[}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{[[<-}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{[[}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{\$<-}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{\$}{\code{signature(x = "hyperSpec")}: \dots }
 	 
 	 Finding out the Dimensions:
-    \item{ncol}{\code{signature(x = "hyperSpec")}: ... }
-    \item{nrow}{\code{signature(x = "hyperSpec")}: ... }
-    \item{nwl}{\code{signature(x = "hyperSpec")}: ... }
+    \item{ncol}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{nrow}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{nwl}{\code{signature(x = "hyperSpec")}: \dots }
 
 	 
 	 Apply \& Co.:
     \item{aggregate}{\code{signature(x = "hyperSpec")}:
 		apply function to groups of spectra}
-	 \item{apply}{\code{signature(X = "hyperSpec")}: ... }
-    \item{split}{\code{signature(x = "hyperSpec")}: ... }
-    \item{sweep}{\code{signature(x = "hyperSpec")}: ... }
+	 \item{apply}{\code{signature(X = "hyperSpec")}: \dots }
+    \item{split}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{sweep}{\code{signature(x = "hyperSpec")}: \dots }
 	 
 	 Binding \code{hyperSpec} objects together
-	 \item{cbind}{: ... }
-	 \item{rbind}{: ... }
-    \item{cbind2}{\code{signature(x = "hyperSpec", y = "hyperSpec")}: ... }
-    \item{cbind2}{\code{signature(x = "hyperSpec", y = "missing")}: ... }
-    \item{rbind2}{\code{signature(x = "hyperSpec", y = "hyperSpec")}: ... }
-    \item{rbind2}{\code{signature(x = "hyperSpec", y = "missing")}: ... }
-	 \item{bind}{: ... }
+	 \item{cbind}{: \dots }
+	 \item{rbind}{: \dots }
+    \item{cbind2}{\code{signature(x = "hyperSpec", y = "hyperSpec")}: \dots }
+    \item{cbind2}{\code{signature(x = "hyperSpec", y = "missing")}: \dots }
+    \item{rbind2}{\code{signature(x = "hyperSpec", y = "hyperSpec")}: \dots }
+    \item{rbind2}{\code{signature(x = "hyperSpec", y = "missing")}: \dots }
+	 \item{bind}{: \dots }
 
 	 
 
 	 Plotting and Printing:
-    \item{plotc}{\code{signature(object = "hyperSpec")}: ... }
-    \item{plot}{\code{signature(x = "hyperSpec", y = "missing")}: ... }
-    \item{plot}{\code{signature(x = "hyperSpec", y = "character")}: ... }
-    \item{plotmap}{\code{signature(object = "hyperSpec")}: ... }
-    \item{plotspc}{\code{signature(object = "hyperSpec")}: ... }
-    \item{print}{\code{signature(x = "hyperSpec")}: ... }
-	 \item{show}{\code{signature(object = "hyperSpec")}: ... }
+    \item{plotc}{\code{signature(object = "hyperSpec")}: \dots }
+    \item{plot}{\code{signature(x = "hyperSpec", y = "missing")}: \dots }
+    \item{plot}{\code{signature(x = "hyperSpec", y = "character")}: \dots }
+    \item{plotmap}{\code{signature(object = "hyperSpec")}: \dots }
+    \item{plotspc}{\code{signature(object = "hyperSpec")}: \dots }
+    \item{print}{\code{signature(x = "hyperSpec")}: \dots }
+	 \item{show}{\code{signature(object = "hyperSpec")}: \dots }
 	 
 	 
-    \item{decompose}{\code{signature(x = "hyperSpec")}: ... }
-    \item{logentry}{\code{signature(x = "hyperSpec")}: ... }
+    \item{decompose}{\code{signature(x = "hyperSpec")}: \dots }
+    \item{logentry}{\code{signature(x = "hyperSpec")}: \dots }
 
 	 Spectra-related:
-    \item{wli}{\code{signature(x = "hyperSpec")}: ... }
-	 \item{orderwl}{\code{signature(x = "hyperSpec")}: ... }
-	 \item{spc.bin}{\code{signature(hyperSpec = "hyperSpec")}: ... }
-    \item{spc.fit.poly.below}{\code{signature(fit = "hyperSpec")}: ... }
-    \item{spc.fit.poly}{\code{signature(fit = "hyperSpec")}: ... }
+    \item{wli}{\code{signature(x = "hyperSpec")}: \dots }
+	 \item{orderwl}{\code{signature(x = "hyperSpec")}: \dots }
+	 \item{spc.bin}{\code{signature(hyperSpec = "hyperSpec")}: \dots }
+    \item{spc.fit.poly.below}{\code{signature(fit = "hyperSpec")}: \dots }
+    \item{spc.fit.poly}{\code{signature(fit = "hyperSpec")}: \dots }
 	 
 	 }
 }
@@ -126,7 +126,7 @@
 \author{Claudia Beleites \email{cbeleites@units.it}}
 \note{ ~~further notes~~ }
 
-\section{Warning}{....}
+\section{Warning}{\dots.}
 
 \examples{
 showClass("hyperSpec")

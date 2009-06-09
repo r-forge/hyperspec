@@ -12,7 +12,7 @@ using the given parameters.
 \item{.Object = "hyperSpec"}{constructor method for class \code{hyperSpec}.}
 }
 }
-\usage{
+\section{Usage}{
 new("hyperSpec", spc = NULL, data = NULL,
    wavelength = NULL, label = NULL, log = NULL)
 

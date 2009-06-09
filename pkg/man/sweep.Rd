@@ -10,7 +10,7 @@
 }
 \usage{
 \S4method{sweep}{hyperSpec}(x, MARGIN, STATS, FUN = "-",
-   check.margin = TRUE, ..., 
+   check.margin = TRUE, \dots, 
    short = NULL, user = NULL, date = NULL)
 }
 \arguments{

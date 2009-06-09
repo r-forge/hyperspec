@@ -1,4 +1,4 @@
-\name{Arithmetical Operators}
+\name{Arith}
 \docType{methods}
 \alias{hyperSpec Arith}
 \alias{hyperSpec Arithmetical}

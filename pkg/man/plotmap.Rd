@@ -8,7 +8,7 @@
 \usage{
 plotmap (object, use.x = "x", use.y = "y", func = mean, cond = NULL, 
          z = NULL, do.print = FALSE, print.args = NULL, trellis.args = NULL,
-         ...)
+         \dots)
 }
 
 \arguments{

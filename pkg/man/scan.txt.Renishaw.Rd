@@ -3,7 +3,7 @@
 \alias{scan.txt.Renishaw}
 \title{import Raman measurements from Renishaw ASCII-files}
 \usage{scan.txt.Renishaw(file=stop("filename is required"), data="xyspc",
-    nlines=0, nspc, ...)}
+    nlines=0, nspc, \dots)}
 \description{import Raman measurements from Renishaw .txt file}
 \details{Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
 They come in a "long" format with columns (y x | time | z)? wavelength intensity. 
@@ -25,4 +25,4 @@ The corresponding possibilities for the \code{data} argument are:
 \item{data}{type of file, one of "spc", "xyspc", "zspc", "depth", "ts", see details.}
 \item{nlines}{number of lines to read in each chunk, if 0 or less read whole file at once}
 \item{nspc}{number of spectra in the file}
-\item{...}{passed to logentry}}
+\item{\dots}{passed to logentry}}

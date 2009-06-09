@@ -1,4 +1,4 @@
-\name{ncol-methods}
+\name{ncol}
 \docType{methods}
 \alias{ncol,hyperSpec-method}
 \alias{nrow,hyperSpec-method}
@@ -13,7 +13,7 @@
   
  \code{ncol} returns the number of columns in \code{x@data}. I.e. the
   number of columns with additional information to each spectrum
-  (e.g. "x", "y", ...) + 1 (for column \code{spc} containing the spectra).
+  (e.g. "x", "y", \dots) + 1 (for column \code{spc} containing the spectra).
 
   \code{nwl} returns the number of columns in \code{x@data$spc},
   i.e. the length of each spectrum.

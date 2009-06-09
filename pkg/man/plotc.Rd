@@ -7,7 +7,7 @@
   time, or a spatial coordinate.
 }
 \usage{
-plotc(object, use.c = "c", func = sum, ...,
+plotc(object, use.c = "c", func = sum, \dots,
       z = NULL, zlab = NULL, add = FALSE, plot.dots = list())
 }
 %- maybe also 'usage' for other objects documented here.
@@ -26,7 +26,7 @@ plotc(object, use.c = "c", func = sum, ...,
 }
 \details{
   If \code{z} is not given, it is calculated by \code{apply (object, 1,
-	 func, ...)}.
+	 func, \dots)}.
 }
 \references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}

@@ -9,7 +9,7 @@
   object. 
 }
 \usage{
-\S4method{aggregate}{hyperSpec}(x, by, FUN, ..., out.rows = NULL,
+\S4method{aggregate}{hyperSpec}(x, by, FUN, \dots, out.rows = NULL,
 append.rows = NULL, date = NULL, user = NULL)
 }
 \arguments{
@@ -100,4 +100,5 @@ plot (agg, "spc",  add = TRUE, col = color[agg$.aggregate],
 \author{C. Beleites}
 
 \keyword{methods}
-
+\keyword{category}
+\keyword{array}

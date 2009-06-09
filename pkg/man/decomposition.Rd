@@ -10,7 +10,7 @@
 \usage{
 decomposition(object, x, wavelength = seq_len (ncol (x)),
               label.wavelength, label.spc, scores = TRUE,
-              retain.columns = FALSE,short = "", ...)
+              retain.columns = FALSE,short = "", \dots)
 }
 \arguments{
   \item{object}{A \code{hyperSpec} object.}
@@ -46,7 +46,7 @@ decomposition(object, x, wavelength = seq_len (ncol (x)),
   component analysis, partial least squares, linear discriminant
   analysis, and the like.
   These methods yield loadings (or latent
-  variables, components, ...) that are linear combination coefficients
+  variables, components, \dots) that are linear combination coefficients
   along the wavelength axis and scores for each spectrum and loading.
 
   The loadings matrix gives a coordinate transformation, and the scores are
@@ -115,4 +115,5 @@ decomposition(object, x, wavelength = seq_len (ncol (x)),
   plotmap (scores[,,1])
 } 
 \keyword{methods}
+\keyword{manip}
 
