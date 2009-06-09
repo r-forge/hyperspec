@@ -285,7 +285,7 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 #			x <- eval (call)
 			
 			if (missing (j))
-				x@data$spc[,, drop = drop]
+				unclass (x@data$spc[,, drop = drop]) # removes the "AsIs"
 			else {
 				x@data[,, drop = drop]
 			}

@@ -13,11 +13,15 @@ using the given parameters.
 }
 }
 \section{Usage}{
-new("hyperSpec", spc = NULL, data = NULL,
-   wavelength = NULL, label = NULL, log = NULL)
+\code{new ("hyperSpec", spc = NULL, data = NULL,}
 
-\S4method{initialize}{hyperSpec}(.Object, spc = NULL, data = NULL,
-   wavelength = NULL, label = NULL, log = NULL)
+\code{     wavelength = NULL, label = NULL, log = NULL)}
+
+
+
+\code{initialize (.Object, spc = NULL, data = NULL,}
+
+\code{            wavelength = NULL, label = NULL, log = NULL)}
 }
 \arguments{
   \item{.Object}{the new \code{hyperSpec} object.}

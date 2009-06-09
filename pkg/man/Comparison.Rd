@@ -18,21 +18,31 @@
 \title{Comparison Operators: <, >, <=, >=, ==, and !=}
 \description{The comparison operators \code{">"}, \code{"<"},
   \code{">="}, \code{"<="}, \code{"=="}, and \code{"!="} 
-  for \code{hyperSpec} objects. 
-\code{
-#S4 method for signature 'hyperSpec,hyperSpec':
-#S4 method for signature 'hyperSpec,matrix':
-#S4 method for signature 'matrix,hyperSpec':
-#S4 method for signature 'hyperSpec,numeric':
-#S4 method for signature 'numeric,hyperSpec':
-e1 > e2
-`>` (e1, e2)
-e1 < e2
-e1 >= e2
-e1 <= e2
-e1 == e2
-e1 != e2
-}
+  for \code{hyperSpec} objects. }
+\section{Usage}{
+\code{#S4 method for signature 'hyperSpec,hyperSpec':}
+
+\code{#S4 method for signature 'hyperSpec,matrix':}
+
+\code{#S4 method for signature 'matrix,hyperSpec':}
+
+\code{#S4 method for signature 'hyperSpec,numeric':}
+
+\code{#S4 method for signature 'numeric,hyperSpec':}
+
+\code{e1 > e2}
+
+\code{`>` (e1, e2)}
+
+\code{e1 < e2}
+
+\code{e1 >= e2}
+
+\code{e1 <= e2}
+
+\code{e1 == e2}
+
+\code{e1 != e2}
 }
 \arguments{
   \item{e1, e2}{Either two \code{hyperSpec} objects or one
@@ -66,7 +76,9 @@ This also allows indexing with
 \author{C. Beleites}
 
 \examples{
+flu [,,445 : 450] > 300
 
+all (flu == flu[[]])
 }
 \seealso{
   \code{\link[hyperSpec]{sweep-methods}} for calculations involving a vector and

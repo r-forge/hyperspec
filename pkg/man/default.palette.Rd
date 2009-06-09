@@ -16,6 +16,6 @@ matlab.palette(n = 100)
 }
 \author{C. Beleites}
 \examples{
-plotmap (chondro, trellis.args = list (col.regions = matlab.palette ())
+plotmap (chondro, trellis.args = list (col.regions = matlab.palette ()))
 }
 \keyword{color}

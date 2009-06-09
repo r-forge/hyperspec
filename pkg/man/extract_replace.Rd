@@ -33,7 +33,7 @@
 
 ## Shortcuts
 
-\S4method{[[}{hyperSpec}(x) 
+x[[]] 
 
 \S4method{$}{hyperSpec}(x, .)  
 

@@ -26,24 +26,39 @@
 \description{The arithmetical operators \code{"+"}, \code{"-"},
   \code{"*"}, \code{"/"}, \code{"\^"}, \code{"\%\%"}, \code{"\%/\%"},
   and \code{"\%*\%"} for \code{hyperSpec} objects. 
-\code{
-#S4 method for signature 'hyperSpec,hyperSpec':
-#S4 method for signature 'hyperSpec,matrix':
-#S4 method for signature 'matrix,hyperSpec':
-#S4 method for signature 'hyperSpec,numeric':
-#S4 method for signature 'numeric,hyperSpec':
-e1 + e2
-`+` (e1, e2)
-#S4 method for signature 'hyperSpec,hyperSpec':
-#S4 method for signature 'hyperSpec,matrix':
-#S4 method for signature 'matrix,hyperSpec':
-#S4 method for signature 'hyperSpec,numeric':
-#S4 method for signature 'numeric,hyperSpec':
-x \%*\% y
-`\%*\%`(x, y)
-#S4 method for signature 'hyperSpec,missing':
--x
 }
+\section{Usage}{  
+\code{#S4 method for signature 'hyperSpec,hyperSpec':}
+
+\code{#S4 method for signature 'hyperSpec,matrix':}
+
+\code{#S4 method for signature 'matrix,hyperSpec':}
+
+\code{#S4 method for signature 'hyperSpec,numeric':}
+
+\code{#S4 method for signature 'numeric,hyperSpec':}
+
+\code{e1 + e2}
+
+\code{`+` (e1, e2)}
+
+\code{#S4 method for signature 'hyperSpec,hyperSpec':}
+
+\code{#S4 method for signature 'hyperSpec,matrix':}
+
+\code{#S4 method for signature 'matrix,hyperSpec':}
+
+\code{#S4 method for signature 'hyperSpec,numeric':}
+
+\code{#S4 method for signature 'numeric,hyperSpec':}
+
+\code{x \%*\% y}
+
+\code{`\%*\%`(x, y)}
+
+\code{#S4 method for signature 'hyperSpec,missing':}
+
+\code{-x}
 }
 \arguments{
   \item{e1, e2}{Either two \code{hyperSpec} objects or one
