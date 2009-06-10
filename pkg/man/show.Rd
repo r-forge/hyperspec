@@ -1,14 +1,11 @@
 \name{show}
 \docType{methods}
 \alias{show}
-\alias{show-methods}
 \alias{show,hyperSpec-method}
 \alias{print}
-\alias{print-methods}
 \alias{print,hyperSpec-method}
 \alias{as.character}
 \alias{as.character,hyperSpec-method}
-\alias{as.character-methods}
 \title{ Convert a hyerSpec object to character strings for Display}
 \description{
   \code{print} and \code{show} show the result of \code{as.character}
@@ -16,7 +13,7 @@
 \usage{
 \S4method{show}{hyperSpec}(x)
 \S4method{print}{hyperSpec}(x, \dots)
-\S4method{as.character}{hyperSpec}(x, digits = getOption ("digits"), max.print = 25, shorten.to = c(3,3))
+\S4method{as.character}{hyperSpec}(x, digits = getOption ("digits"), max.print = 10, shorten.to = c(2, 2), log = FALSE)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
@@ -29,6 +26,8 @@
   \item{shorten.to}{if a vector is longer than \code{max.print}, only
     the first \code{shorten.to[1]} and the last \code{shorten.to[2]}
     elements are printed}
+
+  \item{log}{should the log be printed?}
 
   \item{\dots}{\code{print} hands any arguments to \code{as.character}}
 }
@@ -47,6 +46,8 @@
 }
 \examples{
 chondro
+
+print (chondro, log = TRUE)
 }  
 \keyword{methods}
 \keyword{print}

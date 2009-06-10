@@ -118,7 +118,6 @@ x$name <- list (value = value, label = label)
   \code{$<-} replaces a column of the \code{data.frame} in slot \code{x@data}. 
   The \code{value} may be a list with two elements, \code{value} and \code{label}. 
   In this case the label of the data column is changed accordingly.
-  }
   
 }
 \value{
