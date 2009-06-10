@@ -1,5 +1,6 @@
 \documentclass[a4paper, 10pt, smallheadings, DIV15]{scrartcl}
 \usepackage[utf8]{inputenc}
+%\VignetteIndexEntry{baselinebelow}
 \usepackage{xspace}
 \usepackage{hyphenat}
 \usepackage{fancyvrb}
@@ -54,7 +55,7 @@ pch = 20
 plot (chondro [1,,1715:1800], col = "blue", add = TRUE, lines.dots = list (lwd = 2))
 cl <- "blue"
 bl <- spc.fit.poly.below (chondro [1,,1715:1800], poly.order = 1)
-@
+@  
 \begin{figure}[b]
 \begin{center}
 \includegraphics[width = .5\textwidth]{baselinebelow-figspcrange}
@@ -74,7 +75,7 @@ Narrowing the spectral range in \code{fit.to} speeds up the fitting of the
 polynomials:
 <<fit-apply>>=
 system.time (spc.fit.poly.below (chondro[], NULL, poly.order = 1, npts.min = 20, noise = 12))
-system.time (spc.fit.poly.below (chondro [,, -wl2i (chondro, 700:1700), index = TRUE], NULL, 
+system.time (spc.fit.poly.below (chondro [,, -wl2i (chondro, 700:1700), wl.index = TRUE], NULL, 
 			 poly.order = 1, npts.min = 20, noise = 12))
 @
 
@@ -122,27 +123,27 @@ cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
 
 bl <- chondro [1] + 1
-	plot (chondro [1])
-	npts <- numeric (length (cols))
-	for (iter in seq_along (cols)){
-		npts [iter] <- sum (chondro [[1]] < bl [[]])
-		cl <- cols [iter]
-		text (600, 1000 - 50 * iter, paste ("Iter. ", iter, ": ", npts [iter], " support pts.", sep = ""), 
-				adj = c(0, 0), col = cols [iter])
-		bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts[iter]  - 1)
-	}
-	plot (chondro [1], add = TRUE)
+plot (chondro [1])
+npts <- numeric (length (cols))
+for (iter in seq_along (cols)){
+	npts [iter] <- sum (chondro [[1]] < bl [[]])
+	cl <- cols [iter]
+	text (600, 1000 - 50 * iter, paste ("Iter. ", iter, ": ", npts [iter], " support pts.", sep = ""), 
+			adj = c(0, 0), col = cols [iter])
+	bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts[iter]  - 1)
+}
+plot (chondro [1], add = TRUE)
 @
 <<fig2, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 2.5, include = FALSE>>=
-	bl <- chondro [1] + 1
-	plot (chondro [1], plot.dots = list (ylim = c (-15, 50)))
-	for (iter in seq_along (cols)){
-		npts <- sum (chondro [[1]] < bl [[]])
-		cl <- cols [iter]
-		#cat ("Iteration", iter, ":", npts, "supporting points\n")
-		bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts - 1)
-	}
-	plot (chondro [1], add = TRUE)
+bl <- chondro [1] + 1
+plot (chondro [1], plot.dots = list (ylim = c (-15, 50)))
+for (iter in seq_along (cols)){
+	npts <- sum (chondro [[1]] < bl [[]])
+	cl <- cols [iter]
+	#cat ("Iteration", iter, ":", npts, "supporting points\n")
+	bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts - 1)
+}
+plot (chondro [1], add = TRUE)
 @
 \begin{figure}[bh]
 \begin{center}
@@ -157,71 +158,71 @@ bl <- chondro [1] + 1
 \subsection*{The noise level}
 <<fig3, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 8, height = 3, include = FALSE>>=
 noise <- 12
-	plot (chondro [1,,1730:1800], plot.dots = list(ylim = c(-15, 20)))
-	trace (spc.fit.poly.below, quote ({
-						plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (pch = 20, type = "p")); 
-						lines (fit.to@wavelength, bl, col = cl);
-						lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
-					}), at = 10, print = FALSE)
-	
-	cols <- as (HSV(seq (240, 0, length.out = 2), 1, 1), "RGB")
-	cols@coords [,2] <- cols@coords[,2] / 2
-	cols <- hex (cols)
-	
-	bl <- chondro [1,,1730:1800] + 15
-	for (iter in seq_along (cols)){
-		npts <- sum (chondro [[1,,1730:1800]] < (bl [[]] + noise))
-		cl <- cols [iter]
-		bl <- spc.fit.poly.below (chondro [1,,1730:1800], poly.order = 1, npts.min = npts, noise = noise)
-		text (1800, 20 - 3 * iter, paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""), 
-				adj = c(1, 0), col = cols [iter])
-	}
-	cl <- "black"
-	trace (spc.fit.poly.below, quote ({
-						plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (type = "p")); 
-						lines (fit.to@wavelength, bl, col = cl);
-					}), at = 10, print = FALSE)
-	bl <- spc.fit.poly.below (chondro [1,, 1710:1800], poly.order = 1)
+plot (chondro [1,,1730:1800], plot.dots = list(ylim = c(-15, 20)))
+trace (spc.fit.poly.below, quote ({
+					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (pch = 20, type = "p")); 
+					lines (fit.to@wavelength, bl, col = cl);
+					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
+				}), at = 10, print = FALSE)
+
+cols <- as (HSV(seq (240, 0, length.out = 2), 1, 1), "RGB")
+cols@coords [,2] <- cols@coords[,2] / 2
+cols <- hex (cols)
+
+bl <- chondro [1,,1730:1800] + 15
+for (iter in seq_along (cols)){
+	npts <- sum (chondro [[1,,1730:1800]] < (bl [[]] + noise))
+	cl <- cols [iter]
+	bl <- spc.fit.poly.below (chondro [1,,1730:1800], poly.order = 1, npts.min = npts, noise = noise)
+	text (1800, 20 - 3 * iter, paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""), 
+			adj = c(1, 0), col = cols [iter])
+}
+cl <- "black"
+trace (spc.fit.poly.below, quote ({
+					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (type = "p")); 
+					lines (fit.to@wavelength, bl, col = cl);
+				}), at = 10, print = FALSE)
+bl <- spc.fit.poly.below (chondro [1,, 1710:1800], poly.order = 1)
 @
 <<fig4, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 4, include = FALSE>>=
-	trace (spc.fit.poly.below, quote ({
-						plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (pch = 20, type = "p")); 
-						lines (fit.to@wavelength, bl, col = cl);
-						lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
-					}), at = 10, print = FALSE)
+trace (spc.fit.poly.below, quote ({
+					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (pch = 20, type = "p")); 
+					lines (fit.to@wavelength, bl, col = cl);
+					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
+				}), at = 10, print = FALSE)
 cols <- as (HSV(seq (240, 0, length.out = 6), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
 bl <- chondro [1] + 15
-	plot (chondro [1])
-	for (iter in seq_along (cols)){
-		npts <- sum (chondro [[1]] < bl [[]] + noise)
-		cl <- cols [iter]
-		text (600, 1000 - 50 * iter, paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""), 
-				adj = c(0, 0), col = cols [iter])
-		bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts - 1, noise = noise)
-	}
-	plot (chondro [1], add = TRUE)
+plot (chondro [1])
+for (iter in seq_along (cols)){
+	npts <- sum (chondro [[1]] < bl [[]] + noise)
+	cl <- cols [iter]
+	text (600, 1000 - 50 * iter, paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""), 
+			adj = c(0, 0), col = cols [iter])
+	bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts - 1, noise = noise)
+}
+plot (chondro [1], add = TRUE)
 @
 <<fig5, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 2.5, include = FALSE>>=
-	trace (spc.fit.poly.below, quote ({
-						plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (pch = 20, type = "p")); 
-						lines (fit.to@wavelength, bl, col = cl);
-						lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
-					}), at = 10, print = FALSE)
+trace (spc.fit.poly.below, quote ({
+					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.dots = list (pch = 20, type = "p")); 
+					lines (fit.to@wavelength, bl, col = cl);
+					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
+				}), at = 10, print = FALSE)
 cols <- as (HSV(seq (240, 0, length.out = 6), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
 bl <- chondro [1] + 15
-	plot (chondro [1], plot.dots = list (ylim = c (-15, 50)))
-	for (iter in seq_along (cols)){
-		npts <- sum (chondro [[1]] < bl [[]] + noise)
-		cl <- cols [iter]
-		cat ("Iteration", iter, ":", npts, "supporting points\n")
-		bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts - 1, noise = noise)
-	}
-	plot (chondro [1], add = TRUE)
-	untrace (spc.fit.poly.below)
+plot (chondro [1], plot.dots = list (ylim = c (-15, 50)))
+for (iter in seq_along (cols)){
+	npts <- sum (chondro [[1]] < bl [[]] + noise)
+	cl <- cols [iter]
+	cat ("Iteration", iter, ":", npts, "supporting points\n")
+	bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts - 1, noise = noise)
+}
+plot (chondro [1], add = TRUE)
+untrace (spc.fit.poly.below)
 @
 \begin{figure}[t]
 \begin{center}

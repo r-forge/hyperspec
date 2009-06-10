@@ -3,3 +3,7 @@ hyperSpec_*.tar.gz
 *~
 .project
 .settings
+*.log
+*-fig*.pdf
+*.tex
+Rplots.pdf
