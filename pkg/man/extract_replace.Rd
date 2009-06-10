@@ -49,6 +49,8 @@ x[[i, j, l, wl.index = FALSE, short = NULL, \dots]] <- value
 
 ## S4 method for signature 'hyperSpec':
 x$name <- value
+
+x$name <- list (value = value, label = label)
 }
 \arguments{
 
@@ -75,7 +77,9 @@ x$name <- value
     \code{\link[base]{drop}} and \code{\link[base]{Extract}}. Ignored for
     \code{[}, as otherwise invalid \code{hyperSpec} objects might result.} 
 
-  \item{value}{the values to be assigned}
+  \item{value}{the values to be assigned.}
+  
+  \item{label}{the label for data column \code{name}.}
   
   \item{\dots}{ignored}
 }
@@ -111,7 +115,11 @@ x$name <- value
   \code{[<-} replaces parts of the \code{data.frame} in slot
   \code{x@data}.
 
-  \code{$<-} replaces a column of the \code{data.frame} in slot \code{x@data}.
+  \code{$<-} replaces a column of the \code{data.frame} in slot \code{x@data}. 
+  The \code{value} may be a list with two elements, \code{value} and \code{label}. 
+  In this case the label of the data column is changed accordingly.
+  }
+  
 }
 \value{
     For \code{[}, \code{[<-}, \code{[[<-}, and \code{$<-} a \code{hyperSpec} object,
@@ -179,10 +187,14 @@ spc$.
 spc[, "c"] <- 16 : 11
 spc$.
 spc$z <- 1 : 6
+spc
+spc$z <- list (1 : 6, "z / a.u.") 
 
 ## be careful:
+plot (spc)
 spc[] <- 6 : 1
-spc$.
+spc$..
+plot (spc)
 
 spc[[]]
 spc[[3]] <- -spc[[3]]

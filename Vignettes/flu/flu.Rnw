@@ -1,0 +1,86 @@
+\documentclass[a4paper, 10pt, smallheadings, DIV15]{scrartcl}
+\usepackage[utf8]{inputenc}
+%\VignetteIndexEntry{baselinebelow}
+\usepackage{xspace}
+\usepackage{hyphenat}
+\usepackage{fancyvrb}
+%\usepackage{SIunitx}
+
+\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\newcommand{\hy}{\nohyphens{\texttt{hyperSpec}}\xspace}
+\newcommand{\R}{\texttt{R}\xspace}
+
+\author{C.~Beleites, DMRN, Università degli Studi di Trieste, Trieste/I}
+\title{Calibration of Quinine Fluorescence Emission}
+\subtitle{Vignette for the Data Set \code{flu} of the R package \hy}
+ 
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+
+\begin{document}
+\maketitle
+
+This vignette gives an example how to set up
+\begin{itemize}
+\item an import function for a spectrometer manufacturer's proprietary ASCII files and  
+\item a linear calibration (ordinary and inverse least squares, respectively)
+\end{itemize}
+
+The data set \code{flu} in \hy consists of 6 fluorescence emission spectra of quinine solutions. 
+They were acquired during an student practicum and were kindly provided by M. Kammer. 
+
+The concentrations of the solutions range from 0.05 mg/l to 0.30 mg/l. Spectra were acquired with a 
+Perkin Elmer LS50-B fluorescence spectrometer at 350 nm excitation.
+
+In order to work with \hy, the library needs to be loaded in \R:
+<<init>>=
+library (hyperSpec)
+@
+
+Now we need to import the spectra. They are in Perkin Elmer's ASCII file format, 
+one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
+
+The function should automatically read in all files specified by a pattern, such as \code{*.txt}. 
+In order to gain some speed, the specrta matrix is preallocated after the first file is read, 
+and the header lines are predefined instead of searching for the . 
+
+<<importfun>>=
+
+
+read.PE <- function (files = "*.txt", skip = 54) {
+	files <- Sys.glob (files)
+	
+	buffer <- matrix (scan (files [1], skip = skip), ncol = 2, byrow = TRUE)
+	
+	wavelength <- buffer [, 1]
+	spc <- matrix (ncol = nrow (buffer), nrow = length (files)) 
+	
+	spc [1, ] <-  buffer [, 2]
+	
+	for (f in seq (along = files)[-1]) {
+
+		buffer <- matrix (scan (files [f], skip = skip), ncol = 2, byrow = TRUE)
+		
+		if (! all.equal (buffer [, 1], wavelength))
+			stop (paste(files [f], "has different wavelengh axis."))
+		
+		spc [f, ] <- buffer[, 2]
+	}
+	
+	new ("hyperSpec", wavelength = wavelength, spc = spc,
+			label = list (.wavelength = expression (lambda[fl] / nm),
+					spc = "I / a.u."))
+}
+
+flu <- read.PE ("*.txt")
+data = data.frame (c = (1:6) * 0.05),
+c           = "c / (mg/l)",
+
+@
+
+
+
+\end{document}
+
+

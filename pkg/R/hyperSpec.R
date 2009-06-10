@@ -43,6 +43,19 @@ setClass ("hyperSpec",
 
 ###-----------------------------------------------------------------------------
 ###
+### .is.hy - checks whether the object is a hyperSpec object
+###  to be used like validObject
+###
+
+.is.hy <- function (x){
+	if (! is (x, "hyperSpec"))
+		stop ("wl<- works on hyperSpec objects only")
+	
+	TRUE
+}
+
+###-----------------------------------------------------------------------------
+###
 ###  initialize -- initialization, called by new ("hyperSpec", ...)
 ###
 setMethod ("initialize", "hyperSpec",
@@ -74,7 +87,7 @@ setMethod ("initialize", "hyperSpec",
 					colnames (.Object@data$spc) <- seq_len (ncol (.Object@data$spc))
 				.Object@wavelength <- as.numeric (colnames (.Object@data$spc))
 			} else {
-				.Object@wavelength <- wavelength
+				.wl(.Object) <- wavelength
 				long$wavelength <- wavelength
 			}
 			if (any (is.na (.Object@wavelength)))
@@ -521,6 +534,49 @@ setMethod ("dimnames", "hyperSpec", function (x){
 			validObject (x)
 			list (row = rownames (x@data), data = colnames (x@data), wl = colnames (x@data$spc)) 
 		})
+###-----------------------------------------------------------------------------
+###
+###  labels
+###  
+###  
+
+setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, ...){
+			validObject (object)
+			
+			if (is.null (which))
+				object@label
+			else {
+				label <- object@label [which]
+				if (drop && (length (label) == 1))
+					label <- label [[1]]
+				label
+			}
+		})
+
+###-----------------------------------------------------------------------------
+###
+###  labels<-
+###  
+###  
+
+"labels<-" <- function (object, which = NULL, ..., value){
+	.is.hy (object)
+	validObject (object)
+	
+	if (is.null (which))
+		object@label <- value
+	else
+		object@label [[which]] <- value
+	
+	object@log <- logentry (object, short = "labels<-", 
+			long = list (which = which, value = value), ...)
+	
+	validObject (object) 
+	
+	object
+}
+
+
 
 ###-----------------------------------------------------------------------------
 ###
@@ -560,6 +616,8 @@ wl <- function (x){
 ###  
 ###
 "wl<-" <- function (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value){
+
+	.is.hy (x)
 	validObject (x)
 	
 	if (is.numeric (value)){
@@ -683,12 +741,33 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 ###
 setReplaceMethod ("$", "hyperSpec", function (x, name, value){
 			validObject (x)
+		
+			if (is.list (value) && (length (value) == 2)){
+				ilabel <- match ("label", names (value))
+				if (is.na (ilabel))
+					ilabel <- 2
+				label <- value [[ilabel]]
+				
+				value <- value [[3 - ilabel]] ## the other of the 2 entries
+			} else 
+				label <- NULL
 			
 			if (name == "..") { ## shortcut
-				x@data[, -match ("spc", colnames (x@data))] <- value 
+				i <- -match ("spc", colnames (x@data))
+				x@data[, i] <- value
+				
+				if (!is.null (label)){
+					i <- colnames (x@data)[i]
+					i <- match (i, names (x@label))
+					x@label[i] <- label
+				}
 			} else {
 				dots <- list (x = x@data, i = name, value = value)
 				x@data <- do.call("$<-", dots) ## $<-.data.frame wants "i" instead of "name"
+				#x@data <- `$<-` (x = x@data, i = name, value = value) ## $<-.data.frame wants "i" instead of "name"
+				
+				if (!is.null (label))
+					x@label[[name]] <- label
 			}
 			
 			x@log <- logentry (x,
