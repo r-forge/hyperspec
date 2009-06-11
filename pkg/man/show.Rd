@@ -8,7 +8,7 @@
 \alias{as.character,hyperSpec-method}
 \title{ Convert a hyerSpec object to character strings for Display}
 \description{
-  \code{print} and \code{show} show the result of \code{as.character}
+  \code{print} and \code{show} show the result of \code{as.character}.
 }
 \usage{
 \S4method{show}{hyperSpec}(x)
@@ -48,6 +48,8 @@
 chondro
 
 print (chondro, log = TRUE)
+
+logbook (chondro)
 }  
 \keyword{methods}
 \keyword{print}

@@ -15,10 +15,13 @@
 \alias{Compare,hyperSpec,numeric-method}
 \alias{Compare,matrix,hyperSpec-method}
 \alias{Compare,numeric,hyperSpec-method}
+\alias{all.equal,hyperSpec,hyperSpec-method}
 \title{Comparison Operators: <, >, <=, >=, ==, and !=}
 \description{The comparison operators \code{">"}, \code{"<"},
   \code{">="}, \code{"<="}, \code{"=="}, and \code{"!="} 
-  for \code{hyperSpec} objects. }
+  for \code{hyperSpec} objects. 
+  
+  \code{all.equal} checks the equality of two hyperSpec objects.}
 \section{Usage}{
 \code{#S4 method for signature 'hyperSpec,hyperSpec':}
 
@@ -43,12 +46,21 @@
 \code{e1 == e2}
 
 \code{e1 != e2}
+
+\code{all.equal(target, current, ..., check.column.order = FALSE, check.label = FALSE, check.log = FALSE)}
 }
 \arguments{
   \item{e1, e2}{Either two \code{hyperSpec} objects or one
 	 \code{hyperSpec} object and  matrix of same size
     as \code{hyperSpec[[]]} or a scalar (numeric of length 1).
   } 
+  \item{target, current}{two \code{hyperSpec} objects that are tested for equality}
+  \item{\dots}{handed to \code{all.equal} when testing the slots of the \code{hyperSpec} objects}
+  \item{check.column.order}{If two objects have the same data, but the order of the columns 
+                            (determined by the names) differs, should they be regarded as different?}
+  \item{check.label}{Should the slot \code{label} be checked? \cr
+                     If the labels differ only in the order of their entries, they are conidered equal.}
+  \item{check.log}{Should the slot \code{label} be checked?}
 }
 \details{
    The comparison operators \code{">"}, \code{"<"},
@@ -65,12 +77,13 @@
   have to do this directly on \code{hyperSpec@data}.
 }
 
-\value{a logical matrix
+\value{a logical matrix for the comparison operators.
 
 As \code{hyperSpec} objects must have numeric spectra matrices, 
 the resulting matrix of the comparison is returned directly.
 
-This also allows indexing with 
+\code{all.equal} returns either \code{TRUE}, or a character vector describing the differences.
+In conditions, the result must therefore be tested with \code{\link[base]{isTRUE}}.
 }
 
 \author{C. Beleites}
@@ -91,6 +104,8 @@ all (flu == flu[[]])
   \code{\link[hyperSpec]{Arith}} for arithmetic operators, 
   \code{\link[hyperSpec]{Math}} and \code{\link[hyperSpec]{Math2}} for mathematical group generic 
   functions working on \code{hyperSpec} objects.  
+  
+  \code{\link[base]{all.equal}} and \code{\link[base]{isTRUE}}
 }
 \keyword{methods}
 \keyword{arith}
