@@ -5,14 +5,16 @@ year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
 vers <- paste("R package version", desc$Version)
 
 citEntry(entry="Article",
-		    title = "Hyperspectral Data sets in R: hyperSpec",
+		    title = "Hyperspectral Data Sets in R: hyperSpec",
           author = personList(as.person("Claudia Beleites"),
                               as.person("Valter Sergo")),
           year = year,
           note = vers,
+          URL = 'http://r-forge.r-project.org/projects/hyperspec/',
+          DOI = '---doi--',
      
           textVersion =
-          paste("Claudia Beleites and Valter Sergo: Hyperspectral Data Sets in R: hyperSpec, ",
-				    "JStatSoft,",
-                "(", year, ", V. ", vers, ").", sep="")
+          paste("Claudia Beleites and Valter Sergo: `Hyperspectral Data Sets in R: hyperSpec', ",
+				    "JStatSoft, ",
+                "(", year, "). ", vers, ". http://r-forge.r-project.org/projects/hyperspec/", sep="")
 )

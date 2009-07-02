@@ -1,13 +1,13 @@
 \name{labels}
 \Rdversion{1.1}
-\alias{labels}
+\alias{labels,hyperSpec-method}
 \alias{labels<-}
 \title{Get and Set Labels of a hyperSpec Object}
 \description{
 \code{labels}
 }
 \usage{
-labels (object, which = NULL, drop = TRUE, ...)
+\S4method{labels}{hyperSpec}(object, which = NULL, drop = TRUE, \dots)
 labels (object, which = NULL, ...) <- value
 }
 \arguments{

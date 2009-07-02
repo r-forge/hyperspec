@@ -1,6 +1,6 @@
 Package: hyperSpec
 Type: Package
-Title: Interface for hyperspectral data sets, i.e. spectra + spatial, time, etc. concentration information
+Title: Interface for hyperspectral data sets, i.e. spectra + meta information (spatial, time, concentration, ...)
 Version: 0.5
 Date: 2009-04-20
 Author: Claudia Beleites
@@ -9,6 +9,6 @@ Description: This package gives an interface to handle hyperspectral data sets i
 License: LGPL
 LazyLoad: yes
 LazyData: yes
-Depends: methods, lattice
+Depends: methods, utils, lattice
 #Imports: lattice
 Suggests: R.matlab

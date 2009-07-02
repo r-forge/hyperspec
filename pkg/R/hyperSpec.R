@@ -1,4 +1,3 @@
-require (lattice) 
 ## TODO delete old generics
 # TODO: seq_along
 ## TODO: sweep logentry
@@ -8,6 +7,26 @@ require (lattice)
 
 ## TODO plotc z ./. c
 ## is.na
+
+.onLoad <- function (libname, pkgname){
+	require (lattice) 
+	require (utils) 
+	
+	desc <- utils::packageDescription("hyperSpec")
+	vers <- paste("V. ", desc$Version)
+	cat ("Package ",  desc$Package, ", version ", desc$Version, "\n\n",
+			"Citation:\n",
+			attr (citation ("hyperSpec")[[1]], "textVersion"), "\n\n",
+		"'citation(\"hyperSpec\")' will give you also an BibTeX entry.", "\n\n",
+		"To get started, try\n",
+		'   help ("hyperSpec") \n',
+		'   help (package = "hyperSpec")\n',
+		'   vignette (package = "hyperSpec")\n\n',
+		'The project is hosted on http://r-forge.r-project.org/projects/hyperspec/\n',
+		'and the article mentioned above is openly accessible at http://\n\n',
+		sep = "")  
+}
+	
 
 setClass ("hyperSpec",
 		representation = representation (
@@ -132,7 +151,7 @@ orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
 
 ###-----------------------------------------------------------------------------
 ###
-###  show - print / show method for hyperSpec objects
+###  print
 ###
 
 setMethod ("print", "hyperSpec", function (x, ...){
@@ -141,11 +160,22 @@ setMethod ("print", "hyperSpec", function (x, ...){
 			invisible (x)
 		})
 
+###-----------------------------------------------------------------------------
+###
+###  show
+###
 
-### use as generic show function
 setMethod ("show", "hyperSpec", function (object){
 			print (object)
 			invisible (NULL)
+		})
+###-----------------------------------------------------------------------------
+###
+###  summary 
+###
+
+setMethod ("summary", "hyperSpec", function (object, log = TRUE, ...){
+			print (object, log = log, ...)
 		})
 
 ###-------------------------------------------------------------------------------
@@ -774,9 +804,8 @@ setReplaceMethod ("$", "hyperSpec", function (x, name, value){
 					x@label[i] <- label
 				}
 			} else {
-				dots <- list (x = x@data, i = name, value = value)
-				x@data <- do.call("$<-", dots) ## $<-.data.frame wants "i" instead of "name"
-				#x@data <- `$<-` (x = x@data, i = name, value = value) ## $<-.data.frame wants "i" instead of "name"
+				dots <- list (x = x@data, name = name, value = value)
+				x@data <- do.call("$<-", dots) ## $<-.data.frame wants "i" instead of "name" -- not any longer  
 				
 				if (!is.null (label))
 					x@label[[name]] <- label
