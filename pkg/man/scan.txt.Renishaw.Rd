@@ -17,6 +17,9 @@ The corresponding possibilities for the \code{data} argument are:
 \code{"ts"}                   \tab t wl int   \tab time series\cr
 \code{"xyspc"}                \tab y x wl int \tab 2d map\cr
        }
+       
+This function allows reading very large ASCII files, but it does not work on files with missing 
+values (\code{NA}s are allowed).   
 }
 \value{the \code{hyperSpec} object}
 \seealso{\code{\link{read.txt.long}}, \code{\link{read.txt.wide}}, \code{\link[base]{scan}}}

@@ -9,7 +9,7 @@ A Raman-map (laterally resolved Raman spectra) of chondrocytes in cartilage.
 \format{
 The data set has 796 Raman spectra measured on a 23 \eqn{\times}{x} 35 grid with 1
 micron step size. Spatial information is in \code{chondro$x} and \code{chondro$y}.
-Each spectrum has 424 data points in the range of 600 - 1800 cm\eqn{^{-1}}{^-1}. 
+Each spectrum has 300 data points in the range of ca. 600 - 1800 cm\eqn{^{-1}}{^-1}. 
 }
 \details{
 See the vignette.
@@ -20,6 +20,6 @@ data(chondro)
 
 chondro
 
-vignette ("BaselineBelow", package = "hyperSpec")
+vignette ("chondro", package = "hyperSpec")
 }
 \keyword{datasets}

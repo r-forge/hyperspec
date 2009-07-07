@@ -8,26 +8,28 @@
 ## TODO plotc z ./. c
 ## is.na
 
+#chondro <- NULL
+
 .onLoad <- function (libname, pkgname){
 	require (lattice) 
 	require (utils) 
-	
+}
+
+.onAttach <- function (libname, pkgname){
 	desc <- utils::packageDescription("hyperSpec")
 	vers <- paste("V. ", desc$Version)
 	cat ("Package ",  desc$Package, ", version ", desc$Version, "\n\n",
 			"Citation:\n",
 			attr (citation ("hyperSpec")[[1]], "textVersion"), "\n\n",
-		"'citation(\"hyperSpec\")' will give you also an BibTeX entry.", "\n\n",
-		"To get started, try\n",
-		'   help ("hyperSpec") \n',
-		'   help (package = "hyperSpec")\n',
-		'   vignette (package = "hyperSpec")\n\n',
-		'The project is hosted on http://r-forge.r-project.org/projects/hyperspec/\n',
-		'and the article mentioned above is openly accessible at http://\n\n',
-		sep = "")  
+			"'citation(\"hyperSpec\")' will give you also an BibTeX entry.", "\n\n",
+			"To get started, try\n",
+			'   help ("hyperSpec") \n',
+			'   help (package = "hyperSpec")\n',
+			'   vignette (package = "hyperSpec")\n\n',
+			'The project is hosted on http://r-forge.r-project.org/projects/hyperspec/\n',
+			'and the article mentioned above is openly accessible at http://\n\n',
+			sep = "")  
 }
-	
-
 setClass ("hyperSpec",
 		representation = representation (
 				wavelength = "numeric",     # spectral abscissa
@@ -154,9 +156,9 @@ orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
 ###  print
 ###
 
-setMethod ("print", "hyperSpec", function (x, ...){
+setMethod ("print", "hyperSpec", function (x, log = FALSE, ...){
 			validObject (x)
-			cat (as.character (x, ...), sep ="\n")
+			cat (as.character (x, log = log, ...), sep ="\n")
 			invisible (x)
 		})
 
@@ -423,7 +425,7 @@ setMethod (as.character, "hyperSpec", function (x,
 				digits = getOption ("digits"),
 				max.print = 10,
 				shorten.to = c(2,2),
-				log = FALSE){#, ...){
+				log = TRUE){#, ...){
 			
 			
 			## input checking
@@ -2345,8 +2347,9 @@ read.txt.wide <- function (file = stop ("filename is required"),
 		cols = list (
 				spc = "I / a.u.",
 				.wavelength = expression (lambda / nm)),
+		check.names = FALSE, 
 		...){
-	txtfile <- read.table (file = file, ...)
+	txtfile <- read.table (file = file, ..., check.names = FALSE)
 	
 	.wavelength <- match (".wavelength", names (cols))
 	if (is.na (.wavelength))
@@ -2360,11 +2363,12 @@ read.txt.wide <- function (file = stop ("filename is required"),
 	if (is.na (spc))
 		stop ("cols$spc must exist.")
 	
-	spc <- 1 : (ncol (txtfile) - length (cols)) + spc
+	spc <- 0 : (ncol (txtfile) - length (cols) + 1) + spc
 	
-	spc <- as.matrix (txtfile[, spc])
-	txtfile <- txtfile [, -spc]
-	txtfile$spc <- I (spc)
+	spc.data <- as.matrix (txtfile[, spc])
+	txtfile$spc <- I (spc.data)	
+	txtfile <- txtfile [, -spc, drop = FALSE]
+
 	
 	new ("hyperSpec",
 			data = txtfile,
@@ -2475,6 +2479,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 ###
 write.txt.wide <- function (object,
 		file = stop ("filename required"),
+		cols = NULL, 
 		quote = FALSE, sep = "\t",
 		row.names = FALSE,
 		col.names = TRUE,
@@ -2484,8 +2489,9 @@ write.txt.wide <- function (object,
 		...){
 	validObject (object)
 	
-	##  X <- object@data
-	
+	if (! is.null (object@data))
+		object@data <- object@data [, cols, drop = FALSE]
+
 	if (col.names){
 		col.spc <- match ("spc", colnames (object@data))
 		
@@ -2553,6 +2559,7 @@ write.txt.long <- function (object,
 		order = NULL, na.last = TRUE, decreasing = FALSE,
 		quote = FALSE, sep = "\t",
 		row.names = FALSE,
+		cols = NULL,
 		col.names = TRUE,
 		col.labels = FALSE, # use labels instead of column names?
 		append = FALSE,
@@ -2562,33 +2569,54 @@ write.txt.long <- function (object,
 	col.spc <- match ("spc", colnames (object@data))
 	i <- seq_len (ncol (object@data))
 	
-	
 	X <- array2df (object@data$spc, levels = list (n = NA, .wavelength = object@wavelength),
 			label.x = "spc")
+	X$.wavelength <- as.numeric(levels(X$.wavelength))[as.integer(X$.wavelength)]
 	
-	X <- cbind (object@data[X$n, i < col.spc], X[, c("spc", ".wavelength")], object@data [X$n, i > col.spc]) 
+	X <- cbind (object@data[X$n, -col.spc, drop = FALSE], X[, c(".wavelength", "spc")]) 
 	
-	if (!is.null (order))
+	colnames (X) [match (".wavelength", colnames (X))] <- "wavelength"
+	
+	if (is.null (cols))
+		cols <- seq_len (ncol (object@data) + 1)
+	X <- X [, cols, drop = FALSE]
+	
+	if (!is.null (order)){
+		if (length (decreasing) < length (order))
+			decreasing <- rep (decreasing, out.length = length (order))
+		
+		order.data <- as.list (X [, order, drop = FALSE])
+		
+		for (i in seq_along (order)){
+			if (is.factor(order.data [[i]]))
+				order.data [[i]] <- rank (order.data [[i]], na.last = na.last | is.na (na.last))
+			
+			if (decreasing [i])
+				order.data [[i]] <- - order.data [[i]]
+		}
+		
 		X <- X[do.call ("order",
-						c (lapply (order, function (i, X) X[, i], X),
-								na.last = na.last | is.na (na.last), ## do not allow to throw away rows
-								decreasing = decreasing)
+						c (order.data, na.last = na.last | is.na (na.last),	decreasing = FALSE)
 				), ]
+	}
+	
+	if (is.na (na.last))
+		X <- X[! is.na (X$spc), ]
 	
 	if (col.names){
 		if (col.labels){
-			cln <- match (colnames (object@data), names (object@label))
+			cln <- match (colnames (X), names (object@label))
 			cln[!is.na (cln)] <- object@label [cln[!is.na(cln)]]
-			cln[is.na (cln)] <- colnames (object@data) [is.na(cln)]
+			cln[is.na (cln)] <- colnames (X) [is.na(cln)]
 			cln <- sapply (cln, as.character)
 		} else {
-			cln <- colnames (object@data)
+			cln <- colnames (X)
 		}
 		
 		cln <- c(if (row.names) "" else NULL,
-				cln [i <= col.spc],
-				if (col.labels) as.character (object@label$.wavelength) else "wavelength",
-				cln [i > col.spc]
+				cln #[i <= col.spc],
+				#if (col.labels) as.character (object@label$.wavelength) else "wavelength",
+				#cln [i > col.spc]
 		)
 		write.table (matrix (cln, nrow = 1), file = file, append = append,
 				quote = quote, sep = sep, row.names = FALSE, col.names = FALSE)
@@ -2960,6 +2988,4 @@ wc <- function (file, flags = c("lines", "words", "bytes")){
 	colnames (wc) <- c(flags, "file")
 	wc
 } 
-
-
 

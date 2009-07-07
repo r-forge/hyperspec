@@ -90,7 +90,7 @@ decomposition(object, x, wavelength = seq_len (ncol (x)),
                            label.spc = "score / a.u.")
 
   loadings <- decomposition (flu, t(pca$rotation), scores = FALSE,
-     label.wavelength = "PC", label.spc = "loading I / a.u.")
+     label.spc = "loading I / a.u.")
 
   plotspc (loadings, stacked = TRUE, col = matlab.palette(6))
 
