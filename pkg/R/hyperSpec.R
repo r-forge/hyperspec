@@ -104,7 +104,7 @@ setMethod ("initialize", "hyperSpec",
 			if (is.null (wavelength)){
 				if (is.null (colnames (.Object@data$spc)))
 					colnames (.Object@data$spc) <- seq_len (ncol (.Object@data$spc))
-				.Object@wavelength <- as.numeric (colnames (.Object@data$spc))
+				.wl(.Object) <- as.numeric (colnames (.Object@data$spc))
 			} else {
 				.wl(.Object) <- wavelength
 				long$wavelength <- wavelength
@@ -139,8 +139,8 @@ orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
 		short = "orderwl", date = NULL, user = NULL){
 	ord <- order (x@wavelength, na.last = na.last, decreasing = decreasing)
 	if (any (ord != seq_len (length (x@wavelength)))){
-		x@wavelength <- x@wavelength [ord]
 		x@data$spc <-  x@data$spc [, ord, drop = FALSE]
+		.wl(x) <- x@wavelength [ord]
 	}
 	
 	x@log <- logentry (x, short = short,
@@ -232,8 +232,8 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 		else {
 			if (!wl.index && is.numeric (l))
 				l <- wl2i (x, l)
-			x@wavelength <- x@wavelength[l]
 			x@data$spc <- x@data$spc[,l, drop = FALSE]
+			.wl (x) <- x@wavelength[l]
 		}
 	}
 	
@@ -877,7 +877,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "hyperSpec"),
 										collapse = ", ")))
 			
 			x@data$spc <-  x@data$spc %*% y@data$spc 
-			x@wavelength = y@wavelength
+			.wl (x) <- y@wavelength
 			x@label$.wavelength = y@label$.wavelength
 			x@log <- logentry (x, short = "%*%", long = as.character (y))
 			x
@@ -888,7 +888,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
 		function (x, y){
 			validObject (x)
 			x@data$spc <-  x@data$spc %*% y@data$spc 
-			x@wavelength = seq_len (ncol (y)) 
+			.wl (x) <- seq_len (ncol (y)) 
 			x@label$.wavelength = NA
 			x@log <- logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
 			x
@@ -1086,7 +1086,7 @@ setMethod("cbind2", signature (x = "hyperSpec", y  = "hyperSpec"),
 			}
 			
 			x@data$spc <- cbind(x@data$spc, y@data$spc)
-			x@wavelength <- c (x@wavelength, y@wavelength)
+			.wl (x) <- c (x@wavelength, y@wavelength)
 			
 			x@data <- cbind (x@data,
 					y@data[, is.na (match (colnames (y@data), colnames (x@data))), drop = FALSE])
@@ -1309,17 +1309,17 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
 					## wavelength axis is adjusted 
 					if (!is.null (new.wavelength))
 						if (is.numeric (new.wavelength))
-							X@wavelength <- new.wavelength
+							.wl (X) <- new.wavelength
 						else {
 							dots <- list (...)
-							X@wavelength <- dots[[new.wavelength]]
+							.wl (X) <- dots[[new.wavelength]]
 						}
 					else if (ncol (X@data$spc) != length (X@wavelength)){ 
 						wl <- as.numeric (colnames (X@data$spc))
 						if (length (wl) != ncol (X@data$spc) || any (is.na (wl)))
-							X@wavelength <- seq_len (ncol (X@data$spc))
+							.wl (X) <- seq_len (ncol (X@data$spc))
 						else
-							X@wavelength <- wl
+							.wl (X) <- wl
 					}
 				
 				if (ncol (X@data$spc) != length (X@wavelength)) 
@@ -1544,7 +1544,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 		
 		object@data$spc <- I (as.matrix (x))
 		
-		object@wavelength <- wavelength
+		.wl (object) <- wavelength
 		
 		object@label$.wavelength <- label.wavelength
 		
@@ -2718,7 +2718,7 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1, short = NULL,
 				user = user, date = date)
 		
 		
-		apply.to@wavelength <- wl
+		.wl(apply.to) <- wl
 		colnames (apply.to@data$spc) <- format (wl, digits = 4)
 		
 		apply.to
@@ -2769,7 +2769,7 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
 	}
 	if (is.null (apply.to)){
 		fit.to@data$spc <- p
-		fit.to@wavelength <- 0 : poly.order
+		.wl (fit.to) <- 0 : poly.order
 		colnames (fit.to@data$spc) <- paste ("x^", 0 : poly.order, sep="")
 		fit.to@log <- logentry (fit.to, short = if (is.null (short)) "spc.fit.poly.below: coefficients" else short, 
 				long = list (apply = NULL, poly.order = poly.order,
@@ -2788,7 +2788,7 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
 						npts.min = npts.min, noise = noise), 
 				user = user, date = date)
 		
-		apply.to@wavelength <- x
+		.wl(apply.to) <- x
 		colnames (apply.to@data$spc) <- format (x, digits = 4)
 		apply.to
 	}
@@ -2820,7 +2820,7 @@ loess <- apply (t (spc[[]]), 2,
 		spc@wavelength)
 
 spc@data$spc <- t (sapply (loess, predict, newx))
-spc@wavelength <- newx
+.wl(spc) <- newx
 
 spc@log <- logentry (spc, 		
 		short = if (is.null (short)) "spc.loess" else short,
