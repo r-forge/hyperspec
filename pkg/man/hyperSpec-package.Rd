@@ -17,8 +17,8 @@ a vector of absorbance values for discrete wavelengths is suitable.
 \tabular{ll}{
 Package: \tab hyperSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.5beta\cr
-Date: \tab 2009-02-04\cr
+Version: \tab 0.5\cr
+Date: \tab 2009-07-07\cr
 License: \tab LGPL\cr
 LazyLoad: \tab yes\cr
 Depends: \tab methods, lattice\cr
@@ -26,13 +26,16 @@ Depends: \tab methods, lattice\cr
 
 }
 \author{
-  C. Beleites \url{cbeleite@units.it}
+  C. Beleites \url{cbeleites@units.it}
 }
 \references{
 ~~ Literature or other references for background information ~~
 }
 
 \examples{
+# vignettes
+vignette (package = "hyperSpec")
+
 # information about a hyperSpec object
 chondro
 
@@ -41,6 +44,7 @@ plot (chondro, "spcmeansd")
 
 # plotting a map: integral intensity
 plot (chondro, "map")
+
 
 }
 

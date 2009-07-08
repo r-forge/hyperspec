@@ -43,8 +43,10 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> At the moment, the package is accessible for the listed admins only. 
-However, if you send me an email, I'll send you the zipped source.<br/>
+<p> The package is now publicly accessible from the SVN repository. </p>
+
+<p>To install the latest nightly build, type in R: <pre>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</pre></p>
+<p>
 Claudia Beleites<br/>
 CENMAT, Materials and Natural Resources Dept.<br/> 
 University of Trieste<br/>

@@ -1,0 +1,221 @@
+\documentclass[a4paper, 10pt, smallheadings, DIV15]{scrartcl}
+\usepackage[utf8]{inputenc}
+%\VignettePackage{hyperSpec}
+%\VignetteIndexEntry{flu: the fluorescence data set, how to write an import function, and example of a linear calibration}
+\usepackage{tikz}
+\usepackage{xspace}
+\usepackage{hyphenat}
+\usepackage{fancyvrb}
+%\usepackage{SIunitx}
+
+\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\newcommand{\hy}{\nohyphens{\texttt{hyperSpec}}\xspace}
+\newcommand{\R}{\texttt{R}\xspace}
+
+\author{C.~Beleites, DMRN, Università degli Studi di Trieste, Trieste/I}
+\title{Calibration of Quinine Fluorescence Emission\\
+Vignette for the Data Set \code{flu} of the R package \hy}
+
+
+\begin{document}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}}
+<<init, echo = FALSE, results = hide>>=
+options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
+options ("width" = 100)
+@
+\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE}
+\setkeys{Gin}{width = .5\textwidth}
+\maketitle
+
+This vignette gives an example how to
+\begin{itemize}
+\item write an import function for a spectrometer manufacturer's proprietary ASCII files,
+\item add further data columns to the spectra, and
+\item set up a linear calibration (inverse least squares).
+\end{itemize}
+
+The data set \code{flu} in \hy consists of 6 fluorescence emission spectra of quinine solutions.
+They were acquired during an student practicum and were kindly provided by M. Kammer.
+
+The concentrations of the solutions range from 0.05 mg/l to 0.30 mg/l. Spectra were acquired with a
+Perkin Elmer LS50-B fluorescence spectrometer at 350 nm excitation.
+
+In order to work with \hy, the library needs to be loaded in \R:
+<<init>>=
+library (graphics)
+library (hyperSpec)
+@
+
+\section{Writing an Import Function}
+Now we need to import the spectra. They are in Perkin Elmer's ASCII file format,
+one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
+
+The function should automatically read in all files specified by a pattern, such as \code{*.txt}.
+In order to gain some speed, the spectra matrix is preallocated after the first file is read.
+Also, the number of header lines are predefined instead of searching for the line after \texttt{\#DATA}.
+
+Note, that labels giving the correct units (e.g. for axis labels) are set. The label
+with the special name \code{.wavelength} corresponds to the wavelength axis, all data columns should
+have a label with the same name. The spectra are always in a data column called \code{spc}.
+
+<<importfun>>=
+read.PE <- function (files = "*.txt", skip = 54) {
+	files <- Sys.glob (files)
+
+	buffer <- matrix (scan (files [1], skip = skip), ncol = 2, byrow = TRUE)
+
+	wavelength <- buffer [, 1]
+	spc <- matrix (ncol = nrow (buffer), nrow = length (files))
+
+	spc [1, ] <-  buffer [, 2]
+
+	for (f in seq (along = files)[-1]) {
+
+		buffer <- matrix (scan (files [f], skip = skip), ncol = 2, byrow = TRUE)
+
+		if (! all.equal (buffer [, 1], wavelength))
+			stop (paste(files [f], "has different wavelengh axis."))
+
+		spc [f, ] <- buffer[, 2]
+	}
+
+	new ("hyperSpec", wavelength = wavelength, spc = spc,
+			label = list (.wavelength = expression (lambda[fl] / nm),
+					spc = "I / a.u."))
+}
+@
+From now on, the function can be used:
+<<import>>=
+flu <- read.PE ("*.txt")
+@
+Now the spectra are in a hyperSpec object and can be examined e.g. by
+<<rawspc>>=
+flu
+@
+<<rawfig, fig = TRUE, width = 6, height = 3>>=
+plot (flu)
+@
+\section{Adding further Data Coumns}
+The calibration model needs the quinine concentrations for the spectra.
+This information can be stored together with the specta, and also gets an appropriate label:
+<<newdata>>=
+flu$c <- seq (from = 0.05, to = 0.30, by = 0.05)
+labels (flu, "c") <- "c / (mg / l)"
+flu
+@
+
+Now the \hy object \code{flu} contains two data columns, holding the actual spectra and the
+respective concentrations. The dollar operator returns such a data column:
+<<newc>>=
+flu$c
+@
+
+\section{Linear Calibration}
+As \R is developed for the purpose of statistical analysis, tools for a least squares calibration
+model are readily availabe.
+
+The original spectra range from \Sexpr{min(wl(flu))} to \Sexpr{max(wl(flu))} nm.
+However, the intensities at 445 nm are perfect for a univariate calibration. Plotting them over the
+concentration is done by:
+
+\setkeys{Gin}{width = .33\textwidth}
+<<calplot1, fig=TRUE, width = 6, height = 6>>=
+plotc (flu[,,445])
+@
+
+The square bracket operator extracts parts of a \hy object.
+The first coordinate defines which spectra are to be used, the second which data columns, and the
+third gives the spectral range.
+
+We discard all the wavelengths but 445 nm:
+
+<<cutspc>>=
+flu <- flu [,,445]
+@
+
+The plot could be enhanced by annotating the ordinate with the emission wavelength.
+Also the axes should start at the origin, so that it is easier to see whether the calibration
+function will go through the origin:
+<<calplot2, fig=TRUE, width = 6, height = 6>>=
+plotc (flu, zlab = expression (I ["450 nm"] / a.u.),
+	   plot.dots = list (xlim = range (0, flu$c), ylim = range (0, flu$spc)))
+@
+
+
+The actual calibration is a linear model, which can be fitted by dhe \R function \code{lm}.
+\code{lm} needs a \emph{formula} that specifies which data columns are dependent and independent
+variables.
+
+The normal calibration plot gives the emission intensity as a function of the concentration, and
+the calibration function thus models $I = f (c)$, i. e.  $I = m c + b$ for a linear calibration.
+This is then solved for $c$ when the calibration is used.
+
+However, \R's linear model is a quite strict in predicting: a model set up as $I = f (c)$ will predict
+the intensity as a function of the concentration but not the other way round. Thus we set up an
+inverse calibration model\footnote{As we can safely assume that the error on the concentrations is
+far larger than the error on the instrument signal, it is actually the correct type of model from
+the least squares fit point of view.}:  $c = f (I)$. The corresponding \R formula is \verb+c ~ I+, or in our case
+\verb+c ~ spc+, as the intensities are stored in the data column \code{spc}:
+
+In addition, \code{lm} (like most \R model building functions) expects the data to be a \code{data.frame}.
+
+There are three abbrevations that help to get the parts  of the \hy object that are frequently  needed:
+\begin{description}
+ \item[\code{flu[[]]}] returns the spectra matrix. It takes the same indices as \code{[]}.
+ \item[\code{flu\$.}] returns the data as a \code{data.frame}
+ \item[\code{flu\$..}] returns a  \code{data.frame} that has all data columns but the spectra
+\end{description}
+<<abbrev>>=
+flu[[]]
+flu$.
+flu$..
+@
+
+Putting this together, the calibration model is calculated:
+<<cal>>=
+calibration <- lm (c ~ spc, data = flu$.)
+@
+
+The \code{summary} gives a good overview of our model:
+<<summarymodel>>=
+summary (calibration)
+@
+
+In order to get predictions for new measurements, a new \code{data.frame} with the same independent
+variables (in columns with the same names) as in the calibration data are needed. Then the function 
+\code{predict} can be used. It can also calculate the prediction interval. 
+If we observe e.g. an intensity of 125 units, the corresponding concentration and its 99 \% prediction interval are:
+
+<<pred>>=
+I <- 125
+conc <- predict (calibration, newdata = list (spc = as.matrix(I)), interval = "prediction", level = .99)
+conc
+@
+ 
+Finally, we can draw the calibration function and its 99 \% confidence interval 
+(also via \code{predict}) together with the prediction example:
+
+<<calplot3, fig=TRUE, pdf = TRUE, eps = FALSE, width = 6, height = 6>>=
+plotc (flu, zlab = expression (I ["450 nm"] / a.u.),
+       plot.dots = list (xlim = range (0, flu$c), ylim = range (0, flu$spc)))
+
+int <- list (spc = as.matrix(min (flu) : max(flu)))
+ci <- predict (calibration, newdata = int, interval = "confidence", level = 0.99)
+matlines (ci, int$spc, col = c ("red","#606060","#606060"), lty = 1)
+
+# extrapolate to lower intensities
+int <- list (spc = as.matrix(0 : min (flu)))
+ci <- predict (calibration, newdata = int, interval = "confidence", level = 0.99)
+matlines (ci, int$spc, col = c ("red","#606060","#606060"), lty = 3)
+
+# our example
+lines (conc[-1], rep(I, 2), col = "blue")
+points (conc[1], I, col = "blue", pch = 4, cex = 0.5)
+@
+
+
+\end{document}
+
+

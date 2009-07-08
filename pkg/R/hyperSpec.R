@@ -19,15 +19,13 @@
 	desc <- utils::packageDescription("hyperSpec")
 	vers <- paste("V. ", desc$Version)
 	cat ("Package ",  desc$Package, ", version ", desc$Version, "\n\n",
-			"Citation:\n",
-			attr (citation ("hyperSpec")[[1]], "textVersion"), "\n\n",
-			"'citation(\"hyperSpec\")' will give you also an BibTeX entry.", "\n\n",
 			"To get started, try\n",
 			'   help ("hyperSpec") \n',
 			'   help (package = "hyperSpec")\n',
 			'   vignette (package = "hyperSpec")\n\n',
-			'The project is hosted on http://r-forge.r-project.org/projects/hyperspec/\n',
-			'and the article mentioned above is openly accessible at http://\n\n',
+			"If you use this package please cite it appropriately.\n",
+			"   citation(\"hyperSpec\")\nwill give you the correct reference.", "\n\n",
+			'The project is hosted on http://r-forge.r-project.org/projects/hyperspec/\n\n',
 			sep = "")  
 }
 setClass ("hyperSpec",
@@ -365,7 +363,7 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 ###  
 ## TODO: test
 .paste.row <- function (x, label = "", name = "", ins = 0, i = NULL, val = FALSE, range = TRUE,
-		digits = getOption ("digits"), max.print = 15, shorten.to = c (3,3)){
+		digits = getOption ("digits"), max.print = 5, shorten.to = c (2,1)){
 	if (is.null (name)) name = ""
 	if (is.null (label)) label = ""
 	
@@ -423,8 +421,8 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 
 setMethod (as.character, "hyperSpec", function (x,
 				digits = getOption ("digits"),
-				max.print = 10,
-				shorten.to = c(2,2),
+				max.print = 5,
+				shorten.to = c(2,1),
 				log = TRUE){#, ...){
 			
 			
@@ -449,7 +447,8 @@ setMethod (as.character, "hyperSpec", function (x,
 			)
 			
 			chr <- c (chr, paste ("wavelength:",
-							.paste.row (x@wavelength, x@label$.wavelength, ins = 0, val = TRUE, range = FALSE),
+							.paste.row (x@wavelength, x@label$.wavelength, ins = 0, val = TRUE, 
+									range = FALSE, shorten.to = shorten.to, max.print = max.print),
 							##                    "(", length (x@wavelength), "elements)",
 							collapse = " ")
 			)
@@ -462,7 +461,8 @@ setMethod (as.character, "hyperSpec", function (x,
 			if (n.cols > 0)
 				for (n in names (x@data))
 					chr <- c(chr, .paste.row (x@data[[n]], x@label[[n]], n, ins = 3,
-									i = match (n, names (x@data)), val = TRUE))
+									i = match (n, names (x@data)), val = TRUE, 
+									shorten.to = shorten.to, max.print = max.print))
 			
 			if (log){
 				chr <- c(chr, "log:")
@@ -2445,7 +2445,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 	pos.spc <- 0
 	
 	while (length (fbuf > 0)){
-		cat (".")
+		if (nlines > 0) cat (".")
 		spc [pos.spc + seq_len (nrow (fbuf))] <- fbuf [, ncol]
 		pos.spc <- pos.spc + nrow (fbuf)
 		
@@ -2459,7 +2459,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 		if (length (fbuf > 0) & ! all(unique (fbuf[, ncol - 1]) %in% wl))
 			stop ("Wavelengths do not correspond to that of the other chunks. Is the size of the first chunk large enough to cover a complete spectrum?")
 	}
-	cat ("\n")
+	if (nlines > 0) cat ("\n")
 	
 	spc <- matrix (spc, ncol = length (wl), nrow = nspc, byrow = TRUE)
 	

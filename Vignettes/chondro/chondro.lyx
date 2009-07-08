@@ -1,0 +1,559 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass literate-scrartcl
+\begin_preamble
+% Meta information - fill between {} and do not remove %
+% \VignetteIndexEntry{Vignette on the chondro data set. Shows common Preprocessing tasks for Raman spectra, principal component analysis (PCA), and hierarchical cluster analysis.}
+% \VignetteKeywords{chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}
+% \VignettePackage{hyperSpec}
+\AtBeginDocument{
+\fvset{listparameters={\setlength{\topsep}{0pt}}} 
+\renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
+} 
+\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE}
+}
+
+% my preferred packages
+\usepackage{xspace}
+
+\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\newcommand{\hy}{\nohyphens{\texttt{hyperSpec}}\xspace}
+\newcommand{\R}{\texttt{R}\xspace}
+\end_preamble
+\options a4paper, 10pt, smallheadings, DIV15
+\use_default_options false
+\language english
+\inputencoding utf8x
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\float_placement tbh
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_title "Chondro "
+\pdf_author "Claudia Beleites"
+\pdf_subject "Vignette on hyperSpec's chondro data set"
+\pdf_keywords "chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry false
+\use_amsmath 1
+\use_esint 0
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Raman Spectra of Chondrocytes in Cartilage:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+'s 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Robject{chondro}
+\end_layout
+
+\end_inset
+
+ data set
+\end_layout
+
+\begin_layout Author
+Claudia Beleites (
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+cbeleites@units.it
+\end_layout
+
+\end_inset
+
+)
+\begin_inset Newline newline
+\end_inset
+
+CENMAT, DMRN, University of Trieste
+\end_layout
+
+\begin_layout Scrap
+<<startup, echo = FALSE, results = hide>>=
+\begin_inset Newline newline
+\end_inset
+
+setwd ("~/Uni/workspace/hyperspec.rforge/Vignettes/chondro")
+\begin_inset Newline newline
+\end_inset
+
+options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6)))) 
+\begin_inset Newline newline
+\end_inset
+
+options ("width" = 100)
+\begin_inset Newline newline
+\end_inset
+
+library (hyperSpec)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+This vignette describes the 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Robject{chondro}
+\end_layout
+
+\end_inset
+
+ data set.
+ It shows a complete data analysis work flow on a Raman map demonstrating
+ frequently needed preprocessing methods
+\end_layout
+
+\begin_layout Itemize
+baseline correction
+\end_layout
+
+\begin_layout Itemize
+normalization
+\end_layout
+
+\begin_layout Itemize
+smoothing / interpolating spectra
+\end_layout
+
+\begin_layout Itemize
+plotting spectra
+\end_layout
+
+\begin_layout Itemize
+plotting false color maps
+\end_layout
+
+\begin_layout Standard
+and other basic work techniques 
+\end_layout
+
+\begin_layout Itemize
+cutting the spectral range,
+\end_layout
+
+\begin_layout Itemize
+selecting (extracting) or deleting spectra, and
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+aggregating
+\emph default
+ spectra (e.g.
+ calculating cluster mean spectra).
+\end_layout
+
+\begin_layout Standard
+The chemometric methods used are
+\end_layout
+
+\begin_layout Itemize
+Principal Component Analysis (PCA) and
+\end_layout
+
+\begin_layout Itemize
+hierarchical cluster analysis,
+\end_layout
+
+\begin_layout Standard
+showing how to use data analysis procedures provided by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{R}
+\end_layout
+
+\end_inset
+
+ and other packages.
+\end_layout
+
+\begin_layout Section
+The Data Set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:vis-all"
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename 080606d-flip-ausw.pdf
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Microscope view of the cartilage section.
+ The frame indicates the measurement area (35 
+\begin_inset Formula $\times$
+\end_inset
+
+21 μm).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Raman spectra of a cartilage section were measured on each point of a grid,
+ resulting in a so-called 
+\emph on
+Raman map
+\emph default
+.
+ Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:vis-all"
+
+\end_inset
+
+ shows a microscope picture fo the measuarea and its surroundings.
+ 
+\end_layout
+
+\begin_layout Standard
+The measurement parameters were:
+\end_layout
+
+\begin_layout Description
+Excitation
+\begin_inset space ~
+\end_inset
+
+wavelength: 633 nm
+\end_layout
+
+\begin_layout Description
+Exposure
+\begin_inset space ~
+\end_inset
+
+time: 10 s per spectrum
+\end_layout
+
+\begin_layout Description
+Objective: 100
+\begin_inset Formula $\times$
+\end_inset
+
+, NA 0.85
+\end_layout
+
+\begin_layout Description
+Measurement
+\begin_inset space ~
+\end_inset
+
+grid: 35 
+\begin_inset Formula $\times$
+\end_inset
+
+21 μm, 1 μm step size
+\end_layout
+
+\begin_layout Description
+Spectrometer: Renishaw InVia
+\end_layout
+
+\begin_layout Standard
+All data to reproduce this Vignette is accessible at 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+'s homepage, 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://r-forge.r-project.org/projects/hyperspec/
+\end_layout
+
+\end_inset
+
+, as the original file is far too large to be included in the package.
+ 
+\end_layout
+
+\begin_layout Section
+Data Import
+\end_layout
+
+\begin_layout Standard
+Renishaw provides a converter to export their proprietary data in a so-called
+ long format ASCII file.
+ Raman maps are exported having four columns, 
+\emph on
+y
+\emph default
+, 
+\emph on
+x
+\emph default
+, 
+\emph on
+raman shift
+\emph default
+, and 
+\emph on
+intensity
+\emph default
+.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ comes with a function to import such files, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{scan.txt.Renishaw}
+\end_layout
+
+\end_inset
+
+.
+ The function assumes a map as default, but can also handle single spectra
+ (
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{data = "spc"}
+\end_layout
+
+\end_inset
+
+), time series (
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{data = "ts"}
+\end_layout
+
+\end_inset
+
+), and depth profiles (
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{data = "depth"}
+\end_layout
+
+\end_inset
+
+).
+ In addition, large files may be processed in chunks.
+ In order to speed up the reading 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{scan.txt.Renishaw}
+\end_layout
+
+\end_inset
+
+ does not allow missing values, but it does work with 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{NA}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Scrap
+<<import, keep.source = T>>=
+\begin_inset Newline newline
+\end_inset
+
+chondro <- scan.txt.Renishaw ("chondro.txt", data = "xyspc")
+\begin_inset Newline newline
+\end_inset
+
+chondro
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Scrap
+
+\end_layout
+
+\begin_layout Section
+Session information
+\end_layout
+
+\begin_layout Standard
+R session information:
+\end_layout
+
+\begin_layout Scrap
+<<sessionInfo, results=tex>>=
+\begin_inset Newline newline
+\end_inset
+
+toLatex(sessionInfo())
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,1198 @@
+#LyX 1.6.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass literate-scrartcl
+\begin_preamble
+%\VignetteIndexEntry{flu: the fluorescence data set, how to write an import function, and example of a linear calibration}
+% \VignetteKeywords{hyperspec, data set, flu}
+% \VignettePackage{hyperSpec}
+\usepackage{xspace}
+
+\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\newcommand{\hy}{\nohyphens{\texttt{hyperSpec}}\xspace}
+\newcommand{\R}{\texttt{R}\xspace}
+\end_preamble
+\options 10pt, A4paper,smallheadings,DIV15
+\use_default_options false
+\language english
+\inputencoding utf8x
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize 10
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_amsmath 0
+\use_esint 0
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Calibration of Quinine Fluorescence Emission
+\end_layout
+
+\begin_layout Title
+Vignette for the Data Set 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+
+R
+\lang english
+code{flu}
+\end_layout
+
+\end_inset
+
+ of the R package 
+\backslash
+hy
+\end_layout
+
+\begin_layout Author
+Claudia Beleites (
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+cbeleites@units.it
+\end_layout
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Address
+CENMAT, DMRN, University of Trieste
+\end_layout
+
+\begin_layout Scrap
+<<init, echo = FALSE, results = hide>>= 
+\begin_inset Newline newline
+\end_inset
+
+options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6)))) 
+\begin_inset Newline newline
+\end_inset
+
+options ("width" = 100) 
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+This vignette gives an example how to 
+\end_layout
+
+\begin_layout Itemize
+write an import function for a spectrometer manufacturer's proprietary ASCII
+ files, 
+\end_layout
+
+\begin_layout Itemize
+add further data columns to the spectra, and 
+\end_layout
+
+\begin_layout Itemize
+set up a linear calibration (inverse least squares).
+ 
+\end_layout
+
+\begin_layout Standard
+The data set 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+flu
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ in 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hy
+\end_layout
+
+\end_inset
+
+ consists of 6 fluorescence emission spectra of quinine solutions.
+ They were acquired during a student practicum and were kindly provided
+ by M.
+ Kammer.
+\end_layout
+
+\begin_layout Standard
+The concentrations of the solutions range from 0.05 mg/l to 0.30 mg/l.
+ Spectra were acquired with a Perkin Elmer LS50-B fluorescence spectrometer
+ at 350 nm excitation.
+\end_layout
+
+\begin_layout Standard
+In order to work with 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hy
+\end_layout
+
+\end_inset
+
+, the library needs to be loaded in 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+R
+\end_layout
+
+\end_inset
+
+: 
+\end_layout
+
+\begin_layout Scrap
+<<init>>= 
+\begin_inset Newline newline
+\end_inset
+
+library (graphics) 
+\begin_inset Newline newline
+\end_inset
+
+library (hyperSpec) 
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Section
+Writing an Import Function
+\end_layout
+
+\begin_layout Standard
+Now we need to import the spectra.
+ They are in Perkin Elmer's ASCII file format, one spectrum per file.
+ The files are completely ASCII text, with the actual spectra starting at
+ line 55.
+\end_layout
+
+\begin_layout Standard
+The function should automatically read in all files specified by a pattern,
+ such as 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+*.txt
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+.
+ In order to gain some speed, the spectra matrix is preallocated after the
+ first file is read.
+ Also, the number of header lines are predefined instead of searching for
+ the line after 
+\family typewriter
+#DATA
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Note, that labels giving the correct units (e.g.
+ for axis labels) are set.
+ The label with the special name 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+.wavelength
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ corresponds to the wavelength axis, all data columns should have a label
+ with the same name.
+ The spectra are always in a data column called 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+spc
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Scrap
+<<importfun>>= 
+\begin_inset Newline newline
+\end_inset
+
+read.PE <- function (files = "*.txt", skip = 54) 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+   files <- Sys.glob (files)
+\begin_inset Newline newline
+\end_inset
+
+   buffer <- matrix (scan (files [1], skip = skip), ncol = 2, byrow = TRUE)
+\begin_inset Newline newline
+\end_inset
+
+   wavelength <- buffer [, 1] spc <- matrix (ncol = nrow (buffer), nrow
+ = length (files))
+\begin_inset Newline newline
+\end_inset
+
+   spc [1, ] <- buffer [, 2]
+\begin_inset Newline newline
+\end_inset
+
+   for (f in seq (along = files)[-1]) 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+      buffer <- matrix (scan (files [f], skip = skip), ncol = 2, byrow =
+ TRUE)
+\begin_inset Newline newline
+\end_inset
+
+      if (! all.equal (buffer [, 1], wavelength)) stop (paste(files [f],
+ "has different wavelengh axis."))
+\begin_inset Newline newline
+\end_inset
+
+      spc [f, ] <- buffer[, 2] 
+\begin_inset Newline newline
+\end_inset
+
+   
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+  new ("hyperSpec", wavelength = wavelength, spc = spc, label = list (.wavelength
+ = expression (lambda[fl] / nm), spc = "I / a.u.")) 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+@ 
+\end_layout
+
+\begin_layout Standard
+From now on, the function can be used: 
+\end_layout
+
+\begin_layout Scrap
+<<import>>= 
+\begin_inset Newline newline
+\end_inset
+
+flu <- read.PE ("*.txt") 
+\begin_inset Newline newline
+\end_inset
+
+@ 
+\end_layout
+
+\begin_layout Standard
+Now the spectra are in a hyperSpec object and can be examined e.g.
+ by 
+\end_layout
+
+\begin_layout Scrap
+<<rawspc>>= 
+\begin_inset Newline newline
+\end_inset
+
+flu 
+\begin_inset Newline newline
+\end_inset
+
+@ 
+\begin_inset Newline newline
+\end_inset
+
+<<rawfig, fig = TRUE, width = 6, height = 3>>= 
+\begin_inset Newline newline
+\end_inset
+
+plot (flu) 
+\begin_inset Newline newline
+\end_inset
+
+@ 
+\end_layout
+
+\begin_layout Section
+Adding further Data Coumns
+\end_layout
+
+\begin_layout Standard
+The calibration model needs the quinine concentrations for the spectra.
+ This information can be stored together with the specta, and also gets
+ an appropriate label: 
+\end_layout
+
+\begin_layout Scrap
+newdata
+\begin_inset Quotes ald
+\end_inset
+
+= flu
+\begin_inset Formula $c<-seq(from=0.05,to=0.30,by=0.05)labels(flu,"c")<-"c/(mg/l)"flu@Nowthe\hy object\code{flu}containstwodatacolumns,holdingtheactualspectraandtherespectiveconcentrations.Thedollaroperatorreturnssuchadatacolumn:<<newc>>=flu$
+\end_inset
+
+c @
+\end_layout
+
+\begin_layout Section
+Linear Calibration
+\end_layout
+
+\begin_layout Standard
+As 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+R
+\end_layout
+
+\end_inset
+
+ is developed for the purpose of statistical analysis, tools for a least
+ squares calibration model are readily availabe.
+\end_layout
+
+\begin_layout Standard
+The original spectra range from 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{min(wl(flu))}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{max(wl(flu))}
+\end_layout
+
+\end_inset
+
+ nm.
+ However, the intensities at 445 nm are perfect for a univariate calibration.
+ Plotting them over the concentration is done by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+setkeys
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+Gin
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+width = .33
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Quotes ard
+\end_inset
+
+calplot1, fig=TRUE, width = 6, height = 6
+\begin_inset Quotes ald
+\end_inset
+
+= plotc (flu[,,445]) @
+\end_layout
+
+\begin_layout Standard
+The square bracket operator extracts parts of a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hy
+\end_layout
+
+\end_inset
+
+ object.
+ The first coordinate defines which spectra are to be used, the second which
+ data columns, and the third gives the spectral range.
+\end_layout
+
+\begin_layout Standard
+We discard all the wavelengths but 445 nm:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes ard
+\end_inset
+
+cutspc
+\begin_inset Quotes ald
+\end_inset
+
+= flu <- flu [,,445] @
+\end_layout
+
+\begin_layout Standard
+The plot could be enhanced by annotating the ordinate with the emission
+ wavelength.
+ Also the axes should start at the origin, so that it is easier to see whether
+ the calibration function will go through the origin: 
+\begin_inset Quotes ard
+\end_inset
+
+calplot2, fig=TRUE, width = 6, height = 6
+\begin_inset Quotes ald
+\end_inset
+
+= plotc (flu, zlab = expression (I ["450 nm"] / a.u.), plot.dots = list (xlim
+ = range (0, flu
+\begin_inset Formula $c),ylim=range(0,flu$
+\end_inset
+
+spc))) @
+\end_layout
+
+\begin_layout Standard
+The actual calibration is a linear model, which can be fitted by dhe 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+R
+\end_layout
+
+\end_inset
+
+ function 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+lm
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+lm
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ needs a 
+\emph on
+formula
+\emph default
+ that specifies which data columns are dependent and independent variables.
+\end_layout
+
+\begin_layout Standard
+The normal calibration plot gives the emission intensity as a function of
+ the concentration, and the calibration function thus models 
+\begin_inset Formula $I=f(c)$
+\end_inset
+
+, i.
+ e.
+ 
+\begin_inset Formula $I=mc+b$
+\end_inset
+
+ for a linear calibration.
+ This is then solved for 
+\begin_inset Formula $c$
+\end_inset
+
+ when the calibration is used.
+\end_layout
+
+\begin_layout Standard
+However, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+R
+\end_layout
+
+\end_inset
+
+'s linear model is a quite strict in predicting: a model set up as 
+\begin_inset Formula $I=f(c)$
+\end_inset
+
+ will predict the intensity as a function of the concentration but not the
+ other way round.
+ Thus we set up an inverse calibration model
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+As we can safely assume that the error on the concentrations is far larger
+ than the error on the instrument signal, it is actually the correct type
+ of model from the least squares fit point of view.
+\end_layout
+
+\end_inset
+
+: 
+\begin_inset Formula $c=f(I)$
+\end_inset
+
+.
+ The corresponding 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+R
+\end_layout
+
+\end_inset
+
+ formula is 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+c ~ I+
+\end_layout
+
+\end_inset
+
+, or in our case 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+c ~ spc+
+\end_layout
+
+\end_inset
+
+, as the intensities are stored in the data column 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+spc
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+In addition, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+lm
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ (like most 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+R
+\end_layout
+
+\end_inset
+
+ model building functions) expects the data to be a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+data.frame
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+There are three abbrevations that help to get the parts of the 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+hy
+\end_layout
+
+\end_inset
+
+ object that are frequently needed: 
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+flu
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+[[]]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ returns the spectra matrix.
+ It takes the same indices as 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+[]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+flu$.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ returns the data as a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+data.frame
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+flu$..
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ returns a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+code{
+\end_layout
+
+\end_inset
+
+data.frame
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ that has all data columns but the spectra 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes ard
+\end_inset
+
+abbrev
+\begin_inset Quotes ald
+\end_inset
+
+= flu
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+[[]]
+\end_layout
+
+\end_inset
+
+ flu
+\begin_inset Formula $.flu$
+\end_inset
+
+..
+ @
+\end_layout
+
+\begin_layout Standard
+Putting this together, the calibration model is calculated: 
+\begin_inset Quotes ard
+\end_inset
+
+cal
+\begin_inset Quotes ald
+\end_inset
+
+= calibration <- lm (c 
+\begin_inset space ~
+\end_inset
+
+ spc, data = flu
+\begin_inset Formula $.)@The\code{summary}givesagoodoverviewofourmodel:<<summarymodel>>=summary(calibration)@Inordertogetpredictionsfornewmeasurements,anew\code{data.frame}withthesameindependentvariables(incolumnswiththesamenames)asinthecalibrationdataareneeded.Thenthefunction\code{predict}canbeused.Itcanalsocalculatethepredictioninterval.Ifweobservee.g.anintensityof125units,thecorrespondingconcentrationandits99\%predictionintervalare:<<pred>>=I<-125conc<-predict(calibration,newdata=list(spc=as.matrix(I)),interval="prediction",level=.99)conc@Finally,wecandrawthecalibrationfunctionandits99\%confidenceinterval(alsovia\code{predict})togetherwiththepredictionexample:<<calplot3,fig=TRUE,pdf=TRUE,eps=FALSE,width=6,height=6>>=plotc(flu,zlab=expression(I["450nm"]/a.u.),plot.dots=list(xlim=range(0,flu$
+\end_inset
+
+c), ylim = range (0, flu
+\begin_inset Formula $spc)))int<-list(spc=as.matrix(min(flu):max(flu)))ci<-predict(calibration,newdata=int,interval="confidence",level=0.99)matlines(ci,int$
+\end_inset
+
+spc, col = c ("red","#606060","#606060"), lty = 1)
+\end_layout
+
+\begin_layout Standard
+# extrapolate to lower intensities int <- list (spc = as.matrix(0 : min (flu)))
+ ci <- predict (calibration, newdata = int, interval = "confidence", level
+ = 0.99) matlines (ci, int
+\begin_inset Formula $spc,col=c("red","#606060","#606060"),lty=3)# ourexamplelines(conc[-1],rep(I,2),col="blue")points(conc[1],I,col="blue",pch=4,cex=0.5)@{document}$
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

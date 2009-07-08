@@ -19,7 +19,10 @@ The corresponding possibilities for the \code{data} argument are:
        }
        
 This function allows reading very large ASCII files, but it does not work on files with missing 
-values (\code{NA}s are allowed).   
+values (\code{NA}s are allowed).  
+
+If the file is so large that it sould be read in chunks and \code{nspc} is not given, 
+\code{scan.txt.Renishaw} tries to guess it by using \code{wc} (if installed).
 }
 \value{the \code{hyperSpec} object}
 \seealso{\code{\link{read.txt.long}}, \code{\link{read.txt.wide}}, \code{\link[base]{scan}}}
