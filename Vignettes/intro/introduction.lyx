@@ -741,7 +741,7 @@ Rcode{demo (plotmath)}
 \end_layout
 
 \begin_layout Subsection
-Remarks and S4 Classes
+Remarks on S4 Classes
 \end_layout
 
 \begin_layout Standard
@@ -942,7 +942,9 @@ status open
 
 
 \backslash
-Robject{spc}
+Robject{
+\backslash
+$spc}
 \end_layout
 
 \end_inset
@@ -993,27 +995,618 @@ Rcode{@data}
 \end_layout
 
 \begin_layout Scrap
-<<nwl>>=
+<<names>>=
 \begin_inset Newline newline
 \end_inset
 
-nrow (chondro)
-\begin_inset Newline newline
-\end_inset
-
-nwl (chondro)
-\begin_inset Newline newline
-\end_inset
-
-ncol (chondro)
-\begin_inset Newline newline
-\end_inset
-
-dim (chondro)
+colnames (chondro)
 \begin_inset Newline newline
 \end_inset
 
 @
+\end_layout
+
+\begin_layout Standard
+Likewise, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rmethod{rownames}
+\end_layout
+
+\end_inset
+
+ returns the names assigned to the spectra, and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rmethod{dimnames}
+\end_layout
+
+\end_inset
+
+ yields a list of these three vectors (including also the column names of
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Robject{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Section
+Plotting
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ comes with three predefined plotting functions.
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotspc}
+\end_layout
+
+\end_inset
+
+ plots the spectra, i.
+\begin_inset space ~
+\end_inset
+
+e.
+ 
+the intensities 
+\lang english
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+ over the wavelengths 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{@wavelength}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotmap}
+\end_layout
+
+\end_inset
+
+ plots a false color map: a single value (e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ average intensity or cluster membership) over two data columns (default
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$x}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$y}
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotc}
+\end_layout
+
+\end_inset
+
+ plots a time series or calibration plot: e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ an intensity over a single other data column (like concentration, depth,
+ or time).
+\end_layout
+
+\begin_layout Standard
+All three plus some more handy abbrevations are also accessible via 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rmethod{plot}
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (flu, "spc")}
+\end_layout
+
+\end_inset
+
+ equivalent to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotspc (flu)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (chondro, "spcmeansd")}
+\end_layout
+
+\end_inset
+
+ plot mean spectrum
+\begin_inset Formula $\pm$
+\end_inset
+
+1 standard deviation
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (chondro, "spcprctl")}
+\end_layout
+
+\end_inset
+
+ plot median, 16
+\begin_inset Formula $^{\text{th}}$
+\end_inset
+
+ and 84
+\begin_inset Formula $^{\text{th}}$
+\end_inset
+
+ percentile.
+ This is similar to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{"spcmeansd"}
+\end_layout
+
+\end_inset
+
+.
+ Spectroscopic data frequently are not gaussian distributed.
+ The percentiles give a better idea of the true distribution.
+ They are also less sensitive to outliers.
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (chondro, "spcprctl5")}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{"spcprctl"}
+\end_layout
+
+\end_inset
+
+ plus 5
+\begin_inset Formula $^{\text{th}}$
+\end_inset
+
+ and 95
+\begin_inset Formula $^{\text{th}}$
+\end_inset
+
+percentile.
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (chondro, "map")}
+\end_layout
+
+\end_inset
+
+ equivalent to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotmap (chondro)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (flu, "c")}
+\end_layout
+
+\end_inset
+
+ equivalent to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotc (flu)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (laser, "ts")}
+\end_layout
+
+\end_inset
+
+ a time series plot, equivalent to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotc (laser, use.c = "t")}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (x, "depth")}
+\end_layout
+
+\end_inset
+
+ a depth profile plot, equivalent to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotc (laser, use.c = "z")}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Figure
+\begin_inset space ~
+\end_inset
+
+ shows some example plots.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Scrap
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+setkeys{Gin}{width = .5
+\backslash
+textwidth}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+<<plotspc, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plotspc (flu)
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+<<plotspcmeansd, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (chondro, "spcmeansd")
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+<<plotc, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plotc (flu)
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+<<plotmap, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+print (plotmap (chondro))
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Some example plots.
+ From left to right: 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotspc (flu)}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plot (chondro, "spcmeansd")}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotc (flu)}
+\end_layout
+
+\end_inset
+
+, and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotmap (chondro)}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
