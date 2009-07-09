@@ -7,8 +7,8 @@
   summary values calculated from these may be used.
 }
 \usage{
-plotspc(object, wavelength.range = NULL, wavelength.index = FALSE,
-        wavelength.reverse = FALSE,
+plotspc(object, wl.range = NULL, wl.index = FALSE,
+        wl.reverse = FALSE,
         spc.nmax = 50, func = NULL, func.dots = list(), stacked = FALSE, 
         add = FALSE, bty = "l", col = "black", plot.dots = list (),
         xoffset = 0, yoffset = 0, nxticks = 10, axis.dots = list (),
@@ -18,20 +18,20 @@ plotspc(object, wavelength.range = NULL, wavelength.index = FALSE,
 \arguments{
   \item{object}{the \code{hyperSpec} object}
  
-  \item{wavelength.range}{the wavelength range to be plotted.
+  \item{wl.range}{the wavelength range to be plotted.
 
 	 Either a numeric vector or a list of vectors with different
 	 wavelength ranges to be plotted separately.
 
 	 The values can be either wavelengths or wavelength indices
-	 (according to \code{wavelength.index}).
+	 (according to \code{wl.index}).
   }
   
-  \item{wavelength.index}{if \code{TRUE}, \code{wavelength.range} is
+  \item{wl.index}{if \code{TRUE}, \code{wl.range} is
 	 considered to give column indices into the spectra matrix. Defaults
 	 to specifying wavelength values rather than indices.}
   
-  \item{wavelength.reverse}{if \code{TRUE}, the wavelength axis is
+  \item{wl.reverse}{if \code{TRUE}, the wavelength axis is
 	 plotted backwards.}
 
   \item{spc.nmax}{maximal number of spectra to be plotted (to avoid
@@ -53,13 +53,13 @@ plotspc(object, wavelength.range = NULL, wavelength.index = FALSE,
 	 \code{\link[graphics]{plot}}}
   
   \item{xoffset}{vector with abscissa offsets for each of the
-	 \code{wavelength.range}s. If it has one element less than there are
-	 \code{wavelength.range}s, 0 is padded at the beginning.
+	 \code{wl.range}s. If it has one element less than there are
+	 \code{wl.range}s, 0 is padded at the beginning.
 
 	 The values are interpreted as the distance along the wavelength axis
 	 that the following parts of the spectra are shifted towards the
-	 origin. E.g. if \code{wavelength.range = list (600:1800,
-	 2800:3200)}, \code{xoffset = c(0, 750)} \code{xoffset = 750} would
+	 origin. E.g. if \code{wl.range = list (600 \~ 1800,
+	 2800 \~ 3200)}, \code{xoffset = c(0, 750)} \code{xoffset = 750} would
 	 result in a reasonable plot. See also the examples.
   }
 
@@ -138,15 +138,15 @@ plotspc (flu)
 
 ## artificial example to show wavelength axis cutting
 plotspc (chondro [sample (nrow (chondro), 50)],
-         wavelength.range = list (600:650, 1000:1100, 1600:1700),
+         wl.range = list (600 ~ 650, 1000 ~ 1100, 1600 ~ 1700),
          xoffset = c (0, 300, 450))
 
 plotspc (chondro [sample (nrow (chondro), 50)],
-         wavelength.range = list (600:650, 1000:1100, 1600:1700),
+         wl.range = list (600 ~ 650, 1000 ~ 1100, 1600 ~ 1700),
          xoffset = c (300, 450))
 
 ## some journals publish Raman spectra backwards
-plotspc (chondro [sample (nrow (chondro), 50)], wavelength.reverse = TRUE)
+plotspc (chondro [sample (nrow (chondro), 50)], wl.reverse = TRUE)
 
 plotspc (laser[(0:4)*20+1,,], stacked = TRUE)
 

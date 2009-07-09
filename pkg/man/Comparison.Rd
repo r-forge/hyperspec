@@ -89,7 +89,7 @@ In conditions, the result must therefore be tested with \code{\link[base]{isTRUE
 \author{C. Beleites}
 
 \examples{
-flu [,,445 : 450] > 300
+flu [,,445 ~ 450] > 300
 
 all (flu == flu[[]])
 }

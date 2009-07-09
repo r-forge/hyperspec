@@ -41,7 +41,7 @@ spc.fit.poly.below  (fit.to, apply.to = fit.to, poly.order = 1, npts.min = NULL,
 \seealso{\url{../doc/baselinebelow.pdf}}
 \author{C. Beleites}
 \examples{
-baselines <- spc.fit.poly(cbind(chondro[,,625:640], chondro[,,1785:1800]), chondro)
+baselines <- spc.fit.poly(chondro[,, c (625 ~ 640, 1785 ~ 1800)], chondro)
 plot(chondro - baselines, "spcprctl5")
 
 baselines <- spc.fit.poly.below(chondro)

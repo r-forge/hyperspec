@@ -16,6 +16,6 @@ citEntry(entry="Article",
           textVersion =
           paste("Claudia Beleites and Valter Sergo: `Hyperspectral Data Sets in R: hyperSpec', ",
 				    "in preparation for JStatSoft, ",
-                %"(", year, "). ", 
+                # "(", year, "). ", 
                 vers, ". http://r-forge.r-project.org/projects/hyperspec/", sep="")
 )

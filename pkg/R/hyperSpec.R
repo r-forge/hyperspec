@@ -4,6 +4,7 @@
 ## TODO: slice_map
 ## TODO: stopifnot
 ## TODO test log10
+## TODO: delete warning in wl2i for numerics.
 
 ## TODO plotc z ./. c
 ## is.na
@@ -225,13 +226,16 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 	
 	if (!missing (j)) 
 		x@data <- x@data[, j, drop = FALSE]
-
+	
 	if (!missing (l)) {
 		if (is.null (x@data$spc))
 			warning ("Selected columns do not contain specta. l ignored.")
 		else {
-			if (!wl.index && is.numeric (l))
+			if (!wl.index)
 				l <- wl2i (x, l)
+#			if (!wl.index && is.numeric (l))
+#				l <- wl2i (x, l)
+			
 			x@data$spc <- x@data$spc[,l, drop = FALSE]
 			.wl (x) <- x@wavelength[l]
 		}
@@ -315,8 +319,6 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 				drop = FALSE,
 				wl.index = FALSE){
 			validObject (x)
-			
-#			browser()
 			
 #			if (missing (i) & missing (j) & missing (l)) ## shortcut
 #				return (x@data$spc)
@@ -1176,18 +1178,42 @@ rbind.hyperSpec <- function (..., deparse.level) bind ("r", ...)
 ### wl2i
 ###  
 ###
-wl2i <- function (x, wavelength = stop ("wavelengths are required."),
-		subst.direct = FALSE){
+wl2i <- function (x, wavelength = stop ("wavelengths are required.")){
 	validObject (x)
 	
-	if (subst.direct){
-		.getindex (x, wavelength)
-	} else {
-		seq (from = .getindex (x, min (wavelength)),
-				to = .getindex (x, max (wavelength)),
-				by = if (length (wavelength) > 1) min (diff (wavelength)) else 1)
+	## special . in formula
+	max <- max (x@wavelength) 
+	min <- min (x@wavelength) 
+	
+	`~` <- function (e1, e2){
+		if (missing (e2))              # happens with formula ( ~ end)
+			stop ("wavelength must be a both-sided formula")
 		
+		if (    (Re (e1) < min (x@wavelength) && Re (e2) < min (x@wavelength)) ||
+				(Re (e1) > max (x@wavelength) && Re (e2) > max (x@wavelength))){
+			NULL                       # wavelengths completely outside the wl. range of x 
+		} else {
+			e1 <- .getindex (x, Re (e1)) + Im (e1)
+			e2 <- .getindex (x, Re (e2)) + Im (e2)
+			
+			if (e1 <= 0 || e2 <= 0|| e1 > length (x@wavelength) || e2 > length (x@wavelength))
+				warning ("wl2i: formula yields indices outside the object.")
+			
+			seq (e1, e2)
+		}
 	}
+	
+	.conv.range <- function (range){
+		if (is.numeric (range)){
+			warning ("check whether you rather want to use ~ !")
+			.getindex (x, range, rule = 1)
+		} else 
+			eval (range)
+	}
+	
+	if (is.list (wavelength))
+		unlist (lapply (wavelength, .conv.range))
+	else (.conv.range (wavelength))
 }
 ###-----------------------------------------------------------------------------
 ###
@@ -1209,9 +1235,9 @@ i2wl <- function (x, i){
 ## does the acual work of looking up the index
 ## rule = 2 returns first resp. last index for wavelength outside hyperSpec@wavelength.
 
-.getindex <- function (x, wavelength){
+.getindex <- function (x, wavelength, rule = 2){
 	round (approx (x = x@wavelength, y = seq_along(x@wavelength),
-					xout = wavelength, rule = 2)$y)
+					xout = wavelength, rule = rule)$y)
 }
 
 ###-----------------------------------------------------------------------------
@@ -1844,10 +1870,10 @@ plotc <- function (object, use.c = "c", func = sum, ...,
 
 plotspc <- function  (object,
 		## what wavelengths to plot
-		wavelength.range = NULL,
-		wavelength.index = FALSE,
-		wavelength.reverse = FALSE,
-		## what spectra to plot
+		wl.range = NULL, 
+		wl.index = FALSE,
+		wl.reverse = FALSE,
+		## what spectra to plot 
 		spc.nmax = 50,
 		func = NULL,
 		func.dots = list (),
@@ -1875,46 +1901,48 @@ plotspc <- function  (object,
 		stop ("No spectra.")
 	
 	## prepare wavelengths
-	if (is.null (wavelength.range)){
-		wavelength.range <- list (seq (along = object@wavelength));
+	if (is.null (wl.range)){
+		wl.range <- list (seq (along = object@wavelength));
 	} else {
-		if (!wavelength.index){
-			for (i in seq (along = wavelength.range))
-				wavelength.range[[i]] <- wl2i (object, wavelength.range[[i]])
+		if (!wl.index){
+			for (i in seq (along = wl.range))
+				wl.range[[i]] <- wl2i (object, wl.range[[i]])
 		}
 		
-		if (!is.list (wavelength.range))
-			wavelength.range <- list (wavelength.range)
+		if (!is.list (wl.range))
+			wl.range <- list (wl.range)
 		
-		if (!is.numeric (unlist (wavelength.range)))
+		if (!is.numeric (unlist (wl.range)))
 			stop ("wavelength.range needs to be numeric")
 		
+		for (i in seq (along = wl.range))
+			wl.range[[i]] <- unique (wl.range[[i]][!is.na (wl.range[[i]])])
 	}
 	
 	## xoffset
-	if (length (xoffset) == length (wavelength.range) - 1)
+	if (length (xoffset) == length (wl.range) - 1)
 		xoffset = c (0, xoffset) 
 	else if (length (xoffset) == 1)
-		xoffset = rep (xoffset, times = length (wavelength.range))
-	if (!is.numeric(xoffset) || (length (xoffset) != length (wavelength.range)))
+		xoffset = rep (xoffset, times = length (wl.range))
+	if (!is.numeric(xoffset) || (length (xoffset) != length (wl.range)))
 		stop ("xoffset must be a numeric  vector of the same length as the list with wavenumber ranges.")
 	xoffset <- cumsum (xoffset) 
 	
 	## for indexing wavelength.range is needed unlisted
-	u.wl.range <- unlist (wavelength.range)
+	u.wl.range <- unlist (wl.range)
 	
 	## wavelengths are the numbers to print at the x axis
-	wavelengths <- relist (object@wavelength [u.wl.range], wavelength.range)
+	wavelengths <- relist (object@wavelength [u.wl.range], wl.range)
 	
 	## x are the actual x coordinates
 	x <- wavelengths
-	for (i in seq_along(wavelength.range))
+	for (i in seq_along(wl.range))
 		x [[i]] <- x [[i]] - xoffset[i]
 	
 	## indices into columns of spectra matrix spc 
-	ispc <- relist (seq_len (length (u.wl.range)), wavelength.range)
+	ispc <- relist (seq_len (length (u.wl.range)), wl.range)
 	
-	rm (wavelength.range)
+	rm (wl.range)
 	spc <- object[[,, u.wl.range, drop = FALSE, wl.index = TRUE]]
 	rm (u.wl.range)
 	
@@ -1979,7 +2007,7 @@ plotspc <- function  (object,
 			plot.dots$ylim <- range (spc, na.rm = TRUE)
 		
 		## reverse x axis ?
-		if (wavelength.reverse)
+		if (wl.reverse)
 			plot.dots$xlim <- rev(plot.dots$xlim)
 		
 		do.call (plot, plot.dots)
@@ -2399,7 +2427,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 	cols <- switch (data,
 			spc = NULL,   
 			xyspc = list (y = expression ("/" (y, mu * m)), 
-					x = expression ("/" (x, mu * m))), 
+					x = expression ("/" (object, mu * m))), 
 			zspc = ,
 			depth = list (z = expression ("/" (z, mu * m))),
 			ts = 	list (t = "t / s"),
