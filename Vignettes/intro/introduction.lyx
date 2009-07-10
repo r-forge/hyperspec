@@ -18,14 +18,18 @@
 % my preferred packages
 \usepackage{xspace}
 \usepackage{tikz}
+\usepackage{subfig}
 
 \newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 \newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
 \newcommand{\hy}{\nohyphens{\texttt{hyperSpec}}\xspace}
 \newcommand{\R}{\texttt{R}\xspace}
 \end_preamble
-\options a4paper, 10pt, smallheadings, DIV15
+\options a4paper, 10pt, smallheadings, DIV12
 \use_default_options false
+\begin_modules
+logicalmkup
+\end_modules
 \language english
 \inputencoding utf8x
 \font_roman default
@@ -79,7 +83,7 @@
 
 \begin_layout Title
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -96,7 +100,7 @@ Rpackage{hyperSpec}
 \begin_layout Author
 Claudia Beleites (
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -117,11 +121,16 @@ CENMAT, DMRN, University of Trieste
 \begin_inset Newline newline
 \end_inset
 
-options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6)))) 
+options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="seri
+f"))) 
 \begin_inset Newline newline
 \end_inset
 
 options ("width" = 100)
+\begin_inset Newline newline
+\end_inset
+
+setwd ("~/Uni/workspace/hyperspec.rforge/Vignettes/intro")
 \begin_inset Newline newline
 \end_inset
 
@@ -133,10 +142,100 @@ Introduction
 \end_layout
 
 \begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ is a R package that allows convenient handling of (hyper)spectroscopic
+ data sets, i.
+\begin_inset space \thinspace{}
+\end_inset
+
+e.
+ data sets comprising spectra together with further data on a per-spectrum
+ basis.
+ Likewise, the spectra can be anything that is recorded over a common discretize
+d axis, the wavelength axis.
+ Throughout the documentation of the package, the terms intensity and wavelength
+ refer to the spectral ordinate and abscissa, respectively.
+ 
+\end_layout
+
+\begin_layout Standard
+However, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ works perfectly fine with any data that fits in that general scheme, so
+ that the three terms may also be used for:
+\end_layout
+
+\begin_layout Description
+wavelength: frequency, wavenumbers, chemical shift, Raman shift, 
+\begin_inset Formula $\frac{m}{z}$
+\end_inset
+
+, etc.
+\end_layout
+
+\begin_layout Description
+intensity: transmission, absorbance, 
+\begin_inset Formula $\frac{e^{-}}{s}$
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textellipsis
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+extra
+\begin_inset space ~
+\end_inset
+
+data: spatial information (spectral images, maps, or profiles), temporal
+ information (kinetics, time series), concentrations (calibration series),
+ class membership information, etc.
+ 
+\begin_inset Newline newline
+\end_inset
+
+Note that there is no restriction on the number of extra data columns.
+\end_layout
+
+\begin_layout Standard
 This vignette gives an introduction on basic working techniques using the
  R package 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -153,7 +252,7 @@ Rpackage{hyperSpec}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -169,7 +268,7 @@ Robject{chondro}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -185,7 +284,7 @@ Robject{flu}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -210,9 +309,29 @@ Notation
 \end_layout
 
 \begin_layout Standard
+This vignette demonstrates working techniques mostly from a spectroscopic
+ point of view: rather than going through the functions provided by 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+, it is organized more closely on spectroscopic tasks.
+ However, the functions discussed are printed on the margin for a fast overview.
+ 
+\end_layout
+
+\begin_layout Standard
 In R, slots of a S4 class can be accessed directly by the 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -226,7 +345,7 @@ Rcommand{@}
  operator.
  In this vignette, the notation 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -255,7 +374,7 @@ slot xxx of an object
 \begin_layout Standard
 Likewise, named elements of a 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -268,7 +387,7 @@ Rclass{list}
 
 , like the columns of a 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -281,7 +400,7 @@ Rclass{data.frame}
 
 , are accessed by the 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -296,7 +415,7 @@ $}
 
  operator, and 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -337,16 +456,1267 @@ column xxx of the data.frame in slot data of the object
 \end_layout
 
 \begin_layout Section
-Loading the package
+Remarks on R
+\end_layout
+
+\begin_layout Subsection
+Generic Functions
 \end_layout
 
 \begin_layout Standard
 
-To load 
-\lang english
+\emph on
+Generic Functions
+\emph default
+ are functions that apply to a wide range of data types or classes, e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rmethod{plot}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rmethod{print}
+\end_layout
+
+\end_inset
+
+, mathematical operators, etc.
+ These functions can be implemented in a specialized way by each class.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ implements with a variety of such functions, see table
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Generic-methods"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Generic-methods"
+
+\end_inset
+
+Generic methods implemented by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ and some related functions.
+ 
+\emph on
+Emphasized
+\emph default
+ names indicate non-generic functions that are closely related to the generic
+ functions in the row.
+\end_layout
+
+\end_inset
+
 
 \begin_inset ERT
 status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{small}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="20" columns="2">
+<features islongtable="true" headTopDL="true" footBottomDL="true">
+<column alignment="left" valignment="top" width="25text%">
+<column alignment="left" valignment="top" width="60text%">
+<row interlinespace="1em" endhead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Function
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Explanation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{print}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{show}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{summary}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+print information about the object
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plot}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+plotting
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{[]}
+\end_layout
+
+\end_inset
+
+,
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{ [[]]}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{
+\backslash
+$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+extract parts of an object
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{[<-}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{[[<-}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{
+\backslash
+$<-}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+assign parts of an object
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{dim}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{ncol}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{nrow}
+\end_layout
+
+\end_inset
+
+, 
+\emph on
+nwl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+the dimensions of the object
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{colnames}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{rownames}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{dimnames}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+names of the spectra, data columns, and both plus the names of the wavelengths
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{labels}
+\end_layout
+
+\end_inset
+
+, 
+\emph on
+labels<-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+labels for axis annotations etc.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{+ - * 
+\backslash
+textasciicircum{} 
+\backslash
+%
+\backslash
+% 
+\backslash
+%/
+\backslash
+% / 
+\backslash
+%*
+\backslash
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+arithmetical operators work on 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{> < == >= <=}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+comparison operators work on 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{log}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{log10}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{exp}
+\end_layout
+
+\end_inset
+
+, etc.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+basic math functions work on 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+, see also 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{?~"hyperSpec Math"}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{min}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{max}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{range}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+minimum, maximum, and range of the intensities in 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{cbind}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{rbind}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+combine two objects by columns or rows
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{split}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+split an object into a list of objects
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{apply}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+apply a function row- or column-wise, calculate e.
+\begin_inset space ~
+\end_inset
+
+g.
+ the mean spectrum or normalization factors
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{aggregate}
+\end_layout
+
+\end_inset
+
+(
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{ave}
+\end_layout
+
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+calculate sum characteristics for groups of spectra, e.
+\begin_inset space ~
+\end_inset
+
+g.
+ cluster mean spectra.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+'s 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{aggregate}
+\end_layout
+
+\end_inset
+
+ method covers also the functionality of 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{ave}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{sweep}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+sweep
+\begin_inset Quotes erd
+\end_inset
+
+ a sum characteristic over rows or columns, e.
+\begin_inset space ~
+\end_inset
+
+g.
+ center the data by substracting the mean spectrum.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{as.character}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{as.matrix}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{as.data.frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+type conversion functions
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{initialize}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+create an object
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{validObject}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+validity checking
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{small}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+S4 Classes Can be Extended at Runtime
+\end_layout
+
+\begin_layout Standard
+The concept of S4 classes offers more flexibility than the class concepts
+ in many other programming languages.
+ Functions may be added or changed by the user in his 
+\emph on
+workspace
+\emph default
+ at any time.
+ Neither restart of R nor reloading of the package or anything the like
+ is needed.
+ At the same time, the original function is not deleted, it is just masked
+ by the user's new function but stays accessible if the change should be
+ reverted.
+\end_layout
+
+\begin_layout Standard
+This offers the opportunity of easily writing specialized functions that
+ are adapted to specific tasks.
+\end_layout
+
+\begin_layout Subsection
+Validity
+\end_layout
+
+\begin_layout Standard
+S4 classes have a mechanism to define and enforce that the data actually
+ stored in the object is appropriate for this class.
+ In other words, there is a mechanism of 
+\emph on
+validity checking
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+The functions provided by 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ do check the validity of 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ objects at the beginning, and --- if the validity could be broken by inappropra
+te arguments --- also before leaving the function.
+\end_layout
+
+\begin_layout Section
+Loading the package
+\end_layout
+
+\begin_layout Standard
+To load 
+\begin_inset ERT
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -375,7 +1745,7 @@ library (hyperSpec)
 \begin_layout Section
 The structure of 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -391,7 +1761,7 @@ Rclass{hyperSpec}
 
 \begin_layout Standard
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -423,7 +1793,7 @@ Robject{wavelength}
 
 \end_inset
 
- containing a numeric vector with the wavelength axis of the spectra
+ containing a numeric vector with the wavelength axis of the spectra.
 \end_layout
 
 \begin_layout Description
@@ -441,7 +1811,7 @@ Robject{data}
 
  a 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -486,7 +1856,7 @@ Robject{log}
 
  a 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -503,7 +1873,7 @@ Rclass{data.frame}
 \begin_layout Standard
 However, it is good practice to use the functions provided by 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -526,7 +1896,7 @@ valid
 \begin_layout Standard
 Most of the data is stored in 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -540,7 +1910,7 @@ Rcode{@data}
 .
  This 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -553,7 +1923,7 @@ Rclass{data.frame}
 
  has one special column, 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -583,7 +1953,7 @@ reference "fig:structure"
 .
  Even if there are no spectra, 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -603,7 +1973,7 @@ $spc}
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -624,9 +1994,9 @@ name "fig:structure"
 
 \end_inset
 
-The stucture of a 
+The stucture of the data in a 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -653,7 +2023,7 @@ Rpackage{hyperSpec}
 \begin_layout Standard
 Slot 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -666,7 +2036,7 @@ Rcode{@label}
 
  contains an element for each of the columns in 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -679,7 +2049,7 @@ Rcode{@data}
 
  plus one holding the label for the wavelength axis, 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -691,29 +2061,28 @@ Rcode{.wavelength}
 \end_inset
 
 .
- The elements of the list may be anything suitable for 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-Rfunction{text}
-\end_layout
-
-\end_inset
-
-, i.
+ The elements of the list may be anything suitable for axis annotations,
+ i.
 \begin_inset space \thinspace{}
 \end_inset
 
 e.
- they should be either character strings or expressions for pretty axis
- annotations.
+ they should be either character strings or expressions for prettier axis
+ annotations (see figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:example-plots"
+
+\end_inset
+
+).
  To get familiar with expressions for axis annotition, see 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -726,7 +2095,7 @@ Rcode{? plotmath}
 
  and 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -740,75 +2109,10 @@ Rcode{demo (plotmath)}
 .
 \end_layout
 
-\begin_layout Subsection
-Remarks on S4 Classes
-\end_layout
-
-\begin_layout Standard
-The concept of S4 classes offers more flexibility than the class concepts
- in many other programming languages.
- Functions may be added or changed by the user in his 
-\emph on
-workspace
-\emph default
- at any time.
- Neither restart of R nor reloading of the package or anything the like
- is needed.
- At the same time, the original function is not deleted, it is just masked
- by the user's new function but stays accessible if the change should be
- reverted.
-\end_layout
-
-\begin_layout Standard
-This offers the opportunity of easily writing specialized functions that
- are adapted to specific tasks.
-\end_layout
-
-\begin_layout Standard
-S4 classes have a mechanism to define and enforce that the data actually
- stored in the object is appropriate for this class.
- In other words, there is a mechanism of 
-\emph on
-validity checking
-\emph default
-.
-\end_layout
-
-\begin_layout Standard
-The functions provided by 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
-\end_layout
-
-\end_inset
-
- do check the validity of 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
-\end_layout
-
-\end_inset
-
- objects at the beginning, and --- if the validity could be broken by inappropra
-te arguments --- also before leaving the function.
-\end_layout
-
 \begin_layout Section
 Obtaining Basic Information about 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -825,7 +2129,7 @@ Rpackage{hyperSpec}
 \begin_layout Standard
 As usual, the 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -838,7 +2142,7 @@ Rmethod{print}
 
  and 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -851,7 +2155,7 @@ Rmethod{show}
 
  methods display information about the object, and 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -884,7 +2188,7 @@ summary (chondro)
 \begin_layout Standard
 The data set 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -897,7 +2201,7 @@ Robject{chondro}
 
  consists of 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -910,7 +2214,7 @@ Sexpr{nrow (chondro)}
 
  spectra with 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -923,7 +2227,7 @@ Sexpr{nwl (chondro)}
 
  data points each, and 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -936,7 +2240,7 @@ Sexpr{ncol (chondro)}
 
  data columns two for the spatial information plus 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -980,7 +2284,7 @@ dim (chondro)
 \begin_layout Scrap
 The names of the columns in 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1009,7 +2313,7 @@ colnames (chondro)
 \begin_layout Standard
 Likewise, 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1022,7 +2326,7 @@ Rmethod{rownames}
 
  returns the names assigned to the spectra, and 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1036,7 +2340,7 @@ Rmethod{dimnames}
  yields a list of these three vectors (including also the column names of
  
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1054,12 +2358,909 @@ $spc}
 \end_layout
 
 \begin_layout Section
+Creating a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ Object, Data Import and Export
+\end_layout
+
+\begin_layout Subsection
+ASCII Files
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{read.txt.long}
+\end_layout
+
+\end_inset
+
+,
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{read.txt.wide}
+\end_layout
+
+\end_inset
+
+,
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{write.txt.long}
+\end_layout
+
+\end_inset
+
+,
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{write.txt.wide}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Currently, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ provides four functions for general ASCII data import and export: 
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{read.txt.long}
+\end_layout
+
+\end_inset
+
+ import long format ASCII files, i.e.
+ one intensity value per row
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{read.txt.wide}
+\end_layout
+
+\end_inset
+
+ import wide format ASCII files, i.e.
+ one spectrum per row
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{write.txt.long}
+\end_layout
+
+\end_inset
+
+ export long format ASCII files
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{write.txt.wide}
+\end_layout
+
+\end_inset
+
+ export wide format ASCII files
+\end_layout
+
+\begin_layout Standard
+The import functions immediately return a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ object.
+\end_layout
+
+\begin_layout Subsection
+Manufacturer Specific Import Functions
+\end_layout
+
+\begin_layout Standard
+Many spectrometer manufacturers provide a function to export their spectra
+ into ASCII files.
+ The functions discussed in the previous section are written in a very general
+ way, and are highly customizable.
+ I recommend wrapping these calls with the appropriate settings for your
+ spectra format in an import function.
+ You may also consider contributing such import filters to 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+: send me (
+\begin_inset CommandInset href
+LatexCommand href
+target "cbeleites@units.it"
+type "mailto:"
+
+\end_inset
+
+) the documented code (either .R + .R file or Roxygen commented .R).
+\end_layout
+
+\begin_layout Standard
+For the long ASCII format written by Renishaw's converter, a more optimized
+ import function is already available: 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{scan.txt.Renishaw}
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{scan.txt.Renishaw}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Scrap
+<<scan.txt.Renishaw>>=
+\begin_inset Newline newline
+\end_inset
+
+paracetamol <- scan.txt.Renishaw ("paracetamol.txt", "spc")
+\begin_inset Newline newline
+\end_inset
+
+paracetamol 
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Subsection
+Matlab Files
+\end_layout
+
+\begin_layout Standard
+Matlab files can be read and written using the package 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{R.matlab}
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "R.matlab"
+
+\end_inset
+
+, which is available at CRAN and can be installed by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{install.packages ("R.matlab")}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Creating a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyerSpec}
+\end_layout
+
+\end_inset
+
+ Object from Spectra Matrix and Wavelength Vector
+\end_layout
+
+\begin_layout Standard
+Once the data is in R's workspace, a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyerSpec}
+\end_layout
+
+\end_inset
+
+ object is created by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{initialize ("hyperSpec")}
+\end_layout
+
+\end_inset
+
+.
+ You will usually give the following arguments:
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{spc}
+\end_layout
+
+\end_inset
+
+ the spectra matrix
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{wavelength}
+\end_layout
+
+\end_inset
+
+ the wavelength axis vector
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{data}
+\end_layout
+
+\end_inset
+
+ the extra data
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{label}
+\end_layout
+
+\end_inset
+
+ a list with the proper labels.
+ Do not forget the wavelength axis label in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$.wavelength}
+\end_layout
+
+\end_inset
+
+ and the spectral intensity axis label in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Wavelengths and Spectral Axis
+\end_layout
+
+\begin_layout Subsection
+Wavelength Indices
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{wl2i}, 
+\backslash
+Rfunction{i2wl}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Spectra in 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ have always discretized wavelength axes, they are stored in a matrix with
+ column corresponding to one wavelength.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{hyperSpec}
+\end_layout
+
+\end_inset
+
+ provides two conversion functions: 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{i2wl}
+\end_layout
+
+\end_inset
+
+ returns the wavelength corrisponding to the given indices and 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{wl2i}
+\end_layout
+
+\end_inset
+
+ calculates index vectors from wavelengths.
+ 
+\end_layout
+
+\begin_layout Standard
+If the wavelengths are given as a numeric vector, they are each converted
+ to the corresponding wavelength.
+ In addition there is a more sophioticated possibility of specifying wavelength
+ ranges using a 
+\emph on
+formula
+\emph default
+.
+ The basic syntax is 
+\emph on
+start
+\begin_inset space ~
+\end_inset
+
+
+\emph default
+
+\begin_inset Formula $\sim$
+\end_inset
+
+
+\lang english
+
+\begin_inset space ~
+\end_inset
+
+
+\emph on
+end.
+
+\emph default
+ This yields a vector 
+\emph on
+index of start 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{:}
+\end_layout
+
+\end_inset
+
+ index of end.
+\end_layout
+
+\begin_layout Standard
+The result of the formula conversion differs from the numeric vector conversion
+ in three ways:
+\end_layout
+
+\begin_layout Itemize
+The colon operator for constructing vectors accepts only integer numbers,
+ the tilde (for formulas) does not have this restriction.
+\end_layout
+
+\begin_layout Itemize
+If the vector does not take into account the spectral resolution, one may
+ get only every 
+\begin_inset Formula $n^{th}$
+\end_inset
+
+ point or repetitions of the same index:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<wl2ivec>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+wl2i (flu, 405 : 410)
+\end_layout
+
+\begin_layout Plain Layout
+
+wl2i (chondro, 1000 : 1010)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If the object's wavelength axis is not ordered, the formula approach doesn't
+ work.
+ In that (rare) case, use 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{orderwl}
+\end_layout
+
+\end_inset
+
+ first to obtain an object with ordered wavelength axis.
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+start
+\emph default
+ and 
+\emph on
+end
+\emph default
+ may contain the special variables 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Robject{min}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Robject{max}
+\end_layout
+
+\end_inset
+
+ that correspond to the lowest and highest wavelengths of the object:
+\end_layout
+
+\begin_layout Scrap
+<<wl2i.minmax>>=
+\begin_inset Newline newline
+\end_inset
+
+wl2i (flu, min ~ 410)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+Often, specifications like 
+\emph on
+wavelength ± n data points
+\emph default
+ are needed.
+ They can be given using complex numbers in the formula.
+ The imagnary part is added to the index calculated from the wavelenght
+ in the real part:
+\end_layout
+
+\begin_layout Scrap
+<<wl2i.im>>=
+\begin_inset Newline newline
+\end_inset
+
+wl2i (flu, 450 - 2i ~ 450 + 2i)
+\begin_inset Newline newline
+\end_inset
+
+wl2i (flu, max - 2i ~ max)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+To specify several wavelength ranges, use a list containing the formulas
+ and vectors
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Formulas are combined to a list by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{c}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Scrap
+<<wl2i.list>>=
+\begin_inset Newline newline
+\end_inset
+
+wl2i (flu, 450 - 2i ~ 450 + 2i)
+\begin_inset Newline newline
+\end_inset
+
+wl2i (flu, c (min ~ 406.5, max - 2i ~ max))
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+This mechanism also works for the wavelength arguments of 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[]}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[[]]}
+\end_layout
+
+\end_inset
+
+, and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plotspc}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Selecting and Deleting Spectra
+\end_layout
+
+\begin_layout Standard
+The extraction function 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[]}
+\end_layout
+
+\end_inset
+
+ (or 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[[]]}
+\end_layout
+
+\end_inset
+
+, if the spectra matrix is needed rather than a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ object) takes the spectra as first argument.
+ It may be a vector giving the indices of the spectra to extract (select),
+ a vector with negative indices indicating which spectra should be deleted,
+ or a logical 
+\end_layout
+
+\begin_layout Scrap
+<<delspc>>=
+\begin_inset Newline newline
+\end_inset
+
+flu [1 : 3]
+\begin_inset Newline newline
+\end_inset
+
+flu [-3]
+\begin_inset Newline newline
+\end_inset
+
+chondro  [chondro$y > 10]
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Section
 Plotting
 \end_layout
 
 \begin_layout Standard
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1075,7 +3276,7 @@ Rpackage{hyperSpec}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1091,12 +3292,9 @@ Rcode{plotspc}
 \end_inset
 
 e.
- 
-the intensities 
-\lang english
-
+ the intensities 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1111,7 +3309,7 @@ $spc}
 
  over the wavelengths 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1127,7 +3325,7 @@ Rcode{@wavelength}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1146,7 +3344,7 @@ g.
  average intensity or cluster membership) over two data columns (default
  
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1179,7 +3377,7 @@ $y}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1202,7 +3400,7 @@ g.
 \begin_layout Standard
 All three plus some more handy abbrevations are also accessible via 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1214,11 +3412,33 @@ Rmethod{plot}
 \end_inset
 
 :
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plot}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1229,9 +3449,9 @@ Rcode{plot (flu, "spc")}
 
 \end_inset
 
- equivalent to 
+ is equivalent to 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1247,7 +3467,7 @@ Rcode{plotspc (flu)}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1258,16 +3478,16 @@ Rcode{plot (chondro, "spcmeansd")}
 
 \end_inset
 
- plot mean spectrum
+ plots mean spectrum 
 \begin_inset Formula $\pm$
 \end_inset
 
-1 standard deviation
+ 1 standard deviation
 \end_layout
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1278,7 +3498,7 @@ Rcode{plot (chondro, "spcprctl")}
 
 \end_inset
 
- plot median, 16
+ plots median, 16
 \begin_inset Formula $^{\text{th}}$
 \end_inset
 
@@ -1289,7 +3509,7 @@ Rcode{plot (chondro, "spcprctl")}
  percentile.
  This is similar to 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1308,7 +3528,7 @@ Rcode{"spcmeansd"}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1319,9 +3539,9 @@ Rcode{plot (chondro, "spcprctl5")}
 
 \end_inset
 
- 
+ like 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1345,7 +3565,7 @@ percentile.
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1356,9 +3576,9 @@ Rcode{plot (chondro, "map")}
 
 \end_inset
 
- equivalent to 
+ is equivalent to 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1374,7 +3594,7 @@ Rcode{plotmap (chondro)}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1385,9 +3605,9 @@ Rcode{plot (flu, "c")}
 
 \end_inset
 
- equivalent to 
+ is equivalent to 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1403,7 +3623,7 @@ Rcode{plotc (flu)}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1414,9 +3634,9 @@ Rcode{plot (laser, "ts")}
 
 \end_inset
 
- a time series plot, equivalent to 
+ plots a time series plot, equivalent to 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1432,7 +3652,7 @@ Rcode{plotc (laser, use.c = "t")}
 
 \begin_layout Description
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1443,9 +3663,9 @@ Rcode{plot (x, "depth")}
 
 \end_inset
 
- a depth profile plot, equivalent to 
+ plots a depth profile plot, equivalent to 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -1464,7 +3684,32 @@ Figure
 \begin_inset space ~
 \end_inset
 
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:example-plots"
+
+\end_inset
+
  shows some example plots.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plot}
+\end_layout
+
+\end_inset
+
+ uses its second argument to determine which of the three specialized plot
+ functions to call.
+ All further arguments are handed over to this function.
 \end_layout
 
 \begin_layout Standard
@@ -1474,25 +3719,23 @@ sideways false
 status open
 
 \begin_layout Scrap
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
 
 \backslash
-setkeys{Gin}{width = .5
+setkeys{Gin}{width = .245
 \backslash
 textwidth}
-\end_layout
-
-\end_inset
-
-
 \begin_inset Newline newline
 \end_inset
 
-<<plotspc, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+
+\backslash
+subfloat[
+\backslash
+label{fig-plot-spc}]{
+\begin_inset Newline newline
+\end_inset
+
+<<plotspc, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -1504,7 +3747,19 @@ plotspc (flu)
 \begin_inset Newline newline
 \end_inset
 
-<<plotspcmeansd, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-plot-spcmeansd}]{
+\begin_inset Newline newline
+\end_inset
+
+<<plotspcmeansd, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -1516,7 +3771,19 @@ plot (chondro, "spcmeansd")
 \begin_inset Newline newline
 \end_inset
 
-<<plotc, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-plot-c}]{
+\begin_inset Newline newline
+\end_inset
+
+<<plotc, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -1528,7 +3795,19 @@ plotc (flu)
 \begin_inset Newline newline
 \end_inset
 
-<<plotmap, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-plot-map}]{
+\begin_inset Newline newline
+\end_inset
+
+<<plotmap, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -1537,20 +3816,35 @@ print (plotmap (chondro))
 \end_inset
 
 @
+\begin_inset Newline newline
+\end_inset
+
+}
 \end_layout
 
 \begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:example-plots"
+
+\end_inset
+
 Some example plots.
- From left to right: 
+ 
 \begin_inset ERT
 status open
 
 \begin_layout Plain Layout
 
-
+\backslash
+subref{fig-plot
+-
+\lang english
+spc}
+ 
 \backslash
 Rcode{plotspc (flu)}
 \end_layout
@@ -1563,7 +3857,18 @@ status open
 
 \begin_layout Plain Layout
 
-
+\backslash
+subref{fig-plot
+-
+\lang english
+spcm
+ean
+\lang english
+s
+d
+\lang english
+}
+ 
 \backslash
 Rcode{plot (chondro, "spcmeansd")}
 \end_layout
@@ -1576,7 +3881,12 @@ status open
 
 \begin_layout Plain Layout
 
-
+\backslash
+subref{fig-plot
+-
+\lang english
+c}
+ 
 \backslash
 Rcode{plotc (flu)}
 \end_layout
@@ -1589,7 +3899,12 @@ status open
 
 \begin_layout Plain Layout
 
-
+\backslash
+subref{fig-plot-m
+ap
+\lang english
+}
+ 
 \backslash
 Rcode{plotmap (chondro)}
 \end_layout
@@ -1607,6 +3922,857 @@ Rcode{plotmap (chondro)}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Plotting Spectra 
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plotspc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plotspc}
+\end_layout
+
+\end_inset
+
+ offers a variety of parameters for customized plots.
+\end_layout
+
+\begin_layout Description
+reversed
+\begin_inset space ~
+\end_inset
+
+abscissa use 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{wl.reverse = TRUE}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+color 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{col = vector.of.colors}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+dots
+\begin_inset space ~
+\end_inset
+
+instead
+\begin_inset space ~
+\end_inset
+
+of
+\begin_inset space ~
+\end_inset
+
+lines 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{lines.dots = list (pch = 20, type = "p")}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+mass
+\begin_inset space ~
+\end_inset
+
+spectra 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{lines.dots = list (type = "h")}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+several
+\begin_inset space ~
+\end_inset
+
+wavelength
+\begin_inset space ~
+\end_inset
+
+ranges 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{wl.range = list (600 
+\backslash
+textasciitilde{} 1800, 2800 
+\backslash
+textasciitilde{} 3100)}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{wl.range}
+\end_layout
+
+\end_inset
+
+ already contains indices: 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{wl.index = TRUE}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+cut
+\begin_inset space ~
+\end_inset
+
+the
+\begin_inset space ~
+\end_inset
+
+wavelength
+\begin_inset space ~
+\end_inset
+
+axis 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{xoffset = 800}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+stacked
+\begin_inset space ~
+\end_inset
+
+spectra 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{stacked = TRUE}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+adding
+\begin_inset space ~
+\end_inset
+
+more
+\begin_inset space ~
+\end_inset
+
+spectra 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{add = TRUE}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Scrap
+
+\backslash
+setkeys{Gin}{width = .245
+\backslash
+textwidth}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-plotspc-ms}]{
+\begin_inset Newline newline
+\end_inset
+
+<<ms, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+fake.mass.spec <- new ("hyperSpec", spc = matrix (100*runif (25), nrow = 1),
+ 
+\begin_inset Newline newline
+\end_inset
+
+   wavelength = 1 : 25 + 28,
+\begin_inset Newline newline
+\end_inset
+
+   label = list (spc = expression (e^"-" / s), .wavelength = expression (m
+ / z)))
+\begin_inset Newline newline
+\end_inset
+
+plot (fake.mass.spec, lines.dots = list (type = "h"))
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-plotspc-paracetamol}]{
+\begin_inset Newline newline
+\end_inset
+
+<<plotspcadd, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850,
+ wl.reverse = TRUE)
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-plotmap-factor}]{
+\begin_inset Newline newline
+\end_inset
+
+<<plotmapf, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plotmap (chondro, z = cut(chondro[[,,1006]], 3))
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Arguments to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plotspc}
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig-plotspc-ms} 
+\backslash
+Rcode{plot (fake.mass.spec, lines.dots = list (type = "h"))}
+\end_layout
+
+\end_inset
+
+
+ 
+\lang english
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig-plotspc-paracetamol}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotspc (
+\lang english
+paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, wl.reverse
+ = TRUE
+)}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig-plotmap-factor}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+plotmap (chondro, z = cut(chondro[[,,1006]], 3))
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Plotting False-Color Maps
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plotmap}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{plotmap}
+\end_layout
+
+\end_inset
+
+ uses 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{levelplot}
+\end_layout
+
+\end_inset
+
+, a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rpackage{lattice}
+\end_layout
+
+\end_inset
+
+ function.
+ Therefore, in loops, functions, Sweave chunks, etc.
+ the lattice object needs to be printed explicitly by 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{print (plotmap (object))}
+\end_layout
+
+\end_inset
+
+ (
+\begin_inset CommandInset href
+LatexCommand href
+name "R FAQ: Why do lattice/trellis graphics not work?"
+target "http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Calibration Plots, (Depth) Profiles, and Time Series Plots
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plotc}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Accessing the Extra Data 
+\end_layout
+
+\begin_layout Section
+Spectral (Pre)processing
+\end_layout
+
+\begin_layout Subsection
+Cutting the Spectral Range
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{[]}, 
+\backslash
+Rfunction{[[]]}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The extraction functions 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[]}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[[]]}
+\end_layout
+
+\end_inset
+
+ can be used to cut the spectra: Their third argument takes wavelength specifica
+tions as discussed above and also logicals (i.e.
+ vectors specifying with 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{TRUE}
+\end_layout
+
+\end_inset
+
+/
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{FALSE}
+\end_layout
+
+\end_inset
+
+ for each column of 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rcode{
+\backslash
+$spc}
+\end_layout
+
+\end_inset
+
+ whether it should be included or not.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[]}
+\end_layout
+
+\end_inset
+
+ returns a 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ object, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+Rfunction{[[]]}
+\end_layout
+
+\end_inset
+
+ the spectra matrix only.
+\end_layout
+
+\begin_layout Scrap
+<<cut.wl>>=
+\begin_inset Newline newline
+\end_inset
+
+flu [,, min ~ 408.5]
+\begin_inset Newline newline
+\end_inset
+
+flu [[,, c (min ~ min + 2i, max - 2i ~ max)]]
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Subsection
+Spectral Interpolation and Smoothing
+\end_layout
+
+\begin_layout Subsection
+Background Correction
+\end_layout
+
+\begin_layout Subsection
+Offset Correction
+\end_layout
+
+\begin_layout Subsection
+Baseline Correction
+\end_layout
+
+\begin_layout Subsection
+Intensity Calibration
+\end_layout
+
+\begin_layout Subsection
+Normalization
+\end_layout
+
+\begin_layout Subsection
+Spectral Arithmetic
+\end_layout
+
+\begin_layout Section
+Data Analysis 
+\end_layout
+
+\begin_layout Subsection
+Data Analysis Methods using a data.frame
+\begin_inset Newline newline
+\end_inset
+
+Principal Component Analysis with 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{prcomp}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Data Analysis Methods using a matrix
+\begin_inset Newline newline
+\end_inset
+
+Partial Least Squares with 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rfunction{plsr}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Putting the Results of the Data Analysis into a 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Rclass{hyperSpec}
+\end_layout
+
+\end_inset
+
+ Object again
+\end_layout
+
+\begin_layout Subsection
+Calculating group-wise Sum Characteristics
+\begin_inset Newline newline
+\end_inset
+
+Cluster Mean Spectra
+\end_layout
+
+\begin_layout Subsection
+Splitting an Object
 \end_layout
 
 \begin_layout Section
@@ -1627,6 +4793,17 @@ toLatex(sessionInfo())
 \end_inset
 
 @
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/home/cb/Uni/Literatur/Literatur"
+options "unsrtnat"
+
+\end_inset
+
+
 \end_layout
 
 \end_body

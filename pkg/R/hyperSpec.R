@@ -2427,7 +2427,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 	cols <- switch (data,
 			spc = NULL,   
 			xyspc = list (y = expression ("/" (y, mu * m)), 
-					x = expression ("/" (object, mu * m))), 
+					x = expression ("/" (x, mu * m))), 
 			zspc = ,
 			depth = list (z = expression ("/" (z, mu * m))),
 			ts = 	list (t = "t / s"),
