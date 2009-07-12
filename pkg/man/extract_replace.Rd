@@ -144,12 +144,12 @@ x$name <- list (value = value, label = label)
 ## make some "spectra"
 
 ## numeric index
-plot (flu, "spc", lines.dots = list (lty = 2))
+plot (flu, "spc", lines.args = list (lty = 2))
 plot (flu[1:3], "spc", add = TRUE, col = "red")     # select spectra
 plot (flu[-(1:3)], "spc", add = TRUE, col = "blue") # delete spectra
 
 ## logic index
-plot (flu, "spc", lines.dots = list (lty = 2))
+plot (flu, "spc", lines.args = list (lty = 2))
 index <- rnorm (6) > 0
 index
 plot (flu[index], "spc", add = TRUE, col = "red")   # select spectra

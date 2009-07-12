@@ -6,7 +6,7 @@
   An image or map of a summary value of each spectrum is plotted. 
 }
 \usage{
-plotmap (object, use.x = "x", use.y = "y", func = mean, cond = NULL, 
+plotmap (object, x = "x", y = "y", func = mean, cond = NULL, 
          z = NULL, do.print = FALSE, print.args = NULL, trellis.args = NULL,
          \dots)
 }
@@ -14,7 +14,7 @@ plotmap (object, use.x = "x", use.y = "y", func = mean, cond = NULL,
 \arguments{
   \item{object}{the \code{hyperSpec} object}
 
-  \item{use.x, use.y}{names of the columns in slot \code{@data} to be
+  \item{x, y}{names of the columns in slot \code{@data} to be
 	 used as x and y coordinates}
   
   \item{func}{function to apply to compute the summary statistic that is

@@ -35,7 +35,7 @@ If \code{surface} is not given, it defaults to \code{"direct"}.
 \examples{
 plot (flu)
 plot (spc.loess(flu, seq (420, 470, 5), enp.target = 15, surface = "direct"), 
-      add = TRUE, col = "red", lines.dots = list (type = "b", pch = 20))
+      add = TRUE, col = "red", lines.args = list (type = "b", pch = 20))
 }
 \keyword{manip}
 \keyword{datagen}

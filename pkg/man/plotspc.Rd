@@ -9,11 +9,11 @@
 \usage{
 plotspc(object, wl.range = NULL, wl.index = FALSE,
         wl.reverse = FALSE,
-        spc.nmax = 50, func = NULL, func.dots = list(), stacked = FALSE, 
-        add = FALSE, bty = "l", col = "black", plot.dots = list (),
-        xoffset = 0, yoffset = 0, nxticks = 10, axis.dots = list (),
-        fill = NULL, border = NA, title.dots = list(),
-        polygon.dots = list(), lines.dots = list())
+        spc.nmax = 50, func = NULL, func.args = list(), stacked = FALSE, 
+        add = FALSE, bty = "l", col = "black", plot.args = list (),
+        xoffset = 0, yoffset = 0, nxticks = 10, axis.args = list (),
+        fill = NULL, border = NA, title.args = list(),
+        polygon.args = list(), lines.args = list())
 }
 \arguments{
   \item{object}{the \code{hyperSpec} object}
@@ -40,7 +40,7 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   \item{func}{a function to apply to each wavelength in order to
 	 calculate summary spectra such as mean, min, max, etc.}
 
-  \item{func.dots}{\code{list} with furter arguments for \code{func}}
+  \item{func.args}{\code{list} with furter arguments for \code{func}}
 
   \item{add}{if \code{TRUE}, the output is added to the existing plot}
 
@@ -49,7 +49,7 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   \item{col}{see \code{\link[graphics]{par}}. \code{col} might be a
 	 vector giving individual colors for the spectra.}
 
-  \item{plot.dots}{\code{list} with further arguments to
+  \item{plot.args}{\code{list} with further arguments to
 	 \code{\link[graphics]{plot}}}
   
   \item{xoffset}{vector with abscissa offsets for each of the
@@ -70,9 +70,9 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   \item{stacked}{if \code{TRUE}, a "stacked" plot is produced, see the
 	 example.} 
 
-  \item{axis.dots}{\code{list} with further arguments for
-  \code{\link[graphics]{axis}}. \code{axis.dots$x} should contain
-  arguments for plotting the abscissa, \code{axis.dots$y} those for the
+  \item{axis.args}{\code{list} with further arguments for
+  \code{\link[graphics]{axis}}. \code{axis.args$x} should contain
+  arguments for plotting the abscissa, \code{axis.args$y} those for the
   ordinate (again as \code{lists}).}
 %% TODO: ~~Describe \code{fill} here~~ 
   \item{fill}{ }
@@ -81,20 +81,20 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
 %% TODO:   ~~Describe \code{border} here~~ 
    }
 
-  \item{title.dots}{list with further arguments to
+  \item{title.args}{list with further arguments to
 	 \code{\link[graphics]{title}}.
 	 
-	 \code{title.dots} may consits of up to 4 lists, \code{title.dots$main},
+	 \code{title.args} may consits of up to 4 lists, \code{title.args$main},
 	 \code{$sub}, \code{$xlab}, and \code{$ylab} for which the other
 	 parameters then are given individually.}
 
-  \item{lines.dots}{list with further arguments to
+  \item{lines.args}{list with further arguments to
 	 \code{\link[graphics]{lines}}.
 
-	 \code{lines.dots$type} defaults to "l".
+	 \code{lines.args$type} defaults to "l".
   }
 
-  \item{polygon.dots}{list with further arguments to
+  \item{polygon.args}{list with further arguments to
 	 \code{\link[graphics]{polygon}} which draws the filled areas.}
 }
 \details{
@@ -151,12 +151,12 @@ plotspc (chondro [sample (nrow (chondro), 50)], wl.reverse = TRUE)
 plotspc (laser[(0:4)*20+1,,], stacked = TRUE)
 
 plotspc (laser, func = mean_pm_sd, 
-         col = c(NA, "red", "black"), lines.dots = list (lwd = 2),
+         col = c(NA, "red", "black"), lines.args = list (lwd = 2),
          fill = "yellow", border = "blue",
-         polygon.dots = list (lty = 2, lwd = 4),
-         title.dots = list (xlab = expression (lambda[emission] / nm),
+         polygon.args = list (lty = 2, lwd = 4),
+         title.args = list (xlab = expression (lambda[emission] / nm),
                             ylab = list(line = 3.4)),
-         axis.dots = list (x = list (col = "magenta"), y = list (las = 1))
+         axis.args = list (x = list (col = "magenta"), y = list (las = 1))
         )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

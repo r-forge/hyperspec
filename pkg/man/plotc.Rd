@@ -8,7 +8,7 @@
 }
 \usage{
 plotc(object, use.c = "c", func = sum, \dots,
-      z = NULL, zlab = NULL, add = FALSE, plot.dots = list())
+      z = NULL, zlab = NULL, add = FALSE, plot.args = list())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,7 +21,7 @@ plotc(object, use.c = "c", func = sum, \dots,
   \item{zlab}{label for the ordinate}
   \item{add}{if FALSE, a new plot is created, if TRUE the output is
 	 added to the active plot}
-  \item{plot.dots}{list with further arguments to \code{\link[graphics]{plot}} and
+  \item{plot.args}{list with further arguments to \code{\link[graphics]{plot}} and
 	 \code{\link[graphics]{lines}}, respectively.}
 }
 \details{
@@ -50,16 +50,16 @@ matlines (conc$c, ci, col = c ("red", "#606060","#606060"), lty = 1)
 cols <- c ("black", "blue", "#008000", "red")
 wl <- i2wl (laser, c(13, 17, 21, 23))
 
-plotspc (laser, axis.dots=list (x = list (at = seq (404.5, 405.8, .1))))
+plotspc (laser, axis.args=list (x = list (at = seq (404.5, 405.8, .1))))
 for (i in seq_along (wl))
    abline (v = wl[i], col = cols[i], lwd = 2)
 
 X11()
 plotc (laser[,,wl [1]], use.c = "t",
-       plot.dots = list (ylim = range(laser[[]]), type = "o"))
+       plot.args = list (ylim = range(laser[[]]), type = "o"))
 for (i in seq_along (wl)[-1]){
    plotc (laser[,,wl[i]], use.c = "t", add = TRUE,
-          plot.dots = list (type = "o", col = cols[i]))
+          plot.args = list (type = "o", col = cols[i]))
 }
 
 }

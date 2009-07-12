@@ -1,15 +1,12 @@
 ## TODO delete old generics
 # TODO: seq_along
-## TODO: sweep logentry
 ## TODO: slice_map
 ## TODO: stopifnot
 ## TODO test log10
 ## TODO: delete warning in wl2i for numerics.
-
+## TODO sweep mit hyperSpec object: check wavelengths
+## TODO: sweep logentry
 ## TODO plotc z ./. c
-## is.na
-
-#chondro <- NULL
 
 .onLoad <- function (libname, pkgname){
 	require (lattice) 
@@ -1612,8 +1609,8 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 
 ## TODO: test trellis.args$at
 plotmap <- function (object,                                             
-		use.x = "x",
-		use.y = "y",
+		x = "x",
+		y = "y",
 		func = mean,
 		cond = NULL,
 		z = NULL,
@@ -1624,13 +1621,13 @@ plotmap <- function (object,
 ) {
 	validObject (object)
 	
-	ix <- pmatch (use.x, colnames (object@data))
+	ix <- pmatch (x, colnames (object@data))
 	if (is.null (ix))
-		stop (paste ("hyperSpec object has no column ", use.x))
+		stop (paste ("hyperSpec object has no column ", x))
 	
-	iy <- pmatch (use.y, colnames (object@data))
+	iy <- pmatch (y, colnames (object@data))
 	if (is.null (iy))
-		stop (paste ("hyperSpec object has no column ", use.y)) 
+		stop (paste ("hyperSpec object has no column ", y)) 
 	
 	if (!is.null (z)){
 		if (is.numeric (z)){
@@ -1673,13 +1670,13 @@ plotmap <- function (object,
 	if (is.null (trellis.args$xlab)){
 		trellis.args$xlab <- object@label[[names(object@data)[ix]]] 
 		if (is.null (trellis.args$xlab))
-			trellis.args$xlab <- use.x  
+			trellis.args$xlab <- x  
 	}
 	
 	if (is.null (trellis.args$ylab)){
 		trellis.args$ylab = object@label[[names(object@data)[iy]]] 
 		if (is.null (trellis.args$ylab))
-			trellis.args$ylab <- use.y
+			trellis.args$ylab <- y
 	}
 	
 	lattice <- do.call(levelplot, c(dots, trellis.args))
@@ -1800,7 +1797,7 @@ spc.identify <- function (x, y = NULL, wavelengths = NULL, ispc = NULL, ...){
 ###  
 plotc <- function (object, use.c = "c", func = sum, ...,  
 		z = NULL, zlab = NULL, add = FALSE,
-		plot.dots = list()) {
+		plot.args = list()) {
 	validObject (object)
 	
 	ic <- pmatch (use.c, colnames (object@data))
@@ -1833,32 +1830,32 @@ plotc <- function (object, use.c = "c", func = sum, ...,
 		}
 	}
 	
-	plot.dots <- c(list (x = unlist (object[[, ic]]),
+	plot.args <- c(list (x = unlist (object[[, ic]]),
 					y  = as.numeric (z)),
-			plot.dots)
+			plot.args)
 	
-	if (is.null (plot.dots$xlab)){
-		plot.dots$xlab <- object@label[[names(object@data)[ic]]] 
-		if (is.null (plot.dots$xlab))
-			plot.dots$xlab <- use.c  
+	if (is.null (plot.args$xlab)){
+		plot.args$xlab <- object@label[[names(object@data)[ic]]] 
+		if (is.null (plot.args$xlab))
+			plot.args$xlab <- use.c  
 	}
 	
-	if (is.null (plot.dots$ylab)){
-		plot.dots$ylab <- zlab
-		if (is.null (plot.dots$ylab))
-			plot.dots$ylab <- z
+	if (is.null (plot.args$ylab)){
+		plot.args$ylab <- zlab
+		if (is.null (plot.args$ylab))
+			plot.args$ylab <- z
 	}
 	
-	if (is.null (plot.dots$pch))
-		plot.dots$pch = 20
+	if (is.null (plot.args$pch))
+		plot.args$pch = 20
 	
-	if (is.null(plot.dots$type)) 
-		plot.dots$type = "p"
+	if (is.null(plot.args$type)) 
+		plot.args$type = "p"
 	
 	if (add)
-		do.call(lines, plot.dots)
+		do.call(lines, plot.args)
 	else
-		do.call(plot, plot.dots)
+		do.call(plot, plot.args)
 }
 
 ###-----------------------------------------------------------------------------
@@ -1876,24 +1873,24 @@ plotspc <- function  (object,
 		## what spectra to plot 
 		spc.nmax = 50,
 		func = NULL,
-		func.dots = list (),
+		func.args = list (),
 		stacked = FALSE,
 		## plot / lines
 		add = FALSE,
 		bty = "l",
 		col = "black",
-		plot.dots = list() ,
+		plot.args = list() ,
 		## axes
 		xoffset = 0,
 		yoffset = 0,
 		nxticks = 10,
-		axis.dots = list () ,
+		axis.args = list () ,
 		## parameters for filled regions
 		fill = NULL,
 		border = NA, 
-		title.dots = list (),
-		polygon.dots = list (),
-		lines.dots = list ()
+		title.args = list (),
+		polygon.args = list (),
+		lines.args = list ()
 ){
 	validObject (object)
 	
@@ -1955,8 +1952,8 @@ plotspc <- function  (object,
 		## if (spc.sample)
 		##   warning (paste (quote (func), "is applied to random subsample of the spectra"))
 		
-		apply.dots <- c (list (X = spc, MARGIN = 2, FUN = func), func.dots)
-		spc <- matrix (do.call (apply, apply.dots),  #apply (spc, 2, func),
+		apply.args <- c (list (X = spc, MARGIN = 2, FUN = func), func.args)
+		spc <- matrix (do.call (apply, apply.args),  #apply (spc, 2, func),
 				ncol = ncol (spc)
 		)
 		if (nrow (spc) == 0)
@@ -1991,64 +1988,64 @@ plotspc <- function  (object,
 	
 	if (! add){
 		## Plot area
-		plot.dots$x <- unlist (x)
-		plot.dots$y <- spc[1,,drop=FALSE]
-		plot.dots$type <- "n"
-		plot.dots$bty <- bty
-		plot.dots$xaxt <- "n"
-		plot.dots$yaxt <- "n"
-		plot.dots$xlab <- NA     # title is called later
-		plot.dots$ylab <- NA
+		plot.args$x <- unlist (x)
+		plot.args$y <- spc[1,,drop=FALSE]
+		plot.args$type <- "n"
+		plot.args$bty <- bty
+		plot.args$xaxt <- "n"
+		plot.args$yaxt <- "n"
+		plot.args$xlab <- NA     # title is called later
+		plot.args$ylab <- NA
 
-		if (is.null (plot.dots$xlim))
-			plot.dots$xlim <- range (unlist (x), na.rm = TRUE)
+		if (is.null (plot.args$xlim))
+			plot.args$xlim <- range (unlist (x), na.rm = TRUE)
 		
-		if (is.null (plot.dots$ylim))
-			plot.dots$ylim <- range (spc, na.rm = TRUE)
+		if (is.null (plot.args$ylim))
+			plot.args$ylim <- range (spc, na.rm = TRUE)
 		
 		## reverse x axis ?
 		if (wl.reverse)
-			plot.dots$xlim <- rev(plot.dots$xlim)
+			plot.args$xlim <- rev(plot.args$xlim)
 		
-		do.call (plot, plot.dots)
+		do.call (plot, plot.args)
 
 		## reversed x axis ? => would lead to trouble with tick positions
-		if (diff (plot.dots$xlim) < 0)
-			plot.dots$xlim <- rev(plot.dots$xlim)
+		if (diff (plot.args$xlim) < 0)
+			plot.args$xlim <- rev(plot.args$xlim)
 		
 		
 		## Axes
 		## x-axis labels & ticks
 		if (bty %in% c("o", "l", "c", "u", "]") ){
-			if (is.null (axis.dots$x))
-				axis.dots$x <- list ()
-			if (is.null (axis.dots$x$side))
-				axis.dots$x$side <- 1
+			if (is.null (axis.args$x))
+				axis.args$x <- list ()
+			if (is.null (axis.args$x$side))
+				axis.args$x$side <- 1
 			
 			## Tick mark positions
-			if (is.null (axis.dots$x$at)){
+			if (is.null (axis.args$x$at)){
 				if (all (xoffset == 0)){
-					axis.dots$x$at <- pretty (plot.dots$xlim +
-									diff(plot.dots$xlim) * c(-0.04, 0.04),
+					axis.args$x$at <- pretty (plot.args$xlim +
+									diff(plot.args$xlim) * c(-0.04, 0.04),
 							nxticks)
 				} else {
-					axis.dots$x$at <- list ()
+					axis.args$x$at <- list ()
 					
 					part <- apply (sapply (wavelengths, range), 2, diff) /
-							diff (plot.dots$xlim) 
+							diff (plot.args$xlim) 
 					
 					for (i in seq_along (x))  
-						axis.dots$x$at [[i]] <- pretty (wavelengths[[i]],
+						axis.args$x$at [[i]] <- pretty (wavelengths[[i]],
 								part [i] * nxticks + 1)
 				}          
 			}
-			if (!is.list (axis.dots$x$at))
-				axis.dots$x$at <- rep (list (axis.dots$x$at), length (x))
+			if (!is.list (axis.args$x$at))
+				axis.args$x$at <- rep (list (axis.args$x$at), length (x))
 			
 			## calculate cut mark positions and which ticks are to be displayed
 			cutmarks <- numeric (length (x) - 1)
 			
-			for (i in seq_along (axis.dots$x$at)[-1]){
+			for (i in seq_along (axis.args$x$at)[-1]){
 				a <- max (x [[i - 1]])
 				b <- min (x [[i    ]])
 				delta <- b - a
@@ -2057,21 +2054,21 @@ plotspc <- function  (object,
 				a <- a + xoffset [i] + delta / 4
 				b <- b + xoffset [i] - delta / 4
 				
-				axis.dots$x$at [[i - 1]] <- axis.dots$x$at [[i - 1]][axis.dots$x$at [[i - 1]] < a]
-				axis.dots$x$at [[i    ]] <- axis.dots$x$at [[i    ]][axis.dots$x$at [[i    ]] > b]
+				axis.args$x$at [[i - 1]] <- axis.args$x$at [[i - 1]][axis.args$x$at [[i - 1]] < a]
+				axis.args$x$at [[i    ]] <- axis.args$x$at [[i    ]][axis.args$x$at [[i    ]] > b]
 			}
 			
 			## Tick mark labels      
-			if (is.null (axis.dots$x$labels)){
-				axis.dots$x$labels <- (axis.dots$x$at)
-				for (i in seq_along (axis.dots$x$at))
-					axis.dots$x$at [[i]] <- axis.dots$x$at [[i]] - xoffset [i]
+			if (is.null (axis.args$x$labels)){
+				axis.args$x$labels <- (axis.args$x$at)
+				for (i in seq_along (axis.args$x$at))
+					axis.args$x$at [[i]] <- axis.args$x$at [[i]] - xoffset [i]
 			} 
 			
-			axis.dots$x$at <- unlist (axis.dots$x$at)
-			axis.dots$x$labels <- unlist (axis.dots$x$labels) 
+			axis.args$x$at <- unlist (axis.args$x$at)
+			axis.args$x$labels <- unlist (axis.args$x$labels) 
 			
-			do.call (axis, axis.dots$x)
+			do.call (axis, axis.args$x)
 			
 			## plot cut marks for x axis
 			for (i in seq_along (cutmarks))
@@ -2081,46 +2078,46 @@ plotspc <- function  (object,
 		
 		## y-axis labels & ticks
 		if (bty %in% c("o", "l", "c", "u")){
-			if (is.null (axis.dots$y))
-				axis.dots$y <- list ()
-			if (is.null (axis.dots$y$side))
-				axis.dots$y$side <- 2
-			if (is.null (axis.dots$y$at) & stacked){
-				axis.dots$y$at <- apply (spc, 1, min)
-				axis.dots$y$labels <- seq_len (nrow (spc))
+			if (is.null (axis.args$y))
+				axis.args$y <- list ()
+			if (is.null (axis.args$y$side))
+				axis.args$y$side <- 2
+			if (is.null (axis.args$y$at) & stacked){
+				axis.args$y$at <- apply (spc, 1, min)
+				axis.args$y$labels <- seq_len (nrow (spc))
 			}
 			
-			do.call (axis, axis.dots$y)
+			do.call (axis, axis.args$y)
 		}
 		
 		
 		## Title
-		if (is.null (title.dots$xlab))
-			title.dots$xlab <- list ()
-		if (!is.list (title.dots$xlab)) 
-			title.dots$xlab <- list (xlab = title.dots$xlab)
+		if (is.null (title.args$xlab))
+			title.args$xlab <- list ()
+		if (!is.list (title.args$xlab)) 
+			title.args$xlab <- list (xlab = title.args$xlab)
 		else
-			title.dots$xlab$xlab <- I(object@label$.wavelength)
-		if (names (title.dots$xlab) [1] == "")
-			names (title.dots$xlab) [1] <- "xlab"
+			title.args$xlab$xlab <- I(object@label$.wavelength)
+		if (names (title.args$xlab) [1] == "")
+			names (title.args$xlab) [1] <- "xlab"
 		
-		if (is.null (title.dots$xlab$line))
-			title.dots$xlab$line <- 2.5
+		if (is.null (title.args$xlab$line))
+			title.args$xlab$line <- 2.5
 		
-		if (is.null (title.dots$ylab))
-			title.dots$ylab <- list () 
-		if (!is.list (title.dots$ylab)) 
-			title.dots$ylab <- list (ylab = title.dots$ylab)
+		if (is.null (title.args$ylab))
+			title.args$ylab <- list () 
+		if (!is.list (title.args$ylab)) 
+			title.args$ylab <- list (ylab = title.args$ylab)
 		else
-			title.dots$ylab$ylab <- I(object@label$spc)
-		if (names (title.dots$ylab) [1] == "")
-			names (title.dots$ylab) [1] <- "ylab"   
+			title.args$ylab$ylab <- I(object@label$spc)
+		if (names (title.args$ylab) [1] == "")
+			names (title.args$ylab) [1] <- "ylab"   
 		
-		titles <- pmatch (c("main", "sub", "xlab", "ylab"), names (title.dots))
-		other <- !(seq (along = title.dots) %in% titles) 
+		titles <- pmatch (c("main", "sub", "xlab", "ylab"), names (title.args))
+		other <- !(seq (along = title.args) %in% titles) 
 		
 		for (i in titles)
-			do.call (title, c(title.dots[[i]], title.dots[other]))
+			do.call (title, c(title.args[[i]], title.args[other]))
 	}
 	
 	col <- rep (col, nrow(spc))
@@ -2145,35 +2142,35 @@ plotspc <- function  (object,
 			
 			ifill <- matrix (ifill, ncol = 2, byrow = FALSE)
 			
-			if (is.null(polygon.dots$x))
-				polygon.dots <- c(list(x = NULL, y = NULL), polygon.dots)
+			if (is.null(polygon.args$x))
+				polygon.args <- c(list(x = NULL, y = NULL), polygon.args)
 			
 			fill <- rep (fill, length.out = nrow (ifill))
 			
 			border <- rep (border, length.out = nrow (ifill)) 
 			
 			for (j in 1 : nrow (ifill)){
-				polygon.dots$x <- c (x  [[i]]                  , rev (x   [[i]]         ))
-				polygon.dots$y <- c (spc[ifill[j, 1],ispc[[i]]], rev (spc [ifill[j, 2],ispc[[i]]]))
-				polygon.dots$col = fill [j]
-				polygon.dots$border <- border [j]
+				polygon.args$x <- c (x  [[i]]                  , rev (x   [[i]]         ))
+				polygon.args$y <- c (spc[ifill[j, 1],ispc[[i]]], rev (spc [ifill[j, 2],ispc[[i]]]))
+				polygon.args$col = fill [j]
+				polygon.args$border <- border [j]
 				
-				do.call (polygon, polygon.dots)
+				do.call (polygon, polygon.args)
 			}
 		}
 		
-		if (is.null(lines.dots$x)) 
-			lines.dots <- c(list (x = NULL, y = NULL), lines.dots)
+		if (is.null(lines.args$x)) 
+			lines.args <- c(list (x = NULL, y = NULL), lines.args)
 		
-		if (is.null (lines.dots$type))
-			lines.dots$type <- "l"
+		if (is.null (lines.args$type))
+			lines.args$type <- "l"
 		
 		for (j in 1 : nrow (spc)){
-			lines.dots$x <- x[[i]]
-			lines.dots$y <- spc [j, ispc[[i]]]
-			lines.dots$col <- col [j]
+			lines.args$x <- x[[i]]
+			lines.args$y <- spc [j, ispc[[i]]]
+			lines.args$col <- col [j]
 			
-			do.call (lines, lines.dots) 
+			do.call (lines, lines.args) 
 		}
 	}
 	
@@ -2226,10 +2223,10 @@ setMethod ("plot",
 							dots$col <- rep (dots$col, length.out = 3)
 						if (is.null (dots$fill)) 
 							dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)
-						if (is.null (dots$func.dots))
-							dots$func.dots <- list (na.rm = TRUE)
-						else if (is.null (dots$func.dots$na.rm))
-							dots$func.dots$na.rm <- TRUE
+						if (is.null (dots$func.args))
+							dots$func.args <- list (na.rm = TRUE)
+						else if (is.null (dots$func.args$na.rm))
+							dots$func.args$na.rm <- TRUE
 						dots$object = x
 						dots$func = mean_pm_sd
 						do.call (plotspc, dots) 
@@ -2242,12 +2239,12 @@ setMethod ("plot",
 						if (is.null (dots$fill)) {
 							dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)
 						}
-						if (is.null (dots$func.dots))
-							dots$func.dots <- list ()
-						if (is.null (dots$func.dots$na.rm))
-							dots$func.dots$na.rm <- TRUE
-						if (is.null (dots$func.dots$probs))
-							dots$func.dots$probs = c (0.16, 0.5, 0.84)
+						if (is.null (dots$func.args))
+							dots$func.args <- list ()
+						if (is.null (dots$func.args$na.rm))
+							dots$func.args$na.rm <- TRUE
+						if (is.null (dots$func.args$probs))
+							dots$func.args$probs = c (0.16, 0.5, 0.84)
 						dots$object = x
 						dots$func = quantile
 						do.call (plotspc, dots) 
@@ -2260,12 +2257,12 @@ setMethod ("plot",
 						if (is.null (dots$fill)) {
 							dots$fill <- rep(rgb(t(col2rgb(dots$col[3])/255),alpha=0.33), 2)
 						}
-						if (is.null (dots$func.dots))
-							dots$func.dots <- list ()
-						if (is.null (dots$func.dots$na.rm))
-							dots$func.dots$na.rm <- TRUE
-						if (is.null (dots$func.dots$probs))
-							dots$func.dots$probs = c (0.05, 0.16, 0.5, 0.84, 0.95)
+						if (is.null (dots$func.args))
+							dots$func.args <- list ()
+						if (is.null (dots$func.args$na.rm))
+							dots$func.args$na.rm <- TRUE
+						if (is.null (dots$func.args$probs))
+							dots$func.args$probs = c (0.05, 0.16, 0.5, 0.84, 0.95)
 						dots$object <- x
 						dots$func <- quantile
 						do.call (plotspc, dots) 
@@ -2424,6 +2421,7 @@ read.txt.wide <- function (file = stop ("filename is required"),
 #' @export
 scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", 
 		nlines = 0, nspc = NULL, ...){
+	#TODO: bugfix for paracetamol data.
 	cols <- switch (data,
 			spc = NULL,   
 			xyspc = list (y = expression ("/" (y, mu * m)), 

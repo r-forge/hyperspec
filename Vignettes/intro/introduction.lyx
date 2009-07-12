@@ -82,14 +82,11 @@ logicalmkup
 \begin_body
 
 \begin_layout Title
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -100,7 +97,7 @@ Rpackage{hyperSpec}
 \begin_layout Author
 Claudia Beleites (
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -130,7 +127,15 @@ options ("width" = 100)
 \begin_inset Newline newline
 \end_inset
 
-setwd ("~/Uni/workspace/hyperspec.rforge/Vignettes/intro")
+datadir <- "~/Uni/workspace/hyperspec.rforge/Vignettes/intro"
+\begin_inset Newline newline
+\end_inset
+
+wd <- getwd ()
+\begin_inset Newline newline
+\end_inset
+
+setwd (datadir)
 \begin_inset Newline newline
 \end_inset
 
@@ -142,14 +147,11 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
+\begin_inset Flex Rpackage
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -171,14 +173,11 @@ d axis, the wavelength axis.
 
 \begin_layout Standard
 However, 
-\begin_inset ERT
+\begin_inset Flex Rpackage
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -234,14 +233,11 @@ Note that there is no restriction on the number of extra data columns.
 \begin_layout Standard
 This vignette gives an introduction on basic working techniques using the
  R package 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -251,14 +247,11 @@ Rpackage{hyperSpec}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{chondro}
+chondro
 \end_layout
 
 \end_inset
@@ -267,14 +260,11 @@ Robject{chondro}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{flu}
+flu
 \end_layout
 
 \end_inset
@@ -283,14 +273,11 @@ Robject{flu}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{laser}
+laser
 \end_layout
 
 \end_inset
@@ -311,14 +298,11 @@ Notation
 \begin_layout Standard
 This vignette demonstrates working techniques mostly from a spectroscopic
  point of view: rather than going through the functions provided by 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -330,28 +314,22 @@ Rpackage{hyperSpec}
 
 \begin_layout Standard
 In R, slots of a S4 class can be accessed directly by the 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcommand
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcommand{@}
+@
 \end_layout
 
 \end_inset
 
  operator.
  In this vignette, the notation 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{@xxx}
+@xxx
 \end_layout
 
 \end_inset
@@ -373,57 +351,41 @@ slot xxx of an object
 
 \begin_layout Standard
 Likewise, named elements of a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{list}
+list
 \end_layout
 
 \end_inset
 
 , like the columns of a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{data.frame}
+data.frame
 \end_layout
 
 \end_inset
 
 , are accessed by the 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$}
+$
 \end_layout
 
 \end_inset
 
  operator, and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$xxx}
+$xxx
 \end_layout
 
 \end_inset
@@ -474,27 +436,21 @@ Generic Functions
 
 g.
  
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{plot}
+plot
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{print}
+print
 \end_layout
 
 \end_inset
@@ -505,14 +461,11 @@ Rmethod{print}
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
+\begin_inset Flex Rclass
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -535,7 +488,7 @@ reference "tab:Generic-methods"
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -550,14 +503,11 @@ name "tab:Generic-methods"
 \end_inset
 
 Generic methods implemented by 
-\begin_inset ERT
+\begin_inset Flex Rclass
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -621,40 +571,31 @@ Explanation
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{print}
+print
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{show}
+show
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{summary}
+summary
 \end_layout
 
 \end_inset
@@ -679,14 +620,11 @@ print information about the object
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plot}
+plot
 \end_layout
 
 \end_inset
@@ -711,42 +649,31 @@ plotting
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{[]}
+[]
 \end_layout
 
 \end_inset
 
 ,
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{ [[]]}
+[[]]
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{
-\backslash
-$}
+$
 \end_layout
 
 \end_inset
@@ -771,42 +698,31 @@ extract parts of an object
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-Rfunction{[<-}
-\end_layout
-
-\end_inset
-
-, 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-Rfunction{[[<-}
-\end_layout
-
-\end_inset
-
-, 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
+[<-
+\end_layout
 
+\end_inset
 
-\backslash
-Rfunction{
-\backslash
-$<-}
+, 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[<-
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+$<-
 \end_layout
 
 \end_inset
@@ -831,40 +747,31 @@ assign parts of an object
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{dim}
+dim
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{ncol}
+ncol
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{nrow}
+nrow
 \end_layout
 
 \end_inset
@@ -891,40 +798,31 @@ the dimensions of the object
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{colnames}
+colnames
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{rownames}
+rownames
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{dimnames}
+dimnames
 \end_layout
 
 \end_inset
@@ -949,14 +847,11 @@ names of the spectra, data columns, and both plus the names of the wavelengths
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{labels}
+labels
 \end_layout
 
 \end_inset
@@ -983,28 +878,11 @@ labels for axis annotations etc.
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{+ - * 
-\backslash
-textasciicircum{} 
-\backslash
-%
-\backslash
-% 
-\backslash
-%/
-\backslash
-% / 
-\backslash
-%*
-\backslash
-%}
++ - * ^ %% %/% / %*%
 \end_layout
 
 \end_inset
@@ -1019,16 +897,11 @@ textasciicircum{}
 
 \begin_layout Plain Layout
 arithmetical operators work on 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -1044,14 +917,11 @@ $spc}
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{> < == >= <=}
+> < == >= <=
 \end_layout
 
 \end_inset
@@ -1066,16 +936,11 @@ Rfunction{> < == >= <=}
 
 \begin_layout Plain Layout
 comparison operators work on 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -1091,40 +956,31 @@ $spc}
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{log}
+log
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{log10}
+log10
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{exp}
+exp
 \end_layout
 
 \end_inset
@@ -1139,29 +995,21 @@ Rfunction{exp}
 
 \begin_layout Plain Layout
 basic math functions work on 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
 
 , see also 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{?~"hyperSpec Math"}
+? "hyperSpec Math"
 \end_layout
 
 \end_inset
@@ -1177,40 +1025,31 @@ Rcode{?~"hyperSpec Math"}
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{min}
+min
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{max}
+max
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{range}
+range
 \end_layout
 
 \end_inset
@@ -1225,16 +1064,11 @@ Rfunction{range}
 
 \begin_layout Plain Layout
 minimum, maximum, and range of the intensities in 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -1250,27 +1084,21 @@ $spc}
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{cbind}
+cbind
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{rbind}
+rbind
 \end_layout
 
 \end_inset
@@ -1295,14 +1123,11 @@ combine two objects by columns or rows
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{split}
+split
 \end_layout
 
 \end_inset
@@ -1327,14 +1152,11 @@ split an object into a list of objects
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{apply}
+apply
 \end_layout
 
 \end_inset
@@ -1364,27 +1186,21 @@ g.
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{aggregate}
+aggregate
 \end_layout
 
 \end_inset
 
 (
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{ave}
+ave
 \end_layout
 
 \end_inset
@@ -1405,40 +1221,31 @@ calculate sum characteristics for groups of spectra, e.
 g.
  cluster mean spectra.
  
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
 
 's 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{aggregate}
+aggregate
 \end_layout
 
 \end_inset
 
  method covers also the functionality of 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{ave}
+ave
 \end_layout
 
 \end_inset
@@ -1454,14 +1261,11 @@ Rfunction{ave}
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{sweep}
+sweep
 \end_layout
 
 \end_inset
@@ -1498,40 +1302,31 @@ g.
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{as.character}
+as.character
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{as.matrix}
+as.matrix
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{as.data.frame}
+as.data.frame
 \end_layout
 
 \end_inset
@@ -1556,14 +1351,11 @@ type conversion functions
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{initialize}
+initialize
 \end_layout
 
 \end_inset
@@ -1588,14 +1380,11 @@ create an object
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{validObject}
+validObject
 \end_layout
 
 \end_inset
@@ -1680,27 +1469,21 @@ validity checking
 
 \begin_layout Standard
 The functions provided by 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
 
  do check the validity of 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -1715,14 +1498,11 @@ Loading the package
 
 \begin_layout Standard
 To load 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -1744,14 +1524,11 @@ library (hyperSpec)
 
 \begin_layout Section
 The structure of 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -1760,14 +1537,11 @@ Rclass{hyperSpec}
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -1781,14 +1555,11 @@ slots
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{wavelength}
+wavelength
 \end_layout
 
 \end_inset
@@ -1797,43 +1568,34 @@ Robject{wavelength}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{data}
+data
 \end_layout
 
 \end_inset
 
  a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{data.frame}
+data.frame
 \end_layout
 
 \end_inset
 
- with the spectra and all further information belonging to the spectra
+with the spectra and all further information belonging to the spectra
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{label}
+label
 \end_layout
 
 \end_inset
@@ -1842,27 +1604,21 @@ Robject{label}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{log}
+log
 \end_layout
 
 \end_inset
 
  a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{data.frame}
+data.frame
 \end_layout
 
 \end_inset
@@ -1872,14 +1628,11 @@ Rclass{data.frame}
 
 \begin_layout Standard
 However, it is good practice to use the functions provided by 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -1895,43 +1648,32 @@ valid
 
 \begin_layout Standard
 Most of the data is stored in 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{@data}
+@data
 \end_layout
 
 \end_inset
 
 .
  This 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{data.frame}
+data.frame
 \end_layout
 
 \end_inset
 
  has one special column, 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -1952,16 +1694,11 @@ reference "fig:structure"
 
 .
  Even if there are no spectra, 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -1973,7 +1710,7 @@ $spc}
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -1995,14 +1732,11 @@ name "fig:structure"
 \end_inset
 
 The stucture of the data in a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2022,40 +1756,31 @@ Rpackage{hyperSpec}
 
 \begin_layout Standard
 Slot 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{@label}
+@label
 \end_layout
 
 \end_inset
 
  contains an element for each of the columns in 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{@data}
+@data
 \end_layout
 
 \end_inset
 
  plus one holding the label for the wavelength axis, 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{.wavelength}
+.wavelength
 \end_layout
 
 \end_inset
@@ -2081,27 +1806,21 @@ reference "fig:example-plots"
 
 ).
  To get familiar with expressions for axis annotition, see 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{? plotmath}
+? plotmath
 \end_layout
 
 \end_inset
 
  and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{demo (plotmath)}
+demo (plotmath)
 \end_layout
 
 \end_inset
@@ -2111,14 +1830,11 @@ Rcode{demo (plotmath)}
 
 \begin_layout Section
 Obtaining Basic Information about 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2128,40 +1844,31 @@ Rpackage{hyperSpec}
 
 \begin_layout Standard
 As usual, the 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{print}
+print
 \end_layout
 
 \end_inset
 
  and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{show}
+show
 \end_layout
 
 \end_inset
 
  methods display information about the object, and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{summary}
+summary
 \end_layout
 
 \end_inset
@@ -2187,68 +1894,51 @@ summary (chondro)
 
 \begin_layout Standard
 The data set 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{chondro}
+chondro
 \end_layout
 
 \end_inset
 
  consists of 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Sexpr
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Sexpr{nrow (chondro)}
+nrow (chondro)
 \end_layout
 
 \end_inset
 
  spectra with 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Sexpr
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Sexpr{nwl (chondro)}
+nwl (chondro)
 \end_layout
 
 \end_inset
 
  data points each, and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Sexpr
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Sexpr{ncol (chondro)}
+ncol (chondro)
 \end_layout
 
 \end_inset
 
  data columns two for the spatial information plus 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -2281,16 +1971,13 @@ dim (chondro)
 @
 \end_layout
 
-\begin_layout Scrap
+\begin_layout Standard
 The names of the columns in 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{@data}
+@data
 \end_layout
 
 \end_inset
@@ -2312,43 +1999,32 @@ colnames (chondro)
 
 \begin_layout Standard
 Likewise, 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{rownames}
+rownames
 \end_layout
 
 \end_inset
 
  returns the names assigned to the spectra, and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{dimnames}
+dimnames
 \end_layout
 
 \end_inset
 
  yields a list of these three vectors (including also the column names of
  
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -2359,14 +2035,11 @@ $spc}
 
 \begin_layout Section
 Creating a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2380,53 +2053,41 @@ ASCII Files
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{read.txt.long}
+read.txt.long
 \end_layout
 
 \end_inset
 
 ,
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{read.txt.wide}
+read.txt.wide
 \end_layout
 
 \end_inset
 
 ,
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{write.txt.long}
+write.txt.long
 \end_layout
 
 \end_inset
 
 ,
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{write.txt.wide}
+write.txt.wide
 \end_layout
 
 \end_inset
@@ -2441,14 +2102,11 @@ Rfunction{write.txt.wide}
 
 \begin_layout Standard
 Currently, 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2457,14 +2115,11 @@ Rpackage{hyperSpec}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{read.txt.long}
+read.txt.long
 \end_layout
 
 \end_inset
@@ -2474,14 +2129,11 @@ Rfunction{read.txt.long}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{read.txt.wide}
+read.txt.wide
 \end_layout
 
 \end_inset
@@ -2491,14 +2143,11 @@ Rfunction{read.txt.wide}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{write.txt.long}
+write.txt.long
 \end_layout
 
 \end_inset
@@ -2507,14 +2156,11 @@ Rfunction{write.txt.long}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{write.txt.wide}
+write.txt.wide
 \end_layout
 
 \end_inset
@@ -2524,14 +2170,11 @@ Rfunction{write.txt.wide}
 
 \begin_layout Standard
 The import functions immediately return a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2551,14 +2194,11 @@ Many spectrometer manufacturers provide a function to export their spectra
  I recommend wrapping these calls with the appropriate settings for your
  spectra format in an import function.
  You may also consider contributing such import filters to 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2577,14 +2217,11 @@ type "mailto:"
 \begin_layout Standard
 For the long ASCII format written by Renishaw's converter, a more optimized
  import function is already available: 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{scan.txt.Renishaw}
+scan.txt.Renishaw
 \end_layout
 
 \end_inset
@@ -2595,14 +2232,11 @@ Rfunction{scan.txt.Renishaw}
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{scan.txt.Renishaw}
+scan.txt.Renishaw
 \end_layout
 
 \end_inset
@@ -2637,14 +2271,11 @@ Matlab Files
 
 \begin_layout Standard
 Matlab files can be read and written using the package 
-\begin_inset ERT
+\begin_inset Flex Rpackage
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{R.matlab}
+R.matlab
 \end_layout
 
 \end_inset
@@ -2657,14 +2288,11 @@ key "R.matlab"
 \end_inset
 
 , which is available at CRAN and can be installed by 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{install.packages ("R.matlab")}
+install.packages ("R.matlab")
 \end_layout
 
 \end_inset
@@ -2674,14 +2302,11 @@ Rcode{install.packages ("R.matlab")}
 
 \begin_layout Subsection
 Creating a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyerSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2691,27 +2316,21 @@ Rclass{hyerSpec}
 
 \begin_layout Standard
 Once the data is in R's workspace, a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyerSpec}
+hyperSpec
 \end_layout
 
 \end_inset
 
  object is created by 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{initialize ("hyperSpec")}
+initialize ("hyperSpec")
 \end_layout
 
 \end_inset
@@ -2721,14 +2340,11 @@ Rcode{initialize ("hyperSpec")}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{spc}
+spc
 \end_layout
 
 \end_inset
@@ -2737,14 +2353,11 @@ Rcode{spc}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{wavelength}
+wavelength
 \end_layout
 
 \end_inset
@@ -2753,14 +2366,11 @@ Rcode{wavelength}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{data}
+data
 \end_layout
 
 \end_inset
@@ -2769,45 +2379,32 @@ Rcode{data}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{label}
+label
 \end_layout
 
 \end_inset
 
  a list with the proper labels.
  Do not forget the wavelength axis label in 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$.wavelength}
+$.wavelength
 \end_layout
 
 \end_inset
 
  and the spectral intensity axis label in 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -2825,16 +2422,21 @@ Wavelength Indices
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
+wl2i
+\end_layout
 
+\end_inset
 
-\backslash
-Rfunction{wl2i}, 
-\backslash
-Rfunction{i2wl}
+, 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+i2wl
 \end_layout
 
 \end_inset
@@ -2849,14 +2451,11 @@ Rfunction{i2wl}
 
 \begin_layout Standard
 Spectra in 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -2864,40 +2463,31 @@ Rpackage{hyperSpec}
  have always discretized wavelength axes, they are stored in a matrix with
  column corresponding to one wavelength.
  
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
 
  provides two conversion functions: 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{i2wl}
+i2wl
 \end_layout
 
 \end_inset
 
  returns the wavelength corrisponding to the given indices and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{wl2i}
+wl2i
 \end_layout
 
 \end_inset
@@ -2928,8 +2518,6 @@ start
 \end_inset
 
 
-\lang english
-
 \begin_inset space ~
 \end_inset
 
@@ -2941,18 +2529,19 @@ end.
  This yields a vector 
 \emph on
 index of start 
-\begin_inset ERT
-status collapsed
+\emph default
+
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{:}
+:
 \end_layout
 
 \end_inset
 
+
+\emph on
  index of end.
 \end_layout
 
@@ -3009,14 +2598,11 @@ wl2i (chondro, 1000 : 1010)
 If the object's wavelength axis is not ordered, the formula approach doesn't
  work.
  In that (rare) case, use 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{orderwl}
+orderwl
 \end_layout
 
 \end_inset
@@ -3034,27 +2620,21 @@ start
 end
 \emph default
  may contain the special variables 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{min}
+min
 \end_layout
 
 \end_inset
 
  and 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Robject
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{max}
+max
 \end_layout
 
 \end_inset
@@ -3109,14 +2689,11 @@ status open
 
 \begin_layout Plain Layout
 Formulas are combined to a list by 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{c}
+c
 \end_layout
 
 \end_inset
@@ -3147,38 +2724,31 @@ wl2i (flu, c (min ~ 406.5, max - 2i ~ max))
 
 \begin_layout Standard
 This mechanism also works for the wavelength arguments of 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[]}
+[]
 \end_layout
 
 \end_inset
 
 , 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[[]]}
+[[]]
 \end_layout
 
 \end_inset
 
 , and 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plotspc}
+plotspc
 \end_layout
 
 \end_inset
@@ -3187,43 +2757,150 @@ Rfunction{plotspc}
 \end_layout
 
 \begin_layout Section
+Accessing the Extra Data 
+\end_layout
+
+\begin_layout Standard
+The second argument of the extraction functions 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[]
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[]]
+\end_layout
+
+\end_inset
+
+ specifies the (extra) data columns.
+ They can be given like any column specification for a 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+data.frame
+\end_layout
+
+\end_inset
+
+, i.
+\begin_inset space \thinspace{}
+\end_inset
+
+e.
+ numeric, logical, or by a vector of the column names:
+\end_layout
+
+\begin_layout Scrap
+<<data>>=
+\begin_inset Newline newline
+\end_inset
+
+flu [[,1]]
+\begin_inset Newline newline
+\end_inset
+
+flu [[,-2]]
+\begin_inset Newline newline
+\end_inset
+
+flu [[,"c"]]
+\begin_inset Newline newline
+\end_inset
+
+flu [[,c (TRUE, FALSE)]]
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+To select one column, the 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+$
+\end_layout
+
+\end_inset
+
+ operator is more convenient:
+\end_layout
+
+\begin_layout Scrap
+<<data2>>=
+\begin_inset Newline newline
+\end_inset
+
+flu$c
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Section
 Selecting and Deleting Spectra
 \end_layout
 
 \begin_layout Standard
 The extraction function 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[]}
+[]
 \end_layout
 
 \end_inset
 
  (or 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[[]]}
+[[]]
 \end_layout
 
 \end_inset
 
-, if the spectra matrix is needed rather than a 
-\begin_inset ERT
-status collapsed
+, if the spectra 
+\begin_inset Flex Rclass
+status open
 
 \begin_layout Plain Layout
+matrix
+\end_layout
 
+\end_inset
 
-\backslash
-Rclass{hyperSpec}
+ or the 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+data.frame
+\end_layout
+
+\end_inset
+
+ is needed rather than a 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+hyperSpec
 \end_layout
 
 \end_inset
@@ -3259,14 +2936,11 @@ Plotting
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -3275,14 +2949,11 @@ Rpackage{hyperSpec}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotspc}
+plotspc
 \end_layout
 
 \end_inset
@@ -3293,29 +2964,21 @@ Rcode{plotspc}
 
 e.
  the intensities 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
 
  over the wavelengths 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{@wavelength}
+@wavelength
 \end_layout
 
 \end_inset
@@ -3324,14 +2987,11 @@ Rcode{@wavelength}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotmap}
+plotmap
 \end_layout
 
 \end_inset
@@ -3343,31 +3003,21 @@ Rcode{plotmap}
 g.
  average intensity or cluster membership) over two data columns (default
  
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$x}
+$x
 \end_layout
 
 \end_inset
 
  and 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$y}
+$y
 \end_layout
 
 \end_inset
@@ -3376,14 +3026,11 @@ $y}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotc}
+plotc
 \end_layout
 
 \end_inset
@@ -3399,14 +3046,11 @@ g.
 
 \begin_layout Standard
 All three plus some more handy abbrevations are also accessible via 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rmethod
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rmethod{plot}
+plot
 \end_layout
 
 \end_inset
@@ -3416,14 +3060,11 @@ Rmethod{plot}
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plot}
+plot
 \end_layout
 
 \end_inset
@@ -3437,27 +3078,21 @@ Rfunction{plot}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (flu, "spc")}
+plot (flu, "spc")
 \end_layout
 
 \end_inset
 
  is equivalent to 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotspc (flu)}
+plotspc (flu)
 \end_layout
 
 \end_inset
@@ -3466,14 +3101,11 @@ Rcode{plotspc (flu)}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (chondro, "spcmeansd")}
+plot (chondro, "spcmeansd")
 \end_layout
 
 \end_inset
@@ -3486,14 +3118,11 @@ Rcode{plot (chondro, "spcmeansd")}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (chondro, "spcprctl")}
+plot (chondro, "spcprctl")
 \end_layout
 
 \end_inset
@@ -3508,14 +3137,11 @@ Rcode{plot (chondro, "spcprctl")}
 
  percentile.
  This is similar to 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{"spcmeansd"}
+"spcmeansd"
 \end_layout
 
 \end_inset
@@ -3527,27 +3153,21 @@ Rcode{"spcmeansd"}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (chondro, "spcprctl5")}
+plot (chondro, "spcprctl5")
 \end_layout
 
 \end_inset
 
  like 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{"spcprctl"}
+"spcprctl"
 \end_layout
 
 \end_inset
@@ -3564,27 +3184,21 @@ percentile.
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (chondro, "map")}
+plot (chondro, "map")
 \end_layout
 
 \end_inset
 
  is equivalent to 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotmap (chondro)}
+plotmap (chondro)
 \end_layout
 
 \end_inset
@@ -3593,27 +3207,21 @@ Rcode{plotmap (chondro)}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (flu, "c")}
+plot (flu, "c")
 \end_layout
 
 \end_inset
 
  is equivalent to 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotc (flu)}
+plotc (flu)
 \end_layout
 
 \end_inset
@@ -3622,27 +3230,21 @@ Rcode{plotc (flu)}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (laser, "ts")}
+plot (laser, "ts")
 \end_layout
 
 \end_inset
 
  plots a time series plot, equivalent to 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotc (laser, use.c = "t")}
+plotc (laser, use.c = "t")
 \end_layout
 
 \end_inset
@@ -3651,27 +3253,21 @@ Rcode{plotc (laser, use.c = "t")}
 \end_layout
 
 \begin_layout Description
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plot (x, "depth")}
+plot (x, "depth")
 \end_layout
 
 \end_inset
 
  plots a depth profile plot, equivalent to 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotc (laser, use.c = "z")}
+plotc (laser, use.c = "z")
 \end_layout
 
 \end_inset
@@ -3695,14 +3291,11 @@ reference "fig:example-plots"
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plot}
+plot
 \end_layout
 
 \end_inset
@@ -3839,14 +3432,19 @@ status open
 
 \begin_layout Plain Layout
 
+
 \backslash
-subref{fig-plot
--
-\lang english
-spc}
- 
-\backslash
-Rcode{plotspc (flu)}
+subref{fig-plot-spc}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plotspc (flu)
 \end_layout
 
 \end_inset
@@ -3857,20 +3455,19 @@ status open
 
 \begin_layout Plain Layout
 
+
 \backslash
-subref{fig-plot
--
-\lang english
-spcm
-ean
-\lang english
-s
-d
-\lang english
-}
- 
-\backslash
-Rcode{plot (chondro, "spcmeansd")}
+subref{fig-plot-spcmeansd}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plot (chondro, "spcmeansd")
 \end_layout
 
 \end_inset
@@ -3881,14 +3478,19 @@ status open
 
 \begin_layout Plain Layout
 
+
 \backslash
-subref{fig-plot
--
-\lang english
-c}
- 
-\backslash
-Rcode{plotc (flu)}
+subref{fig-plot-c}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plotc (flu)
 \end_layout
 
 \end_inset
@@ -3899,14 +3501,19 @@ status open
 
 \begin_layout Plain Layout
 
+
 \backslash
-subref{fig-plot-m
-ap
-\lang english
-}
- 
-\backslash
-Rcode{plotmap (chondro)}
+subref{fig-plot-map}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plotmap (chondro)
 \end_layout
 
 \end_inset
@@ -3930,14 +3537,11 @@ Plotting Spectra
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plotspc}
+plotspc
 \end_layout
 
 \end_inset
@@ -3951,35 +3555,34 @@ Rfunction{plotspc}
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plotspc}
+plotspc
 \end_layout
 
 \end_inset
 
  offers a variety of parameters for customized plots.
+ To plot ...
 \end_layout
 
 \begin_layout Description
+with
+\begin_inset space ~
+\end_inset
+
 reversed
 \begin_inset space ~
 \end_inset
 
 abscissa use 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{wl.reverse = TRUE}
+wl.reverse = TRUE
 \end_layout
 
 \end_inset
@@ -3988,15 +3591,20 @@ Rcode{wl.reverse = TRUE}
 \end_layout
 
 \begin_layout Description
-color 
-\begin_inset ERT
+in
+\begin_inset space ~
+\end_inset
+
+different
+\begin_inset space ~
+\end_inset
+
+colors colors use 
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{col = vector.of.colors}
+col = vector.of.colors
 \end_layout
 
 \end_inset
@@ -4017,15 +3625,12 @@ of
 \begin_inset space ~
 \end_inset
 
-lines 
-\begin_inset ERT
+lines use 
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{lines.dots = list (pch = 20, type = "p")}
+lines.dots = list (pch = 20, type = "p")
 \end_layout
 
 \end_inset
@@ -4038,15 +3643,12 @@ mass
 \begin_inset space ~
 \end_inset
 
-spectra 
-\begin_inset ERT
+spectra use 
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{lines.dots = list (type = "h")}
+lines.dots = list (type = "h")
 \end_layout
 
 \end_inset
@@ -4063,19 +3665,16 @@ wavelength
 \begin_inset space ~
 \end_inset
 
-ranges 
-\begin_inset ERT
+ranges use 
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{wl.range = list (600 
+wl.range = list (600 
 \backslash
 textasciitilde{} 1800, 2800 
 \backslash
-textasciitilde{} 3100)}
+textasciitilde{} 3100)
 \end_layout
 
 \end_inset
@@ -4085,56 +3684,35 @@ textasciitilde{} 3100)}
 \end_inset
 
 If 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{wl.range}
+wl.range
 \end_layout
 
 \end_inset
 
- already contains indices: 
-\begin_inset ERT
+ already contains indices: use 
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{wl.index = TRUE}
+wl.index = TRUE
 \end_layout
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Description
-cut
-\begin_inset space ~
+\begin_inset Newline newline
 \end_inset
 
-the
-\begin_inset space ~
-\end_inset
-
-wavelength
-\begin_inset space ~
-\end_inset
-
-axis 
-\begin_inset ERT
+Cut the wavelength axis appropriately with 
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{xoffset = 800}
+xoffset = 800
 \end_layout
 
 \end_inset
@@ -4147,15 +3725,12 @@ stacked
 \begin_inset space ~
 \end_inset
 
-spectra 
-\begin_inset ERT
+spectra use 
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{stacked = TRUE}
+stacked = TRUE
 \end_layout
 
 \end_inset
@@ -4164,23 +3739,32 @@ Rcode{stacked = TRUE}
 \end_layout
 
 \begin_layout Description
-adding
-\begin_inset space ~
-\end_inset
-
 more
 \begin_inset space ~
 \end_inset
 
-spectra 
-\begin_inset ERT
+spectra
+\begin_inset space ~
+\end_inset
+
+into
+\begin_inset space ~
+\end_inset
+
+an
+\begin_inset space ~
+\end_inset
+
+existing
+\begin_inset space ~
+\end_inset
+
+plot use
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{add = TRUE}
+add = TRUE
 \end_layout
 
 \end_inset
@@ -4197,7 +3781,7 @@ status open
 \begin_layout Scrap
 
 \backslash
-setkeys{Gin}{width = .245
+setkeys{Gin}{width = .33
 \backslash
 textwidth}
 \begin_inset Newline newline
@@ -4211,7 +3795,7 @@ label{fig-plotspc-ms}]{
 \begin_inset Newline newline
 \end_inset
 
-<<ms, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
+<<ms, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -4249,12 +3833,12 @@ label{fig-plotspc-paracetamol}]{
 \begin_inset Newline newline
 \end_inset
 
-<<plotspcadd, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
+<<plotspcadd, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
 plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850,
- wl.reverse = TRUE)
+ wl.reverse = TRUE, col = "blue")
 \begin_inset Newline newline
 \end_inset
 
@@ -4278,7 +3862,7 @@ label{fig-plotmap-factor}]{
 \begin_inset Newline newline
 \end_inset
 
-plotmap (chondro, z = cut(chondro[[,,1006]], 3))
+print (plotmap (chondro, z = cut(chondro[[,,1006]], 3)))
 \begin_inset Newline newline
 \end_inset
 
@@ -4294,14 +3878,11 @@ plotmap (chondro, z = cut(chondro[[,,1006]], 3))
 
 \begin_layout Plain Layout
 Arguments to 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plotspc}
+plotspc
 \end_layout
 
 \end_inset
@@ -4315,17 +3896,22 @@ status open
 
 
 \backslash
-subref{fig-plotspc-ms} 
-\backslash
-Rcode{plot (fake.mass.spec, lines.dots = list (type = "h"))}
+subref{fig-plotspc-ms}
 \end_layout
 
 \end_inset
 
+ 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plot (fake.mass.spec, lines.dots = list (type = "h"))
+\end_layout
+
+\end_inset
 
  
-\lang english
-
 \begin_inset ERT
 status open
 
@@ -4339,18 +3925,12 @@ subref{fig-plotspc-paracetamol}
 \end_inset
 
  
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{plotspc (
-\lang english
-paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, wl.reverse
- = TRUE
-)}
+plotspc (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850,
+ wl.reverse = TRUE)
 \end_layout
 
 \end_inset
@@ -4369,16 +3949,16 @@ subref{fig-plotmap-factor}
 \end_inset
 
  
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-plotmap (chondro, z = cut(chondro[[,,1006]], 3))
+plotmap (chondro, z = cut(chondro[[, , 1006]], 3)) 
 \end_layout
 
 \end_inset
 
- 
+
 \end_layout
 
 \end_inset
@@ -4392,19 +3972,16 @@ plotmap (chondro, z = cut(chondro[[,,1006]], 3))
 \end_layout
 
 \begin_layout Subsection
-Plotting False-Color Maps
+Calibration Plots, (Depth) Profiles, and Time Series Plots
 \begin_inset Marginal
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plotmap}
+plotc
 \end_layout
 
 \end_inset
@@ -4418,40 +3995,192 @@ Rfunction{plotmap}
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
+plotc
+\end_layout
+
+\end_inset
+
+ plots an intensity over one of the extra data columns.
+ The abscissa uses column 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+$c
+\end_layout
+
+\end_inset
+
+ by default, another colum can be specifiedusing 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+use.c
+\end_layout
+
+\end_inset
 
 
-\backslash
-Rcode{plotmap}
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+= 
+\emph on
+name
+\end_layout
+
+\end_inset
+
+.
+ The ordinate can be calculated as a sum characteristic (with parameter
+ 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+func
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+= 
+\family roman
+\emph on
+function
+\end_layout
+
+\end_inset
+
+, defaulting to 
+\begin_inset Flex Rmethod
+status open
+
+\begin_layout Plain Layout
+sum
+\end_layout
+
+\end_inset
+
+).
+ If parameter 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+z
+\end_layout
+
+\end_inset
+
+is given, these values are used instead.
+ 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+z
+\end_layout
+
+\end_inset
+
+may be the name of an extra data column, or a 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+numeric
+\end_layout
+
+\end_inset
+
+ that should be used directly.
+\end_layout
+
+\begin_layout Standard
+To customize the plot, give any arguments that you would usually supply
+ to 
+\begin_inset Flex Rmethod
+status open
+
+\begin_layout Plain Layout
+plot
+\end_layout
+
+\end_inset
+
+ as a list using argument 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+plot.args
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Plotting False-Color Maps
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+plotmap
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plotmap
 \end_layout
 
 \end_inset
 
  uses 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{levelplot}
+levelplot
 \end_layout
 
 \end_inset
 
 , a 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{lattice}
+lattice
 \end_layout
 
 \end_inset
@@ -4459,14 +4188,11 @@ Rpackage{lattice}
  function.
  Therefore, in loops, functions, Sweave chunks, etc.
  the lattice object needs to be printed explicitly by 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{print (plotmap (object))}
+print (plotmap (object))
 \end_layout
 
 \end_inset
@@ -4482,34 +4208,193 @@ target "http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-
 ).
 \end_layout
 
-\begin_layout Subsection
-Calibration Plots, (Depth) Profiles, and Time Series Plots
-\begin_inset Marginal
+\begin_layout Standard
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
-status collapsed
+plotmap
+\end_layout
+
+\end_inset
+
+ produces a 3d plot, with the 
+\begin_inset Formula $z$
+\end_inset
+
+ axis color-coded.
+ 
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
+plotmap
+\end_layout
 
+\end_inset
 
-\backslash
-Rfunction{plotc}
+'s arguments 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+y
+\end_layout
+
+\end_inset
+
+ take the name of extra data columns.
+\end_layout
+
+\begin_layout Paragraph
+The color-coded axis.
+ 
+\end_layout
+
+\begin_layout Standard
+Also 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+z
+\end_layout
+
+\end_inset
+
+can be used to select one column of the extra data by name.
+ Alternatively, it may be a numeric or factor directy giving the values
+ to be used.
+ Each level of a factor will have one color.
+ It is also possible to plot a sum caracteristic of the spectra: supply
+ the function in argument 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+func
+\end_layout
+
+\end_inset
+
+.
+ The default setting is to plot the average intensity (no 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+z
+\end_layout
+
+\end_inset
+
+and 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+func
 \end_layout
 
 \end_inset
 
 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+= mean
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+To plot with a different palette, use 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+trellis.args
 \end_layout
 
 \end_inset
 
 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+= list (col.regions = 
+\emph on
+palette
+\emph default
+)
 \end_layout
 
-\begin_layout Section
-Accessing the Extra Data 
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+Conditioning.
+\end_layout
+
+\begin_layout Standard
+Lattice graphics have a concept of conditioning a plot.
+ Instead of plotting all data in one diagram, a diagram is produced for
+ each of the groups specified by the condition.
+ 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+plotmap
+\end_layout
+
+\end_inset
+
+'s argument 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+cond
+\end_layout
+
+\end_inset
+
+ takes he name of the extra data column used for conditioning.
+ This could e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ be a column containing the sample number of a 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ object that contains several samples.
+ 
 \end_layout
 
 \begin_layout Section
@@ -4522,16 +4407,21 @@ Cutting the Spectral Range
 status open
 
 \begin_layout Plain Layout
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
+[]
+\end_layout
 
+\end_inset
 
-\backslash
-Rfunction{[]}, 
-\backslash
-Rfunction{[[]]}
+, 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[]]
 \end_layout
 
 \end_inset
@@ -4546,25 +4436,21 @@ Rfunction{[[]]}
 
 \begin_layout Standard
 The extraction functions 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[]}
+[]
 \end_layout
 
 \end_inset
 
  and 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[[]]}
+[[]]
 \end_layout
 
 \end_inset
@@ -4572,42 +4458,31 @@ Rfunction{[[]]}
  can be used to cut the spectra: Their third argument takes wavelength specifica
 tions as discussed above and also logicals (i.e.
  vectors specifying with 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{TRUE}
+TRUE
 \end_layout
 
 \end_inset
 
 /
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rcode
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{FALSE}
+FALSE
 \end_layout
 
 \end_inset
 
  for each column of 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{
-\backslash
-$spc}
+$spc
 \end_layout
 
 \end_inset
@@ -4617,43 +4492,76 @@ $spc}
 \end_inset
 
 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[]}
+[]
 \end_layout
 
 \end_inset
 
  returns a 
-\begin_inset ERT
+\begin_inset Flex Rclass
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
 
  object, 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-Rfunction{[[]]}
+[[]]
 \end_layout
 
 \end_inset
 
- the spectra matrix only.
+ the spectra 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+$spc
+\end_layout
+
+\end_inset
+
+ (or the 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+data.frame
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+@data
+\end_layout
+
+\end_inset
+
+ if data columns were specified, too) only.
 \end_layout
 
 \begin_layout Scrap
@@ -4674,18 +4582,398 @@ flu [[,, c (min ~ min + 2i, max - 2i ~ max)]]
 
 \begin_layout Subsection
 Spectral Interpolation and Smoothing
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.bin
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.loess
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Frequently, a 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ object needs to be interpolated onto a new wavelength axis.
+ e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ because measurements resulted in slightly shifted wavelength axes.
+ Or data from a grating spectrometer with inequal data point spacing should
+ be interpolated onto an evenly spaced wavelength axis.
+ Also, the spectra can be smoothed: reducing the spectral resolution allows
+ to increase the signal to noise ratio.
+ For chemometric data analysis reducing the number of data points per spectrum
+ may be crucial as it reduces the dimensionality of the data.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rpackage
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ provides two functions to change the wavelength axis of 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ objects: 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.bin
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.loess
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.bin
+\end_layout
+
+\end_inset
+
+ bins the spectral axis by averaging every 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+by
+\end_layout
+
+\end_inset
+
+ data points.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Scrap
+<<fig-loess, fig = TRUE, width = 10, height = 5, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850)
+\begin_inset Newline newline
+\end_inset
+
+p <- spc.loess (paracetamol, c(seq (300, 1800, 2), seq (2850, 3150, 2)))
+\begin_inset Newline newline
+\end_inset
+
+plot (p, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, col = "red",
+ add = TRUE)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig-spcloess"
+
+\end_inset
+
+Smoothing interpolation by 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.loess
+\end_layout
+
+\end_inset
+
+ with new data point spacing of 2 cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{-1}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.loess
+\end_layout
+
+\end_inset
+
+ applies R's 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+loess
+\end_layout
+
+\end_inset
+
+ function for spectral interpolation.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig-spcloess"
+
+\end_inset
+
+ shows the result of interpolating from 300 to 1800 and 2850 to 3150 cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{-1}
+\end_layout
+
+\end_inset
+
+ with 2 cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{-1}
+\end_layout
+
+\end_inset
+
+ data point distance.
+ This correspends to a spectral resolution of about 4 cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{-1}
+\end_layout
+
+\end_inset
+
+, and the decrease in spectral resolution can be seen at tha sharp bands
+ where the maxima are not reached (due to the eact that the interpolation
+ wavelength axis does not necessarily hit the maxima.
+ The original spectrum had 
+\begin_inset Flex Sexpr
+status open
+
+\begin_layout Plain Layout
+nwl (paracetamol)
+\end_layout
+
+\end_inset
+
+ data points with unequal data point spacing (between 
+\begin_inset Flex Sexpr
+status open
+
+\begin_layout Plain Layout
+signif (min (diff (wl (paracetamol))), 2)
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex Sexpr
+status open
+
+\begin_layout Plain Layout
+signif (max (diff (wl (paracetamol))), 2)
+\end_layout
+
+\end_inset
+
+ cm
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{-1}
+\end_layout
+
+\end_inset
+
+).
+ The interpolated spectrum has 
+\begin_inset Flex Sexpr
+status open
+
+\begin_layout Plain Layout
+nwl (p)
+\end_layout
+
+\end_inset
+
+ data points.
+ 
 \end_layout
 
 \begin_layout Subsection
 Background Correction
 \end_layout
 
+\begin_layout Standard
+To substract a background spectrum of each of the spectra in an object,
+ use 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+sweep (
+\emph on
+spectra
+\emph default
+, 2, 
+\emph on
+background.spectrum
+\emph default
+, "-")
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection
 Offset Correction
 \end_layout
 
+\begin_layout Standard
+Calculate the offsets and sweep them off the spectra:
+\end_layout
+
+\begin_layout Scrap
+<<ofs>>=
+\begin_inset Newline newline
+\end_inset
+
+offsets <- apply (chondro, 1, min)
+\begin_inset Newline newline
+\end_inset
+
+chondro.offset.corrected <- sweep (chondro, 1, offsets, "-")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
 \begin_layout Subsection
 Baseline Correction
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rpackage
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ comes with two functions to fit polynomial baselines.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -4710,14 +4998,11 @@ Data Analysis Methods using a data.frame
 \end_inset
 
 Principal Component Analysis with 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rfunction
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{prcomp}
+prcomp
 \end_layout
 
 \end_inset
@@ -4731,14 +5016,11 @@ Data Analysis Methods using a matrix
 \end_inset
 
 Partial Least Squares with 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{plsr}
+plsr
 \end_layout
 
 \end_inset
@@ -4748,14 +5030,11 @@ Rfunction{plsr}
 
 \begin_layout Subsection
 Putting the Results of the Data Analysis into a 
-\begin_inset ERT
+\begin_inset Flex Rclass
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rclass{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset

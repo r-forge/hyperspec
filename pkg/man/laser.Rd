@@ -19,6 +19,6 @@ laser
 
 plot (laser)
 
-plot (laser[,,405], "ts", plot.dots = list (type = "b"))
+plot (laser[,,405], "ts", plot.args = list (type = "b"))
 }
 \keyword{datasets}

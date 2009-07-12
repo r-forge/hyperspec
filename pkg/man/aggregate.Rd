@@ -72,11 +72,11 @@ plot (spc, "spc", col = color[by])
 
 ## Example 1: plot the mean of the groups 
 plot (aggregate (spc, by, mean), "spc", col = color, add = TRUE,
-      lines.dots = list(lwd = 3, lty = 2))
+      lines.args = list(lwd = 3, lty = 2))
 
 ## Example 2: FUN may return more than one value (here: 3)
 plot (aggregate (spc, by, mean_pm_sd), "spc",
-      col = rep(color, each = 3), lines.dots = list(lwd = 3, lty = 2)) 
+      col = rep(color, each = 3), lines.args = list(lwd = 3, lty = 2)) 
 
 ## Example 3: aggregate even takes FUN that return different numbers of
 ##            values for different groups 
@@ -94,7 +94,7 @@ weird.function <- function (x){
 agg <- aggregate (spc, by, weird.function)
 agg$.aggregate 
 plot (agg, "spc",  add = TRUE, col = color[agg$.aggregate],
-      lines.dots = list (lwd = 3, lty = 2))
+      lines.args = list (lwd = 3, lty = 2))
 }
 
 \author{C. Beleites}

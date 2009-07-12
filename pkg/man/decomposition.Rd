@@ -94,9 +94,9 @@ decomposition(object, x, wavelength = seq_len (ncol (x)),
 
   plotspc (loadings, stacked = TRUE, col = matlab.palette(6))
 
-  plotc (scores[,,1], plot.dots = list(ylim = range(scores[[]])))
+  plotc (scores[,,1], plot.args = list(ylim = range(scores[[]])))
   for (i in 2 : nwl (scores))
-     plotc (scores[,,i], add = TRUE, plot.dots = list (col = matlab.palette(6)[i]))
+     plotc (scores[,,i], add = TRUE, plot.args = list (col = matlab.palette(6)[i]))
   pca$sdev
 
   ## everything besides the first component is just noise

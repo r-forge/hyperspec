@@ -1,4 +1,3 @@
-%% TODO
 \name{import}
 \alias{read.txt.long}
 \alias{read.txt.wide}
