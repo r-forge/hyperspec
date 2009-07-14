@@ -300,9 +300,9 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
 setMethod ("$", "hyperSpec", function (x, name){
 			validObject (x)
 			if (name == ".") ## shortcut
-				x@data
+				x@data [, , drop = FALSE]
 			else if (name == "..") 
-				x@data[, -match ("spc", colnames (x@data))] 
+				x@data[, -match ("spc", colnames (x@data)), drop = FALSE] 
 			else
 				x@data[[name]]
 		})
@@ -793,7 +793,7 @@ setReplaceMethod ("$", "hyperSpec", function (x, name, value){
 				
 				value <- value [[3 - ilabel]] ## the other of the 2 entries
 			} else 
-				label <- NULL
+				label <- name
 			
 			if (name == "..") { ## shortcut
 				i <- -match ("spc", colnames (x@data))
@@ -808,8 +808,8 @@ setReplaceMethod ("$", "hyperSpec", function (x, name, value){
 				dots <- list (x = x@data, name = name, value = value)
 				x@data <- do.call("$<-", dots) ## $<-.data.frame wants "i" instead of "name" -- not any longer  
 				
-				if (!is.null (label))
-					x@label[[name]] <- label
+				#if (!is.null (label))
+				x@label[[name]] <- label
 			}
 			
 			x@log <- logentry (x,
@@ -840,7 +840,11 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 
 .arithx <- function (e1, e2){
 	validObject (e1)
-	e1  [[]] <- callGeneric (e1 [[]], e2)
+	if (missing (e2))
+		e1  [[]] <- callGeneric (e1 [[]])
+	else
+		e1  [[]] <- callGeneric (e1 [[]], e2)
+	
 	e1@log <- logentry (e1, short = .Generic, 
 			long = list (if (exists ("e2")) e2 = .paste.row (e2, val = TRUE))) 
 	e1
@@ -1890,7 +1894,8 @@ plotspc <- function  (object,
 		border = NA, 
 		title.args = list (),
 		polygon.args = list (),
-		lines.args = list ()
+		lines.args = list (),
+		zeroline = NULL
 ){
 	validObject (object)
 	
@@ -2138,7 +2143,7 @@ plotspc <- function  (object,
 			if (nrow (spc) %% 2) {
 				ifill <- ifill [- (floor (nrow (spc) / 2) + 1)]
 			}
-			ifill[- (1 : length(ifill)/2)] <- rev (ifill[- (1 : length(ifill)/2)]) 
+			ifill [- (1 : length (ifill) / 2)] <- rev (ifill[- (1 : length (ifill) / 2)]) 
 			
 			ifill <- matrix (ifill, ncol = 2, byrow = FALSE)
 			
@@ -2172,6 +2177,18 @@ plotspc <- function  (object,
 			
 			do.call (lines, lines.args) 
 		}
+	}
+	
+	if (! is.null (zeroline) && zeroline){
+		if (isTRUE (zeroline))
+			zeroline = list()
+
+		if (stacked)
+			zeroline <- c (list (h = yoffset), zeroline)
+		else 
+			zeroline <- c (h = 0, zeroline)
+		
+		do.call (abline, zeroline)
 	}
 	
 	invisible (list (x = rep (unlist (x), each = nrow (spc)) ,
@@ -2421,7 +2438,6 @@ read.txt.wide <- function (file = stop ("filename is required"),
 #' @export
 scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", 
 		nlines = 0, nspc = NULL, ...){
-	#TODO: bugfix for paracetamol data.
 	cols <- switch (data,
 			spc = NULL,   
 			xyspc = list (y = expression ("/" (y, mu * m)), 
@@ -2445,6 +2461,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 	
 	fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
 	
+	#TODO: bugfix for paracetamol data.
 	wl <- unique (fbuf[, ncol - 1])
 	
 	## if the file is to be read in chunks
