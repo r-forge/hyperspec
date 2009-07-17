@@ -1895,7 +1895,7 @@ plotspc <- function  (object,
 		title.args = list (),
 		polygon.args = list (),
 		lines.args = list (),
-		zeroline = NULL
+		zeroline = list (lty = 2)
 ){
 	validObject (object)
 	
@@ -1914,8 +1914,9 @@ plotspc <- function  (object,
 		if (!is.list (wl.range))
 			wl.range <- list (wl.range)
 		
-		if (!is.numeric (unlist (wl.range)))
-			stop ("wavelength.range needs to be numeric")
+		for (i in seq (along = wl.range))
+			if (!is.numeric (wl.range[[i]]) && !is (wl.range [[i]], "formula"))
+				stop ("wavelength ranges need to be numeric or formulas.")
 		
 		for (i in seq (along = wl.range))
 			wl.range[[i]] <- unique (wl.range[[i]][!is.na (wl.range[[i]])])
@@ -2179,10 +2180,7 @@ plotspc <- function  (object,
 		}
 	}
 	
-	if (! is.null (zeroline) && zeroline){
-		if (isTRUE (zeroline))
-			zeroline = list()
-
+	if (! is.null (zeroline)){
 		if (stacked)
 			zeroline <- c (list (h = yoffset), zeroline)
 		else 

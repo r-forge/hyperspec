@@ -12,13 +12,14 @@
 \fvset{listparameters={\setlength{\topsep}{0pt}}} 
 \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
 } 
-\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE}
+\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
 }
 
 % my preferred packages
 \usepackage{xspace}
 \usepackage{tikz}
 \usepackage{subfig}
+\usepackage{booktabs}
 
 \newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 \newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
@@ -62,7 +63,7 @@ logicalmkup
 \use_geometry false
 \use_amsmath 1
 \use_esint 0
-\cite_engine basic
+\cite_engine natbib_numerical
 \use_bibtopic false
 \paperorientation portrait
 \secnumdepth 3
@@ -538,15 +539,27 @@ begin{small}
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="20" columns="2">
-<features islongtable="true" headTopDL="true" footBottomDL="true">
+<lyxtabular version="3" rows="22" columns="2">
+<features footBottomDL="true">
 <column alignment="left" valignment="top" width="25text%">
 <column alignment="left" valignment="top" width="60text%">
 <row interlinespace="1em" endhead="true">
-<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+toprule
+\end_layout
+
+\end_inset
+
 
 \series bold
 Function
@@ -554,13 +567,47 @@ Function
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
 \series bold
 Explanation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+cmidrule(lr){1-1}
+\backslash
+cmidrule(lr){2-2}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -858,7 +905,19 @@ labels
 
 , 
 \emph on
+
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+
+\emph on
 labels<-
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1376,7 +1435,7 @@ create an object
 </cell>
 </row>
 <row interlinespace="1em">
-<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1394,11 +1453,43 @@ validObject
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 validity checking
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="1em">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+bottomrule
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -2850,6 +2941,386 @@ flu$c
 @
 \end_layout
 
+\begin_layout Standard
+The extra data may also be set this way:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Scrap
+<<data3>>=
+\begin_inset Newline newline
+\end_inset
+
+flu$n <- list (1 : 6, label = "sample no.")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+This function will append new columns, if necessary.
+ 
+\end_layout
+
+\begin_layout Section
+Accessing Parts of the 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ Object
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[]] $.
+ $..
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ comes with three abbrevation functions for easy access to the data:
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[]]
+\end_layout
+
+\end_inset
+
+ returns the spectra matrix (
+\begin_inset Flex Rcode
+status collapsed
+
+\begin_layout Plain Layout
+$spc
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+
+, , 
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+
+]]
+\end_layout
+
+\end_inset
+
+ the cut spectr amatrix is returned if wavelengths are specified is 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+j
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+
+]]
+\end_layout
+
+\end_inset
+
+ If data columns are selected (second index), the result is a 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+data.frame
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[[
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+
+, , 
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+
+]]<-
+\end_layout
+
+\end_inset
+
+ Also, parts of the spectra matrix can be set (only indices for spectra
+ and wavelength are allowed for this function).
+ 
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+[
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex Rfunarg
+status collapsed
+
+\begin_layout Plain Layout
+j
+\end_layout
+
+\end_inset
+
+]<-
+\end_layout
+
+\end_inset
+
+ sets parts of 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+@data
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
+$.
+\end_layout
+
+\end_inset
+
+ returns the complete 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+data.frame
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+@data
+\end_layout
+
+\end_inset
+
+, with the spectra in column 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+$spc
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
+$..
+\end_layout
+
+\end_inset
+
+ returns the extra data (
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+@data
+\end_layout
+
+\end_inset
+
+ without 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+$spc
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
+$..<-
+\end_layout
+
+\end_inset
+
+ sets the extra data (
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+@data
+\end_layout
+
+\end_inset
+
+ without 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+$spc
+\end_layout
+
+\end_inset
+
+).
+ However, the columns must be exactly tha same in this case.
+ 
+\end_layout
+
 \begin_layout Section
 Selecting and Deleting Spectra
 \end_layout
@@ -3630,7 +4101,7 @@ lines use
 status open
 
 \begin_layout Plain Layout
-lines.dots = list (pch = 20, type = "p")
+lines.args = list (pch = 20, type = "p")
 \end_layout
 
 \end_inset
@@ -3648,7 +4119,7 @@ spectra use
 status open
 
 \begin_layout Plain Layout
-lines.dots = list (type = "h")
+lines.args = list (type = "h")
 \end_layout
 
 \end_inset
@@ -3657,7 +4128,7 @@ lines.dots = list (type = "h")
 \end_layout
 
 \begin_layout Description
-several
+particular
 \begin_inset space ~
 \end_inset
 
@@ -3670,11 +4141,7 @@ ranges use
 status open
 
 \begin_layout Plain Layout
-wl.range = list (600 
-\backslash
-textasciitilde{} 1800, 2800 
-\backslash
-textasciitilde{} 3100)
+wl.range = list (600 ~ 1800, 2800 ~ 3100)
 \end_layout
 
 \end_inset
@@ -3772,6 +4239,57 @@ add = TRUE
 
 \end_layout
 
+\begin_layout Description
+with
+\begin_inset space ~
+\end_inset
+
+different
+\begin_inset space ~
+\end_inset
+
+line
+\begin_inset space ~
+\end_inset
+
+at
+\begin_inset space ~
+\end_inset
+
+I
+\begin_inset space ~
+\end_inset
+
+=
+\begin_inset space ~
+\end_inset
+
+0 use 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+zeroline = 
+\emph on
+list.of.arguments.to.abline
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+NULL
+\end_layout
+
+\end_inset
+
+suppresses the line.
+\end_layout
+
 \begin_layout Standard
 \begin_inset Float figure
 wide false
@@ -3813,7 +4331,7 @@ fake.mass.spec <- new ("hyperSpec", spc = matrix (100*runif (25), nrow = 1),
 \begin_inset Newline newline
 \end_inset
 
-plot (fake.mass.spec, lines.dots = list (type = "h"))
+plot (fake.mass.spec, lines.args = list (type = "h"))
 \begin_inset Newline newline
 \end_inset
 
@@ -3855,19 +4373,10 @@ plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850,
 subfloat[
 \backslash
 label{fig-plotmap-factor}]{
-\begin_inset Newline newline
-\end_inset
+\begin_inset Graphics
+	filename introduction-clustmap.pdf
+	width 33text%
 
-<<plotmapf, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-\begin_inset Newline newline
-\end_inset
-
-print (plotmap (chondro, z = cut(chondro[[,,1006]], 3)))
-\begin_inset Newline newline
-\end_inset
-
-@
-\begin_inset Newline newline
 \end_inset
 
 }
@@ -3906,7 +4415,7 @@ subref{fig-plotspc-ms}
 status open
 
 \begin_layout Plain Layout
-plot (fake.mass.spec, lines.dots = list (type = "h"))
+plot (fake.mass.spec, lines.args = list (type = "h"))
 \end_layout
 
 \end_inset
@@ -4030,9 +4539,7 @@ use.c
 status open
 
 \begin_layout Plain Layout
-= 
-\emph on
-name
+= name
 \end_layout
 
 \end_inset
@@ -4054,10 +4561,7 @@ func
 status open
 
 \begin_layout Plain Layout
-= 
-\family roman
-\emph on
-function
+= function
 \end_layout
 
 \end_inset
@@ -4337,11 +4841,7 @@ trellis.args
 status open
 
 \begin_layout Plain Layout
-= list (col.regions = 
-\emph on
-palette
-\emph default
-)
+= list (col.regions = palette)
 \end_layout
 
 \end_inset
@@ -4705,14 +5205,8 @@ by
  data points.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
 \begin_layout Scrap
-<<fig-loess, fig = TRUE, width = 10, height = 5, echo = FALSE>>=
+<<fig-loess, fig = TRUE, width = 10, height = 5, include = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -4730,12 +5224,49 @@ plot (p, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, col = "red",
 \end_inset
 
 @
+\begin_inset Newline newline
+\end_inset
+
+<<fig-loess-kl, fig = TRUE, width = 5, height = 5, include = FALSE, echo
+ = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (paracetamol [, , 1600 ~ 1670])
+\begin_inset Newline newline
+\end_inset
+
+plot (p [, , 1600 ~ 1670], col = "red", add = TRUE)
+\begin_inset Newline newline
+\end_inset
+
+@
 \end_layout
 
-\begin_layout Plain Layout
-\begin_inset Caption
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename introduction-fig-loess.pdf
+	width 66text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename introduction-fig-loess-kl.pdf
+	width 33text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Captionbelow
 \begin_inset CommandInset label
 LatexCommand label
 name "fig-spcloess"
@@ -4766,11 +5297,8 @@ textsuperscript{-1}
 \end_inset
 
 .
-\end_layout
-
-\end_inset
-
-
+ The magnification on the right shows how interpolation may cause a loss
+ in signal.
 \end_layout
 
 \end_inset
@@ -4918,15 +5446,7 @@ To substract a background spectrum of each of the spectra in an object,
 status open
 
 \begin_layout Plain Layout
-sweep (
-\emph on
-spectra
-\emph default
-, 2, 
-\emph on
-background.spectrum
-\emph default
-, "-")
+sweep (spectra, 2, background.spectrum, "-")
 \end_layout
 
 \end_inset
@@ -4976,16 +5496,701 @@ hyperSpec
  
 \end_layout
 
+\begin_layout Standard
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
+spc.fit.poly
+\end_layout
+
+\end_inset
+
+ fits a polynomual baseline of the given order.
+ A least-squares fit is done so that the function may be used on rather
+ noisy spectra.
+ However, the user must supply an object that is cut appropriately.
+ Particularly, the supplied wavelength ranges are not weighted.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
+spc.fit.poly.below
+\end_layout
+
+\end_inset
+
+ tries to find appropriate support points for the baseline iteratively.
+ 
+\end_layout
+
+\begin_layout Standard
+Both functions return a 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ object containing the fitted baselines.
+ They need to be substracted afterwards:
+\end_layout
+
+\begin_layout Scrap
+<<bl>>=
+\begin_inset Newline newline
+\end_inset
+
+bl <- spc.fit.poly.below (chondro)
+\begin_inset Newline newline
+\end_inset
+
+chondro <- chondro - bl
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+For details, see 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+vignette (baselinebelow)
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection
 Intensity Calibration
+\end_layout
+
+\begin_layout Subsubsection
+Correcting by a constant, e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ Readout Bias
+\end_layout
+
+\begin_layout Standard
+CCD cameras often operate with a bias, causing a constant value for each
+ pixel.
+ Such a constant can be immediately substracted:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+spectra - constant
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Correcting Wavelength Dependence
+\end_layout
+
+\begin_layout Standard
+This means that for each of the wavelenths the same correction needs to
+ be applied to all spectra.
+\end_layout
+
+\begin_layout Enumerate
+There might be wavelength dependent offsets (background or dark spectra).
+ They are substracted:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+sweep (spectra, 2, offset.spectrum, "-")
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+A multiplicative dependency such as a CCD's photon efficiency: 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+sweep (spectra, 2, photon.efficiency, "/")
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Spectra Dependent Correction
+\end_layout
+
+\begin_layout Standard
+If the correction depends on the spectra (e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ due to inhomogeneous illumination while collecting imaging data
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+imaging (as opposed to mapping) refers to simultaneously collecting spatially
+ resolved spectra, either 2d images or line imaging.
+\end_layout
+
+\end_inset
+
+), the 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+MARGIN
+\end_layout
+
+\end_inset
+
+of the 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+sweep
+\end_layout
+
+\end_inset
+
+ function needs to be 1:
+\end_layout
+
+\begin_layout Enumerate
+Pixel dependent offsets are substracted:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+sweep (spectra, 2, pixel.offsets, "-")
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+A multiplicative dependency: 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+sweep (spectra, 2, illumination.factors, "*")
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
 Normalization
 \end_layout
 
+\begin_layout Enumerate
+Calculate appropriate normalization factors:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status collapsed
+
+\begin_layout Plain Layout
+factors <- 1 / apply (spectra, 1, sum)
+\end_layout
+
+\end_inset
+
+ for area normalization.
+ 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+mean
+\end_layout
+
+\end_inset
+
+ gives fqual results, just that tha Intensities are on the same scale as
+ before.
+\begin_inset Newline newline
+\end_inset
+
+For minimum-maximum-normalization, first do an offset- or baseline correction,
+ then calculate the 
+\emph on
+
+\begin_inset Flex Rcode
+status collapsed
+
+\begin_layout Plain Layout
+factors
+\end_layout
+
+\end_inset
+
+
+\emph default
+ using 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+max
+\end_layout
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+You may calculate the factors using only a certain wavelength range, thereby
+ normalizing on a particalar band or peak.
+\end_layout
+
+\begin_layout Enumerate
+Again, sweep the factor off the spectra:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status collapsed
+
+\begin_layout Plain Layout
+normalized <- sweep (spectra, 1, factors, "*")
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Scrap
+<<norm>>=
+\begin_inset Newline newline
+\end_inset
+
+factors <- 1 / apply (chondro, 1, mean)
+\begin_inset Newline newline
+\end_inset
+
+chondro <- sweep (chondro, 1, factors, "*")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Subsection
+Centering the Data
+\end_layout
+
+\begin_layout Standard
+Centering means that the mean spectrum is substracted from each of the spectra.
+ Many data analysis techniques, like principal component analysis, partial
+ least squares, etc., work much better on centered data.
+ 
+\end_layout
+
+\begin_layout Standard
+However, from a spectroscopic point of view it depends on the particular
+ data set whether centering does make sense or not.
+ 
+\end_layout
+
+\begin_layout Standard
+It is perfectly fine to center the 
+\begin_inset Flex Robject
+status open
+
+\begin_layout Plain Layout
+flu
+\end_layout
+
+\end_inset
+
+ data set: the inderpretation is that centering he data cancels the offset
+ (background spectrum etc.) of the calibration:
+\end_layout
+
+\begin_layout Scrap
+<<center-flu>>=
+\begin_inset Newline newline
+\end_inset
+
+flu.centered <- sweep (flu, 2, apply (flu, 2, mean), "-")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Scrap
+<<fig-center-flu, fig = TRUE, width = 10, height = 5, include = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (flu.centered)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+On the other hand, the 
+\begin_inset Flex Robject
+status open
+
+\begin_layout Plain Layout
+chondro
+\end_layout
+
+\end_inset
+
+ data set consists of Raman spectra, so the spectroscopic interpretiation
+ of centering is getting rid of the the average chemical composition of
+ the sample.
+ But: what is the meaning of the 
+\begin_inset Quotes eld
+\end_inset
+
+average spectrum
+\begin_inset Quotes erd
+\end_inset
+
+ of an inhomogeneous sample? In this case it is better rather want to substract
+ the minimum spectrum (which will hopefully have almost the same benefit
+ on the data analysis) as it is the spectrum of that chemical composition
+ that is underlying the whole sample.
+\end_layout
+
+\begin_layout Standard
+One more point to consider is that the actual minimum spectrum will pick
+ up lots of the negative noise.
+ In order to avoid that, using e.
+\begin_inset space ~
+\end_inset
+
+g.
+ the 5
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{th}
+\end_layout
+
+\end_inset
+
+ percentile spectrum is more suitable:
+\end_layout
+
+\begin_layout Scrap
+<<perc>>=
+\begin_inset Newline newline
+\end_inset
+
+chondro <- sweep (chondro, 2, apply (chondro, 2, quantile, 0.05), "-")
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+<<fig-center-ch, fig = TRUE, width = 10, height = 5, include = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (chondro, "spcprctl5")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Subsection
+Variance Scaling
+\end_layout
+
+\begin_layout Standard
+Variance scaling is often used in multivariate analysis to adjust the influence
+ and scalung of the variates (that are typically different physical values).
+ However, it is hardly appropriate for spetra that do have the same scale
+ of the same physical value.
+\end_layout
+
+\begin_layout Subsection
+Multiplicative Scatter Correction (MSC)
+\end_layout
+
+\begin_layout Standard
+MSC can be done using 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+msc
+\end_layout
+
+\end_inset
+
+from package 
+\begin_inset Flex Rpackage
+status open
+
+\begin_layout Plain Layout
+pls
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mevik2007"
+
+\end_inset
+
+.
+ It operates on the spectra matrix:
+\end_layout
+
+\begin_layout Scrap
+<<msc, eval = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+library (pls)
+\begin_inset Newline newline
+\end_inset
+
+chondro.msc <- chondro
+\begin_inset Newline newline
+\end_inset
+
+chondro.msc [[]] <- msc (chondro [[]])
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
 \begin_layout Subsection
 Spectral Arithmetic
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
++ - * / ^ log log10
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Basic mathematical functions are defined for 
+\begin_inset Flex Rclass
+status open
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ objects.
+ You may convert spectra:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+absorbance.spectra = - log10 (transmission.spectra)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this case, do not forget to adapt the label:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+labels (absorbance.spectra)$spc <- "A"
+\end_layout
+
+\end_inset
+
+
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
+labels
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Be careful: R's 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+log
+\end_layout
+
+\end_inset
+
+function calculates the natural logarithm if no base is given.
+\begin_inset Newline newline
+\end_inset
+
+The basic arithmetic operators work element-wise in R.
+ Thus they all need either a scalar, or a matrix (or 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ object) of the correct size.
+\begin_inset Newline newline
+\end_inset
+
+Matrix multiplication is done by 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+%*%
+\end_layout
+
+\end_inset
+
+
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+%*%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, again each of the operands may be a matrix or a 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ object, and must have the correct dimensions.
 \end_layout
 
 \begin_layout Section
@@ -4997,7 +6202,12 @@ Data Analysis Methods using a data.frame
 \begin_inset Newline newline
 \end_inset
 
-Principal Component Analysis with 
+e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ Principal Component Analysis with 
 \begin_inset Flex Rfunction
 status open
 
@@ -5010,28 +6220,47 @@ prcomp
 
 \end_layout
 
-\begin_layout Subsection
-Data Analysis Methods using a matrix
-\begin_inset Newline newline
+\begin_layout Standard
+The 
+\begin_inset Flex Rcode
+status collapsed
+
+\begin_layout Plain Layout
+$.
+\end_layout
+
 \end_inset
 
-Partial Least Squares with 
-\begin_inset Flex Rfunction
+ notation is handy, if a data analysis function expects a 
+\begin_inset Flex Rclass
 status open
 
 \begin_layout Plain Layout
-plsr
+data.frame
 \end_layout
 
 \end_inset
 
-
+.
+ The column names can then be used in the formula:
 \end_layout
 
-\begin_layout Subsection
-Putting the Results of the Data Analysis into a 
+\begin_layout Scrap
+<<pca>>=
+\begin_inset Newline newline
+\end_inset
+
+pca <- prcomp (~ spc, data = chondro$., center = FALSE)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+Results of such a decomposition can be put again into 
 \begin_inset Flex Rclass
-status open
+status collapsed
 
 \begin_layout Plain Layout
 hyperSpec
@@ -5039,7 +6268,416 @@ hyperSpec
 
 \end_inset
 
- Object again
+ objects.
+ This allows to plot e.g.
+ the loading like spectra, or score maps, see figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pca"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Scrap
+<<decomp>>=
+\begin_inset Newline newline
+\end_inset
+
+scores <- decomposition (chondro, pca$x, label.wavelength = "PC", label.spc
+ = "score / a.u.")
+\begin_inset Newline newline
+\end_inset
+
+loadings <- decomposition (chondro, t(pca$rotation), scores = FALSE, label.spc
+ = "loading I / a.u.")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Scrap
+
+\backslash
+setkeys{Gin}{width = .495
+\backslash
+textwidth}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-pca-load}]{
+\begin_inset Newline newline
+\end_inset
+
+<<pca-load, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (loadings [1:3], stacked = TRUE)
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+subfloat[
+\backslash
+label{fig-pca-score}]{
+\begin_inset Newline newline
+\end_inset
+
+<<pca-score, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+print (plotmap (scores [,,2]))
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:pca"
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig-pca-load}
+\end_layout
+
+\end_inset
+
+ The first three loadings: 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plot (loadings [1 : 3], stacked = TRUE)
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig-pca-score}
+\end_layout
+
+\end_inset
+
+ The second score map: 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+plotmap (scores [, , 2])
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Data Analysis Methods using a matrix
+\begin_inset Newline newline
+\end_inset
+
+e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ Hierarchical Cluster Analysis
+\end_layout
+
+\begin_layout Scrap
+<<hca>>=
+\begin_inset Newline newline
+\end_inset
+
+dist <- pearson.dist (chondro [[]])
+\begin_inset Newline newline
+\end_inset
+
+dendrogram <- hclust (dist, method = "ward")
+\begin_inset Newline newline
+\end_inset
+
+@
+\begin_inset Newline newline
+\end_inset
+
+<<dend, fig = TRUE, width = 5, height = 5, include = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (dendrogram)
+\begin_inset Newline newline
+\end_inset
+
+@ 
+\end_layout
+
+\begin_layout Standard
+In order to plot a cluster map, the cluster membership needs to be calulated
+ from the dendrogram.
+ 
+\end_layout
+
+\begin_layout Standard
+First, cut tha dendrogam so that three clusters result:
+\end_layout
+
+\begin_layout Scrap
+<<dendcut>>=
+\begin_inset Newline newline
+\end_inset
+
+clusters <- cutree (dendrogram, k = 3)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+Then the result may be plotted: 
+\end_layout
+
+\begin_layout Scrap
+<<clustmap, fig = TRUE, width = 7.5, height = 5, include = FALSE, echo =
+ FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plotmap (chondro, z = as.factor (clusters), do.print = TRUE)
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+subfloat[
+
+\backslash
+label{fig:clust:dend}
+\lang english
+]{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename introduction-dend.pdf
+	lyxscale 33
+	width 33text%
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+subfloat[
+
+\backslash
+label{fig:clust:map}
+\lang english
+]{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename introduction-clustmap.pdf
+	lyxscale 33
+	width 33text%
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+subfloat[
+
+\backslash
+label{fig:clust:spc}
+\lang english
+]{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename introduction-clustmean.pdf
+	lyxscale 33
+	width 33text%
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The results of the cluster analysis: 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig:clust:dend}
+\end_layout
+
+\end_inset
+
+ the dendrogram 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig:clust:mab}
+\end_layout
+
+\end_inset
+
+ the map of the 3 clusters 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+subref{fig:clust:spc}
+\end_layout
+
+\end_inset
+
+ the mean spectra.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -5047,27 +6685,128 @@ Calculating group-wise Sum Characteristics
 \begin_inset Newline newline
 \end_inset
 
-Cluster Mean Spectra
+e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
+ Cluster Mean Spectra
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+aggregate
+\end_layout
+
+\end_inset
+
+ applies the function given in 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+FUN
+\end_layout
+
+\end_inset
+
+ to each of the groups of spectra specified in 
+\begin_inset Flex Rfunarg
+status open
+
+\begin_layout Plain Layout
+by
+\end_layout
+
+\end_inset
+
+.
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+aggregate
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So we may plot the cluster mean spectra:
+\end_layout
+
+\begin_layout Scrap
+<<clustmean, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+means <- aggregate (chondro, by = clusters, mean)
+\begin_inset Newline newline
+\end_inset
+
+means
+\begin_inset Newline newline
+\end_inset
+
+plot (means, col = matlab.palette (3)[means$.aggregate], stacked = TRUE) 
+\begin_inset Newline newline
+\end_inset
+
+@
 \end_layout
 
 \begin_layout Subsection
 Splitting an Object
 \end_layout
 
-\begin_layout Section
-Session information
+\begin_layout Standard
+A 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperSpec
 \end_layout
 
-\begin_layout Standard
-R session information:
+\end_inset
+
+ object may also be split into a list of 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ objects: 
 \end_layout
 
 \begin_layout Scrap
-<<sessionInfo, results=tex>>=
+<<split, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
-toLatex(sessionInfo())
+clusters <- split (chondro, clusters)
+\begin_inset Newline newline
+\end_inset
+
+clusters
 \begin_inset Newline newline
 \end_inset
 

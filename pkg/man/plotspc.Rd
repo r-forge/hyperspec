@@ -13,7 +13,7 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
         add = FALSE, bty = "l", col = "black", plot.args = list (),
         xoffset = 0, yoffset = 0, nxticks = 10, axis.args = list (),
         fill = NULL, border = NA, title.args = list(),
-        polygon.args = list(), lines.args = list(), zeroline = NULL)
+        polygon.args = list(), lines.args = list(), zeroline = list (lty = 2))
 }
 \arguments{
   \item{object}{the \code{hyperSpec} object}
@@ -95,7 +95,9 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   \item{polygon.args}{list with further arguments to
 	 \code{\link[graphics]{polygon}} which draws the filled areas.}
 
-  \item{zeroline}{\code{TRUE} or a list with arguments \code{\link[graphics]{abline}}, used to plot line (s) marking I = 0.
+  \item{zeroline}{\code{NULL} or a list with arguments \code{\link[graphics]{abline}}, used to plot line (s) marking I = 0.
+  
+  \code{NULL} suppresses plotting of the line.  
   }
 }
 \details{
@@ -149,9 +151,7 @@ plotspc (chondro [sample (nrow (chondro), 50)],
 ## some journals publish Raman spectra backwards
 plotspc (chondro [sample (nrow (chondro), 50)], wl.reverse = TRUE)
 
-plotspc (laser[(0:4)*20+1,,], stacked = TRUE, zeroline = TRUE)
-
-plotspc (laser[(0:4)*20+1,,], stacked = TRUE, zeroline = c(lty = 2))
+plotspc (laser[(0:4)*20+1,,], stacked = TRUE)
 
 plotspc (laser, func = mean_pm_sd, 
          col = c(NA, "red", "black"), lines.args = list (lwd = 2),
