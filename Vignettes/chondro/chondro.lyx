@@ -702,8 +702,105 @@ As usual in Raman spectroscopy of biological tissues, the spectra need some
  preprocessing.
 \end_layout
 
+\begin_layout Subsection
+Spectral Smoothing
+\end_layout
+
 \begin_layout Standard
-First, we do a linear baseline correction.
+As the overview print shows that the spectra contain 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+NA
+\end_layout
+
+\end_inset
+
+s (from cosmic spike removal that was done previously), the first step is
+ to remove these.
+ Another issue that can be solved at the same time is that the wavelength
+ axis is not evenlyspaced and has a higher resolution than is needed.
+ All three of these issues are tackled by interpolating and smoothing of
+ the wavelength axis, the 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+NA
+\end_layout
+
+\end_inset
+
+s will be treated as missing values in the interpolation done by 
+\begin_inset Flex Rfunction
+status collapsed
+
+\begin_layout Plain Layout
+spc.loess
+\end_layout
+
+\end_inset
+
+.
+ The resolution is to be reduced to 8 cm
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{-1}
+\end_layout
+
+\end_inset
+
+
+\lang english
+, or 4 cm
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{-1}
+\end_layout
+
+\end_inset
+
+
+\lang english
+ data point spacing.
+ 
+\end_layout
+
+\begin_layout Scrap
+<<interp>>=
+\begin_inset Newline newline
+\end_inset
+
+chondro <- spc.loess (chondro, seq (602, 1800, 4))
+\begin_inset Newline newline
+\end_inset
+
+chondro
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Subsection
+Baseline Correction
+\end_layout
+
+\begin_layout Standard
+Next, we do a linear baseline correction.
  
 \begin_inset Flex Rfunction
 status open
@@ -719,7 +816,7 @@ spc.fit.poly.below
 \end_layout
 
 \begin_layout Scrap
-<<fig-bl, fig = TRUE, width = 7.5, height = 7.5, include = FALSE, eval = F>>=
+<<bl, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -739,19 +836,176 @@ plot (chondro, "spcprctl5")
 \end_layout
 
 \begin_layout Standard
-R session information:
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename chondro-fig-bl.pdf
+	lyxscale 50
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:bl-bl"
+
+\end_inset
+
+The spectra after smoothing and baseline correction.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:bl:perc"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:bl"
+
+\end_inset
+
+The preprocesed spectra.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Normalization
+\end_layout
+
+\begin_layout Standard
+As the spectra are already very homogeneous in intenity, normalization is
+ not needed.
+\end_layout
+
+\begin_layout Subsection
+Substracting the Overall Composition
+\end_layout
+
+\begin_layout Standard
+The spectra are very homogeneous, but I'm interested in the differences
+ between the different regions of the sample.
+ Sustracting the minimum spectrum cancels out the matrix compositon that
+ is common to all spectra.
+ But the minimum spectrum also picks up a lot of noise.
+ So instead, the 5
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{
+\lang english
+th
+}
+\end_layout
+
+\end_inset
+
+ percentile spectrum is substracted:
 \end_layout
 
 \begin_layout Scrap
-<<sessionInfo, results=tex>>=
+<<perc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
-toLatex(sessionInfo())
+chondro <- sweep (chendro, 2, apply (chondro, 2, quantile, 0.05), "-") 
+\begin_inset Newline newline
+\end_inset
+
+plot (chondro, "spcprctl5")
 \begin_inset Newline newline
 \end_inset
 
 @
+\end_layout
+
+\begin_layout Standard
+The resulting data set is shown in figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:bl:perc"
+
+\end_inset
+
+
 \end_layout
 
 \end_body
