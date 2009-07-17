@@ -386,7 +386,7 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 				)
 			else
 				dummy <- format (val, digits = digits, trim = TRUE)
-			dummy <- paste ("", if(range) "range", paste (dummy, collapse = " "), collapse = " ")
+			dummy <- paste ("", if(range) "range", paste (dummy, collapse = " "), if(any (is.na (x))) "+ NA", collapse = " ")
 			
 		}
 	}

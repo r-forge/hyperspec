@@ -11,8 +11,6 @@
 
 \newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 \newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-\newcommand{\hy}{\nohyphens{\texttt{hyperSpec}}\xspace}
-\newcommand{\R}{\texttt{R}\xspace}
 \end_preamble
 \options 10pt, A4paper,smallheadings,DIV15
 \use_default_options false
@@ -60,23 +58,26 @@ Calibration of Quinine Fluorescence Emission
 
 \begin_layout Title
 Vignette for the Data Set 
-\begin_inset ERT
+\begin_inset Flex Robject
 status open
 
 \begin_layout Plain Layout
-
-\backslash
-
-R
-\lang english
-code{flu}
+flu
 \end_layout
 
 \end_inset
 
  of the R package 
-\backslash
-hy
+\begin_inset Flex Rpackage
+status open
+
+\begin_layout Plain Layout
+hyperspec
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Author
@@ -92,22 +93,35 @@ cbeleites@units.it
 \end_inset
 
 )
-\end_layout
+\begin_inset Newline newline
+\end_inset
 
-\begin_layout Address
 CENMAT, DMRN, University of Trieste
 \end_layout
 
 \begin_layout Scrap
-<<init, echo = FALSE, results = hide>>= 
+<<startup, echo = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
-options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6)))) 
+options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="seri
+f"))) 
 \begin_inset Newline newline
 \end_inset
 
-options ("width" = 100) 
+options ("width" = 100)
+\begin_inset Newline newline
+\end_inset
+
+datadir <- "~/Uni/workspace/hyperspec.rforge/Vignettes/flu"
+\begin_inset Newline newline
+\end_inset
+
+wd <- getwd ()
+\begin_inset Newline newline
+\end_inset
+
+setwd (datadir)
 \begin_inset Newline newline
 \end_inset
 
@@ -134,38 +148,21 @@ set up a linear calibration (inverse least squares).
 
 \begin_layout Standard
 The data set 
-\begin_inset ERT
+\begin_inset Flex Robject
 status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-code{
-\end_layout
-
-\end_inset
-
 flu
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-}
 \end_layout
 
 \end_inset
 
  in 
-\begin_inset ERT
-status collapsed
+\begin_inset Flex Rpackage
+status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-hy
+hyperspec
 \end_layout
 
 \end_inset
@@ -180,36 +177,6 @@ hy
 The concentrations of the solutions range from 0.05 mg/l to 0.30 mg/l.
  Spectra were acquired with a Perkin Elmer LS50-B fluorescence spectrometer
  at 350 nm excitation.
-\end_layout
-
-\begin_layout Standard
-In order to work with 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-hy
-\end_layout
-
-\end_inset
-
-, the library needs to be loaded in 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-R
-\end_layout
-
-\end_inset
-
-: 
 \end_layout
 
 \begin_layout Scrap
@@ -241,31 +208,7 @@ Now we need to import the spectra.
 
 \begin_layout Standard
 The function should automatically read in all files specified by a pattern,
- such as 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-code{
-\end_layout
-
-\end_inset
-
-*.txt
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-.
+ such as *.txt.
  In order to gain some speed, the spectra matrix is preallocated after the
  first file is read.
  Also, the number of header lines are predefined instead of searching for
@@ -280,25 +223,11 @@ status collapsed
 Note, that labels giving the correct units (e.g.
  for axis labels) are set.
  The label with the special name 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-code{
-\end_layout
-
-\end_inset
-
 .wavelength
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-}
 \end_layout
 
 \end_inset
@@ -306,25 +235,11 @@ status collapsed
  corresponds to the wavelength axis, all data columns should have a label
  with the same name.
  The spectra are always in a data column called 
-\begin_inset ERT
+\begin_inset Flex Rcode
 status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-code{
-\end_layout
-
-\end_inset
-
-spc
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-}
+$spc
 \end_layout
 
 \end_inset
@@ -333,7 +248,7 @@ status collapsed
 \end_layout
 
 \begin_layout Scrap
-<<importfun>>= 
+<<importfun, keep.source = TRUE>>= 
 \begin_inset Newline newline
 \end_inset
 
@@ -356,7 +271,15 @@ status collapsed
 \begin_inset Newline newline
 \end_inset
 
+   
+\begin_inset Newline newline
+\end_inset
+
    buffer <- matrix (scan (files [1], skip = skip), ncol = 2, byrow = TRUE)
+\begin_inset Newline newline
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -366,6 +289,10 @@ status collapsed
 \end_inset
 
    spc [1, ] <- buffer [, 2]
+\begin_inset Newline newline
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -389,8 +316,19 @@ status collapsed
 \begin_inset Newline newline
 \end_inset
 
-      if (! all.equal (buffer [, 1], wavelength)) stop (paste(files [f],
- "has different wavelengh axis."))
+
+\begin_inset Newline newline
+\end_inset
+
+      if (! all.equal (buffer [, 1], wavelength)) 
+\begin_inset Newline newline
+\end_inset
+
+         stop (paste(files [f], "has different wavelengh axis."))
+\begin_inset Newline newline
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -413,8 +351,16 @@ status collapsed
 \begin_inset Newline newline
 \end_inset
 
-  new ("hyperSpec", wavelength = wavelength, spc = spc, label = list (.wavelength
- = expression (lambda[fl] / nm), spc = "I / a.u.")) 
+
+\begin_inset Newline newline
+\end_inset
+
+  new ("hyperSpec", wavelength = wavelength, spc = spc, 
+\begin_inset Newline newline
+\end_inset
+
+       label = list (.wavelength = expression (lambda[fl] / nm), spc = "I
+ / a.u.")) 
 \begin_inset Newline newline
 \end_inset
 
@@ -453,7 +399,21 @@ flu <- read.PE ("*.txt")
 \end_layout
 
 \begin_layout Standard
-Now the spectra are in a hyperSpec object and can be examined e.g.
+Now the spectra are in a 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ object and can be examined e.
+\begin_inset space \thinspace{}
+\end_inset
+
+g.
  by 
 \end_layout
 
@@ -482,7 +442,7 @@ plot (flu)
 \end_layout
 
 \begin_layout Section
-Adding further Data Coumns
+Adding further Data Columns
 \end_layout
 
 \begin_layout Standard
@@ -492,15 +452,61 @@ The calibration model needs the quinine concentrations for the spectra.
 \end_layout
 
 \begin_layout Scrap
-newdata
-\begin_inset Quotes ald
+<<newdata>>= 
+\begin_inset Newline newline
 \end_inset
 
-= flu
-\begin_inset Formula $c<-seq(from=0.05,to=0.30,by=0.05)labels(flu,"c")<-"c/(mg/l)"flu@Nowthe\hy object\code{flu}containstwodatacolumns,holdingtheactualspectraandtherespectiveconcentrations.Thedollaroperatorreturnssuchadatacolumn:<<newc>>=flu$
+flu$c <- seq (from = 0.05, to = 0.30, by = 0.05) 
+\begin_inset Newline newline
 \end_inset
 
-c @
+labels (flu, "c") <- "c / (mg / l)" 
+\begin_inset Newline newline
+\end_inset
+
+flu 
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+Now the 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperSpec
+\end_layout
+
+\end_inset
+
+ object 
+\begin_inset Flex Robject
+status collapsed
+
+\begin_layout Plain Layout
+flu
+\end_layout
+
+\end_inset
+
+ contains two data columns, holding the actual spectra and the respective
+ concentrations.
+ The new column is 
+\end_layout
+
+\begin_layout Scrap
+<<newc>>= 
+\begin_inset Newline newline
+\end_inset
+
+flu$c 
+\begin_inset Newline newline
+\end_inset
+
+@
 \end_layout
 
 \begin_layout Section
@@ -572,7 +578,7 @@ setkeys
 
 
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -684,7 +690,7 @@ calplot2, fig=TRUE, width = 6, height = 6
 \begin_inset Quotes ald
 \end_inset
 
-= plotc (flu, zlab = expression (I ["450 nm"] / a.u.), plot.dots = list (xlim
+= plotc (flu, zlab = expression (I ["450 nm"] / a.u.), plot.args = list (xlim
  = range (0, flu
 \begin_inset Formula $c),ylim=range(0,flu$
 \end_inset

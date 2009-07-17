@@ -12,19 +12,20 @@
 \fvset{listparameters={\setlength{\topsep}{0pt}}} 
 \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
 } 
-\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE}
+\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
 }
 
 % my preferred packages
 \usepackage{xspace}
 
-\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+\newcommand{\rcm}[1]{\ensuremath{#1} \mathrm{cm^{-1}}\xspace}
 \newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-\newcommand{\hy}{\nohyphens{\texttt{hyperSpec}}\xspace}
-\newcommand{\R}{\texttt{R}\xspace}
 \end_preamble
 \options a4paper, 10pt, smallheadings, DIV15
 \use_default_options false
+\begin_modules
+logicalmkup
+\end_modules
 \language english
 \inputencoding utf8x
 \font_roman default
@@ -83,27 +84,21 @@ Raman Spectra of Chondrocytes in Cartilage:
 \end_inset
 
 
-\begin_inset ERT
-status open
+\begin_inset Flex Rpackage
+status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
 
 's 
-\begin_inset ERT
-status open
+\begin_inset Flex Robject
+status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{chondro}
+chondro
 \end_layout
 
 \end_inset
@@ -160,14 +155,11 @@ Introduction
 
 \begin_layout Standard
 This vignette describes the 
-\begin_inset ERT
-status open
+\begin_inset Flex Robject
+status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-Robject{chondro}
+chondro
 \end_layout
 
 \end_inset
@@ -231,20 +223,7 @@ hierarchical cluster analysis,
 \end_layout
 
 \begin_layout Standard
-showing how to use data analysis procedures provided by 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-Rcode{R}
-\end_layout
-
-\end_inset
-
- and other packages.
+showing how to use data analysis procedures provided by R and other packages.
 \end_layout
 
 \begin_layout Section
@@ -366,14 +345,11 @@ Spectrometer: Renishaw InVia
 
 \begin_layout Standard
 All data to reproduce this Vignette is accessible at 
-\begin_inset ERT
-status open
+\begin_inset Flex Rpackage
+status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
@@ -418,27 +394,21 @@ intensity
 \emph default
 .
  
-\begin_inset ERT
-status open
+\begin_inset Flex Rpackage
+status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rpackage{hyperSpec}
+hyperSpec
 \end_layout
 
 \end_inset
 
  comes with a function to import such files, 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{scan.txt.Renishaw}
+scan.txt.Renishaw
 \end_layout
 
 \end_inset
@@ -446,68 +416,43 @@ Rfunction{scan.txt.Renishaw}
 .
  The function assumes a map as default, but can also handle single spectra
  (
-\begin_inset ERT
+\begin_inset Flex Rcode
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{data = "spc"}
+data = "spc"
 \end_layout
 
 \end_inset
 
 ), time series (
-\begin_inset ERT
-status open
+\begin_inset Flex Rcode
+status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{data = "ts"}
+data = "ts"
 \end_layout
 
 \end_inset
 
-), and depth profiles (
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-Rcode{data = "depth"}
-\end_layout
-
-\end_inset
-
-).
+), and depth profiles (data = "depth").
  In addition, large files may be processed in chunks.
  In order to speed up the reading 
-\begin_inset ERT
+\begin_inset Flex Rfunction
 status open
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rfunction{scan.txt.Renishaw}
+scan.txt.Renishaw
 \end_layout
 
 \end_inset
 
  does not allow missing values, but it does work with 
-\begin_inset ERT
-status open
+\begin_inset Flex Rcode
+status collapsed
 
 \begin_layout Plain Layout
-
-
-\backslash
-Rcode{NA}
+NA
 \end_layout
 
 \end_inset
@@ -516,7 +461,7 @@ Rcode{NA}
 \end_layout
 
 \begin_layout Scrap
-<<import, keep.source = T>>=
+<<import>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -531,12 +476,266 @@ chondro
 @
 \end_layout
 
+\begin_layout Standard
+To get an overview of the spectra, : 
+\end_layout
+
 \begin_layout Scrap
+<<fig-rawspc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+plot (chondro, "spcprctl5")
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+A sum intensity map is produced by:
+\end_layout
+
+\begin_layout Scrap
+<<fig-rawmap, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+\begin_inset Newline newline
+\end_inset
+
+print (plotmap (chondro, na.rm = TRUE))
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:raw"
+
+\end_inset
+
+ shows the results.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename chondro-fig-rawspc.pdf
+	lyxscale 50
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The raw spectra: median, 16
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{
+\lang english
+th
+}
+\end_layout
+
+\end_inset
+
+ and 84
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{
+\lang english
+th
+}
+\end_layout
+
+\end_inset
+
+, and 5
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{
+\lang english
+th
+}
+\end_layout
+
+\end_inset
+
+ and 95
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+textsuperscript{
+\lang english
+th
+}
+\end_layout
+
+\end_inset
+
+ percentile spectra.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename chondro-fig-rawmap.pdf
+	lyxscale 50
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The sum intensity of the raw spectra.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:raw"
+
+\end_inset
+
+ The raw data.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Section
-Session information
+Preprocessing
+\end_layout
+
+\begin_layout Standard
+As usual in Raman spectroscopy of biological tissues, the spectra need some
+ preprocessing.
+\end_layout
+
+\begin_layout Standard
+First, we do a linear baseline correction.
+ 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+spc.fit.poly.below
+\end_layout
+
+\end_inset
+
+ tries to automatically find appropriate support points for polynomial baselines.
+ The default is a linear baseline, which is appropriate in our case:
+\end_layout
+
+\begin_layout Scrap
+<<fig-bl, fig = TRUE, width = 7.5, height = 7.5, include = FALSE, eval = F>>=
+\begin_inset Newline newline
+\end_inset
+
+baselines <- spc.fit.poly.below (chondro)
+\begin_inset Newline newline
+\end_inset
+
+chondro <- chondro - baselines
+\begin_inset Newline newline
+\end_inset
+
+plot (chondro, "spcprctl5")
+\begin_inset Newline newline
+\end_inset
+
+@
 \end_layout
 
 \begin_layout Standard

@@ -2125,6 +2125,115 @@ $spc
 \end_layout
 
 \begin_layout Section
+Combining 
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperspec
+\end_layout
+
+\end_inset
+
+ Objects
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+cbind
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+rbind
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Rclass
+status collapsed
+
+\begin_layout Plain Layout
+hyperspec
+\end_layout
+
+\end_inset
+
+ Objects can be bound together, either by rows to append a new spectral
+ range or by columns to append new spectra
+\end_layout
+
+\begin_layout Scrap
+<<cbind>>=
+\begin_inset Newline newline
+\end_inset
+
+cbind (chondro [, , 600 ~ 800], chondro [, , 1600 ~ 1800])
+\begin_inset Newline newline
+\end_inset
+
+rbind (chondro [, , 600 ~ 800], chondro [, , 600 ~ 800])
+\begin_inset Newline newline
+\end_inset
+
+@
+\end_layout
+
+\begin_layout Standard
+There is also a more general function, 
+\begin_inset Flex Rfunction
+status open
+
+\begin_layout Plain Layout
+bind
+\end_layout
+
+\end_inset
+
+, taking the direction (
+\begin_inset Flex Rcode
+status collapsed
+
+\begin_layout Plain Layout
+"r"
+\end_layout
+
+\end_inset
+
+ or 
+\begin_inset Flex Rcode
+status open
+
+\begin_layout Plain Layout
+"c"
+\end_layout
+
+\end_inset
+
+) as first argument and then all objects to bind either in separate arguments
+ or in a list.
+ 
+\end_layout
+
+\begin_layout Section
 Creating a 
 \begin_inset Flex Rclass
 status open
@@ -4290,30 +4399,8 @@ NULL
 suppresses the line.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
 \begin_layout Scrap
-
-\backslash
-setkeys{Gin}{width = .33
-\backslash
-textwidth}
-\begin_inset Newline newline
-\end_inset
-
-
-\backslash
-subfloat[
-\backslash
-label{fig-plotspc-ms}]{
-\begin_inset Newline newline
-\end_inset
-
-<<ms, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
+<<ms, fig = TRUE, width = 8, height = 5, echo = FALSE, include = FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -4339,19 +4426,8 @@ plot (fake.mass.spec, lines.args = list (type = "h"))
 \begin_inset Newline newline
 \end_inset
 
-}
-\begin_inset Newline newline
-\end_inset
-
-
-\backslash
-subfloat[
-\backslash
-label{fig-plotspc-paracetamol}]{
-\begin_inset Newline newline
-\end_inset
-
-<<plotspcadd, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
+<<plotspcadd, fig = TRUE, width = 8, height = 5, echo = FALSE, include =
+ FALSE>>=
 \begin_inset Newline newline
 \end_inset
 
@@ -4361,28 +4437,130 @@ plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850,
 \end_inset
 
 @
-\begin_inset Newline newline
-\end_inset
+\end_layout
 
-}
-\begin_inset Newline newline
-\end_inset
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
 
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
 
-\backslash
-subfloat[
-\backslash
-label{fig-plotmap-factor}]{
+\begin_layout Plain Layout
 \begin_inset Graphics
-	filename introduction-clustmap.pdf
+	filename introduction-ms.pdf
+	lyxscale 33
 	width 33text%
 
 \end_inset
 
-}
+
 \end_layout
 
 \begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig-plotspc-ms"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename introduction-plotspcadd.pdf
+	lyxscale 33
+	width 33text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig-plotspc-paracetamol"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename introduction-clustmap.pdf
+	lyxscale 33
+	width 33text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig-plotmap-factor"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -4422,7 +4600,7 @@ plot (fake.mass.spec, lines.args = list (type = "h"))
 
  
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -4446,7 +4624,7 @@ plotspc (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850,
 
  
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -4462,12 +4640,19 @@ subref{fig-plotmap-factor}
 status open
 
 \begin_layout Plain Layout
-plotmap (chondro, z = cut(chondro[[, , 1006]], 3)) 
+plotmap
 \end_layout
 
 \end_inset
 
+ with a factor, see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "HCA"
 
+\end_inset
+
+.
 \end_layout
 
 \end_inset
@@ -6373,7 +6558,7 @@ name "fig:pca"
 
 
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -6397,7 +6582,7 @@ plot (loadings [1 : 3], stacked = TRUE)
 .
  
 \begin_inset ERT
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -6437,6 +6622,13 @@ e.
 
 g.
  Hierarchical Cluster Analysis
+\begin_inset CommandInset label
+LatexCommand label
+name "HCA"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Scrap
@@ -6518,13 +6710,11 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\backslash
-subfloat[
 
 \backslash
-label{fig:clust:dend}
-\lang english
-]{
+subfloat[
+\backslash
+label{fig:clust:dend}]{
 \end_layout
 
 \end_inset
@@ -6542,6 +6732,7 @@ label{fig:clust:dend}
 status collapsed
 
 \begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -6553,13 +6744,11 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\backslash
-subfloat[
 
 \backslash
-label{fig:clust:map}
-\lang english
-]{
+subfloat[
+\backslash
+label{fig:clust:map}]{
 \end_layout
 
 \end_inset
@@ -6577,6 +6766,7 @@ label{fig:clust:map}
 status collapsed
 
 \begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -6588,13 +6778,11 @@ status collapsed
 
 \begin_layout Plain Layout
 
-\backslash
-subfloat[
 
 \backslash
-label{fig:clust:spc}
-\lang english
-]{
+subfloat[
+\backslash
+label{fig:clust:spc}]{
 \end_layout
 
 \end_inset
@@ -6612,6 +6800,7 @@ label{fig:clust:spc}
 status collapsed
 
 \begin_layout Plain Layout
+
 }
 \end_layout
 
@@ -6798,7 +6987,7 @@ hyperSpec
 \end_layout
 
 \begin_layout Scrap
-<<split, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+<<split>>=
 \begin_inset Newline newline
 \end_inset
 
