@@ -2351,9 +2351,12 @@ read.txt.long <- function (file = stop ("filename is required"),
 	
 	colnames (txtfile) <- names (cols)
 	
-	txtfile$.wavelength <- ordered (txtfile$.wavelength)
+	# wavelength axis
+	wavelength <- rep (TRUE,  nrow (txtfile))				
+	for (i in which (! colnames (txtfile) %in% c(".wavelength", "spc")))
+		wavelength [wavelength] <- txtfile [wavelength, i] == txtfile [1, i]
 	
-	wavelength <- as.numeric (levels (txtfile$.wavelength))
+	wavelength <- txtfile$.wavelength [wavelength]
 	
 	spc <- as.matrix (unstack (txtfile, form = spc ~ .wavelength))
 	if ((nrow (spc)  == length (wavelength)) & (ncol (spc) != length (wavelength)))
@@ -2459,8 +2462,12 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 	
 	fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
 	
-	#TODO: bugfix for paracetamol data.
-	wl <- unique (fbuf[, ncol - 1])
+	# wavelength axis
+	wl <- rep (TRUE,  nrow (fbuf))				
+	for (i in seq_len (ncol (fbuf) - 2))
+		wl [wl] <- fbuf [wl, i] == fbuf [1, i]
+
+	wl <- fbuf[wl, ncol - 1]
 	
 	## if the file is to be read in chunks
 	## try to find out how many lines it has 

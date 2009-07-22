@@ -44,8 +44,20 @@ echo $contents; } ?>
 <!-- end of project description -->
 
 <p> The package is now publicly accessible from the SVN repository. </p>
-
+<h2>Installation</h2>
 <p>To install the latest nightly build, type in R: <pre>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</pre></p>
+<h2>Vignettes</h2>
+<p><pre>hyperSpec</pre> comes with some vignettes:</p>
+<ul>
+<li><a href="../Vignettes/intro/introduction.pdf">Introduction</a>: a user manual from aspectroscopist's point of view</li>
+<li>Example work-flow: <a href="../Vignettes/flu/flu.pdf">calibration of quinine fluorescence emission</a></li>
+<li>Example work-flow: <a href="../Vignettes/chondro/chondro.pdf">Cluster Analysis of a Raman Map of Chondrocytes in Cartilage</a><br/>
+    the <a href="../Vignettes/chondro/chondro.txt">data file</a> is quite large (ca. 31 MB) and needs to be saved into the the same folder as the .Rnw file in order to reprduce the example. 
+</li>
+<li>A more technical <a href="../Vignettes/baselinebelow/baselinebelow.pdf">explanation of the baseline fitting technique used by <pre>spc.fit.poly.below</pre></a></li>
+</ul> 
+<p><pre>hyperSpec</pre> Both .pdf and source files (including the spectra files except <a href="../Vignettes/chondro/chondro.txt">chondro.txt</a>, which needs to be downloaded explicitly due to its size) are available, and are 
+installed into the documentation directory by <pre>install.packages</pre>.</p>
 <p>
 Claudia Beleites<br/>
 CENMAT, Materials and Natural Resources Dept.<br/> 
@@ -54,7 +66,7 @@ e-mail: cbeleites at units.it
 </p>
 
 
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p> You find the <strong>project summary page</strong> at <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
 </body>
 </html>
