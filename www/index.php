@@ -45,19 +45,19 @@ echo $contents; } ?>
 
 <p> The package is now publicly accessible from the SVN repository. </p>
 <h2>Installation</h2>
-<p>To install the latest nightly build, type in R: <pre>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</pre></p>
+<p>To install the latest nightly build, type in R: <tt>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</tt></p>
 <h2>Vignettes</h2>
-<p><pre>hyperSpec</pre> comes with some vignettes:</p>
+<p><tt>hyperSpec</tt> comes with some vignettes:</p>
 <ul>
-<li><a href="../Vignettes/intro/introduction.pdf">Introduction</a>: a user manual from aspectroscopist's point of view</li>
-<li>Example work-flow: <a href="../Vignettes/flu/flu.pdf">calibration of quinine fluorescence emission</a></li>
-<li>Example work-flow: <a href="../Vignettes/chondro/chondro.pdf">Cluster Analysis of a Raman Map of Chondrocytes in Cartilage</a><br/>
-    the <a href="../Vignettes/chondro/chondro.txt">data file</a> is quite large (ca. 31 MB) and needs to be saved into the the same folder as the .Rnw file in order to reprduce the example. 
+<li><a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/intro/introduction.pdf?root=hyperspec">Introduction</a>: a user manual from aspectroscopist's point of view</li>
+<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/flu/flu.pdf?root=hyperspec">calibration of quinine fluorescence emission</a></li>
+<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.pdf?root=hyperspec">Cluster Analysis of a Raman Map of Chondrocytes in Cartilage</a><br/>
+    the <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.txt?root=hyperspec">data file</a> is quite large (ca. 31 MB) and needs to be saved into the the same folder as the .Rnw file in order to reprduce the example. 
 </li>
-<li>A more technical <a href="../Vignettes/baselinebelow/baselinebelow.pdf">explanation of the baseline fitting technique used by <pre>spc.fit.poly.below</pre></a></li>
+<li>A more technical <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/baselinebelow/baselinebelow.pdf?root=hyperspec">explanation of the baseline fitting technique used by <tt>spc.fit.poly.below</tt></a></li>
 </ul> 
-<p><pre>hyperSpec</pre> Both .pdf and source files (including the spectra files except <a href="../Vignettes/chondro/chondro.txt">chondro.txt</a>, which needs to be downloaded explicitly due to its size) are available, and are 
-installed into the documentation directory by <pre>install.packages</pre>.</p>
+<p><tt>hyperSpec</tt> Both .pdf and source files (including the spectra files except <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.txt?root=hyperspec">chondro.txt</a>, which needs to be downloaded explicitly due to its size) are available, and are 
+installed into the documentation directory by <tt>install.packages</tt>.</p>
 <p>
 Claudia Beleites<br/>
 CENMAT, Materials and Natural Resources Dept.<br/> 

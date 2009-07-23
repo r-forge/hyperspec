@@ -1,7 +1,7 @@
 %% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-\documentclass[english,a4paper, 10pt, smallheadings, DIV12]{scrartcl}
-\usepackage[T1]{fontenc}
+\documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl}
+%\usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
@@ -22,23 +22,24 @@
  pdfauthor={C. Beleites},
  pdfsubject={Introduction on the R package hyperSpec},
  pdfkeywords={hyperSpec}}
+\usepackage{hyphenat}
 
 \makeatletter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
 \usepackage{Sweave}
 
-\newcommand{\Rcode}[1]{\nohyphens{\texttt{#1}}}
-\newcommand{\Robject}[1]{\nohyphens{\texttt{#1}}}
-\newcommand{\Rcommand}[1]{\nohyphens{\texttt{#1}}}
-\newcommand{\Rfunction}[1]{\nohyphens{\texttt{#1}}}
+\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
 
-\newcommand{\Rfunarg}[1]{\nohyphens{\textit{#1}}}
-\newcommand{\Rpackage}[1]{\nohyphens{\textit{#1}}}
-\newcommand{\Rmethod}[1]{\nohyphens{\textit{#1}}}
-\newcommand{\Rclass}[1]{\nohyphens{\textit{#1}}}
+\newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
 
-\newcommand{\}
+\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 % Meta information - fill between {} and do not remove %
@@ -289,7 +290,7 @@ and \Rmethod{dimnames} yields a list of these three vectors (including
 also the column names of \Robject{\$spc}).
 
 
-\section{Combining \Rclass{hyperspec} Objects \marginpar{\Rfunction{cbind} \Rfunction{rbind}}}
+\section{Combining \Rclass{hyperspec} Objects} \mFun{\Rfunction{cbind} \Rfunction{rbind}}
 
 \Rclass{hyperspec} Objects can be bound together, either by rows
 to append a new spectral range or by columns to append new spectra
@@ -306,7 +307,7 @@ arguments or in a list.
 
 
 \section{Creating a \Rclass{hyperSpec} Object, Data Import and Export}
-\subsection{ASCII Files \marginpar{\Rfunction{read.txt.long} \Rfunction{read.txt.wide} \Rfunction{write.txt.long} \Rfunction{write.txt.wide}}}
+\subsection{ASCII Files} \mFun{\Rfunction{read.txt.long} \Rfunction{read.txt.wide} \Rfunction{write.txt.long} \Rfunction{write.txt.wide}}
 
 Currently, \Rclass{hyperSpec} provides four functions for general
 ASCII data import and export:
@@ -332,7 +333,7 @@ such import filters to \Rpackage{hyperSpec}: send me (\href{mailto:cbeleites@uni
 the documented code (either .R + .Rd file or Roxygen commented .R).
 
 For the long ASCII format written by Renishaw's converter, a more
-optimized import function is already available: \Rfunction{scan.txt.Renishaw}. \marginpar{\Rfunction{scan.txt.Renishaw}}
+optimized import function is already available: \Rfunction{scan.txt.Renishaw}. \mFun{\Rfunction{scan.txt.Renishaw}}
 
 <<scan.txt.Renishaw>>=
 paracetamol <- scan.txt.Renishaw ("paracetamol.txt", "spc")
@@ -364,7 +365,7 @@ axis label in \Rcode{\$spc}.
 \section{Wavelengths and Spectral Axis}
 
 
-\subsection{Wavelength Indices\marginpar{\Rfunction{wl2i} \Rfunction{i2wl}}}
+\subsection{Wavelength Indices}\mFun{\Rfunction{wl2i} \Rfunction{i2wl}}
 
 Spectra in \Rpackage{hyperSpec} have always discretized wavelength
 axes, they are stored in a matrix with column corresponding to one
@@ -459,26 +460,19 @@ flu$n <- list (1 : 6, label = "sample no.")
 This function will append new columns, if necessary.
 
 
-\section{Accessing Parts of the \Rclass{hyperSpec} Object\marginpar{\Rfunction{[[]] \$. \$..}}}
+\section{Accessing Parts of the \Rclass{hyperSpec} Object}\mFun{\Rfunction{[[]] \$. \$..}}
 
 \Rclass{hyperSpec} comes with three abbrevation functions for easy
 access to the data:
 \begin{description}
-\item [{\Rfunction{[[]]}] returns the spectra matrix (\Rcode{\$spc}).
-\item [{\Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]}] the cut spectra matrix is returned if wavelengths are specified in \Rfunarg{l}.
-\item [{\Rfunction{[[\Rfunarg{i}, \Rfunarg{j}, \Rfunarg{l}]]}}] If
-data columns are selected (second index), the result is a \Rclass{data.frame}.
-\item [{\Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]<-}}] Also, parts
-of the spectra matrix can be set (only indices for spectra and wavelength
-are allowed for this function).
-\item [{\Rfunction{[\Rfunarg{i}, \Rfunarg{j}]<-}}] sets parts of \Rcode{@data}.
-\item [{\Rfunction{\$.}}] returns the complete \Rclass{data.frame} \Rcode{@data},
-with the spectra in column \Rcode{\$spc}.
-\item [{\Rfunction{\$..}}] returns the extra data (\Rcode{@data} without
-\Rcode{\$spc}).
-\item [{\Rfunction{\$..<-}}] sets the extra data (\Rcode{@data} without
-\Rcode{\$spc}). However, the columns must be exactly tha same in
-this case.
+\item [\Robject{x} \Rfunction{[[]]}] returns the spectra matrix (\Rcode{x\$spc}).
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]}] the cut spectra matrix is returned if wavelengths are specified in \Rfunarg{l}.
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, \Rfunarg{j}, \Rfunarg{l}]]}] If data columns are selected (second index), the result is a \Rclass{data.frame}.
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]] <-}] Also, parts of the spectra matrix can be set (only indices for spectra and wavelength are allowed for this function).
+\item [\Robject{x} \Rfunction{[\Rfunarg{i}, \Rfunarg{j}] <-}] sets parts of \Rcode{x@data}.
+\item [\Robject{x} \Rfunction{\$.}] returns the complete \Rclass{data.frame} \Rcode{x@data}, with the spectra in column \Rcode{\$spc}.
+\item [\Robject{x} \Rfunction{\$..}] returns the extra data (\Rcode{x@data} without \Rcode{x\$spc}).
+\item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without \Rcode{x\$spc}). However, the columns must match exactly in this case.
 \end{description}
 
 \section{Selecting and Deleting Spectra}
@@ -504,7 +498,7 @@ chondro  [chondro$y > 10]
 \item [{\Rcode{plotc}}] plots a time series or calibration plot: e.\,g. an intensity over a single other data column (like concentration, depth, or time).
 \end{description}
 
-All three plus some more handy abbrevations are also accessible via \Rmethod{plot}: \marginpar{\Rfunction{plot}}
+All three plus some more handy abbrevations are also accessible via \Rmethod{plot}: \mFun{\Rfunction{plot}}
 
 \begin{description}
 \item [{\Rcode{plot (flu, \textquotedbl{}spc\textquotedbl{})}}] is equivalent to \Rcode{plotspc (flu)}
@@ -554,7 +548,7 @@ print (plotmap (chondro))
 
 
 
-\subsection{Plotting Spectra\marginpar{\Rfunction{plotspc}}}
+\subsection{Plotting Spectra}\mFun{\Rfunction{plotspc}}
 
 \Rfunction{plotspc} offers a variety of parameters for customized
 plots. To plot ...
@@ -602,7 +596,7 @@ see section \ref{HCA}.}
 
 
 
-\subsection{Calibration Plots, (Depth) Profiles, and Time Series Plots\marginpar{\Rfunction{plotc}}}
+\subsection{Calibration Plots, (Depth) Profiles, and Time Series Plots}\mFun{\Rfunction{plotc}}
 
 \Rfunction{plotc} plots an intensity over one of the extra data columns.
 The abscissa uses column \Rcode{\$c} by default, another colum can
@@ -616,7 +610,7 @@ To customize the plot, give any arguments that you would usually supply
 to \Rmethod{plot} as a list using argument \Rfunarg{plot.args}.
 
 
-\subsection{Plotting False-Color Maps \marginpar{\Rfunction{plotmap}}}
+\subsection{Plotting False-Color Maps}\mFun{\Rfunction{plotmap}}
 
 \Rcode{plotmap} uses \Rcode{levelplot}, a \Rpackage{lattice} function.
 Therefore, in loops, functions, Sweave chunks, etc. the lattice object
@@ -650,7 +644,7 @@ object that contains several samples.
 
 
 \section{Spectral (Pre)processing}
-\subsection{Cutting the Spectral Range \marginpar{\Rfunction{[]} \Rfunction{[[]]}}}
+\subsection{Cutting the Spectral Range}\mFun{\Rfunction{[]} \Rfunction{[[]]}}
 The extraction functions \Rfunction{[]} and \Rfunction{[[]]}
 can be used to cut the spectra: Their third argument takes wavelength
 specifications as discussed above and also logicals (i.e. vectors
@@ -666,7 +660,7 @@ flu [[,, c (min ~ min + 2i, max - 2i ~ max)]]
 @
 
 
-\subsection{Spectral Interpolation and Smoothing \marginpar{\Rfunction{spc.bin} \Rfunction{spc.loess}}}
+\subsection{Spectral Interpolation and Smoothing} \mFun{\Rfunction{spc.bin} \Rfunction{spc.loess}}
 Frequently, a \Rclass{hyperSpec} object needs to be interpolated
 onto a new wavelength axis. e.\,g. because measurements resulted
 in slightly shifted wavelength axes. Or data from a grating spectrometer
@@ -876,13 +870,13 @@ chondro.msc [[]] <- msc (chondro [[]])
 @
 
 
-\subsection{Spectral Arithmetic \marginpar{\Rfunction{+ - {*} / \textasciicircum{} log log10}}}
+\subsection{Spectral Arithmetic} \mFun{\Rfunction{+ - {*} / \textasciicircum{} log log10}}
 
 Basic mathematical functions are defined for \Rclass{hyperSpec} objects.
 You may convert spectra:\\
 \Rcode{absorbance.spectra = - log10 (transmission.spectra)}
 
-In this case, do not forget to adapt the label:\marginpar{\Rfunction{labels}}
+In this case, do not forget to adapt the label:\mFun{\Rfunction{labels}}
 <<label, eval = FALSE>>=
 labels (absorbance.spectra)$spc <- "A"
 @
@@ -894,7 +888,7 @@ The basic arithmetic operators work element-wise in R. Thus they
 all need either a scalar, or a matrix (or \Rclass{hyperSpec} object)
 of the correct size.
 
-Matrix multiplication is done by \Rfunction{\%{*}\%} \marginpar{\Rfunction{\%{*}\%}},
+Matrix multiplication is done by \Rfunction{\%{*}\%} \mFun{\Rfunction{\%{*}\%}},
 again each of the operands may be a matrix or a \Rclass{hyperSpec} object, and must have the correct dimensions.
 
 
@@ -981,7 +975,7 @@ the mean spectra.}
 e.\,g. Cluster Mean Spectra}
 
 \Rfunction{aggregate} applies the function given in \Rfunarg{FUN}
-to each of the groups of spectra specified in \Rfunarg{by}. \marginpar{\Rfunction{aggregate}}
+to each of the groups of spectra specified in \Rfunarg{by}. \mFun{\Rfunction{aggregate}}
 
 So we may plot the cluster mean spectra:
 
