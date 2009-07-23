@@ -59,9 +59,9 @@
 \usepackage{subfig}
 \usepackage{booktabs}
 
-\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
-\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-\newcommand{\R}{\texttt{R}\xspace}
+%\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
 
 \@ifundefined{showcaptionsetup}{}{%
  \PassOptionsToPackage{caption=false}{subfig}}
@@ -80,9 +80,6 @@ CENMAT, DMRN, University of Trieste}
 <<startup, echo = FALSE>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="serif")))
 options ("width" = 100)
-#datadir <- "~/Uni/workspace/hyperspec.rforge/Vignettes/intro"
-#wd <- getwd ()
-#setwd (datadir)
 @
 
 
@@ -405,7 +402,7 @@ of the object:
 wl2i (flu, min ~ 410)
 @
 
-Often, specifications like \emph{wavelength \textpm{} n data points}
+Often, specifications like \emph{wavelength \textpm $n$ data points}
 are needed. They can be given using complex numbers in the formula.
 The imaginary part is added to the index calculated from the wavelenght
 in the real part:
@@ -416,9 +413,7 @@ wl2i (flu, max - 2i ~ max)
 @
 
 To specify several wavelength ranges, use a list containing the formulas
-and vectors%
-\footnote{Formulas are combined to a list by \Rfunction{c}.%
-}:
+and vectors\footnote{Formulas are combined to a list by \Rfunction{c}.}:
 
 <<wl2i.list>>=
 wl2i (flu, 450 - 2i ~ 450 + 2i)
@@ -428,9 +423,7 @@ wl2i (flu, c (min ~ 406.5, max - 2i ~ max))
 This mechanism also works for the wavelength arguments of \Rfunction{[]},
 \Rfunction{[[]]}, and \Rfunction{plotspc}.
 
-
 \section{Accessing the Extra Data }
-
 The second argument of the extraction functions \Rfunction{[]}
 and \Rfunction{[[]]} specifies the (extra) data columns.
 They can be given like any column specification for a \Rclass{data.frame},
