@@ -82,6 +82,7 @@ options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="s
 options ("width" = 100)
 @
 
+\tableofcontents{}
 
 \section{Introduction}
 
@@ -97,10 +98,19 @@ However, \Rpackage{hyperSpec} works perfectly fine with any data
 that fits in that general scheme, so that the three terms may also
 be used for:
 \begin{description}
-\item [{wavelength:}] frequency, wavenumbers, chemical shift, Raman shift,
+\setlength{\labelwidth}{2.5cm}
+\setlength{\itemindent}{1.7cm}
+%\setlength{\leftmargini}{5cm}
+%\showthe\labelindent
+\showthe\itemindent
+\showthe\labelwidth
+\showthe\leftmargin
+\showthe\labelsep
+\showthe\listparindent
+\item [wavelength:] frequency, wavenumbers, chemical shift, Raman shift,
 $\frac{m}{z}$, etc.
-\item [{intensity:}] transmission, absorbance, $\frac{e^{-}}{s}$, \textellipsis
-\item [{extra~data:}] spatial information (spectral images, maps, or profiles),
+\item [intensity:] transmission, absorbance, $\frac{e^{-}}{s}$, \textellipsis
+\item [extra~data: \hfill] spatial information (spectral images, maps, or profiles),
 temporal information (kinetics, time series), concentrations (calibration
 series), class membership information, etc. \\
 Note that there is no restriction on the number of extra data columns.
@@ -108,6 +118,8 @@ Note that there is no restriction on the number of extra data columns.
 This vignette gives an introduction on basic working techniques using
 the R package \Rpackage{hyperSpec}. It comes with three data sets,
 \begin{description}
+\setlength{\labelwidth}{2.5cm}
+\setlength{\itemindent}{1.7cm}
 \item [{\Robject{chondro}}] a Raman map of chondrocytes in cartilage,
 \item [{\Robject{flu}}] a set of fluorescence spectra of a calibration
 series, and
@@ -116,6 +128,7 @@ series, and
 In this vignette, all three data sets are used in an indermixed way
 to illustrate appropriate procedures for different tasks.
 
+This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. Therefore recommend to look up the used methods in R's help system using  \Rcode{? command}.
 
 \subsection{Notation}
 
@@ -127,13 +140,15 @@ for a fast overview.
 
 In R, slots of a S4 class can be accessed directly by the \Rcommand{@}
 operator. In this vignette, the notation \Rcode{@xxx} will thus mean
-\emph{``slot xxx of an object''}.
+\emph{``slot xxx of an object''} see figure~\ref{fig:structure} on page~\pageref{fig:structure}).
+%TODO vref
 
 Likewise, named elements of a \Rclass{list}, like the columns of
 a \Rclass{data.frame}, are accessed by the \Rcode{\$} operator,
 and \Rcode{\$xxx} will be used for \emph{``column xxx''}, and
 as an abbrevation for \emph{``column xxx of the data.frame in slot
-data of the object''}.
+data of the object''} see figure~\ref{fig:structure} on page~\pageref{fig:structure}) .%TODO vref
+
 
 
 \section{Remarks on R}
@@ -157,7 +172,7 @@ functions that are closely related to the generic functions in the
 row.}
 \begin{small}
 \renewcommand{\arraystretch}{2}
-\begin{tabular}{p{0.25\textwidth}p{0.6\textwidth}}
+\begin{tabular}{p{0.3\textwidth}p{0.65\textwidth}}
 \toprule
 \textbf{Function}                                                          & \textbf{Explanation}\\\cmidrule(lr){1-1}\cmidrule(lr){2-2}
 \Rfunction{print}, \Rfunction{show}, \Rfunction{summary}                   & print information about the object\\
@@ -165,18 +180,18 @@ row.}
 \Rfunction{[},\Rfunction{[[}, \Rfunction{\$}                               & extract parts of an object\\
 \Rfunction{[<-}, \Rfunction{[[<-}, \Rfunction{\$<-}                        & assign parts of an object\\
 \Rfunction{dim}, \Rfunction{ncol}, \Rfunction{nrow}, \emph{nwl}            & the dimensions of the object\\
-\Rfunction{colnames}, \Rfunction{rownames}, \Rfunction{dimnames}           & names of the spectra, data columns, and both plus the names of the wavelengths\\
+\Rfunction{colnames},~\Rfunction{rownames}, \Rfunction{dimnames}           & names of the spectra, data columns, and both plus the names of the wavelengths\\
 \Rfunction{labels}, \emph{\Rfunction{labels<-}}                            & labels for axis annotations etc.\\
 \Rfunction{+ - * \textasciicircum{} \%\% \%/\% / \%*\%}                    & arithmetical operators work on \Rcode{\$spc}\\
 \Rfunction{> < == >= <=}                                                   & comparison operators work on \Rcode{\$spc}\\
-\Rfunction{log}, \Rfunction{log10}, \Rfunction{exp}, etc.                  & basic math functions work on \Rcode{\$spc}, see also \Rcode{? \textquotedbl hyperSpec Math\textquotedbl}\\
+\Rfunction{log}, \Rfunction{log10}, \Rfunction{exp}, etc.                  & basic math functions work on \Rcode{\$spc}, see also: \Rcode{? \textquotedbl hyperSpec Math\textquotedbl}\\
 \Rfunction{min}, \Rfunction{max}, \Rfunction{range}                        & minimum, maximum, and range of the intensities in \Rcode{\$spc}\\
 \Rfunction{cbind}, \Rfunction{rbind}                                       & combine two objects by columns or rows\\
 \Rfunction{split}                                                          & split an object into a list of objects\\
 \Rfunction{apply}                                                          & apply a function row- or column-wise, calculate e.\,g. the mean spectrum or normalization factors\\
 \Rfunction{aggregate} (\Rfunction{ave})                                    & calculate sum characteristics for groups of spectra, e.\,g. cluster mean spectra. \Rpackage{hyperSpec}'s \Rfunction{aggregate} method covers also the functionality of \Rfunction{ave}.\\
 \Rfunction{sweep}                                                          & ``sweep'' a sum characteristic over rows or columns, e.\,g. center the data by substracting the mean spectrum.\\
-\Rfunction{as.character}, \Rfunction{as.matrix}, \Rfunction{as.data.frame} & type conversion functions\\
+\raggedright{\Rfunction{as.character}, \Rfunction{as.matrix}, \Rfunction{as.data.frame}} & type conversion functions\\
 \Rfunction{initialize}                                                     & create an object\\
 \Rfunction{validObject}                                                    & validity checking\\
 \bottomrule
@@ -211,13 +226,15 @@ library (hyperSpec)
 \Rclass{hyperSpec} is a S4 (or new-style) class. It has four so-called
 \emph{slots} that hold the data:
 \begin{description}
-\item [{\Robject{wavelength}}] containing a numeric vector with the wavelength
+\setlength{\labelwidth}{2.5cm}
+\setlength{\itemindent}{1.7cm}
+\item [{\Robject{@wavelength}}] containing a numeric vector with the wavelength
 axis of the spectra.
-\item [{\Robject{data}}] a \Rclass{data.frame}with the spectra and all
+\item [{\Robject{@data}}] a \Rclass{data.frame}with the spectra and all
 further information belonging to the spectra
-\item [{\Robject{label}}] a list with appropriate labels (particularly
+\item [{\Robject{@label}}] a list with appropriate labels (particularly
 for axis annotations)
-\item [{\Robject{log}}] a \Rclass{data.frame} keeping track of what is
+\item [{\Robject{@log}}] a \Rclass{data.frame} keeping track of what is
 done with the object
 \end{description}
 However, it is good practice to use the functions provided by \Rpackage{hyperSpec}
@@ -266,7 +283,7 @@ summary (chondro)
 
 The data set \Robject{chondro} consists of \Sexpr{nrow (chondro)}
 spectra with \Sexpr{nwl (chondro)} data points each, and \Sexpr{ncol (chondro)}
-data columns two for the spatial information plus \Robject{\$spc}.
+data columns: two for the spatial information plus \Robject{\$spc}.
 These informations can be directly obtained by
 
 <<nwl>>=
@@ -286,29 +303,14 @@ Likewise, \Rmethod{rownames} returns the names assigned to the spectra,
 and \Rmethod{dimnames} yields a list of these three vectors (including
 also the column names of \Robject{\$spc}).
 
-
-\section{Combining \Rclass{hyperspec} Objects} \mFun{\Rfunction{cbind} \Rfunction{rbind}}
-
-\Rclass{hyperspec} Objects can be bound together, either by rows
-to append a new spectral range or by columns to append new spectra
-
-<<cbind>>=
-cbind (chondro [, , 600 ~ 800], chondro [, , 1600 ~ 1800])
-rbind (chondro [, , 600 ~ 800], chondro [, , 600 ~ 800])
-@
-
-There is also a more general function, \Rfunction{bind}, taking the
-direction (\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}})
-as first argument and then all objects to bind either in separate
-arguments or in a list.
-
-
 \section{Creating a \Rclass{hyperSpec} Object, Data Import and Export}
 \subsection{ASCII Files} \mFun{\Rfunction{read.txt.long} \Rfunction{read.txt.wide} \Rfunction{write.txt.long} \Rfunction{write.txt.wide}}
 
 Currently, \Rclass{hyperSpec} provides four functions for general
 ASCII data import and export:
 \begin{description}
+\setlength{\labelwidth}{3cm}
+\setlength{\itemindent}{2.2cm}
 \item [{\Rfunction{read.txt.long}}] import long format ASCII files, i.e.
 one intensity value per row
 \item [{\Rfunction{read.txt.wide}}] import wide format ASCII files, i.e.
@@ -348,9 +350,13 @@ which is available at CRAN and can be installed by \Rcode{install.packages (\tex
 and Wavelength Vector}
 
 Once the data is in R's workspace, a \Rclass{hyperSpec} object is
-created by \Rcode{initialize (\textquotedbl{}hyperSpec\textquotedbl{})}.
+created by:\\
+\Rcode{spc <- new (\textquotedbl{}hyperSpec\textquotedbl{}, spc =
+  spectra.matrix, wavelength = wavelength.vector)}\\
 You will usually give the following arguments:
 \begin{description}
+\setlength{\labelwidth}{2.5cm}
+\setlength{\itemindent}{1.7cm}
 \item [{\Rcode{spc}}] the spectra matrix
 \item [{\Rcode{wavelength}}] the wavelength axis vector
 \item [{\Rcode{data}}] the extra data
@@ -359,10 +365,70 @@ wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
 axis label in \Rcode{\$spc}.
 \end{description}
 
-\section{Wavelengths and Spectral Axis}
+\section{Combining \Rclass{hyperspec} Objects} \mFun{\Rfunction{cbind} \Rfunction{rbind}}
+
+\Rclass{hyperspec} Objects can be bound together, either by rows
+to append a new spectral range or by columns to append new spectra
+
+<<cbind>>=
+cbind (chondro [, , 600 ~ 800], chondro [, , 1600 ~ 1800])
+rbind (chondro [, , 600 ~ 800], chondro [, , 600 ~ 800])
+@
+
+There is also a more general function, \Rfunction{bind}, taking the
+direction (\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}})
+as first argument and then all objects to bind either in separate
+arguments or in a list.
 
 
-\subsection{Wavelength Indices}\mFun{\Rfunction{wl2i} \Rfunction{i2wl}}
+\section{Access to the data}
+
+\subsection{Selecting and Deleting Spectra}
+
+The extraction function \Rfunction{[]} (or \Rfunction{[[]]},
+if the spectra \Rclass{matrix} or the \Rclass{data.frame} is needed
+rather than a \Rclass{hyperSpec} object) takes the spectra as first
+argument (For detailed help: \Rcode{? \textquotedbl[\textquotedbl}). It may be a vector giving the indices of the spectra to
+extract (select), a vector with negative indices indicating which
+spectra should be deleted, or a logical
+
+<<delspc>>=
+flu [1 : 3]
+flu [-3]
+chondro  [chondro$y > 10]
+@
+
+\subsection{Accessing the Extra Data }
+The second argument of the extraction functions \Rfunction{[]}
+and \Rfunction{[[]]} specifies the (extra) data columns.
+They can be given like any column specification for a \Rclass{data.frame},
+i.\,e. numeric, logical, or by a vector of the column names:
+
+<<data>>=
+colnames (chondro)
+chondro [[1 : 3, 1]]
+chondro [[1 : 3, -3]]
+chondro [[1 : 3, "x"]]
+chondro [[1 : 3, c (TRUE, FALSE, FALSE)]]
+@
+
+To select one column, the \Rcode{\$} operator is more convenient:
+
+<<data2>>=
+flu$c
+@
+
+The extra data may also be set this way:\\
+
+
+<<data3>>=
+flu$n <- list (1 : 6, label = "sample no.")
+@
+
+This function will append new columns, if necessary.
+
+\subsection{Wavelengths and Spectral Axis}
+\subsubsection{Wavelength Indices}\mFun{\Rfunction{wl2i} \Rfunction{i2wl}}
 
 Spectra in \Rpackage{hyperSpec} have always discretized wavelength
 axes, they are stored in a matrix with column corresponding to one
@@ -371,7 +437,7 @@ wavelength. \Rpackage{hyperSpec} provides two conversion functions:
 indices and \Rfunction{wl2i} calculates index vectors from wavelengths.
 
 If the wavelengths are given as a numeric vector, they are each converted
-to the corresponding wavelength. In addition there is a more sophioticated
+to the corresponding wavelength. In addition there is a more sophisticated
 possibility of specifying wavelength ranges using a \emph{formula}.
 The basic syntax is \emph{start~}$\sim$~\emph{end.} This yields
 a vector \emph{index of start }\Rcode{:}\emph{ index of end.}
@@ -404,7 +470,7 @@ wl2i (flu, min ~ 410)
 
 Often, specifications like \emph{wavelength \textpm $n$ data points}
 are needed. They can be given using complex numbers in the formula.
-The imaginary part is added to the index calculated from the wavelenght
+The imaginary part is added to the index calculated from the wavelength
 in the real part:
 
 <<wl2i.im>>=
@@ -423,37 +489,11 @@ wl2i (flu, c (min ~ 406.5, max - 2i ~ max))
 This mechanism also works for the wavelength arguments of \Rfunction{[]},
 \Rfunction{[[]]}, and \Rfunction{plotspc}.
 
-\section{Accessing the Extra Data }
-The second argument of the extraction functions \Rfunction{[]}
-and \Rfunction{[[]]} specifies the (extra) data columns.
-They can be given like any column specification for a \Rclass{data.frame},
-i.\,e. numeric, logical, or by a vector of the column names:
-
-<<data>>=
-colnames (chondro)
-chondro [[1 : 3, 1]]
-chondro [[1 : 3, -3]]
-chondro [[1 : 3, "x"]]
-chondro [[1 : 3, c (TRUE, FALSE, FALSE)]]
-@
-
-To select one column, the \Rcode{\$} operator is more convenient:
-
-<<data2>>=
-flu$c
-@
-
-The extra data may also be set this way:\\
+%TODO Wl-Achse ändern
+\subsubsection{Wavelength Axis Conversion}
 
 
-<<data3>>=
-flu$n <- list (1 : 6, label = "sample no.")
-@
-
-This function will append new columns, if necessary.
-
-
-\section{Accessing Parts of the \Rclass{hyperSpec} Object}\mFun{\Rfunction{[[]] \$. \$..}}
+\subsection{Fast Access to Parts of the \Rclass{hyperSpec} Object}\mFun{\Rfunction{[[]] \$. \$..}}
 
 \Rclass{hyperSpec} comes with three abbrevation functions for easy
 access to the data:
@@ -468,24 +508,12 @@ access to the data:
 \item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without \Rcode{x\$spc}). However, the columns must match exactly in this case.
 \end{description}
 
-\section{Selecting and Deleting Spectra}
-
-The extraction function \Rfunction{[]} (or \Rfunction{[[]]},
-if the spectra \Rclass{matrix} or the \Rclass{data.frame} is needed
-rather than a \Rclass{hyperSpec} object) takes the spectra as first
-argument. It may be a vector giving the indices of the spectra to
-extract (select), a vector with negative indices indicating which
-spectra should be deleted, or a logical
-
-<<delspc>>=
-flu [1 : 3]
-flu [-3]
-chondro  [chondro$y > 10]
-@
 
 \section{Plotting}
 \Rpackage{hyperSpec} comes with three predefined plotting functions.
 \begin{description}
+%\setlength{\labelwidth}{2.5cm}
+%\setlength{\itemindent}{1.7cm}
 \item [{\Rcode{plotspc}}] plots the spectra, i.~e. the intensities \Rcode{\$spc} over the wavelengths \Rcode{@wavelength}.
 \item [{\Rcode{plotmap}}] plots a false color map: a single value (e.\,g. average intensity or cluster membership) over two data columns (default \Rcode{\$x} and \Rcode{\$y}).
 \item [{\Rcode{plotc}}] plots a time series or calibration plot: e.\,g. an intensity over a single other data column (like concentration, depth, or time).
@@ -494,6 +522,8 @@ chondro  [chondro$y > 10]
 All three plus some more handy abbrevations are also accessible via \Rmethod{plot}: \mFun{\Rfunction{plot}}
 
 \begin{description}
+%\setlength{\labelwidth}{2.4cm}
+%\setlength{\itemindent}{1.7cm}
 \item [{\Rcode{plot (flu, \textquotedbl{}spc\textquotedbl{})}}] is equivalent to \Rcode{plotspc (flu)}
 \item [{\Rcode{plot (chondro, \textquotedbl{}spcmeansd\textquotedbl{})}}] plots mean spectrum $\pm$ 1 standard deviation
 \item [{\Rcode{plot (chondro, \textquotedbl{}spcprctl\textquotedbl{})}}] plots median, 16$^{\text{th}}$ and 84$^{\text{th}}$ percentile. This is similar to \Rcode{\textquotedbl{}spcmeansd\textquotedbl{}}. Spectroscopic data frequently are not gaussian distributed. The percentiles give a better idea of the true distribution. They are also less sensitive to outliers.
@@ -511,6 +541,7 @@ handed over to this function.
 
 %
 \begin{figure}
+\hspace*{-0.5cm}
 \setkeys{Gin}{width = .245\textwidth}
 \subfloat[\label{fig-plot-spc}]{
 <<plotspc, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
@@ -546,6 +577,8 @@ print (plotmap (chondro))
 \Rfunction{plotspc} offers a variety of parameters for customized
 plots. To plot ...
 \begin{description}
+\setlength{\labelwidth}{2.5cm}
+\setlength{\itemindent}{1.7cm}
 \item [{with~reversed~abscissa}] use \Rcode{wl.reverse = TRUE}
 \item [{in~different~colors}] colors use \Rcode{col = vector.of.colors}
 \item [{dots~instead~of~lines}] use \Rcode{lines.args = list (pch = 20, type = \textquotedbl{}p\textquotedbl{})}
@@ -555,9 +588,9 @@ plots. To plot ...
 If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}\\
 Cut the wavelength axis appropriately with \Rcode{xoffset = 800}
 \item [{stacked~spectra}] use \Rcode{stacked = TRUE}
-\item [{more~spectra~into~an~existing~plot}] use\Rcode{add = TRUE}
+\item [{more~spectra~into~an~existing~plot}] use \Rcode{add = TRUE}
 \item [{with~different~line~at~I~=~0}] use \Rcode{zeroline = \emph{list.of.arguments.to.abline}}.
-\Rcode{NULL}suppresses the line.
+\Rcode{NULL} suppresses the line.
 \end{description}
 <<ms, fig = TRUE, width = 8, height = 5, echo = FALSE, include = FALSE>>=
 fake.mass.spec <- new ("hyperSpec", spc = matrix (100*runif (25), nrow = 1),
@@ -593,10 +626,10 @@ see section \ref{HCA}.}
 
 \Rfunction{plotc} plots an intensity over one of the extra data columns.
 The abscissa uses column \Rcode{\$c} by default, another colum can
-be specifiedusing \Rfunarg{use.c}\Rcode{= name}. The ordinate can
+be specified using \Rfunarg{use.c}\Rcode{ = name}. The ordinate can
 be calculated as a sum characteristic (with parameter \Rfunarg{func}\Rcode{= function},
-defaulting to \Rmethod{sum}). If parameter \Rfunarg{z}is given,
-these values are used instead. \Rfunarg{z}may be the name of an extra
+defaulting to \Rmethod{sum}). If parameter \Rfunarg{z} is given,
+these values are used instead. \Rfunarg{z} may be the name of an extra
 data column, or a \Rclass{numeric} that should be used directly.
 
 To customize the plot, give any arguments that you would usually supply
@@ -617,12 +650,12 @@ the name of extra data columns.
 
 \paragraph{The color-coded axis. }
 
-Also \Rfunarg{z}can be used to select one column of the extra data
+Also \Rfunarg{z} can be used to select one column of the extra data
 by name. Alternatively, it may be a numeric or factor directy giving
 the values to be used. Each level of a factor will have one color.
 It is also possible to plot a sum caracteristic of the spectra: supply
 the function in argument \Rfunarg{func}. The default setting is to
-plot the average intensity (no \Rfunarg{z}and \Rfunarg{func}\Rcode{= mean}).
+plot the average intensity (no \Rfunarg{z} and \Rfunarg{func}\Rcode{= mean}).
 
 To plot with a different palette, use \Rfunarg{trellis.args}\Rcode{= list (col.regions = palette)}.
 
@@ -695,8 +728,8 @@ spectral interpolation. Figure \ref{fig-spcloess} shows the result
 of interpolating from 300 to 1800 and 2850 to 3150 cm\textsuperscript{-1}
 with 2 cm\textsuperscript{-1} data point distance. This correspends
 to a spectral resolution of about 4 cm\textsuperscript{-1}, and the
-decrease in spectral resolution can be seen at tha sharp bands where
-the maxima are not reached (due to the eact that the interpolation
+decrease in spectral resolution can be seen at the sharp bands where
+the maxima are not reached (due to the fact that the interpolation
 wavelength axis does not necessarily hit the maxima. The original
 spectrum had \Sexpr{nwl (paracetamol)} data points with unequal data
 point spacing (between \Sexpr{signif (min (diff (wl (paracetamol))), 2)}
@@ -724,7 +757,7 @@ chondro.offset.corrected <- sweep (chondro, 1, offsets, "-")
 
 \Rpackage{hyperSpec} comes with two functions to fit polynomial baselines.
 
-\Rfunction{spc.fit.poly} fits a polynomual baseline of the given
+\Rfunction{spc.fit.poly} fits a polynomial baseline of the given
 order. A least-squares fit is done so that the function may be used
 on rather noisy spectra. However, the user must supply an object that
 is cut appropriately. Particularly, the supplied wavelength ranges
@@ -756,7 +789,7 @@ each pixel. Such a constant can be immediately substracted:\\
 
 \subsubsection{Correcting Wavelength Dependence}
 
-This means that for each of the wavelenths the same correction needs
+This means that for each of the wavelengths the same correction needs
 to be applied to all spectra.
 \begin{enumerate}
 \item There might be wavelength dependent offsets (background or dark spectra).
@@ -785,7 +818,7 @@ be 1:
 \begin{enumerate}
 \item Calculate appropriate normalization factors:\\
 \Rcode{factors <- 1 / apply (spectra, 1, sum)} for area normalization.
-\Rfunction{mean} gives fqual results, just that tha Intensities are
+\Rfunction{mean} gives equal results, just that the Intensities are
 on the same scale as before.\\
 For minimum-maximum-normalization, first do an offset- or baseline
 correction, then calculate the \emph{\Rcode{factors}} using \Rfunction{max}.\\
@@ -810,8 +843,8 @@ data.
 However, from a spectroscopic point of view it depends on the particular
 data set whether centering does make sense or not.
 
-It is perfectly fine to center the \Robject{flu} data set: the inderpretation
-is that centering he data cancels the offset (background spectrum
+It is perfectly fine to center the \Robject{flu} data set: the interpretation
+is that centering the data cancels the offset (background spectrum
 etc.) of the calibration:
 
 <<center-flu>>=
@@ -823,10 +856,10 @@ plot (flu.centered)
 @
 
 On the other hand, the \Robject{chondro} data set consists of Raman
-spectra, so the spectroscopic interpretiation of centering is getting
+spectra, so the spectroscopic interpretation of centering is getting
 rid of the the average chemical composition of the sample. But: what
 is the meaning of the {}``average spectrum'' of an inhomogeneous
-sample? In this case it is better rather want to substract the minimum
+sample? In this case it is better to substract the minimum
 spectrum (which will hopefully have almost the same benefit on the
 data analysis) as it is the spectrum of that chemical composition
 that is underlying the whole sample.
@@ -846,14 +879,14 @@ plot (chondro, "spcprctl5")
 \subsection{Variance Scaling}
 
 Variance scaling is often used in multivariate analysis to adjust
-the influence and scalung of the variates (that are typically different
-physical values). However, it is hardly appropriate for spetra that
+the influence and scaling of the variates (that are typically different
+physical values). However, it is hardly appropriate for spectra that
 do have the same scale of the same physical value.
 
 
 \subsection{Multiplicative Scatter Correction (MSC)}
 
-MSC can be done using \Rfunction{msc}from package \Rpackage{pls}\citep{Mevik2007}.
+MSC can be done using \Rfunction{msc} from package \Rpackage{pls}\citep{Mevik2007}.
 It operates on the spectra matrix:
 
 <<msc, eval = FALSE>>=
@@ -917,9 +950,9 @@ plot (loadings [1:3], stacked = TRUE)
 print (plotmap (scores [,,2]))
 @
 }
-
+\caption{
 \label{fig:pca}\subref{fig-pca-load} The first three loadings: \Rcode{plot (loadings [1 : 3], stacked = TRUE)}.
-\subref{fig-pca-score} The second score map: \Rcode{plotmap (scores [, , 2])}.
+\subref{fig-pca-score} The second score map: \Rcode{plotmap (scores [, , 2])}}.
 \end{figure}
 
 
@@ -938,7 +971,7 @@ plot (dendrogram)
 In order to plot a cluster map, the cluster membership needs to be
 calulated from the dendrogram.
 
-First, cut tha dendrogam so that three clusters result:
+First, cut the dendrogam so that three clusters result:
 
 <<dendcut>>=
 clusters <- cutree (dendrogram, k = 3)
@@ -955,7 +988,7 @@ plotmap (chondro, z = as.factor (clusters), do.print = TRUE)
 \subfloat[\label{fig:clust:dend}]{\includegraphics[width=0.33\textwidth]{introduction-dend}}\subfloat[\label{fig:clust:map}]{\includegraphics[width=0.33\textwidth]{introduction-clustmap}}\subfloat[\label{fig:clust:spc}]{\includegraphics[width=0.33\textwidth]{introduction-clustmean}}
 
 \caption{The results of the cluster analysis: \subref{fig:clust:dend} the
-dendrogram \subref{fig:clust:mab} the map of the 3 clusters \subref{fig:clust:spc}
+dendrogram \subref{fig:clust:map} the map of the 3 clusters \subref{fig:clust:spc}
 the mean spectra.}
 
 
