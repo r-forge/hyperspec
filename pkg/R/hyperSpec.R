@@ -2237,7 +2237,8 @@ setMethod ("plot",
 						else if (length (dots$col) != 3)
 							dots$col <- rep (dots$col, length.out = 3)
 						if (is.null (dots$fill)) 
-							dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)
+							#dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)   # transparency sometimes looking weird
+							dots$fill <- rgb(t(col2rgb("black")/255)/2 + c (0.5, 0.5, 0.5))
 						if (is.null (dots$func.args))
 							dots$func.args <- list (na.rm = TRUE)
 						else if (is.null (dots$func.args$na.rm))
@@ -2252,7 +2253,8 @@ setMethod ("plot",
 						else if (length (dots$col) != 3)
 							dots$col <- rep (dots$col, length.out = 3)
 						if (is.null (dots$fill)) {
-							dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)
+							#dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)   # transparency sometimes looking weird
+							dots$fill <- rgb(t(col2rgb("black")/255)/2 + c (0.5, 0.5, 0.5))
 						}
 						if (is.null (dots$func.args))
 							dots$func.args <- list ()
@@ -2270,7 +2272,9 @@ setMethod ("plot",
 						else if (length (dots$col) != 5)
 							dots$col <- rep (dots$col, length.out = 5)
 						if (is.null (dots$fill)) {
-							dots$fill <- rep(rgb(t(col2rgb(dots$col[3])/255),alpha=0.33), 2)
+							#dots$fill <- rep(rgb(t(col2rgb(dots$col[3])/255),alpha=0.33), 2)   # transparency sometimes looking weird
+							dots$fill <- c (rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75), 
+							                rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .50))
 						}
 						if (is.null (dots$func.args))
 							dots$func.args <- list ()

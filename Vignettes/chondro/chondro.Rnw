@@ -244,7 +244,7 @@ chondro <- chondro - baselines
 %
 \begin{figure}[tbh]
 \subfloat[\label{fig:bl-bl}The spectra after smoothing, baseline correction,
-and normalization.]{\includegraphics[width=0.49\textwidth]{chondro-fig-norm}}\subfloat[\label{fig:bl:perc} The spectra after substracting the 5\textsuperscript{th}
+and normalization.]{\includegraphics[width=0.49\textwidth]{chondro-norm}}\subfloat[\label{fig:bl:perc} The spectra after substracting the 5\textsuperscript{th}
 percentile spectrum.]{\includegraphics[width=0.49\textwidth]{chondro-perc}}\caption{\label{fig:bl}The preprocessed spectra.}
 
 \end{figure}
