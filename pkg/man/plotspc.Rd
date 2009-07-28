@@ -9,11 +9,12 @@
 \usage{
 plotspc(object, wl.range = NULL, wl.index = FALSE,
         wl.reverse = FALSE,
-        spc.nmax = 50, func = NULL, func.args = list(), stacked = FALSE, 
+        spc.nmax = 50, func = NULL, func.args = list(), stacked = NULL, 
         add = FALSE, bty = "l", col = "black", plot.args = list (),
         xoffset = 0, yoffset = 0, nxticks = 10, axis.args = list (),
-        fill = NULL, border = NA, title.args = list(),
-        polygon.args = list(), lines.args = list(), zeroline = list (lty = 2))
+        fill = NULL, fill.col = NULL, border = NA, title.args = list(),
+        polygon.args = list(), lines.args = list(), 
+        zeroline = if (all (yoffset == 0)) list (lty = 2) else NULL)
 }
 \arguments{
   \item{object}{the \code{hyperSpec} object}
@@ -67,15 +68,23 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
 
   \item{nxticks}{hint how many tick marks the abscissa should have.}
 
-  \item{stacked}{if \code{TRUE}, a "stacked" plot is produced, see the
-	 example.} 
+  \item{stacked}{if not \code{NULL}, a "stacked" plot is produced, see the
+	 example. \code{stacked} may be \code{TRUE} to stack single spectra. 
+	 A numeric or factor is interpreted as giving the grouping, character is interpreted as the name 
+	 of the extra data column that holds the groups.} 
 
   \item{axis.args}{\code{list} with further arguments for
   \code{\link[graphics]{axis}}. \code{axis.args$x} should contain
   arguments for plotting the abscissa, \code{axis.args$y} those for the
   ordinate (again as \code{lists}).}
-  \item{fill}{character vector with fill color}
+  
+  \item{fill}{if not \code{NULL}, the area between the specified spectra is filled with color 
+  \code{col}. The grouping can be given as factor or numeric, or as a character with the name of  
+  the extra data column to use. If a group contains more than 2 spectra, the first and the last are used.
+  
+  If \code{TRUE} spectra n and nrow (spc) - n build a group.}
 
+  \item{fill.col}{character vector with fill color. Defaults to brightened colors from \code{col}.}
   \item{border}{character vector with border color. You will need to set the line color \code{col} to \code{NA} in order see the effect.
    }
 
@@ -97,7 +106,8 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
 
   \item{zeroline}{\code{NULL} or a list with arguments \code{\link[graphics]{abline}}, used to plot line (s) marking I = 0.
   
-  \code{NULL} suppresses plotting of the line.  
+  \code{NULL} suppresses plotting of the line.  The line is by default turned off if  \code{yoffset} 
+  is not 0. 
   }
 }
 \details{
@@ -155,12 +165,17 @@ plotspc (laser[(0:4)*20+1,,], stacked = TRUE)
 
 plotspc (laser, func = mean_pm_sd, 
          col = c(NA, "red", "black"), lines.args = list (lwd = 2),
-         fill = "yellow", border = "blue",
+         fill = c (1, NA, 1), 
+         fill.col = "yellow", border = "blue",
          polygon.args = list (lty = 2, lwd = 4),
          title.args = list (xlab = expression (lambda[emission] / nm),
                             ylab = list(line = 3.4)),
          axis.args = list (x = list (col = "magenta"), y = list (las = 1))
         )
+        
+groups <- rep (1 : 3, length.out = nrow (chondro))
+mean.pm.sd <- aggregate (chondro, groups, mean_pm_sd)
+plot (mean.pm.sd, col = matlab.palette (3), fill = ".aggregate", stacked = ".aggregate")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

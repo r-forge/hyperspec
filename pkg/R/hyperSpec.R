@@ -1878,7 +1878,7 @@ plotspc <- function  (object,
 		spc.nmax = 50,
 		func = NULL,
 		func.args = list (),
-		stacked = FALSE,
+		stacked = NULL,
 		## plot / lines
 		add = FALSE,
 		bty = "l",
@@ -1891,11 +1891,12 @@ plotspc <- function  (object,
 		axis.args = list () ,
 		## parameters for filled regions
 		fill = NULL,
+		fill.col = NULL,
 		border = NA, 
 		title.args = list (),
 		polygon.args = list (),
 		lines.args = list (),
-		zeroline = list (lty = 2)
+		zeroline = if (all (yoffset == 0)) list (lty = 2) else NULL
 ){
 	validObject (object)
 	
@@ -1984,12 +1985,12 @@ plotspc <- function  (object,
 	}
 	
 	## stacked plot
-	if (stacked){
-		yoffset <- apply (spc, 1, range, na.rm = TRUE)
-		yoffset [2,] <- yoffset[2,] - yoffset [1,]
-		yoffset <- c(-yoffset[1,], 0) + c(0, cumsum (yoffset[2,]))
-		yoffset <- yoffset [sequence (nrow (spc))]
-	}
+	if (!is.null (stacked)){
+		yoffset <- stacked.offsets (object, stacked, spc)
+		yoffset <- yoffset$offsets [yoffset$groups]
+		stacked <- TRUE
+	} else 
+		stacked <- FALSE
 	spc <- sweep (spc, 1, yoffset, "+")
 	
 	if (! add){
@@ -2126,40 +2127,49 @@ plotspc <- function  (object,
 			do.call (title, c(title.args[[i]], title.args[other]))
 	}
 	
-	col <- rep (col, nrow(spc))
+	col <- rep (col, each = ceiling (nrow (spc) / length (col)), length.out = nrow (spc))
 	
 	## start loop over wavelength ranges
 	for (i in seq_along (x)){
 		if (!is.null (fill)){
-			## TODO: fill -> grouping for fill, col -> fill color, border -> border color
-			## 
-			if (!is.vector (fill) || !is.character(fill))
-				stop ("fill must be a character vector.")
-			
-			if (nrow (spc) < 2)
-				stop ("Nothing to fill: at least 2 spectra are required")
-			
-			ifill <- seq_len (nrow (spc))
-			
-			if (nrow (spc) %% 2) {
-				ifill <- ifill [- (floor (nrow (spc) / 2) + 1)]
-			}
-			ifill [- (1 : length (ifill) / 2)] <- rev (ifill[- (1 : length (ifill) / 2)]) 
-			
-			ifill <- matrix (ifill, ncol = 2, byrow = FALSE)
+			if (is.character (fill))
+				fill <- unlist (object [[, fill]])
+			else if (isTRUE (fill)){
+				fill <- seq (1 : (nrow (spc) / 2))
+				if (nrow (spc) %% 2 == 1) # odd numberr of spectra
+					fill <- c (fill, NA, rev (fill))
+				else
+					fill <- c (fill, rev (fill))
+			} 
+			if (is.factor (fill))
+				fill <- as.numeric (fill)
+			else if (!is.numeric (fill))
+				stop ("fill must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
+
+			groups = unique (fill)
+			groups = groups [!is.na (groups)]
 			
 			if (is.null(polygon.args$x))
 				polygon.args <- c(list(x = NULL, y = NULL), polygon.args)
 			
-			fill <- rep (fill, length.out = nrow (ifill))
+			if (is.null (fill.col)){
+				fill.col <- character (length (groups))
+				for (j in seq_along (groups)){
+					dummy <- which (fill == groups [j])
+					fill.col [j] <- rgb(t(col2rgb(col[dummy[1]]) / 255) / 3 + 2/3)
+				}
+			} else {				
+				fill.col <- rep (fill.col, length.out = length (groups))
+			}
 			
-			border <- rep (border, length.out = nrow (ifill)) 
+			border <- rep (border, length.out = length (groups)) 
 			
-			for (j in 1 : nrow (ifill)){
-				polygon.args$x <- c (x  [[i]]                  , rev (x   [[i]]         ))
-				polygon.args$y <- c (spc[ifill[j, 1],ispc[[i]]], rev (spc [ifill[j, 2],ispc[[i]]]))
-				polygon.args$col = fill [j]
-				polygon.args$border <- border [j]
+			polygon.args$x <- c (x  [[i]]                  , rev (x   [[i]]         ))
+			for (j in seq_along (groups)){
+				dummy <- which (fill == groups [j])
+				polygon.args$y <- c (spc[head(dummy, 1), ispc[[i]]], rev (spc [tail (dummy, 1), ispc[[i]]]))
+				polygon.args$col = fill.col [groups [j]]
+				polygon.args$border <- border [groups [j]]
 				
 				do.call (polygon, polygon.args)
 			}
@@ -2193,6 +2203,37 @@ plotspc <- function  (object,
 					y = spc,
 					wavelengths = rep (unlist (wavelengths), each = nrow (spc))
 			))
+}
+
+###-----------------------------------------------------------------------------
+###
+###  stacked.offsets
+###  
+
+stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
+if (is.character (stacked))
+	stacked <- unlist (x [[, stacked]])
+else if (isTRUE (stacked))
+	stacked <- seq (nrow (x@data))
+
+if (is.factor (stacked))
+	stacked <- as.numeric (stacked)
+else if (!is.numeric (stacked))
+	stop ("stacked must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
+
+if (is.null (.spc))
+	.spc <- x@data$spc
+
+## using ave would be easier, but it splits the data possibly leading to huge lists.
+groups <- unique (as.numeric (stacked))  
+offset <- matrix (nrow = 2, ncol = length (groups))
+for (i in seq_along (groups))
+	offset[, i] <- range (.spc [stacked == groups[i], ], na.rm = TRUE)
+
+
+offset [2,] <- offset[2,] - offset [1,]
+offset <- c(-offset[1,], 0) + c(0, cumsum (offset[2,]))
+list (offsets = offset [seq (length (groups))], groups = stacked)
 }
 
 ###-----------------------------------------------------------------------------
@@ -2232,13 +2273,7 @@ setMethod ("plot",
 						plotspc (x, ...)
 					},
 					spcmeansd = {
-						if (is.null (dots$col))
-							dots$col = c(NA, "black", NA)
-						else if (length (dots$col) != 3)
-							dots$col <- rep (dots$col, length.out = 3)
-						if (is.null (dots$fill)) 
-							#dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)   # transparency sometimes looking weird
-							dots$fill <- rgb(t(col2rgb("black")/255)/2 + c (0.5, 0.5, 0.5))
+						dots$fill <- c (1, NA, 1)
 						if (is.null (dots$func.args))
 							dots$func.args <- list (na.rm = TRUE)
 						else if (is.null (dots$func.args$na.rm))
@@ -2248,14 +2283,7 @@ setMethod ("plot",
 						do.call (plotspc, dots) 
 					},
 					spcprctile = {
-						if (is.null (dots$col))
-							dots$col = c("#000000AA", "black", "#000000AA")
-						else if (length (dots$col) != 3)
-							dots$col <- rep (dots$col, length.out = 3)
-						if (is.null (dots$fill)) {
-							#dots$fill <- rgb(t(col2rgb(dots$col[2])/255),alpha=0.5)   # transparency sometimes looking weird
-							dots$fill <- rgb(t(col2rgb("black")/255)/2 + c (0.5, 0.5, 0.5))
-						}
+						dots$fill <- TRUE	
 						if (is.null (dots$func.args))
 							dots$func.args <- list ()
 						if (is.null (dots$func.args$na.rm))
@@ -2267,15 +2295,11 @@ setMethod ("plot",
 						do.call (plotspc, dots) 
 					},
 					spcprctl5 = {
-						if (is.null (dots$col))
-							dots$col = c("#00000080", "#000000AA", "black", "#000000AA", "#00000080")
-						else if (length (dots$col) != 5)
-							dots$col <- rep (dots$col, length.out = 5)
-						if (is.null (dots$fill)) {
-							#dots$fill <- rep(rgb(t(col2rgb(dots$col[3])/255),alpha=0.33), 2)   # transparency sometimes looking weird
-							dots$fill <- c (rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75), 
-							                rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .50))
+						if (is.null (dots$fill.col)) {
+							dots$fill.col <- c(rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75), 
+							                   rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .50))
 						}
+						dots$fill <-  c(1, 2, 3, 2, 1)
 						if (is.null (dots$func.args))
 							dots$func.args <- list ()
 						if (is.null (dots$func.args$na.rm))

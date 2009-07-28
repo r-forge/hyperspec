@@ -12,7 +12,7 @@
 \usepackage{url}
 \usepackage{relsize}
 \usepackage{graphicx}
-\usepackage[unicode=true, 
+\usepackage[unicode=true,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
  {hyperref}
@@ -20,7 +20,7 @@
  pdfauthor={Claudia Beleites},
  pdfsubject={Vignette on hyperSpec's chondro data set},
  pdfkeywords={chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}}
- 
+
 \makeatletter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
@@ -55,9 +55,9 @@
 % \VignetteKeywords{chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}
 % \VignettePackage{hyperSpec}
 \AtBeginDocument{
-\fvset{listparameters={\setlength{\topsep}{0pt}}} 
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
-} 
+}
 \SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
 }
 
@@ -84,7 +84,7 @@ CENMAT, DMRN, University of Trieste}
 \maketitle
 <<startup, echo = FALSE, results = hide>>=
 #setwd ("~/Uni/workspace/hyperspec.rforge/Vignettes/chondro")
-options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6)))) 
+options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
 options ("width" = 100)
 library (hyperSpec)
 @
@@ -102,7 +102,7 @@ needed preprocessing methods
 \item plotting spectra
 \item plotting false color maps
 \end{itemize}
-and other basic work techniques 
+and other basic work techniques
 \begin{itemize}
 \item cutting the spectral range,
 \item selecting (extracting) or deleting spectra, and
@@ -133,7 +133,7 @@ frame indicates the measurement area (35 $\times$21 μm).}
 \end{figure}
 Raman spectra of a cartilage section were measured on each point of
 a grid, resulting in a so-called \emph{Raman map}. Figure~\ref{fig:vis-all}
-shows a microscope picture fo the measuarea and its surroundings. 
+shows a microscope picture fo the measuarea and its surroundings.
 
 The measurement parameters were:
 \begin{description}
@@ -145,7 +145,7 @@ The measurement parameters were:
 \end{description}
 All data to reproduce this Vignette is accessible at \Rpackage{hyperSpec}'s
 homepage, \url{http://r-forge.r-project.org/projects/hyperspec/},
-as the original file is far too large to be included in the package. 
+as the original file is far too large to be included in the package.
 
 
 \section{Data Import}
@@ -167,7 +167,7 @@ chondro <- scan.txt.Renishaw ("chondro.txt", data = "xyspc")
 chondro
 @
 
-To get an overview of the spectra, : 
+To get an overview of the spectra, :
 
 <<fig-rawspc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 plot (chondro, "spcprctl5")
@@ -221,7 +221,7 @@ be good to trade some spectral resolution for hgher signal to noise
 ratio. All three of these issues are tackled by interpolating and
 smoothing of the wavelength axis by \Rfunction{spc.loess}. The resolution
 is to be reduced to 8 cm\textsuperscript{-1}, or 4 cm\textsuperscript{-1}
-data point spacing. 
+data point spacing.
 
 <<interp>>=
 chondro <- spc.loess (chondro, seq (602, 1800, 4))
@@ -256,7 +256,7 @@ percentile spectrum.]{\includegraphics[width=0.49\textwidth]{chondro-perc}}\capt
 As the spectra are quite similar, area normalization should work well:.
 
 <<norm, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-chondro <- sweep (chondro, 1, apply (chondro, 1, mean), "/") 
+chondro <- sweep (chondro, 1, apply (chondro, 1, mean), "/")
 plot (chondro, "spcprctl5")
 @
 
@@ -272,7 +272,7 @@ But the minimum spectrum also picks up a lot of noise. So instead,
 the 5\textsuperscript{th} percentile spectrum is substracted:
 
 <<perc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-chondro <- sweep (chondro, 2, apply (chondro, 2, quantile, 0.05), "-") 
+chondro <- sweep (chondro, 2, apply (chondro, 2, quantile, 0.05), "-")
 plot (chondro, "spcprctl5")
 @
 
@@ -295,7 +295,7 @@ loadings <- decomposition (chondro, t(pca$rotation), scores = FALSE, label.spc =
 @
 
 Plotting the scores of each PC against all other gives a good idea
-where to look for outliers. 
+where to look for outliers.
 
 <<pca-pairs, eval = FALSE>>=
 pairs (scores [[,,1:20]], pch = 19, cex = 0.5)
@@ -308,7 +308,7 @@ There is also a function to identify spectra in a spectra plot, \Rfunction{spc.i
 but this is not helpful here.
 
 <<pca-identify, eval = FALSE>>=
-out <- map.identify (scores [,,5]) 
+out <- map.identify (scores [,,5])
 out <- c (out, map.identify (scores [,,6]))
 out <- c (out, map.identify (scores [,,7]))
 @
@@ -319,10 +319,10 @@ out <- c(105, 140, 216, 289, 75, 69)
 
 <<pca-cols>>=
 out
-outcols <- c ("red", "blue", "#800080", "orange", "magenta", "brown") 
+outcols <- c ("red", "blue", "#800080", "orange", "magenta", "brown")
 
-cols <- rep ("black", nrow(chondro)) 
-cols [out] <- outcols 
+cols <- rep ("black", nrow(chondro))
+cols [out] <- outcols
 @
 
 We can check our findings by comparing the spectra to the bulk of
@@ -333,7 +333,7 @@ plot(chondro[1], plot.args = list (ylim = c (1, length (out) + .7)), lines.args 
 for (i in seq (along = out)){
    plot(chondro, "spcprctl5", yoffset = i, add = TRUE, col = "gray")
    plot (chondro [out[i]], yoffset = i, col = outcols[i] , add = TRUE, lines.args = list (lwd = 2))
-   text (600, i + .33, out [i])  } 
+   text (600, i + .33, out [i])  }
 @
 
 and also by looking where these spectra appear in the scores \Rfunction{pairs}
@@ -370,7 +370,7 @@ The first step in HCA is the choice of the distance. The R function
 The so-called \textsc{Pearson} distance \global\long\def\COR{COR}
 $D\lyxmathsym{\texttwosuperior}_{Pearson}=\frac{1-\COR\left(X\right)}{2}$
 is popular in data analysis of vibrational spectra and is provided
-by \Rpackage{hyperSpec}. 
+by \Rpackage{hyperSpec}.
 
 Also for computing the dendrogram, a number of choices are available.
 I choose \textsc{Ward}'s method, and, as it uses \textsc{Euclid}ean
@@ -383,7 +383,7 @@ dendrogram <- hclust (dist, method = "ward")
 @
 
 <<denddummy, eval = FALSE>>=
-plot (dendrogram) 
+plot (dendrogram)
 @
 
 In order to get clusters, the dendrogram is cut at a level specified
@@ -400,8 +400,8 @@ The cluster membership can also be marked in the dendrogram:
 
 <<dend, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 plot (dendrogram, labels = FALSE, hang = 0)
-col.clust <- matlab.palette(3) 
-points (seq_along (dendrogram$order), rep (-3, length (dendrogram$order)), 
+col.clust <- matlab.palette(3)
+points (seq_along (dendrogram$order), rep (-3, length (dendrogram$order)),
         col = col.clust [clusters [dendrogram$order]], pch = "|")
 @
 
@@ -437,11 +437,11 @@ look at the nucleic acid distribution, using the DNA bands at 728,
 782, 1098, 1240, 1482, and 1577~cm\textsuperscript{-1}:
 
 <<DNA, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-print (plotmap (chondro[, , c( 728 - 1i ~  728 + 1i, 
-                               782 - 1i ~  782 + 1i, 
-                              1098 - 1i ~ 1098 + 1i, 
-                              1240 - 1i ~ 1240 + 1i, 
-                              1482 - 1i ~ 1482 + 1i, 
+print (plotmap (chondro[, , c( 728 - 1i ~  728 + 1i,
+                               782 - 1i ~  782 + 1i,
+                              1098 - 1i ~ 1098 + 1i,
+                              1240 - 1i ~ 1240 + 1i,
+                              1482 - 1i ~ 1482 + 1i,
                               1577 - 1i ~ 1577 + 1i)]))
 @
 

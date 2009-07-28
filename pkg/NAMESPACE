@@ -47,7 +47,8 @@ export (bind,
         pearson.dist,
         mean_pm_sd,
         mean_sd,
-        wc
+        wc,
+        stacked.offsets
         )
 
 exportClass (hyperSpec)
