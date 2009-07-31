@@ -1,53 +1,45 @@
 %% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-\documentclass[a4paper,english,a4paper, 10pt, smallheadings, DIV15]{scrartcl}
-\usepackage[T1]{fontenc}
+\documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl} % ursprünglich DIV 15
+%\usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
 \usepackage{color}
 \usepackage{babel}
 
+\usepackage{array}
 \usepackage{textcomp}
 \usepackage{url}
-\usepackage{relsize}
+\usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage[numbers]{natbib}
 \usepackage[unicode=true,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
  {hyperref}
 \hypersetup{pdftitle={Chondro },
- pdfauthor={Claudia Beleites},
+ pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's chondro data set},
  pdfkeywords={chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}}
+\usepackage{hyphenat}
 
 \makeatletter
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
-\DeclareRobustCommand{\greektext}{%
-  \fontencoding{LGR}\selectfont\def\encodingdefault{LGR}}
-\DeclareRobustCommand{\textgreek}[1]{\leavevmode{\greektext #1}}
-\DeclareFontEncoding{LGR}{}{}
-
-\DeclareRobustCommand{\lyxmathsym}[1]{\ifmmode\begingroup\def\b@ld{bold}
-  \def\rmorbf##1{\ifx\math@version\b@ld\textbf{##1}\else\textrm{##1}\fi}
-  \mathchoice{\hbox{\rmorbf{#1}}}{\hbox{\rmorbf{#1}}}
-  {\hbox{\smaller[2]\rmorbf{#1}}}{\hbox{\smaller[3]\rmorbf{#1}}}
-  \endgroup\else#1\fi}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
 \usepackage{Sweave}
 
-\newcommand{\Rcode}[1]{{\texttt{#1}}}
-\newcommand{\Robject}[1]{{\texttt{#1}}}
-\newcommand{\Rcommand}[1]{{\texttt{#1}}}
-\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
 
-\newcommand{\Rfunarg}[1]{{\textit{#1}}}
-\newcommand{\Rpackage}[1]{{\textit{#1}}}
-\newcommand{\Rmethod}[1]{{\textit{#1}}}
-\newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+
+\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 % Meta information - fill between {} and do not remove %
@@ -63,9 +55,18 @@
 
 % my preferred packages
 \usepackage{xspace}
+\usepackage{tikz}
+\usepackage{subfig}
+\usepackage{booktabs}
 
-\newcommand{\rcm}[1]{\ensuremath{#1} \mathrm{cm^{-1}}\xspace}
-\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\usepackage{hyphenat}
+\usepackage{fancyvrb}
+\usepackage{siunitx}
+\usepackage{relsize} %wird es benötigt?
+
+%\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
 
 \@ifundefined{showcaptionsetup}{}{%
  \PassOptionsToPackage{caption=false}{subfig}}
@@ -75,8 +76,7 @@
 \begin{document}
 
 \title{Raman Spectra of Chondrocytes in Cartilage:\\
-\Rpackage{hyperSpec}'s \Robject{chondro} data set}
-
+\Rpackage{hyperSpec}'s \Robject{chondro} data set }
 
 \author{Claudia Beleites (\url{cbeleites@units.it})\\
 CENMAT, DMRN, University of Trieste}
@@ -88,7 +88,6 @@ options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
 options ("width" = 100)
 library (hyperSpec)
 @
-
 
 \section{Introduction}
 
@@ -133,7 +132,7 @@ frame indicates the measurement area (35 $\times$21 μm).}
 \end{figure}
 Raman spectra of a cartilage section were measured on each point of
 a grid, resulting in a so-called \emph{Raman map}. Figure~\ref{fig:vis-all}
-shows a microscope picture fo the measuarea and its surroundings.
+shows a microscope picture of the measured area and its surroundings.
 
 The measurement parameters were:
 \begin{description}
@@ -185,20 +184,11 @@ Figure~\ref{fig:raw} shows the results.
 \begin{figure}[tbh]
 \subfloat[The raw spectra: median, 16\textsuperscript{th} and 84\textsuperscript{th},
 and 5\textsuperscript{th} and 95\textsuperscript{th} percentile
-spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig-rawspc}
-
-
-
-}\subfloat[The sum intensity of the raw spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig-rawmap}
-
-
-
-}
-
+spectra.]
+{\includegraphics[width=0.5\textwidth]{chondro-fig-rawspc}}
+\subfloat[The sum intensity of the raw spectra.]
+{\includegraphics[width=0.5\textwidth]{chondro-fig-rawmap}}
 \caption{\label{fig:raw} The raw data.}
-
-
-
 \end{figure}
 
 
@@ -217,7 +207,7 @@ is to remove these. Another issue that can be solved at the same time
 is that the wavelength axis is not evenly spaced (the data points
 are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and \Sexpr{signif (max (diff (wl (chondro))), 2)}
 cm\textsuperscript{-1} apart from each other). Furthermore, it would
-be good to trade some spectral resolution for hgher signal to noise
+be good to trade some spectral resolution for higher signal to noise
 ratio. All three of these issues are tackled by interpolating and
 smoothing of the wavelength axis by \Rfunction{spc.loess}. The resolution
 is to be reduced to 8 cm\textsuperscript{-1}, or 4 cm\textsuperscript{-1}
@@ -243,10 +233,9 @@ chondro <- chondro - baselines
 
 %
 \begin{figure}[tbh]
-\subfloat[\label{fig:bl-bl}The spectra after smoothing, baseline correction,
-and normalization.]{\includegraphics[width=0.49\textwidth]{chondro-norm}}\subfloat[\label{fig:bl:perc} The spectra after substracting the 5\textsuperscript{th}
-percentile spectrum.]{\includegraphics[width=0.49\textwidth]{chondro-perc}}\caption{\label{fig:bl}The preprocessed spectra.}
-
+\subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{chondro-norm}}\quad
+\subfloat[\label{fig:bl:perc} The spectra after subtracting the 5\textsuperscript{th} percentile spectrum.]{\includegraphics[width=0.4\textwidth]{chondro-perc}}
+\caption{\label{fig:bl}The preprocessed spectra.}
 \end{figure}
 
 
@@ -263,13 +252,13 @@ plot (chondro, "spcprctl5")
 For the results of these preprocessing steps, see figure~\ref{fig:bl-bl}.
 
 
-\subsection{Substracting the Overall Composition}
+\subsection{Subtracting the Overall Composition}
 
 The spectra are very homogeneous, but I'm interested in the differences
-between the different regions of the sample. Sustracting the minimum
-spectrum cancels out the matrix compositon that is common to all spectra.
+between the different regions of the sample. Subtracting the minimum
+spectrum cancels out the matrix composition that is common to all spectra.
 But the minimum spectrum also picks up a lot of noise. So instead,
-the 5\textsuperscript{th} percentile spectrum is substracted:
+the 5\textsuperscript{th} percentile spectrum is subtracted:
 
 <<perc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 chondro <- sweep (chondro, 2, apply (chondro, 2, quantile, 0.05), "-")
@@ -284,7 +273,7 @@ bands in some but not all of the spectra.
 \subsection{Outlier Removal by Principal Component Analysis (PCA)}
 
 PCA is a technique that decomposes the data into scores and loadings
-(virual spectra). It is known to be quite sensitive to outliers. Thus,
+(virtual spectra). It is known to be quite sensitive to outliers. Thus,
 I use it for outlier detection. The resulting scores and loadings
 are put again into \Rclass{hyperSpec} objects by \Rfunction{decomposition}:
 
@@ -368,7 +357,7 @@ and thus grouped together.
 The first step in HCA is the choice of the distance. The R function
 \Rfunction{dist} offers a variety of distance measures to be computed.
 The so-called \textsc{Pearson} distance \global\long\def\COR{COR}
-$D\lyxmathsym{\texttwosuperior}_{Pearson}=\frac{1-\COR\left(X\right)}{2}$
+$D^2_{Pearson}=\frac{1-\COR\left(X\right)}{2}$
 is popular in data analysis of vibrational spectra and is provided
 by \Rpackage{hyperSpec}.
 
@@ -430,7 +419,7 @@ plot(cluster.means, yoffset = rep ((1:3), each = 3), col = rep (matlab.palette (
 
 \section{Plotting a False-Colour Map of Certain Spectral Regions}
 
-\Rclass{hyperSpec} comes with a sophisticated inferface for specifying
+\Rclass{hyperSpec} comes with a sophisticated interface for specifying
 spectral ranges. Expressing things like 1000~cm\textsuperscript{-1}
 $\pm$~1 data points are easily possible. Thus, we can have a fast
 look at the nucleic acid distribution, using the DNA bands at 728,
@@ -452,12 +441,11 @@ of the left cell.
 %
 \begin{figure}[tbh]
 \subfloat[\label{fig:clustmeans} The cluster mean $\pm$ 1 standard deviation
-spectra. The blue cluster shows distinct lipid bnds, the green cluster
-collagen, and the red cluster proteins and nucleic acids.]{\includegraphics[width=0.495\textwidth]{chondro-clustmeans}
-
-}\subfloat[\label{fig:DNA} False colour map of the DNA band intensities.]{\includegraphics[width=0.495\textwidth]{chondro-DNA}
-
-}
+spectra. The blue cluster shows distinct lipid bands, the green cluster
+collagen, and the red cluster proteins and nucleic acids.]
+{\includegraphics[width=0.495\textwidth]{chondro-clustmeans}}
+\subfloat[\label{fig:DNA} False colour map of the DNA band intensities.]
+{\includegraphics[width=0.495\textwidth]{chondro-DNA}}
 
 \caption{}
 
