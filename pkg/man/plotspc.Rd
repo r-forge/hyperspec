@@ -14,7 +14,7 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
         xoffset = 0, yoffset = 0, nxticks = 10, axis.args = list (),
         fill = NULL, fill.col = NULL, border = NA, title.args = list(),
         polygon.args = list(), lines.args = list(), 
-        zeroline = if (all (yoffset == 0)) list (lty = 2) else NULL)
+        zeroline = list (lty = 2, col = col))
 }
 \arguments{
   \item{object}{the \code{hyperSpec} object}

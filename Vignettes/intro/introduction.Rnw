@@ -108,11 +108,11 @@ be used for:
 \setlength{\itemindent}{1.7cm}
 %\setlength{\leftmargini}{5cm}
 %\showthe\labelindent
-\showthe\itemindent
-\showthe\labelwidth
-\showthe\leftmargin
-\showthe\labelsep
-\showthe\listparindent
+%\showthe\itemindent
+%\showthe\labelwidth
+%\showthe\leftmargin
+%\showthe\labelsep
+%\showthe\listparindent
 \item [wavelength:] frequency, wavenumbers, chemical shift, Raman shift,
 $\frac{m}{z}$, etc.
 \item [intensity:] transmission, absorbance, $\frac{e^{-}}{s}$, \textellipsis
@@ -458,8 +458,14 @@ one may get only every $n^{th}$ point or repetitions of the same
 index:\\
 <<wl2ivec>>=
 wl2i (flu, 405 : 410)
+@
+<<wl2ivec2>>=
 wl2i (flu, 405 ~ 410)
+@
+<<wl2ivec3>>=
 wl2i (chondro, 1000 : 1010)
+@
+<<wl2ivec4>>=
 wl2i (chondro, 1000 ~ 1010)
 @
 \item If the object's wavelength axis is not ordered, the formula approach
@@ -1012,9 +1018,9 @@ to each of the groups of spectra specified in \Rfunarg{by}. \mFun{\Rfunction{agg
 So we may plot the cluster mean spectra:
 
 <<clustmean, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-means <- aggregate (chondro, by = clusters, mean)
+means <- aggregate (chondro, by = clusters, mean_pm_sd)
 means
-plot (means, col = matlab.palette (3)[means$.aggregate], stacked = TRUE)
+plot (means, col = matlab.palette (3), stacked = ".aggregate", fill = ".aggregate")
 @
 
 
@@ -1030,5 +1036,7 @@ clusters
 
 \bibliographystyle{unsrtnat}
 \bibliography{/home/cb/Uni/Literatur/Literatur}
-
+<<cleanup>>=
+rm (list = ls () ) 
+@ 
 \end{document}

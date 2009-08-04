@@ -121,8 +121,11 @@ setMethod ("initialize", "hyperSpec",
 			if (is.null (log))
 				.Object@log <- logentry (.Object, short = "initialize", long = long)
 			else
-				.Object@log <- logentry (.Object, short = log$short, long = log$long,
-						date = log$date, user = log$user)
+				if (is.data.frame(log))
+					.Object@log <- log
+				else
+					.Object@log <- logentry (.Object, short = log$short, long = log$long,
+							date = log$date, user = log$user)
 			
 			validObject (.Object)
 			
@@ -763,7 +766,7 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 #			else 
 			if  (!missing (l) && !wl.index)
 				l <- wl2i (x, l)
-			
+		
 			if (is (value, "hyperSpec")){
 				validObject (value)
 				value <- value@data$spc
@@ -898,7 +901,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "hyperSpec"),
 setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
 		function (x, y){
 			validObject (x)
-			x@data$spc <-  x@data$spc %*% y@data$spc 
+			x@data$spc <-  x@data$spc %*% y
 			.wl (x) <- seq_len (ncol (y)) 
 			x@label$.wavelength = NA
 			x@log <- logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
@@ -913,10 +916,9 @@ setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
 			if (ncol(y) > 1) 
 				warning(paste("Dropping column(s) of y:", paste(colnames(y$..), 
 										collapse = ", ")))
-			
 			y <- new ("hyperSpec",
 					wavelength = y@wavelength,
-					spc <- x %*% y@data$spc,
+					spc = x %*% y@data$spc,
 					log = y@log
 			)
 			
@@ -1904,8 +1906,10 @@ plotspc <- function  (object,
 		title.args = list (),
 		polygon.args = list (),
 		lines.args = list (),
-		zeroline = if (all (yoffset == 0)) list (lty = 2) else NULL
+		zeroline =  list (lty = 2, col = col)#if (all (yoffset == 0)) list (lty = 2) else NULL
 ){
+	force (zeroline) # otherwise stacking messes up colors
+	
 	validObject (object)
 	
 	if (nrow (object) == 0)
@@ -1994,11 +1998,12 @@ plotspc <- function  (object,
 	
 	## stacked plot
 	if (!is.null (stacked)){
-		yoffset <- stacked.offsets (object, stacked, spc)
-		yoffset <- yoffset$offsets [yoffset$groups]
-		stacked <- TRUE
-	} else 
-		stacked <- FALSE
+		stacked <- stacked.offsets (object, stacked, spc)
+#		stacked <- yoffset$groups
+		yoffset <- stacked$offsets [stacked$groups]
+#		stacked <- TRUE
+	}# else 
+		#stacked <- FALSE
 	spc <- sweep (spc, 1, yoffset, "+")
 	
 	if (! add){
@@ -2097,9 +2102,9 @@ plotspc <- function  (object,
 				axis.args$y <- list ()
 			if (is.null (axis.args$y$side))
 				axis.args$y$side <- 2
-			if (is.null (axis.args$y$at) & stacked){
-				axis.args$y$at <- apply (spc, 1, min)
-				axis.args$y$labels <- seq_len (nrow (spc))
+			if (is.null (axis.args$y$at) & !is.null (stacked)){
+				axis.args$y$at <- apply (spc[!duplicated (stacked$groups),], 1, min) #apply (spc, 1, min)
+				axis.args$y$labels <- stacked$levels #seq_len (nrow (spc))
 			}
 			
 			do.call (axis, axis.args$y)
@@ -2198,11 +2203,13 @@ plotspc <- function  (object,
 		}
 	}
 	
+
 	if (! is.null (zeroline)){
-		if (stacked)
-			zeroline <- c (list (h = yoffset), zeroline)
-		else 
-			zeroline <- c (h = 0, zeroline)
+#		if (! is.null (stacked) && length (zeroline$col))
+#			zeroline$col <- col [!duplicated (stacked$groups)]
+		zeroline <- c (list (h = unique (yoffset)), zeroline)
+		#else 
+		#	zeroline <- c (h = yoffset, zeroline)
 		
 		do.call (abline, zeroline)
 	}
@@ -2219,29 +2226,35 @@ plotspc <- function  (object,
 ###  
 
 stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
-if (is.character (stacked))
-	stacked <- unlist (x [[, stacked]])
-else if (isTRUE (stacked))
-	stacked <- seq (nrow (x@data))
+	lvl <- NULL
 
-if (is.factor (stacked))
-	stacked <- as.numeric (stacked)
-else if (!is.numeric (stacked))
-	stop ("stacked must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
-
-if (is.null (.spc))
-	.spc <- x@data$spc
-
-## using ave would be easier, but it splits the data possibly leading to huge lists.
-groups <- unique (as.numeric (stacked))  
-offset <- matrix (nrow = 2, ncol = length (groups))
-for (i in seq_along (groups))
-	offset[, i] <- range (.spc [stacked == groups[i], ], na.rm = TRUE)
-
-
-offset [2,] <- offset[2,] - offset [1,]
-offset <- c(-offset[1,], 0) + c(0, cumsum (offset[2,]))
-list (offsets = offset [seq (length (groups))], groups = stacked)
+	if (is.character (stacked))
+		stacked <- unlist (x [[, stacked]])
+	else if (isTRUE (stacked))
+		stacked <- seq (nrow (x@data))
+	
+	if (is.factor (stacked)) {
+		lvl <- levels (stacked)
+		stacked <- as.numeric (stacked)
+	} else if (!is.numeric (stacked))
+		stop ("stacked must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
+	
+	if (is.null (.spc))
+		.spc <- x@data$spc
+	
+	## using ave would be easier, but it splits the data possibly leading to huge lists.
+	groups <- unique (as.numeric (stacked))  
+	offset <- matrix (nrow = 2, ncol = length (groups))
+	for (i in seq_along (groups))
+		offset[, i] <- range (.spc [stacked == groups[i], ], na.rm = TRUE)
+	
+	
+	offset [2,] <- offset[2,] - offset [1,]
+	offset <- c(-offset[1,], 0) + c(0, cumsum (offset[2,]))
+	list (offsets = offset [seq (length (groups))], 
+		  groups = stacked, 
+		  levels = if (is.null (lvl)) stacked else lvl
+    )
 }
 
 ###-----------------------------------------------------------------------------

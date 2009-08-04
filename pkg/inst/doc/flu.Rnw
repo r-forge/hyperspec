@@ -1,8 +1,10 @@
-\documentclass[english,a4paper, 10pt, smallheadings, DIV12]{scrartcl}
-%\VignettePackage{hyperSpec}
-%\VignetteIndexEntry{flu: the fluorescence data set, how to write an import function, and example of a linear calibration}
-% \VignetteKeywords{hyperSpec, flu, calibration}
+%% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl} % ursprünglich DIV 15
+%\usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
 \usepackage{color}
 \usepackage{babel}
 
@@ -16,12 +18,16 @@
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
  {hyperref}
-\hypersetup{pdftitle={hyperSpec Introduction},
+\hypersetup{pdftitle={Flu },
  pdfauthor={C. Beleites},
- pdfsubject={Introduction on the R package hyperSpec},
- pdfkeywords={hyperSpec}}
+ pdfsubject={Vignette on hyperSpec's flu data set},
+ pdfkeywords={hyperSpec, flu, calibration}}
+\usepackage{hyphenat}
 
 \makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\usepackage{Sweave}
 
 \newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
 \newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
@@ -33,32 +39,46 @@
 \newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
 \newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
 
+\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% Meta information - fill between {} and do not remove %
+%\VignetteIndexEntry{flu: Vignette on the fluorescence data set, how to write an import function, and example of a linear calibration}
+% \VignetteKeywords{hyperSpec, flu, calibration}
+% \VignettePackage{hyperSpec}
 \AtBeginDocument{
-	\setlength{\parskip}{\medskipamount}
-	\setlength{\parindent}{0pt}
-	\fvset{listparameters={\setlength{\topsep}{0pt}}}
-	\renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}}
-	\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
+  \setlength{\parskip}{\medskipamount}
+  \setlength{\parindent}{0pt}
+  \fvset{listparameters={\setlength{\topsep}{0pt}}}
+  \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
+  }
+\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
 }
 
-\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
-\newcommand{\R}{\texttt{R}\xspace}
-
+% my preferred packages
+\usepackage{xspace}
+\usepackage{tikz}
 \usepackage{subfig}
-\makeatother
+\usepackage{booktabs}
 
 \usepackage{hyphenat}
 \usepackage{fancyvrb}
 \usepackage{siunitx}
+\usepackage{relsize} 
+
+%\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
+\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
+
+\@ifundefined{showcaptionsetup}{}{%
+ \PassOptionsToPackage{caption=false}{subfig}}
 \usepackage{subfig}
-\usepackage{booktabs}
+\makeatother
 
-
+\title{Calibration of Quinine Fluorescence Emission\\
+Vignette for the Data Set \Rfunction{flu} of the R package \Rpackage{hyperSpec} }
 \author{Claudia Beleites (\url{cbeleites@units.it})\\
 CENMAT, DMRN, University of Trieste}
-\title{Calibration of Quinine Fluorescence Emission\\
-Vignette for the Data Set \Rfunction{flu} of the R package \Rpackage{hyperSpec}}
-
 
 \begin{document}
 \maketitle
@@ -103,7 +123,7 @@ with the special name \Rcode{.wavelength} corresponds to the wavelength axis, al
 have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
 
 <<importfun>>=
-read.PE <- function (files = "*.txt", skip = 54) {
+read.PE <- function (files = "flu?.txt", skip = 54) {
 	files <- Sys.glob (files)
 
 	buffer <- matrix (scan (files [1], skip = skip), ncol = 2, byrow = TRUE)
@@ -118,7 +138,7 @@ read.PE <- function (files = "*.txt", skip = 54) {
 		buffer <- matrix (scan (files [f], skip = skip), ncol = 2, byrow = TRUE)
 
 		if (! all.equal (buffer [, 1], wavelength))
-			stop (paste(files [f], "has different wavelengh axis."))
+			stop (paste(files [f], "has different wavelength axis."))
 
 		spc [f, ] <- buffer[, 2]
 	}
@@ -130,7 +150,7 @@ read.PE <- function (files = "*.txt", skip = 54) {
 @
 From now on, the function can be used:
 <<import>>=
-flu <- read.PE ("*.txt")
+flu <- read.PE ("flu?.txt")
 @
 Now the spectra are in a \Rclass{hyperSpec} object and can be examined e.g. by
 <<rawspc>>=
@@ -139,9 +159,9 @@ flu
 <<rawfig, fig = TRUE, width = 6, height = 3>>=
 plot (flu)
 @
-\section{Adding further Data Coumns}
+\section{Adding further Data Columns}
 The calibration model needs the quinine concentrations for the spectra.
-This information can be stored together with the specta, and also gets an appropriate label:
+This information can be stored together with the spectra, and also gets an appropriate label:
 <<newdata>>=
 flu$c <- seq (from = 0.05, to = 0.30, by = 0.05)
 labels (flu, "c") <- "c / (mg / l)"
@@ -156,7 +176,7 @@ flu$c
 
 \section{Linear Calibration}
 As R is developed for the purpose of statistical analysis, tools for a least squares calibration
-model are readily availabe.
+model are readily available.
 
 The original spectra range from \Sexpr{min(wl(flu))} to \Sexpr{max(wl(flu))} nm.
 However, the intensities at 445~nm are perfect for a univariate calibration. Plotting them over the
@@ -186,7 +206,7 @@ plotc (flu, zlab = expression (I ["450 nm"] / a.u.),
 @
 
 
-The actual calibration is a linear model, which can be fitted by dhe R function \Rfunction{lm}.
+The actual calibration is a linear model, which can be fitted by the R function \Rfunction{lm}.
 \Rfunction{lm} needs a \emph{formula} that specifies which data columns are dependent and independent
 variables.
 
@@ -198,13 +218,15 @@ However, R's linear model is a quite strict in predicting: a model set up as $I 
 the intensity as a function of the concentration but not the other way round. Thus we set up an
 inverse calibration model\footnote{As we can safely assume that the error on the concentrations is
 far larger than the error on the instrument signal, it is actually the correct type of model from
-the least squares fit point of view.}:  $c = f (I)$. The corresponding\R formula is \verb+c ~ I+, or in our case
+the least squares fit point of view.}:  $c = f (I)$. The corresponding \R formula is \verb+c ~ I+, or in our case
 \verb+c ~ spc+, as the intensities are stored in the data column \Rcode{\$spc}:
 
 In addition, \Rfunction{lm} (like most R model building functions) expects the data to be a \Rclass{data.frame}.
 
-There are three abbrevations that help to get the parts  of the \Rclass{hyperSpec} object that are frequently  needed:
+There are three abbreviations that help to get the parts  of the \Rclass{hyperSpec} object that are frequently  needed:
 \begin{description}
+\setlength{\labelwidth}{2.5cm}
+\setlength{\itemindent}{1.7cm}
  \item[\Rcode{flu[[]]}] returns the spectra matrix. It takes the same indices as \Rcode{[]}.
  \item[\Rcode{flu\$.}] returns the data as a \Rclass{data.frame}
  \item[\Rcode{flu\$..}] returns a  \Rclass{data.frame} that has all data columns but the spectra
@@ -232,7 +254,8 @@ If we observe e.g. an intensity of 125 units, the corresponding concentration an
 
 <<pred>>=
 I <- 125
-conc <- predict (calibration, newdata = list (spc = as.matrix(I)), interval = "prediction", level = .99)
+conc <- predict (calibration, newdata = list (spc = as.matrix(I)), interval = "prediction", 
+                 level = .99)
 conc
 @
 
@@ -245,7 +268,7 @@ plotc (flu, zlab = expression (I ["450 nm"] / a.u.),
 
 int <- list (spc = as.matrix(min (flu) : max(flu)))
 ci <- predict (calibration, newdata = int, interval = "confidence", level = 0.99)
-matlines (ci, int$spc, col = c ("red","#606060","#606060"), lty = 1)
+matlines (ci, int$spc, col = c ("red","gray","gray"), lty = 1)
 
 # extrapolate to lower intensities
 int <- list (spc = as.matrix(0 : min (flu)))
@@ -256,8 +279,9 @@ matlines (ci, int$spc, col = c ("red","#606060","#606060"), lty = 3)
 lines (conc[-1], rep(I, 2), col = "blue")
 points (conc[1], I, col = "blue", pch = 4, cex = 0.5)
 @
-
-
+<<cleanup>>=
+rm (list = ls () ) 
+@ 
 \end{document}
 
 

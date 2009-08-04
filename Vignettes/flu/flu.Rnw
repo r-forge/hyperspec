@@ -150,7 +150,7 @@ read.PE <- function (files = "flu?.txt", skip = 54) {
 @
 From now on, the function can be used:
 <<import>>=
-flu <- read.PE ("*.txt")
+flu <- read.PE ("flu?.txt")
 @
 Now the spectra are in a \Rclass{hyperSpec} object and can be examined e.g. by
 <<rawspc>>=
@@ -279,8 +279,9 @@ matlines (ci, int$spc, col = c ("red","#606060","#606060"), lty = 3)
 lines (conc[-1], rep(I, 2), col = "blue")
 points (conc[1], I, col = "blue", pch = 4, cex = 0.5)
 @
-
-
+<<cleanup>>=
+rm (list = ls () ) 
+@ 
 \end{document}
 
 
