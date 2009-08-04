@@ -450,5 +450,7 @@ collagen, and the red cluster proteins and nucleic acids.]
 \caption{}
 
 \end{figure}
-
+<<cleanup>>=
+rm (list = ls () ) 
+@ 
 \end{document}

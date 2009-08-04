@@ -332,5 +332,7 @@ of the whole spectrum are shown in the middle and lower part of figure~\ref{fig:
 
 \Rcode{noise} may be a single value for all spectra, or a vector with the noise level for each of the spectra separately.
 
-
+<<cleanup>>=
+rm (list = ls () ) 
+@ 
 \end{document}
