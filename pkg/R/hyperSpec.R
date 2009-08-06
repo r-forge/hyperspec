@@ -1,12 +1,13 @@
 ## TODO delete old generics
 # TODO: seq_along
-## TODO: slice_map
+## wish: slice_map
 ## TODO: stopifnot
 ## TODO test log10
 ## TODO: delete warning in wl2i for numerics.
 ## TODO sweep mit hyperSpec object: check wavelengths
 ## TODO: sweep logentry
 ## TODO plotc z ./. c
+## whish: parse arg of form x..y = z => x = list (y = z) 
 
 .onLoad <- function (libname, pkgname){
 	require (lattice) 
@@ -566,7 +567,7 @@ setMethod ("rownames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "col")
 ###  
 ###  
 
-setMethod ("dimnames", "hyperSpec", function (x){
+setMethod("dimnames", "hyperSpec", function (x){
 			validObject (x)
 			list (row = rownames (x@data), data = colnames (x@data), wl = colnames (x@data$spc)) 
 		})
@@ -699,7 +700,7 @@ wl <- function (x){
 ### replacing with [<-
 ###
 
-setReplaceMethod ("[", "hyperSpec", function (x, i, j,
+setReplaceMethod("[", "hyperSpec", function (x, i, j,
 				short = NULL,
 				...,
 				value){
@@ -1077,7 +1078,7 @@ setMethod ("Summary", signature (x = "hyperSpec"),
 ### cbind2
 ###  
 ###  
-setMethod("cbind2", signature (x = "hyperSpec", y  = "hyperSpec"),
+setMethod ("cbind2", signature (x = "hyperSpec", y  = "hyperSpec"),
 		function (x, y){
 			validObject (x)
 			validObject (y)
@@ -2487,29 +2488,32 @@ read.txt.wide <- function (file = stop ("filename is required"),
 #' @author cb
 #' @export
 scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", 
-		nlines = 0, nspc = NULL, ...){
-	cols <- switch (data,
-			spc = NULL,   
-			xyspc = list (y = expression ("/" (y, mu * m)), 
-					x = expression ("/" (x, mu * m))), 
-			zspc = ,
-			depth = list (z = expression ("/" (z, mu * m))),
-			ts = 	list (t = "t / s"),
-			stop ("unknown format for Renishaw .txt files.")
-	)
-	cols <- c  (cols, list (.wavelength = expression (tilde(nu) / cm^-1) ,
-					spc = "I / a.u."))	
+                               nlines = 0, nspc = NULL, ...){
+  cols <- switch (data,
+                  spc = NULL,   
+                  xyspc = list (y = expression ("/" (y, mu * m)), 
+                    x = expression ("/" (x, mu * m))), 
+                  zspc = ,
+                  depth = list (z = expression ("/" (z, mu * m))),
+                  ts = 	list (t = "t / s"),
+                  stop ("unknown format for Renishaw .txt files.")
+                  )
+  cols <- c  (cols, list (.wavelength = expression (tilde(nu) / cm^-1) ,
+                          spc = "I / a.u."))	
 	
-	first <- scan(file, nlines = 1, quiet = TRUE)
-	ncol <- length (first)
+  first <- scan(file, nlines = 1, quiet = TRUE)
+  ncol <- length (first)
+
+  if (ncol == 0)
+    return (new ("hyperSpec"))
+  
+  if (ncol != length (cols))
+    stop (paste ("File has", ncol, "columns, while 'cols' gives", length (cols)))
 	
-	if (ncol != length (cols))
-		stop (paste ("File has", ncol, "columns, while 'cols' gives", length (cols)))
+  file <- file (file, "r")
+  on.exit(close(file))
 	
-	file <- file (file, "r")
-	on.exit(close(file))
-	
-	fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
+  fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
 	
 	# wavelength axis
 	wl <- rep (TRUE,  nrow (fbuf))				
