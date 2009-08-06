@@ -898,7 +898,7 @@ do have the same scale of the same physical value.
 
 \subsection{Multiplicative Scatter Correction (MSC)}
 
-MSC can be done using \Rfunction{msc} from package \Rpackage{pls}\citep{Mevik2007}.
+MSC can be done using \Rfunction{msc} from package \Rpackage{pls}\citep{Wehrens2007}.
 It operates on the spectra matrix:
 
 <<msc, eval = FALSE>>=
@@ -1035,8 +1035,8 @@ clusters
 @
 
 \bibliographystyle{unsrtnat}
-\bibliography{/home/cb/Uni/Literatur/Literatur}
-<<cleanup>>=
+\bibliography{introduction}
+<<cleanup, echo = FALSE, results = hide>>=
 rm (list = ls () ) 
 @ 
 \end{document}
