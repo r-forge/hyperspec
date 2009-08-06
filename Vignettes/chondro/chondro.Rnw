@@ -58,14 +58,14 @@
 
 % my preferred packages
 \usepackage{xspace}
-\usepackage{tikz}
-\usepackage{subfig}
-\usepackage{booktabs}
+%\usepackage{tikz}
+%\usepackage{subfig}
+%\usepackage{booktabs}
 
 \usepackage{hyphenat}
 \usepackage{fancyvrb}
-\usepackage{siunitx}
-\usepackage{relsize} %wird es benötigt?
+%\usepackage{siunitx}
+%\usepackage{relsize} %wird es benötigt?
 
 %\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 %\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
@@ -337,8 +337,10 @@ for (i in seq (along = out)){
 and also by looking where these spectra appear in the scores \Rfunction{pairs}
 plot (figure~):
 
-<<pca-pairs2, fig = TRUE, width = 7.5, height = 7.5, include = FALSE>>=
+<<pca-pairs2, include = FALSE, results = hide>>=
+png ("chondro-pca-pairs2.png", width = 1000, height = 1000)
 pairs (scores [[,,1:7]], pch = 19, cex = 1, col = cols)
+dev.off ()
 @
 
 Finally, the outliers are removed:

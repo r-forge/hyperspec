@@ -63,8 +63,8 @@
 
 \usepackage{hyphenat}
 \usepackage{fancyvrb}
-\usepackage{siunitx}
-\usepackage{relsize}
+%\usepackage{siunitx}
+%\usepackage{relsize}
 
 %\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 %\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
