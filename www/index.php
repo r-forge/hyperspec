@@ -25,8 +25,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <!-- R-Forge Logo -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
-<tr><td>
-<a href="/"><img src="<?php echo $themeroot; ?>/images/logo.png" border="0" alt="R-Forge Logo" /> </a> </td> </tr>
+<tr>
+	<td><img src="hyperSpec-logo-sm.png"></td>
+	<td align ="right"><a href="/"><img src="<?php echo $themeroot; ?>/images/logo.png" border="0" alt="R-Forge Logo" /> </a> </td>
+</tr>
 </table>
 
 

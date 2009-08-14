@@ -1,10 +1,4 @@
-## TODO delete old generics
-# TODO: seq_along
 ## wish: slice_map
-## TODO: stopifnot
-## TODO test log10
-## TODO: delete warning in wl2i for numerics.
-## TODO sweep mit hyperSpec object: check wavelengths
 ## TODO: sweep logentry
 ## TODO plotc z ./. c
 ## whish: parse arg of form x..y = z => x = list (y = z) 
@@ -30,8 +24,7 @@
 setClass ("hyperSpec",
 		representation = representation (
 				wavelength = "numeric",     # spectral abscissa
-				data = "data.frame",        # data: spectra & information related to
-				# each spectrum
+				data = "data.frame",        # data: spectra & information related to each spectrum
 				label = "list",             # labels and units of the stored 
 				log = "data.frame"          # log of transformations etc.
 		),
@@ -364,7 +357,6 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 ###  .paste.row
 ###  
 ###  
-## TODO: test
 .paste.row <- function (x, label = "", name = "", ins = 0, i = NULL, val = FALSE, range = TRUE,
 		digits = getOption ("digits"), max.print = 5, shorten.to = c (2,1)){
 	if (is.null (name)) name = ""
@@ -1139,15 +1131,12 @@ setMethod("rbind2", signature (x = "hyperSpec", y = "missing"), function (x, y) 
 ### cbind & rbind
 ###  
 ###  
-## TODO: test
 bind <- function (direction = stop ("direction ('c' or 'r') required"),
 		..., short = NULL, user = NULL, date = NULL){
 	dots <- list (...)
 	
 	if ((length (dots) == 1) & is.list (dots [[1]]))
 		dots <- dots[[1]]
-	
-	#objnames <- sapply(match.call()[-1], deparse)
 	
 	if (length (dots) == 0)
 		NULL
@@ -1193,7 +1182,7 @@ rbind.hyperSpec <- function (..., deparse.level) bind ("r", ...)
 wl2i <- function (x, wavelength = stop ("wavelengths are required.")){
 	validObject (x)
 	
-	## special . in formula
+	## special in formula
 	max <- max (x@wavelength) 
 	min <- min (x@wavelength) 
 	
@@ -1669,16 +1658,23 @@ plotmap <- function (object,
 	} else
 		dots <- list (x = formula (as.numeric (z) ~ grid$x * grid$y))
 	
-	n <- length (unique (as.numeric (z)))
+	n <- length (unique (zapsmall (as.numeric (z))))
 	if (is.null (trellis.args$col.regions)){
 		if (is.factor (z))
 			trellis.args$col.regions <- matlab.palette (nlevels (z))
-		else
-			trellis.args$col.regions <- matlab.palette ()
+		else {
+			if (n < 100)
+				trellis.args$col.regions <- matlab.palette (n)
+			else
+				trellis.args$col.regions <- matlab.palette ()
+		}
 	}
 	
-	if (is.null (trellis.args$at) && is.factor (z)){
-		trellis.args$at <- seq_len (nlevels (z) + 1) - 0.5
+	if (is.null (trellis.args$at)){
+		if (is.factor (z))
+			trellis.args$at <- seq_len (nlevels (z) + 1) - 0.5
+		if (n == 1)
+			trellis.args$at <- range (z)[1] * c (.99, 1.01) 
 	}
 	
 	if (is.null (trellis.args$aspect))
@@ -2151,8 +2147,8 @@ plotspc <- function  (object,
 			if (is.character (fill))
 				fill <- unlist (object [[, fill]])
 			else if (isTRUE (fill)){
-				fill <- seq (1 : (nrow (spc) / 2))
-				if (nrow (spc) %% 2 == 1) # odd numberr of spectra
+				fill <- seq_len (nrow (spc)) / 2
+				if (nrow (spc) %% 2 == 1) # odd number of spectra
 					fill <- c (fill, NA, rev (fill))
 				else
 					fill <- c (fill, rev (fill))
@@ -2197,7 +2193,7 @@ plotspc <- function  (object,
 		if (is.null (lines.args$type))
 			lines.args$type <- "l"
 		
-		for (j in 1 : nrow (spc)){
+		for (j in seq_len (nrow (spc))){
 			lines.args$x <- x[[i]]
 			lines.args$y <- spc [j, ispc[[i]]]
 			lines.args$col <- col [j]
@@ -2451,7 +2447,7 @@ read.txt.wide <- function (file = stop ("filename is required"),
 		cols <- c (cols, .wavelength = expression (lambda / nm))
 	else  
 	if (.wavelength != length (cols)) ## .wavelength should be at the end of cols
-		cols <- cols [c ((1 : length (cols))[-.wavelength], .wavelength)]
+		cols <- cols [c (seq_along (cols)[-.wavelength], .wavelength)]
 	
 	# columns containing the spectra
 	spc <- match ("spc", names (cols))
@@ -2475,20 +2471,6 @@ read.txt.wide <- function (file = stop ("filename is required"),
 	) 
 }
 
-#' import Raman measurements from Renishaw ASCII file
-#'  
-#' Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
-#' They come in a "long" format with columns (y x | time | z) wavelength intensity. 
-#' The first columns depend on the data type.
-#' @param file file name 
-#' @param data type of file, one of "spc", "xyspc", "zspc", "depth", "ts", see details. 
-#' @param nlines number of lines to read in each chunk, if 0 or less read whole file at once
-#' @param nspc number of spectra in the file
-#' @param ... passed to logentry
-#' @return the \code{hyperSpec} object 
-#' @seealso \code{\link{read.txt.long}}, \code{\link{read.txt.wide}}, \code{\link[bae]{scan}}
-#' @author cb
-#' @export
 scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", 
                                nlines = 0, nspc = NULL, ...){
   cols <- switch (data,
@@ -2741,8 +2723,6 @@ write.txt.long <- function (object,
 ###
 ###  spc.bin
 ###
-##setGeneric ("spc.bin", function (hyperSpec, ...) standardGeneric("spc.bin"))
-##setMethod ("spc.bin", "hyperSpec", function (hyperSpec,
 spc.bin <- function (spc,
 		by = stop ("reduction factor needed"), na.rm = TRUE,
 		...) {
@@ -2802,7 +2782,7 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1, short = NULL,
 	validObject (apply.to)
 	
 	x <- fit.to@wavelength
-	x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
+	x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x 
 	p <- apply (fit.to, 1, function (y, x){qr.solve (x, y)}, x,
 			short = if (is.null (short)) "spc.fit.poly: coefficients" else short,
 			user = user, date = date)
@@ -2950,7 +2930,7 @@ vec2array <- function (ivec, dim) {
 	pdim <- c(1, cumprod (dim))
 	
 	iarr <- matrix(NA, nrow = length(ivec), ncol = ndim) # matrix for the array indices
-	colnames (iarr) <- letters[9 : (9 + ndim - 1)]       # i, j, k, ...
+	colnames (iarr) <- letters[8 + seq_len (ndim)]       # i, j, k, ...
 	
 	ivec <- (ivec - 1)
 	for (j in seq_len (ndim))
@@ -2999,7 +2979,7 @@ array2df <- function (x, levels = rep (NA, length (dims)),
 	df <- matrix (x, nrow = length (x), ncol = length (idim) + 1)
 	
 	for (d in seq (along = idim))
-		df [, d + 1] <-  rep (1 : dims [idim [d]], each = cprod [idim [d]], times = rprod [idim [d]])
+		df [, d + 1] <-  rep (seq_len (dims [idim [d]]), each = cprod [idim [d]], times = rprod [idim [d]])
 	
 	if(!matrix){
 		df <- as.data.frame (df)
