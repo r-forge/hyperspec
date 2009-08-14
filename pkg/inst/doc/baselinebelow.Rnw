@@ -1,7 +1,5 @@
-%% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
-\documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl}
-%\usepackage[T1]{fontenc}
+\documentclass[english,a4paper, 10pt, smallheadings, DIV12]{scrartcl}
+\usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
@@ -57,14 +55,9 @@
 
 % my preferred
 \usepackage{xspace}
-\usepackage{tikz}
-\usepackage{subfig}
-\usepackage{booktabs}
 
 \usepackage{hyphenat}
 \usepackage{fancyvrb}
-\usepackage{siunitx}
-\usepackage{relsize}
 
 %\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 %\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
@@ -121,18 +114,25 @@ If \Rfunction{npts.min} $\leq$ {poly.order}, a warning is issued and \Rcode{npts
 <<trace, echo = FALSE, results = hide>>=
 	trace (spc.fit.poly.below, quote ({ls ();
 	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NULL);
-	lines (fit.to@wavelength, bl, col = cl)
 	}), at = 10, print = FALSE)
 @
 <<figspcrange, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 8, height = 4, include = FALSE>>=
-plot (chondro [1,,1700 ~ max], plot.args = list (ylim = range (chondro [1,,1700 ~ max] + c(-100, 0))))
+plot (chondro [3,,1700 ~ 1750], plot.args = list (ylim = range (chondro [3,,1700 ~ 1750]) + c(-50, 0)))
 cl <- "black"
 pch = 1
-bl <- spc.fit.poly.below (chondro [1,,1700 ~ max], poly.order = 1)
+bl <- spc.fit.poly.below (chondro [3,,1700 ~ 1750], NULL, poly.order = 1)
 pch = 20
-plot (chondro [1,,1715 ~ max], col = "blue", add = TRUE, lines.args = list (lwd = 2))
+plot (chondro [3,,1720 ~ 1750], col = "blue", add = TRUE, lines.args = list (lwd = 2))
+abline (bl[[]], col = "black")
 cl <- "blue"
-bl <- spc.fit.poly.below (chondro [1,,1715 ~ max], poly.order = 1)
+bl <- spc.fit.poly.below (chondro [3,,1720 ~ 1750], NULL, poly.order = 1)
+abline (bl[[]], col = "blue")
+@
+<<trace2, echo = FALSE, results = hide>>=
+	trace (spc.fit.poly.below, quote ({ls ();
+	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NULL);
+	lines (fit.to@wavelength, bl, col = cl);
+	}), at = 10, print = FALSE)
 @
 \begin{figure}[b]
 \begin{center}
@@ -154,7 +154,7 @@ polynomials:
 <<fit-apply>>=
 system.time (spc.fit.poly.below (chondro[], NULL, poly.order = 1, npts.min = 20,
             noise = 12))
-system.time (spc.fit.poly.below (chondro [,, -wl2i (chondro, 700 ~ 1700), wl.index = TRUE],
+system.time (spc.fit.poly.below (chondro [,, c (min ~ 700, 1700 ~ max)],
 				NULL, poly.order = 1, npts.min = 20, noise = 12))
 @
 
@@ -207,8 +207,8 @@ npts <- numeric (length (cols))
 for (iter in seq_along (cols)){
 	npts [iter] <- sum (chondro [[1]] < bl [[]])
 	cl <- cols [iter]
-	text (600, 1000 - 50 * iter, paste ("Iter. ", iter, ": ", npts [iter], " support pts.", sep = ""),
-			adj = c(0, 0), col = cols [iter])
+	text (750, max (chondro [1]), paste ("Iter. ", iter, ": ", npts [iter], " support pts.", sep = ""),
+			 pos = 1, col = cols [iter], offset = iter - 1)
 	bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts[iter]  - 1)
 }
 plot (chondro [1], add = TRUE)
@@ -236,8 +236,10 @@ plot (chondro [1], add = TRUE)
 
 \subsection*{The noise level}
 <<fig3, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 8, height = 3, include = FALSE>>=
-noise <- 12
-plot (chondro [1,,1730 ~ max], plot.args = list(ylim = range (chondro [1,, 1730 ~ max])))
+
+spc <- new ("hyperSpec", spc = matrix (rnorm (30, mean = 100, sd = 2), ncol = 30))
+noise <- 10
+plot (spc)
 trace (spc.fit.poly.below, quote ({
 					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"), zeroline = NULL);
 					lines (fit.to@wavelength, bl, col = cl);
@@ -248,20 +250,20 @@ cols <- as (HSV(seq (240, 0, length.out = 2), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
 
-bl <- chondro [1,,1730 ~ max] + 15
+bl <- spc + 15
 for (iter in seq_along (cols)){
-	npts <- sum (chondro [[1,,1730 ~ max]] < (bl [[]] + noise))
+	npts <- sum (spc [[]] < (bl [[]] + noise))
 	cl <- cols [iter]
-	bl <- spc.fit.poly.below (chondro [1,,1730 ~ max], poly.order = 1, npts.min = npts, noise = noise)
-	text (1800, 20 - 3 * iter, paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""),
-			adj = c(1, 0), col = cols [iter])
+	bl <- spc.fit.poly.below (spc, poly.order = 0, npts.min = npts, noise = noise)
+	text (5, max (spc[]), paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""),
+			pos = 1, col = cols [iter], offset = iter - 1)
 }
 cl <- "black"
 trace (spc.fit.poly.below, quote ({
 					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (type = "p"), zeroline = NULL);
 					lines (fit.to@wavelength, bl, col = cl);
 				}), at = 10, print = FALSE)
-bl <- spc.fit.poly.below (chondro [1,, 1710 ~ max], poly.order = 1)
+bl <- spc.fit.poly.below (spc, poly.order = 0)
 @
 <<fig4, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 4, include = FALSE>>=
 trace (spc.fit.poly.below, quote ({
@@ -269,7 +271,7 @@ trace (spc.fit.poly.below, quote ({
 					lines (fit.to@wavelength, bl, col = cl);
 					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
 				}), at = 10, print = FALSE)
-cols <- as (HSV(seq (240, 0, length.out = 6), 1, 1), "RGB")
+cols <- as (HSV(seq (240, 0, length.out = 10), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
 bl <- chondro [1] + 15
@@ -277,8 +279,8 @@ plot (chondro [1])
 for (iter in seq_along (cols)){
 	npts <- sum (chondro [[1]] < bl [[]] + noise)
 	cl <- cols [iter]
-	text (600, 1000 - 50 * iter, paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""),
-			adj = c(0, 0), col = cols [iter])
+	text (750, max (chondro [1]), paste ("Iter. ", iter, ": ", npts, " support pts.", sep = ""),
+			pos = 1, offset = iter-1, col = cols [iter])
 	bl <- spc.fit.poly.below (chondro [1], poly.order = 1, npts.min = npts - 1, noise = noise)
 }
 plot (chondro [1], add = TRUE)
@@ -289,7 +291,7 @@ trace (spc.fit.poly.below, quote ({
 					lines (fit.to@wavelength, bl, col = cl);
 					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
 				}), at = 10, print = FALSE)
-cols <- as (HSV(seq (240, 0, length.out = 6), 1, 1), "RGB")
+cols <- as (HSV(seq (240, 0, length.out = 10), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
 bl <- chondro [1] + 15
@@ -309,8 +311,8 @@ untrace (spc.fit.poly.below)
   \includegraphics[width=.75\textwidth]{baselinebelow-fig4}
   \includegraphics[width=.75\textwidth]{baselinebelow-fig5}
   \caption{Iterative fitting of the baseline with noise level. Upper part: effects of the noise parameter on the baseline
-  of a spectrum consisting only of noise and baseline:  without giving \Rcode{noise} the resulting baseline
-  (black) is clearly too low. A noise level of 12 results in the red baseline.
+  of a spectrum consisting only of noise and offset:  without giving \Rcode{noise} the resulting baseline
+  (black) is clearly too low. A noise level of 10 results in the red baseline.
   The middle and lower part show the baseline fitting with noise level on the
   complete spectrum.
   Colour: iterations, dots/circles: supporting points for the respective baselines. Dashed: baseline plus noise. All points above this line are excluded from the next iteration.
@@ -320,12 +322,12 @@ untrace (spc.fit.poly.below)
 \end{figure}
 
 Besides defining a minimal number of supporting points, a ``noise level'' may be given.
-Consider the spectral range above \rcm{1730} of the shown spectrum. The spectrum consists practically only of noise.
+Consider a spectral range consisting only of noise.
 The upper part of figure~\ref{fig:noise} illustrates the problem. As the baseline fitting algorithm cannot distinguish
 between noise and real bands appearing above the fitted polynomial, the resulting baseline (black) is too low if the \Rcode{noise}
 parameter is not given.
 
-Setting the noise level to 12 (roughly 1.5 standard deviations), the fitting converges after 2 iterations with a much better result.
+Setting the noise level to \Sexpr{noise} (2 standard deviations), the fitting converges immediately with a much better result.
 The resulting baselines for
 \Rcode{spc.fit.poly.below (chondro [1], poly.order = 1, noise = 12)}
 of the whole spectrum are shown in the middle and lower part of figure~\ref{fig:noise}

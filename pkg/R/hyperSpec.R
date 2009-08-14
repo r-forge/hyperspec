@@ -1217,7 +1217,6 @@ wl2i <- function (x, wavelength = stop ("wavelengths are required.")){
 	
 	.conv.range <- function (range){
 		if (is.numeric (range)){
-			warning ("check whether you rather want to use ~ !")
 			.getindex (x, range, rule = 1)
 		} else 
 			eval (range)
@@ -1248,8 +1247,11 @@ i2wl <- function (x, i){
 ## rule = 2 returns first resp. last index for wavelength outside hyperSpec@wavelength.
 
 .getindex <- function (x, wavelength, rule = 2){
-	round (approx (x = x@wavelength, y = seq_along(x@wavelength),
-					xout = wavelength, rule = rule)$y)
+	if (length (x@wavelength) == 1)
+		1
+	else
+		round (approx (x = x@wavelength, y = seq_along(x@wavelength),
+					   xout = wavelength, rule = rule)$y)
 }
 
 ###-----------------------------------------------------------------------------
