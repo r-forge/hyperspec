@@ -26,7 +26,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <!-- R-Forge Logo -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-	<td><img src="hyperSpec-logo-sm.png"></td>
+	<td><img src="hyperSpec-logo.png"></td>
+	<td align ="center">hyperSpec</td>
 	<td align ="right"><a href="/"><img src="<?php echo $themeroot; ?>/images/logo.png" border="0" alt="R-Forge Logo" /> </a> </td>
 </tr>
 </table>
@@ -46,20 +47,45 @@ echo $contents; } ?>
 <!-- end of project description -->
 
 <p> The package is now publicly accessible from the <a href="http://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/?root=hyperspec">SVN repository</a>. </p>
+
 <h2>Installation</h2>
-<p>To install the latest nightly build, type in R: <tt>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</tt></p>
+<h3>... from inside R</h3>
+<p>To install the latest nightly build, type in R: 
+<pre>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</pre>
+</p>
+
+<h3>... from svn source</h3>
+<ol><li>
+get an svn checkout using your favourite svn client program, or
+<pre>svn checkout svn://svn.r-forge.r-project.org/svnroot/hyperspec</pre></li>
+<li> Install the package:
+<pre>R CMD INSTALL hyperspec/pkg</pre></li>
+</ol>
+
+<h3>... via source Package</h3>
+<ol>
+<li><a href="hyperSpec_0.7.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
+	 Windows users will probably need the <a href="hyperSpec_0.7.zip">compiled .zip package</a></li>
+<li>Install the package:
+<pre>R CMD INSTALL hyperSpec_0.7.tar.gz</pre></li>
+</ol>
+ 
+
+These may be a bit outdated, but they work if the nightly build fails.
+
+
 <h2>Vignettes</h2>
 <p><tt>hyperSpec</tt> comes with some vignettes:</p>
 <ul>
 <li><a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/intro/introduction.pdf?root=hyperspec">Introduction</a>: a user manual from aspectroscopist's point of view</li>
 <li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/flu/flu.pdf?root=hyperspec">calibration of quinine fluorescence emission</a></li>
 <li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.pdf?root=hyperspec">Cluster Analysis of a Raman Map of Chondrocytes in Cartilage</a><br/>
-    the <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.txt?root=hyperspec">data file</a> is quite large (ca. 31 MB) and needs to be saved into the the same folder as the .Rnw file in order to reproduce the example. 
-</li>
+    the <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.txt?root=hyperspec">data file</a> is quite large (ca. 31 MB) and needs to be saved into the documentation folder  in order to reproduce the example. </li>
 <li>A more technical <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/baseline/baselinebelow.pdf?root=hyperspec">explanation of the baseline fitting technique used by <tt>spc.fit.poly.below</tt></a></li>
 </ul> 
-<p><tt>hyperSpec</tt> Both .pdf and source files (including the spectra files except <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.txt?root=hyperspec">chondro.txt</a>, which needs to be downloaded explicitly due to its size) are available, and are 
-installed into the documentation directory by <tt>install.packages</tt>.</p>
+<p> In the standard <tt>hyperSpec</tt> installation, .pdf files and source  are already available in the documentation directory, with the exception of the the chondrocyte raw data (see above).</p>
+</p>
+
 <p>
 Claudia Beleites<br/>
 CENMAT, Materials and Natural Resources Dept.<br/> 
