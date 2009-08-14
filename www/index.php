@@ -56,18 +56,19 @@ echo $contents; } ?>
 
 <h3>... from svn source</h3>
 <ol><li>
-get an svn checkout using your favourite svn client program, or
-<pre>svn checkout svn://svn.r-forge.r-project.org/svnroot/hyperspec</pre></li>
-<li> Install the package:
-<pre>R CMD INSTALL hyperspec/pkg</pre></li>
+get an svn checkout using your favourite svn client program, or<br/>
+<tt>svn checkout svn://svn.r-forge.r-project.org/svnroot/hyperspec</tt></li>
+<li> Install the package:<br/>
+<tt>R CMD INSTALL <i>pkg-directory</i></tt> 
+    where <tt><i>pkg-directory</i></tt> is the subdirectory called pkg of the directory where the svn checkout went.</li>
 </ol>
 
 <h3>... via source Package</h3>
 <ol>
 <li><a href="hyperSpec_0.7.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
 	 Windows users will probably need the <a href="hyperSpec_0.7.zip">compiled .zip package</a></li>
-<li>Install the package:
-<pre>R CMD INSTALL hyperSpec_0.7.tar.gz</pre></li>
+<li>Install the package:<br/>
+<tt>R CMD INSTALL <i>filename</i></tt></li>
 </ol>
  
 
