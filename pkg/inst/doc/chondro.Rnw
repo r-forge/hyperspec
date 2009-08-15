@@ -1,4 +1,4 @@
-\documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl} % ursprünglich DIV 15
+\documentclass[english,a4paper, 10pt, smallheadings, DIV11]{scrartcl} % ursprünglich DIV 15
 \usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 \setlength{\parskip}{\medskipamount}
@@ -167,8 +167,8 @@ library (hyperSpec)
 filename <- "chondro.txt"
 @ 
 <<filenamecheck, echo = FALSE, results = hide>>= this is to ensure the building of the vignette on r-forge
-if (grepl ("inst/doc$", getwd()))
-   filename <- ("../../../Vignettes/chondro/chondro.txt")
+#if (grepl ("inst/doc$", getwd()))
+#   filename <- ("../../../Vignettes/chondro/chondro.txt")
 @ 
 <<import>>=
 chondro <- scan.txt.Renishaw (filename, data = "xyspc")
