@@ -73,7 +73,7 @@ get an svn checkout using your favourite svn client program, or<br/>
 
 These may be a bit outdated, but they work if the nightly build fails.
 
-<h1>Vignettes</h1>
+<h1>Documentation</h1>
 <p><tt>hyperSpec</tt> comes with some pdf documentation (vignettes) in addition to the R help files:</p>
 <ul>
 <li><a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/intro/introduction.pdf?root=hyperspec">Introduction</a>: a user manual from aspectroscopist's point of view</li>
@@ -88,8 +88,8 @@ These may be a bit outdated, but they work if the nightly build fails.
 <h1>Useful Packages for Chemometric Data Analysis</h1>
 <p>By no means complete, if you have suggestions, send me an email.</p>
 <ul>
-<li><tt>R.matlab</t>: Read &ampersand; write .mat files, run external calculations in Matlab</li>
-<li><tt>pls</t>: Partial Least Squares regression</li>
+<li><tt>R.matlab</tt>: Read & write .mat files, run external calculations in Matlab</li>
+<li><tt>pls</tt>: Partial Least Squares regression</li>
 </ul>
 
 <h1>Impressum</h1>
