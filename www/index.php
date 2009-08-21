@@ -26,7 +26,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <!-- R-Forge Logo -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-	<td><img src="hyperSpec-logo.png" width="212px" height="210px", alt = "hyperSpec logo"></td>
+	<td style="width:212px"><img src="hyperSpec-logo.png" width="212px" height="210px", alt = "hyperSpec logo"></td>
 	<td align ="center"><?php if ($handle=fopen('http://'.$domain.'/export/projtitl.php?group_name='.$group_name,'r')){
 $contents = '';
 while (!feof($handle)) {
