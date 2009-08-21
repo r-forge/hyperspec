@@ -27,8 +27,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
 	<td><img src="hyperSpec-logo.png" alt = "hyperSpec logo"></td>
-	<td align ="center">
-		 <h1>Welcome <tt>hyperSpec</tt>!</h1>
+	<td align = "justify">
+		 <h1 align = "center">Welcome to <tt>hyperSpec</tt>!</h1>
 		 <p><tt>hyperSpec</tt> is a R package to handle hyperspectral data, i.e. spectra plus further information such as spatial information, time, concentrations, etc.</p>
 		 <p>Such data are frequently encountered in Raman, IR, NIR, UV/VIS, NMR, mass spectroscopy, AAS / AES, ...</p>
 		 <p><tt>hyperSpec</tt> acts as an interface for the convenient handling of the spectra. Chemometric data analysis is done by R and other R packages.</p>
@@ -39,6 +39,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 
 <p> The package is now publicly accessible from the <a href="http://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/?root=hyperspec">SVN repository</a>. </p>
+<p> You find the <strong>project summary page</strong> <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
 <h1>Installation</h1>
 <h2>... from inside R</h2>
@@ -91,15 +92,12 @@ These may be a bit outdated, but they work if the nightly build fails.
 <li><tt>pls</t>: Partial Least Squares regression</li>
 </ul>
 
+<h1>Impressum</h1>
 <p>
 Claudia Beleites<br/>
 CENMAT, Materials and Natural Resources Dept.<br/> 
 University of Trieste<br/>
 e-mail: cbeleites at units.it
 </p>
-
-
-<p> You find the <strong>project summary page</strong> <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
-
 </body>
 </html>
