@@ -46,6 +46,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <pre>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</pre>
 </p>
 
+<h2>... from source or binaries automatically built by r-forge (nightly build)</h2>
+<ol>
+<li><a href="http://r-forge.r-project.org/R/?group_id=366">Download</a> the appropriate file.</li>
+<li>Install the package:<br/>
+<tt>R CMD INSTALL <i>filename</i></tt></li>
+</ol>
+
 <h2>... from svn source</h2>
 <ol><li>
 get an svn checkout using your favourite svn client program, or<br/>
@@ -55,7 +62,7 @@ get an svn checkout using your favourite svn client program, or<br/>
     where <tt><i>pkg-directory</i></tt> is the subdirectory called pkg of the directory where the svn checkout went.</li>
 </ol>
 
-<h2>... via source Package</h2>
+<h2>... via package built on my computer</h2>
 <ol>
 <li><a href="hyperSpec_0.7.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
 	 Windows users will probably need the <a href="hyperSpec_0.7.zip">compiled .zip package</a></li>
@@ -65,9 +72,8 @@ get an svn checkout using your favourite svn client program, or<br/>
 
 These may be a bit outdated, but they work if the nightly build fails.
 
-
 <h1>Vignettes</h1>
-<p><tt>hyperSpec</tt> comes with some vignettes:</p>
+<p><tt>hyperSpec</tt> comes with some pdf documentation (vignettes) in addition to the R help files:</p>
 <ul>
 <li><a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/intro/introduction.pdf?root=hyperspec">Introduction</a>: a user manual from aspectroscopist's point of view</li>
 <li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/flu/flu.pdf?root=hyperspec">calibration of quinine fluorescence emission</a></li>
