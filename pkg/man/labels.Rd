@@ -35,12 +35,12 @@ If \code{drop} is \code{TRUE} and the list contains only one element, the elemen
 
 \code{labels<-} returns a \code{hyperSpec} object.
 }
-\references{}
 \author{C. Beleites}
 \seealso{
 \code{\link[base]{labels}}
 }
 \examples{
-
+labels (chondro)
+labels (flu, "c") <- expression ("/" ("c", "mg / l"))
 }
 

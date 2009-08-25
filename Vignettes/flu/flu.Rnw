@@ -1,7 +1,5 @@
-%% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
 \documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl} % ursprünglich DIV 15
-%\usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
@@ -76,7 +74,7 @@
 \makeatother
 
 \title{Calibration of Quinine Fluorescence Emission\\
-Vignette for the Data Set \Rfunction{flu} of the R package \Rpackage{hyperSpec} }
+Vignette for the Data Set \Robject{flu} of the R package \Rpackage{hyperSpec} }
 \author{Claudia Beleites (\url{cbeleites@units.it})\\
 CENMAT, DMRN, University of Trieste}
 

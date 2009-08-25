@@ -605,7 +605,7 @@ setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, .
 	if (is.null (which))
 		object@label <- value
 	else {
-		if ((is.character (which) && !which %in% colnames (object@data)) ||
+		if ((is.character (which) && !which %in% colnames (object@data)) && which != ".wavelength" ||
 		    (is.numeric (which) && (which < 1 || which > ncol (object@data) + 1)) ||
 		    (is.logical (which) && length (which) != ncol (object@data) + 1)
 		   )
