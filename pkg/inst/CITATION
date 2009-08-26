@@ -10,12 +10,12 @@ citEntry(entry="Article",
                               as.person("Valter Sergo")),
           year = year,
           note = paste ("in preparation", vers),
-          URL = 'http://r-forge.r-project.org/projects/hyperspec/',
+          URL = 'http://hyperspec.r-forge.r-project.org',
           DOI = '---doi--',
      
           textVersion =
           paste("Claudia Beleites and Valter Sergo: `Hyperspectral Data Sets in R: hyperSpec', ",
 				    "in preparation for JStatSoft, ",
                 # "(", year, "). ", 
-                vers, ". http://r-forge.r-project.org/projects/hyperspec/", sep="")
+                vers, ". http://hyperspec.r-forge.r-project.org", sep="")
 )

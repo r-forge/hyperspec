@@ -17,7 +17,7 @@ A time series of an unstable laser emission.
 \examples{
 laser
 
-plot (laser)
+vignette ("laser", package="hyperSpec")
 
 plot (laser[,,405], "ts", plot.args = list (type = "b"))
 }

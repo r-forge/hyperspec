@@ -1,7 +1,5 @@
-## wish: slice_map
-## TODO: sweep logentry
-## TODO plotc z ./. c
-## whish: parse arg of form x..y = z => x = list (y = z) 
+## wishlist: slice_map
+## wishlist: parse arg of form x..y = z => x = list (y = z) 
 
 .onLoad <- function (libname, pkgname){
 	require (lattice) 
@@ -227,8 +225,6 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 		else {
 			if (!wl.index)
 				l <- wl2i (x, l)
-#			if (!wl.index && is.numeric (l))
-#				l <- wl2i (x, l)
 			
 			x@data$spc <- x@data$spc[,l, drop = FALSE]
 			.wl (x) <- x@wavelength[l]
@@ -314,14 +310,7 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
 				wl.index = FALSE){
 			validObject (x)
 			
-#			if (missing (i) & missing (j) & missing (l)) ## shortcut
-#				return (x@data$spc)
-			
 			x <- .extract (x, i, j, l, ..., wl.index = wl.index)
-			
-#			call <- match.call ()
-#			$call [[1]] <- .extract
-#			x <- eval (call)
 			
 			if (missing (j))
 				unclass (x@data$spc[,, drop = drop]) # removes the "AsIs"
@@ -386,7 +375,6 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 			
 		}
 	}
-	#cat(nchar(dummy ) ) 
 	dummy <- paste (paste (rep (" ", ins), collapse = ""),
 			if (!is.null (i)) paste ("(", i, ") ", sep =""),
 			name,
@@ -444,14 +432,12 @@ setMethod (as.character, "hyperSpec", function (x,
 			chr <- c (chr, paste ("wavelength:",
 							.paste.row (x@wavelength, x@label$.wavelength, ins = 0, val = TRUE, 
 									range = FALSE, shorten.to = shorten.to, max.print = max.print),
-							##                    "(", length (x@wavelength), "elements)",
 							collapse = " ")
 			)
 			
 			n.cols <- ncol (x@data)
 			
 			chr <- c(chr, paste ("data: ",
-							#as.character (x@label$.data), 
 							" (", nrow(x@data), " rows x ", n.cols, " columns)", sep = ""))
 			if (n.cols > 0)
 				for (n in names (x@data))
@@ -751,12 +737,6 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 			if (! missing (j))
 				stop ("The spectra matrix may only be indexed by i (spectra) and l (wavlengths). j (data column) must be missing.")
 			
-#			if (missing (i))
-#				i <- seq_len (nrow (x@data$spc))
-			
-#			if (missing (l))
-#				l <- seq_len (ncol (x@data$spc))
-#			else 
 			if  (!missing (l) && !wl.index)
 				l <- wl2i (x, l)
 		
@@ -810,9 +790,7 @@ setReplaceMethod ("$", "hyperSpec", function (x, name, value){
 				}
 			} else {
 				dots <- list (x = x@data, name = name, value = value)
-				x@data <- do.call("$<-", dots) ## $<-.data.frame wants "i" instead of "name" -- not any longer  
-				
-				#if (!is.null (label))
+				x@data <- do.call("$<-", dots) 				
 				x@label[[name]] <- label
 			}
 			
@@ -1267,9 +1245,7 @@ i2wl <- function (x, i){
 	if (length (data$spc) == 0)
 		stop ("empty spectra matrix.") 
 	
-	spc <- apply (data[,"spc",drop = FALSE], MARGIN, FUN, ...)
-	##  if (is.null (spc))
-	##    return (NULL)
+	spc <- apply (data [, "spc", drop = FALSE], MARGIN, FUN, ...)
 	
 	if (MARGIN == 1){
 		if (is.null (spc))
@@ -1297,10 +1273,7 @@ i2wl <- function (x, i){
 			cols <- which (cols != "spc")
 			if (length (cols) > 0) {
 				colvals <- apply (data [,cols,drop = FALSE], 2, .na.if.different)
-				
-				#data <- data[rep (1, nrow),]
 				data [,cols] <- rep (colvals, each = nrow)
-				
 			}
 			
 			data$spc <- I (spc)
@@ -1370,53 +1343,6 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
 			X
 		})
 
-####-----------------------------------------------------------------------------
-####
-####  spc.apply
-####  
-####  
-#
-#spc.apply <- function (spc, FUN, ..., 
-#		label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
-#		short = NULL, long = NULL, user = NULL, date = NULL){
-#	validObject (spc)
-#	
-#	if (is.null (short))
-#		short <- "spc.apply"
-#	if (is.null (long))
-#		long <- list (FUN = FUN, ...,
-#				label.wl = label.wl, label.spc = label.spc, new.wavelength = new.wavelength,
-#				call = deparse (sys.call()[])
-#		)
-#	
-#	apply (spc, MARGIN = 1, FUN = FUN, ...,
-#			label.wl = label.wl, label.spc = label.spc, new.wavelength = new.wavelength,
-#			short = short, long = long, user = user, date = date
-#			)
-#}
-
-####-----------------------------------------------------------------------------
-####
-####  wl.apply
-####  
-####  
-#
-#wl.apply <- function (spc, FUN, ..., 
-#		short = NULL, long = NULL, user = NULL, date = NULL){
-#	validObject (spc)
-#	
-#	if (is.null (short))
-#		short <- "wl.apply"
-#	if (is.null (long))
-#		long <- list (FUN = FUN, ...,
-#				call = deparse (sys.call()[])
-#		)
-#	
-#	apply (spc, MARGIN = 2, FUN = FUN, ...,
-#			short = short, long = long, user = user, date = date
-#	)
-#}
-
 
 ###-----------------------------------------------------------------------------
 ###
@@ -1447,7 +1373,9 @@ setMethod ("split", "hyperSpec", function (x, f, drop = TRUE, #...,
 ###  
 ###
 
-setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-", check.margin=TRUE, ..., short = NULL, user = NULL, date = NULL){
+setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-",
+                                           check.margin = TRUE, ...,
+                                           short = NULL, user = NULL, date = NULL){
 			validObject (x)
 			
 			if (is (STATS, "hyperSpec")){
@@ -1492,8 +1420,7 @@ setMethod ("aggregate", "hyperSpec", function (x,
 				...,
 				out.rows = NULL, 
 				append.rows = NULL,
-				date = NULL,
-				user = NULL){
+				short = NULL, date = NULL, user = NULL){
 			
 			validObject (x)
 			
@@ -1544,7 +1471,7 @@ setMethod ("aggregate", "hyperSpec", function (x,
 			if (!is.null (names (by)) && !any (is.na (names (by)))) 
 				levels (x@data[, col.aggregate]) <- names (by) 
 			
-			x@log <- logentry (x, long = long, date = date, user = user)
+			x@log <- logentry (x, long = long, short = short, date = date, user = user)
 			
 			x 
 			
@@ -1613,7 +1540,6 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 ###  plotmap - plot map 
 ###
 
-## TODO: test trellis.args$at
 plotmap <- function (object,                                             
 		x = "x",
 		y = "y",
@@ -1967,16 +1893,12 @@ plotspc <- function  (object,
 		if (!is.function (func))
 			stop ("func needs to be a function.");
 		
-		## if (spc.sample)
-		##   warning (paste (quote (func), "is applied to random subsample of the spectra"))
-		
 		apply.args <- c (list (X = spc, MARGIN = 2, FUN = func), func.args)
 		spc <- matrix (do.call (apply, apply.args),  #apply (spc, 2, func),
 				ncol = ncol (spc)
 		)
 		if (nrow (spc) == 0)
 			stop ("No spectra after func was applied.")
-		##    spc.range <- seq_len (nrow (spc))
 	}
 	
 	
@@ -1998,11 +1920,9 @@ plotspc <- function  (object,
 	## stacked plot
 	if (!is.null (stacked)){
 		stacked <- stacked.offsets (object, stacked, spc)
-#		stacked <- yoffset$groups
 		yoffset <- stacked$offsets [stacked$groups]
-#		stacked <- TRUE
-	}# else 
-		#stacked <- FALSE
+	}
+   
 	spc <- sweep (spc, 1, yoffset, "+")
 	
 	if (! add){
@@ -2204,11 +2124,7 @@ plotspc <- function  (object,
 	
 
 	if (! is.null (zeroline)){
-#		if (! is.null (stacked) && length (zeroline$col))
-#			zeroline$col <- col [!duplicated (stacked$groups)]
 		zeroline <- c (list (h = unique (yoffset)), zeroline)
-		#else 
-		#	zeroline <- c (h = yoffset, zeroline)
 		
 		do.call (abline, zeroline)
 	}
@@ -2268,7 +2184,7 @@ setMethod ("plot",
 		function (x, y, ...) plotspc (x, ...)
 )
 
-### and allow choice of spectral or map plot by second argument
+### allow choice of spectral or map plot by second argument
 setMethod ("plot",
 		##    'spc'        ... spectra
 		##    'map'        ... map
@@ -2585,7 +2501,6 @@ write.txt.wide <- function (object,
 			cln[!is.na (cln)] <- object@label [cln[!is.na(cln)]]
 			cln[is.na (cln)] <- colnames (object@data) [is.na(cln)]
 			cln <- sapply (cln, as.character)
-			
 			#cln [-col.spc] <- object@label []
 		} else {
 			cln <- colnames (object@data)

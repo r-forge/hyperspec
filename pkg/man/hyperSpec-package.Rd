@@ -1,51 +1,113 @@
 \name{hyperSpec-package}
+\Rdversion{1.1}
 \alias{hyperSpec-package}
-\alias{hyperSpec}
 \docType{package}
-\title{hyperSpec: Handling hyperSpectral Data}
+\title{
+Interface for hyperspectral data sets, i.e. spectra + meta information (spatial, time, concentration, ...)
+}
 \description{
 This package gives an interface to handle hyperspectral data sets in
 R. I.e. spatially or time-resolved spectra, or spectra with any other
 kind of information associated with the spectra.
 
 The spectra can be data as obtained in XRF, UV/VIS, Fluorescence, AES,
-NIR, IR, Raman, NMR, MS, etc. More generally, any data that is recorded
-over a discretized variable, e.g. absorbance = f (wavelength), stored as
-a vector of absorbance values for discrete wavelengths is suitable.  
+NIR, IR, Raman, NMR, MS, etc.
+
+More generally, any data that is recorded over a discretized variable, e.g. absorbance = f (wavelength), stored as a vector of absorbance values for discrete wavelengths is suitable.
 }
 \details{
 \tabular{ll}{
 Package: \tab hyperSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.5\cr
-Date: \tab 2009-07-07\cr
+Version: \tab 0.9\cr
+Date: \tab 2009-08-26\cr
 License: \tab LGPL\cr
 LazyLoad: \tab yes\cr
-Depends: \tab methods, lattice\cr
+LazyData: \tab yes\cr
+Depends: \tab methods, utils, lattice\cr
+#Imports: \tab lattice\cr
+Suggests: \tab R.matlab\cr
+Built: \tab R 2.9.1; ; 2009-08-26 13:30:50 UTC; unix\cr
 }
 
+Index:
+\preformatted{
+Summary,hyperSpec-method
+                        Math Functions for hyperSpec Objects
+[,hyperSpec-method      Extract and Replace Methods for hyperSpec
+aggregate,hyperSpec-method
+                        aggregate
+apply,hyperSpec-method
+                        apply
+array2df                array2df: Convert multidimensional array into
+                        matrix or data.frame
+array2vec               Converting array and vector Indices
+as.data.frame-methods   Conversion of a hyperSpec object into a
+                        data.frame or matrix
+bind                    Binding hyperSpec Objects
+chondro                 Raman spectra of 2 Chondrocytes in Cartilage
+decomposition           Convert Principal Component Decomposition or
+                        the like into a hyperSpec Object
+dimnames,hyperSpec-method
+                        Dimnames of an hyperSpec Object
+flu                     Chitin Fluorescence Spectra
+hyperSpec Arith         Arithmetical Operators: +, -, *, \^, \%\%,
+                        \%/\%, /, \%*\%
+hyperSpec Comparison    Comparison Operators: <, >, <=, >=, ==, and !=
+hyperSpec Math          Math Functions for hyperSpec Objects
+hyperSpec-class         Class "hyperSpec"
+hyperSpec-package       hyperSpec: Handling hyperSpectral Data
+import                  Import and Export of hyperSpec objects
+index.grid              index.grid: Calculate a Matrix with Indices for
+                        x,y-Data
+initialize,hyperSpec-method
+                        Creating a hyperSpec Object
+labels,hyperSpec-method
+                        Get and Set Labels of a hyperSpec Object
+laser                   Laser Emission
+logbook                 Logging the processing ot a hyperSpec Object
+logentry                Append a Row to the log of a hyperSpec Object
+map.identify            Identify Spectra on a Map Plot
+matlab.palette          Matlab-like Palette
+mean_sd                 Mean and Standard Deviation
+ncol,hyperSpec-method   The Number of Rows (Spectra), Columns, and Data
+                        Points per Spectrum of an hyperSpec Object)
+orderwl                 Sorting the Wavelengths of a hyperSpec Object
+pearson.dist            Calculate Distance based on Pearson's R\^2
+plot                    Plotting hyperSpec Objects
+plotc                   Calibration- and Timeseries Plots,
+                        Depth-Profiles and the like
+plotmap                 Function to Plot a Map of a hyperSpec Object
+plotspc                 Plotting Spectra
+scan.txt.Renishaw       import Raman measurements from Renishaw
+                        ASCII-files
+show,hyperSpec-method   Convert a hyerSpec object to character strings
+                        for Display
+spc.bin                 Wavelength Binning
+spc.fit.poly            Polynomial Baseline Fitting
+spc.identify            Identifying Spectra and Spectral Data Points
+spc.loess               loess smoothing interpolation for spectra
+split-methods           Split a hyperSpec object into groups
+stacked.offsets         y Offsets for Stacked Plots
+sweep                   Sweep Summary Statistic out of an hyperSpec
+                        Object
+wc                      wc
+wl                      Getting and Setting the Wavelength Axis
+wl2i                    Conversion between Wavelength and Spectra
+                        Matrix Column Index
+}
+
+Further information is available in the following vignettes:
+\tabular{ll}{
+\code{baselinebelow} \tab baselinebelow (source, pdf)\cr
+\code{chondro} \tab Vignette on the chondro data set. Shows common Preprocessing tasks for Raman spectra, principal component analysis (PCA), and hierarchical cluster analysis. (source, pdf)\cr
+\code{flu} \tab flu: Vignette on the fluorescence data set, how to write an import function, and example of a linear calibration (source, pdf)\cr
+\code{introduction} \tab hyperSpec Introduction (source, pdf)\cr
+}
 }
 \author{
-  C. Beleites \url{cbeleites@units.it}
+Claudia Beleites
+
+Maintainer: Claudia Beleites <cbeleites@units.it>
 }
-\references{
-~~ Literature or other references for background information ~~
-}
-
-\examples{
-# vignettes
-vignette (package = "hyperSpec")
-
-# information about a hyperSpec object
-chondro
-
-# plotting spectra: mean $\pm$ 1 standard deviation
-plot (chondro, "spcmeansd")
-
-# plotting a map: integral intensity
-plot (chondro, "map")
-
-
-}
-
 \keyword{ package }

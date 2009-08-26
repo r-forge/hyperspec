@@ -10,7 +10,8 @@
 }
 \usage{
 \S4method{aggregate}{hyperSpec}(x, by, FUN, \dots, out.rows = NULL,
-append.rows = NULL, date = NULL, user = NULL)
+    append.rows = NULL,
+    short = NULL, date = NULL, user = NULL)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
@@ -32,7 +33,7 @@ append.rows = NULL, date = NULL, user = NULL)
   }
   \item{\dots}{further arguments passed to \code{FUN}}
   
-  \item{date, user}{aguments passed to \code{logentry}}
+  \item{short, date, user}{aguments passed to \code{logentry}}
 }
 
 \value{
