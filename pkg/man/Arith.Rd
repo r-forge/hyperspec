@@ -1,15 +1,19 @@
 \name{Arith}
 \docType{methods}
 \alias{hyperSpec Arith}
-\alias{hyperSpec Arithmetical}
-\alias{hyperSpec Arithmetical Operators}
+\concept{hyperSpec arithmetic}
+\concept{hyperSpec arithmetical operators}
+\concept{hyperSpec matrix multiplication}
+\concept{hyperSpec plus}
+\concept{hyperSpec division}
+\concept{hyperSpec spectra conversion}
 \alias{Arith-method}
 \alias{Arith,hyperSpec-method}
 \alias{Arith,hyperSpec,hyperSpec-method}
 \alias{+,hyperSpec,hyperSpec-method}
 \alias{-,hyperSpec,hyperSpec-method}
 \alias{*,hyperSpec,hyperSpec-method}
-\alias{\^,hyperSpec,hyperSpec-method}
+\alias{^,hyperSpec,hyperSpec-method}
 \alias{\%\%,hyperSpec,hyperSpec-method}
 \alias{\%/\%,hyperSpec,hyperSpec-method}
 \alias{/,hyperSpec,hyperSpec-method}
@@ -22,43 +26,19 @@
 \alias{\%*\%,hyperSpec,hyperSpec-method}
 \alias{\%*\%,matrix,hyperSpec-method}
 \alias{\%*\%,hyperSpec,matrix-method}
-\title{Arithmetical Operators: +, -, *, \^, \%\%, \%/\%, /, \%*\%}
-\description{The arithmetical operators \code{"+"}, \code{"-"},
-  \code{"*"}, \code{"/"}, \code{"\^"}, \code{"\%\%"}, \code{"\%/\%"},
-  and \code{"\%*\%"} for \code{hyperSpec} objects. 
+\title{Arithmetical Operators: +, -, *, /, ^, \%\%, \%/\%, \%*\%}
+\description{The arithmetical operators \code{+}, \code{-},
+  \code{*}, \code{/}, \code{\^}, \code{\%\%}, \code{\%/\%},
+  and \code{\%*\%} for \code{hyperSpec} objects. 
 }
-\section{Usage}{  
-\code{#S4 method for signature 'hyperSpec,hyperSpec':}
-
-\code{#S4 method for signature 'hyperSpec,matrix':}
-
-\code{#S4 method for signature 'matrix,hyperSpec':}
-
-\code{#S4 method for signature 'hyperSpec,numeric':}
-
-\code{#S4 method for signature 'numeric,hyperSpec':}
-
-\code{e1 + e2}
-
-\code{`+` (e1, e2)}
-
-\code{#S4 method for signature 'hyperSpec,hyperSpec':}
-
-\code{#S4 method for signature 'hyperSpec,matrix':}
-
-\code{#S4 method for signature 'matrix,hyperSpec':}
-
-\code{#S4 method for signature 'hyperSpec,numeric':}
-
-\code{#S4 method for signature 'numeric,hyperSpec':}
-
-\code{x \%*\% y}
-
-\code{`\%*\%`(x, y)}
-
-\code{#S4 method for signature 'hyperSpec,missing':}
-
-\code{-x}
+\usage{
+\S4method{Arith}{hyperSpec,hyperSpec}(e1, e2)
+\S4method{Arith}{hyperSpec,matrix}(e1, e2)
+\S4method{Arith}{matrix,hyperSpec}(e1, e2)
+\S4method{Arith}{hyperSpec,numeric}(e1, e2)
+\S4method{Arith}{numeric,hyperSpec}(e1, e2)
+\S4method{Arith}{hyperSpec,missing}(e1, e2)
+x \%*\% y
 }
 \arguments{
   \item{e1, e2}{Either two \code{hyperSpec} objects or one
@@ -71,15 +51,25 @@
   }
 }
 \details{
-  The arithmetical operators \code{"+"}, \code{"-"}, \code{"*"},
-	 \code{"\^"}, \code{"\%\%"}, \code{"\%/\%"}, \code{"/"} work on the 
+  You can use these operators in different ways:
+  \preformatted{
+e1 + e2
+`+` (e1, e2)
+
+x \%*\% y
+`\%*\%`(x, y)
+
+-x
+  }
+  The arithmetical operators \code{+}, \code{-}, \code{*}, \code{/},
+  \code{^}, \code{\%\%}, \code{\%/\%}, and \code{\%*\%} work on the 
   spectra matrix of the \code{hyperSpec} object. They have their
   usual meaning (see \code{\link[base]{Arithmetic}}).
   The operators work also with one \code{hyperSpec} object and a numeric object
   or a matrices of the same size as the spectra matrix of the \code{hyperSpec}
   object.
 
-  With numeric vectors \code{\link[hyperSpec]{sweep}} might be more appropriate.
+  With numeric vectors \code{\link[hyperSpec]{sweep}} is most probably more appropriate.
   
   If you want to calculate on the \code{data.frame} \code{hyperSpec@data}, you
   have to do this directly on \code{hyperSpec@data}.
@@ -93,6 +83,7 @@
 chondro + chondro
 1 / chondro
 all((chondro + chondro - 2 * chondro)[[]] == 0)
+-flu
 }
 \seealso{
   \code{\link[hyperSpec]{sweep-methods}} for calculations involving a vector and

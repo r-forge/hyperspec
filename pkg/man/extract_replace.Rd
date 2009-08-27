@@ -24,33 +24,12 @@
   \code{data.frame} in slot \code{data} are provided.
 }
 \usage{
-## Extaction
 \S4method{[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE, short = NULL, drop = FALSE)
 
 \S4method{[[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE, drop = FALSE)
 
 \S4method{$}{hyperSpec}(x, name)
 
-## Shortcuts
-
-x[[]] 
-
-\S4method{$}{hyperSpec}(x, .)  
-
-\S4method{$}{hyperSpec}(x, ..) 
-
-## Replacement functions
-
-## S4 method for signature 'hyperSpec':
-x[i, j, l, short = NULL, \dots] <- value
-
-## S4 method for signature 'hyperSpec':
-x[[i, j, l, wl.index = FALSE, short = NULL, \dots]] <- value
-
-## S4 method for signature 'hyperSpec':
-x$name <- value
-
-x$name <- list (value = value, label = label)
 }
 \arguments{
 
@@ -59,8 +38,6 @@ x$name <- list (value = value, label = label)
   \item{i}{ row index: selects spectra}
 
   \item{j, name}{selecting columns of \code{x@data}}
-  \item{. ,..}{shortcut \code{name}s expanding to "all columns" and "all
-  columns except \code{spc}", respectively.}
     
   \item{l}{selecting columns of the spectra matrix. If \code{l} is numeric, the default
     behaviour is treating \code{l} as wavelengths, \emph{not} as
@@ -77,10 +54,6 @@ x$name <- list (value = value, label = label)
     \code{\link[base]{drop}} and \code{\link[base]{Extract}}. Ignored for
     \code{[}, as otherwise invalid \code{hyperSpec} objects might result.} 
 
-  \item{value}{the values to be assigned.}
-  
-  \item{label}{the label for data column \code{name}.}
-  
   \item{\dots}{ignored}
 }
 \details{
@@ -109,6 +82,21 @@ x$name <- list (value = value, label = label)
   the spectra matrix.
 
   \emph{Replacing: \code{[<-}, \code{[[<-}, and \code{$<-}}.
+\preformatted{
+## S4 method for signature 'hyperSpec':
+x[i, j, l, short = NULL, \dots] <- value
+
+## S4 method for signature 'hyperSpec':
+x [[i, j, l, wl.index = FALSE, short = NULL, \dots]] <- value
+
+## S4 method for signature 'hyperSpec':
+x$name <- value
+}
+  \code{value} gives the values to be assigned.\cr
+    For \code{$}, this con also be a list of the form
+    \code{list (value = value, label = label)},
+    with \code{label} containing the label for data column \code{name}.
+  
 
   \code{[[<-} replaces parts of the spectra matrix.
 

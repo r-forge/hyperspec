@@ -822,13 +822,15 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 
 .arithx <- function (e1, e2){
 	validObject (e1)
-	if (missing (e2))
+	if (missing (e2)){
 		e1  [[]] <- callGeneric (e1 [[]])
-	else
-		e1  [[]] <- callGeneric (e1 [[]], e2)
-	
-	e1@log <- logentry (e1, short = .Generic, 
-			long = list (if (exists ("e2")) e2 = .paste.row (e2, val = TRUE))) 
+      e1@log <- logentry (e1, short = .Generic, long = list ())  
+      
+    } else {
+ 		e1  [[]] <- callGeneric (e1 [[]], e2)
+      e1@log <- logentry (e1, short = .Generic, 
+			long = list (e2 = .paste.row (e2, val = TRUE))) 
+    }
 	e1
 }
 
