@@ -65,8 +65,8 @@ get an svn checkout using your favourite svn client program, or<br/>
 
 <h2>... via package built on my computer</h2>
 <ol>
-<li><a href="hyperSpec_0.7.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
-	 Windows users will probably need the <a href="hyperSpec_0.7.zip">compiled .zip package</a></li>
+<li><a href="hyperSpec_0.9.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
+	 Windows users will probably need the <a href="hyperSpec_0.9.zip">compiled .zip package</a></li>
 <li>Install the package:<br/>
 <tt>R CMD INSTALL <i>filename</i></tt></li>
 </ol>
@@ -77,9 +77,10 @@ These may be a bit outdated, but they work if the nightly build fails.
 <p><tt>hyperSpec</tt> comes with some pdf documentation (vignettes) in addition to the R help files:</p>
 <ul>
 <li><a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/intro/introduction.pdf?root=hyperspec">Introduction</a>: a user manual from aspectroscopist's point of view</li>
-<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/flu/flu.pdf?root=hyperspec">calibration of quinine fluorescence emission</a></li>
-<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.pdf?root=hyperspec">Cluster Analysis of a Raman Map of Chondrocytes in Cartilage</a><br/>
-    the <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/chondro/chondro.txt?root=hyperspec">data file</a> is quite large (ca. 31 MB) and needs to be saved into the documentation folder  in order to reproduce the example. </li>
+<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/flu/flu.pdf?root=hyperspec">calibration of quinine fluorescence emission</a>: how to program import functions for other file formats, and how to set up a calibration.</li>
+<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/laser/laser.pdf?root=hyperspec">Unstable Laser Emission</a>: working with time series, conversion of the spectral abscissa ("wavelength axis")</li>
+<li>Example work-flow: <a href="chondrocytes.pdf"></a> Raman map of chondrocytes in cartilage, examples of PCA and cluster analysis.<br/>
+    the <a href="chondrocytes.zip">zipped directory containing all data</a> is needed to reproduce the vignette.</li>
 <li>A more technical <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/baseline/baselinebelow.pdf?root=hyperspec">explanation of the baseline fitting technique used by <tt>spc.fit.poly.below</tt></a></li>
 </ul> 
 <p> In the standard <tt>hyperSpec</tt> installation, .pdf files and source  are already available in the documentation directory, with the exception of the the chondrocyte raw data (see above).</p>
