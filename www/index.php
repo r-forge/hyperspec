@@ -79,7 +79,7 @@ These may be a bit outdated, but they work if the nightly build fails.
 <li><a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/intro/introduction.pdf?root=hyperspec">Introduction</a>: a user manual from aspectroscopist's point of view</li>
 <li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/flu/flu.pdf?root=hyperspec">calibration of quinine fluorescence emission</a>: how to program import functions for other file formats, and how to set up a calibration.</li>
 <li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/laser/laser.pdf?root=hyperspec">Unstable Laser Emission</a>: working with time series, conversion of the spectral abscissa ("wavelength axis")</li>
-<li>Example work-flow: <a href="chondrocytes.pdf"></a> Raman map of chondrocytes in cartilage, examples of PCA and cluster analysis.<br/>
+<li>Example work-flow: <a href="chondrocytes.pdf"> Raman map of chondrocytes in cartilage</a>: principal component analysis, cluster analysis, working with spectral maps/images.<br/>
     the <a href="chondrocytes.zip">zipped directory containing all data</a> is needed to reproduce the vignette.</li>
 <li>A more technical <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/baseline/baselinebelow.pdf?root=hyperspec">explanation of the baseline fitting technique used by <tt>spc.fit.poly.below</tt></a></li>
 </ul> 
