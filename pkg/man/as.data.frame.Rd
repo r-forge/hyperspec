@@ -27,9 +27,12 @@
   \code{x@data} and \code{x@data$spc}, respectively.
 }
 
-
 \author{C. Beleites}
-\seealso{\code{\link[base]{as.data.frame}} and \code{\link[base]{as.matrix}}}
+\seealso{
+  \code{\link[base]{as.data.frame}} and \code{\link[base]{as.matrix}}
+
+  \code{\link[hyperSpec]{extract}}}
+}
 \examples{
 as.data.frame (chondro [1:3,, 600:620])
 as.matrix (chondro [1:3,, 600:620])

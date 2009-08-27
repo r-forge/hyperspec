@@ -23,7 +23,6 @@ vec2array(ivec, dim)
 \value{
   \code{array2vec} returns a scalar, \code{vec2array} a \code{matrix}. 
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \seealso{see \code{\link[base]{Extract}} on the difference of indexing
   an \code{array} with a vector or a \code{matrix}.}

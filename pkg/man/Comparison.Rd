@@ -17,8 +17,8 @@
 \alias{Compare,numeric,hyperSpec-method}
 \alias{all.equal,hyperSpec,hyperSpec-method}
 \title{Comparison Operators: <, >, <=, >=, ==, and !=}
-\description{The comparison operators \code{">"}, \code{"<"},
-  \code{">="}, \code{"<="}, \code{"=="}, and \code{"!="} 
+\description{The comparison operators \code{>}, \code{<},
+  \code{>=}, \code{<=}, \code{==}, and \code{!=} 
   for \code{hyperSpec} objects. 
   
   \code{all.equal} checks the equality of two hyperSpec objects.}
@@ -63,8 +63,8 @@
   \item{check.log}{Should the slot \code{label} be checked?}
 }
 \details{
-   The comparison operators \code{">"}, \code{"<"},
-  \code{">="}, \code{"<="}, \code{"=="}, and \code{"!="} work on the 
+   The comparison operators \code{>}, \code{<},
+  \code{>=}, \code{<=}, \code{==}, and \code{!=} work on the 
   spectra matrix of the \code{hyperSpec} object. They have their
   usual meaning (see \code{\link[base]{Comparison}}).
   The operators work also with one \code{hyperSpec} object and a numeric (scalar) object

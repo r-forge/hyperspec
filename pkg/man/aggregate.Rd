@@ -55,8 +55,6 @@
   If the initially preallocated \code{data.frame} turns out to be too
   small, more rows are appended and a warning is issued.
 }
-\references{
-}
 \seealso{
   \code{\link[base]{tapply}}, \code{\link[stats]{aggregate}}, \code{\link[stats]{ave}}
 }

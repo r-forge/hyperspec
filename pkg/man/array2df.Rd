@@ -29,14 +29,18 @@ array2df(x, levels = rep(NA, length(dims)), matrix = FALSE, label.x = deparse(su
 \details{
   If the resulting \code{data.frame} is too large to fit in memory, a
   \code{matrix} might help.
+
+  The main benefit of this function is that it uses matrices as long as
+  possible. This can give large advantages in terms of memory consumption.
 }
 \value{
   A \code{data.frame} or \code{matrix} with \code{prod (dim (x))} rows
   and \code{length (dim (x)) + 1} columns.
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
-\seealso{\code{\link[utils]{stack}}}
+\seealso{
+  \code{\link[utils]{stack}}
+}
 \examples{
 arr <- array (rnorm (24), 2:4)
 
