@@ -85,8 +85,15 @@ These may be a bit outdated, but they work if the nightly build fails.
 </ul> 
 <p> In the standard <tt>hyperSpec</tt> installation, .pdf files and source  are already available in the documentation directory, with the exception of the the chondrocyte raw data (see above).</p>
 
+<h1>Help, Suggestions, Feature Requests, and Bugs</h1>
+<ul>
+<li>There is a <a href="http://r-forge.r-project.org/forum/forum.php?forum_id=1218">help forum</a> on <tt>hyperSpec</tt></li>
+<li>and a <a href="http://r-forge.r-project.org/forum/forum.php?forum_id=1217">discussion forum</a>.</li>
+<li>Trackers for <a href="http://r-forge.r-project.org/tracker/?atid=1504&group_id=366&func=browse">feature requests</a>, </li>
+<li>and <a href="http://r-forge.r-project.org/tracker/?atid=1501&group_id=366&func=browse">bugs</a> are found on r.forge.</li>
+</ul>
 
-<h1>Useful Packages for Chemometric Data Analysis</h1>
+<h1>Other Useful Packages for Chemometric Data Analysis</h1>
 <p>By no means complete, if you have suggestions, send me an email.</p>
 <ul>
 <li><tt>R.matlab</tt>: Read & write .mat files, run external calculations in Matlab</li>
