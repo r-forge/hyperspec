@@ -2217,20 +2217,20 @@ setMethod ("plot",
                          dots$func.args <- list (na.rm = TRUE)
                        else if (is.null (dots$func.args$na.rm))
                          dots$func.args$na.rm <- TRUE
-                       dots$object = x
-                       dots$func = mean_pm_sd
+                       dots$object <- x
+                       dots$func <- mean_pm_sd
                        do.call (plotspc, dots) 
                      },
                      spcprctile = {
-                       dots$fill <- TRUE	
+                       dots$fill <- c (1, NA, 1)
                        if (is.null (dots$func.args))
                          dots$func.args <- list ()
                        if (is.null (dots$func.args$na.rm))
                          dots$func.args$na.rm <- TRUE
                        if (is.null (dots$func.args$probs))
                          dots$func.args$probs = c (0.16, 0.5, 0.84)
-                       dots$object = x
-                       dots$func = quantile
+                       dots$object <- x
+                       dots$func <- quantile
                        do.call (plotspc, dots) 
                      },
                      spcprctl5 = {
