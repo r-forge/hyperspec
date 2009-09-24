@@ -1576,16 +1576,22 @@ plotmap <- function (object,
     if (length (z) != nrow (object))
       warning ("func did not yield one value per spectrum.")
   }
-  
-  grid <- index.grid (object[[, ix]], object[[, iy]]) 
-  z <- z [grid$grid]
-  
+
+
+#  grid <- index.grid (object[[, ix]], object[[, iy]]) 
+#  z <- z [grid$grid]
+
   if (! is.null (cond)){
-    cond <- cond [grid$grid]
-    dots <- list (x = formula (as.numeric (z) ~ grid$x * grid$y | cond))
-  } else
-  dots <- list (x = formula (as.numeric (z) ~ grid$x * grid$y))
-  
+#    cond <- cond [grid$grid]
+    dots <- list (x = formula (z ~ x * y | cond))
+    if (is.null (trellis.args$data))
+      dots$data <- data.frame (x = object[[, ix]] , y = object[[, iy]], z = as.numeric(z), cond = cond)
+  } else { 
+    dots <- list (x = formula (z ~ x * y))
+    if (is.null (trellis.args$data))
+      dots$data <- data.frame (x = object[[, ix]] , y = object[[, iy]], z = as.numeric(z))
+  }
+    
   n <- length (unique (zapsmall (as.numeric (z))))
   if (is.null (trellis.args$col.regions)){
     if (is.factor (z))
@@ -1615,7 +1621,14 @@ plotmap <- function (object,
     if (is.null (trellis.args$ylab))
       trellis.args$ylab <- y
   }
-  
+
+  if (is.null (trellis.args$panel)){
+    trellis.args$panel <- function (x, y, z, subscripts, ...) {
+      dummy <- index.grid (x[subscripts], y[subscripts], z [subscripts])
+      panel.levelplot (dummy$x, dummy$y, dummy$z, subscripts = TRUE, ...)     
+    } 
+  }
+
   lattice <- do.call(levelplot, c(dots, trellis.args))
   dots$x <- lattice
   if (do.print)

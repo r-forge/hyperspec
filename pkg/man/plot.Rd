@@ -78,6 +78,8 @@ plot (laser, "ts")
 spc <- apply (chondro, 2, quantile, probs = 0.05)
 spc <- sweep (chondro, 2, spc, "-")
 plot (spc, "spcprctl5")
+plot (spc, "spcprctile")
+plot (spc, "spcmeansd")
 }
 
 \keyword{methods}
