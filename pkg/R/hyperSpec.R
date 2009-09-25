@@ -1598,13 +1598,16 @@ plotmap <- function (object,
       trellis.args$col.regions <- matlab.palette (nlevels (z))
     else
       trellis.args$col.regions <- matlab.palette ()
-  }
+  } else if (is.factor (z))
+    trellis.args$col.regions <- rep (trellis.args$col.regions, length.out = nlevels (z))
   
   if (is.null (trellis.args$at)){
     if (is.factor (z))
       trellis.args$at <- seq_len (nlevels (z) + 1) - 0.5
-    if (n == 1)
-      trellis.args$at <- range (z)[1] * c (.99, 1.01) 
+    else if (n == 1)
+      trellis.args$at <- range (z)[1] * c (.99, 1.01)
+    else
+      trellis.args$at = seq (min (z), max (z), length.out = length (trellis.args$col.regions) + 1)
   }
   
   if (is.null (trellis.args$aspect))
@@ -1623,8 +1626,9 @@ plotmap <- function (object,
   }
 
   if (is.null (trellis.args$panel)){
-    trellis.args$panel <- function (x, y, z, subscripts, ...) {
+    trellis.args$panel <- function (x, y, z, subscripts, ..., panel.bg = NA) {
       dummy <- index.grid (x[subscripts], y[subscripts], z [subscripts])
+      panel.fill (col = panel.bg) 
       panel.levelplot (dummy$x, dummy$y, dummy$z, subscripts = TRUE, ...)     
     } 
   }
