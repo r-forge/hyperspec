@@ -9,13 +9,13 @@
   \code{print}, \code{show}, and \code{summary} show the result of \code{as.character}.
 }
 \usage{
-\S4method{show}{hyperSpec}(x)
-\S4method{print}{hyperSpec}(x, \dots)
-\S4method{summary}{hyperSpec}(x, log = TRUE, \dots)
-\S4method{as.character}{hyperSpec}(x, digits = getOption ("digits"), max.print = 10, shorten.to = c(2, 2), log = FALSE)
+\S4method{show}{hyperSpec}(object)
+\S4method{print}{hyperSpec}(x, log = FALSE, \dots)
+\S4method{summary}{hyperSpec}(object, log = TRUE, \dots)
+\S4method{as.character}{hyperSpec}(x, digits = getOption ("digits"), max.print = 5, shorten.to = c(2, 1), log = TRUE)
 }
 \arguments{
-  \item{x}{a \code{hyperSpec} object}
+  \item{x, object}{a \code{hyperSpec} object}
   
   \item{digits}{number of digits handed over to \code{format}}
   

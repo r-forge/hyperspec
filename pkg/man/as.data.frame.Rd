@@ -15,12 +15,12 @@
   \code{as.matrix} returns the spectra matrix \code{x@data$spc}
 }
 \usage{
-\S4method{as.data.frame}{hyperSpec,missing,missing}(x)
-\S4method{as.matrix}{hyperSpec}(x)
+\S4method{as.data.frame}{hyperSpec,missing,missing}(x, row.names = NULL, optional = FALSE, \dots)
+\S4method{as.matrix}{hyperSpec}(x, \dots)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
-  %\item{row.names, optional, \dots}{ignored}
+  \item{row.names, optional, \dots}{ignored}
   %\item{\dots}{ignored}
 }
 \value{

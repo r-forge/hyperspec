@@ -13,8 +13,7 @@
  It also supplies some convenient abbrevations for much used plots.
 }
 \usage{
-\S4method{plot}{hyperSpec,missing}(x)
-\S4method{plot}{hyperSpec,missing}(x, \dots)
+\S4method{plot}{hyperSpec,missing}(x, y, \dots)
 \S4method{plot}{hyperSpec,character}(x, y, \dots)
 }
 \arguments{

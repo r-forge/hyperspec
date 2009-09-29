@@ -1,14 +1,17 @@
 \name{plotmap}
 \alias{plotmap}
+\alias{map.identify}
 
-\title{Function to Plot a Map of a hyperSpec Object}
+\title{Plot a Map and Identify Spectra}
 \description{
-  An image or map of a summary value of each spectrum is plotted. 
+  An image or map of a summary value of each spectrum is plotted. The
+  spectra may be identified by mouse click.
 }
 \usage{
 plotmap (object, x = "x", y = "y", func = mean, cond = NULL, 
          z = NULL, do.print = FALSE, print.args = NULL, trellis.args = NULL,
          \dots)
+map.identify (object, x = "x", y = "y", \dots)
 }
 
 \arguments{
@@ -26,7 +29,7 @@ plotmap (object, x = "x", y = "y", func = mean, cond = NULL,
 	 \code{factor}, and the default color scheme (returned by
 	 \code{\link{matlab.palette}}) is used, one color per level of \code{z}
 	 is used, otherwise a continuous palette is requested.
-  }
+       }
   
   \item{do.print}{if \code{TRUE}, the lattice object is printed with the
 	 further arguments given in \code{print.args} before returning it.}
@@ -37,15 +40,22 @@ plotmap (object, x = "x", y = "y", func = mean, cond = NULL,
   \item{trellis.args}{list with further arguments passed to
 	 \code{\link[lattice]{levelplot}}.}
 
-  \item{\dots}{further arguments passed to \code{func}.}
+  \item{\dots}{further arguments passed to \code{func} by
+    \code{plotmap}.
+
+    \code{map.identify} passes all further arguments to \code{plotmap}.
+  }
 }
 \details{
-  \code{plotmap} calculated a grid (via \code{\link{index.grid}}) on
+  \code{plotmap} calculates a grid (via \code{\link{index.grid}}) on
   which the summary value is displayed with
   \code{\link[lattice]{levelplot}}. 
 
   Arguments to \code{\link[lattice]{levelplot}} can be given in
   \code{trellis.args}.
+
+  \code{map.identify} calls \code{plotmap} and waits for (left) mouse
+  clicks on points. The row indices of the
 }
 \value{
   a lattice object

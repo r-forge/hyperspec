@@ -306,8 +306,8 @@ setMethod ("$", "hyperSpec", function (x, name){
 ### extractsqsq - extracting with [[
 ###
 setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
-                                        drop = FALSE,
-                                        wl.index = FALSE){
+                                        wl.index = FALSE,
+                                        drop = FALSE){
   validObject (x)
   
   x <- .extract (x, i, j, l, ..., wl.index = wl.index)
@@ -535,7 +535,7 @@ setMethod ("colnames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "col")
 ###  
 ###  
 
-setMethod ("rownames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "col"){
+setMethod ("rownames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "row"){
   validObject (x)
   rownames (x@data, do.NULL = do.NULL, prefix = prefix) 
 })
@@ -1705,17 +1705,23 @@ index.grid <- function (x, y, z){
 ###  
 ###  
 
-map.identify <- function (x, lattice = NULL){
-  validObject (x)
+map.identify <- function (object, x = "x", y = "y", ...){
+  validObject (object)
   
-  mesh <- index.grid (x)$grid 
+  ix <- pmatch (x, colnames (object@data))
+  if (is.null (ix))
+    stop (paste ("hyperSpec object has no column ", x))
   
-  if (is.null(lattice))
-    lattice <- plotmap(x) 
+  iy <- pmatch (y, colnames (object@data))
+  if (is.null (iy))
+    stop (paste ("hyperSpec object has no column ", y)) 
+
+  lattice <- plotmap(object, x, y, ...) 
   
   print (lattice)
   trellis.focus ()
-  panel.identify (subscripts = mesh) 
+#  panel.identify (subscripts = mesh)
+  panel.identify (object[[, ix]], object[[, iy]]) 
 }
 
 ###-----------------------------------------------------------------------------

@@ -59,7 +59,7 @@ decomposition(object, x, wavelength = seq_len (ncol (x)),
   \code{x}. Moreover,  all columns of \code{object@data} that did not
   contain the same value for all spectra are set to \code{NA}.
   Thus, for the resulting \code{hyperSpec} object, \code{\link{plotspc}}
-  and related functions are meaningful. \code{\code{plotmap}}
+  and related functions are meaningful. \code{\link[hyperSpec]{plotmap}}
   cannot be applied as the loadings are not laterally resolved. 
   
   The scores-matrix needs to have the same number of rows as

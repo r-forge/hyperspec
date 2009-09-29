@@ -21,8 +21,8 @@ rbind.hyperSpec (\dots, deparse.level)
 \S4method{cbind2}{hyperSpec,hyperSpec}(x, y)
 \S4method{rbind2}{hyperSpec,hyperSpec}(x, y)
 
-\S4method{cbind2}{hyperSpec,missing}(x)
-\S4method{rbind2}{hyperSpec,missing}(x)
+\S4method{cbind2}{hyperSpec,missing}(x, y)
+\S4method{rbind2}{hyperSpec,missing}(x, y)
 
 bind(direction = stop("direction ('c' or 'r') required"), \dots,
    short = NULL, user = NULL, date = NULL)

@@ -13,8 +13,8 @@
   \code{dimnames} both together with the names of the wavelengths (see below).
   }
 \usage{
-\S4method{colnames}{hyperSpec}(x)
-\S4method{rownames}{hyperSpec}(x)
+\S4method{colnames}{hyperSpec}(x, do.NULL = TRUE, prefix = "col")
+\S4method{rownames}{hyperSpec}(x, do.NULL = TRUE, prefix = "row")
 \S4method{dimnames}{hyperSpec}(x)
 }
 \details{
@@ -22,6 +22,8 @@
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
+  \item{do.NULL, prefix}{handed to \code{\link[base]{rownames}} and
+  \code{\link[base]{colnames}}, respectively.}
 }
 \value{
   \code{rownames} and \code{colnames} return an \code{character} vector,
