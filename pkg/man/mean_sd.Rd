@@ -12,7 +12,7 @@ mean_pm_sd(x, na.rm = TRUE)
 }
 \arguments{
   \item{x}{ a numeric vector }
-  \item{na.rm}{ ~~Describe \code{na.rm} here~~ }
+  \item{na.rm}{handed to \code{\link[base]{mean}} and \code{\link[base]{sd}}}
 }
 \details{
   These functions are provided for convenience. 

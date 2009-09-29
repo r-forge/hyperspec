@@ -35,7 +35,7 @@ If the range is given as a formula (i.e. \code{start ~ end}, a sequence
 index corresponding to start :  index corresponding to end
 
 is returned. If the wavelengths are not ordered, that may lead to chaos. In this case, call 
-\code{\link[hperSpec]{orderwl}} first.
+\code{\link[hyperSpec]{orderwl}} first.
 
 Two special variables can be used: \code{min} and \code{max}, corresponding to the lowest and highest 
 wavelength of \code{x}, respectively.  

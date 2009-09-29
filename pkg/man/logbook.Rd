@@ -16,8 +16,6 @@ A \code{data.frame} in slot \code{x@log} keeps track of the changes done to the 
 }
 \value{
 a \code{data.frame} containing \code{x@log}}
-\references{
-}
 \author{C. Beleites}
 \examples{
 logbook (flu)

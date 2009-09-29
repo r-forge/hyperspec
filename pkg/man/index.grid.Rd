@@ -28,8 +28,6 @@ index.grid(x, y, z)
   appropriate \code{z} value for each point of the grid.}
 }
 \author{C. Beleites}
-
-\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
 ## select a small 4 x 4 corner of chondro
 spc <- chondro[c(1, 2, 32, 33, 34, 35, 66, 67, 68,100, 101, 102)]

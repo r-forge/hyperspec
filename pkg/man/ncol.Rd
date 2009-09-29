@@ -34,9 +34,6 @@ nwl (x)
   
    \code{dim} return a vector of length 3.
 }
-
-\references{
-}
 \author{C. Beleites}
 \seealso{\code{\link[base]{nrow}}, \code{\link[base]{ncol}}, and \code{\link[base]{dim}}}
 \examples{

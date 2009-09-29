@@ -31,8 +31,6 @@
    \code{dimames} returns a list with elements \code{row},  \code{data}, \code{wl} with the 
    respective character vectors. 
 }
-
-\references{}
 \author{C. Beleites}
 \seealso{\code{\link[base]{rownames}}, \code{\link[base]{colnames}}, and \code{\link[base]{dimnames}}
 
