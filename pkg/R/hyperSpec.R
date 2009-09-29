@@ -1602,12 +1602,15 @@ plotmap <- function (object,
     trellis.args$col.regions <- rep (trellis.args$col.regions, length.out = nlevels (z))
   
   if (is.null (trellis.args$at)){
-    if (is.factor (z))
+    if (is.factor (z)) {
       trellis.args$at <- seq_len (nlevels (z) + 1) - 0.5
-    else if (n == 1)
+    } else if (n == 1) {
       trellis.args$at <- range (z)[1] * c (.99, 1.01)
-    else
+      if (all (trellis.args$at == 0))
+        trellis.args$at <- c(-1, 1)
+    } else {
       trellis.args$at = seq (min (z), max (z), length.out = length (trellis.args$col.regions) + 1)
+    }
   }
   
   if (is.null (trellis.args$aspect))
@@ -1721,7 +1724,7 @@ map.identify <- function (object, x = "x", y = "y", ...){
   print (lattice)
   trellis.focus ()
 #  panel.identify (subscripts = mesh)
-  panel.identify (object[[, ix]], object[[, iy]]) 
+  panel.identify (x = unlist (object[[, ix]]), y = unlist (object[[, iy]])) 
 }
 
 ###-----------------------------------------------------------------------------
