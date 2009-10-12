@@ -6,12 +6,9 @@
 Interface for hyperspectral data sets, i.e. spectra + meta information (spatial, time, concentration, ...)
 }
 \description{
-This package gives an interface to handle hyperspectral data sets in
-R. I.e. spatially or time-resolved spectra, or spectra with any other
-kind of information associated with the spectra.
+This package gives an interface to handle hyperspectral data sets in R. I.e. spatially or time-resolved spectra, or spectra with any other kind of information associated with the spectra. 
 
-The spectra can be data as obtained in XRF, UV/VIS, Fluorescence, AES,
-NIR, IR, Raman, NMR, MS, etc.
+The spectra can be data as obtained in XRF, UV/VIS, Fluorescence, AES, NIR, IR, Raman, NMR, etc. 
 
 More generally, any data that is recorded over a discretized variable, e.g. absorbance = f (wavelength), stored as a vector of absorbance values for discrete wavelengths is suitable.
 }
@@ -19,15 +16,16 @@ More generally, any data that is recorded over a discretized variable, e.g. abso
 \tabular{ll}{
 Package: \tab hyperSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.9\cr
-Date: \tab 2009-08-26\cr
+Version: \tab 0.95\cr
+Date: \tab 2009-10-12\cr
 License: \tab LGPL\cr
 LazyLoad: \tab yes\cr
 LazyData: \tab yes\cr
 Depends: \tab methods, utils, lattice\cr
 #Imports: \tab lattice\cr
 Suggests: \tab R.matlab\cr
-Built: \tab R 2.9.1; ; 2009-08-26 13:30:50 UTC; unix\cr
+Packaged: \tab 2009-10-12 13:50:19 UTC; cb\cr
+Built: \tab R 2.9.2; ; 2009-10-12 14:55:39 UTC; unix\cr
 }
 
 Index:
@@ -51,12 +49,15 @@ decomposition           Convert Principal Component Decomposition or
 dimnames,hyperSpec-method
                         Dimnames of an hyperSpec Object
 flu                     Chitin Fluorescence Spectra
-hyperSpec Arith         Arithmetical Operators: +, -, *, \^, \%\%,
-                        \%/\%, /, \%*\%
+hyperSpec               Interface for hyperspectral data sets
+hyperSpec Arith         Arithmetical Operators: +, -, *, /, ^, \%\%,
+                        \%/\%, \%*\%
 hyperSpec Comparison    Comparison Operators: <, >, <=, >=, ==, and !=
 hyperSpec Math          Math Functions for hyperSpec Objects
 hyperSpec-class         Class "hyperSpec"
-hyperSpec-package       hyperSpec: Handling hyperSpectral Data
+hyperSpec-package       Interface for hyperspectral data sets, i.e.
+                        spectra + meta information (spatial, time,
+                        concentration, ...)
 import                  Import and Export of hyperSpec objects
 index.grid              index.grid: Calculate a Matrix with Indices for
                         x,y-Data
@@ -67,7 +68,6 @@ labels,hyperSpec-method
 laser                   Laser Emission
 logbook                 Logging the processing ot a hyperSpec Object
 logentry                Append a Row to the log of a hyperSpec Object
-map.identify            Identify Spectra on a Map Plot
 matlab.palette          Matlab-like Palette
 mean_sd                 Mean and Standard Deviation
 ncol,hyperSpec-method   The Number of Rows (Spectra), Columns, and Data
@@ -77,7 +77,7 @@ pearson.dist            Calculate Distance based on Pearson's R\^2
 plot                    Plotting hyperSpec Objects
 plotc                   Calibration- and Timeseries Plots,
                         Depth-Profiles and the like
-plotmap                 Function to Plot a Map of a hyperSpec Object
+plotmap                 Plot a Map and Identify Spectra
 plotspc                 Plotting Spectra
 scan.txt.Renishaw       import Raman measurements from Renishaw
                         ASCII-files
@@ -103,6 +103,7 @@ Further information is available in the following vignettes:
 \code{chondro} \tab Vignette on the chondro data set. Shows common Preprocessing tasks for Raman spectra, principal component analysis (PCA), and hierarchical cluster analysis. (source, pdf)\cr
 \code{flu} \tab flu: Vignette on the fluorescence data set, how to write an import function, and example of a linear calibration (source, pdf)\cr
 \code{introduction} \tab hyperSpec Introduction (source, pdf)\cr
+\code{laser} \tab laser: Vignette on the laser data set, example of a time series. Shows also how to change the spectral abscissa. (source, pdf)\cr
 }
 }
 \author{
