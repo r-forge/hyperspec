@@ -18,7 +18,6 @@ citEntry(entry="Article", "hyperSpecABC",
 				    "in preparation for Analytical and Bioanalytical Chemistry, ",
                 # "(", year, "). ", 
                 vers, ". http://hyperspec.r-forge.r-project.org", 
-                "% an introduction to the package written for spectroscopists", 
                 sep="")
 )
 citEntry(entry="Article", "hyperSpecJSS", 
@@ -35,6 +34,5 @@ citEntry(entry="Article", "hyperSpecJSS",
 				    "in preparation for Journal of Statistical Software, ",
                 # "(", year, "). ", 
                 vers, ". http://hyperspec.r-forge.r-project.org", 
-		"% a more technical discussion of the implementation",
 		sep="")
 )
