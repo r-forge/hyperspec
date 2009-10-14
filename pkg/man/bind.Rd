@@ -68,7 +68,7 @@ rownames and/or colnames.
 \author{c. Beleites}
 
 \seealso{ \code{\link[Matrix]{rBind}}, \code{\link[Matrix]{cBind}}
-  \code{\link[Matrix]{rbind2}}, \code{\link[Matrix]{cbind2}}
+  \code{\link[methods]{rbind2}}, \code{\link[methods]{cbind2}}
   \code{\link[base]{rbind}}, \code{\link[base]{cbind}}
 }
 \examples{

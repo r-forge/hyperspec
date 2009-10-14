@@ -31,7 +31,7 @@
 \seealso{
   \code{\link[base]{as.data.frame}} and \code{\link[base]{as.matrix}}
 
-  \code{\link[hyperSpec]{extract}}
+  \code{\link[hyperSpec:extract_replace]{[}}
 }
 \examples{
 as.data.frame (chondro [1:3,, 600:620])

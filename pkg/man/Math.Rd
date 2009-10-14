@@ -144,8 +144,8 @@
   \code{\link[base]{Math}} for the base math functions.
   
   \code{\link[hyperSpec]{Arith}} for arithmetic operators,
-  \code{\link[hyperSpec]{Compare}} for comparison operators, and 
-    \code{\link[hyperSpec]{Summary}} 
+  \code{\link[hyperSpec]{Comparison}} for comparison operators, and 
+  \code{\link[hyperSpec]{Summary}} 
     for group generic functions working on \code{hyperSpec} objects.  
 }
 \keyword{methods}

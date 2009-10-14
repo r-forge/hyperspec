@@ -96,8 +96,8 @@ all((chondro + chondro - 2 * chondro)[[]] == 0)
   \code{\link[base]{matmult}} for matrix multiplications with \code{\%*\%}.
   
   \code{\link[hyperSpec]{Comparison}} for comparison operators, 
-  \code{\link[hyperSpec]{Math}} and \code{\link[hyperSpec]{Math2}} for mathematical group generic 
-  functions working on \code{hyperSpec} objects.  
+  \code{\link[hyperSpec]{Math}} for mathematical group generic 
+  functions (Math and Math2 groups) working on \code{hyperSpec} objects.  
 }
 \keyword{methods}
 \keyword{arith}

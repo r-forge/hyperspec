@@ -30,7 +30,7 @@
 
 \details{
    \code{apply} gives the functionality of
-	\code{\link[stats]{apply}} for \code{hyperSpec} objects.
+	\code{\link[base]{apply}} for \code{hyperSpec} objects.
 
   The generic functions of group \code{\link[methods]{Math}} are not
   definded for \code{hyperSpec} objects. Instead, \code{apply} can be
@@ -44,7 +44,7 @@
   but additionally allows to set a new wavelength axis and adjust the labels.     
 }
 \seealso{
-  \code{\link[stats]{apply}}, for applying \code{FUN} to subgroups of
+  \code{\link[base]{apply}}, for applying \code{FUN} to subgroups of
   the \code{hyperSpec} object:  \code{\link{aggregate}}.
 }
 \examples{

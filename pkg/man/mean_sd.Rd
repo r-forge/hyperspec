@@ -12,7 +12,7 @@ mean_pm_sd(x, na.rm = TRUE)
 }
 \arguments{
   \item{x}{ a numeric vector }
-  \item{na.rm}{handed to \code{\link[base]{mean}} and \code{\link[base]{sd}}}
+  \item{na.rm}{handed to \code{\link[base]{mean}} and \code{\link[stats]{sd}}}
 }
 \details{
   These functions are provided for convenience. 
@@ -26,7 +26,7 @@ mean_pm_sd(x, na.rm = TRUE)
 }
 \references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
-\seealso{\code{\link[base]{mean}}, \code{\link[base]{sd}}}
+\seealso{\code{\link[base]{mean}}, \code{\link[stats]{sd}}}
 \examples{
   mean_sd (flu$c)
   mean_pm_sd (flu$c)

@@ -57,7 +57,7 @@
   \code{\link[base]{Summary}} for the base summary functions.
   
   \code{\link[hyperSpec]{Arith}} for arithmetic operators,
-  \code{\link[hyperSpec]{Compare}} for comparison operators, and 
+  \code{\link[hyperSpec]{Comparison}} for comparison operators, and 
   \code{\link[hyperSpec]{Math}}
   for group generic functions working on \code{hyperSpec} objects.  
 }

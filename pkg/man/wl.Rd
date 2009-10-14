@@ -44,7 +44,7 @@ If no label is given, a warning will be issued.
 }
 \note{
   \code{wl<-} always sets the complete wavelength axis, without changing the columns 
-  of the spectra matrix. If you rather want to cut the spectral range, use \code{\link[hyperSpec]{[}}, 
+  of the spectra matrix. If you rather want to cut the spectral range, use \code{\link[hyperSpec:extract_replace]{[}}, 
   for interpolation along the spectral axis see \code{\link[hyperSpec]{spc.loess}} 
   and for spectral binning \code{\link[hyperSpec]{spc.bin}}.
 }
@@ -54,7 +54,7 @@ If no label is given, a warning will be issued.
 \seealso{
 \code{\link[base]{signif}}
 
-cutting the spectral range: \code{\link[hyperSpec]{[}}
+cutting the spectral range: \code{\link[hyperSpec:extract_replace]{[}}
 
 interpolation along the spectral axis: \code{\link[hyperSpec]{spc.loess}}
 
