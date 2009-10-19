@@ -2427,7 +2427,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
                   ts = 	list (t = "t / s"),
                   stop ("unknown format for Renishaw .txt files.")
                   )
-  cols <- c  (cols, list (.wavelength = expression (tilde(nu) / cm^-1) ,
+  cols <- c  (cols, list (.wavelength = expression (Delta * tilde(nu) / cm^-1) ,
                           spc = "I / a.u."))	
   
   first <- scan(file, nlines = 1, quiet = TRUE)

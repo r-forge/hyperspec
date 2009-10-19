@@ -102,8 +102,8 @@ all (flu == flu[[]])
   \code{\link[base]{Comparison}} for the base comparison functions.
   
   \code{\link[hyperSpec]{Arith}} for arithmetic operators, 
-  \code{\link[hyperSpec]{Math}} and \code{\link[hyperSpec]{Math2}} for mathematical group generic 
-  functions working on \code{hyperSpec} objects.  
+  \code{\link[hyperSpec]{Math}}  for mathematical group generic 
+  functions (groups Math and Math2) working on \code{hyperSpec} objects.  
   
   \code{\link[base]{all.equal}} and \code{\link[base]{isTRUE}}
 }
