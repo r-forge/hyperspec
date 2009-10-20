@@ -44,7 +44,6 @@ start and end may be complex numbers. The resulting index for a complex x is the
 
 index (Re (x)) + Im (x)  
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \examples{
 flu

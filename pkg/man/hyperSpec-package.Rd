@@ -106,8 +106,7 @@ Further information is available in the following vignettes:
 \code{laser} \tab laser: Vignette on the laser data set, example of a time series. Shows also how to change the spectral abscissa. (source, pdf)\cr
 }
 }
-\author{
-Claudia Beleites
+\author{C. Beleites
 
 Maintainer: Claudia Beleites <cbeleites@units.it>
 }

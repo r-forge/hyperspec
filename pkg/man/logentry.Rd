@@ -32,9 +32,7 @@ logentry(x, short = NULL, long = NULL, date = NULL, user = NULL)
 \value{
   \code{x@log} (\emph{\code{data.frame}}) including the new row.
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
-
 \examples{
 logentry (chondro, short = "test")
 }

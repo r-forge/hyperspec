@@ -2416,6 +2416,126 @@ read.txt.wide <- function (file = stop ("filename is required"),
        ) 
 }
 
+###-----------------------------------------------------------------------------
+###
+###  read.ENVI
+###  
+###  read ENVI files, missing header files may be replaced by list in parameter 
+###  header
+###
+###  
+read.ENVI <- function (file = stop ("read.ENVI: file name needed"), header = NULL,
+                       x = 0 : 1, y = x,
+                       wavelength = NULL, label = NULL, log = NULL) {
+  warning ('This function could not be tested extensively up to now.
+It was tested with Bruker FTIR (FPA) ENVI files.
+If you have other ENVI files, please contact the maintainer: e-mail to Claudia Beleites <cbeleites@units.it>.')
+  if (!file.exists(file)) 
+    stop("read.ENVI: Could not open binary file: ", file)
+
+  fields <- c("samples", "lines", "bands", "data type", "header offset", 
+              "interleave", "byte order")
+
+  if (is.list (header)) {
+    header <- header [fields]
+    header [sapply (header, is.null)] <- NA
+  } else {
+    if (is.null (header)) {
+      header <- paste (dirname (file), sub ("[.][^.]+$", ".*", basename (file)), sep = "/")
+      dummy <- Sys.glob (header)
+      header <- dummy [! grepl (file, dummy)]
+
+      if (length (header) != 1)
+        stop ("read.ENVI: cannot guess header file name")
+      else
+        warning ("read.ENVI: guessing header file name (", header, ")")
+    }
+    
+    if (!file.exists(header)) 
+      stop("read.ENVI: Could not open header file: ", header)
+    
+    header <- read.table(header, sep = "=", strip.white = TRUE, 
+                         row.names = NULL, as.is = TRUE, fill = TRUE)
+    header <- sapply (header, tolower)
+    
+    header <- as.list (header [match (fields, header [,1]), 2])
+  }
+  names (header) <- fields
+  
+  if (any (is.na (header [c("samples", "lines", "bands", "data type")])))
+    stop("read.ENVI: Error in header file (missing information)",
+         paste (names (header), " = ", header, collapse = ", "))
+
+  header [1 : 5] <- lapply (header [1 : 5], as.numeric) # all but interleave are integers
+
+  if (header$samples <= 0)
+    stop("read.ENVI: Error in header file: incorrect data size (", header$samples, ")")
+  if (header$lines <= 0)
+    stop("read.ENVI: Error in header file: incorrect data size (", header$lines, ")")
+  if (header$bands <= 0)
+    stop("read.ENVI: Error in header file: incorrect data size (", header$bands, ")")
+  
+  if (!(header$`data type` %in% c(1 : 5, 9, 12))) 
+    stop("read.ENVI: Error in header file: data type incorrect or unsupported (", header$`data type`,")")
+
+  if (! header$`byte order` %in% c ("big", "little", "swap")) {
+    header$`byte order` <- as.numeric (header$`byte order`)
+    if (is.na (header$`byte order`) || ! header$`byte order` %in% 0 : 1) {
+      header$`byte order` <- .Platform$endian
+      warning ("read.ENVI: byte order not given. Guessing '", .Platform$endian, "'")
+    } else if (header$`byte order` == 0)
+      header$`byte order` <- "little"
+    else 
+      header$`byte order` <- "big"
+  }
+
+  n <- header$samples * header$lines * header$bands
+  
+  f = file (file, "rb")
+  if (! is.na (header$`header offset`)) 
+    readBin(f, raw(), n = header$`header offset`)
+  
+  switch(header$`data type`,
+         spc <- readBin(f, integer(), n = n, size =  1, signed = FALSE),
+         spc <- readBin(f, integer(), n = n, size =  2, endian = header$`byte order`),
+         spc <- readBin(f, integer(), n = n, size =  4, endian = header$`byte order`),
+         spc <- readBin(f, double(),  n = n, size =  4, endian = header$`byte order`),
+         spc <- readBin(f, double(),  n = n, size =  8, endian = header$`byte order`),
+         ,
+         ,
+         ,
+         spc <- readBin(f, complex(), n = n, size = 16, endian = header$`byte order`),
+         ,
+         ,
+         spc <- readBin(f, integer(), n = n, size =  2, endian = header$`byte order`, signed = FALSE)
+         )
+  
+  close(f)
+
+  switch (tolower (header$interleave),
+          bil = {dim (spc) <- c(header$samples, header$bands, header$lines); spc <- aperm(spc, c(3, 1, 2))},
+          bip = {dim (spc) <- c(header$bands, header$samples, header$lines); spc <- aperm(spc, c(3, 2, 1))},
+          ## bsq is default
+                {dim (spc) <- c(header$samples, header$lines, header$bands); spc <- aperm(spc, c(2, 1, 3))} 
+          )
+
+  dim (spc) <- c (header$samples * header$lines, header$bands)
+  
+  x <- rep (seq (0, header$samples - 1), each = header$lines)   * x [2] + x [1]
+  y <- rep (seq (0, header$lines   - 1),        header$samples) * y [2] + y [1]
+
+  new ("hyperSpec", spc = spc, data = data.frame (x = x, y = y),
+       wavelength = wavelength, label = label, log = log)
+  
+}
+
+###-----------------------------------------------------------------------------
+###
+### scan.txt.Renishaw - import Renishaw Raman ASCII files
+###  
+### In general this is a long ASCII format. But this function offers chunk-wise
+### reading to save memory.
+### 
 scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", 
                                nlines = 0, nspc = NULL, ...){
   cols <- switch (data,

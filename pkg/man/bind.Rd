@@ -65,7 +65,7 @@ rownames and/or colnames.
   a \code{hyperSpec} object, possibly with different row order (for
   \code{bind ("c", \dots)} and \code{cbind2}).
 }
-\author{c. Beleites}
+\author{C. Beleites}
 
 \seealso{ \code{\link[Matrix]{rBind}}, \code{\link[Matrix]{cBind}}
   \code{\link[methods]{rbind2}}, \code{\link[methods]{cbind2}}

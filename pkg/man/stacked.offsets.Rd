@@ -26,9 +26,7 @@ a list containing
 \item{groups}{numeric with the group number for each spectrum}
 }
 
-\author{
-C. Beleites
-}
+\author{C. Beleites}
 \seealso{
 \code{\link[hyperSpec]{plotspc}}
 }

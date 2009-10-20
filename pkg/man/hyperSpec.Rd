@@ -34,8 +34,7 @@ The following vignettes should provide a start:
   \code{class?hyperSpec} for details on the S4 class provided by this package.
 }
 
-\author{
-Claudia Beleites
+\author{C. Beleites
 
 Maintainer: Claudia Beleites <cbeleites@units.it>
 }

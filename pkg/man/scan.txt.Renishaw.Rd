@@ -1,4 +1,3 @@
-%% TODO: write
 \name{scan.txt.Renishaw}
 \alias{scan.txt.Renishaw}
 \title{import Raman measurements from Renishaw ASCII-files}
@@ -26,9 +25,11 @@ If the file is so large that it sould be read in chunks and \code{nspc} is not g
 }
 \value{the \code{hyperSpec} object}
 \seealso{\code{\link{read.txt.long}}, \code{\link{read.txt.wide}}, \code{\link[base]{scan}}}
-\author{cb}
+\author{C. Beleites}
 \arguments{\item{file}{file name}
 \item{data}{type of file, one of "spc", "xyspc", "zspc", "depth", "ts", see details.}
 \item{nlines}{number of lines to read in each chunk, if 0 or less read whole file at once}
 \item{nspc}{number of spectra in the file}
 \item{\dots}{passed to logentry}}
+\keyword{IO}
+\keyword{file}

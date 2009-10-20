@@ -36,7 +36,6 @@ spc.identify(x, y = NULL, wavelengths = NULL, ispc = NULL, \dots)
   }
   \item{wavelengths}{the wavelengths of the identified points}
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \seealso{\code{\link[graphics]{identify}}, \code{\link{plotspc}}}
 \examples{

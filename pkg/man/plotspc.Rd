@@ -133,7 +133,6 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
 
   This can be used together with \code{\link{spc.identify}}.
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \seealso{\code{\link[graphics]{plot}}, \code{\link[graphics]{axis}},
   \code{\link[graphics]{title}}, \code{\link[graphics]{lines}},

@@ -89,9 +89,11 @@ For further information, see the
 \seealso{
 \code{\link[utils]{read.table}} and \code{\link[utils]{write.table}}
 
-\code{\link[R.matlab]{R.matlab}}
+\code{\link[R.matlab]{R.matlab}} for .mat files
 
-For manufacturer specific file formats: \code{\link{scan.txt.Renishaw}}
+\code{\link[hyperSpec]{read.ENVI}} for ENVI data
+
+Manufacturer specific file formats: \code{\link{scan.txt.Renishaw}}
 }
 \author{C. Beleites}
 \examples{

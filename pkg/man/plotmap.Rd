@@ -60,7 +60,6 @@ map.identify (object, x = "x", y = "y", \dots)
 \value{
   a lattice object
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \seealso{
   \code{\link[lattice]{levelplot}} 

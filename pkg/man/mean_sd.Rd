@@ -24,7 +24,6 @@ mean_pm_sd(x, na.rm = TRUE)
   \code{mean_pm_sd} returns a vector with 3 values: mean - 1 sd, mean,
   mean + 1 sd.
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \seealso{\code{\link[base]{mean}}, \code{\link[stats]{sd}}}
 \examples{

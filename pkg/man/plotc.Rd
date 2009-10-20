@@ -28,7 +28,6 @@ plotc(object, use.c = "c", func = sum, \dots,
   If \code{z} is not given, it is calculated by \code{apply (object, 1,
 	 func, \dots)}.
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \examples{
 

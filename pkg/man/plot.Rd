@@ -55,7 +55,6 @@
   \code{\link{plotc} (x, use.c = "z")}} 
   }
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{C. Beleites}
 \seealso{
   \code{\link{plotspc}} for spectra plots (intensity over wavelength),
