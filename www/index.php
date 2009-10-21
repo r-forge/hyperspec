@@ -65,8 +65,8 @@ get an svn checkout using your favourite svn client program, or<br/>
 
 <h2>... via package built on my computer</h2>
 <ol>
-<li><a href="hyperSpec_0.9.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
-	 Windows users will probably need the <a href="hyperSpec_0.9.zip">compiled .zip package</a></li>
+<li><a href="hyperSpec_0.95.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
+	 Windows users will probably need the <a href="hyperSpec_0.95.zip">compiled .zip package</a></li>
 <li>Install the package:<br/>
 <tt>R CMD INSTALL <i>filename</i></tt></li>
 </ol>

@@ -2474,10 +2474,13 @@ If you have other ENVI files, please contact the maintainer: e-mail to Claudia B
     if (any (r <= l))
       stop ("read.ENVI: mismatch of curly braces in header.")
     
-    for (i in seq_along (rev (l))) {
-      header [l] <- sub ("\\{", "", header [l])
-      header [r] <- sub ("\\}", "", header [r])
-      header <- c (header [seq_len (l [i] - 1)], paste (header [l [i] : r [i]], collapse = " "), header [- seq_len (r [i])])
+    header [l] <- sub ("\\{", "", header [l])
+    header [r] <- sub ("\\}", "", header [r])
+
+    for (i in rev (seq_along (l))) {
+      header <- c (header [seq_len (l [i] - 1)],
+                   paste (header [l [i] : r [i]], collapse = " "),
+                   header [- seq_len (r [i])])
     }
 
     ## now ready to separate into key = value pairs
