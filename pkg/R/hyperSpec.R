@@ -111,12 +111,12 @@ setMethod ("initialize", "hyperSpec",
              }
              
              if (is.null (log))
-               .Object@log <- logentry (.Object, short = "initialize", long = long)
+               .Object@log <- .logentry (.Object, short = "initialize", long = long)
              else
                if (is.data.frame(log))
                  .Object@log <- log
                else
-                 .Object@log <- logentry (.Object, short = log$short, long = log$long,
+                 .Object@log <- .logentry (.Object, short = log$short, long = log$long,
                                           date = log$date, user = log$user)
              
              validObject (.Object)
@@ -136,7 +136,7 @@ orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
     .wl(x) <- x@wavelength [ord]
   }
   
-  x@log <- logentry (x, short = short,
+  x@log <- .logentry (x, short = short,
                      long = list (na.last = na.last, decreasing = decreasing),
                      date = date, user = user) 
   x
@@ -173,10 +173,10 @@ setMethod ("summary", "hyperSpec", function (object, log = TRUE, ...){
 
 ###-------------------------------------------------------------------------------
 ###
-###  logentry - create new log item (hyperSpec)
+###  .logentry - create new log item (hyperSpec)
 ###
 ###
-logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
+.logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
   validObject (x)
   
   Call <- sys.call (-1);
@@ -252,7 +252,7 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
   
   env <- parent.frame (1) 
   
-  x@log <- logentry (x,
+  x@log <- .logentry (x,
                      short = if (is.null (short))
                      "["
                      else
@@ -561,6 +561,16 @@ logbook <- function (x){
 }
 ###-----------------------------------------------------------------------------
 ###
+###  logentry
+###  
+###
+logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
+  .is.hy (x)
+  validObject (x)
+  x@log <- .logentry (x, short, long, date, user)
+}
+###-----------------------------------------------------------------------------
+###
 ###  labels
 ###  
 ###  
@@ -601,7 +611,7 @@ setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, .
     
   }
   
-  object@log <- logentry (object, short = "labels<-", 
+  object@log <- .logentry (object, short = "labels<-", 
                           long = list (which = which, value = value), ...)
   
   validObject (object) 
@@ -666,7 +676,7 @@ wl <- function (x){
   x@label$.wavelength <- label
   
   validObject (x)
-  x@log <- logentry (x, short = short, long = list (value = value, digits = digits), 
+  x@log <- .logentry (x, short = short, long = list (value = value, digits = digits), 
                      date = date, user = user)
   
   x
@@ -703,7 +713,7 @@ setReplaceMethod("[", "hyperSpec", function (x, i, j,
   } else
   x@data [i, j, ...] <- value
   
-  x@log <- logentry (x,
+  x@log <- .logentry (x,
                      short = if (is.null (short)) "[<-"
                      else paste ("[<- (", short, ")" , sep = ""),
                      long = long
@@ -747,7 +757,7 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
   
   x@data$spc[i, l, ...] <- value
   
-  x@log <- logentry (x,
+  x@log <- .logentry (x,
                      short = if (is.null (short))
                      "[[<-"
                      else
@@ -794,7 +804,7 @@ setReplaceMethod ("$", "hyperSpec", function (x, name, value){
     x@label[[name]] <- label
   }
   
-  x@log <- logentry (x,
+  x@log <- .logentry (x,
                      short = "$<-", 
                      long = list (name = name, value = .paste.row (value, val = TRUE))
                      )
@@ -815,7 +825,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
              if (.Generic %in% c ("*", "^", "%%", "%/%", "/"))
                warning (paste ("Do you really want to use", .Generic, "on 2 hyperSpec objects?"))
              e1 [[]] <- callGeneric (e1[[]], e2[[]])
-             e1@log <- logentry (e1, short = .Generic, long = as.character (e2))
+             e1@log <- .logentry (e1, short = .Generic, long = as.character (e2))
              e1
            }
            )
@@ -824,11 +834,11 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
   validObject (e1)
   if (missing (e2)){
     e1  [[]] <- callGeneric (e1 [[]])
-    e1@log <- logentry (e1, short = .Generic, long = list ())  
+    e1@log <- .logentry (e1, short = .Generic, long = list ())  
     
   } else {
     e1  [[]] <- callGeneric (e1 [[]], e2)
-    e1@log <- logentry (e1, short = .Generic, 
+    e1@log <- .logentry (e1, short = .Generic, 
 			long = list (e2 = .paste.row (e2, val = TRUE))) 
   }
   e1
@@ -837,7 +847,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 .arithy <- function (e1, e2){ 
   validObject (e2)
   e2  [[]] <- callGeneric (e1, e2 [[]])
-  e2@log <- logentry (e2, short = .Generic, long = list (e1 = .paste.row (e1, val = TRUE)))
+  e2@log <- .logentry (e2, short = .Generic, long = list (e1 = .paste.row (e1, val = TRUE)))
   e2
 }
 
@@ -866,7 +876,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "hyperSpec"),
              x@data$spc <-  x@data$spc %*% y@data$spc 
              .wl (x) <- y@wavelength
              x@label$.wavelength = y@label$.wavelength
-             x@log <- logentry (x, short = "%*%", long = as.character (y))
+             x@log <- .logentry (x, short = "%*%", long = as.character (y))
              x
            }
            )
@@ -877,7 +887,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
              x@data$spc <-  x@data$spc %*% y
              .wl (x) <- seq_len (ncol (y)) 
              x@label$.wavelength = NA
-             x@log <- logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
+             x@log <- .logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
              x
            }
            )
@@ -895,7 +905,7 @@ setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
                        log = y@log
                        )
              
-             y@log <- logentry (y, short = "%*%", long = list (x = .paste.row (x, val = TRUE)))
+             y@log <- .logentry (y, short = "%*%", long = list (x = .paste.row (x, val = TRUE)))
              y
            }
            )
@@ -985,7 +995,7 @@ setMethod ("Math", signature (x = "hyperSpec"),
                warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
              
              x [[]] <- callGeneric (x[[]])
-             x@log <- logentry (x, short = .Generic, long = list())
+             x@log <- .logentry (x, short = .Generic, long = list())
              x
            }
            )
@@ -1002,7 +1012,7 @@ setMethod ("log", signature (x = "hyperSpec"),
              validObject (x)
              
              x [[]] <-  log (x[[]], base = base) 
-             x@log <- logentry (x, short = "log", long = list (base = base))
+             x@log <- .logentry (x, short = "log", long = list (base = base))
              x
            }
            )
@@ -1019,7 +1029,7 @@ setMethod ("Math2", signature (x = "hyperSpec"),
              
              x [[]] <- callGeneric (x[[]], digits)
              
-             x@log <- logentry (x, short = .Generic, 
+             x@log <- .logentry (x, short = .Generic, 
                                 long = list(if (exists ("digits")) digits = digits))
              x
            }
@@ -1077,7 +1087,7 @@ setMethod ("cbind2", signature (x = "hyperSpec", y  = "hyperSpec"),
              x@data <- cbind (x@data,
                               y@data[, is.na (match (colnames (y@data), colnames (x@data))), drop = FALSE])
              
-             x@log <- logentry (x, short = "cbind2", long = as.character (y))
+             x@log <- .logentry (x, short = "cbind2", long = as.character (y))
              x
            }
            )
@@ -1099,7 +1109,7 @@ setMethod("rbind2",
               stop ("The wavelengths of the objects differ.")
             
             x@data <- rbind (x@data, y@data)
-            x@log <- logentry (x, short = "rbind2", long = list (y = as.character (y)))
+            x@log <- .logentry (x, short = "rbind2", long = list (y = as.character (y)))
             
             x
           }
@@ -1338,7 +1348,7 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
   if (!is.null (label.spc))
     X@label$spc <- label.spc
   
-  X@log <- logentry(X, short = short, long = long, user = user, date = date)
+  X@log <- .logentry(X, short = short, long = long, user = user, date = date)
   
   validObject (X)
   
@@ -1357,7 +1367,7 @@ setMethod ("split", "hyperSpec", function (x, f, drop = TRUE, #...,
   
   hyperlist <- split (seq_len (nrow (x@data)), f, drop) 
   
-  log <-  logentry (x, short = short, long = list (f = f, drop = drop),
+  log <-  .logentry (x, short = short, long = list (f = f, drop = drop),
                     user = user, date = date)
   
   for (i in seq_len (length (hyperlist))){
@@ -1393,7 +1403,7 @@ setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-",
                                    ...)
                          )
   
-  x@log <- logentry (x,
+  x@log <- .logentry (x,
                      short = if (!is.null (short)) paste ("sweep (", short, ")", sep = "") else NULL,
                      long = list (MARGIN = MARGIN,
                        FUN = FUN,
@@ -1473,7 +1483,7 @@ setMethod ("aggregate", "hyperSpec", function (x,
   if (!is.null (names (by)) && !any (is.na (names (by)))) 
     levels (x@data[, col.aggregate]) <- names (by) 
   
-  x@log <- logentry (x, long = long, short = short, date = date, user = user)
+  x@log <- .logentry (x, long = long, short = short, date = date, user = user)
   
   x 
   
@@ -1525,7 +1535,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
   }
   
   object@label$spc <- label.spc
-  object@log <- logentry (object, short = short, ...)
+  object@log <- .logentry (object, short = short, ...)
   
   validObject (object)
   object
@@ -2890,7 +2900,7 @@ spc.bin <- function (spc,
   
   .wl (spc) <- as.numeric (tapply (spc@wavelength, bin, mean, na.rm = na.rm > 0))
   
-  spc@log <- logentry (spc,
+  spc@log <- .logentry (spc,
                        long = long.description,
                        ...            # date and user?
                        )
@@ -2922,7 +2932,7 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1, short = NULL,
     wl <- apply.to@wavelength;
     x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
     apply.to@data$spc <- I (t (apply (p[[]], 1, function (p, x) {x %*% p}, x)))
-    apply.to@log <- logentry (apply.to, 		
+    apply.to@log <- .logentry (apply.to, 		
                               short = if (is.null (short)) "spc.fit.poly: spectra" else short,
                               long = list (apply = match.call()$apply, poly.order = poly.order), 
                               user = user, date = date)
@@ -2981,7 +2991,7 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
     fit.to@data$spc <- p
     .wl (fit.to) <- 0 : poly.order
     colnames (fit.to@data$spc) <- paste ("x^", 0 : poly.order, sep="")
-    fit.to@log <- logentry (fit.to, short = if (is.null (short)) "spc.fit.poly.below: coefficients" else short, 
+    fit.to@log <- .logentry (fit.to, short = if (is.null (short)) "spc.fit.poly.below: coefficients" else short, 
                             long = list (apply = NULL, poly.order = poly.order,
                               npts.min = npts.min, noise = noise), 
                             user = user, date = date)
@@ -2992,7 +3002,7 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
     vdm <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
     
     apply.to@data$spc <- I (t (apply (p, 1, function (p, x) {x %*% p}, vdm)))
-    apply.to@log <- logentry (apply.to, 		
+    apply.to@log <- .logentry (apply.to, 		
                               short = if (is.null (short)) "spc.fit.poly.below: spectra" else short,
                               long = list (apply = match.call()$apply, poly.order = poly.order,
                                 npts.min = npts.min, noise = noise), 
@@ -3032,7 +3042,7 @@ spc.loess <- function (spc, newx, ...,
   spc@data$spc <- t (sapply (loess, predict, newx))
   .wl(spc) <- newx
   
-  spc@log <- logentry (spc, 		
+  spc@log <- .logentry (spc, 		
                        short = if (is.null (short)) "spc.loess" else short,
                        long = list (newx = newx, enp.target = dots$enp.target,  ...),  
                        user = user, date = date)

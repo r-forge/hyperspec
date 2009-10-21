@@ -173,33 +173,45 @@ table~\ref{tab:Generic-methods}.
 %
 \begin{table}
 \noindent \centering{}\caption{\label{tab:Generic-methods}Generic methods implemented by \Rclass{hyperSpec}
-and some related functions. \emph{Emphasized} names indicate non-generic
-functions that are closely related to the generic functions in the
-row.}
+and some closely related functions. \emph{Emphasized} names indicate non-generic
+functions.}
 \begin{small}
 \renewcommand{\arraystretch}{2}
 \begin{tabular}{p{0.3\textwidth}p{0.65\textwidth}}
 \toprule
 \textbf{Function}                                                          & \textbf{Explanation}\\\cmidrule(lr){1-1}\cmidrule(lr){2-2}
+\Rcode{new (\textquotedbl{}hyperSpec\textquotedbl{}, ...)},
+\Rfunction{initialize}                                                     & create and initialize an object\\
+\Rfunction{validObject}                                                    & validity checking\\
+Display\\
 \Rfunction{print}, \Rfunction{show}, \Rfunction{summary}                   & print information about the object\\
 \Rfunction{plot}                                                           & plotting\\
+Basic information\\
+\Rfunction{dim}, \Rfunction{ncol}, \Rfunction{nrow}, \emph{nwl}            & the dimensions of the object\\
+\Rfunction{dimnames}, \Rfunction{colnames},\Rfunction{rownames}            & names of the spectra, data columns, and both plus the names of the wavelengths\\
+Parts of the object\\
 \Rfunction{[},\Rfunction{[[}, \Rfunction{\$}                               & extract parts of an object\\
 \Rfunction{[<-}, \Rfunction{[[<-}, \Rfunction{\$<-}                        & assign parts of an object\\
-\Rfunction{dim}, \Rfunction{ncol}, \Rfunction{nrow}, \emph{nwl}            & the dimensions of the object\\
-\Rfunction{colnames},~\Rfunction{rownames}, \Rfunction{dimnames}           & names of the spectra, data columns, and both plus the names of the wavelengths\\
 \Rfunction{labels}, \emph{\Rfunction{labels<-}}                            & labels for axis annotations etc.\\
+\emph{\Rfunction{wl}}, \emph{\Rfunction{wl<-}}                             & wavelength axis\\
+\emph{\Rfunction{logbook}}, \emph{\Rfunction{logentry}}                    & logbook and adding logbook entries\\
+Calculations on the spectra matrix\\
 \Rfunction{+ - * \textasciicircum{} \%\% \%/\% / \%*\%}                    & arithmetical operators work on \Rcode{\$spc}\\
-\Rfunction{> < == >= <=}                                                   & comparison operators work on \Rcode{\$spc}\\
-\Rfunction{log}, \Rfunction{log10}, \Rfunction{exp}, etc.                  & basic math functions work on \Rcode{\$spc}, see also: \Rcode{? \textquotedbl hyperSpec Math\textquotedbl}\\
+\Rfunction{> < == >= <=}                                                   & comparison operators work on \Rcode{\$spc} yielding a logic matrix\\
+\Rfunction{all.equal}                                                      & checking equality of \Rclass{hyperSpec} objects on diffent levels\\
+\Rfunction{log}, \Rfunction{log10}, \Rfunction{exp}, etc.                  & basic math functions work on \Rcode{\$spc}, see also: \Rcode{? \textquotedbl{}hyperSpec Math\textquotedbl}\\
 \Rfunction{min}, \Rfunction{max}, \Rfunction{range}                        & minimum, maximum, and range of the intensities in \Rcode{\$spc}\\
-\Rfunction{cbind}, \Rfunction{rbind}                                       & combine two objects by columns or rows\\
+Combining and splitting\\
+\Rfunction{cbind}, \Rfunction{rbind}, \Rfunction{cbind2},
+\Rfunction{rbind2}, \emph{\Rfunction{bind}}                                & combine two objects by columns or rows\\
 \Rfunction{split}                                                          & split an object into a list of objects\\
+Vectorization of calibrations\\
 \Rfunction{apply}                                                          & apply a function row- or column-wise, calculate e.\,g. the mean spectrum or normalization factors\\
 \Rfunction{aggregate} (\Rfunction{ave})                                    & calculate sum characteristics for groups of spectra, e.\,g. cluster mean spectra. \Rpackage{hyperSpec}'s \Rfunction{aggregate} method covers also the functionality of \Rfunction{ave}.\\
 \Rfunction{sweep}                                                          & ``sweep'' a sum characteristic over rows or columns, e.\,g. centre the data by subtracting the mean spectrum.\\
+Type conversion\\
 \raggedright{\Rfunction{as.character}, \Rfunction{as.matrix}, \Rfunction{as.data.frame}} & type conversion functions\\
-\Rfunction{initialize}                                                     & create an object\\
-\Rfunction{validObject}                                                    & validity checking\\
+\Rfunction{[[}, \Rfunction{\$}                               					& extract parts of an object as data.frame, matrix, or vector\\
 \bottomrule
 \end{tabular}\end{small}
 \end{table}
@@ -1037,6 +1049,6 @@ clusters
 \bibliographystyle{unsrtnat}
 \bibliography{introduction}
 <<cleanup, echo = FALSE, results = hide>>=
-rm (list = ls () ) 
-@ 
+rm (list = ls () )
+@
 \end{document}
