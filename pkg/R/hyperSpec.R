@@ -80,6 +80,8 @@ setMethod ("initialize", "hyperSpec",
              }
              
              if (!is.null (spc)){
+               if (is.numeric (spc) && !is.matrix (spc))
+                 spc <- as.matrix (t (spc)) # make a 1 row matrix
                if (nrow (.Object) == nrow (spc)){
                  if (!is.null (.Object@data$spc))
                    warning ("data$spc replaced by spc.")
