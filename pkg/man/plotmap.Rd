@@ -23,7 +23,9 @@ map.identify (object, x = "x", y = "y", \dots)
   \item{func}{function to apply to compute the summary statistic that is
 	 displayed if \code{z} is not given.}
   
-  \item{cond}{conditioning factor (for \code{\| cond} in the levelplot formula)}
+  \item{cond}{conditioning factor (for \code{\| cond} in the levelplot
+  formula). May also be the name of the extra data column to be used for
+  conditioning.}
   
   \item{z}{summary value to be displayed. If \code{z} is a
 	 \code{factor}, and the default color scheme (returned by

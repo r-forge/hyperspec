@@ -1589,12 +1589,12 @@ plotmap <- function (object,
       warning ("func did not yield one value per spectrum.")
   }
 
-
-#  grid <- index.grid (object[[, ix]], object[[, iy]]) 
-#  z <- z [grid$grid]
-
   if (! is.null (cond)){
-#    cond <- cond [grid$grid]
+    if (is.character (cond) && length (cond) == 1) {
+      if (is.na (match (cond, colnames (object@data))))
+        stop ("cond did not evaluate to a column in object@data.")
+      cond <- object@data[, cond]
+    }
     dots <- list (x = formula (z ~ x * y | cond))
     if (is.null (trellis.args$data))
       dots$data <- data.frame (x = object[[, ix]] , y = object[[, iy]], z = as.numeric(z), cond = cond)
