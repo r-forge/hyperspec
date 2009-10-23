@@ -333,6 +333,22 @@ setMethod ("as.data.frame",
              x@data
            })
 
+###-----------------------------------------------------------------------------
+###
+### as.long.df
+###
+
+as.long.df <- function (x) {
+  .is.hy (x)
+  validObject (x)
+  ispc <- match ("spc", colnames (x@data))
+  dummy <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
+
+  cbind (data.frame (spc = as.numeric (x [[]]),
+                     wl = rep (x@wavelength, each = nrow (x))),
+         dummy)
+}
+
 
 ###-----------------------------------------------------------------------------
 ###
