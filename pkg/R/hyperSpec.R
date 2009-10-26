@@ -338,15 +338,21 @@ setMethod ("as.data.frame",
 ### as.long.df
 ###
 
-as.long.df <- function (x) {
+as.long.df <- function (x, rownames = FALSE) {
   .is.hy (x)
   validObject (x)
   ispc <- match ("spc", colnames (x@data))
   dummy <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
-
-  cbind (data.frame (spc = as.numeric (x [[]]),
-                     wl = rep (x@wavelength, each = nrow (x))),
-         dummy)
+    
+  if (rownames)
+    cbind (data.frame (.rownames = rep (rownames (x), nwl (x)), 
+                       wavelength = rep (x@wavelength, each = nrow (x)),
+                       spc = as.numeric (x [[]])),
+           dummy)
+    else
+      cbind (data.frame (wavelength = rep (x@wavelength, each = nrow (x)),
+                         spc = as.numeric (x [[]])),
+             dummy)
 }
 
 
@@ -549,6 +555,20 @@ setMethod ("colnames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "col")
 
 ###-----------------------------------------------------------------------------
 ###
+###  colnames <-
+###  
+###  
+
+setReplaceMethod ("colnames", "hyperSpec", function (x, value){
+  validObject (x)
+  colnames (x@data) <- value
+  validObject (x)
+  x
+})
+
+
+###-----------------------------------------------------------------------------
+###
 ###  rownames
 ###  
 ###  
@@ -557,6 +577,19 @@ setMethod ("rownames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "row")
   validObject (x)
   rownames (x@data, do.NULL = do.NULL, prefix = prefix) 
 })
+
+###-----------------------------------------------------------------------------
+###
+###  rownames <-
+###  
+###  
+
+setReplaceMethod ("rownames", "hyperSpec", function (x, value){
+  validObject (x)
+  rownames (x@data) <- value
+  x
+})
+
 ###-----------------------------------------------------------------------------
 ###
 ###  dimnames
@@ -2715,7 +2748,7 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 
 ###-----------------------------------------------------------------------------
 ###
-### write.table.wide
+### write.txt.wide
 ###  
 ###
 write.txt.wide <- function (object,
@@ -2730,8 +2763,8 @@ write.txt.wide <- function (object,
                             ...){
   validObject (object)
   
-  if (! is.null (object@data))
-    object@data <- object@data [, cols, drop = FALSE]
+  if (! is.null (cols))
+    object <- object [, cols]
   
   if (col.names){
     col.spc <- match ("spc", colnames (object@data))
@@ -2796,7 +2829,8 @@ write.txt.wide <- function (object,
 ###
 write.txt.long <- function (object,
                             file = stop ("filename required"),
-                            order = NULL, na.last = TRUE, decreasing = FALSE,
+                            order = c (".rownames", "wavelength"),
+                            na.last = TRUE, decreasing = FALSE,
                             quote = FALSE, sep = "\t",
                             row.names = FALSE,
                             cols = NULL,
@@ -2807,23 +2841,28 @@ write.txt.long <- function (object,
   validObject (object)
   
   col.spc <- match ("spc", colnames (object@data))
-  i <- seq_len (ncol (object@data))
+#  i <- seq_len (ncol (object@data))
   
-  X <- array2df (object@data$spc, levels = list (n = NA, .wavelength = object@wavelength),
-                 label.x = "spc")
-  X$.wavelength <- as.numeric(levels(X$.wavelength))[as.integer(X$.wavelength)]
+#  X <- array2df (object@data$spc, levels = list (n = seq_len (nrow (object)), .wavelength = object@wavelength),
+#                 label.x = "spc")
+#  X$.wavelength <- as.numeric(levels(X$.wavelength))[as.integer(X$.wavelength)]
   
-  X <- cbind (object@data[X$n, -col.spc, drop = FALSE], X[, c(".wavelength", "spc")]) 
-  
-  colnames (X) [match (".wavelength", colnames (X))] <- "wavelength"
-  
-  if (is.null (cols))
-    cols <- seq_len (ncol (object@data) + 1)
-  X <- X [, cols, drop = FALSE]
+#  X <- cbind (object@data[X$n, -col.spc, drop = FALSE], X[, c(".wavelength", "spc", "n")])
+
+  X <- as.long.df (object, rownames = TRUE)
   
   if (!is.null (order)){
+    if (is.character (order)) {
+      dummy <- match (order, colnames (X))
+      if (any (is.na (dummy)))
+        stop ("write.txt.long: no such columns: ",
+              paste (order [is.na (dummy)], collapse = ", "))
+      order <- dummy
+      }
+    
+    
     if (length (decreasing) < length (order))
-      decreasing <- rep (decreasing, out.length = length (order))
+      decreasing <- rep (decreasing, length.out = length (order))
     
     order.data <- as.list (X [, order, drop = FALSE])
     
@@ -2842,7 +2881,13 @@ write.txt.long <- function (object,
   
   if (is.na (na.last))
     X <- X[! is.na (X$spc), ]
-  
+
+      
+  if (!row.names)
+    X$.rownames <- NULL
+  else
+    cln [match (".rownames", cln)] <- "row"
+
   if (col.names){
     if (col.labels){
       cln <- match (colnames (X), names (object@label))
@@ -2852,19 +2897,23 @@ write.txt.long <- function (object,
     } else {
       cln <- colnames (X)
     }
+
+    if (!is.null (cols))
+       X <- X [, cols, drop = FALSE]
     
-    cln <- c(if (row.names) "" else NULL,
-             cln #[i <= col.spc],
-                                        #if (col.labels) as.character (object@label$.wavelength) else "wavelength",
-                                        #cln [i > col.spc]
-             )
+#    cln <- c(if (row.names) "row" else NULL,
+#             cln #[i <= col.spc],
+#                                        #if (col.labels) as.character (object@label$.wavelength) else "wavelength",
+#                                        #cln [i > col.spc]
+#             )
+
     write.table (matrix (cln, nrow = 1), file = file, append = append,
                  quote = quote, sep = sep, row.names = FALSE, col.names = FALSE)
     append = TRUE
   }
   
   write.table (X, file, append = append, quote = quote, sep = sep,
-               row.names = row.names, col.names = FALSE, ...) 
+               row.names = FALSE, col.names = FALSE, ...) 
 }
 
 ### ****************************************************************************

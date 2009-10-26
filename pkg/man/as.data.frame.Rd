@@ -18,13 +18,14 @@
 }
 \usage{
 \S4method{as.data.frame}{hyperSpec,missing,missing}(x, row.names = NULL, optional = FALSE, \dots)
-as.long.df (x)
+as.long.df (x, rownames = FALSE)
 \S4method{as.matrix}{hyperSpec}(x, \dots)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
   \item{row.names, optional, \dots}{ignored}
-  %\item{\dots}{ignored}
+  \item{rownames}{should the rownames be in column \code{.rownames} of
+	 the long-format data.frame?}
 }
 \value{
   \code{x@data} and \code{x@data$spc}, respectively.

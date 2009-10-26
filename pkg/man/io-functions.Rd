@@ -30,12 +30,13 @@ read.txt.wide (file = stop ("filename is required"),
    check.names = FALSE,
    \dots)
 
-write.txt.long (object, file = stop("filename required"), order = NULL, 
+write.txt.long (object, file = stop("filename required"),
+   order = c(".rownames", "wavelength"), 
    na.last = TRUE, decreasing = FALSE, quote = FALSE, sep = "\t", 
    row.names = FALSE, cols = NULL, col.names = TRUE, 
    col.labels = FALSE, append = FALSE, \dots)
 
-write.txt.wide (object, file = stop ("filename required"), cols = NULL, 
+write.txt.wide (object, file = stop ("filename required"), cols = NULL,
    quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE,
    header.lines = 1, col.labels = if (header.lines == 1) FALSE else TRUE, 
    append = FALSE, \dots)
@@ -43,7 +44,7 @@ write.txt.wide (object, file = stop ("filename required"), cols = NULL,
 \arguments{
   \item{file}{filename}
 
-  \item{cols}{the column names (also specifying the column order). 
+  \item{cols}{the column names specifying the column order. 
   
   For data import, a list with elements \code{colname = label}; 
   for export a character vector with the colnames. 
@@ -124,7 +125,7 @@ read.txt.long (file = "flu.txt", cols = list (wavelength = expression (lambda / 
 write.txt.wide (flu,  file = "flu.txt", cols = c("c", "spc"), 
 		col.labels = TRUE, header.lines = 2, row.names = TRUE)
 
-write.txt.wide (flu,  file = "flu.txt", cols = c("c", "spc"), col.labels = FALSE, row.names = FALSE)
+write.txt.wide (flu,  file = "flu.txt", col.labels = FALSE, row.names = FALSE)
 
 read.txt.wide (file = "flu.txt", 
       cols = list (c=expression ("/"("c", "mg/l")), spc="I / a.u", .wavelength = "lambda / nm"),
