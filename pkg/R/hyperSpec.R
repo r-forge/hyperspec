@@ -342,17 +342,18 @@ as.long.df <- function (x, rownames = FALSE) {
   .is.hy (x)
   validObject (x)
   ispc <- match ("spc", colnames (x@data))
+
   dummy <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
-    
+
+  dummy <- cbind (data.frame (wavelength = rep (x@wavelength, each = nrow (x)),
+                              spc = as.numeric (x [[]])),
+                  dummy)
+  
   if (rownames)
-    cbind (data.frame (.rownames = rep (rownames (x), nwl (x)), 
-                       wavelength = rep (x@wavelength, each = nrow (x)),
-                       spc = as.numeric (x [[]])),
-           dummy)
-    else
-      cbind (data.frame (wavelength = rep (x@wavelength, each = nrow (x)),
-                         spc = as.numeric (x [[]])),
-             dummy)
+    dummy <- data.frame (.rownames = as.factor (rep (rownames (x), nwl (x))),
+                    dummy)
+
+  dummy
 }
 
 
@@ -2882,6 +2883,8 @@ write.txt.long <- function (object,
   if (is.na (na.last))
     X <- X[! is.na (X$spc), ]
 
+  if (!is.null (cols))
+    X <- X [, cols, drop = FALSE]
       
   if (!row.names)
     X$.rownames <- NULL
@@ -2898,8 +2901,6 @@ write.txt.long <- function (object,
       cln <- colnames (X)
     }
 
-    if (!is.null (cols))
-       X <- X [, cols, drop = FALSE]
     
 #    cln <- c(if (row.names) "row" else NULL,
 #             cln #[i <= col.spc],
