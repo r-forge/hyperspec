@@ -104,10 +104,10 @@ setMethod ("initialize", "hyperSpec",
              if (any (is.na (.Object@wavelength)))
                .Object@wavelength <- seq_len (ncol (.Object@data$spc))
              
-             if (is.null (label)){
+             if (is.null (label) || length (label) == 0){
                .Object@label <- vector ("list", length (colnames (.Object@data)) + 1)
                names (.Object@label) <- c(".wavelength", colnames (.Object@data))  
-             } else{
+             } else {
                .Object@label <- label
                long$label <- label
              }
