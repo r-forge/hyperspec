@@ -1,14 +1,20 @@
 \name{read.ENVI}
 \Rdversion{1.1}
 \alias{read.ENVI}
+\alias{read.ENVI.Nicolet}
 \title{Import of ENVI data as hyperSpec object}
 \description{
 This function allows ENVI data import as \code{hyperSpec} object. 
 }
 \usage{
-read.ENVI(file = stop ("read.ENVI: file name needed"), header = NULL,
-          x = 0:1, y = x,
-          wavelength = NULL, label = NULL, log = NULL)
+read.ENVI (file = stop ("read.ENVI: file name needed"), header = NULL,
+   x = 0:1, y = x,
+   wavelength = NULL, label = NULL, log = NULL)
+
+read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
+   x = c (NA, NA), y = c (NA, NA),
+   wavelength = NULL, label = list (), log = NULL,
+   nicolet.correction = FALSE) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,7 +24,9 @@ read.ENVI(file = stop ("read.ENVI: file name needed"), header = NULL,
     header file is guessed.}
   \item{x, y}{vectors of form c(offset, step size) for the position
     vectors, see details.}
-  \item{wavelength, label, log}{handed to \code{\link[hyperSpec]{initialize}}}
+  \item{wavelength, label, log}{handed to
+    \code{\link[hyperSpec]{initialize}}}
+  \item{nicolet.correction}{see details}
 }
 \details{
   ENVI data usually consists of two files, an ASCII header and a binary data
@@ -68,7 +76,30 @@ read.ENVI(file = stop ("read.ENVI: file name needed"), header = NULL,
   Thus, the object's \code{$x} colum is:
   \code{(0 : header$samples - 1) * x [2] + x [1]}.
   The \code{$y} colum is calculated analogously.
-}
+
+  Nicolet uses some more keywords in their header
+  file. \code{read.ENVI.Nicolet} supports:
+  \tabular{ll}{
+	 description \tab giving the position of the first spectrum \cr
+	 z plot titles \tab wavelength and intensity axis units, comma
+	 separated \cr
+	 pixel size \tab interpreted as x and y step size
+  }
+
+  The values in header line description seem to be microns while the
+  pixel size seems to be in microns. If \code{nicolet.correction} is
+  true, the pixel size values (i.e. the step sizes) are multiplied by
+  1000.
+
+  read.ENVI.Nicolet uses the following default labels:
+  \tabular{ll}{
+	 x \tab \expr{} \cr
+	 z plot titles \tab wavelength and intensity axis units, comma
+	 separated \cr
+	 pixel size \tab interpreted as x and y step size
+  }
+  
+  
 \value{
   a \code{hyperSpec} object
 }
@@ -78,7 +109,7 @@ This function was adapted from \code{\link[caTools]{read.ENVI}}:
 Jarek Tuszynski (2008). caTools: Tools: moving window statistics,
 GIF, Base64, ROC AUC, etc.. R package version 1.9.
 }
-\author{C. Beleites}
+\author{C. Beleites, testing for the Nicolet files C. Dicko}
 
 \section{Warning }{I do only have ENVI filed saved by Opus / Bruker
   FT-IR FPA spectrometer (BIP format). Thus the function is not
