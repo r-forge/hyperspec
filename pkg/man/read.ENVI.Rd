@@ -4,7 +4,7 @@
 \alias{read.ENVI.Nicolet}
 \title{Import of ENVI data as hyperSpec object}
 \description{
-This function allows ENVI data import as \code{hyperSpec} object. 
+This function allows ENVI data import as \code{hyperSpec} object.
 }
 \usage{
 read.ENVI (file = stop ("read.ENVI: file name needed"), header = NULL,
@@ -14,7 +14,7 @@ read.ENVI (file = stop ("read.ENVI: file name needed"), header = NULL,
 read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
    x = c (NA, NA), y = c (NA, NA),
    wavelength = NULL, label = list (), log = NULL,
-   nicolet.correction = FALSE) 
+   nicolet.correction = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,7 +35,7 @@ read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
 
   I experienced missing header files (or rather: header files
   without any contents) produced by Bruker Opus' ENVI export.
-  
+
   In this case the necessary information can be given as a list in
   parameter \code{header} instead. The elements of header are then:
 
@@ -60,19 +60,19 @@ read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
     \tab "BIP" \tab band interleave by pixel (indexing: [band, line, sample])\cr
     \code{`byte order`}    \tab 0 or "little" \tab little endian \cr
     \tab 1 or "big" \tab big endian \cr
-    \tab "swap" \tab swap byte order 
+    \tab "swap" \tab swap byte order
   }
 
   Some more information that is not provided by the ENVI files may be
   given:
-  
+
   Wavelength axis and axis labels in the respective parameters. For more
   information, see \code{\link[hyperSpec]{initialize}}.
 
   The spatial information is by default a sequence from 0 to
   \code{header$samples - 1} and \code{header$lines - 1}, respectively.
   \code{x} and \code{y} give offset of the first spectrum and step size.
-  
+
   Thus, the object's \code{$x} colum is:
   \code{(0 : header$samples - 1) * x [2] + x [1]}.
   The \code{$y} colum is calculated analogously.
@@ -80,10 +80,10 @@ read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
   Nicolet uses some more keywords in their header
   file. \code{read.ENVI.Nicolet} supports:
   \tabular{ll}{
-	 description \tab giving the position of the first spectrum \cr
-	 z plot titles \tab wavelength and intensity axis units, comma
-	 separated \cr
-	 pixel size \tab interpreted as x and y step size
+    description \tab giving the position of the first spectrum \cr
+    z plot titles \tab wavelength and intensity axis units, comma
+    separated \cr
+    pixel size \tab interpreted as x and y step size
   }
 
   The values in header line description seem to be microns while the
@@ -91,31 +91,31 @@ read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
   true, the pixel size values (i.e. the step sizes) are multiplied by
   1000.
 
-  read.ENVI.Nicolet uses the following default labels:
+  read.ENVI.Nicolet tries to extract the following information from keyword-value pairs:
   \tabular{ll}{
-	 x \tab \expr{} \cr
-	 z plot titles \tab wavelength and intensity axis units, comma
-	 separated \cr
-	 pixel size \tab interpreted as x and y step size
+     keyword \tab value(s) \cr
+    description \tab x and y position of first spectrum \cr
+    z plot titles \tab wavelength and intensity axis units, comma separated \cr
+    pixel size \tab interpreted as x and y step size
   }
-  
-  
+}
+
 \value{
   a \code{hyperSpec} object
 }
 \references{
 This function was adapted from \code{\link[caTools]{read.ENVI}}:
-  
+
 Jarek Tuszynski (2008). caTools: Tools: moving window statistics,
 GIF, Base64, ROC AUC, etc.. R package version 1.9.
 }
 \author{C. Beleites, testing for the Nicolet files C. Dicko}
 
 \section{Warning }{I do only have ENVI filed saved by Opus / Bruker
-  FT-IR FPA spectrometer (BIP format). Thus the function is not
-  extensively tested. 
-  
-  If you import other ENVI data (successful and unsuccessful), please
+  FT-IR FPA spectrometer (BIP format). Thus the function is not yet
+  extensively tested.
+
+  If you import other ENVI data (successfully and unsuccessfully), please
   let me know (e-mail: <cbeleites@units.it>).
 }
 

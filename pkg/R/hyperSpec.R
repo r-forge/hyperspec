@@ -1,9 +1,9 @@
-## wishlist: slice_map
-## wishlist: parse arg of form x..y = z => x = list (y = z) 
+## wish list: slice_map
+## wish list: parse arg of form x..y = z => x = list (y = z)
 
 .onLoad <- function (libname, pkgname){
-  require (lattice) 
-  require (utils) 
+  require (lattice)
+  require (utils)
 }
 
 .onAttach <- function (libname, pkgname){
@@ -17,7 +17,7 @@
        "If you use this package please cite it appropriately.\n",
        "   citation(\"hyperSpec\")\nwill give you the correct reference.", "\n\n",
        'The project is hosted on http://r-forge.r-project.org/projects/hyperspec/\n\n',
-       sep = "")  
+       sep = "")
 }
 setClass ("hyperSpec",
           representation = representation (
@@ -32,20 +32,20 @@ setClass ("hyperSpec",
             label = list (.wavelength = NULL, "spc" = NULL),
             log = data.frame (short.description = character (0),
               long.description = I(list ()),
-              date = numeric (0), 
+              date = numeric (0),
               user = character (0)
-              )), 
+              )),
           validity = function (object){
             ncol <- ncol (object@data$spc)
             if (is.null (ncol))
               ncol <- 0
             if (length (object@wavelength) != ncol)
               return ("Length of wavelength vector differs from number of data points per spectrum.")
-            
+
             if (any (is.na (match (colnames (object@log),
                                    c("short.description", "long.description",  "date", "user")))))
               return ("Slot log does not have the correct columns.")
-            
+
             TRUE
           }
           )
@@ -54,12 +54,12 @@ setClass ("hyperSpec",
 ###
 ### .is.hy - checks whether the object is a hyperSpec object
 ### to be used like validObject
-### 
+###
 
 .is.hy <- function (x){
   if (! is (x, "hyperSpec"))
     stop ("no hyperSpec object")
-  
+
   TRUE
 }
 
@@ -71,14 +71,14 @@ setMethod ("initialize", "hyperSpec",
            function (.Object, spc = NULL, data = NULL,
                      wavelength = NULL, label = NULL, log = NULL){
              long <- list ()
-             
+
              if (is.null (data))
                .Object@data <- data.frame (spc = I (matrix (NA, 0, 0)))
              else {
                .Object@data <- data
                long$data <- .paste.row (.Object@data, val = TRUE)
              }
-             
+
              if (!is.null (spc)){
                if (is.numeric (spc) && !is.matrix (spc))
                  spc <- as.matrix (t (spc)) # make a 1 row matrix
@@ -92,7 +92,7 @@ setMethod ("initialize", "hyperSpec",
                  stop ("data and spc need to have the same number of rows.")
                long$spc <- .paste.row (spc, val = TRUE)
              }
-             
+
              if (is.null (wavelength)){
                if (is.null (colnames (.Object@data$spc)))
                  colnames (.Object@data$spc) <- seq_len (ncol (.Object@data$spc))
@@ -103,15 +103,15 @@ setMethod ("initialize", "hyperSpec",
              }
              if (any (is.na (.Object@wavelength)))
                .Object@wavelength <- seq_len (ncol (.Object@data$spc))
-             
+
              if (is.null (label) || length (label) == 0){
                .Object@label <- vector ("list", length (colnames (.Object@data)) + 1)
-               names (.Object@label) <- c(".wavelength", colnames (.Object@data))  
+               names (.Object@label) <- c(".wavelength", colnames (.Object@data))
              } else {
                .Object@label <- label
                long$label <- label
              }
-             
+
              if (is.null (log))
                .Object@log <- .logentry (.Object, short = "initialize", long = long)
              else
@@ -120,9 +120,9 @@ setMethod ("initialize", "hyperSpec",
                else
                  .Object@log <- .logentry (.Object, short = log$short, long = log$long,
                                           date = log$date, user = log$user)
-             
+
              validObject (.Object)
-             
+
              .Object
            })
 
@@ -137,10 +137,10 @@ orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
     x@data$spc <-  x@data$spc [, ord, drop = FALSE]
     .wl(x) <- x@wavelength [ord]
   }
-  
+
   x@log <- .logentry (x, short = short,
                      long = list (na.last = na.last, decreasing = decreasing),
-                     date = date, user = user) 
+                     date = date, user = user)
   x
 }
 
@@ -166,7 +166,7 @@ setMethod ("show", "hyperSpec", function (object){
 })
 ###-----------------------------------------------------------------------------
 ###
-###  summary 
+###  summary
 ###
 
 setMethod ("summary", "hyperSpec", function (object, log = TRUE, ...){
@@ -211,28 +211,28 @@ setMethod ("summary", "hyperSpec", function (object, log = TRUE, ...){
 ###
 
 
-.extract <- function (x, i, j, l, 
+.extract <- function (x, i, j, l,
                       ...,
                       wl.index = FALSE
                       ){
   if (! missing (i))
     x@data <- x@data[i,, drop = FALSE]
-  
-  if (!missing (j)) 
+
+  if (!missing (j))
     x@data <- x@data[, j, drop = FALSE]
-  
+
   if (!missing (l)) {
     if (is.null (x@data$spc))
       warning ("Selected columns do not contain specta. l ignored.")
     else {
       if (!wl.index)
         l <- wl2i (x, l)
-      
+
       x@data$spc <- x@data$spc[,l, drop = FALSE]
       .wl (x) <- x@wavelength[l]
     }
   }
-  
+
   x
 }
 
@@ -249,21 +249,21 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
                                        ){
   if (drop)
     warning ("Ignoring drop = TRUE.")
-  
+
   validObject (x)
-  
-  env <- parent.frame (1) 
-  
+
+  env <- parent.frame (1)
+
   x@log <- .logentry (x,
                      short = if (is.null (short))
                      "["
                      else
-                     paste ("[ (", short, ")", sep =""), 
+                     paste ("[ (", short, ")", sep =""),
                      long = list (
                        i = if (missing (i))
                        ""
                        else
-                       deparse (substitute (i, env)), 
+                       deparse (substitute (i, env)),
                        j = if (missing (j))
                        ""
                        else
@@ -274,14 +274,14 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
                        deparse (substitute (l, env)),
                        wl.index = wl.index,
                        data = data))
-  
+
   x <- .extract (x, i, j, l, ..., wl.index = wl.index)
-  
-  if (is.null (x@data$spc)){ 
+
+  if (is.null (x@data$spc)){
     x@data$spc <- matrix (NA, nrow (x@data), 0)
     x@wavelength <- numeric (0)
   }
-  
+
   x
 })
 
@@ -296,8 +296,8 @@ setMethod ("$", "hyperSpec", function (x, name){
   validObject (x)
   if (name == ".") ## shortcut
     x@data [, , drop = FALSE]
-  else if (name == "..") 
-    x@data[, -match ("spc", colnames (x@data)), drop = FALSE] 
+  else if (name == "..")
+    x@data[, -match ("spc", colnames (x@data)), drop = FALSE]
   else
     x@data[[name]]
 })
@@ -311,9 +311,9 @@ setMethod ("[[", "hyperSpec", function (x, i, j, l, ...,
                                         wl.index = FALSE,
                                         drop = FALSE){
   validObject (x)
-  
+
   x <- .extract (x, i, j, l, ..., wl.index = wl.index)
-  
+
   if (missing (j))
     unclass (x@data$spc[,, drop = drop]) # removes the "AsIs"
   else {
@@ -348,7 +348,7 @@ as.long.df <- function (x, rownames = FALSE) {
   dummy <- cbind (data.frame (wavelength = rep (x@wavelength, each = nrow (x)),
                               spc = as.numeric (x [[]])),
                   dummy)
-  
+
   if (rownames)
     dummy <- data.frame (.rownames = as.factor (rep (rownames (x), nwl (x))),
                     dummy)
@@ -369,18 +369,18 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 ###-----------------------------------------------------------------------------
 ###
 ###  .paste.row
-###  
-###  
+###
+###
 .paste.row <- function (x, label = "", name = "", ins = 0, i = NULL, val = FALSE, range = TRUE,
                         digits = getOption ("digits"), max.print = 5, shorten.to = c (2,1)){
   if (is.null (name)) name = ""
   if (is.null (label)) label = ""
-  
+
   dummy <- ""
-  
+
   if (val){
-    if (is.list (x)){ 
-      dummy <- paste ("", "columns/entries", paste (names (x), collapse = ", ")) 
+    if (is.list (x)){
+      dummy <- paste ("", "columns/entries", paste (names (x), collapse = ", "))
     } else {
       if (range)
         val <- sort (unique (as.vector (x)))
@@ -397,7 +397,7 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
       else
         dummy <- format (val, digits = digits, trim = TRUE)
       dummy <- paste ("", if(range) "range", paste (dummy, collapse = " "), if(any (is.na (x))) "+ NA", collapse = " ")
-      
+
     }
   }
   dummy <- paste (paste (rep (" ", ins), collapse = ""),
@@ -424,55 +424,55 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 ###-----------------------------------------------------------------------------
 ###
 ###  as.character
-###  
-###  
+###
+###
 
 setMethod (as.character, "hyperSpec", function (x,
                                                 digits = getOption ("digits"),
                                                 max.print = 5,
                                                 shorten.to = c(2,1),
                                                 log = TRUE){#, ...){
-  
-  
+
+
   ## input checking
   validObject (x)
-  
+
   if (is.null (max.print))
     max.print <- getOption ("max.print")
-  
+
   if ((length (max.print) != 1) | ! is.numeric (max.print))
     stop ("max.print needs to be a number")
   if ((length (shorten.to) < 1) |(length (shorten.to) > 2) | ! is.numeric (shorten.to))
     stop ("shorten.to needs to be a numeric vector with length 1 or 2")
   if (sum (shorten.to) > max.print)
     stop ("sum (shorten.to) > max.print: this does not make sense.")
-  
+
   ## printing information
   chr <- c("hyperSpec object",
            paste ("  ", nrow (x), "spectra"),
            paste ("  ", ncol (x), "data columns"),
            paste ("  ", nwl (x), "data points / spectrum")
            )
-  
+
   chr <- c (chr, paste ("wavelength:",
-                        .paste.row (x@wavelength, x@label$.wavelength, ins = 0, val = TRUE, 
+                        .paste.row (x@wavelength, x@label$.wavelength, ins = 0, val = TRUE,
                                     range = FALSE, shorten.to = shorten.to, max.print = max.print),
                         collapse = " ")
             )
-  
+
   n.cols <- ncol (x@data)
-  
+
   chr <- c(chr, paste ("data: ",
                        " (", nrow(x@data), " rows x ", n.cols, " columns)", sep = ""))
   if (n.cols > 0)
     for (n in names (x@data))
       chr <- c(chr, .paste.row (x@data[[n]], x@label[[n]], n, ins = 3,
-                                i = match (n, names (x@data)), val = TRUE, 
+                                i = match (n, names (x@data)), val = TRUE,
                                 shorten.to = shorten.to, max.print = max.print))
-  
+
   if (log){
     chr <- c(chr, "log:")
-    
+
     long <- lapply (as.character (x@log$long.description),
                     function (x, max.print, shorten.to, desc = TRUE){
                       if (nchar (x) > max.print)
@@ -487,7 +487,7 @@ setMethod (as.character, "hyperSpec", function (x,
       max (sapply (c("date", as.character (x@log$date)), nchar)),
       max (sapply (c("user", as.character (x@log$user)), nchar))
       )
-    
+
     chr <- c (chr, paste (paste (rep (" ", width [1]), collapse = ""),
                           format ("short", justify = "right", width = width [2]),
                           format ("long", justify = "right", width = width [3]),
@@ -495,7 +495,7 @@ setMethod (as.character, "hyperSpec", function (x,
                           format ("user", justify = "right", width = width [5]),
                           sep = "   ")
               )
-    
+
     for (i in seq_len (nrow (x@log)))
       chr <- c (chr, paste (format (i, justify = "right", width = width [1]),
                             format (as.character (x@log[i, 1]), justify = "right", width = width [2]),
@@ -504,7 +504,7 @@ setMethod (as.character, "hyperSpec", function (x,
                             format (as.character (x@log[i, 4]), justify = "right", width = width [5]),
                             sep = "   ")
                 )
-  }	
+  }
   chr
 })
 
@@ -512,53 +512,53 @@ setMethod (as.character, "hyperSpec", function (x,
 ###-----------------------------------------------------------------------------
 ###
 ###  ncol
-###  
-###  
+###
+###
 
 setMethod ("ncol", "hyperSpec", function (x){
   validObject (x)
-  ncol (x@data) 
+  ncol (x@data)
 })
 
 
 ###-----------------------------------------------------------------------------
 ###
 ###  nrow
-###  
-###  
+###
+###
 
 setMethod ("nrow", "hyperSpec", function (x){
   validObject (x)
-  nrow (x@data) 
+  nrow (x@data)
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ###  dim
-###  
-###  
+###
+###
 
 setMethod ("dim", "hyperSpec", function (x){
   validObject (x)
-  c (nrow = nrow (x@data), ncol = ncol (x@data), nwl = ncol (x@data$spc)) 
+  c (nrow = nrow (x@data), ncol = ncol (x@data), nwl = ncol (x@data$spc))
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ###  colnames
-###  
-###  
+###
+###
 
 setMethod ("colnames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "col"){
   validObject (x)
-  colnames (x@data, do.NULL = do.NULL, prefix = prefix) 
+  colnames (x@data, do.NULL = do.NULL, prefix = prefix)
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ###  colnames <-
-###  
-###  
+###
+###
 
 setReplaceMethod ("colnames", "hyperSpec", function (x, value){
   validObject (x)
@@ -571,19 +571,19 @@ setReplaceMethod ("colnames", "hyperSpec", function (x, value){
 ###-----------------------------------------------------------------------------
 ###
 ###  rownames
-###  
-###  
+###
+###
 
 setMethod ("rownames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "row"){
   validObject (x)
-  rownames (x@data, do.NULL = do.NULL, prefix = prefix) 
+  rownames (x@data, do.NULL = do.NULL, prefix = prefix)
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ###  rownames <-
-###  
-###  
+###
+###
 
 setReplaceMethod ("rownames", "hyperSpec", function (x, value){
   validObject (x)
@@ -594,17 +594,17 @@ setReplaceMethod ("rownames", "hyperSpec", function (x, value){
 ###-----------------------------------------------------------------------------
 ###
 ###  dimnames
-###  
-###  
+###
+###
 
 setMethod("dimnames", "hyperSpec", function (x){
   validObject (x)
-  list (row = rownames (x@data), data = colnames (x@data), wl = colnames (x@data$spc)) 
+  list (row = rownames (x@data), data = colnames (x@data), wl = colnames (x@data$spc))
 })
 ###-----------------------------------------------------------------------------
 ###
 ###  logbook
-###  
+###
 ###
 logbook <- function (x){
   .is.hy (x)
@@ -614,7 +614,7 @@ logbook <- function (x){
 ###-----------------------------------------------------------------------------
 ###
 ###  logentry
-###  
+###
 ###
 logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
   .is.hy (x)
@@ -624,12 +624,12 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
 ###-----------------------------------------------------------------------------
 ###
 ###  labels
-###  
-###  
+###
+###
 
 setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, ...){
   validObject (object)
-  
+
   if (is.null (which))
     object@label
   else {
@@ -643,13 +643,13 @@ setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, .
 ###-----------------------------------------------------------------------------
 ###
 ###  labels<-
-###  
-###  
+###
+###
 
 "labels<-" <- function (object, which = NULL, ..., value){
   .is.hy (object)
   validObject (object)
-  
+
   if (is.null (which))
     object@label <- value
   else {
@@ -658,16 +658,16 @@ setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, .
         (is.logical (which) && length (which) != ncol (object@data) + 1)
         )
       stop ("Label does not exist!")
-    
+
     object@label [[which]] <- value
-    
+
   }
-  
-  object@log <- .logentry (object, short = "labels<-", 
+
+  object@log <- .logentry (object, short = "labels<-",
                           long = list (which = which, value = value), ...)
-  
-  validObject (object) 
-  
+
+  validObject (object)
+
   object
 }
 
@@ -675,8 +675,8 @@ setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, .
 
 ###-----------------------------------------------------------------------------
 ###
-###  nwl 
-###  
+###  nwl
+###
 ###
 nwl <- function (x){
   validObject (x)
@@ -685,8 +685,8 @@ nwl <- function (x){
 
 ###-----------------------------------------------------------------------------
 ###
-###  wl 
-###  
+###  wl
+###
 ###
 wl <- function (x){
   validObject (x)
@@ -695,26 +695,26 @@ wl <- function (x){
 
 ###-----------------------------------------------------------------------------
 ###
-###  .wl 
-###  
+###  .wl
+###
 ###
 ".wl<-" <- function (x, digits = 6, value){
   x@wavelength <- value
   colnames (x@data$spc) <- signif (value, digits)
-  
+
   x
 }
 
 ###-----------------------------------------------------------------------------
 ###
-###  wl 
-###  
+###  wl
+###
 ###
 "wl<-" <- function (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value){
-  
+
   .is.hy (x)
   validObject (x)
-  
+
   if (is.numeric (value)){
     if (is.null (label))
       warning ("Do not forget to adjust the label of the wavelength axis.")
@@ -722,15 +722,15 @@ wl <- function (x){
     label <- value$label
     value <- value$wl
   }
-  
+
   .wl (x) <- value
-  
+
   x@label$.wavelength <- label
-  
+
   validObject (x)
-  x@log <- .logentry (x, short = short, long = list (value = value, digits = digits), 
+  x@log <- .logentry (x, short = short, long = list (value = value, digits = digits),
                      date = date, user = user)
-  
+
   x
 }
 
@@ -745,34 +745,34 @@ setReplaceMethod("[", "hyperSpec", function (x, i, j,
                                              ...,
                                              value){
   validObject (x)
-  
+
   long <- list (i = if (missing (i)) "" else i ,
                 j = if (missing (j)) "" else j,
                 drop = drop,
                 ...,
-                value = if (is (value, "hyperSpec")) 
-                as.character (value) 
-                else 
+                value = if (is (value, "hyperSpec"))
+                as.character (value)
+                else
                 .paste.row (value, val = TRUE)
-                ) 
-  
+                )
+
   if (missing (i)) i <- seq_len (nrow (x@data))
   if (missing (j)) j <- seq_len (ncol (x@data))
-  
+
   if (is (value, "hyperSpec")){
     validObject (value)
     x@data [i, j, ...] <- value@data
   } else
   x@data [i, j, ...] <- value
-  
+
   x@log <- .logentry (x,
                      short = if (is.null (short)) "[<-"
                      else paste ("[<- (", short, ")" , sep = ""),
                      long = long
                      )
-  
+
   validObject (x)
-  
+
   x
 })
 
@@ -781,44 +781,44 @@ setReplaceMethod("[", "hyperSpec", function (x, i, j,
 ### replacing with [[<-
 ###
 
-setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l, 
+setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
                                                wl.index = FALSE,
                                                short = NULL,
                                                ...,
                                                value){
   validObject (x)
-  
+
   long <- list (i = if (missing (i)) "" else i ,
                 l = if (missing (l)) "" else l,
                 wl.index = wl.index,
                 ...,
                 value = if (is (value, "hyperSpec")) as.character (value)
                 else .paste.row (value, val = TRUE)
-                ) 
-  
+                )
+
   if (! missing (j))
     stop ("The spectra matrix may only be indexed by i (spectra) and l (wavlengths). j (data column) must be missing.")
-  
+
   if  (!missing (l) && !wl.index)
     l <- wl2i (x, l)
-  
+
   if (is (value, "hyperSpec")){
     validObject (value)
     value <- value@data$spc
-  } 
-  
+  }
+
   x@data$spc[i, l, ...] <- value
-  
+
   x@log <- .logentry (x,
                      short = if (is.null (short))
                      "[[<-"
                      else
-                     paste ("[[<- (", short, ")" , sep = ""), 
+                     paste ("[[<- (", short, ")" , sep = ""),
                      long = long
                      )
-  
+
   validObject (x)
-  
+
   x
 })
 
@@ -830,21 +830,21 @@ setReplaceMethod ("[[", "hyperSpec", function (x, i, j, l,
 ###
 setReplaceMethod ("$", "hyperSpec", function (x, name, value){
   validObject (x)
-  
+
   if (is.list (value) && (length (value) == 2)){
     ilabel <- match ("label", names (value))
     if (is.na (ilabel))
       ilabel <- 2
     label <- value [[ilabel]]
-    
+
     value <- value [[3 - ilabel]] ## the other of the 2 entries
-  } else 
+  } else
   label <- name
-  
+
   if (name == "..") { ## shortcut
     i <- -match ("spc", colnames (x@data))
     x@data[, i] <- value
-    
+
     if (!is.null (label)){
       i <- colnames (x@data)[i]
       i <- match (i, names (x@label))
@@ -852,23 +852,23 @@ setReplaceMethod ("$", "hyperSpec", function (x, name, value){
     }
   } else {
     dots <- list (x = x@data, name = name, value = value)
-    x@data <- do.call("$<-", dots) 				
+    x@data <- do.call("$<-", dots)
     x@label[[name]] <- label
   }
-  
+
   x@log <- .logentry (x,
-                     short = "$<-", 
+                     short = "$<-",
                      long = list (name = name, value = .paste.row (value, val = TRUE))
                      )
-  
+
   x
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ###  artihmetic functions
-###  
-###  
+###
+###
 
 setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
            function (e1, e2){
@@ -886,17 +886,17 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
   validObject (e1)
   if (missing (e2)){
     e1  [[]] <- callGeneric (e1 [[]])
-    e1@log <- .logentry (e1, short = .Generic, long = list ())  
-    
+    e1@log <- .logentry (e1, short = .Generic, long = list ())
+
   } else {
     e1  [[]] <- callGeneric (e1 [[]], e2)
-    e1@log <- .logentry (e1, short = .Generic, 
-			long = list (e2 = .paste.row (e2, val = TRUE))) 
+    e1@log <- .logentry (e1, short = .Generic,
+         long = list (e2 = .paste.row (e2, val = TRUE)))
   }
   e1
 }
 
-.arithy <- function (e1, e2){ 
+.arithy <- function (e1, e2){
   validObject (e2)
   e2  [[]] <- callGeneric (e1, e2 [[]])
   e2@log <- .logentry (e2, short = .Generic, long = list (e1 = .paste.row (e1, val = TRUE)))
@@ -913,19 +913,19 @@ setMethod ("Arith", signature (e1 = "matrix", e2 = "hyperSpec"), .arithy)
 ###-----------------------------------------------------------------------------
 ###
 ###  %*%
-###  
+###
 ###
 
 setMethod ("%*%", signature (x = "hyperSpec", y = "hyperSpec"),
            function (x, y){
              validObject (x)
              validObject (y)
-             
-             if (ncol(y) > 1) 
-               warning(paste("Dropping column(s) of y:", paste(colnames(y$..), 
+
+             if (ncol(y) > 1)
+               warning(paste("Dropping column(s) of y:", paste(colnames(y$..),
                                                                collapse = ", ")))
-             
-             x@data$spc <-  x@data$spc %*% y@data$spc 
+
+             x@data$spc <-  x@data$spc %*% y@data$spc
              .wl (x) <- y@wavelength
              x@label$.wavelength = y@label$.wavelength
              x@log <- .logentry (x, short = "%*%", long = as.character (y))
@@ -937,7 +937,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
            function (x, y){
              validObject (x)
              x@data$spc <-  x@data$spc %*% y
-             .wl (x) <- seq_len (ncol (y)) 
+             .wl (x) <- seq_len (ncol (y))
              x@label$.wavelength = NA
              x@log <- .logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
              x
@@ -947,16 +947,16 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
 setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
            function (x, y){
              validObject (y)
-             
-             if (ncol(y) > 1) 
-               warning(paste("Dropping column(s) of y:", paste(colnames(y$..), 
+
+             if (ncol(y) > 1)
+               warning(paste("Dropping column(s) of y:", paste(colnames(y$..),
                                                                collapse = ", ")))
              y <- new ("hyperSpec",
                        wavelength = y@wavelength,
                        spc = x %*% y@data$spc,
                        log = y@log
                        )
-             
+
              y@log <- .logentry (y, short = "%*%", long = list (x = .paste.row (x, val = TRUE)))
              y
            }
@@ -964,14 +964,14 @@ setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
 ###-----------------------------------------------------------------------------
 ###
 ###  compare functions
-###  
-###  
+###
+###
 
 setMethod ("Compare", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
            function (e1, e2){
              validObject (e1)
              validObject (e2)
-             
+
              callGeneric (e1[[]], e2[[]])
            }
            )
@@ -994,41 +994,41 @@ setMethod ("Compare", signature (e1 = "matrix", e2 = "hyperSpec"), .compy)
 ###-----------------------------------------------------------------------------
 ###
 ###  all.equal
-###  
-###  
+###
+###
 
 setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),
            function (target, current, ..., check.column.order = FALSE, check.label = FALSE, check.log = FALSE){
              validObject (target)
              validObject (current)
-             
+
              result <- character (0)
-             
+
              cmp <- all.equal (target@wavelength, current@wavelength, ...)
              if (! isTRUE (cmp)) result <- c("@wavelength:", cmp)
-             
+
              if (check.column.order)
                cmp <- all.equal (target@data, current@data, ...)
              else
-               cmp <- all.equal ( target@data[order (colnames ( target@data))], 
+               cmp <- all.equal ( target@data[order (colnames ( target@data))],
                                  current@data[order (colnames (current@data))], ...)
              if (! isTRUE (cmp)) result <- c (result, "@data:", cmp)
-             
+
              if (check.label){
-               cmp <- all.equal (target@label[order (names (target@label))], 
+               cmp <- all.equal (target@label[order (names (target@label))],
                                  current@label[order (names (current@label))], ...)
-               if (! isTRUE (cmp)) result <- c (result, "@label:", cmp)		
+               if (! isTRUE (cmp)) result <- c (result, "@label:", cmp)
              }
-             
+
              if (check.log) {
                cmp <- all.equal (target@log, current@log, ...)
                if (! isTRUE (cmp)) result <- c (result, "@log:", cmp)
              }
-             
+
              if (length (result) == 0)
                TRUE
              else
-               result 
+               result
            }
            )
 
@@ -1036,16 +1036,16 @@ setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),
 ###-----------------------------------------------------------------------------
 ###
 ###  math functions
-###  
-###  
+###
+###
 
 setMethod ("Math", signature (x = "hyperSpec"),
            function (x){
              validObject (x)
-             
+
              if (grepl ("^cum", .Generic) || grepl ("gamma$", .Generic))
                warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
-             
+
              x [[]] <- callGeneric (x[[]])
              x@log <- .logentry (x, short = .Generic, long = list())
              x
@@ -1056,14 +1056,14 @@ setMethod ("Math", signature (x = "hyperSpec"),
 ###-----------------------------------------------------------------------------
 ###
 ###  log
-###  
+###
 ###
 
 setMethod ("log", signature (x = "hyperSpec"),
            function (x, base = exp (1)){
              validObject (x)
-             
-             x [[]] <-  log (x[[]], base = base) 
+
+             x [[]] <-  log (x[[]], base = base)
              x@log <- .logentry (x, short = "log", long = list (base = base))
              x
            }
@@ -1072,16 +1072,16 @@ setMethod ("log", signature (x = "hyperSpec"),
 ###-----------------------------------------------------------------------------
 ###
 ###  math functions
-###  
-###  
+###
+###
 
 setMethod ("Math2", signature (x = "hyperSpec"),
            function (x, digits){
              validObject (x)
-             
+
              x [[]] <- callGeneric (x[[]], digits)
-             
-             x@log <- .logentry (x, short = .Generic, 
+
+             x@log <- .logentry (x, short = .Generic,
                                 long = list(if (exists ("digits")) digits = digits))
              x
            }
@@ -1090,19 +1090,19 @@ setMethod ("Math2", signature (x = "hyperSpec"),
 ###-----------------------------------------------------------------------------
 ###
 ###  summary functions
-###  
-###  
+###
+###
 
 setMethod ("Summary", signature (x = "hyperSpec"),
            function (x, ..., na.rm = FALSE){
              validObject (x)
-             
+
              if ((.Generic == "prod") || (.Generic == "sum"))
                warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
-             
+
              ## dispatch also on the objects in ...
-             x <- sapply (list (x[[]], ...), .Generic, na.rm = na.rm) 
-             
+             x <- sapply (list (x[[]], ...), .Generic, na.rm = na.rm)
+
              callGeneric (x, na.rm = na.rm)
            }
            )
@@ -1110,76 +1110,76 @@ setMethod ("Summary", signature (x = "hyperSpec"),
 ###-----------------------------------------------------------------------------
 ###
 ### cbind2
-###  
-###  
+###
+###
 setMethod ("cbind2", signature (x = "hyperSpec", y  = "hyperSpec"),
            function (x, y){
              validObject (x)
              validObject (y)
-             
+
              cols <- match (colnames (x@data), colnames (y@data))
              cols <- colnames(y@data)[cols]
              cols <- cols[!is.na (cols)]
              cols <- cols [-match ("spc", cols)]
-             
+
              if (length (cols) < 0){
                ord <- do.call (order, x@data[, cols, drop = FALSE])
                x@data <- x@data[ord, , drop = FALSE]
-               
+
                ord <- do.call (order, y@data[, cols, drop = FALSE])
                y@data <- y@data[ord, , drop = FALSE]
-               
+
                if (any (x@data[, cols, drop = FALSE] != y@data[, cols, drop = FALSE]))
-                 stop ("hyperSpec objects must have the same data (except data$spc)") 
+                 stop ("hyperSpec objects must have the same data (except data$spc)")
              }
-             
+
              x@data$spc <- cbind(x@data$spc, y@data$spc)
              .wl (x) <- c (x@wavelength, y@wavelength)
-             
+
              x@data <- cbind (x@data,
                               y@data[, is.na (match (colnames (y@data), colnames (x@data))), drop = FALSE])
-             
+
              x@log <- .logentry (x, short = "cbind2", long = as.character (y))
              x
            }
            )
 
-setMethod("cbind2", signature (x = "hyperSpec", y = "missing"), function (x, y)x) 
+setMethod("cbind2", signature (x = "hyperSpec", y = "missing"), function (x, y)x)
 
 ###-----------------------------------------------------------------------------
 ###
 ### rbind2
-###  
-###  
+###
+###
 setMethod("rbind2",
           signature(x = "hyperSpec", y = "hyperSpec"),
           function (x, y) {
             validObject (x)
             validObject (y)
-            
+
             if (! isTRUE (all.equal (x@wavelength, y@wavelength)))
               stop ("The wavelengths of the objects differ.")
-            
+
             x@data <- rbind (x@data, y@data)
             x@log <- .logentry (x, short = "rbind2", long = list (y = as.character (y)))
-            
+
             x
           }
           )
-setMethod("rbind2", signature (x = "hyperSpec", y = "missing"), function (x, y) x) 
+setMethod("rbind2", signature (x = "hyperSpec", y = "missing"), function (x, y) x)
 
 ###-----------------------------------------------------------------------------
 ###
 ### cbind & rbind
-###  
-###  
+###
+###
 bind <- function (direction = stop ("direction ('c' or 'r') required"),
                   ..., short = NULL, user = NULL, date = NULL){
   dots <- list (...)
-  
+
   if ((length (dots) == 1) & is.list (dots [[1]]))
     dots <- dots[[1]]
-  
+
   if (length (dots) == 0)
     NULL
   else if (length (dots) == 1){
@@ -1188,20 +1188,20 @@ bind <- function (direction = stop ("direction ('c' or 'r') required"),
   } else {
     if (! is (dots[[1]], "hyperSpec"))
       stop ("bind only works on hyperSpec objects.")
-    
-    logs <- list() 
-    
+
+    logs <- list()
+
     for (i in seq_len (length (dots)) [-1]){
       if (! is (dots[[i]], "hyperSpec"))
         stop ("bind only works on hyperSpec objects.")
       validObject (dots[[i]])
-      
+
       dots[[1]] <- switch (direction,
                            c = cbind2 (dots[[1]], dots[[i]]),
                            r = rbind2 (dots[[1]], dots[[i]]),
                            stop ("direction must be either 'c' or 'r' for cbind and rbind, respectively.")
                            )
-      
+
       if (!is.null (short))
         dots[[1]]@log[nrow (dots[[1]]@log), "short.description"] <- paste (short, dots[[1]]@log[nrow (dots[[1]]@log), "short.description"])
       if (!is.null (date))
@@ -1214,45 +1214,45 @@ bind <- function (direction = stop ("direction ('c' or 'r') required"),
 }
 
 cbind.hyperSpec <- function (..., deparse.level) bind ("c", ...)
-
 rbind.hyperSpec <- function (..., deparse.level) bind ("r", ...)
+
 ###-----------------------------------------------------------------------------
 ###
 ### wl2i
-###  
+###
 ###
 wl2i <- function (x, wavelength = stop ("wavelengths are required.")){
   validObject (x)
-  
+
   ## special in formula
-  max <- max (x@wavelength) 
-  min <- min (x@wavelength) 
-  
+  max <- max (x@wavelength)
+  min <- min (x@wavelength)
+
   `~` <- function (e1, e2){
     if (missing (e2))              # happens with formula ( ~ end)
       stop ("wavelength must be a both-sided formula")
-    
+
     if (    (Re (e1) < min (x@wavelength) && Re (e2) < min (x@wavelength)) ||
         (Re (e1) > max (x@wavelength) && Re (e2) > max (x@wavelength))){
-      NULL                       # wavelengths completely outside the wl. range of x 
+      NULL                       # wavelengths completely outside the wl. range of x
     } else {
       e1 <- .getindex (x, Re (e1)) + Im (e1)
       e2 <- .getindex (x, Re (e2)) + Im (e2)
-      
+
       if (e1 <= 0 || e2 <= 0|| e1 > length (x@wavelength) || e2 > length (x@wavelength))
         warning ("wl2i: formula yields indices outside the object.")
-      
+
       seq (e1, e2)
     }
   }
-  
+
   .conv.range <- function (range){
     if (is.numeric (range)){
       .getindex (x, range, rule = 1)
-    } else 
+    } else
     eval (range)
   }
-  
+
   if (is.list (wavelength))
     unlist (lapply (wavelength, .conv.range))
   else (.conv.range (wavelength))
@@ -1260,20 +1260,20 @@ wl2i <- function (x, wavelength = stop ("wavelengths are required.")){
 ###-----------------------------------------------------------------------------
 ###
 ### i2wl
-###  
+###
 ###
 
 i2wl <- function (x, i){
   validObject (x)
-  
+
   x@wavelength[i]
-} 
+}
 
 ###-----------------------------------------------------------------------------
 ###
 ### .getindex
-###  
-###  
+###
+###
 ## does the acual work of looking up the index
 ## rule = 2 returns first resp. last index for wavelength outside hyperSpec@wavelength.
 
@@ -1288,8 +1288,8 @@ i2wl <- function (x, i){
 ###-----------------------------------------------------------------------------
 ###
 ###  .na.if.different
-###  
-###  
+###
+###
 
 .na.if.different <- function (x) {
   if (length (unique (x)) > 1)
@@ -1301,64 +1301,64 @@ i2wl <- function (x, i){
 ###-----------------------------------------------------------------------------
 ###
 ###  .apply
-###  
-###  
+###
+###
 
 .apply <- function (data, MARGIN, FUN, ...){
-  
+
   if (length (data$spc) == 0)
-    stop ("empty spectra matrix.") 
-  
+    stop ("empty spectra matrix.")
+
   spc <- apply (data [, "spc", drop = FALSE], MARGIN, FUN, ...)
-  
+
   if (MARGIN == 1){
     if (is.null (spc))
       spc <- matrix (ncol = 0, nrow = nrow (data))
-    else if (is.vector (spc)) 
+    else if (is.vector (spc))
       dim (spc) <- c(length (spc), 1)
     else if (is.matrix (spc))
       spc <- t (spc)
-    
+
     data$spc <- I(spc)
   } else if (MARGIN == 2){
     if (is.null (spc))
       return (data [0, ])
-    if (is.null (dim (spc))) 
+    if (is.null (dim (spc)))
       dim (spc) <- c(1, ncol (data$spc))
-    
+
     if (all(dim (spc) == dim (data$spc))){
       data$spc <- spc
     }  else {
       nrow <- nrow (spc)
-      
-      data <- data[rep (1, nrow), , drop = FALSE] 
-      
+
+      data <- data[rep (1, nrow), , drop = FALSE]
+
       cols <- colnames (data)
       cols <- which (cols != "spc")
       if (length (cols) > 0) {
         colvals <- apply (data [,cols,drop = FALSE], 2, .na.if.different)
         data [,cols] <- rep (colvals, each = nrow)
       }
-      
+
       data$spc <- I (spc)
       rownames (data) <- rownames (spc)
     }
   }
-  
-  data 
+
+  data
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ###  apply
-###  
-###  
+###
+###
 
 setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
                                            label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
                                            short = NULL, long = NULL, user = NULL, date = NULL){
   validObject (X)
-  
+
   if (is.null (short))
     short <- "apply"
   if (is.null (long))
@@ -1366,13 +1366,13 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
                   call = deparse (sys.call()[])
                   )
   if (all (MARGIN == 1 : 2)){
-    X@data$spc <- do.call (FUN, list (X@data$spc, ...)) 
+    X@data$spc <- do.call (FUN, list (X@data$spc, ...))
   } else {
     X@data <- .apply(X@data, MARGIN = MARGIN, FUN = FUN, ...)
-    
+
     if (MARGIN == 1) {
       ## no shortcuts here: the validation will fail until the
-      ## wavelength axis is adjusted 
+      ## wavelength axis is adjusted
       if (!is.null (new.wavelength))
         if (is.numeric (new.wavelength))
           .wl (X) <- new.wavelength
@@ -1380,30 +1380,30 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
           dots <- list (...)
           .wl (X) <- dots[[new.wavelength]]
         }
-      else if (ncol (X@data$spc) != length (X@wavelength)){ 
+      else if (ncol (X@data$spc) != length (X@wavelength)){
         wl <- as.numeric (colnames (X@data$spc))
         if (length (wl) != ncol (X@data$spc) || any (is.na (wl)))
           .wl (X) <- seq_len (ncol (X@data$spc))
         else
           .wl (X) <- wl
       }
-      
-      if (ncol (X@data$spc) != length (X@wavelength)) 
+
+      if (ncol (X@data$spc) != length (X@wavelength))
         X@label$.wavelength <- NULL
-      
+
     }
   }
-  
+
   if (!is.null (label.wl))
-    X@label$.wavelength <- label.wl	
-  
+    X@label$.wavelength <- label.wl
+
   if (!is.null (label.spc))
     X@label$spc <- label.spc
-  
+
   X@log <- .logentry(X, short = short, long = long, user = user, date = date)
-  
+
   validObject (X)
-  
+
   X
 })
 
@@ -1411,42 +1411,42 @@ setMethod ("apply", "hyperSpec", function (X, MARGIN, FUN, ...,
 ###-----------------------------------------------------------------------------
 ###
 ### split - split according to given factor
-###  
+###
 
 setMethod ("split", "hyperSpec", function (x, f, drop = TRUE, #...,
                                            short = NULL, user = NULL, date = NULL){
   validObject (x)
-  
-  hyperlist <- split (seq_len (nrow (x@data)), f, drop) 
-  
+
+  hyperlist <- split (seq_len (nrow (x@data)), f, drop)
+
   log <-  .logentry (x, short = short, long = list (f = f, drop = drop),
                     user = user, date = date)
-  
+
   for (i in seq_len (length (hyperlist))){
     hyperlist[[i]] <- x[hyperlist[[i]],]
-    
+
     hyperlist[[i]]@log <- log
   }
-  
+
   hyperlist
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ### sweep
-###  
+###
 ###
 
 setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-",
                                            check.margin = TRUE, ...,
                                            short = NULL, user = NULL, date = NULL){
   validObject (x)
-  
+
   if (is (STATS, "hyperSpec")){
-    validObject (STATS) 
+    validObject (STATS)
     STATS <- STATS@data$spc
   }
-  
+
   x@data$spc <- do.call (sweep, c (list (x = x@data$spc,
                                          MARGIN = MARGIN,
                                          STATS = STATS,
@@ -1454,7 +1454,7 @@ setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-",
                                          check.margin = check.margin),
                                    ...)
                          )
-  
+
   x@log <- .logentry (x,
                      short = if (!is.null (short)) paste ("sweep (", short, ")", sep = "") else NULL,
                      long = list (MARGIN = MARGIN,
@@ -1465,130 +1465,130 @@ setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-",
                        ...),
                      date = date,
                      user = user
-                     )  
-  
-  
-  x 
-  
+                     )
+
+
+  x
+
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ###  aggregate
-###  
+###
 ###
 
 setMethod ("aggregate", "hyperSpec", function (x,
                                                by = stop ("by is needed: either a grouping vector (e.g. factor) or a list of groups"),
                                                FUN = stop ("FUN is needed."),
                                                ...,
-                                               out.rows = NULL, 
+                                               out.rows = NULL,
                                                append.rows = NULL,
                                                short = NULL, date = NULL, user = NULL){
-  
+
   validObject (x)
-  
+
   long <- list (by = by, FUN = FUN, out.rows = out.rows,
                 append.rows = append.rows, ...)
-  
+
   if (!is.list (by))
     by <- split (seq_len (nrow (x)), by, drop = TRUE)
-  
+
   if (is.null (out.rows)){
     dummy <- .apply (data = x@data[by [[1]], , drop = FALSE], MARGIN = 2, FUN = FUN, ...)
-    
-    out.rows <- nrow (dummy) * length (by)  
+
+    out.rows <- nrow (dummy) * length (by)
   }
-  
-  data  <- x@data[rep (1, out.rows), , drop = FALSE] # preallocate memory 
+
+  data  <- x@data[rep (1, out.rows), , drop = FALSE] # preallocate memory
   data <- cbind (x@data, .aggregate = NA)
   col.aggregate <- ncol (data)
-  
-  
+
+
   r <- 1 # keeping track of the actually filled rows
-  
+
   for (i in seq (along = by)){
     dummy <- .apply (data = x@data[by [[i]], , drop  = FALSE], MARGIN = 2, FUN = FUN, ...)
-    
+
     prows <- nrow (dummy) - 1
-    
-    
+
+
     if (r + prows > out.rows) {
-      if (is.null (append.rows)) 
+      if (is.null (append.rows))
         append.rows <- max (100, ceiling (1 - (i / length (by)) * out.rows))
       out.rows <- max (append.rows + out.rows, r + prows)
       data  <- rbind (data, data [rep (1, out.rows - nrow (data)), , drop = FALSE])
       warning (paste ("At", i, "of", length (by), "levels: Output data.frame too small. Consider using an appropriate value for out.rows to speed up calculations."))
     }
-    
+
     if (prows >= 0){
       data[r : (r + prows), -col.aggregate] <- dummy
-      data[r : (r + prows),  col.aggregate] <- i  
-      
+      data[r : (r + prows),  col.aggregate] <- i
+
       r <- r + prows + 1
     }
   }
-  
+
   x@data <- data[seq_len (r - 1), , drop = FALSE]
   x@data[, col.aggregate] <- factor (x@data[, col.aggregate], levels = seq_len (length (by)))
-  
-  if (!is.null (names (by)) && !any (is.na (names (by)))) 
-    levels (x@data[, col.aggregate]) <- names (by) 
-  
+
+  if (!is.null (names (by)) && !any (is.na (names (by))))
+    levels (x@data[, col.aggregate]) <- names (by)
+
   x@log <- .logentry (x, long = long, short = short, date = date, user = user)
-  
-  x 
-  
+
+  x
+
 })
 
 ###-----------------------------------------------------------------------------
 ###
 ###  decomposition -- decomposes hyperSpec object e.g. into scores and loading objects
-###  
-###  
+###
+###
 decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
                            label.wavelength, label.spc,
                            scores = TRUE, retain.columns = FALSE,
                            short = "", ...){
   validObject (object)
-  
+
   short <- paste (" decomposition:", short, sep ="")
-  
+
   if (is.vector (x))
     if (nrow (object) == length (x))
       dim (x) <- c(length (x), 1)
     else
       dim (x) <- c(1, length (x))
-  
+
   if ((nrow (x) == nrow (object)) & scores){
-    
+
     object@data$spc <- I (as.matrix (x))
-    
+
     .wl (object) <- wavelength
-    
+
     object@label$.wavelength <- label.wavelength
-    
+
   } else if (ncol (x) == nwl (object)){
     spc <- match("spc", colnames(object@data))
     cols <- apply(object@data[, -spc, drop = FALSE], 2,
                   .na.if.different)
     object@data[1, -spc] <- cols
-    
+
     if (!retain.columns) {
       cols <- which(is.na(object@data[1, -spc]))
       cols[cols > spc] <- cols [cols > spc] + 1
       object@data <- object@data[, -cols, drop = FALSE]
     }
-    
+
     object@data <- object@data[rep(1, nrow(x)), , drop = FALSE]
     object@data$spc <- I(as.matrix(x))
   } else {
     stop ("Either rows or columns of x and object must correspond")
   }
-  
+
   object@label$spc <- label.spc
   object@log <- .logentry (object, short = short, ...)
-  
+
   validObject (object)
   object
 }
@@ -1596,15 +1596,15 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 ### ****************************************************************************
 ###
 ###  plotting functions
-###  
+###
 ### ****************************************************************************
 
 ###-----------------------------------------------------------------------------
 ###
-###  plotmap - plot map 
+###  plotmap - plot map
 ###
 
-plotmap <- function (object,                                             
+plotmap <- function (object,
                      x = "x",
                      y = "y",
                      func = mean,
@@ -1616,15 +1616,15 @@ plotmap <- function (object,
                      ...
                      ) {
   validObject (object)
-  
+
   ix <- pmatch (x, colnames (object@data))
   if (is.null (ix))
     stop (paste ("hyperSpec object has no column ", x))
-  
+
   iy <- pmatch (y, colnames (object@data))
   if (is.null (iy))
-    stop (paste ("hyperSpec object has no column ", y)) 
-  
+    stop (paste ("hyperSpec object has no column ", y))
+
   if (!is.null (z)){
     if (is.numeric (z)){
       z <- rep (z, length.out = nrow (object))
@@ -1632,7 +1632,7 @@ plotmap <- function (object,
       if (is.na (match (z, colnames (object@data))))
         stop ("z did not evaluate to a column in object@data.")
       z <- object@data[, z]
-    } 
+    }
   } else {
     z <- apply (object [[]], 1, func, ...)
     if (length (z) != nrow (object))
@@ -1648,12 +1648,12 @@ plotmap <- function (object,
     dots <- list (x = formula (z ~ x * y | cond))
     if (is.null (trellis.args$data))
       dots$data <- data.frame (x = object[[, ix]] , y = object[[, iy]], z = as.numeric(z), cond = cond)
-  } else { 
+  } else {
     dots <- list (x = formula (z ~ x * y))
     if (is.null (trellis.args$data))
       dots$data <- data.frame (x = object[[, ix]] , y = object[[, iy]], z = as.numeric(z))
   }
-    
+
   n <- length (unique (zapsmall (as.numeric (z))))
   if (is.null (trellis.args$col.regions)){
     if (is.factor (z))
@@ -1662,7 +1662,7 @@ plotmap <- function (object,
       trellis.args$col.regions <- matlab.palette ()
   } else if (is.factor (z))
     trellis.args$col.regions <- rep (trellis.args$col.regions, length.out = nlevels (z))
-  
+
   if (is.null (trellis.args$at)){
     if (is.factor (z)) {
       trellis.args$at <- seq_len (nlevels (z) + 1) - 0.5
@@ -1674,18 +1674,18 @@ plotmap <- function (object,
       trellis.args$at = seq (min (z), max (z), length.out = length (trellis.args$col.regions) + 1)
     }
   }
-  
+
   if (is.null (trellis.args$aspect))
     trellis.args$aspect = "iso"
-  
+
   if (is.null (trellis.args$xlab)){
-    trellis.args$xlab <- object@label[[names(object@data)[ix]]] 
+    trellis.args$xlab <- object@label[[names(object@data)[ix]]]
     if (is.null (trellis.args$xlab))
-      trellis.args$xlab <- x  
+      trellis.args$xlab <- x
   }
-  
+
   if (is.null (trellis.args$ylab)){
-    trellis.args$ylab = object@label[[names(object@data)[iy]]] 
+    trellis.args$ylab = object@label[[names(object@data)[iy]]]
     if (is.null (trellis.args$ylab))
       trellis.args$ylab <- y
   }
@@ -1693,24 +1693,24 @@ plotmap <- function (object,
   if (is.null (trellis.args$panel)){
     trellis.args$panel <- function (x, y, z, subscripts, ..., panel.bg = NA) {
       dummy <- index.grid (x[subscripts], y[subscripts], z [subscripts])
-      panel.fill (col = panel.bg) 
-      panel.levelplot (dummy$x, dummy$y, dummy$z, subscripts = TRUE, ...)     
-    } 
+      panel.fill (col = panel.bg)
+      panel.levelplot (dummy$x, dummy$y, dummy$z, subscripts = TRUE, ...)
+    }
   }
 
   lattice <- do.call(levelplot, c(dots, trellis.args))
   dots$x <- lattice
   if (do.print)
     do.call (print, c(print.args, dots))
-  
+
   lattice
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ### index.grid
-###  
-###  
+###
+###
 index.grid <- function (x, y, z){
   if (is (x, "hyperSpec")){
     validObject
@@ -1720,120 +1720,120 @@ index.grid <- function (x, y, z){
     y <- x [,2]
     x <- x [,1]
   } else if (missing (y))
-    stop ("y can only be omitted if x is a hyperSpec object or a matrix or data.frame with 2 columns.") 
+    stop ("y can only be omitted if x is a hyperSpec object or a matrix or data.frame with 2 columns.")
 
-  if (is.data.frame (x)) 
+  if (is.data.frame (x))
     x <- x [[1]]
-  if (is.data.frame (y)) 
+  if (is.data.frame (y))
     y <- y [[1]]
-  
+
   if (length (x) != length (y))
-    stop ("x and y need to have the same length") 
-  
+    stop ("x and y need to have the same length")
+
   order <- order (cbind (x, y))
-  
+
   x <- as.ordered (x)
   y <- as.ordered (y)
   levx <- as.numeric (levels (x))
   levy <- as.numeric (levels (y))
   x <- as.numeric (x)
-  y <- as.numeric (y) 
-  
+  y <- as.numeric (y)
+
   grid <- matrix (nrow = length (levx),
                   ncol = length (levy),
                   dimnames = list (x = levx, y = levy))
-  
+
   for (i in seq (along = x)){
     grid [x[i], y[i]] <- i
   }
-  
+
   if (!missing (z)){
     z <- z [grid]
     dim(z) <- dim (grid)
-    dimnames (z) <- dimnames (grid) 
+    dimnames (z) <- dimnames (grid)
   } else {
     z <- NULL
   }
-  
+
   x <- levx[row(grid)]
-  dim (x) <- dim (grid)  
-  
+  dim (x) <- dim (grid)
+
   y <- levy[col(grid)]
-  dim (y) <- dim (grid) 
-  
+  dim (y) <- dim (grid)
+
   list (grid = grid, x = x, y = y, z = z)
-} 
+}
 
 ###-----------------------------------------------------------------------------
 ###
 ### map.identify
-###  
-###  
+###
+###
 
 map.identify <- function (object, x = "x", y = "y", ...){
   validObject (object)
-  
+
   ix <- pmatch (x, colnames (object@data))
   if (is.null (ix))
     stop (paste ("hyperSpec object has no column ", x))
-  
+
   iy <- pmatch (y, colnames (object@data))
   if (is.null (iy))
-    stop (paste ("hyperSpec object has no column ", y)) 
+    stop (paste ("hyperSpec object has no column ", y))
 
-  lattice <- plotmap(object, x, y, ...) 
-  
+  lattice <- plotmap(object, x, y, ...)
+
   print (lattice)
   trellis.focus ()
 #  panel.identify (subscripts = mesh)
-  panel.identify (x = unlist (object[[, ix]]), y = unlist (object[[, iy]])) 
+  panel.identify (x = unlist (object[[, ix]]), y = unlist (object[[, iy]]))
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ### spc.identify
-###  
-###  
+###
+###
 
 spc.identify <- function (x, y = NULL, wavelengths = NULL, ispc = NULL, ...){
   if (is.list (x)) {
-    if (is.null (wavelengths)) 
+    if (is.null (wavelengths))
       wavelengths <- x$wavelengths
-    if (is.null (y)) 
+    if (is.null (y))
       y <- x$y
     x <- x$x
   }
-  
+
   if ((length (x) != length (y)) | (length (x) != length (wavelengths)))
-    stop ("x, y, and wavelength need to have the same length.") 
-  
-  if (is.null (ispc)) 
+    stop ("x, y, and wavelength need to have the same length.")
+
+  if (is.null (ispc))
     ispc <- row (y)
   else
-    ispc <- ispc[row(y)] 
-  
+    ispc <- ispc[row(y)]
+
   i <- identify (x, y,
                  labels = paste (ispc, format (wavelengths, digits = 4),
                    sep = ", "),
                  ...
                  )
-  
-  data.frame (i = ispc [i], wavelengths = wavelengths [i]) 
+
+  data.frame (i = ispc [i], wavelengths = wavelengths [i])
 }
 
 ###-----------------------------------------------------------------------------
 ###
-###  plotc - plot timeseries, concentration, ... 
-###  
-plotc <- function (object, use.c = "c", func = sum, ...,  
+###  plotc - plot timeseries, concentration, ...
+###
+plotc <- function (object, use.c = "c", func = sum, ...,
                    z = NULL, zlab = NULL, add = FALSE,
                    plot.args = list()) {
   validObject (object)
-  
+
   ic <- pmatch (use.c, colnames (object@data))
   if (is.null (ic))
     stop (paste ("hyperSpec object has no column ", use.c))
-  
+
   if (!is.null (z)){
     if (is.numeric (z)){
       z <- rep (z, length.out = nrow (object))
@@ -1847,10 +1847,10 @@ plotc <- function (object, use.c = "c", func = sum, ...,
       if (is.null (zlab))
         zlab <- z
       z <- object@data[, z]
-    } 
+    }
   } else {
     z <- apply (object [[]], 1, func, ...)
-    
+
     if (is.null (zlab)){
       zlab <- as.expression (substitute (func))
       if (nwl (object) == 1 & as.character(zlab) == "sum")
@@ -1859,29 +1859,29 @@ plotc <- function (object, use.c = "c", func = sum, ...,
         zlab <-  paste (zlab, object@label$spc)
     }
   }
-  
+
   plot.args <- c(list (x = unlist (object[[, ic]]),
                        y  = as.numeric (z)),
                  plot.args)
-  
+
   if (is.null (plot.args$xlab)){
-    plot.args$xlab <- object@label[[names(object@data)[ic]]] 
+    plot.args$xlab <- object@label[[names(object@data)[ic]]]
     if (is.null (plot.args$xlab))
-      plot.args$xlab <- use.c  
+      plot.args$xlab <- use.c
   }
-  
+
   if (is.null (plot.args$ylab)){
     plot.args$ylab <- zlab
     if (is.null (plot.args$ylab))
       plot.args$ylab <- z
   }
-  
+
   if (is.null (plot.args$pch))
     plot.args$pch = 20
-  
-  if (is.null(plot.args$type)) 
+
+  if (is.null(plot.args$type))
     plot.args$type = "p"
-  
+
   if (add)
     do.call(lines, plot.args)
   else
@@ -1891,16 +1891,16 @@ plotc <- function (object, use.c = "c", func = sum, ...,
 ###-----------------------------------------------------------------------------
 ###
 ###  plotspc - Plots spectra of hyperSpec object
-###  
+###
 ###  convenient plot interface for plotting spectra
-###  
+###
 
 plotspc <- function  (object,
                       ## what wavelengths to plot
-                      wl.range = NULL, 
+                      wl.range = NULL,
                       wl.index = FALSE,
                       wl.reverse = FALSE,
-                      ## what spectra to plot 
+                      ## what spectra to plot
                       spc.nmax = 50,
                       func = NULL,
                       func.args = list (),
@@ -1918,19 +1918,19 @@ plotspc <- function  (object,
                       ## parameters for filled regions
                       fill = NULL,
                       fill.col = NULL,
-                      border = NA, 
+                      border = NA,
                       title.args = list (),
                       polygon.args = list (),
                       lines.args = list (),
                       zeroline =  list (lty = 2, col = col)#if (all (yoffset == 0)) list (lty = 2) else NULL
                       ){
   force (zeroline) # otherwise stacking messes up colors
-  
+
   validObject (object)
-  
+
   if (nrow (object) == 0)
     stop ("No spectra.")
-  
+
   ## prepare wavelengths
   if (is.null (wl.range)){
     wl.range <- list (seq (along = object@wavelength));
@@ -1939,51 +1939,51 @@ plotspc <- function  (object,
       for (i in seq (along = wl.range))
         wl.range[[i]] <- wl2i (object, wl.range[[i]])
     }
-    
+
     if (!is.list (wl.range))
       wl.range <- list (wl.range)
-    
+
     for (i in seq (along = wl.range))
       if (!is.numeric (wl.range[[i]]) && !is (wl.range [[i]], "formula"))
         stop ("wavelength ranges need to be numeric or formulas.")
-    
+
     for (i in seq (along = wl.range))
       wl.range[[i]] <- unique (wl.range[[i]][!is.na (wl.range[[i]])])
   }
-  
+
   ## xoffset
   if (length (xoffset) == length (wl.range) - 1)
-    xoffset = c (0, xoffset) 
+    xoffset = c (0, xoffset)
   else if (length (xoffset) == 1)
     xoffset = rep (xoffset, times = length (wl.range))
   if (!is.numeric(xoffset) || (length (xoffset) != length (wl.range)))
     stop ("xoffset must be a numeric  vector of the same length as the list with wavenumber ranges.")
-  xoffset <- cumsum (xoffset) 
-  
+  xoffset <- cumsum (xoffset)
+
   ## for indexing wavelength.range is needed unlisted
   u.wl.range <- unlist (wl.range)
-  
+
   ## wavelengths are the numbers to print at the x axis
   wavelengths <- relist (object@wavelength [u.wl.range], wl.range)
-  
+
   ## x are the actual x coordinates
   x <- wavelengths
   for (i in seq_along(wl.range))
     x [[i]] <- x [[i]] - xoffset[i]
-  
-  ## indices into columns of spectra matrix spc 
+
+  ## indices into columns of spectra matrix spc
   ispc <- relist (seq_len (length (u.wl.range)), wl.range)
-  
+
   rm (wl.range)
   spc <- object[[,, u.wl.range, drop = FALSE, wl.index = TRUE]]
   rm (u.wl.range)
-  
-  
+
+
   ## apply function func to spc
   if (!is.null (func)){
     if (!is.function (func))
       stop ("func needs to be a function.");
-    
+
     apply.args <- c (list (X = spc, MARGIN = 2, FUN = func), func.args)
     spc <- matrix (do.call (apply, apply.args),  #apply (spc, 2, func),
                    ncol = ncol (spc)
@@ -1991,31 +1991,31 @@ plotspc <- function  (object,
     if (nrow (spc) == 0)
       stop ("No spectra after func was applied.")
   }
-  
-  
-  
+
+
+
   if (length (yoffset) != nrow (spc)){
     if (length (yoffset) == 1)
       yoffset <- rep (yoffset, nrow (spc))
     else
       stop ("yoffset must be single number.")
   }
-  
+
   if (nrow (spc) > spc.nmax){
     warning (paste ("Number of spectra exceeds spc.nmax. Only the first",
                     spc.nmax, "are plotted."))
     spc <- spc [seq_len (spc.nmax), , drop = FALSE]
     yoffset <- yoffset [seq_len (spc.nmax)]
   }
-  
+
   ## stacked plot
   if (!is.null (stacked)){
     stacked <- stacked.offsets (object, stacked, spc)
     yoffset <- stacked$offsets [stacked$groups]
   }
-  
+
   spc <- sweep (spc, 1, yoffset, "+")
-  
+
   if (! add){
     ## Plot area
     plot.args$x <- unlist (x)
@@ -2026,24 +2026,24 @@ plotspc <- function  (object,
     plot.args$yaxt <- "n"
     plot.args$xlab <- NA     # title is called later
     plot.args$ylab <- NA
-    
+
     if (is.null (plot.args$xlim))
       plot.args$xlim <- range (unlist (x), na.rm = TRUE)
-    
+
     if (is.null (plot.args$ylim))
       plot.args$ylim <- range (spc, na.rm = TRUE)
-    
+
     ## reverse x axis ?
     if (wl.reverse)
       plot.args$xlim <- rev(plot.args$xlim)
-    
+
     do.call (plot, plot.args)
-    
+
     ## reversed x axis ? => would lead to trouble with tick positions
     if (diff (plot.args$xlim) < 0)
       plot.args$xlim <- rev(plot.args$xlim)
-    
-    
+
+
     ## Axes
     ## x-axis labels & ticks
     if (bty %in% c("o", "l", "c", "u", "]") ){
@@ -2051,7 +2051,7 @@ plotspc <- function  (object,
         axis.args$x <- list ()
       if (is.null (axis.args$x$side))
         axis.args$x$side <- 1
-      
+
       ## Tick mark positions
       if (is.null (axis.args$x$at)){
         if (all (xoffset == 0)){
@@ -2060,52 +2060,52 @@ plotspc <- function  (object,
                                     nxticks)
         } else {
           axis.args$x$at <- list ()
-          
+
           part <- apply (sapply (wavelengths, range), 2, diff) /
-            diff (plot.args$xlim) 
-          
-          for (i in seq_along (x))  
+            diff (plot.args$xlim)
+
+          for (i in seq_along (x))
             axis.args$x$at [[i]] <- pretty (wavelengths[[i]],
                                             part [i] * nxticks + 1)
-        }          
+        }
       }
       if (!is.list (axis.args$x$at))
         axis.args$x$at <- rep (list (axis.args$x$at), length (x))
-      
+
       ## calculate cut mark positions and which ticks are to be displayed
       cutmarks <- numeric (length (x) - 1)
-      
+
       for (i in seq_along (axis.args$x$at)[-1]){
         a <- max (x [[i - 1]])
         b <- min (x [[i    ]])
         delta <- b - a
         cutmarks [i - 1] <- a + delta / 2
-        
+
         a <- a + xoffset [i] + delta / 4
         b <- b + xoffset [i] - delta / 4
-        
+
         axis.args$x$at [[i - 1]] <- axis.args$x$at [[i - 1]][axis.args$x$at [[i - 1]] < a]
         axis.args$x$at [[i    ]] <- axis.args$x$at [[i    ]][axis.args$x$at [[i    ]] > b]
       }
-      
-      ## Tick mark labels      
+
+      ## Tick mark labels
       if (is.null (axis.args$x$labels)){
         axis.args$x$labels <- (axis.args$x$at)
         for (i in seq_along (axis.args$x$at))
           axis.args$x$at [[i]] <- axis.args$x$at [[i]] - xoffset [i]
-      } 
-      
+      }
+
       axis.args$x$at <- unlist (axis.args$x$at)
-      axis.args$x$labels <- unlist (axis.args$x$labels) 
-      
+      axis.args$x$labels <- unlist (axis.args$x$labels)
+
       do.call (axis, axis.args$x)
-      
+
       ## plot cut marks for x axis
       for (i in seq_along (cutmarks))
         if (xoffset[i + 1] != 0)
           mtext("//", at = cutmarks [i], side = 1, padj = -1, adj = 0.5)
     }
-    
+
     ## y-axis labels & ticks
     if (bty %in% c("o", "l", "c", "u")){
       if (is.null (axis.args$y))
@@ -2116,42 +2116,41 @@ plotspc <- function  (object,
         axis.args$y$at <- apply (spc[!duplicated (stacked$groups),], 1, min) #apply (spc, 1, min)
         axis.args$y$labels <- stacked$levels #seq_len (nrow (spc))
       }
-      
+
       do.call (axis, axis.args$y)
     }
-    
-    
+
     ## Title
     if (is.null (title.args$xlab))
       title.args$xlab <- list ()
-    if (!is.list (title.args$xlab)) 
+    if (!is.list (title.args$xlab))
       title.args$xlab <- list (xlab = title.args$xlab)
     else
       title.args$xlab$xlab <- I(object@label$.wavelength)
     if (names (title.args$xlab) [1] == "")
       names (title.args$xlab) [1] <- "xlab"
-    
+
     if (is.null (title.args$xlab$line))
       title.args$xlab$line <- 2.5
-    
+
     if (is.null (title.args$ylab))
-      title.args$ylab <- list () 
-    if (!is.list (title.args$ylab)) 
+      title.args$ylab <- list ()
+    if (!is.list (title.args$ylab))
       title.args$ylab <- list (ylab = title.args$ylab)
     else
       title.args$ylab$ylab <- I(object@label$spc)
     if (names (title.args$ylab) [1] == "")
-      names (title.args$ylab) [1] <- "ylab"   
-    
+      names (title.args$ylab) [1] <- "ylab"
+
     titles <- pmatch (c("main", "sub", "xlab", "ylab"), names (title.args))
-    other <- !(seq (along = title.args) %in% titles) 
-    
+    other <- !(seq (along = title.args) %in% titles)
+
     for (i in titles)
       do.call (title, c(title.args[[i]], title.args[other]))
   }
-  
+
   col <- rep (col, each = ceiling (nrow (spc) / length (col)), length.out = nrow (spc))
-  
+
   ## start loop over wavelength ranges
   for (i in seq_along (x)){
     if (!is.null (fill)){
@@ -2163,63 +2162,63 @@ plotspc <- function  (object,
           fill <- c (fill, NA, rev (fill))
         else
           fill <- c (fill, rev (fill))
-      } 
+      }
       if (is.factor (fill))
         fill <- as.numeric (fill)
       else if (!is.numeric (fill))
         stop ("fill must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
-      
+
       groups = unique (fill)
       groups = groups [!is.na (groups)]
-      
+
       if (is.null(polygon.args$x))
         polygon.args <- c(list(x = NULL, y = NULL), polygon.args)
-      
+
       if (is.null (fill.col)){
         fill.col <- character (length (groups))
         for (j in seq_along (groups)){
           dummy <- which (fill == groups [j])
           fill.col [j] <- rgb(t(col2rgb(col[dummy[1]]) / 255) / 3 + 2/3)
         }
-      } else {				
+      } else {
         fill.col <- rep (fill.col, length.out = length (groups))
       }
-      
-      border <- rep (border, length.out = length (groups)) 
-      
+
+      border <- rep (border, length.out = length (groups))
+
       polygon.args$x <- c (x  [[i]]                  , rev (x   [[i]]         ))
       for (j in seq_along (groups)){
         dummy <- which (fill == groups [j])
         polygon.args$y <- c (spc[head(dummy, 1), ispc[[i]]], rev (spc [tail (dummy, 1), ispc[[i]]]))
         polygon.args$col = fill.col [groups [j]]
         polygon.args$border <- border [groups [j]]
-        
+
         do.call (polygon, polygon.args)
       }
     }
-    
-    if (is.null(lines.args$x)) 
+
+    if (is.null(lines.args$x))
       lines.args <- c(list (x = NULL, y = NULL), lines.args)
-    
+
     if (is.null (lines.args$type))
       lines.args$type <- "l"
-    
+
     for (j in seq_len (nrow (spc))){
       lines.args$x <- x[[i]]
       lines.args$y <- spc [j, ispc[[i]]]
       lines.args$col <- col [j]
-      
-      do.call (lines, lines.args) 
+
+      do.call (lines, lines.args)
     }
   }
-  
-  
+
+
   if (! is.null (zeroline)){
     zeroline <- c (list (h = unique (yoffset)), zeroline)
-    
+
     do.call (abline, zeroline)
   }
-  
+
   invisible (list (x = rep (unlist (x), each = nrow (spc)) ,
                    y = spc,
                    wavelengths = rep (unlist (wavelengths), each = nrow (spc))
@@ -2229,36 +2228,36 @@ plotspc <- function  (object,
 ###-----------------------------------------------------------------------------
 ###
 ###  stacked.offsets
-###  
+###
 
 stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
   lvl <- NULL
-  
+
   if (is.character (stacked))
     stacked <- unlist (x [[, stacked]])
   else if (isTRUE (stacked))
     stacked <- seq (nrow (x@data))
-  
+
   if (is.factor (stacked)) {
     lvl <- levels (stacked)
     stacked <- as.numeric (stacked)
   } else if (!is.numeric (stacked))
     stop ("stacked must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
-  
+
   if (is.null (.spc))
     .spc <- x@data$spc
-  
+
   ## using ave would be easier, but it splits the data possibly leading to huge lists.
-  groups <- unique (as.numeric (stacked))  
+  groups <- unique (as.numeric (stacked))
   offset <- matrix (nrow = 2, ncol = length (groups))
   for (i in seq_along (groups))
     offset[, i] <- range (.spc [stacked == groups[i], ], na.rm = TRUE)
-  
-  
+
+
   offset [2,] <- offset[2,] - offset [1,]
   offset <- c(-offset[1,], 0) + c(0, cumsum (offset[2,]))
-  list (offsets = offset [seq (length (groups))], 
-        groups = stacked, 
+  list (offsets = offset [seq (length (groups))],
+        groups = stacked,
         levels = if (is.null (lvl)) stacked else lvl
         )
 }
@@ -2266,7 +2265,7 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
 ###-----------------------------------------------------------------------------
 ###
 ###  plot methods
-###  
+###
 
 
 ### use plotspc as default plot function
@@ -2285,16 +2284,16 @@ setMethod ("plot",
            ##    'spcmeansd'  ... mean spectrum +- 1 standard deviation
            ##    'spcprctile' ... median spectrum , 16th and 84th percentile
            ##    'spcprctl5'  ... spcprctile plus 5th and 95th percentile
-           
+
            signature (x = "hyperSpec", y = "character"),
            function (x, y, ...){
              dots <- list(...)          # to allow optional argument checks
-             
+
              if (missing (y)){
                stop ("shouldnt be")
                y = "spc"
              }
-             
+
              switch (tolower (y),
                      spc = {
                        plotspc (x, ...)
@@ -2307,7 +2306,7 @@ setMethod ("plot",
                          dots$func.args$na.rm <- TRUE
                        dots$object <- x
                        dots$func <- mean_pm_sd
-                       do.call (plotspc, dots) 
+                       do.call (plotspc, dots)
                      },
                      spcprctile = {
                        dots$fill <- c (1, NA, 1)
@@ -2319,11 +2318,11 @@ setMethod ("plot",
                          dots$func.args$probs = c (0.16, 0.5, 0.84)
                        dots$object <- x
                        dots$func <- quantile
-                       do.call (plotspc, dots) 
+                       do.call (plotspc, dots)
                      },
                      spcprctl5 = {
                        if (is.null (dots$fill.col)) {
-                         dots$fill.col <- c(rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75), 
+                         dots$fill.col <- c(rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75),
                                             rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .50))
                        }
                        dots$fill <-  c(1, 2, 3, 2, 1)
@@ -2335,7 +2334,7 @@ setMethod ("plot",
                          dots$func.args$probs = c (0.05, 0.16, 0.5, 0.84, 0.95)
                        dots$object <- x
                        dots$func <- quantile
-                       do.call (plotspc, dots) 
+                       do.call (plotspc, dots)
                      },
                      map = plotmap (x, ...),
                      c = plotc (x, ...),
@@ -2346,12 +2345,12 @@ setMethod ("plot",
                        do.call (plotc, dots)
                      },
                      depth = {
-                       dots <- list (object = x, ...) 
+                       dots <- list (object = x, ...)
                        if (is.null (dots$use.c))
                          dots$use.c = "z"
                        do.call (plotc, dots)
                      },
-                     stop (paste ("y = ", y, "unknown.", collapse = " ")) 
+                     stop (paste ("y = ", y, "unknown.", collapse = " "))
                      )
            }
            )
@@ -2360,17 +2359,17 @@ setMethod ("plot",
 ### ****************************************************************************
 ###
 ###  read & write hyperSpec objects
-###  
+###
 ### ****************************************************************************
 
 ###-----------------------------------------------------------------------------
 ###
 ###  read.txt.long: was .Renishaw - import Raman measurements from Renishaw .txt file
-###  
-###  Renishaw .wxd files are converted to .txt ASCII files by their batch converter. 
+###
+###  Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
 ###  Format:
 ###  (y x) wl int
-###  
+###
 
 read.txt.long <- function (file = stop ("filename is required"),
                            cols = list (
@@ -2379,7 +2378,7 @@ read.txt.long <- function (file = stop ("filename is required"),
                            header = TRUE,
                            ...){
   txtfile <- read.table (file = file, header = header, ...)
-  
+
   if (header){
     cln <- match (colnames (txtfile), names (cols))
     cln <- cols[cln]
@@ -2393,36 +2392,36 @@ read.txt.long <- function (file = stop ("filename is required"),
       cols <- c (character (ncol (txtfile) - 2), cols)
     }
   }
-  
-  
+
+
   if (is.na (match ("spc", names (cols))))
     stop ("cols$spc must exist.")
-  
+
   wavelength <- match ("wavelength", names (cols))
   if (is.na (wavelength))
     stop ("cols$wavelength must exist.")
   else
     names (cols) [wavelength] <- ".wavelength"
-  
+
   colnames (txtfile) <- names (cols)
-  
+
                                         # wavelength axis
-  wavelength <- rep (TRUE,  nrow (txtfile))				
+  wavelength <- rep (TRUE,  nrow (txtfile))
   for (i in which (! colnames (txtfile) %in% c(".wavelength", "spc")))
     wavelength [wavelength] <- txtfile [wavelength, i] == txtfile [1, i]
-  
+
   wavelength <- txtfile$.wavelength [wavelength]
-  
+
   spc <- as.matrix (unstack (txtfile, form = spc ~ .wavelength))
   if ((nrow (spc)  == length (wavelength)) & (ncol (spc) != length (wavelength)))
-    spc <- t (spc) 
-  
+    spc <- t (spc)
+
   colnames (spc) <- levels (txtfile$.wavelength)
-  
+
   txtfile <- txtfile [txtfile$.wavelength == txtfile$.wavelength[1], ]
   txtfile$.wavelength <- NULL
   txtfile$spc <- I (spc)
-  
+
   new ("hyperSpec",
        wavelength = wavelength,
        data = txtfile,
@@ -2431,43 +2430,43 @@ read.txt.long <- function (file = stop ("filename is required"),
          short = "read.txt.long",
          long = list (file = file, cols = I (cols), ...)
          )
-       ) 
+       )
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ###  read.txt.wide
-###  
+###
 ###  Format:
 ###  x y ... int (wl1)  int (wl2) ... int (wl p) z ...
-###  
+###
 read.txt.wide <- function (file = stop ("filename is required"),
                            cols = list (
                              spc = "I / a.u.",
                              .wavelength = expression (lambda / nm)),
-                           check.names = FALSE, 
+                           check.names = FALSE,
                            ...){
   txtfile <- read.table (file = file, ..., check.names = FALSE)
-  
+
   .wavelength <- match (".wavelength", names (cols))
   if (is.na (.wavelength))
     cols <- c (cols, .wavelength = expression (lambda / nm))
-  else  
+  else
     if (.wavelength != length (cols)) ## .wavelength should be at the end of cols
       cols <- cols [c (seq_along (cols)[-.wavelength], .wavelength)]
-  
+
                                         # columns containing the spectra
   spc <- match ("spc", names (cols))
   if (is.na (spc))
     stop ("cols$spc must exist.")
-  
+
   spc <- 0 : (ncol (txtfile) - length (cols) + 1) + spc
-  
+
   spc.data <- as.matrix (txtfile[, spc])
-  txtfile$spc <- I (spc.data)	
+  txtfile$spc <- I (spc.data)
   txtfile <- txtfile [, -spc, drop = FALSE]
-  
-  
+
+
   new ("hyperSpec",
        data = txtfile,
        label = cols,
@@ -2475,20 +2474,20 @@ read.txt.wide <- function (file = stop ("filename is required"),
          short = "read.txt.long",
          long = list (file = file, cols = I (cols), ...)
          )
-       ) 
+       )
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ### scan.txt.Renishaw - import Renishaw Raman ASCII files
-###  
+###
 ### In general this is a long ASCII format. But this function offers chunk-wise
 ### reading to save memory.
-### 
-scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc", 
+###
+scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc",
                                nlines = 0, nspc = NULL, ...){
   cols <- switch (data,
-                  spc = NULL,   
+                  spc = NULL,
                   xyspc = list (y = expression ("/" (y, mu * m)), 
                     x = expression ("/" (x, mu * m))), 
                   zspc = ,
@@ -2497,33 +2496,33 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
                   stop ("unknown format for Renishaw .txt files.")
                   )
   cols <- c  (cols, list (.wavelength = expression (Delta * tilde(nu) / cm^-1) ,
-                          spc = "I / a.u."))	
-  
+                          spc = "I / a.u."))
+
   first <- scan(file, nlines = 1, quiet = TRUE)
   ncol <- length (first)
-  
+
   if (ncol == 0)
     return (new ("hyperSpec"))
-  
+
   if (ncol != length (cols))
     stop (paste ("File has", ncol, "columns, while 'cols' gives", length (cols)))
-  
+
   file <- file (file, "r")
   on.exit(close(file))
-  
+
   fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
-  
+
                                         # wavelength axis
-  wl <- rep (TRUE,  nrow (fbuf))				
+  wl <- rep (TRUE,  nrow (fbuf))
   for (i in seq_len (ncol (fbuf) - 2))
     wl [wl] <- fbuf [wl, i] == fbuf [1, i]
-  
+
   wl <- fbuf[wl, ncol - 1]
-  
+
   ## if the file is to be read in chunks
-  ## try to find out how many lines it has 
+  ## try to find out how many lines it has
   if (is.null (nspc))
-    if (nlines > 0){ 
+    if (nlines > 0){
       nspc <- wc (summary(file)$description, "lines")
       if (is.null (nspc))
         stop ("failed guessing nspc.")
@@ -2535,35 +2534,35 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
     } else {
       nspc <- nrow (fbuf) / length (wl)
     }
-  
+
   data <- matrix (NA, ncol = ncol - 2, nrow = nspc)
-  colnames (data) <- head (names (cols), -2) 
+  colnames (data) <- head (names (cols), -2)
   pos.data <- 0
-  
+
   spc <- numeric (nspc * length (wl))
   pos.spc <- 0
-  
+
   while (length (fbuf > 0)){
     if (nlines > 0) cat (".")
     spc [pos.spc + seq_len (nrow (fbuf))] <- fbuf [, ncol]
     pos.spc <- pos.spc + nrow (fbuf)
-    
+
     dummy <- fbuf [fbuf[, ncol - 1] == wl [1], seq_len (ncol - 2), drop = FALSE]
-    
+
     data [pos.data + seq_len (nrow (dummy)), ] <- dummy
     pos.data <- pos.data + nrow (dummy)
-    
+
     fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
-    
+
     if (length (fbuf > 0) & ! all(unique (fbuf[, ncol - 1]) %in% wl))
       stop ("Wavelengths do not correspond to that of the other chunks. Is the size of the first chunk large enough to cover a complete spectrum?")
   }
   if (nlines > 0) cat ("\n")
-  
+
   spc <- matrix (spc, ncol = length (wl), nrow = nspc, byrow = TRUE)
-  
-  orderwl (new ("hyperSpec", spc = spc, data = as.data.frame (data), 
-                wavelength = wl, label = cols, 
+
+  orderwl (new ("hyperSpec", spc = spc, data = as.data.frame (data),
+                wavelength = wl, label = cols,
                 log = list (short = "scan.txt.Renishaw",
                   long = list (file = file, cols = I (cols)), ...)
                 )
@@ -2574,11 +2573,11 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 ###-----------------------------------------------------------------------------
 ###
 ### write.txt.wide
-###  
+###
 ###
 write.txt.wide <- function (object,
                             file = stop ("filename required"),
-                            cols = NULL, 
+                            cols = NULL,
                             quote = FALSE, sep = "\t",
                             row.names = FALSE,
                             col.names = TRUE,
@@ -2587,13 +2586,13 @@ write.txt.wide <- function (object,
                             append = FALSE,
                             ...){
   validObject (object)
-  
+
   if (! is.null (cols))
     object <- object [, cols]
-  
+
   if (col.names){
     col.spc <- match ("spc", colnames (object@data))
-    
+
     if (col.labels){
       cln <- match (colnames (object@data), names (object@label))
       cln[!is.na (cln)] <- object@label [cln[!is.na(cln)]]
@@ -2603,27 +2602,27 @@ write.txt.wide <- function (object,
     } else {
       cln <- colnames (object@data)
     }
-    
+
     i <- seq_along (cln)
-    
+
     if (header.lines == 1){
       write.table (matrix (c(if (row.names) "" else NULL,
                              cln [i < col.spc],
                              object@wavelength,
                              cln [i > col.spc]
                              ), nrow = 1),
-                   file = file, append = append, quote = quote, sep = sep, 
+                   file = file, append = append, quote = quote, sep = sep,
                    row.names = FALSE, col.names = FALSE)
       append = TRUE
     } else if (header.lines == 2) {
-      ## 1st line          
+      ## 1st line
       write.table (matrix (c (
-                              if (row.names) "" else NULL, 
+                              if (row.names) "" else NULL,
                               cln [i < col.spc],
                               if (col.labels) cln [col.spc] else "",
                               rep ("", length (object@wavelength) - 1),
                               cln [i > col.spc]), nrow = 1),
-                   file = file, append = append, quote = quote, sep = sep, 
+                   file = file, append = append, quote = quote, sep = sep,
                    row.names = FALSE, col.names = FALSE)
       append = TRUE
       ## 2nd line
@@ -2634,23 +2633,23 @@ write.txt.wide <- function (object,
                               object@wavelength,
                               rep ("", sum (i > col.spc))
                               ), nrow = 1),
-                   file = file, append = append, quote, sep, 
+                   file = file, append = append, quote, sep,
                    row.names = FALSE, col.names = FALSE)
-      
+
     } else {
       stop ("Only 1 or 2 line headers supported.")
     }
-    
+
   }
-  
+
   write.table (object@data, file = file, append = append, quote = quote, sep = sep,
-               row.names = row.names, col.names = FALSE, ...) 
-} 
+               row.names = row.names, col.names = FALSE, ...)
+}
 
 ###-----------------------------------------------------------------------------
 ###
 ### write.txt.long
-###  
+###
 ###
 write.txt.long <- function (object,
                             file = stop ("filename required"),
@@ -2664,18 +2663,18 @@ write.txt.long <- function (object,
                             append = FALSE,
                             ...){
   validObject (object)
-  
+
   col.spc <- match ("spc", colnames (object@data))
 #  i <- seq_len (ncol (object@data))
-  
+
 #  X <- array2df (object@data$spc, levels = list (n = seq_len (nrow (object)), .wavelength = object@wavelength),
 #                 label.x = "spc")
 #  X$.wavelength <- as.numeric(levels(X$.wavelength))[as.integer(X$.wavelength)]
-  
+
 #  X <- cbind (object@data[X$n, -col.spc, drop = FALSE], X[, c(".wavelength", "spc", "n")])
 
   X <- as.long.df (object, rownames = TRUE)
-  
+
   if (!is.null (order)){
     if (is.character (order)) {
       dummy <- match (order, colnames (X))
@@ -2684,32 +2683,32 @@ write.txt.long <- function (object,
               paste (order [is.na (dummy)], collapse = ", "))
       order <- dummy
       }
-    
-    
+
+
     if (length (decreasing) < length (order))
       decreasing <- rep (decreasing, length.out = length (order))
-    
+
     order.data <- as.list (X [, order, drop = FALSE])
-    
+
     for (i in seq_along (order)){
       if (is.factor(order.data [[i]]))
         order.data [[i]] <- rank (order.data [[i]], na.last = na.last | is.na (na.last))
-      
+
       if (decreasing [i])
         order.data [[i]] <- - order.data [[i]]
     }
-    
+
     X <- X[do.call ("order",
                     c (order.data, na.last = na.last | is.na (na.last),	decreasing = FALSE)
                     ), ]
   }
-  
+
   if (is.na (na.last))
     X <- X[! is.na (X$spc), ]
 
   if (!is.null (cols))
     X <- X [, cols, drop = FALSE]
-      
+
   if (!row.names)
     X$.rownames <- NULL
   else
@@ -2725,7 +2724,7 @@ write.txt.long <- function (object,
       cln <- colnames (X)
     }
 
-    
+
 #    cln <- c(if (row.names) "row" else NULL,
 #             cln #[i <= col.spc],
 #                                        #if (col.labels) as.character (object@label$.wavelength) else "wavelength",
@@ -2736,15 +2735,15 @@ write.txt.long <- function (object,
                  quote = quote, sep = sep, row.names = FALSE, col.names = FALSE)
     append = TRUE
   }
-  
+
   write.table (X, file, append = append, quote = quote, sep = sep,
-               row.names = FALSE, col.names = FALSE, ...) 
+               row.names = FALSE, col.names = FALSE, ...)
 }
 
 ### ****************************************************************************
 ###
 ###  spectra-related functions
-###  
+###
 ### ****************************************************************************
 
 
@@ -2756,30 +2755,30 @@ spc.bin <- function (spc,
                      by = stop ("reduction factor needed"), na.rm = TRUE,
                      ...) {
   validObject (spc)
-  
+
   long.description <- list (by = deparse (by), na.rm = na.rm)
-  
+
   n <- ceiling (nwl (spc) / by)
-  
-  small <- nwl (spc) %% by 
-  if (small != 0) 
+
+  small <- nwl (spc) %% by
+  if (small != 0)
     warning (paste (c("Last data point averages only ", small, " points.")))
-  
-  bin <- rep (seq_len (n), each = by, length.out = nwl (spc))	
-  
+
+  bin <- rep (seq_len (n), each = by, length.out = nwl (spc))
+
   na <- is.na (spc@data$spc)
-  
+
   if ((na.rm > 0) && any (na)) {
-    if (na.rm == 1) { 
+    if (na.rm == 1) {
       na <- apply (!na, 1, tapply, bin, sum, na.rm = FALSE)
       spc@data$spc <- t (apply (spc@data$spc, 1, tapply, bin, sum, na.rm = TRUE) / na)
     } else { # faster for small numbers of NA
       dummy <- t (apply (spc@data$spc, 1, tapply, bin, sum, na.rm = FALSE))
       dummy <- sweep (dummy, 2, rle (bin)$lengths, "/")
-      
+
       na <- which (is.na (dummy), arr.ind = TRUE)
       bin <- split (seq_len (ncol (spc@data$spc)), bin)
-      
+
       for (i in seq_len (nrow (na))){
         dummy [na [i, 1], na [i, 2]] <- mean (spc@data$spc [na [i, 1], bin [[na[i, 2]]]], na.rm = TRUE)
       }
@@ -2789,50 +2788,50 @@ spc.bin <- function (spc,
     spc@data$spc <- t (apply (spc@data$spc, 1, tapply, bin, sum, na.rm = FALSE))
     spc@data$spc <- sweep (spc@data$spc, 2, rle (bin)$lengths, "/")
   }
-  
+
   .wl (spc) <- as.numeric (tapply (spc@wavelength, bin, mean, na.rm = na.rm > 0))
-  
+
   spc@log <- .logentry (spc,
                        long = long.description,
                        ...            # date and user?
                        )
-  
+
   validObject (spc)
-  
+
   spc
 }
 ###-----------------------------------------------------------------------------
 ###
 ###  spc.fit.poly
-###  
+###
 ###
 spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1, short = NULL, user = NULL, date = NULL){
   validObject (fit.to)
   validObject (apply.to)
-  
+
   x <- fit.to@wavelength
-  x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x 
+  x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
   p <- apply (fit.to, 1, function (y, x){qr.solve (x, y)}, x,
               short = if (is.null (short)) "spc.fit.poly: coefficients" else short,
               user = user, date = date)
-  
+
   if (is.null (apply.to)){
     colnames (p@data$spc) <- paste ("x^", 0 : poly.order, sep="")
-    
+
     p
   } else {
     wl <- apply.to@wavelength;
     x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
     apply.to@data$spc <- I (t (apply (p[[]], 1, function (p, x) {x %*% p}, x)))
-    apply.to@log <- .logentry (apply.to, 		
+    apply.to@log <- .logentry (apply.to,
                               short = if (is.null (short)) "spc.fit.poly: spectra" else short,
-                              long = list (apply = match.call()$apply, poly.order = poly.order), 
+                              long = list (apply = match.call()$apply, poly.order = poly.order),
                               user = user, date = date)
-    
-    
+
+
     .wl(apply.to) <- wl
     colnames (apply.to@data$spc) <- format (wl, digits = 4)
-    
+
     apply.to
   }
 }
@@ -2842,36 +2841,36 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1, short = NULL,
 ###-----------------------------------------------------------------------------
 ###
 ###  spc.fit.poly.below
-###  
+###
 ###
 
 spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.min = NULL,
                                 noise = 0, short = NULL, user = NULL, date = NULL){
-  
+
   validObject (fit.to)
   validObject (apply.to)
-  
+
   if (is.null (npts.min)){
     npts.min <- max (round (nwl(fit.to) * 0.05), 3 * (poly.order + 1))
-    cat ("Fitting with npts.min = ",  npts.min, "\n") 
+    cat ("Fitting with npts.min = ",  npts.min, "\n")
   } else  if (npts.min <= poly.order){
     npts.min <- poly.order + 1
     warning (paste ("npts.min too small: adjusted to", npts.min))
   }
-  
+
   if (length (noise) == 1)
     noise <- rep (noise, nrow (fit.to))
-  
+
   vdm <- outer(fit.to@wavelength, 0 : poly.order, "^")
   y <- t(fit.to [[]])
-  
+
   p <- matrix (nrow = nrow(fit.to) , ncol = poly.order + 1)
   for (i in seq_len (nrow (fit.to))){
     use.old <- logical (nwl (fit.to))
     use <- !use.old
-    
+
     repeat {
-      p[i,] <- qr.solve (vdm[use,], y[use, i]) 
+      p[i,] <- qr.solve (vdm[use,], y[use, i])
       bl <- vdm %*% p [i,]
       use.old <- use
       use <- y[, i] < bl + noise [i]
@@ -2883,23 +2882,23 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
     fit.to@data$spc <- p
     .wl (fit.to) <- 0 : poly.order
     colnames (fit.to@data$spc) <- paste ("x^", 0 : poly.order, sep="")
-    fit.to@log <- .logentry (fit.to, short = if (is.null (short)) "spc.fit.poly.below: coefficients" else short, 
+    fit.to@log <- .logentry (fit.to, short = if (is.null (short)) "spc.fit.poly.below: coefficients" else short,
                             long = list (apply = NULL, poly.order = poly.order,
-                              npts.min = npts.min, noise = noise), 
+                              npts.min = npts.min, noise = noise),
                             user = user, date = date)
     fit.to
   } else {
     x <- apply.to@wavelength
-    
+
     vdm <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
-    
+
     apply.to@data$spc <- I (t (apply (p, 1, function (p, x) {x %*% p}, vdm)))
-    apply.to@log <- .logentry (apply.to, 		
+    apply.to@log <- .logentry (apply.to,
                               short = if (is.null (short)) "spc.fit.poly.below: spectra" else short,
                               long = list (apply = match.call()$apply, poly.order = poly.order,
-                                npts.min = npts.min, noise = noise), 
+                                npts.min = npts.min, noise = noise),
                               user = user, date = date)
-    
+
     .wl(apply.to) <- x
     colnames (apply.to@data$spc) <- format (x, digits = 4)
     apply.to
@@ -2909,93 +2908,93 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
 ###-----------------------------------------------------------------------------
 ###
 ###  spc.loess
-###  
-###  
-spc.loess <- function (spc, newx, ..., 
+###
+###
+spc.loess <- function (spc, newx, ...,
                        short = NULL, user = NULL, date = NULL){
-  validObject (spc)	
-  
+  validObject (spc)
+
   if (any (newx < min (spc@wavelength)) || any (newx > max (spc@wavelength)))
     warning ("newx outside spectral range of spc. NAs will be generated.")
-  
+
   dots <- list (...)
   if (is.null (dots$enp.target))
     dots$enp.target <- nwl (spc) / 4
-  
+
   if (is.null (dots$surface))
     dots$surface <- "direct"
-  
-  loess <- apply (t (spc[[]]), 2, 
+
+  loess <- apply (t (spc[[]]), 2,
                   function (y, x){
-                    do.call (loess, c(y ~ x, dots))	
-                  }, 
+                    do.call (loess, c(y ~ x, dots))
+                  },
                   spc@wavelength)
-  
+
   spc@data$spc <- t (sapply (loess, predict, newx))
   .wl(spc) <- newx
-  
-  spc@log <- .logentry (spc, 		
+
+  spc@log <- .logentry (spc,
                        short = if (is.null (short)) "spc.loess" else short,
-                       long = list (newx = newx, enp.target = dots$enp.target,  ...),  
+                       long = list (newx = newx, enp.target = dots$enp.target,  ...),
                        user = user, date = date)
-  
+
   spc
 }
 
 ### ****************************************************************************
 ###
 ###  some more convenient functions, not operating on hyperSpec objects
-###  
+###
 ### ****************************************************************************
 
 ###-----------------------------------------------------------------------------
 ###
 ###  vec2array -- vector index to array index conversion
-###  
-###  
+###
+###
 
 vec2array <- function (ivec, dim) {
   ndim <- length (dim)
   pdim <- c(1, cumprod (dim))
-  
+
   iarr <- matrix(NA, nrow = length(ivec), ncol = ndim) # matrix for the array indices
   colnames (iarr) <- letters[8 + seq_len (ndim)]       # i, j, k, ...
-  
+
   ivec <- (ivec - 1)
   for (j in seq_len (ndim))
     iarr [, j] <- (ivec %% pdim [j + 1]) / pdim [j]
-  
+
   1 + floor(iarr)
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ###  array2vec -- array index to vector index conversion
-###  
-###  
+###
+###
 
 array2vec <- function (iarr, dim){
   if (!is.matrix (iarr))
     dim (iarr) <- c(1, length (iarr))
-  
+
   if (ncol (iarr) != length (dim))
     stop ("Number of columns in iarr and number of dimensions differ.")
-  
+
   if (any (sweep (iarr, 2, dim) > 0))
     stop ("array index > dim")
-  
+
   pdim <- c(1, cumprod (dim [- length (dim)]))
   iarr <- iarr - 1
-  
+
   colSums(apply (iarr, 1, "*", pdim)) + 1
-} 
+}
 
 ###-----------------------------------------------------------------------------
 ###
 ###  array2df -- "explodes" a mulitdimensional array into a long form matrix or
 ###              data.frame. Compare stack, unstack.
-###  
-###  
+###
+###
 
 array2df <- function (x, levels = rep (NA, length (dims)),
                       matrix = FALSE,
@@ -3004,32 +3003,32 @@ array2df <- function (x, levels = rep (NA, length (dims)),
   cprod <- c(1, cumprod (dims))
   rprod <- c(rev (cumprod (rev (dims))), 1)[-1]
   idim  <- seq_len (length (dims)) [! sapply (levels, is.null)]
-  
+
   df <- matrix (x, nrow = length (x), ncol = length (idim) + 1)
-  
+
   for (d in seq (along = idim))
     df [, d + 1] <-  rep (seq_len (dims [idim [d]]), each = cprod [idim [d]], times = rprod [idim [d]])
-  
+
   if(!matrix){
     df <- as.data.frame (df)
-    
+
     for (d in seq (along = idim)){
       if (! all (is.na(levels[[idim [d]]]))){
         df[, d + 1] <- factor (df[, d + 1], labels = levels [[idim [d]]])
       }
     }
-    
+
   }
   colnames (df) <- c (label.x, names (levels)[idim])
-  
+
   df
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ###  matlab.palette
-###  
-###  
+###
+###
 
 matlab.palette <- function (n = 100) {
   rev (rainbow (n, start = 0, end = 4/6))
@@ -3038,32 +3037,32 @@ matlab.palette <- function (n = 100) {
 ###-----------------------------------------------------------------------------
 ###
 ###  matlab.dark.palette
-###  
-###  
+###
+###
 
 matlab.dark.palette <- function (n = 100) {
   pal <- rev (rainbow (n, start = 0, end = 4/6))
   pal <- col2rgb(pal)
   pal ["green",] <- pal ["green",] / 2
-  
+
   rgb (t (pal)/255)
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ### pearson.dist
-###  
-### 
+###
+###
 
 pearson.dist <- function (x) {
-  as.dist (0.5 - cor (t(x)) / 2) 
+  as.dist (0.5 - cor (t(x)) / 2)
 }
 
 ###-----------------------------------------------------------------------------
 ###
 ### mean_pm_sd
-###  
-###  
+###
+###
 
 mean_pm_sd <- function (x, na.rm = TRUE){
   m <- mean (x, na.rm = na.rm)
@@ -3074,52 +3073,52 @@ mean_pm_sd <- function (x, na.rm = TRUE){
 ###-----------------------------------------------------------------------------
 ###
 ### mean_sd
-###  
-###  
+###
+###
 
 mean_sd <- function (x, na.rm = TRUE)
   c(mean (x, na.rm = na.rm),  sd (x, na.rm = na.rm))
 
 
 
-                                        #' word count 
-                                        #' 
+                                        #' word count
+                                        #'
                                         #' wc uses the system command wc
-                                        #' 
+                                        #'
                                         #' @param file the file name or pattern
-                                        #' @param flags the parameters to count, character vector with the long form of the parameters 
+                                        #' @param flags the parameters to count, character vector with the long form of the parameters
                                         #' @return data.frame with the counts and file names, or \code{NULL} if wc is not available
                                         #' @author cb
                                         #' @export
 ###-----------------------------------------------------------------------------
 ###
 ### wc - word count
-###  
-###  
+###
+###
 
 wc <- function (file, flags = c("lines", "words", "bytes")){
   if (length (system ("wc --help", intern = TRUE)) == 0)
     return (NULL)
-  
+
   wc <- paste ("wc", paste ("--", flags, sep = "", collapse = ", "), file)
   wc <- read.table(pipe (wc))
   colnames (wc) <- c(flags, "file")
   wc
-} 
+}
 
 ###-----------------------------------------------------------------------------
 ###
 ### split.line - split line into list of key-value pairs
-###  
-###  
+###
+###
 
 split.line <- function (x, separator, trim.blank = TRUE) {
   dummy <- regexpr (separator, x)
-  if (dummy == -1)
-    stop ("line without separator", separator)
-  
-  key <- substring (x, 1, dummy - 1)
-  value <- substring (x, dummy + 1, )
+  #if (length (dummy) == 1 && dummy [[1]] == -1)
+  #  warning ("line without separator", separator)
+
+  key   <- substr (x, 1, dummy - 1)
+  value <- substr (x, dummy + 1, nchar (x))
 
   if (trim.blank){
     blank.pattern <- "^[[:blank:]]*([^[:blank:]]+.*[^[:blank:]]+)[[:blank:]]*$"
@@ -3131,4 +3130,38 @@ split.line <- function (x, separator, trim.blank = TRUE) {
   names (value) <- key
 
   value
+}
+
+###-----------------------------------------------------------------------------
+###
+### split.string - split string at pattern
+###
+###
+
+split.string <- function (x, separator, trim.blank = TRUE, remove.empty = TRUE) {
+  pos <- gregexpr (separator, x)
+  if (length (pos) == 1 && pos [[1]] == -1)
+    return (x)
+
+  pos <- pos [[1]]
+
+  pos <- matrix (c (1, pos + attr (pos, "match.length"),
+                    pos - 1, nchar (x)),
+                 ncol = 2)
+
+  if (pos [nrow (pos), 1] > nchar (x))
+    pos <- pos [- nrow (pos), ]
+
+  x <- apply (pos, 1, function (p, x) substr (x, p [1], p [2]), x)
+
+  if (trim.blank){
+    blank.pattern <- "^[[:blank:]]*([^[:blank:]]+.*[^[:blank:]]+)[[:blank:]]*$"
+    x <- sub (blank.pattern, "\\1", x)
+  }
+
+  if (remove.empty){
+    x <- x [sapply (x, nchar) > 0]
+  }
+
+  x
 }
