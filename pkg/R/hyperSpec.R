@@ -998,30 +998,31 @@ setMethod ("Compare", signature (e1 = "matrix", e2 = "hyperSpec"), .compy)
 ###
 
 setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),
-           function (target, current, ..., check.column.order = FALSE, check.label = FALSE, check.log = FALSE){
+           function (target, current, check.attributes = FALSE, check.names = FALSE, ...,
+                     check.column.order = FALSE, check.label = FALSE, check.log = FALSE){
              validObject (target)
              validObject (current)
 
              result <- character (0)
 
-             cmp <- all.equal (target@wavelength, current@wavelength, ...)
+             cmp <- all.equal (target@wavelength, current@wavelength, check.attributes, check.names, ...)
              if (! isTRUE (cmp)) result <- c("@wavelength:", cmp)
 
              if (check.column.order)
-               cmp <- all.equal (target@data, current@data, ...)
+               cmp <- all.equal (target@data, current@data, check.attributes, ...)
              else
                cmp <- all.equal ( target@data[order (colnames ( target@data))],
-                                 current@data[order (colnames (current@data))], ...)
+                                 current@data[order (colnames (current@data))], check.attributes, check.names, ...)
              if (! isTRUE (cmp)) result <- c (result, "@data:", cmp)
 
              if (check.label){
                cmp <- all.equal (target@label[order (names (target@label))],
-                                 current@label[order (names (current@label))], ...)
+                                 current@label[order (names (current@label))], check.attributes, check.names, ...)
                if (! isTRUE (cmp)) result <- c (result, "@label:", cmp)
              }
 
              if (check.log) {
-               cmp <- all.equal (target@log, current@log, ...)
+               cmp <- all.equal (target@log, current@log, check.attributes, check.names, ...)
                if (! isTRUE (cmp)) result <- c (result, "@log:", cmp)
              }
 
@@ -1248,7 +1249,7 @@ wl2i <- function (x, wavelength = stop ("wavelengths are required.")){
 
   .conv.range <- function (range){
     if (is.numeric (range)){
-      .getindex (x, range, rule = 1)
+      .getindex (x, range, extrapolate = FALSE)
     } else
     eval (range)
   }
@@ -1275,14 +1276,22 @@ i2wl <- function (x, i){
 ###
 ###
 ## does the acual work of looking up the index
-## rule = 2 returns first resp. last index for wavelength outside hyperSpec@wavelength.
+## extrapolate = TRUE returns first resp. last index for wavelength outside hyperSpec@wavelength.
+## extrapolate = TRUE returns NA in this case
 
-.getindex <- function (x, wavelength, rule = 2){
-  if (length (x@wavelength) == 1)
-    1
-  else
-    round (approx (x = x@wavelength, y = seq_along(x@wavelength),
-                   xout = wavelength, rule = rule)$y)
+.getindex <- function (x, wavelength, extrapolate = TRUE){
+    if (! extrapolate) {
+        wavelength [wavelength < min (x@wavelength)] <- NA
+        wavelength [wavelength > max (x@wavelength)] <- NA
+    }
+    dummy <- wavelength [! is.na (wavelength)]
+    if (length (dummy) > 0) {
+        dummy <- sapply (dummy,
+                         function (x, y) which.min (abs (x  - y)),
+                         x@wavelength)
+        wavelength [! is.na (wavelength)] <- dummy
+    }
+    wavelength
 }
 
 ###-----------------------------------------------------------------------------
