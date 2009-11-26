@@ -108,6 +108,14 @@ setMethod ("initialize", "hyperSpec",
                .Object@label <- vector ("list", length (colnames (.Object@data)) + 1)
                names (.Object@label) <- c(".wavelength", colnames (.Object@data))
              } else {
+               label <- lapply (label, function (x){
+                 if (is.language (x) && ! is.expression (x))
+                   class (x) <- "expression"
+                 else if (is.character (x))
+                   x <- as.expression (x)
+                 x
+               })
+               label <- as.list (label)
                .Object@label <- label
                long$label <- label
              }
@@ -373,9 +381,14 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
 ###
 .paste.row <- function (x, label = "", name = "", ins = 0, i = NULL, val = FALSE, range = TRUE,
                         digits = getOption ("digits"), max.print = 5, shorten.to = c (2,1)){
-  if (is.null (name)) name = ""
-  if (is.null (label)) label = ""
+  if (is.null (name))
+    name <- ""
 
+  if (is.null (label))
+    label <- ""
+  else
+    label <- paste (as.character (label), collapse = " ")
+  
   dummy <- ""
 
   if (val){
@@ -1510,7 +1523,7 @@ setMethod ("aggregate", "hyperSpec", function (x,
   }
 
   data  <- x@data[rep (1, out.rows), , drop = FALSE] # preallocate memory
-  data <- cbind (x@data, .aggregate = NA)
+  data <- cbind (data, .aggregate = NA)
   col.aggregate <- ncol (data)
 
 
@@ -1837,6 +1850,7 @@ spc.identify <- function (x, y = NULL, wavelengths = NULL, ispc = NULL, ...){
 plotc <- function (object, use.c = "c", func = sum, ...,
                    z = NULL, zlab = NULL, add = FALSE,
                    plot.args = list()) {
+  .is.hy (object)
   validObject (object)
 
   ic <- pmatch (use.c, colnames (object@data))
@@ -2459,7 +2473,7 @@ read.txt.wide <- function (file = stop ("filename is required"),
 
   .wavelength <- match (".wavelength", names (cols))
   if (is.na (.wavelength))
-    cols <- c (cols, .wavelength = expression (lambda / nm))
+    cols <- as.list (c (cols, .wavelength = expression (lambda / nm)))
   else
     if (.wavelength != length (cols)) ## .wavelength should be at the end of cols
       cols <- cols [c (seq_along (cols)[-.wavelength], .wavelength)]
