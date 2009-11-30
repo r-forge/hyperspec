@@ -25,7 +25,6 @@ mv <- function (x, class, cutoff = 0) {
 		NaN		
   }
 }
-
 # confusion matrix
 
 confmat <- function (pred, truth, levels = levels(as.factor(truth))) {

@@ -18,32 +18,29 @@ readspc <- function(filepath, filename)
 		}
 		out
 	}
-
-        FVERSN <- c (newversion.lsb = 75, newversion.msb = 76, oldversion = 77)
-## 	FVERSN <- function(input)
-## 	{
-## 		if ( input %in% c(75, 76, 77))
-## 		{
-## 			if ( input == 75)
-## 			{
-## 				out <- 'newversionlsb' # new LSB 1st
-## 			}
-## 			if ( input == 76)
-## 			{
-## 				out <- 'newversionmsb' # new MSB 1st (different word order)
-## 			}
-## 			if ( input == 77)
-## 			{
-## 				out <- 'oldversion'
-## 			}
-## 		}
-## 		else
-## 		{
-## 			out <- 'unknown'
-## 		}
-## 		out
-## 	}
-
+	FVERSN <- function(input)
+	{
+		if ( input %in% c(75, 76, 77))
+		{
+			if ( input == 75)
+			{
+				out <- 'newversionlsb' # new LSB 1st
+			}
+			if ( input == 76)
+			{
+				out <- 'newversionmsb' # new MSB 1st (different word order)
+			}
+			if ( input == 77)
+			{
+				out <- 'oldversion'
+			}
+		}
+		else
+		{
+			out <- 'unknown'
+		}
+		out
+	}
 	FEXP <- function(input)
 	{
 		if (input == 128)
@@ -394,11 +391,7 @@ readspc <- function(filepath, filename)
 	# Ausgabe: In Matlab eine Struktur, in R einfacherweise eine Liste
 	output <- list()
 	bytes <- readBin(filecon, "integer", 4, 1, signed = FALSE) # bytes = fread (fid, 4, 'uint8');
-
-        if (bytes [2] != FVERSN ['newversionlsb']
-            stop ('Wrong spc file format version.')
-        
-        if (FVERSN(bytes[2]) != 'newversionlsb')
+	if (FVERSN(bytes[2]) != 'newversionlsb')
 	{
 		warning('Wrong spc file format version.')
 	}
