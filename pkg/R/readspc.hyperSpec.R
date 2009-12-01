@@ -252,6 +252,11 @@
 		hdr$ftflgs ['TXVALS'] <- TRUE
 	}
 	
+	if (hdr$fwplanes > 0)
+	warning ("w planes found! This is not yet tested as the developer didn't have access to such files.\n",
+			"Please contact the package maintainer (cbeleites@units.it)",
+			"stating whether the file was imported successfully or not.")
+	
 	hdr
 }
 
@@ -269,9 +274,8 @@
 			subnois   = readBin (raw.data [pos + (13 : 16)], "numeric", 1, 4),
 			subnpts   = readBin (raw.data [pos + (17 : 20)], "integer", 1, 4, signed = FALSE),
 			subscan   = readBin (raw.data [pos + (21 : 24)], "integer", 1, 4, signed = FALSE),
-			subwlevel = readBin (raw.data [pos + (25 : 28)], "numeric", 1, 4)
+			subwlevel = readBin (raw.data [pos + (25 : 28)], "numeric", 1, 4))
 	## 4 bytes reserved
-	)
 	
 	hdr$.last.read <- pos + .spc.size ['subhdr']
 	
@@ -320,16 +324,16 @@
 		subhdr$subtime = subhdr$subindx * hdr$fzinc + hdr$firstz
 	
 	## the w values
-	## integer !!!
 	if (hdr$fwplanes > 0) {
-		stop ("w planes found! This is not yet implemented as the developer didn't have access to such files.")
-		## FIXME: w planes
-		
-#      if (subhdr$subwlevel != 0)
-#          w <- subhdr$subwlevel
-#       else
-#         w <- subhdr
+		if (subhdr$subwlevel != 0) {
+			subhdr$w <- subhdr$subwlevel
+			
+		} else if (subhdr$subindx %% hdr$fwplanes == 1)
+			subhdr$w <- hdr$subhdr$w +  hdr$fwinc
+		else
+			subhdr$w <- hdr$subhdr$w
 	}
+	
 	
 	hdr$subhdr <- subhdr
 	
@@ -357,9 +361,8 @@
 ## read log block header ............................................................................
 ##
 
-.spc.log <- function (raw.data, pos, log.bin, log.disk, log.txt, keys.log2data,  keys.log2log,
-		log.as.txt = FALSE) {
-	## TODO here reading only
+.spc.log <- function (raw.data, pos, log.bin, log.disk, log.txt, keys.log2data,  keys.log2log) {
+	
 	if (pos == 0) # no log block exists
 		return (list (data = list (),
 						log = list ()))
@@ -373,37 +376,31 @@
 			.last.read = pos + .spc.size ['loghdr']
 	)
 	
-	if (log.as.txt) {	# ignores log.bin and log.disk!!!		
+	log <- list ()
+	data <- list ()
+	
+	## read binary part of log
+	if (log.bin) 
+		log$.log.bin <- raw.data [loghdr$.last.read + seq_len (loghdr$logbins)]
+	
+	## read binary on-disk-only part of log
+	if (log.disk) 
+		log$.log.disk <- raw.data [loghdr$.last.read + loghdr$logbins + seq_len (loghdr$logdsks)]
+	
+	## read text part of log
+	if (log.txt) {
 		log.txt <- raw.data [pos + loghdr$logtxto + seq_len (loghdr$logsizd - loghdr$logtxto)]
-		log.txt [log.txt == .nul] <- '\n'
-		rawToChar (log.txt)
-	}	else {
+		log.txt <- paste (rawToChar (log.txt, multiple = TRUE), collapse = "")
+		log.txt <- split.string (log.txt, "\r\n") ## spc file spec says \r\n regardless of OS
+		log.txt <- split.line (log.txt, "=")
 		
-		log <- list ()
-		data <- list ()
-		
-		## read binary part of log
-		if (log.bin) 
-			log$.log.bin <- raw.data [loghdr$.last.read + seq_len (loghdr$logbins)]
-		
-		## read binary on-disk-only part of log
-		if (log.disk) 
-			log$.log.disk <- raw.data [loghdr$.last.read + loghdr$logbins + seq_len (loghdr$logdsks)]
-		
-		## read text part of log
-		if (log.txt) {
-			log.txt <- raw.data [pos + loghdr$logtxto + seq_len (loghdr$logsizd - loghdr$logtxto)]
-			log.txt <- paste (rawToChar (log.txt, multiple = TRUE), collapse = "")
-			log.txt <- split.string (log.txt, "\r\n") ## spc file spec says \r\n regardless of OS
-			log.txt <- split.line (log.txt, "=")
-			
-			data <- .getbynames (log.txt, keys.log2data)
-			log <- c (log, .getbynames (log.txt, keys.log2log))
-		}
-		
-		list (log.long = log, extra.data = data)
+		data <- getbynames (log.txt, keys.log2data)
+		log <- c (log, getbynames (log.txt, keys.log2log))
 	}
+	
+	list (log.long = log, extra.data = data)
 }
+
 
 ## read y data ......................................................................................
 ##
@@ -540,6 +537,7 @@ read.spc <- function (filename,
 							log = tmp$log.long,
 							header = getbynames (hdr, keys.hdr2log))),
 			log)
+	data <- c (data, tmp$extra.data)
 	
 	
 	## try to preallocate spectra matrix and extra data data.frame
@@ -557,6 +555,7 @@ read.spc <- function (filename,
 		hdr$subfiledir <- .spc.subfiledir (f, hdr$subfiledir, hdr$fnsub)
 		
 		for (s in seq_len (hdr$fnsub)) {
+
 			hdr <- .spc.subhdr (f, hdr$subfiledir$ssfposn [s], hdr)
 			fpos <- hdr$.last.read
 			wavelength <- .spc.read.x (f, fpos, hdr$subhdr$subnpts)
@@ -564,7 +563,7 @@ read.spc <- function (filename,
 			
 			y <- .spc.read.y (f, fpos, npts = hdr$subhdr$subnpts, exponent = hdr$subhdr$subexp,
 					word = hdr$ftflgs ['TSPREC'])
-			fpos <- fpos + y$.last.read
+			fpos <- y$.last.read
 			
 			data$z <- hdr$subhdr$subtime
 			data$z.end <- hdr$subhdr$subnext
@@ -590,7 +589,7 @@ read.spc <- function (filename,
 			fpos <- hdr$.last.read
 			tmp <- .spc.read.y (f, fpos, npts = hdr$subhdr$subnpts, exponent = hdr$subhdr$subexp,
 					word = hdr$ftflgs ['TSPREC'])
-			fpos <- fpos + tmp$.last.read
+			fpos <- tmp$.last.read
 			
 			spc [s, ] <- tmp$y
 			data [s, c('z', 'z.end')] <- unlist (hdr$subhdr [c('subtime', 'subnext')])
@@ -628,7 +627,7 @@ read.spc.KaiserMap <- function (files,
 	f <- files [1]
 	
 	spc <- read.spc (f, keys.log2data = keys.log2data, keys.log2log = keys.log2log, no.object = TRUE)
-	
+
 	data [1, 'x'] <- factor2num (spc$data$Stage_X_Position)
 	data [1, 'y'] <- factor2num (spc$data$Stage_Y_Position)
 	data [1, 'z'] <- factor2num (spc$data$Stage_Z_Position)

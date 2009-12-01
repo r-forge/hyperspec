@@ -20,7 +20,7 @@
             pdfborder = {0 0 1},
             backref = false,
             colorlinks = true,
-            citecolor=green!50!black,        % color of links to bibliography
+            citecolor=green!50!black,        % color of links to bibli
             filecolor=blue!50!black,      % color of file links
             urlcolor=blue!50!black,           % color of external links
             linkcolor=blue!50          % color of internal links
@@ -79,6 +79,8 @@
 %\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 %\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
 \newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
+\newcommand{\phy}{\texorpdfstring{\nohyphens{\textit{hyperSpec}}}{hyperSpec}\xspace}
+
 
 \@ifundefined{showcaptionsetup}{}{%
  \PassOptionsToPackage{caption=false}{subfig}}
@@ -115,10 +117,10 @@ homepage, \url{http://r-forge.r-project.org/projects/hyperspec/} (ca. 8.5 MB).
 The original file (ca. 31 MB) is far too large to be included in the package.
 }
 
-<<startup, echo = FALSE, results = hide>>= 
+<<startup, echo = FALSE, results = hide>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
 options ("width" = 100)
-@
+@ 
 
 \section{Introduction}
 
@@ -188,20 +190,21 @@ it does work with \Rcode{NA}.
 library (hyperSpec)
 filename <- "chondro.txt"
 @ 
-<<filenamecheck, echo = FALSE, results = hide>>= this is to ensure the building of the vignette on r-forge
-#if (grepl ("inst/doc$", getwd()))
-#   filename <- ("../../../Vignettes/chondro/chondro.txt")
-@ 
+
 <<import>>=
 chondro <- scan.txt.Renishaw (filename, data = "xyspc")
 chondro
 @
+
+
+
 
 To get an overview of the spectra, :
 
 <<fig-rawspc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 plot (chondro, "spcprctl5")
 @
+
 
 A sum intensity map is produced by:
 
@@ -236,7 +239,8 @@ As the overview print shows that the spectra contain \Rcode{NA}s
 (from cosmic spike removal that was done previously), the first step
 is to remove these. Another issue that can be solved at the same time
 is that the wavelength axis is not evenly spaced (the data points
-are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and \Sexpr{signif (max (diff (wl (chondro))), 2)}
+are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and  
+\Sexpr{signif (max (diff (wl (chondro))), 2)}
 cm\textsuperscript{-1} apart from each other). Furthermore, it would
 be good to trade some spectral resolution for higher signal to noise
 ratio. All three of these issues are tackled by interpolating and
@@ -244,10 +248,12 @@ smoothing of the wavelength axis by \Rfunction{spc.loess}. The resolution
 is to be reduced to 8 cm\textsuperscript{-1}, or 4 cm\textsuperscript{-1}
 data point spacing.
 
-<<interp>>=
+<<interp>>= 
 chondro <- spc.loess (chondro, seq (602, 1800, 4))
 chondro
-@
+@    
+
+<<interp>>
 
 
 \subsection{Baseline Correction}
@@ -257,12 +263,12 @@ tries to automatically find appropriate support points for polynomial
 baselines. The default is a linear baseline, which is appropriate
 in our case:
 
-<<bl>>=
+<<bl, slfkjdsl = TRUE >>= 
 baselines <- spc.fit.poly.below (chondro)
 chondro <- chondro - baselines
 @
 
-%
+
 \begin{figure}[tbh]
 \subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{chondrocytes-norm}}\quad
 \subfloat[\label{fig:bl:perc} The spectra after subtracting the 5\textsuperscript{th} percentile spectrum.]{\includegraphics[width=0.4\textwidth]{chondrocytes-perc}}
@@ -420,13 +426,13 @@ print (plotmap (chondro, z = as.factor (clusters)))
 
 The cluster membership can also be marked in the dendrogram:
 
-<<dend, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-plot (dendrogram, labels = FALSE, hang = 0)
+<<dend, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=         lkjfldsflsf sklföldsjflas
+plot (dendrogram, labels = FALSE, hang = 0) 
 col.clust <- matlab.palette(3)
 points (seq_along (dendrogram$order), rep (-3, length (dendrogram$order)),
         col = col.clust [clusters [dendrogram$order]], pch = "|")
-@
-
+@     
+   
 Figure~\ref{fig:dend} shows the dendrogram and \ref{fig:clustmap}
 the resulting cluster map. The three clusters correspond to the cartilage
 matrix, the lacuna and the cells. The left cell is destroyed and its
@@ -435,13 +441,15 @@ intact.
 
 We can calculate the cluster mean spectra using \Rfunction{aggregate}.
 However, we can do even better and plot the cluster mean spectra $\pm$
-1 standard deviation (see figure~\ref{fig:clustmeans}):
+1 standard deviation (see figure~\ref{fig:clustmeans}): 
 
-<<clustmeans, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+<<clustmeans, fig = TRUE, width = 7.5, height = 5, include = FALSE>>= fljdaslfksjfölsa    
 cluster.means <- aggregate (chondro, clusters, mean_pm_sd)
 plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", 
      col = matlab.palette (3))
-@
+@   ldskjafjdökldsfa
+ldksjflsjaföls
+
 
 %
 \begin{figure}[tbh]
@@ -451,15 +459,15 @@ plot(cluster.means, stacked = ".aggregate", fill = ".aggregate",
 
 
 
-\section{Plotting a False-Colour Map of Certain Spectral Regions}
+\section{Plotting a False-Color Map of Certain Spectral Regions}   
 
 \Rclass{hyperSpec} comes with a sophisticated interface for specifying
 spectral ranges. Expressing things like 1000~cm\textsuperscript{-1}
 $\pm$~1 data points are easily possible. Thus, we can have a fast
 look at the nucleic acid distribution, using the DNA bands at 728,
-782, 1098, 1240, 1482, and 1577~cm\textsuperscript{-1}:
+782, 1098, 1240, 1482, and 1577~cm\textsuperscript{-1}: 
 
-<<DNA, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+<<DNA, fig = TRUE, width = 7.5, height = 5, include = FALSE>>= klkasöl 
 print (plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)]))
 @
 
@@ -473,12 +481,11 @@ of the left cell.
 spectra. The blue cluster shows distinct lipid bands, the green cluster
 collagen, and the red cluster proteins and nucleic acids.]
 {\includegraphics[width=0.495\textwidth]{chondrocytes-clustmeans}}
-\subfloat[\label{fig:DNA} False colour map of the DNA band intensities.]
+\subfloat[\label{fig:DNA} False color map of the DNA band intensities.]
 {\includegraphics[width=0.495\textwidth]{chondrocytes-DNA}}
-
 \caption{}
-
 \end{figure}
+
 <<cleanup, echo = FALSE, results=hide>>=
 rm (list = ls () ) 
 @ 

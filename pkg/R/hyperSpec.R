@@ -1,9 +1,15 @@
 ## wish list: slice_map
 ## wish list: parse arg of form x..y = z => x = list (y = z)
 
+# TODO: divide into single .R files
+# TODO: write tests
+# TODO: check docs
+# TODO: check .is.hy / validObject
+# TODO: make consistent user/short/long/date
+
 .onLoad <- function (libname, pkgname){
   require (lattice)
-  require (utils)
+  require (utils) 
 }
 
 .onAttach <- function (libname, pkgname){
@@ -268,18 +274,9 @@ setMethod ("[", "hyperSpec", function (x, i, j, l, #
                      else
                      paste ("[ (", short, ")", sep =""),
                      long = list (
-                       i = if (missing (i))
-                       ""
-                       else
-                       deparse (substitute (i, env)),
-                       j = if (missing (j))
-                       ""
-                       else
-                       deparse (substitute (j, env)),
-                       l = if (missing (l))
-                       ""
-                       else
-                       deparse (substitute (l, env)),
+                       i = if (missing (i)) "" else deparse (substitute (i, env)),
+                       j = if (missing (j)) "" else deparse (substitute (j, env)),
+                       l = if (missing (l)) "" else deparse (substitute (l, env)),
                        wl.index = wl.index,
                        data = data))
 
@@ -351,17 +348,17 @@ as.long.df <- function (x, rownames = FALSE) {
   validObject (x)
   ispc <- match ("spc", colnames (x@data))
 
-  dummy <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
+  tmp <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
 
-  dummy <- cbind (data.frame (wavelength = rep (x@wavelength, each = nrow (x)),
+  tmp <- cbind (data.frame (wavelength = rep (x@wavelength, each = nrow (x)),
                               spc = as.numeric (x [[]])),
-                  dummy)
+                  tmp)
 
   if (rownames)
-    dummy <- data.frame (.rownames = as.factor (rep (rownames (x), nwl (x))),
-                    dummy)
+    tmp <- data.frame (.rownames = as.factor (rep (rownames (x), nwl (x))),
+                    tmp)
 
-  dummy
+  tmp
 }
 
 
@@ -389,18 +386,18 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
   else
     label <- paste (as.character (label), collapse = " ")
   
-  dummy <- ""
+  row.text <- ""
 
   if (val){
     if (is.list (x)){
-      dummy <- paste ("", "columns/entries", paste (names (x), collapse = ", "))
+      row.text <- paste ("", "columns/entries", paste (names (x), collapse = ", "))
     } else {
       if (range)
         val <- sort (unique (as.vector (x)))
       else
         val <- x
       if (length (val) > max.print)
-        dummy <- c(
+        row.text <- c(
                    format (val [seq_len (shorten.to[1])], # was 1 :
                            digits = digits, trim = TRUE),
                    "...",
@@ -408,18 +405,18 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
                            digits = digits, trim = TRUE)
                    )
       else
-        dummy <- format (val, digits = digits, trim = TRUE)
-      dummy <- paste ("", if(range) "range", paste (dummy, collapse = " "), if(any (is.na (x))) "+ NA", collapse = " ")
+        row.text <- format (val, digits = digits, trim = TRUE)
+      row.text <- paste ("", if(range) "range", paste (row.text, collapse = " "), if(any (is.na (x))) "+ NA", collapse = " ")
 
     }
   }
-  dummy <- paste (paste (rep (" ", ins), collapse = ""),
+  row.text <- paste (paste (rep (" ", ins), collapse = ""),
                   if (!is.null (i)) paste ("(", i, ") ", sep =""),
                   name,
                   if (nchar (name) != 0) ": ",
                   label,
                   if (nchar (label) != 0) " ",
-                  if ((nchar (dummy) > 0) | (nchar (label) + nchar (name) > 0) | !is.null (i)) "[",
+                  if ((nchar (row.text) > 0) | (nchar (label) + nchar (name) > 0) | !is.null (i)) "[",
                   paste (class (x), collapse = ", "),
                   " ",
                   if (! is.null (dim (x)))
@@ -429,10 +426,10 @@ setMethod ("as.matrix", "hyperSpec", function (x, ...){
                          , sep = "")
                   else if (length (x) > 1)
                   length (x),
-                  if ((nchar (dummy) > 0) | (nchar (label) + nchar (name) > 0) | !is.null (i)) "]",
-                  dummy,
+                  if ((nchar (row.text) > 0) | (nchar (label) + nchar (name) > 0) | !is.null (i)) "]",
+                  row.text,
                   sep ="")
-  dummy
+  row.text
 }
 ###-----------------------------------------------------------------------------
 ###
@@ -1004,6 +1001,8 @@ setMethod ("Compare", signature (e1 = "hyperSpec", e2 = "matrix"), .compx)
 
 setMethod ("Compare", signature (e1 = "numeric", e2 = "hyperSpec"), .compy)
 setMethod ("Compare", signature (e1 = "matrix", e2 = "hyperSpec"), .compy)
+
+
 ###-----------------------------------------------------------------------------
 ###
 ###  all.equal
@@ -1297,12 +1296,12 @@ i2wl <- function (x, i){
         wavelength [wavelength < min (x@wavelength)] <- NA
         wavelength [wavelength > max (x@wavelength)] <- NA
     }
-    dummy <- wavelength [! is.na (wavelength)]
-    if (length (dummy) > 0) {
-        dummy <- sapply (dummy,
+    tmp <- wavelength [! is.na (wavelength)]
+    if (length (tmp) > 0) {
+        tmp <- sapply (tmp,
                          function (x, y) which.min (abs (x  - y)),
                          x@wavelength)
-        wavelength [! is.na (wavelength)] <- dummy
+        wavelength [! is.na (wavelength)] <- tmp
     }
     wavelength
 }
@@ -1517,9 +1516,9 @@ setMethod ("aggregate", "hyperSpec", function (x,
     by <- split (seq_len (nrow (x)), by, drop = TRUE)
 
   if (is.null (out.rows)){
-    dummy <- .apply (data = x@data[by [[1]], , drop = FALSE], MARGIN = 2, FUN = FUN, ...)
+    tmp <- .apply (data = x@data[by [[1]], , drop = FALSE], MARGIN = 2, FUN = FUN, ...)
 
-    out.rows <- nrow (dummy) * length (by)
+    out.rows <- nrow (tmp) * length (by)
   }
 
   data  <- x@data[rep (1, out.rows), , drop = FALSE] # preallocate memory
@@ -1530,9 +1529,9 @@ setMethod ("aggregate", "hyperSpec", function (x,
   r <- 1 # keeping track of the actually filled rows
 
   for (i in seq (along = by)){
-    dummy <- .apply (data = x@data[by [[i]], , drop  = FALSE], MARGIN = 2, FUN = FUN, ...)
+    tmp <- .apply (data = x@data[by [[i]], , drop  = FALSE], MARGIN = 2, FUN = FUN, ...)
 
-    prows <- nrow (dummy) - 1
+    prows <- nrow (tmp) - 1
 
 
     if (r + prows > out.rows) {
@@ -1544,7 +1543,7 @@ setMethod ("aggregate", "hyperSpec", function (x,
     }
 
     if (prows >= 0){
-      data[r : (r + prows), -col.aggregate] <- dummy
+      data[r : (r + prows), -col.aggregate] <- tmp
       data[r : (r + prows),  col.aggregate] <- i
 
       r <- r + prows + 1
@@ -1625,6 +1624,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 ###
 ###  plotmap - plot map
 ###
+## FIXME: one row / one column
 
 plotmap <- function (object,
                      x = "x",
@@ -1714,9 +1714,9 @@ plotmap <- function (object,
 
   if (is.null (trellis.args$panel)){
     trellis.args$panel <- function (x, y, z, subscripts, ..., panel.bg = NA) {
-      dummy <- index.grid (x[subscripts], y[subscripts], z [subscripts])
+      tmp <- index.grid (x[subscripts], y[subscripts], z [subscripts])
       panel.fill (col = panel.bg)
-      panel.levelplot (dummy$x, dummy$y, dummy$z, subscripts = TRUE, ...)
+      panel.levelplot (tmp$x, tmp$y, tmp$z, subscripts = TRUE, ...)
     }
   }
 
@@ -2200,8 +2200,8 @@ plotspc <- function  (object,
       if (is.null (fill.col)){
         fill.col <- character (length (groups))
         for (j in seq_along (groups)){
-          dummy <- which (fill == groups [j])
-          fill.col [j] <- rgb(t(col2rgb(col[dummy[1]]) / 255) / 3 + 2/3)
+          tmp <- which (fill == groups [j])
+          fill.col [j] <- rgb(t(col2rgb(col[tmp[1]]) / 255) / 3 + 2/3)
         }
       } else {
         fill.col <- rep (fill.col, length.out = length (groups))
@@ -2211,8 +2211,8 @@ plotspc <- function  (object,
 
       polygon.args$x <- c (x  [[i]]                  , rev (x   [[i]]         ))
       for (j in seq_along (groups)){
-        dummy <- which (fill == groups [j])
-        polygon.args$y <- c (spc[head(dummy, 1), ispc[[i]]], rev (spc [tail (dummy, 1), ispc[[i]]]))
+        tmp <- which (fill == groups [j])
+        polygon.args$y <- c (spc[head(tmp, 1), ispc[[i]]], rev (spc [tail (tmp, 1), ispc[[i]]]))
         polygon.args$col = fill.col [groups [j]]
         polygon.args$border <- border [groups [j]]
 
@@ -2570,10 +2570,10 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
     spc [pos.spc + seq_len (nrow (fbuf))] <- fbuf [, ncol]
     pos.spc <- pos.spc + nrow (fbuf)
 
-    dummy <- fbuf [fbuf[, ncol - 1] == wl [1], seq_len (ncol - 2), drop = FALSE]
+    tmp <- fbuf [fbuf[, ncol - 1] == wl [1], seq_len (ncol - 2), drop = FALSE]
 
-    data [pos.data + seq_len (nrow (dummy)), ] <- dummy
-    pos.data <- pos.data + nrow (dummy)
+    data [pos.data + seq_len (nrow (tmp)), ] <- tmp
+    pos.data <- pos.data + nrow (tmp)
 
     fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
 
@@ -2700,11 +2700,11 @@ write.txt.long <- function (object,
 
   if (!is.null (order)){
     if (is.character (order)) {
-      dummy <- match (order, colnames (X))
-      if (any (is.na (dummy)))
+      tmp <- match (order, colnames (X))
+      if (any (is.na (tmp)))
         stop ("write.txt.long: no such columns: ",
-              paste (order [is.na (dummy)], collapse = ", "))
-      order <- dummy
+              paste (order [is.na (tmp)], collapse = ", "))
+      order <- tmp
       }
 
 
@@ -2796,16 +2796,16 @@ spc.bin <- function (spc,
       na <- apply (!na, 1, tapply, bin, sum, na.rm = FALSE)
       spc@data$spc <- t (apply (spc@data$spc, 1, tapply, bin, sum, na.rm = TRUE) / na)
     } else { # faster for small numbers of NA
-      dummy <- t (apply (spc@data$spc, 1, tapply, bin, sum, na.rm = FALSE))
-      dummy <- sweep (dummy, 2, rle (bin)$lengths, "/")
+      tmp <- t (apply (spc@data$spc, 1, tapply, bin, sum, na.rm = FALSE))
+      tmp <- sweep (tmp, 2, rle (bin)$lengths, "/")
 
-      na <- which (is.na (dummy), arr.ind = TRUE)
+      na <- which (is.na (tmp), arr.ind = TRUE)
       bin <- split (seq_len (ncol (spc@data$spc)), bin)
 
       for (i in seq_len (nrow (na))){
-        dummy [na [i, 1], na [i, 2]] <- mean (spc@data$spc [na [i, 1], bin [[na[i, 2]]]], na.rm = TRUE)
+        tmp [na [i, 1], na [i, 2]] <- mean (spc@data$spc [na [i, 1], bin [[na[i, 2]]]], na.rm = TRUE)
       }
-      spc@data$spc <- dummy
+      spc@data$spc <- tmp
     }
   } else {  # considerably faster
     spc@data$spc <- t (apply (spc@data$spc, 1, tapply, bin, sum, na.rm = FALSE))
@@ -3136,12 +3136,12 @@ wc <- function (file, flags = c("lines", "words", "bytes")){
 ###
 
 split.line <- function (x, separator, trim.blank = TRUE) {
-  dummy <- regexpr (separator, x)
-  #if (length (dummy) == 1 && dummy [[1]] == -1)
+  tmp <- regexpr (separator, x)
+  #if (length (tmp) == 1 && tmp [[1]] == -1)
   #  warning ("line without separator", separator)
 
-  key   <- substr (x, 1, dummy - 1)
-  value <- substr (x, dummy + 1, nchar (x))
+  key   <- substr (x, 1, tmp - 1)
+  value <- substr (x, tmp + 1, nchar (x))
 
   if (trim.blank){
     blank.pattern <- "^[[:blank:]]*([^[:blank:]]+.*[^[:blank:]]+)[[:blank:]]*$"
@@ -3187,4 +3187,65 @@ split.string <- function (x, separator, trim.blank = TRUE, remove.empty = TRUE) 
   }
 
   x
+}
+
+###-----------------------------------------------------------------------------
+###
+### raw.split.nul - rawToChar conversion, splitting at \0
+###
+###
+
+.nul <- as.raw (0)
+
+raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
+	# todo make better truncation
+	trunc <- rep (trunc, length.out = 2)
+	
+	if (trunc [1] && raw [1] == .nul)
+		raw <- raw [-1]
+	if (trunc [2]) {
+		tmp <- which (raw > .nul)
+		if (length (tmp) == 0) 
+			return ("")
+		raw <- raw [1 : tail (tmp, 1)]	
+	} 
+	if (raw [length (raw)] != .nul)
+		raw <- c (raw , .nul)
+	
+	tmp <- c (0, which (raw == .nul))
+	
+	out <- character (length (tmp) - 1)
+	for (i in 1 : (length (tmp) - 1))
+		if (tmp [i] + 1 < tmp [i + 1] - 1)
+			out [i] <- rawToChar (raw [(tmp [i] + 1)  : (tmp [i + 1] - 1)])
+	
+	out
+}
+
+###-----------------------------------------------------------------------------
+###
+### factor2num - conversion of a factor containing numerical levels
+###
+###
+
+
+factor2num <- function (f)
+	as.numeric(levels (f)) [as.numeric (f)]
+
+###-----------------------------------------------------------------------------
+###
+### getbynames - get list elements by name and if no such element exists, NA 
+###
+###
+
+getbynames <- function (x, e) {
+	x <- x [e]
+	if (length (x) > 0) {
+		if (is.character (e)) 
+			names (x) <- e
+		x [sapply (x, is.null)] <- NA
+		x
+	} else {
+		list ()
+	}
 }

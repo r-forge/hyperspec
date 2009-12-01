@@ -1,35 +1,34 @@
-#################################################################################
+####################################################################################################
 ###
-###  read.ENVI - read ENVI files, missing header files may be replaced by list in 
-###  parameter header
+###  read.ENVI - read ENVI files, missing header files may be replaced by list in parameter header 
 ###
 ###  * read.ENVI.Nicolet for ENVI files written by Nicolet spectrometers 
 ###  * adapted from caTools read.ENVI
 ###
 ###  Time-stamp: <Claudia Beleites on Monday, 2009-11-09 at 14:00:01 on cb>
-###  
-###  Version 1.0  2009-10-20 09:14  Claudia Beleites  Claudia.Beleites@gmx.de
 ###
-#################################################################################
+####################################################################################################
 
+.ENVI.default.keys.hdr2data <- FALSE
+.ENVI.default.keys.hdr2log  <- TRUE
 
-### some helper functions ...........................................................................
-.read.ENVI.header  <- function (file, header) {
-  if (is.null (header)) {
-    header <- paste (dirname (file), sub ("[.][^.]+$", ".*", basename (file)), sep = "/")
-    dummy <- Sys.glob (header)
-    header <- dummy [! grepl (file, dummy)]
+### some helper functions ..........................................................................
+.read.ENVI.header  <- function (file, headerfilename) {
+  if (is.null (headerfilename)) {
+    headerfilename <- paste (dirname (file), sub ("[.][^.]+$", ".*", basename (file)), sep = "/")
+    tmp <- Sys.glob (headerfilename)
+    headerfilename <- tmp [! grepl (file, tmp)]
       
-    if (length (header) != 1)
+    if (length (headerfilename) != 1)
       stop ("Cannot guess header file name")
     else
-      cat (".read.ENVI.header: Guessing header file name (", header, ")\n", sep = '')
+      cat (".read.ENVI.header: Guessing header file name (", headerfilename, ")\n", sep = '')
   }
     
-  if (!file.exists(header)) 
-    stop("Could not open header file: ", header)
+  if (!file.exists(headerfilename)) 
+    stop("Could not open header file: ", headerfilename)
 
-  readLines (header)
+  readLines (headerfilename)
 }
 
 # ...................................................................................................
@@ -66,8 +65,8 @@
   names (header) <- tolower (names (header))
 
   ## some values are numeric
-  dummy <- names (header) %in% c("samples", "lines", "bands", "data type", "header offset")
-  header [dummy] <- lapply (header [dummy], as.numeric)
+  tmp <- names (header) %in% c("samples", "lines", "bands", "data type", "header offset")
+  header [tmp] <- lapply (header [tmp], as.numeric)
 
   header
 }
@@ -146,22 +145,26 @@
   spc
 }
 
-# ...................................................................................................
+# ..................................................................................................
 
-read.ENVI <- function (file = stop ("read.ENVI: file name needed"), header = NULL,
-                       x = 0 : 1, y = x,
-                       wavelength = NULL, label = NULL, log = NULL) {
-  if (!is.list (header)) {
-    header <- .read.ENVI.header (file, header)
-    header <- .read.ENVI.split.header (header)
-  }
+read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile = NULL, 
+							  header = list (), 
+                       x = 0 : 1, y = x, 
+							  keys.hdr2data = .ENVI.default.keys.hdr2data, 
+							  keys.hdr2log = .ENVI.default.keys.hdr2log,
+                       wavelength = NULL, label = list (), log = list ()) {
+  force (y)				
+  
+  if (! file.exists (file))
+	  stop ("File not found:", file)
+						  
+  tmp <- .read.ENVI.header (file, headerfile)
+  tmp <- .read.ENVI.split.header (tmp)
+  header <- modifyList (tmp, header)  
 
-  ## split header into known and unknown key-value-pairs
   ## _no_ capital letters here: .read.ENVI.split.header produces lowercase names
   recognized.keywords <- c("samples", "lines", "bands", "data type", "header offset", 
                            "interleave", "byte order", "wavelength")
-  unknown <- header [! names (header) %in% recognized.keywords]
-  header <- header [names (header) %in% recognized.keywords]
 
   ## read the binary file
   spc <- .read.ENVI.bin (file, header)
@@ -172,145 +175,116 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), header = NUL
 
     if (! any (is.na (header$wavelength)) && is.null (wavelength))
       wavelength <- header$wavelength
-    
   } 
   
   ## set up spatial coordinates
-  ## y must be first as it defaults to x
-  y <- rep (seq (0, header$lines   - 1),        header$samples) * y [2] + y [1]
   x <- rep (seq (0, header$samples - 1), each = header$lines)   * x [2] + x [1]
-
-  ## unknown header lines end up as extra data columns
-  if (length (unknown) > 0)
-    data <- data.frame (x = x, y = y, unknown)
-  else
-    data <- data.frame (x = x, y = y)
+  y <- rep (seq (0, header$lines   - 1),        header$samples) * y [2] + y [1]
+  
+  ## header lines => extra data columns or log entries
+  extra.data <- header [keys.hdr2data]
+  
+  log <- modifyList (list (short = "read.ENVI", 
+				               long = list (call = match.call (),
+											       header = getbynames (header, keys.hdr2log))),
+							log)
+  
+  if (length (extra.data) > 0) {
+	  extra.data <- lapply (extra.data, rep, length.out = length (x))
+	  data <- data.frame (x = x, y = y, extra.data)
+  } else {
+	  data <- data.frame (x = x, y = y)
+  }
 
   ## finally put together the hyperSpec object
   new ("hyperSpec", spc = spc, data = data, 
        wavelength = wavelength, label = label, log = log)
 }
 
-###-----------------------------------------------------------------------------
-###
-###  read.ENVI.Nicolet
-###  
-###  read ENVI files written by Nicolet instruments
-###  parameter nicolet.correction causes 
-###  
+####-----------------------------------------------------------------------------
+####
+####  read.ENVI.Nicolet - read ENVI files written by Nicolet instruments
+####  
 
-read.ENVI.Nicolet <- function (file = stop("read.ENVI: file name needed"),
-                               header = NULL, x = c (NA, NA), y = c (NA, NA),
-                               wavelength = NULL, label = list (), log = NULL,
-                               nicolet.correction = FALSE) {
+read.ENVI.Nicolet <- function (..., 
+		# file headerfile, header
+		x = NA, y = NA, # NA means: use the specifications from the header file if possible
+		log = list (),
+		keys.hdr2log = TRUE,
+		nicolet.correction = FALSE) {
+	
+	log <- modifyList (list (short = "read.ENVI.Nicolet", 
+									 long = list (call = match.call ())),
+							 log)
+	
+	if (! isTRUE (keys.hdr2log))
+		keys.hdr2log <- unique (c ("description", "z plot titles", "pixel size", keys.hdr2log))
+	
+	spc <- read.ENVI (..., keys.hdr2log = keys.hdr2log,
+			x = if (is.na (x)) 0 : 1 else x,
+			y = if (is.na (y)) 0 : 1 else y,
+			log = log)
+	
+	header <-spc@log$long.description [[1]] 
+	
+	### From here on processing the additional keywords in Nicolet's ENVI header
+	
+	## z plot titles (Nicolet) ------------------------------------------------------------------------
+	# default labels
+	label <- list (x = expression (`/` (x, micro * m)),
+						y = expression (`/` (y, micro * m)),
+						spc = 'I / a.u.',
+						.wavelength = expression (tilde (nu) / cm^-1))		
 
-  ## split header into known and unknown key-value-pairs
-  ## Nicolet seems to save the position of the first spectrum in microns, and the pixel size in mm.
-  ## maybe.nicolet helps guessing whether this is an ENVI saved by Nicolet
-  maybe.nicolet <- 0
+	if (!is.null (header$'z plot titles')){
+		pattern <- "^[[:blank:]]*([[:print:]^,]+)[[:blank:]]*,.*$"
+		tmp <- sub (pattern, "\\1", header$'z plot titles')
+		
+		if (grepl ("Wavenumbers (cm-1)", tmp, ignore.case = TRUE))
+			label$.wavelength <- expression (tilde (nu) / cm^(-1))
+		else
+			label$.wavelength <- tmp
+		
+		pattern <- "^[[:blank:]]*[[:print:]^,]+,[[:blank:]]*([[:print:]^,]+).*$"
+		tmp <- sub (pattern, "\\1", header$'z plot titles')
+		if (grepl ("Unknown", tmp, ignore.case = TRUE))
+			label$spc <- "I / a.u."
+		else
+			label$spc <- tmp
+	}
+	spc@label <- modifyList (label, spc@label)
+		
+	## set up spatial coordinates -------------------------------------------------------------------
+	## look for x and y in the header only if x and y are NULL
+	## they are in decription + pixel size for Nicolet ENVI 
+	
+	p.description <- "^Spectrum position [[:digit:]]+ of [[:digit:]]+ positions, X = ([[:digit:].-]+), Y = ([[:digit:].-]+)$"
+	p.pixel.size  <- "^[[:blank:]]*([[:digit:].-]+),[[:blank:]]*([[:digit:].-]+).*$"
 
-  if (!is.list (header)) {
-    header <- .read.ENVI.header (file, header)
-    header <- .read.ENVI.split.header (header)
-  }
-
-  recognized.keywords <- c("samples", "lines", "bands", "data type", 
-                           "header offset", "interleave", "byte order", "wavelength",
-                           "description", "z plot titles", "pixel size" # these are for Nicolet
-                           )
-  
-  unknown <- header [! names (header) %in% recognized.keywords]
-  header <- header [names (header) %in% recognized.keywords]
-
-  ## read the binary file
-  spc <- .read.ENVI.bin (file, header)
-
-  ## wavelength should contain the mean wavelength of the respective band ---------------------------
-  ## the pattern in read.ENVI works for Nicolet files as well
-  if (! is.null (header$wavelength)) {
-    header$wavelength <- as.numeric (unlist (strsplit (header$wavelength, "[,;[:blank:]]+")))
-
-    if (! any (is.na (header$wavelength)) && is.null (wavelength))
-      wavelength <- header$wavelength
-     
-  }
-
-  ## z plot titles (Nicolet) ------------------------------------------------------------------------
-  if (!is.null (header$'z plot titles')){
-    if (is.null(label))
-      label <- list ()
-    
-    if (is.null (label$.wavelength)){
-      pattern <- "^[[:blank:]]*([[:print:]^,]+)[[:blank:]]*,.*$"
-      if (grepl (pattern, header$'z plot titles')) {
-        dummy <- sub (pattern, "\\1", header$'z plot titles')
-        if (grepl ("Wavenumbers (cm-1)", dummy, ignore.case = TRUE))
-          label$.wavelength <- expression (tilde (nu) / cm^(-1))
-        else
-          label$.wavelength <- dummy
-      }
-      if (is.null (label$spc)){
-        pattern <- "^[[:blank:]]*[[:print:]^,]+,[[:blank:]]*([[:print:]^,]+).*$"
-        if (grepl (pattern, header$'z plot titles')) {
-          dummy <- sub (pattern, "\\1", header$'z plot titles')
-          if (grepl ("Unknown", dummy, ignore.case = TRUE))
-            label$spc <- "I / a.u."
-          else
-            label$spc <- dummy
-        }
-      }
-    }
-  }
-  
-  ## set up spatial coordinates
-  ## look for x and y in the header only if x and y are NULL
-  ## they are in decription + pixel size for Nicolet ENVI -------------------------------------------
-
-  p.description <- "^Spectrum position [[:digit:]]+ of [[:digit:]]+ positions, X = ([[:digit:].-]+), Y = ([[:digit:].-]+)$"
-  p.pixel.size  <- "^[[:blank:]]*([[:digit:].-]+),[[:blank:]]*([[:digit:].-]+).*$"
-  
-  if(isTRUE (all.equal (x, c (NA, NA)))) {
-    if (! is.null (header$description) && grepl (p.description, header$description)) 
-      x [1] <- as.numeric (sub (p.description, "\\1", header$description))
-
-    if (! is.null (header$'pixel size') && grepl (p.pixel.size, header$'pixel size')) 
-      x [2] <- as.numeric (sub (p.pixel.size, "\\1", header$'pixel size'))
-
-    x [is.na (x)] <- c(0, 1) [is.na (x)]
-  }
-  
-  if(isTRUE (all.equal (y, c (NA, NA)))) {
-    if (! is.null (header$description) && grepl (p.description, header$description))
-      y [1] <- as.numeric (sub (p.description, "\\2", header$description))
-
-    if (! is.null (header$'pixel size') && grepl (p.pixel.size, header$'pixel size')) 
-      y [2] <- as.numeric (sub (p.pixel.size, "\\2", header$'pixel size'))
-    
-    y [is.na (y)] <- c(0, 1) [is.na (y)]
-  }
-
-  if (nicolet.correction) {
-    x [2] <- x [2] * 1000
-    y [2] <- y [2] * 1000
-  }
-
-  y <- rep (seq (0, header$lines - 1  ),        header$samples) * y[2] + y[1]
-  x <- rep (seq (0, header$samples - 1), each = header$lines  ) * x[2] + x[1]
-
-  ## use default labels
-  label <- modifyList (list (x = expression (`/` (x, micro * m)),
-                             y = expression (`/` (y, micro * m)),
-                             spc = 'A',
-                             .wavelength = expression (tilde (nu) / cm^-1)
-                             ),
-                       label)
-  
-  ## this is again just as in the original read.ENVI
-  if (length(unknown) > 0) 
-    data <- data.frame(x = x, y = y, unknown)
-  else
-    data <- data.frame(x = x, y = y)
-
-  new("hyperSpec", spc = spc, data = data, wavelength = wavelength, 
-      label = label, log = log)
+	if (is.na (x) && is.na (y) &&
+			! is.null (header$description)  && grepl (p.description, header$description ) &&
+			! is.null (header$'pixel size') && grepl (p.pixel.size,  header$'pixel size')) {
+		
+		x [1] <- as.numeric (sub (p.description, "\\1", header$description))
+		y [1] <- as.numeric (sub (p.description, "\\2", header$description))
+		
+		x [2] <- as.numeric (sub (p.pixel.size, "\\1", header$'pixel size'))
+		y [2] <- as.numeric (sub (p.pixel.size, "\\2", header$'pixel size'))
+		
+		# it seems that at least for some files the step size is given in mm while the offset is in μm...
+		if (nicolet.correction) { 
+			x [2] <- x [2] * 1000
+			y [2] <- y [2] * 1000
+		}
+		
+		x <- x [2] * spc$x + x [1]
+		if (! any (is.na (x)))
+			spc@data$x <- x
+		
+		y <- y [2] * spc$y + y [1]
+		if (! any (is.na (y)))
+			spc@data$y <- y
+	}
+	spc
 }
+

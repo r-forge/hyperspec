@@ -1,6 +1,6 @@
 \documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl} % ursprünglich DIV 15
 \usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenx}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
 \usepackage{color}
@@ -39,9 +39,24 @@
 
 \newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
 
+% fancy warning box
+\newcommand{\warnbox}[2]{
+\begin{tikzpicture}
+\node [draw=red, very thick, rectangle, rounded corners, inner sep=10pt] (box){%
+    \begin{minipage}{\linewidth}
+      \vspace{0.5\baselineskip}
+      #2
+    \end{minipage}
+};
+\node[fill = red, text = white, right=5mm, rounded corners] at (box.north west)
+  {\sffamily\bfseries\large #1};
+\end{tikzpicture}%
+}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
-% Meta information - fill between {} and do not remove %
-%\VignetteIndexEntry{flu: Vignette on the fluorescence data set, how to write an import function, and example of a linear calibration}
+% Meta information - fill between {} and do not remove 
+% \VignetteIndexEntry{flu: Vignette on the fluorescence data set, how to write an import function, and example of a linear calibration}
 % \VignetteKeywords{hyperSpec, flu, calibration}
 % \VignettePackage{hyperSpec}
 \AtBeginDocument{
@@ -55,7 +70,7 @@
 
 % my preferred packages
 \usepackage{xspace}
-%\usepackage{tikz}
+\usepackage{tikz}
 %\usepackage{subfig}
 %\usepackage{booktabs}
 
@@ -67,6 +82,7 @@
 %\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
 %\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
 \newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
+\newcommand{\phy}{\texorpdfstring{\nohyphens{\textit{hyperSpec}}}{hyperSpec}\xspace}
 
 \@ifundefined{showcaptionsetup}{}{%
  \PassOptionsToPackage{caption=false}{subfig}}
@@ -80,6 +96,16 @@ CENMAT, DMRN, University of Trieste}
 
 \begin{document}
 \maketitle
+
+\warnbox{Reproducing the Examples in this Vignette}{
+The spectra files are shipped with \phy. This allows reproduction of the whole
+vignette (source code and spectra files are in the documentation directory).
+
+For reproducing the examples in a live session, the full file names of the 
+spectra can be found with the command:\\
+\texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
+"hyperSpec/doc/flu*.txt", sep = "/"))}} 
+}
 
 <<init, echo = FALSE, results = hide>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
@@ -206,7 +232,7 @@ plotc (flu, zlab = expression (I ["450 nm"] / a.u.),
 
 The actual calibration is a linear model, which can be fitted by the R function \Rfunction{lm}.
 \Rfunction{lm} needs a \emph{formula} that specifies which data columns are dependent and independent
-variables.
+variables. 
 
 The normal calibration plot gives the emission intensity as a function of the concentration, and
 the calibration function thus models $I = f (c)$, i. e.  $I = m c + b$ for a linear calibration.
