@@ -9,9 +9,6 @@
 ###
 ####################################################################################################
 
-.ENVI.default.keys.hdr2data <- FALSE
-.ENVI.default.keys.hdr2log  <- TRUE
-
 ### some helper functions ..........................................................................
 .read.ENVI.header  <- function (file, headerfilename) {
   if (is.null (headerfilename)) {
@@ -149,9 +146,8 @@
 
 read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile = NULL, 
 							  header = list (), 
+							  keys.hdr2data = FALSE, keys.hdr2log = TRUE,
                        x = 0 : 1, y = x, 
-							  keys.hdr2data = .ENVI.default.keys.hdr2data, 
-							  keys.hdr2log = .ENVI.default.keys.hdr2log,
                        wavelength = NULL, label = list (), log = list ()) {
   force (y)				
   

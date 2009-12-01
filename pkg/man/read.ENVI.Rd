@@ -5,28 +5,44 @@
 \title{Import of ENVI data as hyperSpec object}
 \description{
 This function allows ENVI data import as \code{hyperSpec} object.
+
+\code{read.ENVI.Nicolet} should be a good starting point for writing custom wrappers 
+for \code{read.ENVI} that take into account your manufacturer's special entries in the 
+header file. 
 }
 \usage{
-read.ENVI (file = stop ("read.ENVI: file name needed"), header = NULL,
-   x = 0:1, y = x,
-   wavelength = NULL, label = NULL, log = NULL)
+read.ENVI (file = stop ("read.ENVI: file name needed"), headerfile = NULL, 
+	 	   header = list (),
+ 		   keys.hdr2data = FALSE, keys.hdr2log = TRUE,
+           x = 0:1, y = x,
+   		   wavelength = NULL, label = list (), log = list ())
 
-read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
-   x = c (NA, NA), y = c (NA, NA),
-   wavelength = NULL, label = list (), log = NULL,
+read.ENVI.Nicolet (\dots, x = NA, y = NA, log = list (), keys.hdr2log = TRUE,
    nicolet.correction = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{file}{name of the binary file}
-  \item{header}{name of the ASCII header file or list with the
-    respective information, see details. If \code{NULL}, the name of the
-    header file is guessed.}
+  \item{file}{complete name of the binary file}
+  \item{headerfile}{name of the ASCII header file. If \code{NULL}, the name of the
+    header file is guessed by looking for a second file with the same basename but
+    different suffix as \code{file}.}
+  \item{header}{list with the
+    respective information, see details.}
   \item{x, y}{vectors of form c(offset, step size) for the position
     vectors, see details.}
-  \item{wavelength, label, log}{handed to
-    \code{\link[hyperSpec]{initialize}}}
+  \item{wavelength, label, log}{lists that overwrite the respective information 
+  from the ENVI header file. These data is then handed to
+    \code{\link[hyperSpec]{initialize}}} 		   
+  \item{keys.hdr2data, keys.hdr2log}{determine which fields of the header file should
+  be put into the extra data and which are to be stored in long.description in the 
+  hyperSpec object's log. Defaults to putting all header information into the log, 
+  and none as extra data.
+  
+  To specify certain entries, give character vectors 
+  containing the lowercase names of the header file entries.
+  }
   \item{nicolet.correction}{see details}
+  \item{\dots}{handed to \code{read.ENVI}}
 }
 \details{
   ENVI data usually consists of two files, an ASCII header and a binary data
@@ -78,27 +94,21 @@ read.ENVI.Nicolet (file = stop("read.ENVI: file name needed"), header = NULL,
   The \code{$y} colum is calculated analogously.
 
   Nicolet uses some more keywords in their header
-  file. \code{read.ENVI.Nicolet} supports:
+  file.   \code{read.ENVI.Nicolet} therefore appends "description", 
+  "z plot titles", and "pixel size" to \code{keys.hdr2log} before calling  
+  \code{read.ENVI}. They are then interpreted as follows:
   \tabular{ll}{
     description \tab giving the position of the first spectrum \cr
     z plot titles \tab wavelength and intensity axis units, comma
     separated \cr
     pixel size \tab interpreted as x and y step size
   }
-
+  
   The values in header line description seem to be microns while the
   pixel size seems to be in microns. If \code{nicolet.correction} is
   true, the pixel size values (i.e. the step sizes) are multiplied by
   1000.
-
-  read.ENVI.Nicolet tries to extract the following information from keyword-value pairs:
-  \tabular{ll}{
-     keyword \tab value(s) \cr
-    description \tab x and y position of first spectrum \cr
-    z plot titles \tab wavelength and intensity axis units, comma separated \cr
-    pixel size \tab interpreted as x and y step size
-  }
-}
+ }
 
 \value{
   a \code{hyperSpec} object
@@ -121,6 +131,8 @@ GIF, Base64, ROC AUC, etc.. R package version 1.9.
 
 \seealso{
 \code{\link[caTools]{read.ENVI}}
+
+\code{\link[hyperSpec]{io-functions}}
 }
 \keyword{IO}
 \keyword{file}

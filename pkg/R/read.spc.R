@@ -538,7 +538,7 @@ read.spc <- function (filename,
 			data$z.end <- hdr$subhdr$subnext
 			
 			if (hdr$fwplanes > 0)
-				data$w <- subwlevel
+				data$w <- hdr$subhdr$w
 			
 			if (! exists ('wavelength'))
 				.spc.error ("read.spc", list (hdr = hdr),
@@ -564,7 +564,7 @@ read.spc <- function (filename,
 			data [s, c('z', 'z.end')] <- unlist (hdr$subhdr [c('subtime', 'subnext')])
 			
 			if (hdr$fwplanes > 0)
-				data [s, "w"] <- hdr$subhdr$subwlevel
+				data [s, "w"] <- hdr$subhdr$w
 		}
 	}
 	
@@ -582,7 +582,7 @@ read.spc <- function (filename,
 read.spc.KaiserMap <- function (files, 
 		keys.hdr2data = FALSE, keys.hdr2log = TRUE,
 		keys.log2data = NULL, keys.log2log = TRUE, 
-		glob = TRUE, log = list (), ...) {
+		glob = TRUE, ...) {
 	
 	if (glob)
 		files <- Sys.glob (files)

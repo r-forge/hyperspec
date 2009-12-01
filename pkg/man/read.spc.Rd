@@ -18,21 +18,20 @@ read.spc (filename,
 		  keys.log2data = FALSE, 
 		  keys.log2log = TRUE, 
 		  log.txt = TRUE, log.bin = FALSE, log.disk = FALSE, 
-		  hdr = list(), label = list(), log = list(), 
-		  no.object = FALSE)
+		  hdr = list(), no.object = FALSE)
 
 read.spc.KaiserMap (files, 
 					keys.hdr2data = FALSE, 
 					keys.hdr2log = TRUE, 
 					keys.log2data = NULL, 
 					keys.log2log = TRUE, 
-					glob = TRUE, 
-					log = list(), label = list(), ...)
+					glob = TRUE, ...)
 }
 \arguments{
   \item{filename}{
 	The complete file name of the .spc file. 
-	
+}
+  \item{files}{	
 	If \code{glob = TRUE}, \code{filename} can contain wildcards. 
 	Thus all files matching the name pattern in \code{filename} can be specified. 
 }
@@ -69,7 +68,7 @@ All further arguments to \code{read.spc.KaiserMap} are handed over directly to \
 }
 }
 \details{
-A detailed description of the .spc file format is available at \link{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+A detailed description of the .spc file format is available at \link[=https://ftirsearch.com/features/converters/SPCFileFormat.htm]{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
 }
 \value{
 If the file contains multiple spectra with individual wavelength axes, \code{read.spc} returns a list of  hyperSpec objects. 
@@ -79,7 +78,7 @@ Otherwise the result is a hyperSpec object.
 containing the stage position as recorded in the .spc files' log.
 }
 \references{
-Source development kit and file format specification of .spc files: \link{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+Source development kit and file format specification of .spc files: \link[=https://ftirsearch.com/features/converters/SPCFileFormat.htm]{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
 }
 \author{
 C. Beleites
@@ -91,7 +90,7 @@ If you have .spc files that cannot be read with these function, don't hesitate t
 your code patch or asking advice.  
 }
 \seealso{
-\link[=io-functions]{File Import}
+\code{\link[hyperSpec]{io-functions}}
 }
 \examples{
 ## get the sample .spc files from ftirsearch.com (see above)
@@ -107,7 +106,7 @@ spc
 # multi-spectra .spc file with individual wavelength axes
 spc <- read.spc ("BARBITUATES.SPC")
 plot (spc [[1]], lines.args = list (type = "h"))
-
+}
 }
 \keyword{IO}
 \keyword{file}
