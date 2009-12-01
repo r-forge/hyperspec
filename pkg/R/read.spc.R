@@ -442,36 +442,6 @@
 	stop (...)
 }
 
-#    ftflgs \tab \cr
-#    fexper \tab log\cr
-#    fexp \tab \cr
-#    fnpts \tab \cr
-#    ffirst \tab \cr
-#    flast \tab \cr
-#    fnsub \tab \cr
-#    fxtype \tab \cr
-#    fytype \tab \cr
-#    fztype \tab \cr
-#    fpost \tab \cr
-#    fdate \tab extra data\cr
-#    fres \tab log\cr
-#    fsource \tab log\cr
-#    fpeakpt \tab in extra data iff interferogram\cr
-#    fspare \tab \cr
-#    fcmnt \tab log\cr
-#    fcatxt \tab \cr
-#    flogoff \tab \cr
-#    fmods \tab \cr
-#    fprocs \tab \cr
-#    flevel \tab \cr
-#    fsampin \tab \cr
-#    ffactor \tab \cr
-#    fmethod \tab \cr
-#    fzinc \tab \cr
-#    fwplanes \tab \cr
-#    fwinc \tab \cr
-#    fwtype \tab \cr
-
 .spc.ftflags <- function (x) {
 	ftflgs <- as.logical (x %/% 2^(0 : 7) %% 2)
 	names (ftflgs) <- c ('TSPREC', 'TCGRAM', 'TMULTI', 'TRANDM',
@@ -484,7 +454,7 @@ read.spc <- function (filename,
 		keys.hdr2data = c('fexper', 'fres', 'fsource'), keys.hdr2log = c('fdate', 'fpeakpt'),
 		keys.log2data = FALSE, keys.log2log = TRUE,
 		log.txt = TRUE, log.bin = FALSE, log.disk = FALSE,
-		hdr = list (), label = list (), log = list (),
+		hdr = list (),
 		no.object = FALSE){
 	
 	## f contains the raw bytes of the file
@@ -517,10 +487,9 @@ read.spc <- function (filename,
 	if (hdr$fwplanes > 0)
 		label <- modifyList (list (w = hdr$fwtype), label)
 	
-	label <- modifyList (list (.wavelength = hdr$fxtype, spc = hdr$fytype,
-					z = hdr$fztype, z.end = hdr$fztype),
-			label)
-	
+	label <- list (.wavelength = hdr$fxtype, spc = hdr$fytype,
+					z = hdr$fztype, z.end = hdr$fztype)
+				
 	## prepare list for hyperSpec log and data.frame for extra data
 	
 	data <- list (z = NA, z.end = NA)
@@ -532,11 +501,11 @@ read.spc <- function (filename,
 			log.bin, log.disk, log.txt,
 			keys.log2data,  keys.log2log)
 	
-	log <- modifyList (list (short = "read.spc",
+	log <- list (short = "read.spc",
 					long = list (call = match.call (),
 							log = tmp$log.long,
-							header = getbynames (hdr, keys.hdr2log))),
-			log)
+							header = getbynames (hdr, keys.hdr2log)))
+
 	data <- c (data, tmp$extra.data)
 	
 	
@@ -613,10 +582,10 @@ read.spc <- function (filename,
 read.spc.KaiserMap <- function (files, 
 		keys.hdr2data = FALSE, keys.hdr2log = TRUE,
 		keys.log2data = NULL, keys.log2log = TRUE, 
-		glob = TRUE, log = list (), label = list (), ...) {
+		glob = TRUE, log = list (), ...) {
 	
 	if (glob)
-		files <- Sys.glob (filepattern)
+		files <- Sys.glob (files)
 	
 	keys.log2data <- c ('Stage_X_Position','Stage_Y_Position','Stage_Z_Position', keys.log2data)
 	
@@ -626,7 +595,7 @@ read.spc.KaiserMap <- function (files,
 	
 	f <- files [1]
 	
-	spc <- read.spc (f, keys.log2data = keys.log2data, keys.log2log = keys.log2log, no.object = TRUE)
+	spc <- read.spc (f, keys.log2data = keys.log2data, keys.log2log = keys.log2log, no.object = TRUE, ...)
 
 	data [1, 'x'] <- factor2num (spc$data$Stage_X_Position)
 	data [1, 'y'] <- factor2num (spc$data$Stage_Y_Position)
@@ -636,7 +605,7 @@ read.spc.KaiserMap <- function (files,
 	
 	for (f in seq_along (files)){
 		tmp <- read.spc (files [f], keys.log2data = keys.log2data, keys.log2log = keys.log2log,
-				no.object = TRUE)
+				no.object = TRUE, ...)
 		
 		data [f, 'x'] <- factor2num (tmp$data$Stage_X_Position)
 		data [f, 'y'] <- factor2num (tmp$data$Stage_Y_Position)

@@ -77,12 +77,16 @@ files <- files [1:10]
 system.time (low <- read.spc.KaiserMap(files [seq (1, length (files), by = 2)], glob = FALSE))
 system.time (high <- read.spc.KaiserMap(files [seq (2, length (files), by = 2)], glob = FALSE))
 
+read.spc.KaiserMap('~/Uni/Projekte/hyperspec.rforge/dev/Kaiser/Map 20090921 180944/ebroATB*.spc')
+
+
 # je ca. 15 - 30 s
 plot (low, "spcprctl5")
 plot (high, "spcprctl5")
 
 files <- dir ('~/Uni/Projekte/hyperspec.rforge/dev/Kaiser/Map 20090921 180944', '*.spc')
 system.time (for (i in 1 : 100) spc <- readspc ("~/Uni/Projekte/hyperspec.rforge/dev/Kaiser/Map 20090921 180944/", files [i]))
+
 
 
 Rprof ()

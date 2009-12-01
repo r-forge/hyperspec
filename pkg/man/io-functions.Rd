@@ -18,6 +18,9 @@
   A second option is using the package \code{\link[R.matlab]{R.matlab}}
   which provides the functions \code{\link[R.matlab]{readMat}} and
   \code{\link[R.matlab]{writeMat}}. 
+  
+  \code{\link[hyperSpec]{read.spc}} imports Thermo Galactic's .spc file format, and
+  ENVI files may be read using \code{\link[hyperSpec]{read.ENVI}}.
 }
 
 \usage{
@@ -93,6 +96,8 @@ For further information, see the
 \code{\link[R.matlab]{R.matlab}} for .mat files
 
 \code{\link[hyperSpec]{read.ENVI}} for ENVI data
+
+\code{\link[hyperSpec]{read.spc}} for .spc files
 
 Manufacturer specific file formats: \code{\link{scan.txt.Renishaw}}
 }
