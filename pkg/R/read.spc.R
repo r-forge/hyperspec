@@ -312,6 +312,11 @@
 	## according to .spc file documentation:
 	if (! hdr$ftflgs ['TMULTI'])
 		subhdr$subexp <- hdr$fexp
+   else if (hdr$fexp == -128 && subhdr$subexp != -128) {
+     warning ("Header file specifies float data format, but subfile uses integer exponent.",
+              " Subfile settings are overwritten.")
+     subhdr$subexp <- -128
+   }
 	
 	## the z values
 	if (hdr$fzinc == 0) # should only happen for the first subfile...
@@ -361,7 +366,8 @@
 ## read log block header ............................................................................
 ##
 
-.spc.log <- function (raw.data, pos, log.bin, log.disk, log.txt, keys.log2data,  keys.log2log) {
+.spc.log <- function (raw.data, pos, log.bin, log.disk, log.txt, keys.log2data,  keys.log2log,
+                      replace.nul = raw (13), iconv.from = "latin1", iconv.to = "utf8") {
 	
 	if (pos == 0) # no log block exists
 		return (list (data = list (),
@@ -390,7 +396,10 @@
 	## read text part of log
 	if (log.txt) {
 		log.txt <- raw.data [pos + loghdr$logtxto + seq_len (loghdr$logsizd - loghdr$logtxto)]
-		log.txt <- paste (rawToChar (log.txt, multiple = TRUE), collapse = "")
+      log.txt [log.txt == .nul] <- replace.nul
+      log.txt <- readChar (log.txt, length (log.txt), useBytes=T)
+      log.txt <- iconv (log.txt, iconv.from, iconv.to)
+#		log.txt <- paste (rawToChar (log.txt, multiple = TRUE), collapse = "")
 		log.txt <- split.string (log.txt, "\r\n") ## spc file spec says \r\n regardless of OS
 		log.txt <- split.line (log.txt, "=")
 		
@@ -583,7 +592,7 @@ read.spc.KaiserMap <- function (files,
 		keys.hdr2data = FALSE, keys.hdr2log = TRUE,
 		keys.log2data = NULL, keys.log2log = TRUE, 
 		glob = TRUE, ...) {
-	
+    
 	if (glob)
 		files <- Sys.glob (files)
 	
@@ -614,15 +623,13 @@ read.spc.KaiserMap <- function (files,
 		spc$spc  [f, ] <- tmp$spc
 	}
 	
-	log <- modifyList (list (short = "read.spc.KaiserMap",
+	log <- list (short = "read.spc.KaiserMap",
 					long = list (call = match.call (),
 							last.header = tmp$log$long$header,
-							last.log = tmp$log$long$log)),
-			log)
-	label <- modifyList (tmp$label, label)
-	
+							last.log = tmp$log$long$log))
+
 	new ("hyperSpec", wavelength = spc$wavelength, spc = spc$spc, data = data, 
-			label = label,
+			label = tmp$label,
 			log = log)
 }
 

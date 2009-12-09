@@ -333,4 +333,9 @@ my.extract <- function (x, head, tail, ...){
       
 } 
 
+mark.dendrogram <- function (dendrogram, clusters,
+                             col = matlab.dark.palette (length (unique (clusters))),
+                             y = -3, pch = "|")
+  points (seq_along (dendrogram$order), rep (y, length (dendrogram$order)),
+          col = col [clusters [dendrogram$order]], pch = pch)
 

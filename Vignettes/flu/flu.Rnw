@@ -1,3 +1,4 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; noweb-doc-mode: latex-mode; -*-
 \documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl} % ursprünglich DIV 15
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenx}

@@ -1,28 +1,38 @@
-spikefilter2d <- function (spcmatrix) {
-  ## expand matrix by mean values
-  m <- apply (spcmatrix, 1, mean)
-  spcmatrix <- cbind (m, spcmatrix, m)
-  m <- apply (spcmatrix, 2, mean)
-  spcmatrix <- rbind (m, spcmatrix, m)
+## spikefilter2d <- function (spcmatrix) {
+##   ## expand matrix by mean values
+## #  m <- apply (spcmatrix, 1, mean)
+## #  spcmatrix <- cbind (m, spcmatrix, m)
+##   spcmatrix <- spcmatrix [c(1, seq_len (nrow (spcmatrix), nrow (spcmatrix))), ]
+## #  m <- apply (spcmatrix, 2, mean)
+## #  spcmatrix <- rbind (m, spcmatrix, m)
+##   spcmatrix <- spcmatrix [, c(1, seq_len (ncol (spcmatrix), ncol (spcmatrix))), ]
 
-  d <- t(apply (spcmatrix[-c(1, nrow (spcmatrix)),], 1, convolve, c(-1, 2, -1), type="f"))
-  d <- d + apply (spcmatrix[,-c(1, ncol (spcmatrix))], 2, convolve, c(-1, 2, -1), type="f") 
+##   d <- t(apply (spcmatrix[-c(1, nrow (spcmatrix)),], 1, convolve, c(-1, 2, -1), type="f"))
+##   d <- d + apply (spcmatrix[,-c(1, ncol (spcmatrix))], 2, convolve, c(-1, 2, -1), type="f") 
   
-  return (d) 
+##   return (d) 
+## }
+
+spikefilter2d <- function (spcmatrix) {
+  ## expand matrix by one row and col at each side
+  spcmatrix <- spcmatrix [c (1, seq_len (nrow (spcmatrix)), nrow (spcmatrix)), ]
+  spcmatrix <- spcmatrix [, c (1, seq_len (ncol (spcmatrix)), ncol (spcmatrix))]
+
+  # filter 
+  d <- t  (apply (spcmatrix, 1, filter, c(-1, 2, -1)))
+  d <- d + apply (spcmatrix, 2, filter, c(-1, 2, -1)) 
+
+  # the extra row and col are now NA, so don't return them
+  d [-c (1, nrow (d)), -c (1, ncol (d))]
 }
 
-
 spikefilter <- function (spcmatrix) {
-  ## expand matrix by mean values
-  m <- apply (spcmatrix, 1, mean)
-  spcmatrix <- cbind (m, spcmatrix, m)
-  #m <- apply (spcmatrix, 2, mean)
-  #spcmatrix <- rbind (m, spcmatrix, m)
+  ## expand matrix 
+  spcmatrix <- spcmatrix [c(1, seq_len (nrow (spcmatrix)), nrow (spcmatrix)), ]
 
-  d <- t(apply (spcmatrix, 1, convolve, c(-1, 2, -1), type="f"))
-  #d <- d + apply (spcmatrix[,-c(1, ncol (spcmatrix))], 2, convolve, c(-1, 2, -1), type="f") 
-  
-  return (d) 
+  d <- t (apply (spcmatrix, 1, filter, c(-1, 2, -1)))
+
+  d [, -c (1, ncol (d))]
 }
 
 spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
@@ -33,9 +43,11 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   gc ()
   
   dim <- dim (spikiness) 
-  dim(spikiness)  <- NULL
+  dim(spikiness)  <- NULL # make vector
+  
   if (is.null (ispikes))
-    ispikes <- rev (order (spikiness, na.last = FALSE))
+    ispikes <- order (spikiness, na.last = TRUE, decreasing = TRUE)
+
   if (is.null (iispikes))
     iispikes <- order (ispikes)
   
