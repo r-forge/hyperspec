@@ -1,8 +1,6 @@
-%% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
-\documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 %\usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenx}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
 \usepackage{color}
@@ -14,10 +12,19 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[numbers]{natbib}
-\usepackage[unicode=true,
- bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
- breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
- {hyperref}
+\usepackage[unicode = true,
+            bookmarks = true,
+            bookmarksnumbered = false,
+            bookmarksopen = false,
+            breaklinks = false,
+            pdfborder = {0 0 1},
+            backref = false,
+            colorlinks = true,
+            citecolor=green!50!black,        % color of links to bibli
+            filecolor=blue!50!black,      % color of file links
+            urlcolor=blue!50!black,           % color of external links
+            linkcolor=blue!50!black          % color of internal links
+           ]{hyperref}
 \hypersetup{pdftitle={hyperSpec Introduction},
  pdfauthor={C. Beleites},
  pdfsubject={Introduction on the R package hyperSpec},
@@ -40,6 +47,9 @@
 \newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
 
 \newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
+\newcommand{\phy}{\Rpackage{hyperSpec}\xspace}
+\newcommand{\chy}{\Rclass{hyperSpec}\xspace}
+\newcommand{\eg}{e.\,g.\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 % Meta information - fill between {} and do not remove %
@@ -75,6 +85,20 @@
 \usepackage{subfig}
 \makeatother
 
+% fancy warning box
+\newcommand{\warnbox}[2]{
+\begin{tikzpicture}
+\node [draw=red, very thick, rectangle, rounded corners, inner sep=10pt] (box){%
+    \begin{minipage}{\linewidth}
+      \vspace{0.5\baselineskip}
+      #2
+    \end{minipage}
+};
+\node[fill = red, text = white, right=5mm, rounded corners] at (box.north west)
+  {\sffamily\bfseries\large #1};
+\end{tikzpicture}%
+}
+
 \begin{document}
 
 \title{\Rpackage{hyperSpec} Introduction }
@@ -87,6 +111,18 @@ CENMAT, DMRN, University of Trieste}
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="serif")))
 options ("width" = 100)
 @
+\warnbox{Reproducing the Examples in this Vignette}{
+All spectra used in this manual are installed automatically with \phy. 
+
+The source data files of the \Robject{flu} and \Robject{laser} data sets as well as of the paracetamol spectrum are shipped with the package.
+For reproducing the examples in a live session, the full file names of the 
+spectra can be found with the command:\\
+\texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
+"hyperSpec/doc/*.txt", sep = "/"))}} 
+
+The source data file of the \Robject{chondro} data, however, needs to be be obtained separately. It is available for download as a .zip file at \Rpackage{hyperSpec}'s home page  (\url{http://r-forge.r-project.org/projects/hyperspec/}, ca. 8.5 MB).
+The original file (ca. 31 MB) is far too large to be included in the package.
+}
 
 \tableofcontents{}
 
@@ -134,7 +170,7 @@ series, and
 In this vignette, all three data sets are used in an intermixed way
 to illustrate appropriate procedures for different tasks.
 
-This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. Therefore recommend to look up the used methods in R's help system using  \Rcode{?~command}.
+This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. It is therefore recommended to look up the methods in R's help system using  \Rcode{?~command}.
 
 \subsection{Notation}
 
@@ -168,66 +204,31 @@ mathematical operators, etc. These functions can be implemented in
 a specialized way by each class.
 
 \Rclass{hyperSpec} implements with a variety of such functions, see
-table~\ref{tab:Generic-methods}.
+table~\ref{tab:generic} on page~\pageref{tab:generic}.
 
-%
-\begin{table}
-\noindent \centering{}\caption{\label{tab:Generic-methods}Generic methods implemented by \Rclass{hyperSpec}
-and some closely related functions. \emph{Emphasized} names indicate non-generic
-functions.}
-\begin{small}
-\renewcommand{\arraystretch}{2}
-\begin{tabular}{p{0.3\textwidth}p{0.65\textwidth}}
-\toprule
-\textbf{Function}                                                          & \textbf{Explanation}\\\cmidrule(lr){1-1}\cmidrule(lr){2-2}
-\Rcode{new (\textquotedbl{}hyperSpec\textquotedbl{}, ...)},
-\Rfunction{initialize}                                                     & create and initialize an object\\
-\Rfunction{validObject}                                                    & validity checking\\
-Display\\
-\Rfunction{print}, \Rfunction{show}, \Rfunction{summary}                   & print information about the object\\
-\Rfunction{plot}                                                           & plotting\\
-Basic information\\
-\Rfunction{dim}, \Rfunction{ncol}, \Rfunction{nrow}, \emph{nwl}            & the dimensions of the object\\
-\Rfunction{dimnames}, \Rfunction{colnames},\Rfunction{rownames}            & names of the spectra, data columns, and both plus the names of the wavelengths\\
-Parts of the object\\
-\Rfunction{[},\Rfunction{[[}, \Rfunction{\$}                               & extract parts of an object\\
-\Rfunction{[<-}, \Rfunction{[[<-}, \Rfunction{\$<-}                        & assign parts of an object\\
-\Rfunction{labels}, \emph{\Rfunction{labels<-}}                            & labels for axis annotations etc.\\
-\emph{\Rfunction{wl}}, \emph{\Rfunction{wl<-}}                             & wavelength axis\\
-\emph{\Rfunction{logbook}}, \emph{\Rfunction{logentry}}                    & logbook and adding logbook entries\\
-Calculations on the spectra matrix\\
-\Rfunction{+ - * \textasciicircum{} \%\% \%/\% / \%*\%}                    & arithmetical operators work on \Rcode{\$spc}\\
-\Rfunction{> < == >= <=}                                                   & comparison operators work on \Rcode{\$spc} yielding a logic matrix\\
-\Rfunction{all.equal}                                                      & checking equality of \Rclass{hyperSpec} objects on diffent levels\\
-\Rfunction{log}, \Rfunction{log10}, \Rfunction{exp}, etc.                  & basic math functions work on \Rcode{\$spc}, see also: \Rcode{? \textquotedbl{}hyperSpec Math\textquotedbl}\\
-\Rfunction{min}, \Rfunction{max}, \Rfunction{range}                        & minimum, maximum, and range of the intensities in \Rcode{\$spc}\\
-Combining and splitting\\
-\Rfunction{cbind}, \Rfunction{rbind}, \Rfunction{cbind2},
-\Rfunction{rbind2}, \emph{\Rfunction{bind}}                                & combine two objects by columns or rows\\
-\Rfunction{split}                                                          & split an object into a list of objects\\
-Vectorization of calibrations\\
-\Rfunction{apply}                                                          & apply a function row- or column-wise, calculate e.\,g. the mean spectrum or normalization factors\\
-\Rfunction{aggregate} (\Rfunction{ave})                                    & calculate sum characteristics for groups of spectra, e.\,g. cluster mean spectra. \Rpackage{hyperSpec}'s \Rfunction{aggregate} method covers also the functionality of \Rfunction{ave}.\\
-\Rfunction{sweep}                                                          & ``sweep'' a sum characteristic over rows or columns, e.\,g. centre the data by subtracting the mean spectrum.\\
-Type conversion\\
-\raggedright{\Rfunction{as.character}, \Rfunction{as.matrix}, \Rfunction{as.data.frame}} & type conversion functions\\
-\Rfunction{[[}, \Rfunction{\$}                               					& extract parts of an object as data.frame, matrix, or vector\\
-\bottomrule
-\end{tabular}\end{small}
-\end{table}
+\subsection{Functionality Can be Extended at Runtime}
+The concept of functions in \R offers much flexibility. Functions may be added or changed by the user in his \emph{workspace} at any time. This is also true for methods belonging to a certain class.
+Neither restart of R nor reloading of the package or anything the like is needed. At the same time, the original function is not deleted, it is just masked by the user's new function but stays accessible if the change should be reverted.
 
-\subsection{S4 Classes Can be Extended at Runtime}
-The concept of S4 classes offers more flexibility than the class concepts in many other programming languages. Functions may be added or changed by the user in his \emph{workspace} at any time. Neither restart of R nor reloading of the package or anything the like is needed. At the same time, the original function is not deleted, it is just masked by the user's new function but stays accessible if the change should be reverted.
+This offers the opportunity of easily writing specialized functions that are adapted to specific tasks. 
 
-This offers the opportunity of easily writing specialized functions that are adapted to specific tasks.
+As an example, see the setup of the plotting function for the spectra matrix in section~\ref{sec:plotmat} (page~\pageref{sec:plotmat})
 
-\subsection{Validity}
-S4 classes have a mechanism to define and enforce that the data actually stored in the object is appropriate for this class. In other words, there is a mechanism of \emph{validity checking}.
+\subsection{Validity Checking}
+S4 classes have a mechanism to define and enforce that the data actually stored in the object is appropriate for this class. In other words, there is a mechanism of \emph{validity checking}. 
 
 The functions provided by \Rpackage{hyperSpec} check the validity
 of \Rclass{hyperSpec} objects at the beginning, and --- if the validity
 could be broken by inappropriate arguments --- also before leaving
 the function.
+ 
+It is highly recommended to use validity checking also for user-defined functions. In addition, non-generic functions need to ensure that the argument actually is a \chy object. The two tasks are accomplished by:
+<<eval = FALSE>>=
+.is.hy (object)
+validObject (object)
+@
+The first line checks whether \Robject{object} is a \chy object, the second checks its validity. 
+Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise an error and stop.
 
 
 \section{Loading the package}
@@ -288,6 +289,19 @@ and
 demo (plotmath)
 @
 
+\section{Functions provided by \phy}
+\label{sec:funct-prov-phy}
+
+Table~\ref{tab:generic} and \ref{tab:functions} give an overview of the functions implemented by \phy. 
+\input{tab-generic}
+\input{tab-functions}
+\ref{fig:schema} is a reference card providing an overview which functions help to accomplish what (spectroscopic) task. 
+\begin{figure}[p]
+  \includegraphics[width=\textwidth]{hyperSpec-schema-annotated}
+  \caption{Overview of functions to accomplish common spectroscopic tasks.}
+  \label{fig:schema}
+\end{figure}
+
 \section{Obtaining Basic Information about \Rpackage{hyperSpec} Objects}
 
 As usual, the \Rmethod{print} and \Rmethod{show} methods display
@@ -338,18 +352,34 @@ one spectrum per row
 \end{description}
 The import functions immediately return a \Rclass{hyperSpec} object.
 
+\subsection{Matlab Files}
+
+Matlab files can be read and written using the package \Rpackage{R.matlab}\citep{R.matlab},
+which is available at CRAN and can be installed by \Rcode{install.packages (\textquotedbl{}R.matlab\textquotedbl{})}.
+
+\subsection{ENVI Files}
+\label{sec:envi-files}
+\phy provides a function to read ENVI files, \Rfunction{read.ENVI}\mFun{read.ENVI}. ENVI files are binary data accomanied by an ASCII header file.
+
+As we experienced missing header files (Bruker's Opus software frequently produces header files without any content), the data that would usually be read from the header file can also be handed to \Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should contain.
+
+\subsection{spc Files}
+\label{sec:spc-files}
+Thermo Galactic's .spc file format can be read by \Rfunction{read.spc}. 
 
 \subsection{Manufacturer Specific Import Functions}
 
 Many spectrometer manufacturers provide a function to export their
-spectra into ASCII files. The functions discussed in the previous
-section are written in a very general way, and are highly customizable.
+spectra into ASCII files. The functions discussed above are written in a very general way, and are highly customizable.
 I recommend wrapping these calls with the appropriate settings for
 your spectra format in an import function. You may also consider contributing
 such import filters to \Rpackage{hyperSpec}: send me (\href{mailto:cbeleites@units.it}{cbeleites@units.it})
 the documented code (either .R + .Rd file or Roxygen commented .R).
 
-For the long ASCII format written by Renishaw's converter, a more
+\subsubsection{Renishaw}
+\label{sec:renishaw}
+
+For the long ASCII format written by Renishaw's converter, an
 optimized import function is already available: \Rfunction{scan.txt.Renishaw}. \mFun{\Rfunction{scan.txt.Renishaw}}
 
 <<scan.txt.Renishaw>>=
@@ -357,11 +387,34 @@ paracetamol <- scan.txt.Renishaw ("paracetamol.txt", "spc")
 paracetamol
 @
 
+The converter also offers to write .spc files. We experienced however, that this conversion is not fully reliable: maps were saved as depth profile, loosing all spatial information. Also, an evenly spaced wavelength axis was produced, although this was de-selected in the converter. We therefore recommend using the ASCII format.
 
-\subsection{Matlab Files}
+\subsubsection{Bruker FTIR Imaging}
+We use \Rfunction{read.ENVI} to import IR-Images collected with a Bruker Hyperion spectrometer with OPUS software. As mentioned above, the header files are frequently missing. We found the necessary information to be:
+<<eval=FALSE>>=
+header <- list (samples = 64 * no.images.in.row,
+                lines = 64 * no.images.in.column,
+                bands = no.data.points.per.spectrum,
+                `data type` = 4,
+                interleave = "bip")
+@
 
-Matlab files can be read and written using the package \Rpackage{R.matlab}\citep{R.matlab},
-which is available at CRAN and can be installed by \Rcode{install.packages (\textquotedbl{}R.matlab\textquotedbl{})}.
+No spatial information is given in the ENVI header (if correctly written). The lateral coordinates can be setup by specifying origin and pixel size for $x$ and $y$ directions. For details please see the help page.
+
+\subsubsection{Nicolet FTIR Imaging}
+Also Nicolet saves imaging data in ENVI files. These files use some non-standard keywords in the header file that should allow to reconstruct the lateral coordinates as well as the spectral axes' units. 
+
+There is indication that the position of the first spectrum is recorded in \mum, while the pixel size is in mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
+Also here, giving the correct offset and pixel size values as function arguments is possible.
+
+
+
+\subsubsection{Kaiser Raman Maps}
+Spectra obtained using Kaiser's Hologram software can be saved either in their own .hol format and imported into Matlab (from where the data may be written to a .mat file readable by \Rpackage{R.matlab}'s \Rfunction{readMat}. Alternatively, Hologram can write ASCII files and .spc files. We found working with .spc files the best option. 
+
+\phy provides the function \Rfunction{read.spc.KaiserMap} to easily import spatial collections of .spc files written by Kaiser's Hologram software. The filenames of all .spc files to be read into one \chy object can be provided either in a character vector or as a wildcard expression (\eg \textquotedbl path/to/files/*.spc\textquotedbl ).
+
+
 
 
 \subsection{Creating a \Rclass{hyperSpec} Object from Spectra Matrix
@@ -554,7 +607,7 @@ All three plus some more handy abbreviations are also accessible via \Rmethod{pl
 \item [{\Rcode{plot (chondro, \textquotedbl{}spcprctl5\textquotedbl{})}}] like \Rcode{\textquotedbl{}spcprctl\textquotedbl{}} plus 5$^{\text{th}}$ and 95$^{\text{th}}$percentile.
 \item [{\Rcode{plot (chondro, \textquotedbl{}map\textquotedbl{})}}] is equivalent to \Rcode{plotmap (chondro)}
 \item [{\Rcode{plot (flu, \textquotedbl{}c\textquotedbl{})}}] is equivalent to \Rcode{plotc (flu)}
-\item [{\Rcode{plot (laser, \textquotedbl{}ts\textquotedbl{})}}] plots a time series plot, equivalent to \Rcode{plotc (laser, use.c = \textquotedbl{}t\textquotedbl{})}
+\item [{\Rcode{plot (laser, \textquotedbl ts\textquotedbl )}}] plots a time series plot, equivalent to \Rcode{plotc (laser, use.c = \textquotedbl{}t\textquotedbl{})}
 \item [{\Rcode{plot (x, \textquotedbl{}depth\textquotedbl{})}}] plots a depth profile plot, equivalent to \Rcode{plotc (laser, use.c = \textquotedbl{}z\textquotedbl{})}
 \end{description}
 Figure~\ref{fig:example-plots} shows some example plots.
@@ -628,21 +681,58 @@ plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, wl.reve
 
 %
 \begin{figure}
-\subfloat[\label{fig-plotspc-ms}]{\includegraphics[width=0.33\textwidth]{introduction-ms}
-
-}\subfloat[\label{fig-plotspc-paracetamol}]{\includegraphics[width=0.33\textwidth]{introduction-plotspcadd}
-
-}\subfloat[\label{fig-plotmap-factor}]{\includegraphics[width=0.33\textwidth]{introduction-clustmap}
-
-
-
-}\caption{Arguments to \Rfunction{plotspc}. \subref{fig-plotspc-ms}
+\subfloat[\label{fig-plotspc-ms}]{\includegraphics[width=0.33\textwidth]{introduction-ms}}%
+\subfloat[\label{fig-plotspc-paracetamol}]{\includegraphics[width=0.33\textwidth]{introduction-plotspcadd}}%
+\subfloat[\label{fig-plotmap-factor}]{\includegraphics[width=0.33\textwidth]{introduction-clustmap}}
+\caption{Arguments to \Rfunction{plotspc}. \subref{fig-plotspc-ms}
 \Rcode{plot (fake.mass.spec, lines.args = list (type = \textquotedbl{}h\textquotedbl{}))}
 \subref{fig-plotspc-paracetamol} \Rcode{plotspc (paracetamol, wl.range = c (300 \textasciitilde{} 1800, 2800
 \textasciitilde{} max), xoffset = 850, wl.reverse = TRUE)} \subref{fig-plotmap-factor} \Rcode{plotmap} with a factor,
 see section \ref{HCA}.}
-
 \end{figure}
+
+\subsection{Plotting the Spectra Matrix}
+\label{sec:plotmat}
+It is often useful to plot the spectra against an additional coordinate, \eg the time for time series, the depth for depth profiles, etc. 
+
+This is done by  \Rfunction{plotmat}, which is set up similar to \Rfunction{plotmap} and \Rfunction{plotc}. Argument \Rfunarg{use.t} specifies the extra data column to use as ordinate, and defaults to "t". The plot can be conditioned by giving the conditioning term in \Rfunarg{cond}. The actual plot is produced by  \Rfunction{levelplot}, and further arguments are handed over directly. See figure~\ref{fig:plotmat}
+<<plotmat1, fig = TRUE, include = FALSE>>=
+plot (plotmat (laser, col.regions = matlab.palette (20)))
+@
+<<plotmat2, fig = TRUE, include = FALSE>>=
+plot (plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "#00000080"))
+@
+\begin{figure}
+\subfloat[\label{fig-plotmat-a}\Rcode{plotmat (laser, col.regions = matlab.palette (20))}]{\includegraphics[width=0.495\textwidth]{introduction-plotmat1}}%
+\subfloat[\label{fig-plotmat-b}\Rcode{plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "#00000080")}]{\includegraphics[width=0.495\textwidth]{introduction-plotmat2}}%
+\caption{\Rfunction{plotmat}: plotting the spectra matrix. 
+}
+\end{figure}
+
+% <<plotdef>>=
+% showMethods ("plot", classes = "hyperSpec", includeDefs = TRUE)
+% @
+% The actual dispatching of the plots according to the second (character) argument is done by  %\Rfunction{.plot}. Thus, the new switchyard function can just act if \Rcode{y == \textquotedbl       % ms\textquotedbl}, and otherwise call \Rfunction{.plot}. As \Rfunction{.plot} is not exported from  % \phy's namespace, it must be called including its namespace.
+% <<newplot>>=
+% .my.mass.plot <- function (x, y, ...) {
+%   if (y == "ms") {
+%     dots <- list (object = x, ...)
+%     dots <- modifyList (dots, list (lines.args = list (type = "h")))
+%     do.call (plotspc, dots)
+%   } else {
+%     hyperSpec:::.plot (x, y, ...)
+%   }
+% }
+% @ 
+% Finally, \R needs to know that the new switchyard function should be used for plotting of \chy 
+%  objects:
+% <<setmethod>>=
+% setMethod ("plot", signature (x = "hyperSpec", y = "character"), .my.mass.plot)
+% @
+
+% From now on, \Rcode{plot (x, \textquotedbl ms\textquotedbl)} will produce a plot with vertical %lines % as used for mass spectra. All other plot types are unaffected. 
+
+% Patching \Rfunction{.plot} in \phy if the changes could be useful 
 
 
 

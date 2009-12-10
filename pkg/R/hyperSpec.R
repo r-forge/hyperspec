@@ -146,6 +146,9 @@ setMethod ("initialize", "hyperSpec",
 ###
 orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
                      short = "orderwl", date = NULL, user = NULL){
+  .is.hy (x)
+  validObject (x)
+  
   ord <- order (x@wavelength, na.last = na.last, decreasing = decreasing)
   if (any (ord != seq_len (length (x@wavelength)))){
     x@data$spc <-  x@data$spc [, ord, drop = FALSE]
@@ -1625,6 +1628,9 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 ###  plotmap - plot map
 ###
 ## FIXME: one row / one column
+## TODO: ... -> func.args
+## TODO: trellis.args -> ...
+#TODO: cancel do.print: can be done externally as the object is returned
 
 plotmap <- function (object,
                      x = "x",
@@ -1724,7 +1730,6 @@ plotmap <- function (object,
   dots$x <- lattice
   if (do.print)
     do.call (print, c(print.args, dots))
-
   lattice
 }
 
@@ -2284,11 +2289,101 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
         levels = if (is.null (lvl)) stacked else lvl
         )
 }
+###-----------------------------------------------------------------------------
+###
+###  plot spectra matrix
+###
+
+plotmat <- function (object, use.t = "t", cond = NULL, ...) {
+  formula <- paste ("spc ~ wavelength *", use.t)
+  if (! is.null (cond))
+    formula <- paste (formula, "|", cond)
+  formula <- as.formula (formula)
+  
+  dots <- modifyList (list (xlab = object@label$.wavelength,
+                            ylab = object@label [[use.t]]),
+                      list (...))
+  dots <- c (list (x = formula, data = as.long.df (object)), dots)
+
+  do.call (levelplot, dots)
+}
 
 ###-----------------------------------------------------------------------------
 ###
 ###  plot methods
 ###
+
+# .plot: main switchyard for plotting functions
+.plot <-  function (x, y, ...){
+  ##    'spc'        ... spectra
+  ##    'map'        ... map
+  ##    'c'          ... concentration: plotc
+  ##    'ts'         ... time series: plotc
+  ##    'depth'      ... concentration or time series
+  ##    'spcmeansd'  ... mean spectrum +- 1 standard deviation
+  ##    'spcprctile' ... median spectrum , 16th and 84th percentile
+  ##    'spcprctl5'  ... spcprctile plus 5th and 95th percentile
+  
+  dots <- list(...)          # to allow optional argument checks
+  
+  if (missing (y)){
+    stop ("shouldnt be")
+    y = "spc"
+  }
+  
+  switch (tolower (y),
+          spc = {
+            plotspc (x, ...)
+          },
+          spcmeansd = {
+            dots <- modifyList (list (object = x,
+                                      fill = c (1, NA, 1),
+                                      func = mean_pm_sd,
+                                      func.args = list (na.rm = TRUE)
+                                      ),
+                                dots)
+            do.call (plotspc, dots)
+          },
+          spcprctile = {
+            dots <- modifyList (list (object = x,
+                                      fill = c (1, NA, 1),
+                                      func = quantile,
+                                      func.args = list (na.rm = TRUE,
+                                        probs = c (0.16, 0.5, 0.84))
+                                      ),
+                                dots)
+            do.call (plotspc, dots)
+          },
+          spcprctl5 = {
+            dots <- modifyList (list (object = x,
+                                      fill = c (1, 2, 3, 2, 1),
+                                      fill.col = c("#00000040"),
+                                        #c(rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75),
+                                        #rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .50))
+                                      func = quantile,
+                                      func.args = list (na.rm = TRUE,
+                                        probs = c (0.05, 0.16, 0.5, 0.84, 0.95))
+                                      ),
+                                dots)
+            do.call (plotspc, dots)
+          },
+          map = plotmap (x, ...),
+          c = plotc (x, ...),
+          ts = {
+            dots <- modifyList (list (object = x,
+                                      list (use.c = "t")),
+                                dots)
+            do.call (plotc, dots)
+          },
+          depth = {
+            dots <- modifyList (list (object = x,
+                                      list (use.c = "z")),
+                                dots)
+            do.call (plotc, dots)
+          },
+          stop (paste ("y = ", y, "unknown.", collapse = " "))
+          )
+}
 
 
 ### use plotspc as default plot function
@@ -2299,84 +2394,7 @@ setMethod ("plot",
 
 ### allow choice of spectral or map plot by second argument
 setMethod ("plot",
-           ##    'spc'        ... spectra
-           ##    'map'        ... map
-           ##    'c'          ... concentration: plotc
-           ##    'ts'         ... time series: plotc
-           ##    'depth'      ... concentration or time series
-           ##    'spcmeansd'  ... mean spectrum +- 1 standard deviation
-           ##    'spcprctile' ... median spectrum , 16th and 84th percentile
-           ##    'spcprctl5'  ... spcprctile plus 5th and 95th percentile
-
-           signature (x = "hyperSpec", y = "character"),
-           function (x, y, ...){
-             dots <- list(...)          # to allow optional argument checks
-
-             if (missing (y)){
-               stop ("shouldnt be")
-               y = "spc"
-             }
-
-             switch (tolower (y),
-                     spc = {
-                       plotspc (x, ...)
-                     },
-                     spcmeansd = {
-                       dots$fill <- c (1, NA, 1)
-                       if (is.null (dots$func.args))
-                         dots$func.args <- list (na.rm = TRUE)
-                       else if (is.null (dots$func.args$na.rm))
-                         dots$func.args$na.rm <- TRUE
-                       dots$object <- x
-                       dots$func <- mean_pm_sd
-                       do.call (plotspc, dots)
-                     },
-                     spcprctile = {
-                       dots$fill <- c (1, NA, 1)
-                       if (is.null (dots$func.args))
-                         dots$func.args <- list ()
-                       if (is.null (dots$func.args$na.rm))
-                         dots$func.args$na.rm <- TRUE
-                       if (is.null (dots$func.args$probs))
-                         dots$func.args$probs = c (0.16, 0.5, 0.84)
-                       dots$object <- x
-                       dots$func <- quantile
-                       do.call (plotspc, dots)
-                     },
-                     spcprctl5 = {
-                       if (is.null (dots$fill.col)) {
-                         dots$fill.col <- c(rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75),
-                                            rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .50))
-                       }
-                       dots$fill <-  c(1, 2, 3, 2, 1)
-                       if (is.null (dots$func.args))
-                         dots$func.args <- list ()
-                       if (is.null (dots$func.args$na.rm))
-                         dots$func.args$na.rm <- TRUE
-                       if (is.null (dots$func.args$probs))
-                         dots$func.args$probs = c (0.05, 0.16, 0.5, 0.84, 0.95)
-                       dots$object <- x
-                       dots$func <- quantile
-                       do.call (plotspc, dots)
-                     },
-                     map = plotmap (x, ...),
-                     c = plotc (x, ...),
-                     ts = {
-                       dots <- list (object = x, ...)
-                       if (is.null (dots$use.c))
-                         dots$use.c = "t"
-                       do.call (plotc, dots)
-                     },
-                     depth = {
-                       dots <- list (object = x, ...)
-                       if (is.null (dots$use.c))
-                         dots$use.c = "z"
-                       do.call (plotc, dots)
-                     },
-                     stop (paste ("y = ", y, "unknown.", collapse = " "))
-                     )
-           }
-           )
+           signature (x = "hyperSpec", y = "character"), .plot)
 
 
 ### ****************************************************************************
