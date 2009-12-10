@@ -697,7 +697,7 @@ It is often useful to plot the spectra against an additional coordinate, \eg the
 
 This is done by  \Rfunction{plotmat}, which is set up similar to \Rfunction{plotmap} and \Rfunction{plotc}. Argument \Rfunarg{use.t} specifies the extra data column to use as ordinate, and defaults to "t". The plot can be conditioned by giving the conditioning term in \Rfunarg{cond}. The actual plot is produced by  \Rfunction{levelplot}, and further arguments are handed over directly. See figure~\ref{fig:plotmat}
 <<plotmat1, fig = TRUE, include = FALSE>>=
-plot (plotmat (laser, col.regions = matlab.palette (20)))
+print (plotmat (laser, col.regions = matlab.palette (20)))
 @
 <<plotmat2, fig = TRUE, include = FALSE>>=
 plot (plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "#00000080"))

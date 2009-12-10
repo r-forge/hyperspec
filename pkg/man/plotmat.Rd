@@ -2,7 +2,7 @@
 \alias{plotmat}
 \title{Plotting the spectra matrix}
 \description{
-\Rcode{plotmat} produces a   \code{\link[lattice]{levelplot}} with the 
+\code{plotmat} produces a   \code{\link[lattice]{levelplot}} with the 
 wavelength axis as abscissa and one extra data column as ordinate. The 
 intensity is colour-coded.
 }
