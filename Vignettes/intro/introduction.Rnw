@@ -404,7 +404,7 @@ No spatial information is given in the ENVI header (if correctly written). The l
 \subsubsection{Nicolet FTIR Imaging}
 Also Nicolet saves imaging data in ENVI files. These files use some non-standard keywords in the header file that should allow to reconstruct the lateral coordinates as well as the spectral axes' units. 
 
-There is indication that the position of the first spectrum is recorded in \mum, while the pixel size is in mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
+There is indication that the position of the first spectrum is recorded in μm, while the pixel size is in mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
 Also here, giving the correct offset and pixel size values as function arguments is possible.
 
 

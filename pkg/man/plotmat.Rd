@@ -25,6 +25,6 @@ C. Beleites
 \seealso{\code{\link[lattice]{levelplot}}}
 \examples{
 plotmat (laser, col.regions = matlab.palette (20))	
-plotmat (flu, use.t = "c", contour = TRUE, col = "#00000080", labels = T)	
+plotmat (flu, use.t = "c", contour = TRUE, col = "#00000080", labels = TRUE)	
 }
 \keyword{hplot}
