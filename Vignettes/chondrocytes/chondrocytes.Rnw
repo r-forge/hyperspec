@@ -1,94 +1,25 @@
-\documentclass[english,a4paper, 10pt, smallheadings, DIV11]{scrartcl} % ursprünglich DIV 15
-\usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
-\setlength{\parskip}{\medskipamount}
-\setlength{\parindent}{0pt}
-\usepackage{color}
-\usepackage{babel}
-
-\usepackage{array}
-\usepackage{textcomp}
-\usepackage{url}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage[numbers]{natbib}
-\usepackage[unicode=true,
- bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
- breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
- {hyperref}
-\hypersetup{pdftitle={Chondro },
+\documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\SweaveInput{vignettes.defs}
+\hypersetup{pdftitle={Chondro},
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's chondro data set},
  pdfkeywords={chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}}
-\usepackage{hyphenat}
-
-\makeatletter
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-\usepackage{Sweave}
-
-\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-
-\newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-
-\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
-% Meta information - fill between {} and do not remove %
-% \VignetteIndexEntry{Vignette on the chondro data set. Shows common Preprocessing tasks for Raman spectra, principal component analysis (PCA), and hierarchical cluster analysis.}
-% \VignetteKeywords{chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}
-% \VignettePackage{hyperSpec}
-\AtBeginDocument{
-\fvset{listparameters={\setlength{\topsep}{0pt}}}
-\renewenvironment{Schunk}{
-  \vspace{\topsep}
-  \begin{small}}{
-    \end{small}
-  \vspace{\topsep}
-}
-}
-\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
-
-
-% my preferred packages
-\usepackage{xspace}
-%\usepackage{tikz}
-%\usepackage{subfig}
-%\usepackage{booktabs}
-
-\usepackage{hyphenat}
-\usepackage{fancyvrb}
-%\usepackage{siunitx}
-%\usepackage{relsize} %wird es benötigt?
-
-%\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
-%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
-
-\@ifundefined{showcaptionsetup}{}{%
- \PassOptionsToPackage{caption=false}{subfig}}
-\usepackage{subfig}
-\makeatother
 
 \begin{document}
-
 \title{Raman Spectra of Chondrocytes in Cartilage:\\
 \Rpackage{hyperSpec}'s \Robject{chondro} data set }
-
-\author{Claudia Beleites (\url{cbeleites@units.it})\\
-CENMAT, DMRN, University of Trieste}
-
 \maketitle
+
+\warnbox{Reproducing this vignette}{
+The data set needed to reproduce the first steps of this Vignette is available as a zipped archive at \Rpackage{hyperSpec}'s
+homepage, \url{http://r-forge.r-project.org/projects/hyperspec/} (ca. 8.5 MB).
+The original file (ca. 31 MB) is far too large to be included in the package.
+}
+
 <<startup, echo = FALSE, results = hide>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
 options ("width" = 100)
-@
+@ 
 
 \section{Introduction}
 
@@ -124,9 +55,8 @@ packages.
 \noindent \begin{centering}
 \includegraphics[width=0.5\textwidth]{080606d-flip-ausw}
 \par\end{centering}
-
 \caption{\label{fig:vis-all}Microscope view of the cartilage section. The
-frame indicates the measurement area (35 $\times$21 μm).}
+frame indicates the measurement area (\mum{35 \times 21}).}
 
 
 
@@ -137,16 +67,12 @@ shows a microscope picture of the measured area and its surroundings.
 
 The measurement parameters were:
 \begin{description}
-\item [{Excitation~wavelength:}] 633 nm
-\item [{Exposure~time:}] 10 s per spectrum
-\item [{Objective:}] 100$\times$, NA 0.85
-\item [{Measurement~grid:}] 35 $\times$21 μm, 1 μm step size
-\item [{Spectrometer:}] Renishaw InVia
+\item [Excitation wavelength:] 633 nm
+\item [Exposure time:] 10 s per spectrum
+\item [Objective:] 100$\times$, NA 0.85
+\item [Measurement grid:] 35 $\times$21 μm, 1 μm step size
+\item [Spectrometer:] Renishaw InVia
 \end{description}
-All data to reproduce this Vignette is accessible at \Rpackage{hyperSpec}'s
-homepage, \url{http://r-forge.r-project.org/projects/hyperspec/},
-as the original file is far too large to be included in the package.
-
 
 \section{Data Import}
 
@@ -164,26 +90,27 @@ it does work with \Rcode{NA}.
 
 <<filename>>=
 library (hyperSpec)
-filename <- "chondro.txt"
-@
-<<filenamecheck, echo = FALSE, results = hide>>= this is to ensure the building of the vignette on r-forge
-#if (grepl ("inst/doc$", getwd()))
-#   filename <- ("../../../Vignettes/chondro/chondro.txt")
-@
+filename <- "rawdata/chondro.txt"
+@ 
+
 <<import>>=
 chondro <- scan.txt.Renishaw (filename, data = "xyspc")
 chondro
 @
 
+
+
+
 To get an overview of the spectra, :
 
-<<fig-rawspc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+<<rawspc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 plot (chondro, "spcprctl5")
 @
 
+
 A sum intensity map is produced by:
 
-<<fig-rawmap, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+<<rawmap, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 print (plotmap (chondro, na.rm = TRUE))
 @
 
@@ -194,9 +121,9 @@ Figure~\ref{fig:raw} shows the results.
 \subfloat[The raw spectra: median, 16\textsuperscript{th} and 84\textsuperscript{th},
 and 5\textsuperscript{th} and 95\textsuperscript{th} percentile
 spectra.]
-{\includegraphics[width=0.5\textwidth]{chondrocytes-fig-rawspc}}
+{\includegraphics[width=0.5\textwidth]{fig/fig-rawspc}}
 \subfloat[The sum intensity of the raw spectra.]
-{\includegraphics[width=0.5\textwidth]{chondrocytes-fig-rawmap}}
+{\includegraphics[width=0.5\textwidth]{fig/fig-rawmap}}
 \caption{\label{fig:raw} The raw data.}
 \end{figure}
 
@@ -214,7 +141,8 @@ As the overview print shows that the spectra contain \Rcode{NA}s
 (from cosmic spike removal that was done previously), the first step
 is to remove these. Another issue that can be solved at the same time
 is that the wavelength axis is not evenly spaced (the data points
-are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and \Sexpr{signif (max (diff (wl (chondro))), 2)}
+are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and  
+\Sexpr{signif (max (diff (wl (chondro))), 2)}
 cm\textsuperscript{-1} apart from each other). Furthermore, it would
 be good to trade some spectral resolution for higher signal to noise
 ratio. All three of these issues are tackled by interpolating and
@@ -222,10 +150,10 @@ smoothing of the wavelength axis by \Rfunction{spc.loess}. The resolution
 is to be reduced to 8 cm\textsuperscript{-1}, or 4 cm\textsuperscript{-1}
 data point spacing.
 
-<<interp>>=
+<<interp>>= 
 chondro <- spc.loess (chondro, seq (602, 1800, 4))
 chondro
-@
+@    
 
 The spectra are now the same as the data set \Robject{chondro}.
 <<save_chondro>>=
@@ -244,10 +172,10 @@ baselines <- spc.fit.poly.below (chondro)
 chondro <- chondro - baselines
 @
 
-%
+
 \begin{figure}[tbh]
-\subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{chondrocytes-norm}}\quad
-\subfloat[\label{fig:bl:perc} The spectra after subtracting the 5\textsuperscript{th} percentile spectrum.]{\includegraphics[width=0.4\textwidth]{chondrocytes-perc}}
+\subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{fig/fig-norm}}\quad
+\subfloat[\label{fig:bl:perc} The spectra after subtracting the 5\textsuperscript{th} percentile spectrum.]{\includegraphics[width=0.4\textwidth]{fig/fig-perc}}
 \caption{\label{fig:bl}The preprocessed spectra.}
 \end{figure}
 
@@ -342,7 +270,7 @@ and also by looking where these spectra appear in the scores \Rfunction{pairs}
 plot (figure~):
 
 <<pca-pairs2, include = FALSE, results = hide>>=
-png ("chondrocytes-pca-pairs2.png", width = 1000, height = 1000)
+png ("fig/fig-pca-pairs2.png", width = 1000, height = 1000)
 pairs (scores [[,,1:7]], pch = 19, cex = 1, col = cols)
 dev.off ()
 @
@@ -355,9 +283,9 @@ chondro <- chondro [- out]
 
 %
 \begin{figure}[tbh]
-\subfloat[\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{chondrocytes-pca-pairs2}
+\subfloat[\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-pairs2}
 
-}\subfloat[The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{chondrocytes-pca-outspc}}\caption{Outlier removal by PCA}
+}\subfloat[The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-outspc}}\caption{Outlier removal by PCA}
 
 \end{figure}
 
@@ -403,12 +331,12 @@ print (plotmap (chondro, z = as.factor (clusters)))
 The cluster membership can also be marked in the dendrogram:
 
 <<dend, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-plot (dendrogram, labels = FALSE, hang = 0)
+plot (dendrogram, labels = FALSE, hang = 0) 
 col.clust <- matlab.palette(3)
 points (seq_along (dendrogram$order), rep (-3, length (dendrogram$order)),
         col = col.clust [clusters [dendrogram$order]], pch = "|")
-@
-
+@     
+   
 Figure~\ref{fig:dend} shows the dendrogram and \ref{fig:clustmap}
 the resulting cluster map. The three clusters correspond to the cartilage
 matrix, the lacuna and the cells. The left cell is destroyed and its
@@ -417,25 +345,25 @@ intact.
 
 We can calculate the cluster mean spectra using \Rfunction{aggregate}.
 However, we can do even better and plot the cluster mean spectra $\pm$
-1 standard deviation (see figure~\ref{fig:clustmeans}):
+1 standard deviation (see figure~\ref{fig:clustmeans}): 
 
 <<clustmeans, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 cluster.means <- aggregate (chondro, clusters, mean_pm_sd)
-plot(cluster.means, stacked = ".aggregate", fill = ".aggregate",
+plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", 
      col = matlab.palette (3))
 @
 
 %
 \begin{figure}[tbh]
-\subfloat[\label{fig:dend} The dendrogram.]{\includegraphics[width=0.495\textwidth]{chondrocytes-dend}}\subfloat[\label{fig:clustmap} The cluster map for $k=3$ clusters.]{\includegraphics[width=0.495\textwidth]{chondrocytes-clustmap}}\caption{Hierarchical cluster analysis.}
+\subfloat[\label{fig:dend} The dendrogram.]{\includegraphics[width=0.495\textwidth]{fig/fig-dend}}\subfloat[\label{fig:clustmap} The cluster map for $k=3$ clusters.]{\includegraphics[width=0.495\textwidth]{fig/fig-clustmap}}\caption{Hierarchical cluster analysis.}
 \end{figure}
 \begin{figure}[tbh]
 \subfloat[\label{fig:clustmeans} The cluster mean $\pm$ 1 standard deviation
 spectra. The blue cluster shows distinct lipid bands, the green cluster
 collagen, and the red cluster proteins and nucleic acids.]
-{\includegraphics[width=0.495\textwidth]{chondrocytes-clustmeans}}
+{\includegraphics[width=0.495\textwidth]{fig/fig-clustmeans}}
 \subfloat[\label{fig:DNA} False colour map of the DNA band intensities.]
-{\includegraphics[width=0.495\textwidth]{chondrocytes-DNA}}
+{\includegraphics[width=0.495\textwidth]{fig/fig-DNA}}
 \caption{}
 \end{figure}
 
@@ -445,7 +373,7 @@ collagen, and the red cluster proteins and nucleic acids.]
 spectral ranges. Expressing things like 1000~cm\textsuperscript{-1}
 $\pm$~1 data points are easily possible. Thus, we can have a fast
 look at the nucleic acid distribution, using the DNA bands at 728,
-782, 1098, 1240, 1482, and 1577~cm\textsuperscript{-1}:
+782, 1098, 1240, 1482, and 1577~cm\textsuperscript{-1}: 
 
 <<DNA, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 print (plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)]))
@@ -456,6 +384,6 @@ the right cell shows up nicely, nothing is detected in the remainders
 of the left cell.
 
 <<cleanup, echo = FALSE, results=hide>>=
-rm (list = ls () )
-@
+rm (list = ls () ) 
+@ 
 \end{document}

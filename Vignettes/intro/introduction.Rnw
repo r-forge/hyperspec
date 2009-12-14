@@ -1,13 +1,5 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
-\input{vignettes.tex}
-\hypersetup{pdftitle={hyperSpec Introduction},
- pdfauthor={C. Beleites},
- pdfsubject={Introduction on the R package hyperSpec},
- pdfkeywords={hyperSpec}}
-
-% \VignetteIndexEntry{hyperSpec Introduction}
-% \VignetteKeywords{hyperspec}
-% \VignettePackage{hyperSpec}
+\SweaveInput{vignettes.defs}
 \hypersetup{pdftitle={hyperSpec Introduction},
  pdfauthor={C. Beleites},
  pdfsubject={Introduction on the R package hyperSpec},
@@ -20,11 +12,6 @@
 \begin{document}
 \title{\Rpackage{hyperSpec} Introduction }
 \maketitle
-\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white=TRUE}
-<<startup, echo = FALSE>>=
-options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="serif")))
-options ("width" = 100)
-@
 \warnbox{Reproducing the Examples in this Vignette}{
 All spectra used in this manual are installed automatically with \phy. 
 
@@ -32,7 +19,7 @@ The source data files of the \Robject{flu} and \Robject{laser} data sets as well
 For reproducing the examples in a live session, the full file names of the 
 spectra can be found with the command:\\
 \texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
-"hyperSpec/doc/*.txt", sep = "/"))}} 
+"hyperSpec/doc/rawdata/*.txt", sep = "/"))}} 
 
 The source data file of the \Robject{chondro} data, however, needs to be be obtained separately. It is available for download as a .zip file at \Rpackage{hyperSpec}'s home page  (\url{http://r-forge.r-project.org/projects/hyperspec/}, ca. 8.5 MB).
 The original file (ca. 31 MB) is far too large to be included in the package.
@@ -104,7 +91,6 @@ a \Rclass{data.frame}, are accessed by the \Rcode{\$} operator,
 and \Rcode{\$xxx} will be used for \emph{``column xxx''}, and
 as an abbreviation for \emph{``column xxx of the data.frame in slot
 data of the object''} see figure~\ref{fig:structure} on page~\pageref{fig:structure}) .%TODO vref
-
 
 
 \section{Remarks on R}
@@ -295,7 +281,7 @@ For the long ASCII format written by Renishaw's converter, an
 optimized import function is already available: \Rfunction{scan.txt.Renishaw}. \mFun{\Rfunction{scan.txt.Renishaw}}
 
 <<scan.txt.Renishaw>>=
-paracetamol <- scan.txt.Renishaw ("paracetamol.txt", "spc")
+paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
 paracetamol
 @
 
@@ -593,9 +579,9 @@ plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, wl.reve
 
 %
 \begin{figure}
-\subfloat[\label{fig-plotspc-ms}]{\includegraphics[width=0.33\textwidth]{introduction-ms}}%
-\subfloat[\label{fig-plotspc-paracetamol}]{\includegraphics[width=0.33\textwidth]{introduction-plotspcadd}}%
-\subfloat[\label{fig-plotmap-factor}]{\includegraphics[width=0.33\textwidth]{introduction-clustmap}}
+\subfloat[\label{fig-plotspc-ms}]{\includegraphics[width=0.33\textwidth]{fig/fig-ms}}%
+\subfloat[\label{fig-plotspc-paracetamol}]{\includegraphics[width=0.33\textwidth]{fig/fig-plotspcadd}}%
+\subfloat[\label{fig-plotmap-factor}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmap}}
 \caption{Arguments to \Rfunction{plotspc}. \subref{fig-plotspc-ms}
 \Rcode{plot (fake.mass.spec, lines.args = list (type = \textquotedbl{}h\textquotedbl{}))}
 \subref{fig-plotspc-paracetamol} \Rcode{plotspc (paracetamol, wl.range = c (300 \textasciitilde{} 1800, 2800
@@ -615,8 +601,8 @@ print (plotmat (laser, col.regions = matlab.palette (20)))
 plot (plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "#00000080"))
 @
 \begin{figure}
-\subfloat[\label{fig-plotmat-a}\Rcode{plotmat (laser, col.regions = matlab.palette (20))}]{\includegraphics[width=0.495\textwidth]{introduction-plotmat1}}%
-\subfloat[\label{fig-plotmat-b}\Rcode{plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{introduction-plotmat2}}%
+\subfloat[\label{fig-plotmat-a}\Rcode{plotmat (laser, col.regions = matlab.palette (20))}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat1}}%
+\subfloat[\label{fig-plotmat-b}\Rcode{plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat2}}%
 \caption{\label{fig:plotmat}\Rfunction{plotmat}: plotting the spectra matrix. 
 }
 \end{figure}
@@ -740,7 +726,8 @@ plot (p [, , 1600 ~ 1670], col = "red", add = TRUE)
 
 %
 \begin{figure}
-\includegraphics[width=0.66\textwidth]{introduction-fig-loess}\includegraphics[width=0.33\textwidth]{introduction-fig-loess-kl}
+\includegraphics[width=0.66\textwidth]{fig/fig-fig-loess}
+\includegraphics[width=0.33\textwidth]{fig/fig-fig-loess-kl}
 
 
 \captionbelow{\label{fig-spcloess}Smoothing interpolation by \Rfunction{spc.loess}
@@ -1011,17 +998,13 @@ plotmap (chondro, z = as.factor (clusters), do.print = TRUE)
 
 %
 \begin{figure}
-\subfloat[\label{fig:clust:dend}]{\includegraphics[width=0.33\textwidth]{introduction-dend}}\subfloat[\label{fig:clust:map}]{\includegraphics[width=0.33\textwidth]{introduction-clustmap}}\subfloat[\label{fig:clust:spc}]{\includegraphics[width=0.33\textwidth]{introduction-clustmean}}
-
+\subfloat[\label{fig:clust:dend}]{\includegraphics[width=0.33\textwidth]{fig/fig-dend}}
+\subfloat[\label{fig:clust:map}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmap}}
+\subfloat[\label{fig:clust:spc}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmean}}
 \caption{The results of the cluster analysis: \subref{fig:clust:dend} the
 dendrogram \subref{fig:clust:map} the map of the 3 clusters \subref{fig:clust:spc}
 the mean spectra.}
-
-
-
 \end{figure}
-
-
 
 \subsection{Calculating group-wise Sum Characteristics \\
 e.\,g. Cluster Mean Spectra}
