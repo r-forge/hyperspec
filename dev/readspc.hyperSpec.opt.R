@@ -1,0 +1,735 @@
+#####################################################################################################
+###
+### read.spc - Import Thermo Galactic's .spc file format into an hyperSpec Object
+###
+### C. Beleites 2009/11/29
+###
+#####################################################################################################
+
+## Define constants ---------------------------------------------------------------------------------
+
+.nul = as.raw (0)
+
+## header sizes 
+.spc.size <- c (hdr = 512, subhdr = 32, subfiledir = 12, loghdr = 64)
+
+## axis labeling ------------------------------------------------------------------------------------
+
+## x-axis units .....................................................................................
+.spc.FXTYPE <- c (expression (`/` (x, "a. u.")),                      #0
+		expression (`/` (tilde (nu), cm^-1)),
+		expression (`/` (lambda, (mu * m))),
+		expression (`/` (lambda, nm)),
+		expression (`/` (t, s)),
+		expression (`/` (t, min)),
+		expression (`/` (f, Hz)),
+		expression (`/` (f, kHz)),
+		expression (`/` (f, MHz)),
+		expression (`/` (frac (m, z), frac (u, e))),        
+      expression (`/` (delta, ppm)),                     
+		expression (`/` (tilde (nu), cm^-1)),
+		expression (`/` (lambda, (mu * m))),
+		expression (`/` (lambda, nm)),
+		expression (`/` (t, s)),
+		expression (`/` (t, min)),
+		expression (`/` (f, Hz)),
+		expression (`/` (f, kHz)),
+		expression (`/` (f, MHz)),
+		expression (`/` (frac (m, z), frac (u, e))),        
+		expression (`/` (delta, ppm)),                      # 10
+		expression (`/` (t, d)),
+		expression (`/` (t, a)),
+		expression (`/` (Delta*tilde (nu), cm^-1)),
+		expression (`/` (E, eV)),
+		NA, # old version file uses label in gcatxt
+		'Diode No',
+		'Channel',
+		expression (`/` (x, degree)),
+		expression (`/` (T, degree*F)),
+		expression (`/` (T, degree*C)),                     # 20
+		expression (`/` (T, K)),
+		'Data Point',
+		expression (`/` (t, ms)),
+		expression (`/` (t, micro*s)),
+		expression (`/` (t, ns)),
+		expression (`/` (f, GHz)),
+		expression (`/` (lambda, cm)),
+		expression (`/` (lambda, m)),
+		expression (`/` (lambda, mm)),
+		expression (`/` (t, h))                             # 30
+)
+
+.spc.xlab <- function (x) {
+	## x = 255 is for double interferogram and supposed not to have a label.
+	## Thus, returning NA is appropriate
+	if (x <= length (.spc.FXTYPE) + 1) {
+		.spc.FXTYPE [x + 1]
+	} else {
+		NA
+	}
+}
+
+## y-axis units .....................................................................................
+.spc.FYTYPE <- c (expression (`/` (I[Ref], "a. u.")),                      # -1
+		expression (`/` (I, "a. u.")),
+		expression (`/` (I[IGRM], "a. u.")),
+		'A',
+		expression (frac ((1 - R)^2, 2 * R)),
+		'Counts',
+		expression (`/` (U, V)),
+		expression (`/` (y, degree)),
+		expression (`/` (I, mA)),
+		expression (`/` (l, mm)),
+		expression (`/` (U, mV)),
+		expression (-log (R)),                              # 10
+		expression (`/` (y, '%')),
+		expression (`/` (I, 'a. u.')),        
+		expression (I / I[0]),                             
+		expression (`/` (E, J)),
+		NA, # old version file uses label in gcatxt
+		expression (`/` (G, dB)),
+		NA, # old version file uses label in gcatxt
+		NA, # old version file uses label in gcatxt
+		expression (`/` (T, degree*F)),
+		expression (`/` (T, degree*C)),                     # 20
+		expression (`/` (T, K)),
+		'n',
+		'K', # extinction coeaffictient
+		expression (Re (y)),
+		expression (Im (y)),
+		'y (complex)', # complex
+		'T',
+		'R',
+		expression (`/` (I, 'a. u.')),
+		expression (`/` (I[Emission], 'a. u.'))
+)
+.spc.ylab <- function(x){
+	if (x <= 26)
+		.spc.FYTYPE [x + 2]
+	else if (x %in% 128 : 131)
+		.spc.FYTYPE [x - 99]
+	else
+		NA
+}
+
+## file part reading functions ----------------------------------------------------------------------
+
+## read file header .................................................................................
+##
+##
+
+.spc.filehdr <- function (raw.data) {
+	## check file format
+	## NEW.LSB = 75 supported,
+	## NEW.MSB = 76 not supported (neither by many Grams software according to spc doc)
+	## OLD     = 77 not supported (replaced by new format in 1996)
+	if (raw.data [2] != 75)  
+		stop ("Wrong spc file format version.\n",
+				"Only 'new' spc files (1996 file format) with LSB word order are supported.") 
+	
+	hdr <- list (ftflgs   = readBin          (raw.data [        1], "integer", 1, 1, signed = FALSE),
+			## byte 2 is already interpreted
+			fexper   = readBin       (raw.data [        3], "integer", 1, 1, signed = TRUE ),
+			fexp     = readBin       (raw.data [        4], "integer", 1, 1, signed = TRUE ),
+			fnpts    = readBin       (raw.data [  5 :   8], "integer", 1, 4, signed = FALSE),
+			ffirst   = readBin       (raw.data [  9 :  16], "double",  1, 8                ),
+			flast    = readBin       (raw.data [ 17 :  24], "double",  1, 8                ),
+			fnsub    = readBin       (raw.data [ 25 :  28], "integer", 1, 4, signed = FALSE),
+			fxtype   = readBin       (raw.data [       29], "integer", 1, 1, signed = FALSE),
+			fytype   = readBin       (raw.data [       30], "integer", 1, 1, signed = FALSE),
+			fztype   = readBin       (raw.data [       31], "integer", 1, 1, signed = FALSE),
+			fpost    = readBin       (raw.data [       32], "integer", 1, 1, signed = TRUE ),
+			fdate    = readBin       (raw.data [ 33 :  36], "integer", 1, 4, signed = FALSE),
+			fres     = raw.split.nul (raw.data [ 37 :  45]),
+			fsource  = raw.split.nul (raw.data [ 46 :  54]),
+			fpeakpt  = readBin       (raw.data [ 55 :  56], "integer", 1, 2, signed = FALSE),
+			fspare   = readBin       (raw.data [ 57 :  88], "numeric", 8, 4                ),
+			fcmnt    = raw.split.nul (raw.data [ 89 : 218]),
+			fcatxt   = raw.split.nul (raw.data [219 : 248], trunc = c (FALSE, TRUE)        ),                
+			flogoff  = readBin       (raw.data [249 : 252], "integer", 1, 4, signed = FALSE),
+			fmods    = readBin       (raw.data [253 : 256], "integer", 1, 4, signed = FALSE),
+			fprocs   = readBin       (raw.data [      257], "integer", 1, 1, signed = TRUE ),
+			flevel   = readBin       (raw.data [      258], "integer", 1, 1, signed = TRUE ),
+			fsampin  = readBin       (raw.data [259 : 260], "integer", 1, 2, signed = FALSE),
+			ffactor  = readBin       (raw.data [261 : 264], "numeric", 1, 4                ),
+			fmethod  = raw.split.nul (raw.data [265 : 312]),
+			fzinc    = readBin       (raw.data [313 : 316], "numeric", 1, 4, signed = FALSE),
+			fwplanes = readBin       (raw.data [317 : 320], "integer", 1, 4, signed = FALSE),
+			fwinc    = readBin       (raw.data [321 : 324], "numeric", 1, 4                ),
+			fwtype   = readBin       (raw.data [      325], "integer", 1, 1, signed = TRUE ),
+			## 187 bytes reserved
+			.last.read = .spc.size ['hdr'] 
+	)
+	
+	## do some post processing ..........................................
+	
+	experiments <- c ("General", "Gas Chromatogram", "General Chromatogram", "HPLC Chromatogram",
+			"NIR Spectrum", "UV-VIS Spectrum", "* reserved *", "X-ray diffraction spectrum",
+			"Mass Spectrum", "NMR Spectrum", "Raman Spectrum", "Fluorescence Spectrum",
+			"Atomic Spectrum", "Chroatography Diode Array Data")
+	hdr$fexper <- factor (hdr$fexper, levels = seq_along (experiments))
+	levels (hdr$fexper) <- experiments
+	
+	hdr$ftflgs <- .spc.ftflags (hdr$ftflgs)
+	
+	hdr$fdate  <- ISOdate (year  = hdr$fdate %/% 1048560,
+			month = hdr$fdate %/% 65536 %%  16,
+			day   = hdr$fdate %/% 2048 %% 32,
+			hour  = hdr$fdate %/% 64 %% 32,
+			min   = hdr$fdate %% 64)
+	
+	## interferogram ?
+	## if not, hdr$fpeakpt is set to NULL
+	if (hdr$fytype == 1){ 
+		if (hdr$fpeakpt != 0)
+			hdr$fpeakpt <- hdr$fpeakpt + 1
+	} else {
+		hdr$fpeakpt <- NULL
+	}
+	
+	## set the axis labels
+	if (hdr$ftflgs ['TALABS']) {
+		# TODO: find test data
+		tmp <- rep (0, 4)
+		tmp [seq_along (hdr$fcatxt)] <- nchar (hdr$fcatxt)
+		
+		if (tmp [1] > 0) hdr$fxtype <- hdr$fcatxt[1]
+		if (tmp [2] > 0) hdr$fytype <- hdr$fcatxt[2]
+		if (tmp [3] > 0) hdr$fztype <- hdr$fcatxt[3]
+		if (tmp [4] > 0) hdr$fwtype <- hdr$fcatxt[4]
+	}			
+	hdr$fxtype <- .spc.xlab (hdr$fxtype)
+	hdr$fytype <- .spc.ylab (hdr$fytype)
+	hdr$fztype <- .spc.xlab (hdr$fztype)
+	hdr$fwtype <- .spc.xlab (hdr$fwtype)
+	
+	## File with subfiles with individual x axes? 
+	## Then there should be a subfile directory:
+	if (hdr$ftflgs ['TXYXYS'] && hdr$ftflgs ['TMULTI']){ 
+		## try to reject impossible values for the subfiledir offset
+		if (hdr$fnpts > length (raw.data) || 
+			 (hdr$fnpts > hdr$flogoff && hdr$flogoff > 0) ||
+			 hdr$fnpts < 512)
+			.spc.error (".spc.read.hdr", list (hdr = hdr),
+					"file header flags specify TXYXYS and TMULTI, ",
+					"but fnpts does not give a valid offset for the subfile directory.\n hdr$ftflgs = ",
+					paste (names (hdr$ftflgs)[hdr$ftflgs], collapse = " | "),
+					" (", sum (2^(0:7) [hdr$ftflgs]) , ")\n",
+					"You can try to read the file using hdr$ftflgs & ! TXYXYS (",
+					sum (2^(0 : 7) [hdr$ftflgs & c (TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE)]),
+					"). This assumes that all subfiles do have the same x axis.\n\n")
+		
+		hdr$subfiledir <- hdr$fnpts
+		hdr$fnpts <- 0
+	} else {
+		hdr$subfiledir <- 0
+	}
+	
+	
+	## some checks ......................................................
+	
+	if (hdr$ftflgs ['TMULTI']){
+		## multiple spectra in file
+		if (hdr$fnsub <= 1)
+			warning ("spc file header specifies multiple spectra but only zero or one subfile.")
+	} else {
+		## single spectrum file
+		if (hdr$fnsub == 0)
+			hdr$fnsub <- 1
+		
+		if (hdr$fnsub >  1) {
+			warning ("spc file header specifies single spectrum file  but", hdr$fnsub,
+					"subfiles (spectra).\nOnly first subfile will be read.")
+			hdr$fnsub <- 1
+		}
+		
+		if (hdr$ftflgs ['TRANDM']) 
+			warning ("spc file header: file type flag TRANDM does not make sense without TMULTI.")
+		
+		if (hdr$ftflgs ['TORDRD'])
+			warning ("spc file header: file type flag TORDRD does not make sense without TMULTI.")
+		
+		if ((hdr$ftflgs ['TRANDM'] || hdr$ftflgs ['TORDRD']) && hdr$fnsub > 1)
+			hdr$ftflgs ['TMULTI'] <- TRUE
+	}
+	
+	if (hdr$ftflgs ['TXYXYS'] && ! hdr$ftflgs ['TXVALS']) {
+		warning ("spc file header: file type flag TXYXYS does not make sense without TXVALS.")
+		hdr$ftflgs ['TXVALS'] <- TRUE
+	}
+	
+	hdr
+}
+
+## read sub file header .............................................................................
+##
+## needs header for consistency checks
+##
+
+.spc.subhdr <- function (raw.data, pos, hdr) {
+	hdr <- c (hdr, 
+ 				 list (subflgs   =          raw.data [pos + (      1)],
+						 subexp    = readBin (raw.data [pos + (      2)], "integer", 1, 1, signed = FALSE),
+						 subindx   = readBin (raw.data [pos + ( 3 :  4)], "integer", 1, 2, signed = FALSE),
+						 subtime   = readBin (raw.data [pos + ( 5 :  8)], "numeric", 1, 4),
+						 subnext   = readBin (raw.data [pos + ( 9 : 12)], "numeric", 1, 4),
+						 subnois   = readBin (raw.data [pos + (13 : 16)], "numeric", 1, 4),
+						 subnpts   = readBin (raw.data [pos + (17 : 20)], "integer", 1, 4, signed = FALSE),
+						 subscan   = readBin (raw.data [pos + (21 : 24)], "integer", 1, 4, signed = FALSE),
+						 subwlevel = readBin (raw.data [pos + (25 : 28)], "numeric", 1, 4)
+				 ## 4 bytes reserved
+				 ))
+	
+	hdr$.last.read <- pos + .spc.size ['subhdr']
+	
+	## checking
+	if (hdr$subexp == -128 && hdr$fexp != -128)
+		warning ("subfile ", hdr$subindx,  " specifies data type float, but file header doesn't.",
+				"\nData will be interpreted as float.")
+	
+	if (hdr$subnpts > 0 && ! hdr$ftflgs ['TXYXYS'])
+		warning ('subfile ', hdr$subindx, ": number of points in subfile should be 0 if file",
+				" header flags do not specify TXYXYS.")
+	
+	if (hdr$subnpts == 0){
+		if (hdr$ftflgs ['TXYXYS'])
+			warning ('subfile ', hdr$subindx, ': number of data points per spectrum not specified. ',
+					'Using fnpts (', hdr$fnpts, ').')
+		hdr$subnpts <- hdr$fnpts
+	}
+	
+	if (! hdr$ftflgs ['TXYXYS'])
+		if (hdr$fnpts != hdr$subnpts) {
+			.spc.error (".spc.read.subhdr", list (hdr = hdr, subhdr = hdr),
+					"hdr and subhdr differ in number of points per spectrum, ",
+					"but TXYXYS is not specified.\n hdr$ftflgs = ",
+					paste (names (hdr$ftflgs)[hdr$ftflgs], collapse = " | "),
+					" (", sum (2^(0:7) [hdr$ftflgs]) , ")\n",
+					"You can try to read the file using hdr$ftflgs | TMULTI | TXYXYS (",
+					sum (2^(0 : 7) [hdr$ftflgs |
+											c (FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE)]),
+					").\n\n")
+		}
+	
+#  str (subhdr)
+	## according to .spc file documentation:
+	if (! hdr$ftflgs ['TMULTI'])
+		hdr$subexp <- hdr$fexp
+	
+	## the z values
+	if (hdr$fzinc == 0) # should only happen for the first subfile...
+		hdr$fzinc = hdr$subnext - hdr$subtime
+	
+	if (hdr$subindx == 0)
+		hdr$firstz <- hdr$subtime
+	
+	if (hdr$subtime == 0)
+		hdr$subtime = hdr$subindx * hdr$fzinc + hdr$firstz
+	
+	## the w values
+	## integer !!!
+	if (hdr$fwplanes > 0) {
+		stop ("w planes found! This is not yet implemented as the developer didn't have access to such files.")
+		## FIXME: w planes
+		
+#      if (subwlevel != 0)
+#          w <- subwlevel
+#       else
+#         w <- subhdr
+	}
+	
+	hdr$subhdr <- hdr
+	
+	hdr
+}
+
+## read subfile directory ...........................................................................
+##
+
+.spc.subfiledir <- function (raw.data, pos, nsub) {
+	dir <- data.frame (ssfposn = rep (NA, nsub),
+			ssfsize = rep (NA, nsub),
+			ssftime = rep (NA, nsub))
+	
+	for (s in seq_len (nsub)){
+		dir [s,] <- c (readBin (raw.data [pos + ( 1 :  4)], "integer", 1, 4 , signed = FALSE),
+							readBin (raw.data [pos + ( 5 :  8)], "integer", 1, 4 , signed = FALSE),
+							readBin (raw.data [pos + ( 9 : 12)], "numeric", 1, 4))
+		pos <- pos + .spc.size ['subfiledir']
+	}
+	dir$ssfposn <- dir$ssfposn
+	dir
+}
+
+## read log block header ............................................................................
+##
+
+.spc.log <- function (raw.data, pos, log.bin, log.disk, log.txt, keys.log2data,  keys.log2log) {
+	
+	if (pos == 0) # no log block exists
+		return (list ())
+	
+	log <- list ()
+	loghdr <- list (logsizd = readBin (raw.data [pos + ( 1 :  4)], "integer", 1, 4 , signed = FALSE),
+			logsizm = readBin (raw.data [pos + ( 5 :  8)], "integer", 1, 4 , signed = FALSE),
+			logtxto = readBin (raw.data [pos + ( 9 : 12)], "integer", 1, 4 , signed = FALSE),
+			logbins = readBin (raw.data [pos + (13 : 16)], "integer", 1, 4 , signed = FALSE),
+			logdsks = readBin (raw.data [pos + (17 : 20)], "integer", 1, 4 , signed = FALSE),
+			## 44 bytes reserved
+			.last.read = pos + .spc.size ['loghdr']
+	)
+	
+	if (log.txt) {	# ignores log.bin and log.disk!!!		
+		log.txt <- raw.data [pos + loghdr$logtxto + seq_len (loghdr$logsizd - loghdr$logtxto)]
+		log.txt [log.txt == 0] <- '\n'
+		log$log.txt <- rawToChar (log.txt)
+	}
+	
+	if (log.bin) 
+		log$log.bin <- raw.data [loghdr$.last.read + seq_len (loghdr$logbins)]
+	
+	## read binary on-disk-only part of log
+	if (log.disk) 
+		log$.log.disk <- raw.data [loghdr$.last.read + loghdr$logbins + seq_len (loghdr$logdsks)]
+	
+	log
+}
+
+.split.log.txt <- function (log.txt keys.log2data, keys.log2log){
+	log.txt <- split.string (log.txt, "\r\n") ## spc file spec says \r\n regardless of OS
+	log.txt <- split.line (log.txt, "=")
+	
+	list(data = .getbynames (log.txt, keys.log2data),
+			log = .getbynames (log.txt, keys.log2log))
+}
+
+## read y data ......................................................................................
+##
+
+.spc.read.y <- function (raw.data, pos, npts, exponent, word) {
+	if (exponent == -128) { # 4 byte float
+		
+		list (y = readBin (raw.data [pos + seq_len (npts * 4)], "numeric", npts, 4),
+				.last.read = pos + npts * 4)
+		
+	} else if (word) { # 2 byte fixed point integer = word
+		
+		list (y = readBin (raw.data [pos + seq_len (npts * 2)], "integer", npts, 2, signed = TRUE) *
+						2 ^ (exponent - 16),
+				.last.read = pos + npts * 2)
+		
+	} else { # 4 byte fixed point integer = dword
+		list (y = readBin (raw.data [pos + seq_len (npts * 4)], "integer", npts, 4, signed = TRUE) *
+						2 ^ (exponent - 32),
+				.last.read = pos + npts * 4)
+	}
+}
+
+## read x data ......................................................................................
+##
+
+.spc.read.x <- function (raw.data, pos, npts) {
+	list (x = readBin (raw.data [pos + seq_len (npts * 4)], "numeric", npts, 4),
+			.last.read = pos + 4 * npts)
+}
+
+## error .............................................................................................
+.spc.error <- function (fname, objects, ...) {
+	cat ('ERROR in read.spc function ', fname, '\n\n')
+	for (i in seq_along (objects)) {
+		cat (names (objects) [i], ":\n")
+		str (objects [[i]], vec.len = 20)
+	}
+	stop (...)
+}
+
+#    ftflgs \tab \cr
+#    fexper \tab log\cr
+#    fexp \tab \cr
+#    fnpts \tab \cr
+#    ffirst \tab \cr
+#    flast \tab \cr
+#    fnsub \tab \cr
+#    fxtype \tab \cr
+#    fytype \tab \cr
+#    fztype \tab \cr
+#    fpost \tab \cr
+#    fdate \tab extra data\cr
+#    fres \tab log\cr
+#    fsource \tab log\cr
+#    fpeakpt \tab in extra data iff interferogram\cr
+#    fspare \tab \cr
+#    fcmnt \tab log\cr
+#    fcatxt \tab \cr
+#    flogoff \tab \cr
+#    fmods \tab \cr
+#    fprocs \tab \cr
+#    flevel \tab \cr
+#    fsampin \tab \cr
+#    ffactor \tab \cr
+#    fmethod \tab \cr
+#    fzinc \tab \cr
+#    fwplanes \tab \cr
+#    fwinc \tab \cr
+#    fwtype \tab \cr
+
+.spc.ftflags <- function (x) {
+	ftflgs <- as.logical (x %/% 2^(0 : 7) %% 2)
+	names (ftflgs) <- c ('TSPREC', 'TCGRAM', 'TMULTI', 'TRANDM',
+			'TORDRD', 'TALABS', 'TXYXYS', 'TXVALS')
+	ftflgs
+}
+
+#####################################################################################################
+.read.spc <- function (filename,
+		keys.hdr2data = c('fexper', 'fres', 'fsource'), keys.hdr2log = c('fdate', 'fpeakpt'),
+		keys.log2data = FALSE, keys.log2log = TRUE,
+		log.txt = TRUE, log.bin = FALSE, log.disk = FALSE,
+		hdr = list (), #label = list (), log = list (),
+		no.object = FALSE,  # return a list only
+		no.wavelength = FALSE, # do not construct wavelength
+		use.hdr = FALSE, # the list in hdr is complete an can be used immediately. 
+		                 # Exception: hdr$last.read is set to 512  
+		no.log = FALSE, # do not read the log
+		log.as.txt = FALSE, # do not split the log into key-value list
+		no.data = FALSE, # no extra data occurs
+		no.label = FALSE # no label
+){
+	
+	## f contains the raw bytes of the file
+	
+	## fpos marks the position of the last read byte
+	## this is the same as the offset from beginning of the file (count 0) in the .spc definition  	
+	
+	f <- readBin (filename, "raw", file.info (filename)$size, 1)
+	
+	if (use.hdr) {
+		fpos <- .spc.size ['hdr'] 
+	} else {
+		hdr <- modifyList (.spc.filehdr (f), hdr)
+		fpos <- hdr$.last.read
+	}
+	
+	if (! no.wavelength) {
+		if (! hdr$ftflgs ['TXYXYS']) {
+			if (! hdr$ftflgs ['TXVALS']) {
+				## spectra with common evenly spaced wavelength axis
+				wavelength <- seq (hdr$ffirst, hdr$flast, length.out = hdr$fnpts)
+			} else {
+				## spectra with common unevenly spaced wavelength axis
+				if (! hdr$ftflgs ['TMULTI']) {
+					tmp <- .spc.read.x (f, fpos, hdr$fnpts)
+					wavelength <- tmp$x
+					fpos <- tmp$.last.read
+				}
+			}
+		}
+	}
+	## otherwise (TXYXYS set) hdr$fnpts gives offset to subfile directory if that exists
+
+	
+	if (! no.data)  
+		data <- data.frame (z = NA, z.end = NA, w = NA)
+
+	## obtain labels from file hdr or from parameter	
+	if (! no.label)
+		label <- list (.wavelength = hdr$fxtype, 
+				         spc = hdr$fytype,
+							z = hdr$fztype, z.end = hdr$fztype, 
+							w = hdr$fwtype)
+	
+	## prepare list for hyperSpec log and data.frame for extra data
+	if (! no.log)
+		if (log.as.txt) {
+			log <- .spc.log (f, hdr$flogoff,
+					log.as.txt = TRUE)
+		} else {
+			## process the log block
+			tmp <- .spc.log (f, hdr$flogoff,
+					log.bin, log.disk, log.txt,
+					keys.log2data,  keys.log2log)
+			
+			log <- modifyList (list (short = "read.spc",
+							long = list (call = match.call (),
+									log = tmp$log.long,
+									header = getbynames (hdr, keys.hdr2log))),
+					log)
+			
+			if (! no.data)  
+				more.data <- as.data.frame (c (tmp$extra.data, getbynames (hdr, keys.hdr2data)))
+		}
+	
+	## try to preallocate spectra matrix and extra data data.frame
+	## if multispectra file with separate wavelength axes, prepare a list
+	if (hdr$ftflgs ['TXYXYS'] && hdr$ftflgs ['TMULTI']) { 
+		spc <- list (log = if (no.log) NULL else log,
+				       label = if (no.label) NULL else label)
+
+		if (! no.data)
+			data <- as.data.frame (data)
+	} else {
+		spc <- matrix (NA, nrow = hdr$fnsub, ncol = hdr$fnpts)
+		if (! no.data)
+			data <- as.data.frame (lapply (data, rep, hdr$fnsub))
+	}
+	
+	## read subfiles
+	if (hdr$subfiledir){ ## TXYXYS
+		hdr$subfiledir <- .spc.subfiledir (f, hdr$subfiledir, hdr$fnsub)
+
+		for (s in seq_len (hdr$fnsub)) {
+			if (use.hdr){
+				fpos <- fpos + .spc.size ['subhdr']
+			} else {
+				hdr <- .spc.subhdr (f, hdr$subfiledir$ssfposn [s], hdr)
+				fpos <- hdr$.last.read
+			}
+
+			if (no.wavelength) {
+				fpos <- fpos + 8 * hdr$subnpts
+			} else {
+				wavelength <- .spc.read.x (f, fpos, hdr$subnpts)
+				fpos <- wavelength$.last.read
+				wavelength <- wavelength$x
+			}
+			
+			y <- .spc.read.y (f, fpos, npts = hdr$subnpts, exponent = hdr$subexp,	word = hdr$ftflgs ['TSPREC'])
+			fpos <- y$.last.read
+			y <- y$y
+			
+			if (! no.data) {
+				data[1, 1] <- hdr$subtime
+				data[1, 2] <- hdr$subnext
+				
+				if (hdr$fwplanes > 0)
+					data[1, 3] <- subwlevel
+			}
+
+			if (no.object) {
+				spc [[s]] <- list (spc = y, 
+										 wavelength = if (no.wavelength) NULL else wavelength, 
+										 data = if (no.data) NULL else data, 
+								 )
+			} else {
+				if (! exists ('wavelength'))
+					.spc.error ("read.spc", list (hdr = hdr),
+							"wavelength not read. This may be caused by wrong header information.")
+				
+				spc [[s]] <- new ("hyperSpec",
+						spc = y, 
+						wavelength = wavelength,
+						data = data,
+						log = log,
+						label = label)
+			}
+		}
+		
+	} else { ## multiple y data blocks behind each other
+		for (s in seq_len (hdr$fnsub)) {
+			if (use.hdr){
+				fpos <- fpos + .spc.size ['subhdr']
+			} else {
+				hdr <- .spc.subhdr (f, fpos, hdr)
+				fpos <- hdr$.last.read
+			}
+
+			tmp <- .spc.read.y (f, fpos, npts = hdr$subnpts, exponent = hdr$subexp,
+					word = hdr$ftflgs ['TSPREC'])
+			fpos <- fpos + tmp$.last.read
+			
+			spc [s, ] <- tmp$y
+			if (! no.data) {
+				data [s, 1 : 2] <- unlist (hdr$subhdr [c('subtime', 'subnext')])
+				if (hdr$fwplanes > 0)
+					data [s, 3] <- hdr$subwlevel
+			}
+		}
+	}
+	
+	if (hdr$ftflgs ['TXYXYS'] && hdr$ftflgs ['TMULTI']) 
+		spc
+	else 
+		list (spc = spc, 
+				wavelength = if (no.wavelength) NULL else wavelength, 
+				data = if (no.data) NULL else data, 
+				log = if (no.log) NULL else log, 
+				label = if (no.label) NULL else label)
+	}
+
+	### *************************************************************************************************
+	read.spc <- function (filename,
+			keys.hdr2data = c('fexper', 'fres', 'fsource'), keys.hdr2log = c('fdate', 'fpeakpt'),
+			keys.log2data = FALSE, keys.log2log = TRUE,
+			log.txt = TRUE, log.bin = FALSE, log.disk = FALSE,
+			hdr = list (), label = list (), log = list ()){
+		.read.spc <- function (filename,
+									  keys.hdr2data = , 
+									  keys.hdr2log = ,
+									  keys.log2data = , 
+									  keys.log2log = ,
+									  log.txt = , 
+									  log.bin = , 
+									  log.disk = ,
+									  hdr = ){
+								  
+			more.data 
+
+			
+				new ("hyperSpec",  
+						spc = spc, 
+						wavelength = if (no.wavelength) NULL else wavelength, 
+						data = if (no.data) NULL else data, 
+						log = if (no.log) NULL else log, 
+						label = if (no.label) NULL else label)
+			
+		}
+		
+	
+	### *************************************************************************************************
+	read.spc.KaiserMap <- function (files, 
+		keys.hdr2data = FALSE, keys.hdr2log = TRUE,
+		keys.log2data = NULL, keys.log2log = TRUE, 
+		glob = TRUE, log = list (), label = list (), ...) {
+	
+	if (glob)
+		files <- Sys.glob (filepattern)
+	
+	keys.log2data <- c ('Stage_X_Position','Stage_Y_Position','Stage_Z_Position', keys.log2data)
+	
+	data <- data.frame (x = rep (NA, length (files)),
+			y = rep (NA, length (files)),
+			z = rep (NA, length (files)))
+	
+	f <- files [1]
+	
+	spc <- read.spc (f, keys.log2data = keys.log2data, keys.log2log = keys.log2log, no.object = TRUE)
+	
+	data [1, 'x'] <- factor2num (spc$data$Stage_X_Position)
+	data [1, 'y'] <- factor2num (spc$data$Stage_Y_Position)
+	data [1, 'z'] <- factor2num (spc$data$Stage_Z_Position)
+	
+	spc$spc  <- spc$spc  [rep (1, length (files)), , drop = FALSE]
+	
+	for (f in seq_along (files)){
+		tmp <- read.spc (files [f], keys.log2data = keys.log2data, keys.log2log = keys.log2log,
+				no.object = TRUE)
+		
+		data [f, 'x'] <- factor2num (tmp$data$Stage_X_Position)
+		data [f, 'y'] <- factor2num (tmp$data$Stage_Y_Position)
+		data [f, 'z'] <- factor2num (tmp$data$Stage_Z_Position)
+		
+		spc$spc  [f, ] <- tmp$spc
+	}
+
+	log <- modifyList (list (short = "read.spc.KaiserMap",
+				 			 		 long = list (call = match.call (),
+									 			     last.header = tmp$log$long$header,
+													  last.log = tmp$log$long$log)),
+							 log)
+   label <- modifyList (tmp$label, label)
+					 
+	new ("hyperSpec", wavelength = spc$wavelength, spc = spc$spc, data = data, 
+			label = label,
+			log = log)
+}
+
