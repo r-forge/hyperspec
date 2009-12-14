@@ -1,112 +1,26 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
-%\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenx}
-\setlength{\parskip}{\medskipamount}
-\setlength{\parindent}{0pt}
-\usepackage{color}
-\usepackage{babel}
-
-\usepackage{array}
-\usepackage{textcomp}
-\usepackage{url}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage[numbers]{natbib}
-\usepackage[unicode = true,
-            bookmarks = true,
-            bookmarksnumbered = false,
-            bookmarksopen = false,
-            breaklinks = false,
-            pdfborder = {0 0 1},
-            backref = false,
-            colorlinks = true,
-            citecolor=green!50!black,        % color of links to bibli
-            filecolor=blue!50!black,      % color of file links
-            urlcolor=blue!50!black,           % color of external links
-            linkcolor=blue!50!black          % color of internal links
-           ]{hyperref}
+\input{vignettes.tex}
 \hypersetup{pdftitle={hyperSpec Introduction},
  pdfauthor={C. Beleites},
  pdfsubject={Introduction on the R package hyperSpec},
  pdfkeywords={hyperSpec}}
-\usepackage{hyphenat}
 
-\makeatletter
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Text class specific LaTeX commands.
-\usepackage{Sweave}
-
-\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-
-\newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-
-\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
-\newcommand{\phy}{\Rpackage{hyperSpec}\xspace}
-\newcommand{\chy}{\Rclass{hyperSpec}\xspace}
-\newcommand{\eg}{e.\,g.\xspace}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
-% Meta information - fill between {} and do not remove %
 % \VignetteIndexEntry{hyperSpec Introduction}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
-\AtBeginDocument{
-  	\setlength{\parskip}{\medskipamount}
-	\setlength{\parindent}{0pt}
-   \fvset{listparameters={\setlength{\topsep}{0pt}}}
-   \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
-   }
-\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
-}
+\hypersetup{pdftitle={hyperSpec Introduction},
+ pdfauthor={C. Beleites},
+ pdfsubject={Introduction on the R package hyperSpec},
+ pdfkeywords={hyperSpec}}
 
-% my preferred packages
-\usepackage{xspace}
-\usepackage{tikz}
-\usepackage{subfig}
-\usepackage{booktabs}
-
-\usepackage{hyphenat}
-\usepackage{fancyvrb}
-%\usepackage{siunitx}
-%\usepackage{relsize}
-
-%\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
-%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
-
-\@ifundefined{showcaptionsetup}{}{%
- \PassOptionsToPackage{caption=false}{subfig}}
-\usepackage{subfig}
-\makeatother
-
-% fancy warning box
-\newcommand{\warnbox}[2]{
-\begin{tikzpicture}
-\node [draw=red, very thick, rectangle, rounded corners, inner sep=10pt] (box){%
-    \begin{minipage}{\linewidth}
-      \vspace{0.5\baselineskip}
-      #2
-    \end{minipage}
-};
-\node[fill = red, text = white, right=5mm, rounded corners] at (box.north west)
-  {\sffamily\bfseries\large #1};
-\end{tikzpicture}%
-}
+% \VignetteIndexEntry{hyperSpec Introduction}
+% \VignetteKeywords{hyperspec}
+% \VignettePackage{hyperSpec}
 
 \begin{document}
-
 \title{\Rpackage{hyperSpec} Introduction }
-
-\author{Claudia Beleites (\url{cbeleites@units.it})\\
-CENMAT, DMRN, University of Trieste}
-
 \maketitle
+\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white=TRUE}
 <<startup, echo = FALSE>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="serif")))
 options ("width" = 100)
@@ -139,9 +53,9 @@ and abscissa, respectively.
 However, \Rpackage{hyperSpec} works perfectly fine with any data
 that fits in that general scheme, so that the three terms may also
 be used for:
-\begin{description}
-\setlength{\labelwidth}{2.5cm}
-\setlength{\itemindent}{1.7cm}
+\begin{labeling}{wavelength: }
+%\setlength{\labelwidth}{2.5cm}
+%\setlength{\itemindent}{1.7cm}
 %\setlength{\leftmargini}{5cm}
 %\showthe\labelindent
 %\showthe\itemindent
@@ -156,19 +70,19 @@ $\frac{m}{z}$, etc.
 temporal information (kinetics, time series), concentrations (calibration
 series), class membership information, etc. \\
 Note that there is no restriction on the number of extra data columns.
-\end{description}
+\end{labeling}
 This vignette gives an introduction on basic working techniques using
 the R package \Rpackage{hyperSpec}. It comes with three data sets,
-\begin{description}
-\setlength{\labelwidth}{2.5cm}
-\setlength{\itemindent}{1.7cm}
-\item [{\Robject{chondro}}] a Raman map of chondrocytes in cartilage,
-\item [{\Robject{flu}}] a set of fluorescence spectra of a calibration
+\begin{labeling}{wavelength: }
+\item [\Robject{chondro}] a Raman map of chondrocytes in cartilage,
+\item [\Robject{flu}] a set of fluorescence spectra of a calibration
 series, and
-\item [{\Robject{laser}}] a time series of an unstable laser emission
-\end{description}
+\item [\Robject{laser}] a time series of an unstable laser emission
+\end{labeling}
 In this vignette, all three data sets are used in an intermixed way
 to illustrate appropriate procedures for different tasks.
+
+In addition, each of the data sets is accompanied by an vignette that shows an exemplary work flow how to analyze the data.
 
 This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. It is therefore recommended to look up the methods in R's help system using  \Rcode{?~command}.
 
@@ -244,9 +158,7 @@ library (hyperSpec)
 
 \Rclass{hyperSpec} is a S4 (or new-style) class. It has four so-called
 \emph{slots} that hold the data:
-\begin{description}
-\setlength{\labelwidth}{2.5cm}
-\setlength{\itemindent}{1.7cm}
+\begin{labeling}{@wavelength }
 \item [{\Robject{@wavelength}}] containing a numeric vector with the wavelength
 axis of the spectra.
 \item [{\Robject{@data}}] a \Rclass{data.frame}with the spectra and all
@@ -255,7 +167,7 @@ further information belonging to the spectra
 for axis annotations)
 \item [{\Robject{@log}}] a \Rclass{data.frame} keeping track of what is
 done with the object
-\end{description}
+\end{labeling}
 However, it is good practice to use the functions provided by \Rpackage{hyperSpec}
 to handle the objects rather than accessing the slots directly. This
 also helps ensuring that proper (\emph{valid}) objects are retained.
@@ -704,8 +616,8 @@ plot (plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "#00000080
 @
 \begin{figure}
 \subfloat[\label{fig-plotmat-a}\Rcode{plotmat (laser, col.regions = matlab.palette (20))}]{\includegraphics[width=0.495\textwidth]{introduction-plotmat1}}%
-\subfloat[\label{fig-plotmat-b}\Rcode{plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "#00000080")}]{\includegraphics[width=0.495\textwidth]{introduction-plotmat2}}%
-\caption{\Rfunction{plotmat}: plotting the spectra matrix. 
+\subfloat[\label{fig-plotmat-b}\Rcode{plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{introduction-plotmat2}}%
+\caption{\label{fig:plotmat}\Rfunction{plotmat}: plotting the spectra matrix. 
 }
 \end{figure}
 
