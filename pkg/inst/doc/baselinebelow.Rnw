@@ -1,93 +1,19 @@
-\documentclass[english,a4paper, 10pt, smallheadings, DIV12]{scrartcl}
-\usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
-\setlength{\parskip}{\medskipamount}
-\setlength{\parindent}{0pt}
-\usepackage{color}
-\usepackage{babel}
-
-\usepackage{array}
-\usepackage{textcomp}
-\usepackage{url}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage[numbers]{natbib}
-\usepackage[unicode=true,
- bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
- breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
- {hyperref}
+\documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\SweaveInput{vignettes.defs}
 \hypersetup{pdftitle={Baselinebelow},
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's baselinebelow data set},
  pdfkeywords={hyperSpec, baselinebelow}}
-\usepackage{hyphenat}
 
-\makeatletter
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Text class specific LaTeX commands.
-\usepackage{Sweave}
-
-\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-
-\newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-
-\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
-% Meta information - fill between {} and do not remove %
 % \VignetteIndexEntry{baselinebelow }
 % \VignetteKeywords{hyperspec, baselinebelow}
 % \VignettePackage{hyperSpec}
-\AtBeginDocument{
-  	\setlength{\parskip}{\medskipamount}
-	\setlength{\parindent}{0pt}
-   \fvset{listparameters={\setlength{\topsep}{0pt}}}
-   \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
-   }
-\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
-}
-
-% my preferred
-\usepackage{xspace}
-
-\usepackage{hyphenat}
-\usepackage{fancyvrb}
-
-%\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
-%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
-
-\@ifundefined{showcaptionsetup}{}{%
- \PassOptionsToPackage{caption=false}{subfig}}
-\usepackage{subfig}
-\makeatother
 
 \begin{document}
-
 \title{Fitting Polynomial Baselines to Complete Spectra}
-
-\author{Claudia Beleites (\url{cbeleites@units.it})\\
-CENMAT, DMRN, University of Trieste}
-
 \maketitle
 
-
-\newcommand{\rcm}[1]{#1\,cm\textsuperscript{-1}\xspace}
-%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-<<startup, echo = FALSE>>=
-options(SweaveHooks=list(fig=function() par(mar = c (3.6, 3.6, .6, .6), family="serif")))
-options ("width" = 90)
-@
-
-
 \newlength{\tmplength}
-
 \subsection*{Syntax \& parameters}
 \settowidth{\tmplength}{\Rcode{spc.fit.poly.below (}}
 \Rcode{spc.fit.poly.below (fit.to, apply.to = fit.to, poly.order = 1, npts.min = NULL,\\
@@ -136,9 +62,9 @@ abline (bl[[]], col = "blue")
 @
 \begin{figure}[b]
 \begin{center}
-\includegraphics[width = .5\textwidth]{baselinebelow-figspcrange}
-\caption{Influence of \Rcode{fit.to} on the baseline polynomial. The black baseline is fit to the spectral range \rcm{1700 -- 1800},
-the blue to \rcm{1715 -- 1800} only (dots \& circles: supporting points).}
+\includegraphics[width = .5\textwidth]{fig/fig-figspcrange}
+\caption{Influence of \Rcode{fit.to} on the baseline polynomial. The black baseline is fit to the spectral range \rcm{1700 - 1800},
+the blue to \rcm{1715 - 1800} only (dots \& circles: supporting points).}
 \label{fig:spectralrange}
 \end{center}
 \end{figure}
@@ -170,7 +96,7 @@ for (o in 0 : 3){
 @
 \begin{figure}[t]
 \begin{center}
-\includegraphics[width = .75\textwidth]{baselinebelow-figorder}
+\includegraphics[width = .75\textwidth]{fig/fig-figorder}
 \caption{Baseline polynomial fit to the first spectrum of the chondro data set of order
 0 (black), 1 (blue), 2 (green), and 3 (red). The dots indicate the points used for the fitting of the polynomial.}
 \label{fig:order}
@@ -226,8 +152,8 @@ plot (chondro [1], add = TRUE)
 @
 \begin{figure}[bh]
 \begin{center}
-  \includegraphics[width=.75\textwidth]{baselinebelow-fig1}
-  \includegraphics[width=.75\textwidth]{baselinebelow-fig2}
+  \includegraphics[width=.75\textwidth]{fig/fig-fig1}
+  \includegraphics[width=.75\textwidth]{fig/fig-fig2}
   \caption{Iterative fitting of the baseline. The dots give the supporting points for the baselines in the same colour.
   The lower part is a magnification of the intensity axis.}
   \label{fig:iter}
@@ -307,9 +233,9 @@ untrace (spc.fit.poly.below)
 @
 \begin{figure}[t]
 \begin{center}
-  \includegraphics[width=.5\textwidth]{baselinebelow-fig3}
-  \includegraphics[width=.75\textwidth]{baselinebelow-fig4}
-  \includegraphics[width=.75\textwidth]{baselinebelow-fig5}
+  \includegraphics[width=.5\textwidth]{fig/fig-fig3}
+  \includegraphics[width=.75\textwidth]{fig/fig-fig4}
+  \includegraphics[width=.75\textwidth]{fig/fig-fig5}
   \caption{Iterative fitting of the baseline with noise level. Upper part: effects of the noise parameter on the baseline
   of a spectrum consisting only of noise and offset:  without giving \Rcode{noise} the resulting baseline
   (black) is clearly too low. A noise level of 10 results in the red baseline.

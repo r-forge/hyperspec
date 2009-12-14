@@ -1,84 +1,26 @@
-\documentclass[english,a4paper, 10pt, headings=small, DIV11]{scrartcl} % ursprünglich DIV 15
-\usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
-\setlength{\parskip}{\medskipamount}
-\setlength{\parindent}{0pt}
-\usepackage{color}
-\usepackage{babel}
-
-\usepackage{array}
-\usepackage{textcomp}
-\usepackage{url}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage[numbers]{natbib}
-\usepackage[unicode=true,
- bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
- breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
- {hyperref}
+\documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\SweaveInput{vignettes.defs}
 \hypersetup{pdftitle={Laser Vignette for hyperSpec},
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's laser data set},
  pdfkeywords={hyperSpec, laser, time series}}
-\usepackage{hyphenat}
 
-\makeatletter
-
-\usepackage{Sweave}
-
-\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-
-\newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-\newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
-
-\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
-% Meta information - fill between {} and do not remove %
 % \VignetteIndexEntry{laser: Vignette on the laser data set, example of a time series. Shows also how to change the spectral abscissa.}
 % \VignetteKeywords{hyperSpec, laser, time series}
 % \VignettePackage{hyperSpec}
-\AtBeginDocument{
-  \setlength{\parskip}{\medskipamount}
-  \setlength{\parindent}{0pt}
-  \fvset{listparameters={\setlength{\topsep}{0pt}}}
-  \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
-  }
-\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, keep.source = TRUE, strip.white = TRUE}
-}
-
-% my preferred packages
-\usepackage{xspace}
-%\usepackage{tikz}
-%\usepackage{subfig}
-%\usepackage{booktabs}
-
-\usepackage{hyphenat}
-\usepackage{fancyvrb}
-%\usepackage{siunitx}
-%\usepackage{relsize} 
-
-%\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
-%\newcommand{\code}[1]{\nohyphens{\texttt{#1}}\xspace}
-\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
-
-\@ifundefined{showcaptionsetup}{}{%
- \PassOptionsToPackage{caption=false}{subfig}}
-\usepackage{subfig}
-\makeatother
-
-\title{Unstable Laser Emission\\
-Vignette for the Data Set \Robject{laser} of the R package \Rpackage{hyperSpec} }
-\author{Claudia Beleites (\url{cbeleites@units.it})\\
-CENMAT, DMRN, University of Trieste}
 
 \begin{document}
+\title{Unstable Laser Emission\\
+Vignette for the Data Set \Robject{laser} of the R package \Rpackage{hyperSpec} }
 \maketitle
+
+\warnbox{Reproducing the Examples in this Vignette}{
+All spectra used in this manual are installed automatically with \phy. 
+
+The source data files can be found with the command:\\
+\texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
+"hyperSpec/doc/rawdata/laser.txt", sep = "/"))}}
+}
 
 \section{Introduction}
 This data set consists of a time series of 84 spectra of an
@@ -86,9 +28,9 @@ unstable laser emission at 405 nm recorded during ca. 1.5 h.
 
 \section{Loading the Data and Preprocessing}
 
-<<fig-rawspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
+<<rawspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
 library (hyperSpec)
-laser <- scan.txt.Renishaw ("laser.txt", data = "ts")
+laser <- scan.txt.Renishaw ("rawdata/laser.txt", data = "ts")
 plot (laser, "spcprctl5") 
 @
 
@@ -96,15 +38,15 @@ As most of the spectra do not show any signal (fig. \ref{fig:rawspc}), so the sp
 can be cut to -75~--~0~cm\textsuperscript{-1}. 
 Note that negative numbers in the spectral range specification with the tilde do not exclude the spectral range but rather mean negative values of the wavelength axis.
 The results are shown in figure \ref{fig:cutspc}.
-<<fig-cut, fig = TRUE, width = 5, height = 5, include = FALSE>>=
+<<cut, fig = TRUE, width = 5, height = 5, include = FALSE>>=
 laser <- laser [,,-75~0]
 plot (laser, "spcprctl5") 
 @
 \begin{figure}[tbh]
   \centering
-  \subfloat[\label{fig:rawspc} The raw spectra.]{\includegraphics[width=.33\textwidth]{laser-fig-rawspc}}
-  \subfloat[\label{fig:cutspc} The cut spectra.]{\includegraphics[width=.33\textwidth]{laser-fig-cut}}  
-  \subfloat[\label{fig:nmspc} The spectra with wavelength axis.]{\includegraphics[width=.33\textwidth]{laser-fig-wlspc}}
+  \subfloat[\label{fig:rawspc} The raw spectra.]{\includegraphics[width=.33\textwidth]{fig/fig-rawspc}}
+  \subfloat[\label{fig:cutspc} The cut spectra.]{\includegraphics[width=.33\textwidth]{fig/fig-cut}}  
+  \subfloat[\label{fig:nmspc} The spectra with wavelength axis.]{\includegraphics[width=.33\textwidth]{fig/fig-wlspc}}
   \caption{The laser emission spectra.}
   \label{fig:raw}
 \end{figure}
@@ -132,7 +74,7 @@ wl (laser) <- list (
    label = expression (lambda / nm)
    )
 @ 
-<<fig-wlspc, fig = TRUE, width = 5, height = 5, include = FALSE >>=
+<<wlspc, fig = TRUE, width = 5, height = 5, include = FALSE >>=
 plot (laser, "spcprctl5") 
 @ 
 Note that the new wavelength axis label is immediately assigned as well.
@@ -150,7 +92,7 @@ measurement are data points 13, 17, 21, and 23 (fig. \ref{fig:markedspc}):
 wl2i (laser, locator()$x)
 
 @ 
-<<fig-markspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
+<<markspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
 plot (laser, "spcmeansd")
 abline (v = wl (laser)[c (13, 17, 21, 23)], col = c("black", "blue", "red", "darkgreen") )  
 @ 
@@ -161,7 +103,7 @@ time is stored in column \Rcode{\$t} in seconds from start of the
 measurement, and can be handed over as the column name. The resulting
 time series are shown in figure \ref{fig:ts}
 variable, 
-<<fig-ts, fig = TRUE, width = 10, height = 5, include = FALSE>>=
+<<ts, fig = TRUE, width = 10, height = 5, include = FALSE>>=
 plotc (laser[,,13, wl.index = TRUE], use.c = "t", 
     plot.args = list (type = "b", col = "black", ylim = range (laser), pch = 20)) 
 plotc (laser[,,17, wl.index = TRUE], use.c = "t", add = TRUE,
@@ -173,8 +115,8 @@ plotc (laser[,,23, wl.index = TRUE], use.c = "t", add = TRUE,
 @ 
 \begin{figure}[tbh]
   \centering
-  \subfloat[\label{fig:markedspc}]{\includegraphics[width=.33\textwidth]{laser-fig-markspc}}
-  \subfloat[\label{fig:ts}]{\includegraphics[width=.66\textwidth]{laser-fig-ts}}  
+  \subfloat[\label{fig:markedspc}]{\includegraphics[width=.33\textwidth]{fig/fig-markspc}}
+  \subfloat[\label{fig:ts}]{\includegraphics[width=.66\textwidth]{fig/fig-ts}}  
   \caption{The laser emission time series. \ref{fig:markedspc} shows
     the spectral position of the bands. The time series are plotted in
   corresponding colors in \ref{fig:ts}.}
