@@ -57,10 +57,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <h2>... from svn source</h2>
 <ol><li>
 get an svn checkout using your favourite svn client program, or<br/>
-<tt>svn checkout svn://svn.r-forge.r-project.org/svnroot/hyperspec</tt></li>
+<tt>svn checkout svn://svn.r-forge.r-project.org/svnroot/hyperspec/pkg</tt></li>
 <li> Install the package:<br/>
 <tt>R CMD INSTALL <i>pkg-directory</i></tt> 
-    where <tt><i>pkg-directory</i></tt> is the subdirectory called pkg of the directory where the svn checkout went.</li>
+    where <tt><i>pkg-directory</i></tt> is the directory where the svn checkout went (default is ./.</li>
 </ol>
 
 <h2>... via package built on my computer</h2>
