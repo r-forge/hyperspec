@@ -76,21 +76,23 @@ These may be a bit outdated, but they work if the nightly build fails.
 <h1>Documentation</h1>
 <p><tt>hyperSpec</tt> comes with some pdf documentation (vignettes) in addition to the R help files:</p>
 <ul>
-<li><a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/intro/introduction.pdf?root=hyperspec">Introduction</a>: a user manual from aspectroscopist's point of view</li>
-<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/flu/flu.pdf?root=hyperspec">calibration of quinine fluorescence emission</a>: how to program import functions for other file formats, and how to set up a calibration.</li>
-<li>Example work-flow: <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/laser/laser.pdf?root=hyperspec">Unstable Laser Emission</a>: working with time series, conversion of the spectral abscissa ("wavelength axis")</li>
+<li><a href="introduction.pdf">Introduction</a>: a user manual from aspectroscopist's point of view</li>
+<li>Example work-flow: <a href="flu.pdf">calibration of quinine fluorescence emission</a>: how to program import functions for other file formats, and how to set up a calibration.</li>
+<li>Example work-flow: <a href="laser.pdf">Unstable Laser Emission</a>: working with time series, conversion of the spectral abscissa ("wavelength axis")</li>
 <li>Example work-flow: <a href="chondrocytes.pdf"> Raman map of chondrocytes in cartilage</a>: principal component analysis, cluster analysis, working with spectral maps/images.<br/>
     the <a href="chondrocytes.zip">zipped directory containing all data</a> is needed to reproduce the vignette.</li>
-<li>A more technical <a href="https://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/*checkout*/Vignettes/baseline/baselinebelow.pdf?root=hyperspec">explanation of the baseline fitting technique used by <tt>spc.fit.poly.below</tt></a></li>
+<li>A more technical <a href="baselinebelow.pdf">explanation of the baseline fitting technique used by <tt>spc.fit.poly.below</tt></a></li>
 </ul> 
 <p> In the standard <tt>hyperSpec</tt> installation, .pdf files and source  are already available in the documentation directory, with the exception of the the chondrocyte raw data (see above).</p>
 
 <h1>Help, Suggestions, Feature Requests, and Bugs</h1>
 <ul>
 <li>There is a <a href="http://r-forge.r-project.org/forum/forum.php?forum_id=1218">help forum</a> on <tt>hyperSpec</tt></li>
-<li>and a <a href="http://r-forge.r-project.org/forum/forum.php?forum_id=1217">discussion forum</a>.</li>
-<li>Trackers for <a href="http://r-forge.r-project.org/tracker/?atid=1504&group_id=366&func=browse">feature requests</a>, </li>
-<li>and <a href="http://r-forge.r-project.org/tracker/?atid=1501&group_id=366&func=browse">bugs</a> are found on r.forge.</li>
+<li>and a <a href="http://r-forge.r-project.org/forum/forum.php?forum_id=1217">discussion forum</a> where suggestions for further development of hyperSpec can be discussed.</li>
+<li>The very low traffic mailing list hyperSpec-commits is used to announce major bug fixes and new features. <a href="http://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/hyperspec-commits">Subscription</a> and  <a href="http://lists.r-forge.r-project.org/pipermail/hyperspec-commits/">Archives</a> and <a href="https://lists.r-forge.r-project.org/cgi-bin/mailman/swish.cgi?query=listname%3D%22hyperspec-commits%22+">Searching</a> are available.</li>
+<li>The mailing list hyperSpec-help discusses questions on the use of hyperSpec. <a href="http://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/hyperspec-help">Subscription</a> and  <a href="http://lists.r-forge.r-project.org/pipermail/hyperspec-help/">Archives</a> and <a href="https://lists.r-forge.r-project.org/cgi-bin/mailman/swish.cgi?query=listname%3D%22hyperspec-help%22+">Searching</a> are available.</li>
+<li>Trackers for <a href="http://r-forge.r-project.org/tracker/?atid=1504&group_id=366&func=browse">feature requests</a>, and </li>
+<li><a href="http://r-forge.r-project.org/tracker/?atid=1501&group_id=366&func=browse">bugs</a> are also found on r-forge.</li>
 </ul>
 
 <h1>Other Useful Packages for Chemometric Data Analysis</h1>
