@@ -351,15 +351,22 @@ as.long.df <- function (x, rownames = FALSE) {
   validObject (x)
   ispc <- match ("spc", colnames (x@data))
 
-  tmp <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
+  if (nwl (x) == 0) {
+    tmp <- cbind (data.frame (.wavelength = rep (NA, nrow (x)),
+                              spc = rep (NA, nrow (x))),
+                  x@data [, -ispc, drop = FALSE])
+  } else {
+    tmp <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
 
-  tmp <- cbind (data.frame (wavelength = rep (x@wavelength, each = nrow (x)),
+    tmp <- cbind (data.frame (.wavelength = rep (x@wavelength, each = nrow (x)),
                               spc = as.numeric (x [[]])),
                   tmp)
+  }
 
   if (rownames)
-    tmp <- data.frame (.rownames = as.factor (rep (rownames (x), nwl (x))),
-                    tmp)
+    tmp <- data.frame (.rownames = as.factor (rep (rownames (x),
+                         length.out = nrow (tmp))),
+                       tmp)
 
   tmp
 }
@@ -1798,15 +1805,16 @@ index.grid <- function (x, y, z){
 ###
 
 map.identify <- function (object, x = "x", y = "y", ...){
+  .is.hy (object)
   validObject (object)
 
-  ix <- pmatch (x, colnames (object@data))
-  if (is.null (ix))
-    stop (paste ("hyperSpec object has no column ", x))
-
-  iy <- pmatch (y, colnames (object@data))
-  if (is.null (iy))
-    stop (paste ("hyperSpec object has no column ", y))
+  ## ix <- pmatch (x, colnames (object@data))
+  ## if (is.null (ix))
+  ## stop (paste ("hyperSpec object has no column ", x))
+  
+  ## iy <- pmatch (y, colnames (object@data))
+  ## if (is.null (iy))
+  ## stop (paste ("hyperSpec object has no column ", y))
 
   lattice <- plotmap(object, x, y, ...)
 
@@ -2294,19 +2302,19 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
 ###  plot spectra matrix
 ###
 
-plotmat <- function (object, use.t = "t", cond = NULL, ...) {
-  formula <- paste ("spc ~ wavelength *", use.t)
-  if (! is.null (cond))
-    formula <- paste (formula, "|", cond)
-  formula <- as.formula (formula)
+## plotmat <- function (object, use.t = "t", cond = NULL, ...) {
+##   formula <- paste ("spc ~ wavelength *", use.t)
+##   if (! is.null (cond))
+##     formula <- paste (formula, "|", cond)
+##   formula <- as.formula (formula)
   
-  dots <- modifyList (list (xlab = object@label$.wavelength,
-                            ylab = object@label [[use.t]]),
-                      list (...))
-  dots <- c (list (x = formula, data = as.long.df (object)), dots)
+##   dots <- modifyList (list (xlab = object@label$.wavelength,
+##                             ylab = object@label [[use.t]]),
+##                       list (...))
+##   dots <- c (list (x = formula, data = as.long.df (object)), dots)
 
-  do.call (levelplot, dots)
-}
+##   do.call (levelplot, dots)
+## }
 
 ###-----------------------------------------------------------------------------
 ###
@@ -2694,7 +2702,7 @@ write.txt.wide <- function (object,
 ###
 write.txt.long <- function (object,
                             file = stop ("filename required"),
-                            order = c (".rownames", "wavelength"),
+                            order = c (".rownames", ".wavelength"),
                             na.last = TRUE, decreasing = FALSE,
                             quote = FALSE, sep = "\t",
                             row.names = FALSE,

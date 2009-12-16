@@ -339,3 +339,8 @@ mark.dendrogram <- function (dendrogram, clusters,
   points (seq_along (dendrogram$order), rep (y, length (dendrogram$order)),
           col = col [clusters [dendrogram$order]], pch = pch)
 
+colsBR <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
+                              "#E0E3E3", "#F8F8B0", "#F7E6C2", "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
+                              "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
+
+

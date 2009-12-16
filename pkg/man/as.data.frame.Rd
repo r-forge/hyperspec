@@ -29,11 +29,15 @@ as.long.df (x, rownames = FALSE)
 }
 \value{
   \code{x@data} and \code{x@data$spc}, respectively.
+
+  \code{as.long.df} the stacked or molten version of \code{x@data}. The
+  wavelengths are in column \code{.wavelength}.
 }
 \details{
-  Long-format data.frame: this is the stacked or molten version of \code{x@data}.
+The data.frame returned by \code{as.long.df} is guaranteed to have
+  columns \code{spc} and \code{.wavelength}. If \code{nwl (x) == 0}
+  these columns will be \code{NA}. 
 }
-
 \author{C. Beleites}
 \seealso{
   \code{\link[base]{as.data.frame}} and \code{\link[base]{as.matrix}}

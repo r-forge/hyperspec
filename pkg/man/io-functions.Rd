@@ -34,7 +34,7 @@ read.txt.wide (file = stop ("filename is required"),
    \dots)
 
 write.txt.long (object, file = stop("filename required"),
-   order = c(".rownames", "wavelength"), 
+   order = c(".rownames", ".wavelength"), 
    na.last = TRUE, decreasing = FALSE, quote = FALSE, sep = "\t", 
    row.names = FALSE, cols = NULL, col.names = TRUE, 
    col.labels = FALSE, append = FALSE, \dots)
@@ -82,13 +82,14 @@ write.txt.wide (object, file = stop ("filename required"), cols = NULL,
 \details{
 These functions are very flexible and provide lots of arguments. 
 
-If you use them to read or write manufacturer specific ASCII formats, please consider writing a 
+If you use them to read or write manufacturer specific ASCII formats,
+please consider writing a 
 wrapper function and contributing this function to \pkg{hyperSpec}. 
 An example is in the \dQuote{flu} vignette (see \code{vignette ("flu", package = "hyperSpec"}). 
 
 For further information, see the
-  examples below and the documentation of
-  \code{\link[R.matlab]{R.matlab}}.
+examples below and the documentation of
+\code{\link[R.matlab]{R.matlab}}.
 }
 \seealso{
 \code{\link[utils]{read.table}} and \code{\link[utils]{write.table}}
@@ -120,7 +121,7 @@ if (require (R.matlab)){
 ## ascii export & import
 
 
-write.txt.long (flu,  file = "flu.txt", cols = c("wavelength", "spc", "c"), 
+write.txt.long (flu,  file = "flu.txt", cols = c(".wavelength", "spc", "c"), 
 		order = c("c", "wavelength"),
 		decreasing = c(FALSE, TRUE))
 
