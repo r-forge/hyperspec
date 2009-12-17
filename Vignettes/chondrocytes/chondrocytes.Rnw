@@ -155,9 +155,9 @@ chondro <- spc.loess (chondro, seq (602, 1800, 4))
 chondro
 @    
 
-The spectra are now the same as the data set \Robject{chondro}.
+The spectra are now the same as in the data set \Robject{chondro}. The data set also contains the clustering results, see below.
 <<save_chondro>>=
-save (chondro, file = "chondro.rda")
+spectra.to.save <- chondro
 @
 
 \subsection{Baseline Correction}
@@ -319,13 +319,19 @@ plot (dendrogram)
 @
 
 In order to get clusters, the dendrogram is cut at a level specified
-either by height or by the number of clusters. The result for $k$=
-3 clusters is plot as a map. If \Rfunction{plotmap}'s \Rfunarg{z}
-is a factor, the legend bar does not show intermediate colors.
+either by height or by the number of clusters. 
+<<dendcut>>=
+chondro$clusters <- as.factor (cutree (dendrogram, k = 3))
+@
+The result for $k$= 3 clusters is plotted as a map (figure~\ref{fig:clustmap}). If the color-coded variate (left hand side of the formula) is a factor, the legend bar does not show intermediate colors, and \chy's \Rfunction{levelplot} method uses the levels of the factor for the legend.
 
+Thus  meaningful names are assigned
+<<clustname>>=
+levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
+@
+and the cluster membership map is plotted:
 <<clustmap, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-clusters <- cutree (dendrogram, k = 3)
-print (plotmap (chondro, z = as.factor (clusters)))
+print (plotmap (chondro, clusters ~ x * y), col.regions = c ("dark blue", "orange", "dark red"))
 @
 
 The cluster membership can also be marked in the dendrogram:
@@ -350,7 +356,7 @@ However, we can do even better and plot the cluster mean spectra $\pm$
 <<clustmeans, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 cluster.means <- aggregate (chondro, clusters, mean_pm_sd)
 plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", 
-     col = matlab.palette (3))
+     col = c ("dark blue", "orange", "dark red"))
 @
 
 %
@@ -382,6 +388,15 @@ print (plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)]))
 The result is shown in figure~\ref{fig:DNA}. While the nucleus of
 the right cell shows up nicely, nothing is detected in the remainders
 of the left cell.
+
+Finally, the example data set is put together and saved:
+<<save>>=
+spectra.to.save <- spectra.to.save [-out]
+spectra.to.save$clusters <- chondro$clusters
+chondro <- spectra.to.save
+save (chondro, file = "chondro.rda")
+@
+
 
 <<cleanup, echo = FALSE, results=hide>>=
 rm (list = ls () ) 
