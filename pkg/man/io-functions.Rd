@@ -25,7 +25,7 @@
 
 \usage{
 read.txt.long (file = stop ("filename is required"),
-   cols = list (wavelength = expression (lambda / nm), spc = "I / a.u."),
+   cols = list (.wavelength = expression (lambda / nm), spc = "I / a.u."),
    header = TRUE, \dots)
 
 read.txt.wide (file = stop ("filename is required"),
@@ -122,10 +122,10 @@ if (require (R.matlab)){
 
 
 write.txt.long (flu,  file = "flu.txt", cols = c(".wavelength", "spc", "c"), 
-		order = c("c", "wavelength"),
+		order = c("c", ".wavelength"),
 		decreasing = c(FALSE, TRUE))
 
-read.txt.long (file = "flu.txt", cols = list (wavelength = expression (lambda / nm), 
+read.txt.long (file = "flu.txt", cols = list (.wavelength = expression (lambda / nm), 
       spc= "I / a.u", c = expression ("/" (c, (mg/l)))))
 
 write.txt.wide (flu,  file = "flu.txt", cols = c("c", "spc"), 

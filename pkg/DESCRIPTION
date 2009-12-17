@@ -11,4 +11,4 @@ LazyLoad: yes
 LazyData: yes
 Depends: methods, utils, lattice
 #Imports: lattice
-Suggests: R.matlab
+Suggests: R.matlab, RColorBrewer, latticeExtra, tripack, deldir
