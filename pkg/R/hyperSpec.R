@@ -9,7 +9,9 @@
 
 .onLoad <- function (libname, pkgname){
   require (lattice)
-  require (utils) 
+  require (utils)
+  if (! require (latticeExtra))
+    warning ("package 'latticeExtra' is needed for Voronoi plots.")
 }
 
 .onAttach <- function (libname, pkgname){
@@ -1630,199 +1632,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 ###
 ### ****************************************************************************
 
-###-----------------------------------------------------------------------------
-###
-###  plotmap - plot map
-###
-## FIXME: one row / one column
-## TODO: ... -> func.args
-## TODO: trellis.args -> ...
-#TODO: cancel do.print: can be done externally as the object is returned
 
-plotmap <- function (object,
-                     x = "x",
-                     y = "y",
-                     func = mean,
-                     cond = NULL,
-                     z = NULL,
-                     do.print = FALSE,
-                     print.args = NULL,
-                     trellis.args = NULL,
-                     ...
-                     ) {
-  validObject (object)
-
-  ix <- pmatch (x, colnames (object@data))
-  if (is.null (ix))
-    stop (paste ("hyperSpec object has no column ", x))
-
-  iy <- pmatch (y, colnames (object@data))
-  if (is.null (iy))
-    stop (paste ("hyperSpec object has no column ", y))
-
-  if (!is.null (z)){
-    if (is.numeric (z)){
-      z <- rep (z, length.out = nrow (object))
-    } else if (is.character (z)){
-      if (is.na (match (z, colnames (object@data))))
-        stop ("z did not evaluate to a column in object@data.")
-      z <- object@data[, z]
-    }
-  } else {
-    z <- apply (object [[]], 1, func, ...)
-    if (length (z) != nrow (object))
-      warning ("func did not yield one value per spectrum.")
-  }
-
-  if (! is.null (cond)){
-    if (is.character (cond) && length (cond) == 1) {
-      if (is.na (match (cond, colnames (object@data))))
-        stop ("cond did not evaluate to a column in object@data.")
-      cond <- object@data[, cond]
-    }
-    dots <- list (x = formula (z ~ x * y | cond))
-    if (is.null (trellis.args$data))
-      dots$data <- data.frame (x = object[[, ix]] , y = object[[, iy]], z = as.numeric(z), cond = cond)
-  } else {
-    dots <- list (x = formula (z ~ x * y))
-    if (is.null (trellis.args$data))
-      dots$data <- data.frame (x = object[[, ix]] , y = object[[, iy]], z = as.numeric(z))
-  }
-
-  n <- length (unique (zapsmall (as.numeric (z))))
-  if (is.null (trellis.args$col.regions)){
-    if (is.factor (z))
-      trellis.args$col.regions <- matlab.palette (nlevels (z))
-    else
-      trellis.args$col.regions <- matlab.palette ()
-  } else if (is.factor (z))
-    trellis.args$col.regions <- rep (trellis.args$col.regions, length.out = nlevels (z))
-
-  if (is.null (trellis.args$at)){
-    if (is.factor (z)) {
-      trellis.args$at <- seq_len (nlevels (z) + 1) - 0.5
-    } else if (n == 1) {
-      trellis.args$at <- range (z)[1] * c (.99, 1.01)
-      if (all (trellis.args$at == 0))
-        trellis.args$at <- c(-1, 1)
-    } else {
-      trellis.args$at = seq (min (z), max (z), length.out = length (trellis.args$col.regions) + 1)
-    }
-  }
-
-  if (is.null (trellis.args$aspect))
-    trellis.args$aspect = "iso"
-
-  if (is.null (trellis.args$xlab)){
-    trellis.args$xlab <- object@label[[names(object@data)[ix]]]
-    if (is.null (trellis.args$xlab))
-      trellis.args$xlab <- x
-  }
-
-  if (is.null (trellis.args$ylab)){
-    trellis.args$ylab = object@label[[names(object@data)[iy]]]
-    if (is.null (trellis.args$ylab))
-      trellis.args$ylab <- y
-  }
-
-  if (is.null (trellis.args$panel)){
-    trellis.args$panel <- function (x, y, z, subscripts, ..., panel.bg = NA) {
-      tmp <- index.grid (x[subscripts], y[subscripts], z [subscripts])
-      panel.fill (col = panel.bg)
-      panel.levelplot (tmp$x, tmp$y, tmp$z, subscripts = TRUE, ...)
-    }
-  }
-
-  lattice <- do.call(levelplot, c(dots, trellis.args))
-  dots$x <- lattice
-  if (do.print)
-    do.call (print, c(print.args, dots))
-  lattice
-}
-
-###-----------------------------------------------------------------------------
-###
-### index.grid
-###
-###
-index.grid <- function (x, y, z){
-  if (is (x, "hyperSpec")){
-    validObject
-    y <- x$y
-    x <- x$x
-  } else if ((is.matrix (x) || is.data.frame (x)) && ncol (x) == 2) {
-    y <- x [,2]
-    x <- x [,1]
-  } else if (missing (y))
-    stop ("y can only be omitted if x is a hyperSpec object or a matrix or data.frame with 2 columns.")
-
-  if (is.data.frame (x))
-    x <- x [[1]]
-  if (is.data.frame (y))
-    y <- y [[1]]
-
-  if (length (x) != length (y))
-    stop ("x and y need to have the same length")
-
-  order <- order (cbind (x, y))
-
-  x <- as.ordered (x)
-  y <- as.ordered (y)
-  levx <- as.numeric (levels (x))
-  levy <- as.numeric (levels (y))
-  x <- as.numeric (x)
-  y <- as.numeric (y)
-
-  grid <- matrix (nrow = length (levx),
-                  ncol = length (levy),
-                  dimnames = list (x = levx, y = levy))
-
-  for (i in seq (along = x)){
-    grid [x[i], y[i]] <- i
-  }
-
-  if (!missing (z)){
-    z <- z [grid]
-    dim(z) <- dim (grid)
-    dimnames (z) <- dimnames (grid)
-  } else {
-    z <- NULL
-  }
-
-  x <- levx[row(grid)]
-  dim (x) <- dim (grid)
-
-  y <- levy[col(grid)]
-  dim (y) <- dim (grid)
-
-  list (grid = grid, x = x, y = y, z = z)
-}
-
-###-----------------------------------------------------------------------------
-###
-### map.identify
-###
-###
-
-map.identify <- function (object, x = "x", y = "y", ...){
-  .is.hy (object)
-  validObject (object)
-
-  ## ix <- pmatch (x, colnames (object@data))
-  ## if (is.null (ix))
-  ## stop (paste ("hyperSpec object has no column ", x))
-  
-  ## iy <- pmatch (y, colnames (object@data))
-  ## if (is.null (iy))
-  ## stop (paste ("hyperSpec object has no column ", y))
-
-  lattice <- plotmap(object, x, y, ...)
-
-  print (lattice)
-  trellis.focus ()
-#  panel.identify (subscripts = mesh)
-  panel.identify (x = unlist (object[[, ix]]), y = unlist (object[[, iy]]))
-}
 
 ###-----------------------------------------------------------------------------
 ###
@@ -2325,6 +2135,8 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
 .plot <-  function (x, y, ...){
   ##    'spc'        ... spectra
   ##    'map'        ... map
+  ##    'voronoi'    ... voronoi tiled map
+  ##    'mat'        ... spectra matrix
   ##    'c'          ... concentration: plotc
   ##    'ts'         ... time series: plotc
   ##    'depth'      ... concentration or time series
@@ -2335,7 +2147,7 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
   dots <- list(...)          # to allow optional argument checks
   
   if (missing (y)){
-    stop ("shouldnt be")
+    stop ("second argument to plot is missing. Should be a character indicating the type of plot.")
     y = "spc"
   }
   
@@ -2376,6 +2188,11 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
             do.call (plotspc, dots)
           },
           map = plotmap (x, ...),
+          voronoi = plotvoronoi (x, ...),
+          mat = {
+            x$.row <- seq_len (nrow (x))
+            .levelplot (spc ~ .wavelength * .row, x, ...)
+          },
           c = plotc (x, ...),
           ts = {
             dots <- modifyList (list (object = x,
@@ -2422,7 +2239,7 @@ setMethod ("plot",
 
 read.txt.long <- function (file = stop ("filename is required"),
                            cols = list (
-                             wavelength = expression (lambda / nm),
+                             .wavelength = expression (lambda / nm),
                              spc = "I / a.u."),
                            header = TRUE,
                            ...){
@@ -2446,21 +2263,21 @@ read.txt.long <- function (file = stop ("filename is required"),
   if (is.na (match ("spc", names (cols))))
     stop ("cols$spc must exist.")
 
-  wavelength <- match ("wavelength", names (cols))
+  wavelength <- match (".wavelength", names (cols))
   if (is.na (wavelength))
-    stop ("cols$wavelength must exist.")
-  else
-    names (cols) [wavelength] <- ".wavelength"
+    stop ("cols$.wavelength must exist.")
+  ## else
+  ##   names (cols) [wavelength] <- ".wavelength"
 
   colnames (txtfile) <- names (cols)
 
-                                        # wavelength axis
-  wavelength <- rep (TRUE,  nrow (txtfile))
-  for (i in which (! colnames (txtfile) %in% c(".wavelength", "spc")))
-    wavelength [wavelength] <- txtfile [wavelength, i] == txtfile [1, i]
-
-  wavelength <- txtfile$.wavelength [wavelength]
-
+  ## wavelength axis
+  ## wavelength <- rep (TRUE,  nrow (txtfile))
+  ## for (i in which (! colnames (txtfile) %in% c(".wavelength", "spc")))
+  ##   wavelength [wavelength] <- txtfile [wavelength, i] == txtfile [1, i]
+  ## wavelength <- sort (txtfile$.wavelength [wavelength])
+  wavelength <- as.numeric (levels (as.factor (txtfile$.wavelength)))
+  
   spc <- as.matrix (unstack (txtfile, form = spc ~ .wavelength))
   if ((nrow (spc)  == length (wavelength)) & (ncol (spc) != length (wavelength)))
     spc <- t (spc)
@@ -2501,10 +2318,10 @@ read.txt.wide <- function (file = stop ("filename is required"),
   if (is.na (.wavelength))
     cols <- as.list (c (cols, .wavelength = expression (lambda / nm)))
   else
-    if (.wavelength != length (cols)) ## .wavelength should be at the end of cols
+    if (.wavelength != length (cols))   # .wavelength should be at the end of cols
       cols <- cols [c (seq_along (cols)[-.wavelength], .wavelength)]
 
-                                        # columns containing the spectra
+  ## columns containing the spectra
   spc <- match ("spc", names (cols))
   if (is.na (spc))
     stop ("cols$spc must exist.")
