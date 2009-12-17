@@ -339,8 +339,17 @@ mark.dendrogram <- function (dendrogram, clusters,
   points (seq_along (dendrogram$order), rep (y, length (dendrogram$order)),
           col = col [clusters [dendrogram$order]], pch = pch)
 
-colsBR <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
+colsdiv <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
                               "#E0E3E3", "#F8F8B0", "#F7E6C2", "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
                               "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
 
+colsseq <- colorRampPalette (rev (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
+                              "#E0E3E3")), space = "Lab")
 
+colsqual.dark <- c ("#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","black")
+colsqual.dark <- c ("#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#D7619F","black")
+colsqual.dark <- c ("#D42A2C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#D7619F","black")
+colsqual.light <- c ("#E41A1C80","#377EB880","#4DAF4A80","#984EA380","#FF7F0080","#A6562880","#D7619F80","#00000080")
+
+
+brewer.pal (9, "Set1") [-6] [-8], "black")

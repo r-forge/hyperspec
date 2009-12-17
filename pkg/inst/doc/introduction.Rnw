@@ -71,7 +71,7 @@ to illustrate appropriate procedures for different tasks.
 
 In addition, each of the data sets is accompanied by an vignette that shows an exemplary work flow how to analyze the data.
 
-This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. It is therefore recommended to look up the methods in R's help system using  \Rcode{?~command}.
+This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. It is therefore recommended to look up the methods in R's help system using  \Rcode{?{} command}.
 
 \subsection{Notation}
 
@@ -593,17 +593,19 @@ see section \ref{HCA}.}
 \label{sec:plotmat}
 It is often useful to plot the spectra against an additional coordinate, \eg the time for time series, the depth for depth profiles, etc. 
 
-This is done by  \Rfunction{plotmat}, which is set up similar to \Rfunction{plotmap} and \Rfunction{plotc}. Argument \Rfunarg{use.t} specifies the extra data column to use as ordinate, and defaults to "t". The plot can be conditioned by giving the conditioning term in \Rfunarg{cond}. The actual plot is produced by  \Rfunction{levelplot}, and further arguments are handed over directly. See figure~\ref{fig:plotmat}
+This is done by  \Rfunction{levelplot}, or by using \Rcode{plot (object, "mat", model = spc ~ .wavelength * other.data.column)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
+See figure~\ref{fig:plotmat}
 <<plotmat1, fig = TRUE, include = FALSE>>=
-print (plotmat (laser, col.regions = matlab.palette (20)))
+print (levelplot (spc ~ .wavelength * t, laser,
+                  contour = TRUE, labels = TRUE, col = "#00000080"))
 @
 <<plotmat2, fig = TRUE, include = FALSE>>=
-plot (plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "#00000080"))
+plot (plot (flu, "mat")) 
 @
 \begin{figure}
-\subfloat[\label{fig-plotmat-a}\Rcode{plotmat (laser, col.regions = matlab.palette (20))}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat1}}%
-\subfloat[\label{fig-plotmat-b}\Rcode{plotmat (flu, use.t = "c", contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat2}}%
-\caption{\label{fig:plotmat}\Rfunction{plotmat}: plotting the spectra matrix. 
+\subfloat[\label{fig-plotmat-a}\Rcode{levelplot (spc ~ .wavelength * t, laser, contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat1}}%
+\subfloat[\label{fig-plotmat-b}\Rcode{plot (plot (flu, "mat"))}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat2}}%
+\caption{\label{fig:plotmat}plotting the spectra matrix. 
 }
 \end{figure}
 
@@ -987,13 +989,19 @@ calculated from the dendrogram.
 First, cut the dendrogam so that three clusters result:
 
 <<dendcut>>=
-clusters <- cutree (dendrogram, k = 3)
+chondro$clusters <- as.factor (cutree (dendrogram, k = 3))
+@
+As the cluster membership was stored as factor, the levels can be meaningful names, which are displayed in the color legend.
+<<clustname>>=
+levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
 @
 
-Then the result may be plotted:
-
+Then the result may be plotted (figure~\ref{fig:clust:map}):
+<<clustname>>=
+levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
+@
 <<clustmap, fig = TRUE, width = 7.5, height = 5, include = FALSE, echo = FALSE>>=
-plotmap (chondro, z = as.factor (clusters), do.print = TRUE)
+print (plotmap (chondro, clusters ~ x * y))
 @
 
 %
@@ -1015,7 +1023,7 @@ to each of the groups of spectra specified in \Rfunarg{by}. \mFun{\Rfunction{agg
 So we may plot the cluster mean spectra:
 
 <<clustmean, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-means <- aggregate (chondro, by = clusters, mean_pm_sd)
+means <- aggregate (chondro, by = chondro$clusters, mean_pm_sd)
 means
 plot (means, col = matlab.palette (3), stacked = ".aggregate", fill = ".aggregate")
 @
@@ -1027,7 +1035,7 @@ A \Rclass{hyperSpec} object may also be split into a list of \Rclass{hyperSpec}
 objects:
 
 <<split>>=
-clusters <- split (chondro, clusters)
+clusters <- split (chondro, chondro$clusters)
 clusters
 @
 

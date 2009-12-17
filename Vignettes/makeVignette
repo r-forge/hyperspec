@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd $1
+R CMD Sweave $1.Rnw || exit 1
+pdflatex $1.tex || exit 2
+if [ -f $1.bib ] 
+then
+	 bibtex8 -W $1 || exit 3 
+fi
+pdflatex $1.tex || exit 4
+pdflatex $1.tex
+xpdf $1.pdf & 
+rm $1.tex
+rm $1.log
+rm $1.aux
+rm $1.out
+rm $1.blg
+rm $1.bbl
+rm Rplots.pdf
+rm fig/*
+cd ..
+
