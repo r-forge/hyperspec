@@ -1,0 +1,20 @@
+#!/bin/bash
+
+for i in *
+do
+   if [ -d $i ]
+	then
+		 cd ../pkg/inst/doc
+		 rm $i.Rnw
+		 ln ../../../Vignettes/$i/$i.Rnw
+		 rm $i.pdf
+		 ln ../../../Vignettes/$i/$i.pdf
+		 cd ../../../Vignettes
+		 if [ -f $i/$i.rda ]
+		 then
+			  cd ../pkg/data
+			  ln ../../Vignettes/$i/$i.rda
+			  cd ../../Vignettes
+		 fi
+	fi
+done

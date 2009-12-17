@@ -1,0 +1,40 @@
+#################################################################################
+###
+###  Tests for the interaction functions
+###  Must be run interactively.
+###  
+###  Time-stamp: <Claudia Beleites on Tuesday, 2009-12-15 at 16:22:38 on cb>
+###
+#################################################################################
+
+library (hyperSpec)
+
+#################################################################################
+##
+## map.identify                            
+##
+
+spc <- new ("hyperSpec", spc <- matrix (c (rep (0, 6), 1, rep (0, 5)), ncol = 1))
+spc$y <- rep (1 : 4, each = 3)
+spc$x <- rep (1 : 3,        4)
+spc$z <- spc$y * 3
+
+map.identify (spc) == 7
+
+
+i <- c (10, 5, 8, 11, 4, 6, 7, 12, 1)
+map.identify (spc [i]) == 7
+
+map.identify (spc [i], "y", "x")
+map.identify (spc [i], "x", "z")
+
+map.identify (spc[i], "x", "y")
+
+
+#################################################################################
+
+
+
+## Local Variables:
+## mode:R
+## End:             

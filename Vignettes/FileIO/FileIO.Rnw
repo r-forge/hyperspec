@@ -1,0 +1,35 @@
+\documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\SweaveInput{vignettes.defs}
+\hypersetup{pdftitle={Flu},
+ pdfauthor={C. Beleites},
+ pdfsubject={Vignette File Import and Export for R package hyperSpec},
+ pdfkeywords={hyperSpec, data format, file, import, export}}
+
+% \VignetteIndexEntry{FileIO: Import and Export of Spectra into R/hyperSpec}
+% \VignetteKeywords{hyperSpec, import, export, .spc, ENVI, ASCII}
+% \VignettePackage{hyperSpec}
+
+\begin{document}
+\title{Import and Export of Spectra\\
+Vignette for the R package \Rpackage{hyperSpec} }
+\maketitle
+
+\warnbox{Reproducing the Examples in this Vignette}{
+The source code of this vignette including the spectra files are available as .zip file at \phy's home page:
+ \url{http://r-forge.r-project.org/projects/hyperspec/}
+}
+
+<<init, echo = FALSE, results = hide>>=
+library (hyperSpec)
+@
+
+\section{Existing Filters}
+\section{Extending I/O Functions}
+\section{Completely New Functions}
+
+<<cleanup, echo = FALSE, results = hide>>=
+rm (list = ls () ) 
+@ 
+\end{document}
+
+

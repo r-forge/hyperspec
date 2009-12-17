@@ -5,12 +5,15 @@ hyperSpec_*.tar.gz
 .project
 .settings
 *.log
-*.tex
 *.aux
 *.out
 *.lyx.emergency
 Rplots.pdf
+fig
 *-fig*.pdf
 *-fig*.pgf
 *-fig*.eps
+*fig-*.pdf
+*fig-*.pgf
+*fig-*.eps
 
