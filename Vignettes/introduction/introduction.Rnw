@@ -992,9 +992,6 @@ First, cut the dendrogam so that three clusters result:
 chondro$clusters <- as.factor (cutree (dendrogram, k = 3))
 @
 As the cluster membership was stored as factor, the levels can be meaningful names, which are displayed in the color legend.
-<<clustname>>=
-levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
-@
 
 Then the result may be plotted (figure~\ref{fig:clust:map}):
 <<clustname>>=

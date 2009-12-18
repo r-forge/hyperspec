@@ -331,7 +331,7 @@ levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
 @
 and the cluster membership map is plotted:
 <<clustmap, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-print (plotmap (chondro, clusters ~ x * y), col.regions = c ("dark blue", "orange", "dark red"))
+print (plotmap (chondro, clusters ~ x * y, col.regions = c ("dark blue", "orange", "dark red")))
 @
 
 The cluster membership can also be marked in the dendrogram:
@@ -340,7 +340,7 @@ The cluster membership can also be marked in the dendrogram:
 plot (dendrogram, labels = FALSE, hang = 0) 
 col.clust <- matlab.palette(3)
 points (seq_along (dendrogram$order), rep (-3, length (dendrogram$order)),
-        col = col.clust [clusters [dendrogram$order]], pch = "|")
+        col = col.clust [chondro$clusters [dendrogram$order]], pch = "|")
 @     
    
 Figure~\ref{fig:dend} shows the dendrogram and \ref{fig:clustmap}
@@ -354,7 +354,7 @@ However, we can do even better and plot the cluster mean spectra $\pm$
 1 standard deviation (see figure~\ref{fig:clustmeans}): 
 
 <<clustmeans, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-cluster.means <- aggregate (chondro, clusters, mean_pm_sd)
+cluster.means <- aggregate (chondro, chondro$clusters, mean_pm_sd)
 plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", 
      col = c ("dark blue", "orange", "dark red"))
 @
