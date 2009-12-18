@@ -335,7 +335,7 @@ axis label in \Rcode{\$spc}.
 \end{description}
 
 \section{Combining \Rclass{hyperspec} Objects} \mFun{\Rfunction{cbind} \Rfunction{rbind}}
-
+\label{sec:bind}
 \Rclass{hyperspec} Objects can be bound together, either by rows
 to append a new spectral range or by columns to append new spectra
 
@@ -535,13 +535,14 @@ plotc (flu)
 }
 \subfloat[\label{fig-plot-map}]{
 <<plotmap, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-print (plotmap (chondro))
+YG <- colorRampPalette (c ("white", "gold", "dark green"), space = "Lab")
+plotmap (chondro, col.regions = YG (20))
 @
 }
 
 \caption{\label{fig:example-plots}Some example plots. \subref{fig-plot-spc}\Rcode{plotspc (flu)},
 \subref{fig-plot-spcmeansd}\Rcode{plot (chondro, \textquotedbl{}spcmeansd\textquotedbl{})},
-\subref{fig-plot-c}\Rcode{plotc (flu)}, and \subref{fig-plot-map}\Rcode{plotmap (chondro)}.}
+\subref{fig-plot-c}\Rcode{plotc (flu)}, and \subref{fig-plot-map}\Rcode{plotmap (chondro, col.regions = YG (20))} (using a yellow-green palette).}
 
 \end{figure}
 
@@ -554,17 +555,17 @@ plots. To plot ...
 \begin{description}
 \setlength{\labelwidth}{2.5cm}
 \setlength{\itemindent}{1.7cm}
-\item [{with~reversed~abscissa}] use \Rcode{wl.reverse = TRUE}
-\item [{in~different~colours}] colours use \Rcode{col = vector.of.colours}
-\item [{dots~instead~of~lines}] use \Rcode{lines.args = list (pch = 20, type = \textquotedbl{}p\textquotedbl{})}
-\item [{mass~spectra}] use \Rcode{lines.args = list (type = \textquotedbl{}h\textquotedbl{})}
-\item [{particular~wavelength~ranges}] use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
+\item [with reversed abscissa] use \Rcode{wl.reverse = TRUE}
+\item [in different colours] colours use \Rcode{col = vector.of.colours}
+\item [dots instead of lines] use \Rcode{lines.args = list (pch = 20, type = \textquotedbl{}p\textquotedbl{})}
+\item [mass spectra] use \Rcode{lines.args = list (type = \textquotedbl{}h\textquotedbl{})}
+\item [particular wavelength ranges] use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
 3100)}\\
 If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}\\
 Cut the wavelength axis appropriately with \Rcode{xoffset = 800}
-\item [{stacked~spectra}] use \Rcode{stacked = TRUE}
-\item [{more~spectra~into~an~existing~plot}] use \Rcode{add = TRUE}
-\item [{with~different~line~at~I~=~0}] use \Rcode{zeroline = \emph{list.of.arguments.to.abline}}.
+\item [stacked spectra] use \Rfunarg{stacked}
+\item [more spectra into an existing plot] use \Rcode{add = TRUE}
+\item [with different line at $I =0$] use \Rcode{zeroline = \emph{list.of.arguments.to.abline}}.
 \Rcode{NULL} suppresses the line.
 \end{description}
 <<ms, fig = TRUE, width = 8, height = 5, echo = FALSE, include = FALSE>>=
@@ -596,15 +597,14 @@ It is often useful to plot the spectra against an additional coordinate, \eg the
 This is done by  \Rfunction{levelplot}, or by using \Rcode{plot (object, "mat", model = spc ~ .wavelength * other.data.column)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
 See figure~\ref{fig:plotmat}
 <<plotmat1, fig = TRUE, include = FALSE>>=
-print (levelplot (spc ~ .wavelength * t, laser,
-                  contour = TRUE, labels = TRUE, col = "#00000080"))
+levelplot (spc ~ .wavelength * t, laser, col.regions = YG (20))
 @
 <<plotmat2, fig = TRUE, include = FALSE>>=
-plot (plot (flu, "mat")) 
+print (plot (flu, "mat", contour = TRUE, labels = TRUE, col = "#00000080"))
 @
 \begin{figure}
-\subfloat[\label{fig-plotmat-a}\Rcode{levelplot (spc ~ .wavelength * t, laser, contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat1}}%
-\subfloat[\label{fig-plotmat-b}\Rcode{plot (plot (flu, "mat"))}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat2}}%
+\subfloat[\label{fig-plotmat-a}\Rcode{levelplot (spc ~ .wavelength * t, laser, col.regions = YG (20))}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat1}}%
+\subfloat[\label{fig-plotmat-b}\Rcode{plot (flu, "mat", contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat2}}%
 \caption{\label{fig:plotmat}plotting the spectra matrix. 
 }
 \end{figure}
@@ -962,7 +962,7 @@ plot (loadings [1:3], stacked = TRUE)
 }
 \subfloat[\label{fig-pca-score}]{
 <<pca-score, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
-print (plotmap (scores [,,2]))
+plotmap (scores [,,2], col.regions = div.palette (20))
 @
 }
 \caption{
@@ -992,13 +992,13 @@ First, cut the dendrogam so that three clusters result:
 chondro$clusters <- as.factor (cutree (dendrogram, k = 3))
 @
 As the cluster membership was stored as factor, the levels can be meaningful names, which are displayed in the color legend.
-
-Then the result may be plotted (figure~\ref{fig:clust:map}):
 <<clustname>>=
 levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
 @
+Then the result may be plotted (figure~\ref{fig:clust:map}):
 <<clustmap, fig = TRUE, width = 7.5, height = 5, include = FALSE, echo = FALSE>>=
-print (plotmap (chondro, clusters ~ x * y))
+cluster.cols <- c ("dark blue", "orange", "#C02020")
+plotmap (chondro, clusters ~ x * y, col.regions = cluster.cols)
 @
 
 %
@@ -1021,8 +1021,7 @@ So we may plot the cluster mean spectra:
 
 <<clustmean, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 means <- aggregate (chondro, by = chondro$clusters, mean_pm_sd)
-means
-plot (means, col = matlab.palette (3), stacked = ".aggregate", fill = ".aggregate")
+plot (means, col = cluster.cols, stacked = ".aggregate", fill = ".aggregate")
 @
 
 
@@ -1035,6 +1034,8 @@ objects:
 clusters <- split (chondro, chondro$clusters)
 clusters
 @
+
+Splitting can be reversed by \Rfunction{rbind} (see section~\ref{sec:bind}, page~\pageref{sec:bind}).
 
 \bibliographystyle{unsrtnat}
 \bibliography{introduction}

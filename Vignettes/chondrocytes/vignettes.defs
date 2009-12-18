@@ -97,7 +97,41 @@ CENMAT, DMRN, University of Trieste}
 \AtBeginDocument{
 \setkeys{Gin}{width = .5\textwidth}
 }
-<<startup, echo = FALSE>>=
+<<startup, echo = FALSE, results = hide>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="serif")))
 options ("width" = 100)
+library (hyperSpec)
+plotmap <- function (...) print (hyperSpec:::plotmap (...))
+setMethod ("levelplot", signature (x = "hyperSpec", data = "missing"),
+           function (x, data, ...) {
+			    l <- hyperSpec:::.levelplot (x = formula (spc ~ x * y), data = x, ...)
+             print (l)
+           })
+setMethod ("levelplot", signature (x = "formula", data = "hyperSpec"), 
+           function (x, data, ...) print (hyperSpec:::.levelplot (x, data, ...))
+)
+
+plotvoronoi <- function (...) print (hyperSpec:::plotvoronoi (...))
+
+seq.palette <- colorRampPalette (c ("white", "gold", "dark green"), space = "Lab")
+
+seq.palette   <- colorRampPalette (brewer.pal (9, "Greens"), space = "Lab")
+seqsq.palette <- function (n) rgb (colorRamp (brewer.pal (9, "Greens"), space = "Lab") 
+                                   (seq (1/3, 1, length.out = n)^2), maxColorValue = 255)
+YG.palette <- function (n) rgb (colorRamp (brewer.pal (9, "Greens"), space = "Lab") 
+                                   (seq (1/3, 1, length.out = n)^2), maxColorValue = 255)
+
+div.palette <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", 
+                                   "#AC95D1", "#C1AFDC", "#D5C9E8", "#E0E3E3", "#F8F8B0", "#F7E6C2", 
+											  "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
+											  "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
+
+
+# c (#"#F8F8B0", 
+# "#F7E6C2", 
+# 											  "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
+# 											  "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
+# rev (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", 
+#                                         "#AC95D1", "#C1AFDC", "#D5C9E8", "#E0E3E3", "#F8F8B0")), space = "Lab")
+
 @

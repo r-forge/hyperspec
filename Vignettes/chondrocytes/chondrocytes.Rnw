@@ -108,11 +108,14 @@ plot (chondro, "spcprctl5")
 @
 
 
-A sum intensity map is produced by:
+A mean intensity map is produced by:
 
 <<rawmap, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-print (plotmap (chondro, na.rm = TRUE))
+plotmap (chondro, func.args = list (na.rm = TRUE), col.regions = seq.palette (20))
 @
+The mean being the default function to apply for squeezing the spectral intensities into a summary characteristic for the whole spectrum. \Rfunarg{func.args} is a list of further arguments that should be handed to this function. As the raw data contains \Rcode{NA}s due to deleting cosmic ray spikes, this argument is needed here.
+
+The color coding should be 
 
 Figure~\ref{fig:raw} shows the results.
 
@@ -322,6 +325,7 @@ In order to get clusters, the dendrogram is cut at a level specified
 either by height or by the number of clusters. 
 <<dendcut>>=
 chondro$clusters <- as.factor (cutree (dendrogram, k = 3))
+cols <- c ("dark blue", "orange", "#C02020")
 @
 The result for $k$= 3 clusters is plotted as a map (figure~\ref{fig:clustmap}). If the color-coded variate (left hand side of the formula) is a factor, the legend bar does not show intermediate colors, and \chy's \Rfunction{levelplot} method uses the levels of the factor for the legend.
 
@@ -331,16 +335,15 @@ levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
 @
 and the cluster membership map is plotted:
 <<clustmap, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-print (plotmap (chondro, clusters ~ x * y, col.regions = c ("dark blue", "orange", "dark red")))
+print (plotmap (chondro, clusters ~ x * y, col.regions = cols))
 @
 
 The cluster membership can also be marked in the dendrogram:
 
 <<dend, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 plot (dendrogram, labels = FALSE, hang = 0) 
-col.clust <- matlab.palette(3)
 points (seq_along (dendrogram$order), rep (-3, length (dendrogram$order)),
-        col = col.clust [chondro$clusters [dendrogram$order]], pch = "|")
+        col = cols [chondro$clusters [dendrogram$order]], pch = "|")
 @     
    
 Figure~\ref{fig:dend} shows the dendrogram and \ref{fig:clustmap}
@@ -355,8 +358,7 @@ However, we can do even better and plot the cluster mean spectra $\pm$
 
 <<clustmeans, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 cluster.means <- aggregate (chondro, chondro$clusters, mean_pm_sd)
-plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", 
-     col = c ("dark blue", "orange", "dark red"))
+plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", col = cols)
 @
 
 %
@@ -382,8 +384,10 @@ look at the nucleic acid distribution, using the DNA bands at 728,
 782, 1098, 1240, 1482, and 1577~cm\textsuperscript{-1}: 
 
 <<DNA, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-print (plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)]))
+plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)],
+       col.regions = colorRampPalette (c("white", "gold", "dark green"), space = "Lab") (20))
 @
+
 
 The result is shown in figure~\ref{fig:DNA}. While the nucleus of
 the right cell shows up nicely, nothing is detected in the remainders
