@@ -10,7 +10,7 @@
 % \VignettePackage{hyperSpec}
 
 \begin{document}
-\title{Fitting Polynomial Baselines to Complete Spectra}
+\title{Fitting Polynomial Baselines to Spectra}
 \maketitle
 
 \subsection*{Introduction}
@@ -108,7 +108,7 @@ are shown in figure~\ref{fig:iter}.
 trace (spc.fit.poly.below, quote ({
   plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"));
   lines (fit.to@wavelength, bl, col = cl);
-}), at = 10, print = FALSE)
+}), at = 12, print = FALSE)
 @
 <<fig1, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 4, include = FALSE>>=
 cols <- as (HSV(seq (240, 0, length.out = 9), 1, 1), "RGB")
@@ -154,7 +154,7 @@ plot (chondro [1], add = TRUE)
 	trace (spc.fit.poly.below, quote ({ls ();
 	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"),zeroline
 = NULL);
-	}), at = 10, print = FALSE)
+	}), at = 12, print = FALSE)
 @
 <<figspcrange, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 8, height = 4, include = FALSE>>=
 plot (chondro [3,,1700 ~ 1750], plot.args = list (ylim = range (chondro [3,,1700 ~ 1750]) + c(-50, 0)))
@@ -172,7 +172,7 @@ abline (bl[[]], col = "blue")
 	trace (spc.fit.poly.below, quote ({ls ();
 	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NULL);
 	lines (fit.to@wavelength, bl, col = cl);
-	}), at = 10, print = FALSE)
+	}), at = 12, print = FALSE)
 @
 \begin{figure}[b]
 \begin{center}
@@ -228,7 +228,7 @@ trace (spc.fit.poly.below, quote ({
 					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"), zeroline = NULL);
 					lines (fit.to@wavelength, bl, col = cl);
 					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
-				}), at = 10, print = FALSE)
+				}), at = 12, print = FALSE)
 
 cols <- as (HSV(seq (240, 0, length.out = 2), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
@@ -246,7 +246,7 @@ cl <- "black"
 trace (spc.fit.poly.below, quote ({
 					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (type = "p"), zeroline = NULL);
 					lines (fit.to@wavelength, bl, col = cl);
-				}), at = 10, print = FALSE)
+				}), at = 12, print = FALSE)
 bl <- spc.fit.poly.below (spc, poly.order = 0)
 @
 <<fig4, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 4, include = FALSE>>=
@@ -254,7 +254,7 @@ trace (spc.fit.poly.below, quote ({
 					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"), zeroline = NULL);
 					lines (fit.to@wavelength, bl, col = cl);
 					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
-				}), at = 10, print = FALSE)
+				}), at = 12, print = FALSE)
 cols <- as (HSV(seq (240, 0, length.out = 10), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
@@ -274,7 +274,7 @@ trace (spc.fit.poly.below, quote ({
 					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"));
 					lines (fit.to@wavelength, bl, col = cl);
 					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
-				}), at = 10, print = FALSE)
+				}), at = 12, print = FALSE)
 cols <- as (HSV(seq (240, 0, length.out = 10), 1, 1), "RGB")
 cols@coords [,2] <- cols@coords[,2] / 2
 cols <- hex (cols)
