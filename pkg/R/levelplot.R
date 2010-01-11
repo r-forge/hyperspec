@@ -5,7 +5,7 @@
 ###                * plotmap
 ###                * plotvoronoi
 ###                * map.identify
-###  Time-stamp: <Claudia Beleites on Thursday, 2009-12-17 at 18:33:47 on cb>
+###  Time-stamp: <Claudia Beleites on Monday, 2010-01-11 at 13:42:36 on cb>
 ###  
 ###  levelplot is used by plotmap, plotmat, plotvoronoi
 ###  
@@ -105,6 +105,11 @@ plotvoronoi <- function (object, model = spc ~ x * y,
   do.call (plotmap, dots)
 }
 
+#################################################################################
+###
+###  map.identify - identify spectra in map plot
+###  
+
 map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...){
   .is.hy (object)
   validObject (object)
@@ -134,7 +139,7 @@ map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...){
   ## Thus, count the warnings, and if the number increases, do not break.
 
   .nwarn <- function () 
-    if (exists (last.warning)) length (last.warning) else 0
+    if (exists ("last.warning")) length (last.warning) else 0
   
   nwarn <- .nwarn ()
   res <- numeric (0)
