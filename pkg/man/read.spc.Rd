@@ -68,7 +68,7 @@ All further arguments to \code{read.spc.KaiserMap} are handed over directly to \
 }
 }
 \details{
-A detailed description of the .spc file format is available at \link[=https://ftirsearch.com/features/converters/SPCFileFormat.htm]{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+A detailed description of the .spc file format is available at \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
 }
 \value{
 If the file contains multiple spectra with individual wavelength axes, \code{read.spc} returns a list of  hyperSpec objects. 
@@ -78,7 +78,7 @@ Otherwise the result is a hyperSpec object.
 containing the stage position as recorded in the .spc files' log.
 }
 \references{
-Source development kit and file format specification of .spc files: \link[=https://ftirsearch.com/features/converters/SPCFileFormat.htm]{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+Source development kit and file format specification of .spc files: \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
 }
 \author{
 C. Beleites

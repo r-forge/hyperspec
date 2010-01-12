@@ -1670,7 +1670,7 @@ spc.identify <- function (x, y = NULL, wavelengths = NULL, ispc = NULL, ...){
 ###
 ###  plotc - plot timeseries, concentration, ...
 ###
-plotc <- function (object, use.c = "c", func = sum, ...,
+plotc.old <- function (object, use.c = "c", func = sum, ...,
                    z = NULL, zlab = NULL, add = FALSE,
                    plot.args = list()) {
   .is.hy (object)
@@ -2195,16 +2195,18 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
           },
           c = plotc (x, ...),
           ts = {
-            dots <- modifyList (list (object = x,
-                                      list (use.c = "t")),
-                                dots)
-            do.call (plotc, dots)
+            plotc (x, spc ~ t, ...)
+            ## dots <- modifyList (list (object = x,
+            ##                           list (model = spc ~ t)),
+            ##                     dots)
+            ## do.call (plotc, dots)
           },
           depth = {
-            dots <- modifyList (list (object = x,
-                                      list (use.c = "z")),
-                                dots)
-            do.call (plotc, dots)
+            plotc (x, spc ~ z, ...)
+            ## dots <- modifyList (list (object = x,
+            ##                           list (model = spc ~ z)),
+            ##                     dots)
+            ## do.call (plotc, dots)
           },
           stop (paste ("y = ", y, "unknown.", collapse = " "))
           )

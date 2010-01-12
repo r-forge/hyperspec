@@ -24,7 +24,18 @@ The source data files can be found with the command:\\
 
 \section{Introduction}
 This data set consists of a time series of 84 spectra of an
-unstable laser emission at 405 nm recorded during ca. 1.5 h.
+unstable laser emission at 405 nm recorded during ca. 1.5 h. 
+
+The spectra were recorded  during the installation of the 405~nm laser at a Raman spectrometer.
+There is no Raman scattering involved in this data, but the Raman software recorded the
+abscissa of the spectra as Raman shift in wavenumbes.
+
+This document shows
+\begin{itemize}
+\item How to convert the wavelength axis (spectral abscissa)
+\item How to display time series data as intensity over time diagram
+\item How to display time series data as 3d and false colour image of intensity as function of time and wavelength.
+\end{itemize}
 
 \section{Loading the Data and Preprocessing}
 
@@ -33,6 +44,8 @@ library (hyperSpec)
 laser <- scan.txt.Renishaw ("rawdata/laser.txt", data = "ts")
 plot (laser, "spcprctl5") 
 @
+
+As the laser emission was recorded with a Raman spectrometer, the wavelength axis initially is the Raman shift in wavenumbers (cm\textsuperscript{-1}).
 
 As most of the spectra do not show any signal (fig. \ref{fig:rawspc}), so the spectral range
 can be cut to -75~--~0~cm\textsuperscript{-1}. 
@@ -52,21 +65,22 @@ plot (laser, "spcprctl5")
 \end{figure}
 
 The wavelength axis was recorded as Raman shift from 405 nm. However,
-the wavelengths were not properly calibrated and here the wavelength
-is of interest. The band at -50 cm\textsuperscript{-1} is known to be at 405 nm.
+the spectra were taken before calibrating the wavelength axis. 
+The band at -50 cm\textsuperscript{-1} is known to be at 405 nm. 
 <<wlspc1>>=
 wl (laser) <- wl (laser) + 50
 @ 
-The wavelengths corresponding to the wavenumbers are
-\[ \lambda = \frac{1}{ \frac{1}{\lambda_0} - \tilde\nu}\]
-with $\tilde\nu$ being the Raman shift, and $\lambda_0$
-the excitation wavelength for a Raman process\footnote{There is no
-  Raman process involved in this data, but the spectra were recorded
-  during the installation of the 405~nm laser at a Raman
-  spectrometer. The Raman software therefore recorded Raman shift as
-  abscissa of the spectra.}, here 405~nm.
+Furthermore, as the spectra are not Raman shift but emission, the wavelength axis should be converted to proper wavelengths in nm.
 
-Taking into account that 1~cm = 10$^7$ cm, we arrive at the new
+The Raman shift is calculated from the wavelength as follows:
+\[ \Delta\tilde\nu = \frac{1}{\lambda_0} -  \frac{1}{\lambda}\]
+with $\Delta\tilde\nu$ being the Raman shift, and $\lambda_0$
+the excitation wavelength for a Raman process, here 405~nm.
+
+The wavelengths corresponding to the wavenumbers are thus:
+\[ \lambda = \frac{1}{ \frac{1}{\lambda_0} - \Delta\tilde\nu}\]
+
+Taking into account that 1~cm = 10$^7$ nm, we arrive at the new
 wavelength axis:
 <<wlcalc>>=
 wl (laser) <- list (

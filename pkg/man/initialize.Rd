@@ -93,7 +93,7 @@ h <- new ("hyperSpec", spc = spc, data = data.frame (pos = 1 : 3),
 )
 
 plot (h)
-plotc (h, use.c = "pos")
+plotc (h, spc ~ pos)
 
 # giving a log entry
 new ("hyperSpec", log = list (short = "measurement parameters",

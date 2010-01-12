@@ -2,48 +2,61 @@
 \alias{plotc}
 \title{Calibration- and Timeseries Plots, Depth-Profiles and the like}
 \description{
-  \code{plotc} plots a summary value of each spectrum of a
+  \code{plotc} plots intensities of a
   \code{hyperSpec} object over another dimension such as concentration,
   time, or a spatial coordinate.
 }
 \usage{
-plotc(object, use.c = "c", func = sum, \dots,
-      z = NULL, zlab = NULL, add = FALSE, plot.args = list())
+plotc(object, model = spc ~ c, groups = NULL,
+                     func = sum, func.args = list (), \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{ the \code{hyperSpec} object}
-  \item{use.c}{the name of the column to plot against}
-  \item{func}{function to compute the summary value from the spectra}
-  \item{\dots}{further arguments to \code{func}}
-  \item{z}{as an alternative to computing the value via \code{func}:
-	 a numeric with the respective value for each of the spectra.}
-  \item{zlab}{label for the ordinate}
-  \item{add}{if FALSE, a new plot is created, if TRUE the output is
-	 added to the active plot}
-  \item{plot.args}{list with further arguments to \code{\link[graphics]{plot}} and
-	 \code{\link[graphics]{lines}}, respectively.}
+  \item{model}{the lattice model specifying the plot}
+  \item{func}{function to compute a summary value from the spectra to be
+  plotted instead of single intensities}
+  \item{func.args}{further arguments to \code{func}}
+  \item{groups}{grouping variable, e.g. \code{.wavelength} if
+	 intensities of more than one wavelength should be plotted}
+  \item{\dots}{further arguments to \code{\link[lattice]{xyplot}}.}
 }
 \details{
-  If \code{z} is not given, it is calculated by \code{apply (object, 1,
-	 func, \dots)}.
+  If \code{object} has more than one wavelength, and the wavelength is
+  not used in the model specification nor in \code{groups}, nor for
+  specifying \code{subsets}, then the summary characteristic is
+  calculated first by applying \code{func} with the respective arguments
+  (in \code{func.args}) to each of the spectra.
+
+  The plotting is done by \code{\link[lattice]{xyplot}}.
 }
+\seealso{\code{\link[lattice]{xyplot}}}
 \author{C. Beleites}
 \examples{
 
 ## example 1: calibration of fluorescence 
 plotc (flu)
 
-plotc (flu[,,450], zlab = expression (I ["450 nm"] / a.u.))
+plotc (flu[,,450], ylab = expression (I ["450 nm"] / a.u.))
+
 
 calibration <- lm (spc ~ c, data = flu[,,450]$.)
 summary (calibration)
+plotc (flu [,, 450], type = c("p", "r"))
 
 conc <- list (c = seq (from = 0.04, to = 0.31, by = 0.01))
 ci <- predict (calibration, newdata = conc, interval = "confidence", level = 0.999) 
-matlines (conc$c, ci, col = c ("red", "#606060","#606060"), lty = 1)
 
+panel.ci <-  function (x, y, ...,
+                       conc, ci.lwr, ci.upr, ci.col = "#606060") {
+   panel.xyplot (x, y, ...)
+   panel.lmline (x, y,...)
+   panel.lines (conc, ci.lwr, col = ci.col)
+   panel.lines (conc, ci.upr, col = ci.col)
+}
 
+plotc (flu [,, 450], panel = panel.ci,
+       conc = conc$c, ci.lwr = ci [, 2], ci.upr = ci [, 3])
 
 ## example 2: time-trace of laser emission modes
 cols <- c ("black", "blue", "#008000", "red")
@@ -54,13 +67,8 @@ for (i in seq_along (wl))
    abline (v = wl[i], col = cols[i], lwd = 2)
 
 X11()
-plotc (laser[,,wl [1]], use.c = "t",
-       plot.args = list (ylim = range(laser[[]]), type = "o"))
-for (i in seq_along (wl)[-1]){
-   plotc (laser[,,wl[i]], use.c = "t", add = TRUE,
-          plot.args = list (type = "o", col = cols[i]))
-}
-
+plotc (laser [,, wl], spc ~ t, groups = .wavelength, type = "b",
+       col = cols)
 }
 \keyword{hplot}
 
