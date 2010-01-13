@@ -101,10 +101,11 @@ laser
 
 \section{Inspecting the time dependency of the laser emission}
 The maxima of the different emission lines encountered during this
-measurement are data points 13, 17, 21, and 23 (fig. \ref{fig:markedspc}):
+measurement are data points 13, 17, 21, and 23 (fig. \ref{fig:markedspc}).
+
+Alternateively they can be extracted from the graph using \Rfunction{locator} which reads out the coordinates of the points the user clicks with the mouse (use middle or right click to end the input):
 <<locator, eval=FALSE>>=
 wl2i (laser, locator()$x)
-
 @ 
 <<markspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
 plot (laser, "spcmeansd")
@@ -118,14 +119,8 @@ measurement, and can be handed over as the column name. The resulting
 time series are shown in figure \ref{fig:ts}
 variable, 
 <<ts, fig = TRUE, width = 10, height = 5, include = FALSE>>=
-plotc (laser[,,13, wl.index = TRUE], use.c = "t", 
-    plot.args = list (type = "b", col = "black", ylim = range (laser), pch = 20)) 
-plotc (laser[,,17, wl.index = TRUE], use.c = "t", add = TRUE,
-    plot.args = list (type = "b", col = "blue", ylim = range (laser), pch = 20)) 
-plotc (laser[,,21, wl.index = TRUE], use.c = "t", add = TRUE,
-         plot.args = list (type = "b", col = "red", ylim = range (laser), pch = 20)) 
-plotc (laser[,,23, wl.index = TRUE], use.c = "t", add = TRUE,
-         plot.args = list (type = "b", col = "darkgreen", ylim = range (laser), pch = 20)) 
+plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE], 
+       spc ~ t, groups = .wavelength, type = "b", col = c ("black", "blue", "red", "darkgreen"))
 @ 
 \begin{figure}[tbh]
   \centering

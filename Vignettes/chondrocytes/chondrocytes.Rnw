@@ -70,7 +70,7 @@ The measurement parameters were:
 \item [Excitation wavelength:] 633 nm
 \item [Exposure time:] 10 s per spectrum
 \item [Objective:] 100$\times$, NA 0.85
-\item [Measurement grid:] 35 $\times$21 μm, 1 μm step size
+\item [Measurement grid:] 35 $\times$21 \mum{}, 1 \mum{} step size
 \item [Spectrometer:] Renishaw InVia
 \end{description}
 

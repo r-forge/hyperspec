@@ -1,7 +1,7 @@
 #################################################################################
 ###
 ###  plotc.R - plot calibration graph, time series, etc.
-###  Time-stamp: <Claudia Beleites on Tuesday, 2010-01-12 at 16:17:08 on cb>
+###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-13 at 14:14:38 on cb>
 ###  
 ###  
 ###  Version 1.0  2010-01-12 13:58  Claudia Beleites  Claudia.Beleites@gmx.de
@@ -14,13 +14,13 @@ plotc <- function (object, model = spc ~ c, groups = NULL,
   validObject (object)
 
   groups <- substitute (groups)
+  
   dots <- list (...)
 
-
-  parsed.formula <- latticeParseFormula (model, as.long.df (object [1, , 1,
-                                                                wl.index = TRUE]),
-                                         groups = groups,
-                                         dimension = 2)
+  parsed.formula <- latticeParseFormula (model,
+        as.long.df (object [1, , 1, wl.index = TRUE]),
+        groups = groups, dimension = 2)
+  
   use.c <- parsed.formula$right.name
   use.spc <- parsed.formula$left.name
 

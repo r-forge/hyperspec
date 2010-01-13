@@ -1,4 +1,5 @@
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
@@ -98,7 +99,9 @@ CENMAT, DMRN, University of Trieste}
 \setkeys{Gin}{width = .5\textwidth}
 }
 <<startup, echo = FALSE, results = hide>>=
-options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6), family="serif")))
+options(SweaveHooks=list(fig=function() 
+   par(mar = c (4.1, 4.1, 1, .6)#, family="serif"
+       )))
 options ("width" = 100)
 library (hyperSpec)
 plotmap <- function (...) print (hyperSpec:::plotmap (...))
@@ -110,6 +113,12 @@ setMethod ("levelplot", signature (x = "hyperSpec", data = "missing"),
 setMethod ("levelplot", signature (x = "formula", data = "hyperSpec"), 
            function (x, data, ...) print (hyperSpec:::.levelplot (x, data, ...))
 )
+
+plotc <- function (...){
+   call <- match.call () 
+   call [[1]] <- hyperSpec:::plotc 
+   print (eval (call))
+}
 
 plotvoronoi <- function (...) print (hyperSpec:::plotvoronoi (...))
 

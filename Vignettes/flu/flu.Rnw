@@ -44,16 +44,11 @@ library (hyperSpec)
 @
 
 \section{Writing an Import Function}
-Now we need to import the spectra. They are in Perkin Elmer's ASCII file format,
-one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
+The raw spectra are in Perkin Elmer's ASCII file format, one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
 
-The function should automatically read in all files specified by a pattern, such as \texttt{*.txt}.
-In order to gain some speed, the spectra matrix is preallocated after the first file is read.
-Also, the number of header lines are predefined instead of searching for the line after \texttt{\#DATA}.
+The function should automatically read in all files specified by a pattern, such as \texttt{*.txt}. In order to gain some speed, the spectra matrix is preallocated after the first file is read.  Also, the number of header lines are predefined instead of searching for the line after \texttt{\#DATA}.
 
-Note, that labels giving the correct units (e.g. for axis labels) are set. The label
-with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should
-have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
+Note, that labels giving the correct units (e.g. for axis labels) are set. The label with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
 
 <<importfun>>=
 read.PE <- function (files = "*.txt", skip = 54) {
@@ -112,12 +107,12 @@ As R is developed for the purpose of statistical analysis, tools for a least squ
 model are readily available.
 
 The original spectra range from \Sexpr{min(wl(flu))} to \Sexpr{max(wl(flu))} nm.
-However, the intensities at 445~nm are perfect for a univariate calibration. Plotting them over the
+However, the intensities at 450~nm are perfect for a univariate calibration. Plotting them over the
 concentration is done by:
 
 \setkeys{Gin}{width = .33\textwidth}
 <<calplot1, fig=TRUE, width = 6, height = 6>>=
-plotc (flu[,,445])
+plotc (flu[,,450])
 @
 
 The square bracket operator extracts parts of a \Rclass{hyperSpec} object.
@@ -127,15 +122,15 @@ third gives the spectral range.
 We discard all the wavelengths but 445 nm:
 
 <<cutspc>>=
-flu <- flu [,,445]
+flu <- flu [,,450]
+labels (flu, "spc") <- expression (I ["450 nm"] / a.u.)
 @
 
 The plot could be enhanced by annotating the ordinate with the emission wavelength.
 Also the axes should start at the origin, so that it is easier to see whether the calibration
 function will go through the origin:
 <<calplot2, fig=TRUE, width = 6, height = 6>>=
-plotc (flu, zlab = expression (I ["450 nm"] / a.u.),
-	   plot.args = list (xlim = range (0, flu$c), ylim = range (0, flu$spc)))
+plotc (flu, xlim = range (0, flu$c), ylim = range (0, flu$spc))
 @
 
 
@@ -183,35 +178,83 @@ summary (calibration)
 In order to get predictions for new measurements, a new \Rclass{data.frame} with the same independent
 variables (in columns with the same names) as in the calibration data are needed. Then the function
 \Rfunction{predict} can be used. It can also calculate the prediction interval.
-If we observe e.g. an intensity of 125 units, the corresponding concentration and its 99 \% prediction interval are:
+If we observe e.g. an intensity of 125 or 400 units, the corresponding concentrations and their 99 \% prediction intervals are:
 
 <<pred>>=
-I <- 125
+I <- c (125, 400)
 conc <- predict (calibration, newdata = list (spc = as.matrix(I)), interval = "prediction", 
                  level = .99)
 conc
 @
 
 Finally, we can draw the calibration function and its 99 \% confidence interval
-(also via \Rfunction{predict}) together with the prediction example:
-
+(also via \Rfunction{predict}) together with the prediction example. In order to draw the confidence interval into the calibration graph, we can either use a customized panel function:
 <<calplot3, fig=TRUE, pdf = TRUE, eps = FALSE, width = 6, height = 6>>=
-plotc (flu, zlab = expression (I ["450 nm"] / a.u.),
-       plot.args = list (xlim = range (0, flu$c), ylim = range (0, flu$spc)))
 
-int <- list (spc = as.matrix(min (flu) : max(flu)))
+int <- list (spc = as.matrix(seq (min (flu), max(flu), length.out = 25)))
 ci <- predict (calibration, newdata = int, interval = "confidence", level = 0.99)
-matlines (ci, int$spc, col = c ("red","gray","gray"), lty = 1)
 
-# extrapolate to lower intensities
-int <- list (spc = as.matrix(0 : min (flu)))
-ci <- predict (calibration, newdata = int, interval = "confidence", level = 0.99)
-matlines (ci, int$spc, col = c ("red","#606060","#606060"), lty = 3)
+panel.ci <-  function (x, y, ...,
+                       intensity, ci.lwr, ci.upr, ci.col = "#606060") {
+   panel.xyplot (x, y, ...)
+   panel.lmline (x, y,...)
+   panel.lines (ci.lwr, intensity, col = ci.col)
+   panel.lines (ci.upr, intensity, col = ci.col)
+}
+
+plotc (flu, panel = panel.ci,
+       intensity = int$spc, ci.lwr = ci [, 2], ci.upr = ci [, 3])
+## # extrapolate to lower intensities
+## int <- list (spc = as.matrix(0 : min (flu)))
+## ci <- predict (calibration, newdata = int, interval = "confidence", level = 0.99)
+## matlines (ci, int$spc, col = c ("red","#606060","#606060"), lty = 3)
 
 # our example
-lines (conc[-1], rep(I, 2), col = "blue")
-points (conc[1], I, col = "blue", pch = 4, cex = 0.5)
+#lines (conc[-1], rep(I, 2), col = "blue")
+#points (conc[1], I, col = "blue", pch = 4, cex = 0.5)
 @
+
+Or, we can add the respective data to the \chy object. The meaning of the data can be saved in a new extra data column that acts as grouping variable for the plot.
+
+First, the spectral range of \Robject{flu} is cut to contain the fluorescence emission at 450\,nm only, and the new column is introduced for the original data:
+<<calplot4.1>>=
+flu$type <- "data points"
+@ 
+Next, the calculated confidence intervals are appended:
+<<calplot4.2>>=
+tmp <- new ("hyperSpec", spc = as.matrix(seq (min (flu), max(flu), length.out = 25)),
+                         wavelength = 450)
+ci <-  predict (calibration, newdata = tmp$., interval = "confidence", level = 0.99)
+tmp <- tmp [rep (seq_len (nrow (tmp)), 3)]
+tmp$c <- as.numeric (ci)
+tmp$type <- rep (colnames (ci), each = 25)
+
+flu <- rbind (flu, tmp)
+@
+
+Finally, the resulting object is plotted. Our prediction example is handled by another customized panel function:
+<<calplot4, fig=TRUE, pdf = TRUE, eps = FALSE, width = 6, height = 6>>=
+panel.predict <- function (x, y, ..., 
+                 intensity, ci, pred.col = "red", pred.pch = 19, pred.cex = 1) {
+   panel.xyplot (x, y, ...)
+   mapply (function (i, lwr, upr, ...) {
+                 panel.lines (c (lwr, upr), rep (i, 2), ...)
+              }, 
+           intensity, ci [, 2], ci [, 3], MoreArgs = list (col = pred.col))
+   panel.xyplot (ci [, 1], intensity, col = pred.col, pch = pred.pch, cex = pred.cex, type = "p")
+}
+
+
+plotc (flu, groups = type, type = c("l", "p"),
+       col = c ("black", "black", "#606060", "#606060"), 
+       pch = c (19, NA, NA, NA), cex = 0.5, 
+       lty = c (0, 1, 1, 1),
+       panel = panel.predict,
+       intensity = I,
+       ci = conc,
+       pred.cex = 0.5)
+@ 
+
 <<cleanup, echo = FALSE, results = hide>>=
 rm (list = ls () ) 
 @ 
