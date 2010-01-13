@@ -5,7 +5,7 @@
 ###                * plotmap
 ###                * plotvoronoi
 ###                * map.identify
-###  Time-stamp: <Claudia Beleites on Monday, 2010-01-11 at 13:42:36 on cb>
+###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-13 at 17:11:41 on cb>
 ###  
 ###  levelplot is used by plotmap, plotmat, plotvoronoi
 ###  
@@ -17,10 +17,13 @@
 .levelplot <- function (x, data, transform.factor = TRUE, ...) {
   validObject (data)
 
+  data$.row <- seq_len (nrow (data))
+
   ## parse formula to find the columns to be plotted
-  ## they may include also "wavelength" => see plotmat
-  parsed.formula <- latticeParseFormula (x, as.long.df (data [1, , 1, wl.index = TRUE]),
-                                         dimension = 3)
+  ## they may include also "wavelength"
+  parsed.formula <- latticeParseFormula (x,
+        as.long.df (data [1, , 1, wl.index = TRUE], rownames = TRUE),
+        dimension = 3)
   use.x <- parsed.formula$right.x.name
   use.y <- parsed.formula$right.y.name
   use.z <- parsed.formula$left.name
@@ -43,11 +46,15 @@
 
   if (any (grepl ("spc", c(as.character (x),
                            as.character (dots$groups),
-                           as.character (dots$subset)))))
-    data <- as.long.df (data)
-  else
+                           as.character (dots$subset))))){
+    data <- as.long.df (data, rownames = TRUE)
+  } else {
     data <- data$..
+    data$.rownames <- as.factor (rownames (data))
+  }
 
+
+  
   if (is.factor (data [[use.z]]) && transform.factor) {
     dots <- trellis.factor.key (data [[use.z]], dots)
     data [[use.z]] <- as.numeric (data [[use.z]])
@@ -58,7 +65,7 @@
 
 setMethod ("levelplot", signature (x = "hyperSpec", data = "missing"),
            function (x, data, ...) {
-             .levelplot (x = formula (spc ~ x * y), data = x, ...)
+             .levelplot (x = formula (spc ~ .wavelength * .row), data = x, ...)
            })
 setMethod ("levelplot", signature (x = "formula", data = "hyperSpec"), .levelplot)
 
@@ -86,7 +93,7 @@ plotmap <- function (object, model = spc ~ x * y,
 
 #################################################################################
 ###
-###  plotmap - plot spectral maps
+###  plotvoronoi - plot spectral maps with irregular point pattern
 ###  
 ###  plots intensity or extra data column over 2 extra data columns
 

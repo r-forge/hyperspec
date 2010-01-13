@@ -1,7 +1,7 @@
 #################################################################################
 ###
 ###  plotc.R - plot calibration graph, time series, etc.
-###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-13 at 14:14:38 on cb>
+###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-13 at 17:12:06 on cb>
 ###  
 ###  
 ###  Version 1.0  2010-01-12 13:58  Claudia Beleites  Claudia.Beleites@gmx.de
@@ -13,12 +13,14 @@ plotc <- function (object, model = spc ~ c, groups = NULL,
   .is.hy (object)
   validObject (object)
 
+  object$.row <- seq_len (nrow (object))
+
   groups <- substitute (groups)
   
   dots <- list (...)
 
   parsed.formula <- latticeParseFormula (model,
-        as.long.df (object [1, , 1, wl.index = TRUE]),
+        as.long.df (object [1, , 1, wl.index = TRUE], rownames = TRUE),
         groups = groups, dimension = 2)
   
   use.c <- parsed.formula$right.name
@@ -36,7 +38,7 @@ plotc <- function (object, model = spc ~ c, groups = NULL,
                             pch = 19),
                       dots)
 
-  df <- as.long.df (object)
+  df <- as.long.df (object, rownames = TRUE)
 
   if ((! is.null (parsed.formula$condition) &&
        parsed.formula$condition == ".wavelength") ||

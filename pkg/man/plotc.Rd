@@ -28,6 +28,9 @@ plotc(object, model = spc ~ c, groups = NULL,
   calculated first by applying \code{func} with the respective arguments
   (in \code{func.args}) to each of the spectra.
 
+  The special column names \code{.rownames} and \code{.wavelength} may
+  be used.
+  
   The plotting is done by \code{\link[lattice]{xyplot}}.
 }
 \seealso{\code{\link[lattice]{xyplot}}}

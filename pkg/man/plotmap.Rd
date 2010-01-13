@@ -65,7 +65,10 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
   \code{plotmap}, \code{plotmap}, \code{map.identify}, and the
   \code{levelplot} methods internally use the same gateway function to
   \code{\link[lattice]{levelplot}}. Thus \code{transform.factor} can be
-  used with all of them.
+  used with all of them. Two special column names, \code{.rownames} and
+  \code{.wavelength} may be used.
+
+  \code{levelplot} plots the spectra matrix. 
 
   \code{plotvoronoi} calls \code{plotmap} with different default
   settings, namely the panel function defaults to
@@ -76,7 +79,7 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
   \code{\link[latticeExtra]{panel.voronoi}}.
   On the \code{\link{chondro}} data set, \code{plotmap} is roughly 5
   times faster than \code{plotvoronoi} using tripack, and ca. 15 times
-  faster \code{plotvoronoi} using deldir. Package tripack, however, is
+  faster than \code{plotvoronoi} using deldir. Package tripack, however, is
   free only for non-commercial use.
   
   \code{map.identify} calls \code{plotmap} and \code{plotvoronoi},
