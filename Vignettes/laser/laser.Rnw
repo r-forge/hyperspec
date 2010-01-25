@@ -19,7 +19,10 @@ All spectra used in this manual are installed automatically with \phy.
 
 The source data files can be found with the command:\\
 \texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
-"hyperSpec/doc/rawdata/laser.txt", sep = "/"))}}
+"hyperSpec/doc/rawdata/laser.txt", sep = "/"))}}.
+
+In order to reproduce the examples by typing in the commands, have a look at the definitions of
+color palettes used in this document are defined in \texttt{vignettes.defs}. Also, the package \phy needs to be loaded first via \Rcode{library (hyperSpec)}. 
 }
 
 \section{Introduction}
@@ -40,7 +43,6 @@ This document shows
 \section{Loading the Data and Preprocessing}
 
 <<rawspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
-library (hyperSpec)
 laser <- scan.txt.Renishaw ("rawdata/laser.txt", data = "ts")
 plot (laser, "spcprctl5") 
 @

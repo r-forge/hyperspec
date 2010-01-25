@@ -16,12 +16,13 @@ Vignette for the Data Set \Robject{flu} of the R package \Rpackage{hyperSpec} }
 
 \warnbox{Reproducing the Examples in this Vignette}{
 The spectra files are shipped with \phy. This allows reproduction of the whole
-vignette (source code and spectra files are in the documentation directory).
+vignette (source code and spectra files are in the package's documentation directory and its \texttt{rawdata} subdirectory).
 
 For reproducing the examples in a live session, the full file names of the 
 spectra can be found with the command:\\
 \texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
-"hyperSpec/doc/rawdata/flu*.txt", sep = "/"))}} 
+"hyperSpec/doc/rawdata/flu*.txt", sep = "/"))}}. 
+Note that loading the package, and some definitions e.g. of the color palettes are executed in \texttt{vignettes.def}.
 }
 
 This vignette gives an example how to
@@ -39,8 +40,8 @@ Perkin Elmer LS50-B fluorescence spectrometer at 350 nm excitation.
 
 In order to work with \Rpackage{hyperSpec}, the package needs to be loaded in R:
 <<init>>=
-library (graphics)
-library (hyperSpec)
+#library (graphics)
+#library (hyperSpec)
 @
 
 \section{Writing an Import Function}

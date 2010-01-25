@@ -619,7 +619,7 @@ setReplaceMethod ("rownames", "hyperSpec", function (x, value){
 ###
 ###
 
-setMethod("dimnames", "hyperSpec", function (x){
+setMethod ("dimnames", "hyperSpec", function (x){
   validObject (x)
   list (row = rownames (x@data), data = colnames (x@data), wl = colnames (x@data$spc))
 })
