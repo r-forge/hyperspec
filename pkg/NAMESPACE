@@ -15,6 +15,7 @@ importFrom (grDevices, rainbow)
 export (bind,
         cbind.hyperSpec,
         rbind.hyperSpec,
+        seq.hyperSpec,
         logentry,
         plotmap,
         plotvoronoi, 
@@ -98,7 +99,9 @@ exportMethods ("initialize",
                "sweep", 
                "aggregate", 
                "plot",
-               "levelplot"
+               "levelplot",
+               "sample",
+               "is.na"
                ) 
 
 
