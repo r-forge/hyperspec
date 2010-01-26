@@ -1,7 +1,7 @@
 #################################################################################
 ###
 ###  spc.fit.poly.R - polynomial baseline fitting
-###  Time-stamp: <Claudia Beleites on Monday, 2010-01-11 at 15:36:35 on cb>
+###  Time-stamp: <Claudia Beleites on Tuesday, 2010-01-26 at 17:56:45 on cb>
 ###  
 ###  
 ###  Version 1.0  2010-01-11 15:35  Claudia Beleites  Claudia.Beleites@gmx.de
@@ -14,7 +14,7 @@
 ###
 ###
 spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
-                          short = NULL, user = NULL, date = NULL){
+                          short = "spc.fit.poly", user = NULL, date = NULL){
   .is.hy (fit.to)
   if (! is.null (apply.to))
     .is.hy (apply.to)
@@ -24,9 +24,9 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
 
   x <- fit.to@wavelength
   x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
+  if (is.null (short)) short <- "spc.fit.poly: coefficients" 
   p <- apply (fit.to, 1, function (y, x){qr.solve (x, y)}, x,
-              short = if (is.null (short)) "spc.fit.poly: coefficients" else short,
-              user = user, date = date)
+              short = short, user = user, date = date)
 
   if (is.null (apply.to)){
     colnames (p@data$spc) <- paste ("x^", 0 : poly.order, sep="")
@@ -36,10 +36,10 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
     wl <- apply.to@wavelength;
     x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
     apply.to@data$spc <- I (t (apply (p[[]], 1, function (p, x) {x %*% p}, x)))
-    apply.to@log <- .logentry (apply.to,
-                              short = if (is.null (short)) "spc.fit.poly: spectra" else short,
-                              long = list (apply = match.call()$apply, poly.order = poly.order),
-                              user = user, date = date)
+    if (is.null (short)) short <- "spc.fit.poly: spectra" 
+    apply.to <- .logentry (apply.to, short = short,
+                           long = list (apply = match.call()$apply, poly.order = poly.order),
+                           user = user, date = date)
 
 
     .wl(apply.to) <- wl
@@ -58,7 +58,8 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
 ###
 
 spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.min = NULL,
-                                noise = 0, short = NULL, user = NULL, date = NULL){
+                                noise = 0,
+                                short = "spc.fit.poly.below", user = NULL, date = NULL){
   .is.hy (fit.to)
   if (! is.null (apply.to))
     .is.hy (apply.to)
@@ -98,25 +99,26 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1, npts.
     fit.to@data$spc <- p
     .wl (fit.to) <- 0 : poly.order
     colnames (fit.to@data$spc) <- paste ("x^", 0 : poly.order, sep="")
-    fit.to@log <- .logentry (fit.to, short = if (is.null (short)) "spc.fit.poly.below: coefficients" else short,
-                            long = list (apply = NULL, poly.order = poly.order,
-                              npts.min = npts.min, noise = noise),
-                            user = user, date = date)
-    fit.to
+
+    validObject (fit.to)
+    .logentry (fit.to, short = short,
+               long = list (apply = NULL, poly.order = poly.order,
+                 npts.min = npts.min, noise = noise),
+               user = user, date = date)
   } else {
     x <- apply.to@wavelength
 
     vdm <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
 
     apply.to@data$spc <- I (t (apply (p, 1, function (p, x) {x %*% p}, vdm)))
-    apply.to@log <- .logentry (apply.to,
-                              short = if (is.null (short)) "spc.fit.poly.below: spectra" else short,
-                              long = list (apply = match.call()$apply, poly.order = poly.order,
-                                npts.min = npts.min, noise = noise),
-                              user = user, date = date)
 
     .wl(apply.to) <- x
     colnames (apply.to@data$spc) <- format (x, digits = 4)
-    apply.to
+
+    validObject (apply.to)
+    .logentry (apply.to, short = short,
+               long = list (apply = match.call()$apply, poly.order = poly.order,
+                 npts.min = npts.min, noise = noise),
+               user = user, date = date)
   }
 }

@@ -38,12 +38,6 @@ They were acquired during an student practicum and were kindly provided by M. Ka
 The concentrations of the solutions range from 0.05 mg/l to 0.30 mg/l. Spectra were acquired with a
 Perkin Elmer LS50-B fluorescence spectrometer at 350 nm excitation.
 
-In order to work with \Rpackage{hyperSpec}, the package needs to be loaded in R:
-<<init>>=
-#library (graphics)
-#library (hyperSpec)
-@
-
 \section{Writing an Import Function}
 The raw spectra are in Perkin Elmer's ASCII file format, one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
 

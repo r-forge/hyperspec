@@ -48,7 +48,7 @@
     \code{l} are treated as wavelengths and the corresponding column
     indices are looked up first via \code{\link{wl2i}}.}
 
-  \item{short}{short description for \code{\link{logentry}}.}
+  \item{short, user, date}{handed to \code{\link{logentry}}.}
   
   \item{drop}{For \code{[[}: drop unnecessary dimensions, see
     \code{\link[base]{drop}} and \code{\link[base]{Extract}}. Ignored for
@@ -92,21 +92,25 @@ x [[i, j, l, wl.index = FALSE, short = NULL, \dots]] <- value
 ## S4 method for signature 'hyperSpec':
 x$name <- value
 }
-  \code{value} gives the values to be assigned.\cr
-    For \code{$}, this con also be a list of the form
-    \code{list (value = value, label = label)},
-    with \code{label} containing the label for data column \code{name}.
+
+\code{value} gives the values to be assigned.\cr
+
+For \code{$}, this can also be a list of the form \code{list (value =
+value, label = label)}, with \code{label} containing the label for data
+column \code{name}.
   
+\code{[[<-} replaces parts of the spectra matrix.
 
-  \code{[[<-} replaces parts of the spectra matrix.
+\code{[<-} replaces parts of the \code{data.frame} in slot \code{x@data}.
 
-  \code{[<-} replaces parts of the \code{data.frame} in slot
-  \code{x@data}.
+\code{$<-} replaces a column of the \code{data.frame} in slot
+  \code{x@data}.  The \code{value} may be a list with two elements,
+  \code{value} and \code{label}.  In this case the label of the data
+  column is changed accordingly.
 
-  \code{$<-} replaces a column of the \code{data.frame} in slot \code{x@data}. 
-  The \code{value} may be a list with two elements, \code{value} and \code{label}. 
-  In this case the label of the data column is changed accordingly.
-  
+\code{$..<-} is again an abbreviation for the data.frame without the
+spectra matrix.
+
 }
 \value{
     For \code{[}, \code{[<-}, \code{[[<-}, and \code{$<-} a \code{hyperSpec} object,
