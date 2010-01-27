@@ -1,6 +1,6 @@
 \name{sweep}
 \docType{methods}
-\alias{sweep}
+%\alias{sweep}
 \alias{sweep-methods}
 \alias{sweep,hyperSpec-method}
 \title{Sweep Summary Statistic out of an hyperSpec Object}
@@ -11,7 +11,7 @@
 \usage{
 \S4method{sweep}{hyperSpec}(x, MARGIN, STATS, FUN = "-",
    check.margin = TRUE, \dots, 
-   short = NULL, user = NULL, date = NULL)
+   short = "sweep", user = NULL, date = NULL)
 }
 \arguments{
   \item{x}{a \code{hyperSpec object.}}

@@ -8,9 +8,11 @@
   matrices into new 
 \code{hyperSpec} objects.}
 \usage{
-decomposition(object, x, wavelength = seq_len (ncol (x)),
-              label.wavelength, label.spc, scores = TRUE,
-              retain.columns = FALSE,short = "", \dots)
+decomposition (object, x, wavelength = seq_len (ncol (x)),
+               label.wavelength, label.spc,
+               scores = TRUE, retain.columns = FALSE,
+               short = "decomposition", user = NULL, date = NULL,
+               \dots)
 }
 \arguments{
   \item{object}{A \code{hyperSpec} object.}
@@ -39,7 +41,9 @@ decomposition(object, x, wavelength = seq_len (ncol (x)),
     will be deleted.
   }
 
-  \item{short, \dots}{handed over to \code{logentry}}
+  \item{short, user, date}{handed over to \code{logentry}}
+
+  \item{\dots}{ignored.}
 }
 \details{
   Multivariate data are frequently decomposed by methods like principal

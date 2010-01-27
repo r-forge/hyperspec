@@ -223,7 +223,7 @@ plotspc <- function  (object,
       if (is.null (axis.args$y$side))
         axis.args$y$side <- 2
       if (is.null (axis.args$y$at) & !is.null (stacked)){
-        axis.args$y$at <- apply (spc[!duplicated (stacked$groups),], 1, min) #apply (spc, 1, min)
+        axis.args$y$at <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min) #apply (spc, 1, min)
         axis.args$y$labels <- stacked$levels #seq_len (nrow (spc))
       }
 

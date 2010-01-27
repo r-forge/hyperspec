@@ -8,7 +8,7 @@
 \usage{
 \S4method{apply}{hyperSpec}(X, MARGIN, FUN, \dots,
  	label.wl = NULL, label.spc = NULL, new.wavelength = NULL,
-   short = NULL, long = NULL, user = NULL, date = NULL)
+   short = "apply", long = NULL, user = NULL, date = NULL)
 }
 \arguments{
   \item{X, spc}{a \code{hyperSpec} object}
@@ -45,7 +45,7 @@
 }
 \seealso{
   \code{\link[base]{apply}}, for applying \code{FUN} to subgroups of
-  the \code{hyperSpec} object:  \code{\link{aggregate}}.
+  the \code{hyperSpec} object:  \code{\link[hyperSpec]{aggregate}}.
 }
 \examples{
 

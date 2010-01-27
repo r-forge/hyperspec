@@ -47,7 +47,8 @@
 
 \code{e1 != e2}
 
-\code{all.equal(target, current, ..., check.column.order = FALSE, check.label = FALSE, check.log = FALSE)}
+\code{all.equal(target, current, ..., check.column.order = FALSE,
+  check.label = FALSE, check.log = FALSE)}
 }
 \arguments{
   \item{e1, e2}{Either two \code{hyperSpec} objects or one

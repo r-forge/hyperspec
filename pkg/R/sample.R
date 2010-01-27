@@ -1,7 +1,7 @@
 #################################################################################
 ###
 ###  sample.R - sample Method for hyperSpec objects
-###  Time-stamp: <Claudia Beleites on Tuesday, 2010-01-26 at 18:23:09 on cb>
+###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-27 at 14:59:57 on cb>
 ###  
 ###  generates random selection of spectra
 ###  
@@ -19,7 +19,7 @@ setGeneric ("sample",
 )
 
 setMethod ("sample", signature = "hyperSpec",
-           function (x, size, replace = FALSE, prob = NULL,  ...,
+           function (x, size, replace = FALSE, prob = NULL,  
                      index = FALSE,
                      short = "sample", user = NULL, date = NULL) {
              validObject (x)

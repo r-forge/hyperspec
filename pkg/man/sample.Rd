@@ -1,6 +1,7 @@
 \name{sample-methods}
 \docType{methods}
 \alias{sample-methods}
+\alias{sample}
 \alias{sample,ANY-method}
 \alias{sample,hyperSpec-method}
 \title{Random Samples and Permutations}
@@ -9,14 +10,14 @@ Take a sample of the specified size from the elements of x with or without repla
 }
 \section{Methods}{
 \describe{
-
 \item{\code{signature(x = "ANY")}}{The base method
   \code{\link[base]{sample}} is made generic by package hyperSpec.}
 
 \item{\code{signature(x = "hyperSpec")}}{sample spectra of hyperSpec objects}
 }}
 \usage{
-sample(x, size, replace = FALSE, prob = NULL, ..., index = FALSE)
+ \S4method{sample}{hyperSpec}(x, size, replace = FALSE, prob = NULL,
+   index = FALSE, short = "sample", user = NULL, date = NULL)
 }
 \arguments{
   \item{x}{The hyperSpec object to sample from}
@@ -26,9 +27,11 @@ sample(x, size, replace = FALSE, prob = NULL, ..., index = FALSE)
     of the vector being sampled.}
   \item{index}{Should the return value be a vector of indices or the
 	 corresponding hyperSpec object?}
+  \item{short, user, date}{are handed to \code{\link{logentry}}}
 }
+\author{C. Beleites}
 \seealso{\code{\link[base]{sample}}}
-\value{an index vector if \code{index == TRUE}, or a hyperSpec object.}
+\value{a numeric if \code{index == TRUE}, or a hyperSpec object.}
 \examples{
 sample (flu, 3, index = TRUE)
 sample (flu, 3, replace = TRUE, index = TRUE)

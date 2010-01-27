@@ -7,10 +7,10 @@
 }
 \usage{
 spc.fit.poly(fit.to, apply.to = NULL, poly.order = 1, 
-             short = NULL, user = NULL, date = NULL)
+             short = "spc.fit.poly", user = NULL, date = NULL)
 spc.fit.poly.below  (fit.to, apply.to = fit.to, poly.order = 1, npts.min = NULL,
                      noise = 0, 
-                     short = NULL, user = NULL, date = NULL)
+                     short = "spc.fit.poly.below", user = NULL, date = NULL)
 }
 \arguments{
   \item{fit.to}{\code{hyperSpec} object on which the baselines are fitted}
@@ -32,7 +32,7 @@ spc.fit.poly.below  (fit.to, apply.to = fit.to, poly.order = 1, npts.min = NULL,
   to the \emph{complete} spectra given in \code{fit.to}. Thus \code{fit.to} needs to be cut appropriately.
   
   \code{spc.fit.poly.below} tries to fit the baseline on appropriate spectral ranges of the spectra in \code{fit.to}. 
-  For details, see \url{../doc/baseline.pdf}.
+  For details, see the vignette \url{../doc/baseline.pdf}.
 }
 \value{
   \code{hyperspec} object containing the baselines in the spectra matrix,

@@ -9,6 +9,8 @@
 \alias{min,hyperSpec-method}
 \alias{max,hyperSpec-method}
 \alias{range,hyperSpec-method}
+\alias{is.na,hyperSpec-method}
+
 \title{Math Functions for hyperSpec Objects}
 \description{The functions 
 
@@ -33,6 +35,7 @@
 \S4method{min}{hyperSpec}(x, \dots, na.rm = FALSE)
 \S4method{max}{hyperSpec}(x, \dots, na.rm = FALSE)
 \S4method{range}{hyperSpec}(x, \dots, na.rm = FALSE)
+\S4method{is.na}{hyperSpec}(x)
 }
 \arguments{
   \item{x}{the \code{hyperSpec} object} 
@@ -44,7 +47,7 @@
   All these functions work on the spectra matrix. 
 }
 
-\value{a numeric}
+\value{a numeric, for \code{is.na} a logcical matrix}
 
 \author{C. Beleites}
 

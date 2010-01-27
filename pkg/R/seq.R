@@ -1,7 +1,7 @@
 #################################################################################
 ###
 ###  seq.R - seq Method for hyperSpec objects
-###  Time-stamp: <Claudia Beleites on Tuesday, 2010-01-26 at 18:39:43 on cb>
+###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-27 at 14:54:57 on cb>
 ###  
 ###  generates index seqences over the spectra
 ###  

@@ -7,7 +7,8 @@
   the spectral resolution can be reduced.
 }
 \usage{
-spc.bin(spc, by = stop ("reduction factor needed"), na.rm = TRUE, \dots)
+spc.bin(spc, by = stop ("reduction factor needed"), na.rm = TRUE,
+        short = "spc.bin", user = NULL, date = NULL)
 }
 \arguments{
   \item{spc}{the \code{hyperSpec} object}
@@ -21,7 +22,7 @@ spc.bin(spc, by = stop ("reduction factor needed"), na.rm = TRUE, \dots)
         if  \code{2}, the binning is done using \code{na.rm = FALSE}, and resulting \code{NA}s
         are corrected with \code{mean(\dots, na.rm = TRUE)}.  
      	}	 
-  \item{\dots}{handed to \code{logentry}.}
+  \item{short, user, date}{handed to \code{\link[hyperSpec]{logentry}}.}
 }
 \details{
   The mean of every \code{by} data points in the spectra is calculated.

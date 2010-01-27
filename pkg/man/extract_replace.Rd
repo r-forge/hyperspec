@@ -24,7 +24,8 @@
   \code{data.frame} in slot \code{data} are provided.
 }
 \usage{
-\S4method{[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE, short = NULL, drop = FALSE)
+\S4method{[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE,
+  short = "[]", date = NULL, user = NULL, drop = FALSE)
 
 \S4method{[[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE, drop = FALSE)
 

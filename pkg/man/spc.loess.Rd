@@ -5,7 +5,7 @@
   Spectra can be smoothed and interpolated on a new wavelength axis using \code{\link[stats]{loess}}. 
   }
 \usage{
-spc.loess(spc, newx, \dots, short = NULL, user = NULL, date = NULL)
+spc.loess(spc, newx, \dots, short = "spc.loess", user = NULL, date = NULL)
 }
 \arguments{
   \item{spc}{the \code{hyperSpec} object}

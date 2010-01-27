@@ -6,21 +6,29 @@ This function generates sequences along the spectra (rows) or
 wavelengths of hyperSpec objects.  
 }
 \usage{
-seq.hyperSpec(x, from = 1, to = nrow (x), by, length.out, index = FALSE)
+seq.hyperSpec(x,  from = 1, to = nrow (x), \dots, index = FALSE,
+              short = "seq", user = NULL, date = NULL)
 }
 \arguments{
   \item{x}{ the hyperSpec object}
-  \item{from, to, by, length.out}{arguments handed to \code{\link[base]{seq.int}}}
+
+  \item{from, to}{arguments handed to \code{\link[base]{seq.int}}}
+
+  \item{\dots}{arguments for \code{\link[base]{seq}}, namely \code{by},
+	 \code{length.out}}
+
+  \item{index}{should a vector with indices be returned rather than a
+	 hyperSpec object?}
+
+  \item{short, user, date}{handed to \code{\link{logentry}}.}
 }
 \details{
   Note that \code{\link{wl2i}} generates sequences of indices along the wavelength axis. 
 }
 \value{
-  a \code{numeric}
+  a numeric or hyperSpec object, depending on \code{index}.
 }
-\author{
-C. Beleites
-}
+\author{C. Beleites}
 \seealso{
  \code{\link{wl2i}} to construct sequences of wavelength indices.
 

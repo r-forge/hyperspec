@@ -9,9 +9,14 @@
   object. 
 }
 \usage{
-\S4method{aggregate}{hyperSpec}(x, by, FUN, \dots, out.rows = NULL,
+\S4method{aggregate}{hyperSpec}(x,
+    by = stop ("by is needed: either a grouping vector",
+                       "(e.g. factor) or a list of groups"),
+    FUN = stop ("FUN is needed."),
+    \dots,
+    out.rows = NULL,
     append.rows = NULL,
-    short = NULL, date = NULL, user = NULL)
+    short =  "aggregate", date = NULL, user = NULL)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
