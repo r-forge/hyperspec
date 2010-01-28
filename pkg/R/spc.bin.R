@@ -3,8 +3,7 @@
 ###  spc.bin
 ###
 
-spc.bin <- function (spc,
-                     by = stop ("reduction factor needed"), na.rm = TRUE,
+spc.bin <- function (spc, by = stop ("reduction factor needed"), na.rm = TRUE,
                      short = "spc.bin", user = NULL, date = NULL) {
   .is.hy (spc)
   validObject (spc)
@@ -48,38 +47,3 @@ spc.bin <- function (spc,
   .logentry (spc, short = short, long = long, user = user, date = date)
 }
 
-###-----------------------------------------------------------------------------
-###
-###  spc.loess
-###
-###
-
-spc.loess <- function (spc, newx, ...,
-                       short = "spc.loess", user = NULL, date = NULL){
-  .is.hy (spc)
-  validObject (spc)
-
-  if (any (newx < min (spc@wavelength)) || any (newx > max (spc@wavelength)))
-    warning ("newx outside spectral range of spc. NAs will be generated.")
-
-  dots <- list (...)
-  
-  if (is.null (dots$enp.target))
-    dots$enp.target <- nwl (spc) / 4
-
-  if (is.null (dots$surface))
-    dots$surface <- "direct"
-
-  loess <- apply (t (spc[[]]), 2,
-                  function (y, x){
-                    do.call (loess, c(y ~ x, dots))
-                  },
-                  spc@wavelength)
-
-  spc@data$spc <- t (sapply (loess, predict, newx))
-  .wl(spc) <- newx
-
-  .logentry (spc, short =  short,
-             long = list (newx = newx, enp.target = dots$enp.target,  ...),
-             user = user, date = date)
-}

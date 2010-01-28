@@ -5,7 +5,7 @@
 ###                * plotmap
 ###                * plotvoronoi
 ###                * map.identify
-###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-13 at 17:11:41 on cb>
+###  Time-stamp: <Claudia Beleites on Thursday, 2010-01-28 at 14:31:10 on cb>
 ###  
 ###  levelplot is used by plotmap, plotmat, plotvoronoi
 ###  

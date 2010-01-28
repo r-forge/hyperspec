@@ -1,68 +1,3 @@
-###-----------------------------------------------------------------------------
-###
-###  .paste.row
-###
-###
-
-.paste.row <- function (x, label = "", name = "", ins = 0, i = NULL, val = FALSE, range = TRUE,
-                        digits = getOption ("digits"), max.print = 5, shorten.to = c (2,1)){
-  if (is.null (name))
-    name <- ""
-
-  if (is.null (label))
-    label <- ""
-  else
-    label <- paste (as.character (label), collapse = " ")
-  
-  row.text <- ""
-
-  if (val){
-    if (is.list (x)){
-      row.text <- paste ("", "columns/entries", paste (names (x), collapse = ", "))
-    } else {
-      if (range)
-        val <- sort (unique (as.vector (x)))
-      else
-        val <- x
-      if (length (val) > max.print)
-        row.text <- c(
-                   format (val [seq_len (shorten.to[1])], # was 1 :
-                           digits = digits, trim = TRUE),
-                   "...",
-                   format (val [-seq_len (length (val) - shorten.to[2])], # was 1 :
-                           digits = digits, trim = TRUE)
-                   )
-      else
-        row.text <- format (val, digits = digits, trim = TRUE)
-      row.text <- paste ("", if(range) "range", paste (row.text, collapse = " "),
-                         if(any (is.na (x))) "+ NA", collapse = " ")
-
-    }
-  }
-  row.text <- paste (paste (rep (" ", ins), collapse = ""),
-                  if (!is.null (i)) paste ("(", i, ") ", sep =""),
-                  name,
-                  if (nchar (name) != 0) ": ",
-                  label,
-                  if (nchar (label) != 0) " ",
-                  if ((nchar (row.text) > 0) | (nchar (label) + nchar (name) > 0) | !is.null (i))
-                     "[",
-                  paste (class (x), collapse = ", "),
-                  " ",
-                  if (! is.null (dim (x)))
-                     paste (if (is.matrix (x) & all (class (x) != "matrix")) "matrix " else
-                            if (is.array (x) & all (class (x) != "array") & all (class (x) != "matrix"))
-                            "array ",
-                            paste (dim (x) [-1], collapse = " x ")
-                            , sep = ""),
-                  #else if (length (x) > 1)
-                  #length (x),
-                  if ((nchar (row.text) > 0) | (nchar (label) + nchar (name) > 0) | !is.null (i))
-                     "]",
-                  row.text,
-                  sep ="")
-  row.text
-}
 
 ###-----------------------------------------------------------------------------
 ###
@@ -97,22 +32,21 @@ setMethod (as.character, "hyperSpec", function (x,
            paste ("  ", nwl (x), "data points / spectrum")
            )
 
-  chr <- c (chr, paste ("wavelength:",
-                        .paste.row (x@wavelength, x@label$.wavelength, ins = 0, val = TRUE,
-                                    range = FALSE, shorten.to = shorten.to, max.print = max.print),
-                        collapse = " ")
-            )
-
+  chr <- c (chr, .paste.row (x@wavelength, x@label$.wavelength, "wavelength",
+                             ins = 0, val = TRUE, range = FALSE,
+                             shorten.to = shorten.to, max.print = max.print))
+            
   n.cols <- ncol (x@data)
 
-  chr <- c(chr, paste ("data: ",
-                       " (", nrow(x@data), " rows x ", n.cols, " columns)", sep = ""))
+  chr <- c(chr, paste ("data: ", " (", nrow(x@data), " rows x ", n.cols,
+                       " columns)", sep = ""))
+
   if (n.cols > 0)
     for (n in names (x@data))
       chr <- c(chr, .paste.row (x@data[[n]], x@label[[n]], n, ins = 3,
                                 i = match (n, names (x@data)), val = TRUE,
                                 shorten.to = shorten.to, max.print = max.print))
-
+  
   if (log){
     chr <- c(chr, "log:")
 

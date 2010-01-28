@@ -1,13 +1,8 @@
-#################################################################################
+###------------------------------------------------------------------------------
 ###
-###  seq.R - seq Method for hyperSpec objects
-###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-27 at 14:54:57 on cb>
-###  
-###  generates index seqences over the spectra
-###  
-###  Version 1.0  2010-01-25 16:46  Claudia Beleites  Claudia.Beleites@gmx.de
+###  seq
 ###
-#################################################################################
+
 
 ## needs to be an S3 function as S4 ... dispatch has to have the same signature
 ## for all parameters

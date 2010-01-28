@@ -25,7 +25,7 @@ rbind.hyperSpec (\dots, deparse.level)
 \S4method{rbind2}{hyperSpec,missing}(x, y)
 
 bind(direction = stop("direction ('c' or 'r') required"), \dots,
-   short = NULL, user = NULL, date = NULL)
+   short = "bind", user = NULL, date = NULL)
 }
 \arguments{
   \item{\dots}{The \code{hyperSpec} objects to be combined.

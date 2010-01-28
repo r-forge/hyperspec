@@ -1,13 +1,7 @@
-#################################################################################
+###------------------------------------------------------------------------------
 ###
-###  sample.R - sample Method for hyperSpec objects
-###  Time-stamp: <Claudia Beleites on Wednesday, 2010-01-27 at 14:59:57 on cb>
-###  
-###  generates random selection of spectra
-###  
-###  Version 1.0  2010-01-25 16:46  Claudia Beleites  Claudia.Beleites@gmx.de
+###  make sample generic with ... argument
 ###
-#################################################################################
 
 setGeneric ("sample",
             def = function (x, size, replace = FALSE, prob = NULL, ...){
@@ -17,6 +11,11 @@ setGeneric ("sample",
               base::sample (x = x, size = size, replace = replace, prob = prob, ...)
             }
 )
+
+###------------------------------------------------------------------------------
+###
+###  sample
+###
 
 setMethod ("sample", signature = "hyperSpec",
            function (x, size, replace = FALSE, prob = NULL,  

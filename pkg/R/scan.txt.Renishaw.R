@@ -5,8 +5,11 @@
 ### In general this is a long ASCII format. But this function offers chunk-wise
 ### reading to save memory.
 ###
-scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xyspc",
-                               nlines = 0, nspc = NULL, ...){
+
+scan.txt.Renishaw <- function (file = stop ("filename is required"),
+                               data = "xyspc", nlines = 0, nspc = NULL, 
+                               short = "scan.txt.Renishaw", user = NULL,
+                               date = NULL){
   cols <- switch (data,
                   spc = NULL,
                   xyspc = list (y = expression ("/" (y, mu * m)), 
@@ -31,9 +34,10 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
   file <- file (file, "r")
   on.exit(close(file))
 
-  fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
+  fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol,
+                  byrow = TRUE)
 
-                                        # wavelength axis
+  ## wavelength axis
   wl <- rep (TRUE,  nrow (fbuf))
   for (i in seq_len (ncol (fbuf) - 2))
     wl [wl] <- fbuf [wl, i] == fbuf [1, i]
@@ -73,10 +77,13 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
     data [pos.data + seq_len (nrow (tmp)), ] <- tmp
     pos.data <- pos.data + nrow (tmp)
 
-    fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol, byrow = TRUE)
+    fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol,
+                    byrow = TRUE)
 
     if (length (fbuf > 0) & ! all(unique (fbuf[, ncol - 1]) %in% wl))
-      stop ("Wavelengths do not correspond to that of the other chunks. Is the size of the first chunk large enough to cover a complete spectrum?")
+      stop ("Wavelengths do not correspond to that of the other chunks.",
+            "Is the size of the first chunk large enough to cover a complete",
+            "spectrum?")
   }
   if (nlines > 0) cat ("\n")
 
@@ -84,9 +91,11 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"), data = "xys
 
   orderwl (new ("hyperSpec", spc = spc, data = as.data.frame (data),
                 wavelength = wl, label = cols,
-                log = list (short = "scan.txt.Renishaw",
-                  long = list (file = file, cols = I (cols)), ...)
+                log = list (short = short,
+                  long = list (file = file, cols = I (cols),
+                    nlines = nlines, nspc = nspc),
+                  user = user, date = date
                 )
-           )
+           ))
 }
 

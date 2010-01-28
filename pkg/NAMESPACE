@@ -1,16 +1,19 @@
-#import(methods)
-importFrom (methods, initialize)
-importFrom (methods, Arith)
-importFrom (methods, show)
-importFrom (methods, cbind2)
-importFrom (methods, rbind2)
-importFrom (stats, aggregate)
+import(methods)
+import(stats)
+#importFrom (methods, initialize)
+#importFrom (methods, Arith)
+#importFrom (methods, show)
+#importFrom (methods, cbind2)
+#importFrom (methods, rbind2)
+#importFrom (stats, aggregate)
 importFrom (graphics, plot)
 importFrom (lattice, trellis.focus)
 importFrom (lattice, panel.identify)
 importFrom (lattice, levelplot)
 importFrom (grDevices, rainbow) 
 #import(graphics)
+
+exportClass (hyperSpec)
 
 export (bind,
         cbind.hyperSpec,
@@ -44,7 +47,6 @@ export (bind,
         spc.fit.poly, 
         spc.fit.poly.below,
         orderwl,
-#        index.grid,
         map.identify,
         spc.identify,
         vec2array,
@@ -59,8 +61,6 @@ export (bind,
         stacked.offsets,
         trellis.factor.key
         )
-
-exportClass (hyperSpec)
 
 exportMethods ("initialize",
                "cbind2",

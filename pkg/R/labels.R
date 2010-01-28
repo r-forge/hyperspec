@@ -25,29 +25,29 @@ setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, .
 ###
 ###
 
-"labels<-" <- function (object, which = NULL, ..., value){
+"labels<-" <- function (object, which = NULL, ...,
+                        short = "labels<-", user = NULL, date = NULL,
+                        value){
   .is.hy (object)
   validObject (object)
 
   if (is.null (which))
     object@label <- value
   else {
-    if ((is.character (which) && !which %in% colnames (object@data)) && which != ".wavelength" ||
+    if ((is.character (which) && !which %in% colnames (object@data)) &&
+         which != ".wavelength" ||      # neither a colname nor .wavelength
         (is.numeric (which) && (which < 1 || which > ncol (object@data) + 1)) ||
         (is.logical (which) && length (which) != ncol (object@data) + 1)
+                                        # or outside valid indices
         )
-      stop ("Label does not exist!")
+      stop ("Column to label does not exist!")
 
     object@label [[which]] <- value
 
   }
 
-  object <- .logentry (object,
-                       long = list (which = which, value = value),
-                       ...)
-
   validObject (object)
-
-  object
+  .logentry (object, short = short, long = list (which = which, value = value),
+             user = user, date = date)
 }
 

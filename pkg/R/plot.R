@@ -3,7 +3,11 @@
 ###  plot methods
 ###
 
-# .plot: main switchyard for plotting functions
+###-----------------------------------------------------------------------------
+###
+### .plot: main switchyard for plotting functions
+###
+
 .plot <-  function (x, y, ...){
   ##    'spc'        ... spectra
   ##    'map'        ... map
@@ -24,9 +28,7 @@
   }
   
   switch (tolower (y),
-          spc = {
-            plotspc (x, ...)
-          },
+          spc = plotspc (x, ...),
           spcmeansd = {
             dots <- modifyList (list (object = x,
                                       fill = c (1, NA, 1),
@@ -50,8 +52,6 @@
             dots <- modifyList (list (object = x,
                                       fill = c (1, 2, 3, 2, 1),
                                       fill.col = c("#00000040"),
-                                        #c(rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .75),
-                                        #rgb(t(col2rgb("black")/255)/2 + c (1, 1, 1) * .50))
                                       func = quantile,
                                       func.args = list (na.rm = TRUE,
                                         probs = c (0.05, 0.16, 0.5, 0.84, 0.95))
@@ -61,29 +61,13 @@
           },
           map = plotmap (x, ...),
           voronoi = plotvoronoi (x, ...),
-          mat = {
-            x$.row <- seq_len (nrow (x))
-            .levelplot (spc ~ .wavelength * .row, x, ...)
-          },
+          mat = .levelplot (spc ~ .wavelength * .row, x, ...),
           c = plotc (x, ...),
-          ts = {
-            plotc (x, spc ~ t, ...)
-            ## dots <- modifyList (list (object = x,
-            ##                           list (model = spc ~ t)),
-            ##                     dots)
-            ## do.call (plotc, dots)
-          },
-          depth = {
-            plotc (x, spc ~ z, ...)
-            ## dots <- modifyList (list (object = x,
-            ##                           list (model = spc ~ z)),
-            ##                     dots)
-            ## do.call (plotc, dots)
-          },
+          ts = plotc (x, spc ~ t, ...),
+          depth = plotc (x, spc ~ z, ...),
           stop (paste ("y = ", y, "unknown.", collapse = " "))
           )
 }
-
 
 ### use plotspc as default plot function
 setMethod ("plot",

@@ -18,15 +18,3 @@ setMethod ("Summary", signature (x = "hyperSpec"),
            }
            )
 
-###-----------------------------------------------------------------------------
-###
-###  is.na
-###
-###
-
-setMethod ("is.na", signature (x = "hyperSpec"),
-           function (x) {
-             is.na (x@data$spc)
-           })
-           
-

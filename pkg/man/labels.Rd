@@ -8,14 +8,16 @@
 }
 \usage{
 \S4method{labels}{hyperSpec}(object, which = NULL, drop = TRUE, \dots)
-labels (object, which = NULL, ...) <- value
+labels (object, which = NULL, ...,
+        short = "labels<-", user = NULL, date = NULL) <- value
 }
 \arguments{
   \item{object}{a hyperSpec object}
   \item{which}{numeric or character to specify the label(s)}
   \item{drop}{if the result would be a list with only one element, 
   	should the element be returned instead?}
-  \item{\dots}{handed to \code{\link[hyperSpec]{logentry}}}
+ \item{\dots}{ignored}
+ \item{short, user, date}{handed to \code{\link[hyperSpec]{logentry}}}
   \item{value}{the new label(s)}
 }
 \details{

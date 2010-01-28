@@ -2,7 +2,8 @@
 \alias{scan.txt.Renishaw}
 \title{import Raman measurements from Renishaw ASCII-files}
 \usage{scan.txt.Renishaw(file=stop("filename is required"), data="xyspc",
-    nlines=0, nspc, \dots)}
+    nlines=0, nspc = NULL, 
+    short = "scan.txt.Renishaw", user = NULL, date = NULL)}
 \description{import Raman measurements from Renishaw .txt file}
 \details{Renishaw .wxd files are converted to .txt ASCII files by their batch converter.
 They come in a "long" format with columns (y x | time | z)? wavelength intensity. 
@@ -30,6 +31,6 @@ If the file is so large that it sould be read in chunks and \code{nspc} is not g
 \item{data}{type of file, one of "spc", "xyspc", "zspc", "depth", "ts", see details.}
 \item{nlines}{number of lines to read in each chunk, if 0 or less read whole file at once}
 \item{nspc}{number of spectra in the file}
-\item{\dots}{passed to logentry}}
+\item{short, user, date}{passed to logentry}}
 \keyword{IO}
 \keyword{file}

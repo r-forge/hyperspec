@@ -1,8 +1,8 @@
 ###-----------------------------------------------------------------------------
 ###
-###  decomposition -- decomposes hyperSpec object e.g. into scores and loading objects
+###  decomposition - decompose hyperSpec object e.g. into scores and loading objects
 ###
-###
+
 decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
                            label.wavelength, label.spc,
                            scores = TRUE, retain.columns = FALSE,

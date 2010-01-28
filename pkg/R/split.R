@@ -7,15 +7,14 @@ setMethod ("split", "hyperSpec", function (x, f, drop = TRUE, #...,
                                            short = NULL, user = NULL, date = NULL){
   validObject (x)
 
-  hyperlist <- split (seq_len (nrow (x@data)), f, drop)
+  hyperlist <- split (seq (x, index = TRUE), f, drop)
 
   log <-  .logentry (x, short = short, long = list (f = f, drop = drop),
                     user = user, date = date)@log
 
-  for (i in seq_len (length (hyperlist))){
-    hyperlist[[i]] <- x[hyperlist[[i]],]
-
-    hyperlist[[i]]@log <- log
+  for (i in seq_along (hyperlist)){
+    hyperlist [[i]] <- x [hyperlist [[i]], ]
+    hyperlist [[i]]@log <- log
   }
 
   hyperlist

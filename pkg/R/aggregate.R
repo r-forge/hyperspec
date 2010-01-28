@@ -14,11 +14,13 @@ setMethod ("aggregate", "hyperSpec",
                      short = "aggregate", date = NULL, user = NULL){
   validObject (x)
 
-  
-
   if (!is.list (by))
-    by <- split (seq_len (nrow (x)), by, drop = TRUE)
+    by <- split (seq (x, index = TRUE), by, drop = TRUE)
 
+  ## main work here is to avoid calling stats::aggregate as there splitting and
+  ## rearranging is involved. That is slow with the spectra.
+
+  # try a guess how many rows the result will have
   if (is.null (out.rows)){
     tmp <- .apply (data = x@data[by [[1]], , drop = FALSE], MARGIN = 2, FUN = FUN, ...)
 

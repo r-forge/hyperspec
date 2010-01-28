@@ -220,7 +220,7 @@ Next, the calculated confidence intervals are appended:
 tmp <- new ("hyperSpec", spc = as.matrix(seq (min (flu), max(flu), length.out = 25)),
                          wavelength = 450)
 ci <-  predict (calibration, newdata = tmp$., interval = "confidence", level = 0.99)
-tmp <- tmp [rep (seq_len (nrow (tmp)), 3)]
+tmp <- tmp [rep (seq (tmp, index = TRUE), 3)]
 tmp$c <- as.numeric (ci)
 tmp$type <- rep (colnames (ci), each = 25)
 

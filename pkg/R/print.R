@@ -9,23 +9,5 @@ setMethod ("print", "hyperSpec", function (x, log = FALSE, ...){
   invisible (x)
 })
 
-###-----------------------------------------------------------------------------
-###
-###  show
-###
-
-setMethod ("show", "hyperSpec", function (object){
-  print (object)
-  invisible (NULL)
-})
-
-###-----------------------------------------------------------------------------
-###
-###  summary
-###
-
-setMethod ("summary", "hyperSpec", function (object, log = TRUE, ...){
-  print (object, log = log, ...)
-})
 
 

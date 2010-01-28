@@ -2,21 +2,21 @@
 \alias{spc.loess}
 \title{ loess smoothing interpolation for spectra}
 \description{
-  Spectra can be smoothed and interpolated on a new wavelength axis using \code{\link[stats]{loess}}. 
-  }
+  Spectra can be smoothed and interpolated on a new wavelength axis
+  using \code{\link[stats]{loess}}.
+}
 \usage{
-spc.loess(spc, newx, \dots, short = "spc.loess", user = NULL, date = NULL)
+spc.loess(spc, newx, enp.target = nwl (spc) / 4, surface = "direct",
+\dots,
+short = "spc.loess", user = NULL, date = NULL)
 }
 \arguments{
   \item{spc}{the \code{hyperSpec} object}
   \item{newx}{wavelengh axis tointrpolate on}
-  \item{\dots}{parameters for \code{\link[stats]{loess}} and \code{\link[stats]{loess.control}}.
- 
-If \code{enp.target} is not given, it defaults to \code{nwl (spc) / 4}.
-
-If \code{surface} is not given, it defaults to \code{"direct"}.
+  \item{enp.target, surface, \dots}{
+	 parameters for \code{\link[stats]{loess}} and
+  \code{\link[stats]{loess.control}}.  }
   
-  }
   \item{short, user, date}{handed to \code{\link{logentry}}.}
 }
 \details{
@@ -25,7 +25,9 @@ If \code{surface} is not given, it defaults to \code{"direct"}.
 	At the same time, the specta are smoothed in order to increase
 	the signal : noise ratio. See  \code{\link[stats]{loess}} and 
 	\code{\link[stats]{loess.control}} on the parameters that control 
-	the amount of smoothing.  
+	the amount of smoothing.
+
+	
 }
 \value{
   a new \code{hyperspec} object.
@@ -33,9 +35,13 @@ If \code{surface} is not given, it defaults to \code{"direct"}.
 \author{C. Beleites}
 \seealso{\code{\link[stats]{loess}}, \code{\link[stats]{loess.control}}}
 \examples{
-plot (flu)
-plot (spc.loess(flu, seq (420, 470, 5), enp.target = 15, surface = "direct"), 
-      add = TRUE, col = "red", lines.args = list (type = "b", pch = 20))
+plot (flu, col = "darkgray")
+plot (spc.loess(flu, seq (420, 470, 5)), add = TRUE, col = "red")
+
+flu [[3, ]] <- NA_real_
+smooth <- spc.loess(flu, seq (420, 470, 5))
+smooth [[, ]]
+plot (smooth, add = TRUE, col = "blue")
 }
 \keyword{manip}
 \keyword{datagen}
