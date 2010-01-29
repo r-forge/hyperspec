@@ -11,7 +11,7 @@ array2df <- function (x, levels = rep (NA, length (dims)),
   dims  <- c(dim (x))
   cprod <- c(1, cumprod (dims))
   rprod <- c(rev (cumprod (rev (dims))), 1)[-1]
-  idim  <- seq_len (length (dims)) [! sapply (levels, is.null)]
+  idim  <- seq_along (dims) [! sapply (levels, is.null)]
 
   df <- matrix (x, nrow = length (x), ncol = length (idim) + 1)
 

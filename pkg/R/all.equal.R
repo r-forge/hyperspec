@@ -2,6 +2,7 @@
 ###
 ###  all.equal
 ###
+###  C. Beleites
 ###
 
 setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),

@@ -82,7 +82,7 @@ plotspc <- function  (object,
     x [[i]] <- x [[i]] - xoffset[i]
 
   ## indices into columns of spectra matrix spc
-  ispc <- relist (seq_len (length (u.wl.range)), wl.range)
+  ispc <- relist (seq_along (u.wl.range), wl.range)
 
   rm (wl.range)
   spc <- object[[,, u.wl.range, drop = FALSE, wl.index = TRUE]]
@@ -223,8 +223,8 @@ plotspc <- function  (object,
       if (is.null (axis.args$y$side))
         axis.args$y$side <- 2
       if (is.null (axis.args$y$at) & !is.null (stacked)){
-        axis.args$y$at <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min) #apply (spc, 1, min)
-        axis.args$y$labels <- stacked$levels #seq_len (nrow (spc))
+        axis.args$y$at <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min) 
+        axis.args$y$labels <- stacked$levels 
       }
 
       do.call (axis, axis.args$y)

@@ -17,7 +17,7 @@
 .levelplot <- function (x, data, transform.factor = TRUE, ...) {
   validObject (data)
 
-  data$.row <- seq_len (nrow (data))
+  data$.row <- row.seq (data)
 
   ## parse formula to find the columns to be plotted
   ## they may include also "wavelength"
@@ -134,7 +134,7 @@ map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...){
   }
   else {
     lattice <- do.call (plotmap, dots)
-    mix <- seq_len (nrow (object))
+    mix <- row.seq (object)
   }
 
   print (lattice)

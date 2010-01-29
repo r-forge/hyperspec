@@ -2,6 +2,7 @@
 ###
 ###  aggregate
 ###
+###  C. Beleites
 ###
 
 setMethod ("aggregate", "hyperSpec",
@@ -59,7 +60,7 @@ setMethod ("aggregate", "hyperSpec",
   }
 
   x@data <- data[seq_len (r - 1), , drop = FALSE]
-  x@data[, col.aggregate] <- factor (x@data[, col.aggregate], levels = seq_len (length (by)))
+  x@data[, col.aggregate] <- factor (x@data[, col.aggregate], levels = seq_along (by))
 
   if (!is.null (names (by)) && !any (is.na (names (by))))
     levels (x@data[, col.aggregate]) <- names (by)

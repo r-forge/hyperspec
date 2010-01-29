@@ -30,7 +30,7 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1,
   y <- t(fit.to [[]])
 
   p <- matrix (nrow = nrow(fit.to) , ncol = poly.order + 1)
-  for (i in seq_len (nrow (fit.to))){
+  for (i in row.seq (fit.to)){
     use.old <- logical (nwl (fit.to))
     use <- !use.old
 

@@ -15,7 +15,7 @@ as.long.df <- function (x, rownames = FALSE) {
                               spc = rep (NA, nrow (x))),
                   x@data [, -ispc, drop = FALSE])
   } else {
-    tmp <- x@data [rep (seq (nrow (x)), nwl (x)), -ispc, drop = FALSE]
+    tmp <- x@data [rep (row.seq (x), nwl (x)), -ispc, drop = FALSE]
 
     tmp <- cbind (data.frame (.wavelength = rep (x@wavelength, each = nrow (x)),
                               spc = as.numeric (x [[]])),

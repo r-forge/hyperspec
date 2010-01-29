@@ -10,7 +10,7 @@ plotc <- function (object, model = spc ~ c, groups = NULL,
   validObject (object)
 
   ## allow to plot against the row number
-  object$.row <- seq_len (nrow (object))
+  object$.row <- row.seq (object)
 
   
   groups <- substitute (groups)

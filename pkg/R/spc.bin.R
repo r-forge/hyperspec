@@ -29,7 +29,7 @@ spc.bin <- function (spc, by = stop ("reduction factor needed"), na.rm = TRUE,
       tmp <- sweep (tmp, 2, rle (bin)$lengths, "/")
 
       na <- which (is.na (tmp), arr.ind = TRUE)
-      bin <- split (seq_len (ncol (spc@data$spc)), bin)
+      bin <- split (wl.seq (spc), bin)
 
       for (i in seq_len (nrow (na))){
         tmp [na [i, 1], na [i, 2]] <- mean (spc@data$spc [na [i, 1], bin [[na[i, 2]]]], na.rm = TRUE)

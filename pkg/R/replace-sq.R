@@ -19,8 +19,8 @@ setReplaceMethod("[", "hyperSpec",
                            .paste.row (value, val = TRUE)
                 )
 
-  if (missing (i)) i <- seq_len (nrow (x@data))
-  if (missing (j)) j <- seq_len (ncol (x@data))
+  if (missing (i)) i <- row.seq (x)
+  if (missing (j)) j <- col.seq (x@data)
 
   if (is (value, "hyperSpec")){
     validObject (value)
