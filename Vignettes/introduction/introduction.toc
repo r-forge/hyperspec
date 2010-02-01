@@ -3,55 +3,50 @@
 \contentsline {subsection}{\numberline {1.1}Notation}{3}{subsection.1.1}
 \contentsline {section}{\numberline {2}Remarks on R}{3}{section.2}
 \contentsline {subsection}{\numberline {2.1}Generic Functions}{3}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Functionality Can be Extended at Runtime}{4}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.2}Functionality Can be Extended at Runtime}{3}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Validity Checking}{4}{subsection.2.3}
 \contentsline {section}{\numberline {3}Loading the package}{4}{section.3}
 \contentsline {section}{\numberline {4}The structure of {\language \langwohyphens \textit {hyperSpec}} objects}{4}{section.4}
-\contentsline {section}{\numberline {5}Functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{5}{section.5}
-\contentsline {section}{\numberline {6}Obtaining Basic Information about {\language \langwohyphens \textit {hyperSpec}} Objects}{5}{section.6}
+\contentsline {section}{\numberline {5}Functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{8}{section.5}
+\contentsline {section}{\numberline {6}Obtaining Basic Information about {\language \langwohyphens \textit {hyperSpec}} Objects}{8}{section.6}
 \contentsline {section}{\numberline {7}Creating a {\language \langwohyphens \textit {hyperSpec}} Object, Data Import and Export}{10}{section.7}
-\contentsline {subsection}{\numberline {7.1}ASCII Files}{10}{subsection.7.1}
-\contentsline {subsection}{\numberline {7.2}Matlab Files}{10}{subsection.7.2}
-\contentsline {subsection}{\numberline {7.3}ENVI Files}{10}{subsection.7.3}
-\contentsline {subsection}{\numberline {7.4}spc Files}{10}{subsection.7.4}
-\contentsline {subsection}{\numberline {7.5}Manufacturer Specific Import Functions}{10}{subsection.7.5}
-\contentsline {subsubsection}{\numberline {7.5.1}Renishaw}{11}{subsubsection.7.5.1}
-\contentsline {subsubsection}{\numberline {7.5.2}Bruker FTIR Imaging}{11}{subsubsection.7.5.2}
-\contentsline {subsubsection}{\numberline {7.5.3}Nicolet FTIR Imaging}{11}{subsubsection.7.5.3}
-\contentsline {subsubsection}{\numberline {7.5.4}Kaiser Raman Maps}{11}{subsubsection.7.5.4}
-\contentsline {subsection}{\numberline {7.6}Creating a {\language \langwohyphens \textit {hyperSpec}} Object from Spectra Matrix and Wavelength Vector}{12}{subsection.7.6}
-\contentsline {section}{\numberline {8}Combining {\language \langwohyphens \textit {hyperspec}} Objects}{12}{section.8}
-\contentsline {section}{\numberline {9}Access to the data}{13}{section.9}
-\contentsline {subsection}{\numberline {9.1}Selecting and Deleting Spectra}{13}{subsection.9.1}
-\contentsline {subsection}{\numberline {9.2}Accessing the Extra Data }{13}{subsection.9.2}
-\contentsline {subsection}{\numberline {9.3}Wavelengths and Spectral Axis}{14}{subsection.9.3}
-\contentsline {subsubsection}{\numberline {9.3.1}Wavelength Indices}{14}{subsubsection.9.3.1}
-\contentsline {subsubsection}{\numberline {9.3.2}Wavelength Axis Conversion}{16}{subsubsection.9.3.2}
-\contentsline {subsection}{\numberline {9.4}Fast Access to Parts of the {\language \langwohyphens \textit {hyperSpec}} Object}{16}{subsection.9.4}
-\contentsline {section}{\numberline {10}Plotting}{16}{section.10}
-\contentsline {subsection}{\numberline {10.1}Plotting Spectra}{17}{subsection.10.1}
-\contentsline {subsection}{\numberline {10.2}Plotting the Spectra Matrix}{18}{subsection.10.2}
-\contentsline {subsection}{\numberline {10.3}Calibration Plots, (Depth) Profiles, and Time Series Plots}{18}{subsection.10.3}
-\contentsline {subsection}{\numberline {10.4}Plotting False-Colour Maps}{18}{subsection.10.4}
-\contentsline {paragraph}{The colour-coded axis. }{19}{section*.2}
-\contentsline {paragraph}{Conditioning.}{19}{section*.3}
-\contentsline {section}{\numberline {11}Spectral (Pre)processing}{19}{section.11}
-\contentsline {subsection}{\numberline {11.1}Cutting the Spectral Range}{19}{subsection.11.1}
-\contentsline {subsection}{\numberline {11.2}Spectral Interpolation and Smoothing}{19}{subsection.11.2}
-\contentsline {subsection}{\numberline {11.3}Background Correction}{20}{subsection.11.3}
-\contentsline {subsection}{\numberline {11.4}Offset Correction}{20}{subsection.11.4}
-\contentsline {subsection}{\numberline {11.5}Baseline Correction}{21}{subsection.11.5}
-\contentsline {subsection}{\numberline {11.6}Intensity Calibration}{21}{subsection.11.6}
-\contentsline {subsubsection}{\numberline {11.6.1}Correcting by a constant, e.\tmspace +\thinmuskip {.1667em}g. Readout Bias}{21}{subsubsection.11.6.1}
-\contentsline {subsubsection}{\numberline {11.6.2}Correcting Wavelength Dependence}{21}{subsubsection.11.6.2}
-\contentsline {subsubsection}{\numberline {11.6.3}Spectra Dependent Correction}{21}{subsubsection.11.6.3}
-\contentsline {subsection}{\numberline {11.7}Normalization}{22}{subsection.11.7}
-\contentsline {subsection}{\numberline {11.8}Centering the Data}{22}{subsection.11.8}
-\contentsline {subsection}{\numberline {11.9}Variance Scaling}{22}{subsection.11.9}
-\contentsline {subsection}{\numberline {11.10}Multiplicative Scatter Correction (MSC)}{23}{subsection.11.10}
-\contentsline {subsection}{\numberline {11.11}Spectral Arithmetic}{23}{subsection.11.11}
-\contentsline {section}{\numberline {12}Data Analysis }{23}{section.12}
-\contentsline {subsection}{\numberline {12.1}Data Analysis Methods using a data.frame \\ e.\tmspace +\thinmuskip {.1667em}g. Principal Component Analysis with {\language \langwohyphens \texttt {prcomp}}}{23}{subsection.12.1}
-\contentsline {subsection}{\numberline {12.2}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g. Hierarchical Cluster Analysis}{23}{subsection.12.2}
-\contentsline {subsection}{\numberline {12.3}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{25}{subsection.12.3}
-\contentsline {subsection}{\numberline {12.4}Splitting an Object}{25}{subsection.12.4}
+\contentsline {subsection}{\numberline {7.1}Creating a {\language \langwohyphens \textit {hyperSpec}} Object from Spectra Matrix and Wavelength Vector}{10}{subsection.7.1}
+\contentsline {section}{\numberline {8}Decomposition}{11}{section.8}
+\contentsline {section}{\numberline {9}Combining {\language \langwohyphens \textit {hyperspec}} Objects}{11}{section.9}
+\contentsline {subsection}{\numberline {9.1}Matrix Multiplication}{11}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Binding Objects together}{11}{subsection.9.2}
+\contentsline {section}{\numberline {10}Access to the data}{12}{section.10}
+\contentsline {subsection}{\numberline {10.1}Selecting and Deleting Spectra}{12}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}Accessing the Extra Data }{12}{subsection.10.2}
+\contentsline {subsection}{\numberline {10.3}Wavelengths and Spectral Axis}{13}{subsection.10.3}
+\contentsline {subsubsection}{\numberline {10.3.1}Wavelength Indices}{13}{subsubsection.10.3.1}
+\contentsline {subsubsection}{\numberline {10.3.2}Wavelength Axis Conversion}{15}{subsubsection.10.3.2}
+\contentsline {subsection}{\numberline {10.4}Fast Access to Parts of the {\language \langwohyphens \textit {hyperSpec}} Object}{15}{subsection.10.4}
+\contentsline {section}{\numberline {11}Plotting}{15}{section.11}
+\contentsline {subsection}{\numberline {11.1}Plotting Spectra}{16}{subsection.11.1}
+\contentsline {subsection}{\numberline {11.2}Plotting the Spectra Matrix}{16}{subsection.11.2}
+\contentsline {subsection}{\numberline {11.3}Calibration Plots, (Depth) Profiles, and Time Series Plots}{17}{subsection.11.3}
+\contentsline {subsection}{\numberline {11.4}Plotting False-Colour Maps}{17}{subsection.11.4}
+\contentsline {paragraph}{The colour-coded axis. }{17}{section*.10}
+\contentsline {paragraph}{Conditioning.}{18}{section*.11}
+\contentsline {section}{\numberline {12}Spectral (Pre)processing}{18}{section.12}
+\contentsline {subsection}{\numberline {12.1}Cutting the Spectral Range}{18}{subsection.12.1}
+\contentsline {subsection}{\numberline {12.2}Spectral Interpolation and Smoothing}{18}{subsection.12.2}
+\contentsline {subsection}{\numberline {12.3}Background Correction}{19}{subsection.12.3}
+\contentsline {subsection}{\numberline {12.4}Offset Correction}{19}{subsection.12.4}
+\contentsline {subsection}{\numberline {12.5}Baseline Correction}{19}{subsection.12.5}
+\contentsline {subsection}{\numberline {12.6}Intensity Calibration}{20}{subsection.12.6}
+\contentsline {subsubsection}{\numberline {12.6.1}Correcting by a constant, e.\tmspace +\thinmuskip {.1667em}g. Readout Bias}{20}{subsubsection.12.6.1}
+\contentsline {subsubsection}{\numberline {12.6.2}Correcting Wavelength Dependence}{20}{subsubsection.12.6.2}
+\contentsline {subsubsection}{\numberline {12.6.3}Spectra Dependent Correction}{20}{subsubsection.12.6.3}
+\contentsline {subsection}{\numberline {12.7}Normalization}{20}{subsection.12.7}
+\contentsline {subsection}{\numberline {12.8}Centering the Data}{21}{subsection.12.8}
+\contentsline {subsection}{\numberline {12.9}Variance Scaling}{21}{subsection.12.9}
+\contentsline {subsection}{\numberline {12.10}Multiplicative Scatter Correction (MSC)}{21}{subsection.12.10}
+\contentsline {subsection}{\numberline {12.11}Spectral Arithmetic}{22}{subsection.12.11}
+\contentsline {section}{\numberline {13}Data Analysis }{22}{section.13}
+\contentsline {subsection}{\numberline {13.1}Data Analysis Methods using a data.frame \\ e.\tmspace +\thinmuskip {.1667em}g. Principal Component Analysis with {\language \langwohyphens \texttt {\relax \fontsize {9}{11}\selectfont \par@update \abovedisplayskip 8.5\p@ plus3\p@ minus4\p@ \abovedisplayshortskip \z@ plus2\p@ \belowdisplayshortskip 4\p@ plus2\p@ minus2\p@ \def \leftmargin \leftmargini \parsep 4\p@ plus2\p@ minus\p@ \topsep 8\p@ plus2\p@ minus4\p@ \itemsep 4\p@ plus2\p@ minus\p@ \topsep \z@ \parsep \parskip \itemsep \z@ {\leftmargin \leftmargini \topsep 4\p@ plus2\p@ minus2\p@ \parsep 2\p@ plus\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip \add@extra@listi {sml}{prcomp}}}}{22}{subsection.13.1}
+\contentsline {subsubsection}{\numberline {13.1.1}PCA as Noise Filter}{24}{subsubsection.13.1.1}
+\contentsline {subsection}{\numberline {13.2}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g. Hierarchical Cluster Analysis}{24}{subsection.13.2}
+\contentsline {subsection}{\numberline {13.3}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{25}{subsection.13.3}
+\contentsline {subsection}{\numberline {13.4}Splitting an Object}{25}{subsection.13.4}

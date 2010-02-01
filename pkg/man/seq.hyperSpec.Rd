@@ -1,13 +1,14 @@
 \name{seq.hyperSpec}
 \alias{seq.hyperSpec}
+\alias{seq,hyperSpec-method}
 \title{Sequence generation along spectra or wavelengths}
 \description{
 This function generates sequences along the spectra (rows) or
 wavelengths of hyperSpec objects.  
 }
 \usage{
-seq.hyperSpec(x,  from = 1, to = nrow (x), \dots, index = FALSE,
-              short = "seq", user = NULL, date = NULL)
+\method{seq}{hyperSpec}(x,  from = 1, to = nrow (x), \dots, index = FALSE,
+     short = "seq", user = NULL, date = NULL)
 }
 \arguments{
   \item{x}{ the hyperSpec object}
@@ -23,7 +24,11 @@ seq.hyperSpec(x,  from = 1, to = nrow (x), \dots, index = FALSE,
   \item{short, user, date}{handed to \code{\link{logentry}}.}
 }
 \details{
-  Note that \code{\link{wl2i}} generates sequences of indices along the wavelength axis. 
+  Note that \code{\link{wl2i}} generates sequences of indices along the
+  wavelength axis. 
+
+  \code{seq} had to be implemented as S3 method as the generic has only
+  \dots arguments (on which no dispatch with differing types is possible).
 }
 \value{
   a numeric or hyperSpec object, depending on \code{index}.
@@ -32,7 +37,7 @@ seq.hyperSpec(x,  from = 1, to = nrow (x), \dots, index = FALSE,
 \seealso{
  \code{\link{wl2i}} to construct sequences of wavelength indices.
 
- \code{\link[base]{seq.int}}
+ \code{\link[base]{seq}}
 }
 \examples{
 seq (flu, index = TRUE)

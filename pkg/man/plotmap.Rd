@@ -116,34 +116,21 @@ plotmap (chondro [,,1003])
 levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col = "#00000080")
 plot (flu, "mat")
 
-## long version of this is found in vignette (chondro)
-baselines <- spc.fit.poly.below (chondro)
-corrected <- chondro - baselines
-corrected <- sweep (corrected, 1, apply (corrected, 1, mean), `/`)
-background <- apply (corrected, 2, quantile, probs = 0.05)
-corrected <- sweep (corrected, 2, background, "-")
-
 # applying a function before plotting
-plotmap (corrected, func = max, col.regions = gray (seq (0, 1, 0.05)))
+plotmap (chondro, func = max, col.regions = gray (seq (0, 1, 0.05)))
 
-# Plotting of factor maps
-dist <- dist (corrected [[]])
-dend <- hclust (dist, method = "ward")
-chondro$z <- as.factor (cutree (dend, k = 3))
-levels (chondro$z) <- c ("matrix", "lacuna", "cell")
-
-plotmap (chondro, z ~ x * y)
-plotmap (chondro, z ~ x * y, transform.factor = FALSE)
-plotmap (chondro, z ~ x * y, col.regions = gray (seq (0, 1, 0.05))) 
+plotmap (chondro, clusters ~ x * y)
+plotmap (chondro, clusters ~ x * y, transform.factor = FALSE)
+plotmap (chondro, clusters ~ x * y, col.regions = gray (seq (0, 1, 0.05))) 
 
 # Voronoi plots
-i <- sample (nrow (chondro), 300)
-plotmap (chondro [i], z ~ x * y)
+smpl <- sample (chondro, 300)
+plotmap (smpl, clusters ~ x * y)
 if (require (tripack)) 
-    plotvoronoi (chondro [i], z ~ x * y,
+    plotvoronoi (smpl, clusters ~ x * y,
                  border = "#00000020", col = "#00000020")
 if (require (deldir)) 
-    plotvoronoi (chondro [i], z ~ x * y,
+    plotvoronoi (smpl, clusters ~ x * y,
                  border = "#00000020", col = "#00000020",
                  use.tripack = FALSE)
 }

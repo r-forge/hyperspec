@@ -10,7 +10,7 @@
 % \VignettePackage{hyperSpec}
 
 \begin{document}
-\title{Import and Export of Spectra\\
+\title{Import and Export of Spectra Files\\
 Vignette for the R package \Rpackage{hyperSpec} }
 \maketitle
 
@@ -19,9 +19,105 @@ The source code of this vignette including the spectra files are available as .z
  \url{http://r-forge.r-project.org/projects/hyperspec/}
 }
 
-<<init, echo = FALSE, results = hide>>=
-library (hyperSpec)
+\subsection{ASCII Files} \mFun{\Rfunction{read.txt.long} \Rfunction{read.txt.wide} \Rfunction{write.txt.long} \Rfunction{write.txt.wide}}
+
+Currently, \Rclass{hyperSpec} provides four functions for general
+ASCII data import and export:
+\begin{description}
+\setlength{\labelwidth}{3cm}
+\setlength{\itemindent}{2.2cm}
+\item [{\Rfunction{read.txt.long}}] import long format ASCII files, i.e.
+one intensity value per row
+\item [{\Rfunction{read.txt.wide}}] import wide format ASCII files, i.e.
+one spectrum per row
+\item [{\Rfunction{write.txt.long}}] export long format ASCII files
+\item [{\Rfunction{write.txt.wide}}] export wide format ASCII files
+\end{description}
+The import functions immediately return a \Rclass{hyperSpec} object.
+
+\subsection{Matlab Files}
+
+Matlab files can be read and written using the package \Rpackage{R.matlab}\citep{R.matlab},
+which is available at CRAN and can be installed by \Rcode{install.packages (\textquotedbl{}R.matlab\textquotedbl{})}.
+
+\subsection{ENVI Files}
+\label{sec:envi-files}
+\phy provides a function to read ENVI files, \Rfunction{read.ENVI}\mFun{read.ENVI}. ENVI files are binary data accomanied by an ASCII header file.
+
+As we experienced missing header files (Bruker's Opus software frequently produces header files without any content), the data that would usually be read from the header file can also be handed to \Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should contain.
+
+\subsection{spc Files}
+\label{sec:spc-files}
+Thermo Galactic's .spc file format can be read by \Rfunction{read.spc}. 
+
+\subsection{Manufacturer Specific Import Functions}
+
+Many spectrometer manufacturers provide a function to export their
+spectra into ASCII files. The functions discussed above are written in a very general way, and are highly customizable.
+I recommend wrapping these calls with the appropriate settings for
+your spectra format in an import function. You may also consider contributing
+such import filters to \Rpackage{hyperSpec}: send me (\href{mailto:cbeleites@units.it}{cbeleites@units.it})
+the documented code (either .R + .Rd file or Roxygen commented .R).
+
+\subsubsection{Renishaw}
+\label{sec:renishaw}
+
+For the long ASCII format written by Renishaw's converter, an
+optimized import function is already available: \Rfunction{scan.txt.Renishaw}. \mFun{\Rfunction{scan.txt.Renishaw}}
+
+<<scan.txt.Renishaw>>=
+paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
+paracetamol
 @
+
+The converter also offers to write .spc files. We experienced however, that this conversion is not fully reliable: maps were saved as depth profile, loosing all spatial information. Also, an evenly spaced wavelength axis was produced, although this was de-selected in the converter. We therefore recommend using the ASCII format.
+
+\subsubsection{Bruker FTIR Imaging}
+We use \Rfunction{read.ENVI} to import IR-Images collected with a Bruker Hyperion spectrometer with OPUS software. As mentioned above, the header files are frequently missing. We found the necessary information to be:
+<<eval=FALSE>>=
+header <- list (samples = 64 * no.images.in.row,
+                lines = 64 * no.images.in.column,
+                bands = no.data.points.per.spectrum,
+                `data type` = 4,
+                interleave = "bip")
+@
+
+No spatial information is given in the ENVI header (if correctly written). The lateral coordinates can be setup by specifying origin and pixel size for $x$ and $y$ directions. For details please see the help page.
+
+\subsubsection{Nicolet FTIR Imaging}
+Also Nicolet saves imaging data in ENVI files. These files use some non-standard keywords in the header file that should allow to reconstruct the lateral coordinates as well as the spectral axes' units. 
+
+There is indication that the position of the first spectrum is recorded in \mum{}, while the pixel size is in mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
+Also here, giving the correct offset and pixel size values as function arguments is possible.
+
+
+
+\subsubsection{Kaiser Raman Maps}
+Spectra obtained using Kaiser's Hologram software can be saved either in their own .hol format and imported into Matlab (from where the data may be written to a .mat file readable by \Rpackage{R.matlab}'s \Rfunction{readMat}. Alternatively, Hologram can write ASCII files and .spc files. We found working with .spc files the best option. 
+
+\phy provides the function \Rfunction{read.spc.KaiserMap} to easily import spatial collections of .spc files written by Kaiser's Hologram software. The filenames of all .spc files to be read into one \chy object can be provided either in a character vector or as a wildcard expression (\eg \textquotedbl path/to/files/*.spc\textquotedbl ).
+
+
+
+
+\subsection{Creating a \Rclass{hyperSpec} Object from Spectra Matrix
+and Wavelength Vector}
+
+Once the data is in R's workspace, a \Rclass{hyperSpec} object is
+created by:\\
+\Rcode{spc <- new (\textquotedbl{}hyperSpec\textquotedbl{}, spc =
+  spectra.matrix, wavelength = wavelength.vector)}\\
+You will usually give the following arguments:
+\begin{description}
+\setlength{\labelwidth}{2.5cm}
+\setlength{\itemindent}{1.7cm}
+\item [{\Rcode{spc}}] the spectra matrix
+\item [{\Rcode{wavelength}}] the wavelength axis vector
+\item [{\Rcode{data}}] the extra data
+\item [{\Rcode{label}}] a list with the proper labels. Do not forget the
+wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
+axis label in \Rcode{\$spc}.
+\end{description}
 
 \section{Existing Filters}
 \section{Extending I/O Functions}

@@ -29,13 +29,22 @@ seq.hyperSpec <- function (x, from = 1, to = nrow (x),
 ## internal abbreviations
 
 row.seq <- function (x, from = 1, to = nrow (x@data), ...){
-  seq (from = from, to = to, ...)
+  if (nrow (x@data) == 0)
+    integer (0)
+  else
+    seq (from = from, to = to, ...)
 }
 
 col.seq <- function (x, from = 1, to = ncol (x@data), ...){
+  if (ncol (x@data) == 0)
+    integer (0)
+  else
 	seq (from = from, to = to, ...)
 }
 
 wl.seq <- function (x, from = 1, to = ncol (x@data$spc), ...){
-	seq (from = from, to = to, ...)
+  if (ncol (x@data$spc) == 0)
+    integer (0)
+  else
+    seq (from = from, to = to, ...)
 }

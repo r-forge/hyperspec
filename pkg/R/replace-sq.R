@@ -20,7 +20,7 @@ setReplaceMethod("[", "hyperSpec",
                 )
 
   if (missing (i)) i <- row.seq (x)
-  if (missing (j)) j <- col.seq (x@data)
+  if (missing (j)) j <- col.seq (x)
 
   if (is (value, "hyperSpec")){
     validObject (value)

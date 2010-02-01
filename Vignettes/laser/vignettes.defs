@@ -66,10 +66,10 @@
 \end{tikzpicture}%
 }
 
-\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
-\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
+\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
+\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
+\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
 
 \newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
 \newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
@@ -78,10 +78,11 @@
 
 \newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
 
-\newcommand{\phy}{\Rpackage{hyperSpec}\xspace}
+\newcommand{\phy}{\texorpdfstring{\nohyphens{\textit{hyperSpec}}}{hyperSpec}\xspace}
 \newcommand{\chy}{\Rclass{hyperSpec}\xspace}
 
 \newcommand{\eg}{e.\,g.\xspace}
+\newcommand{\ie}{i.\,e.\xspace}
 
 \newcommand{\mum}[1]{\ensuremath{#1\;}\textmu m\xspace}
 \newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}

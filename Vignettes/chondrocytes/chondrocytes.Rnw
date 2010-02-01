@@ -7,7 +7,7 @@
 
 \begin{document}
 \title{Raman Spectra of Chondrocytes in Cartilage:\\
-\Rpackage{hyperSpec}'s \Robject{chondro} data set }
+\Rpackage{hyperSpec}'s \texttt{chondro} data set }
 \maketitle
 
 \warnbox{Reproducing this vignette}{ The data set and source file of this vignette are available as a   zipped archive at \Rpackage{hyperSpec}'s homepage,   \url{http://hyperspec.r-forge.r-project.org/chondrocytes.zip} (ca. 9 MB).  The original data file (ca. 31   MB) is far too large to be included in the package. 
@@ -87,7 +87,7 @@ plotmap (chondro, func.args = list (na.rm = TRUE), col.regions = seq.palette (20
 \begin{figure}[tbh]
 \subfloat[\label{fig:raw:a}The raw spectra: median, 16\textsuperscript{th} and 84\textsuperscript{th}, and 5\textsuperscript{th} and 95\textsuperscript{th} percentile
 spectra.]{\includegraphics[width=0.5\textwidth]{fig/fig-rawspc}}
-\subfloat\label{fig:raw:b}[The sum intensity of the raw spectra.]{\includegraphics[width=0.5\textwidth]{fig/fig-rawmap}}
+\subfloat[\label{fig:raw:b}[The sum intensity of the raw spectra.]{\includegraphics[width=0.5\textwidth]{fig/fig-rawmap}}
 \caption{\label{fig:raw} The raw data.}
 \end{figure}
 
