@@ -8,7 +8,11 @@
 array2df <- function (x, levels = rep (NA, length (dims)),
                       matrix = FALSE,
                       label.x = deparse (substitute (x))){
-  dims  <- c(dim (x))
+  dims  <- dim (x)
+
+  if (length (levels) != length (dims))
+    stop ("Levels must have as many elements as x has dimensions.")
+  
   cprod <- c(1, cumprod (dims))
   rprod <- c(rev (cumprod (rev (dims))), 1)[-1]
   idim  <- seq_along (dims) [! sapply (levels, is.null)]
