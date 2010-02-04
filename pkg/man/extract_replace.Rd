@@ -36,7 +36,12 @@
 
   \item{x}{ a \code{hyperSpec} Object}
   
-  \item{i}{ row index: selects spectra}
+  \item{i}{ row index: selects spectra
+
+           \\code{[[} and code{[[<-} accept indexing with logical matrix
+           or a n by 2 integer index matrix. In this case the indexing
+           is done inside the spectra matrix. See the examples below. 
+  }
 
   \item{j, name}{selecting columns of \code{x@data}}
     
@@ -159,7 +164,26 @@ chondro$x
 
 ## extract the spectra matrix
 flu[[]]
+
+## indexing via logical matrix
+summary (flu [[flu < 125]])
+
+## indexing the spectra matrix with index matrix n by 2
+ind <- matrix (c (1, 2, 4, 406, 405.5, 409), ncol = 2)
+ind
+flu [[ind]]
+
+ind <- matrix (c (1, 2, 4, 4:6), ncol = 2)
+ind
+flu [[ind, wl.index = TRUE]]
+
 pca <- prcomp (flu[[]])
+
+## result is data.frame, if j is given:
+result <- flu [[, 1:2, 405 ~ 410]]
+result
+class (result)
+colnames (result)
 
 ## extract the data.frame including the spectra matrix
 flu$.
@@ -193,6 +217,23 @@ spc[[3]] <- -spc[[3]]
 spc[[]]
 spc[[,,405 : 410]] <- -spc[[,,405 : 410]]
 spc[[]]
+
+## indexing with logical matrix
+spc <- flu [,, min ~ 410]
+spc < 125
+spc [[spc < 125]] <- NA
+spc [[]]
+
+## indexing with n by 2 matrix
+ind <- matrix (c (1, 2, 4, 406, 405.5, 409), ncol = 2)
+ind
+spc [[ind]] <- 3
+spc [[]]
+
+ind <- matrix (c (1, 2, 4, 4:6), ncol = 2)
+ind
+spc [[ind, wl.index = TRUE]] <- 9999
+spc [[]]
 }
 \keyword{methods}
 \keyword{manip}

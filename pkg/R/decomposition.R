@@ -28,16 +28,19 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
     spc <- match("spc", colnames(object@data))
     
     ## apply changes type of retained columns to character!!!
-    ## cols <- apply(object@data[, -spc, drop = FALSE], 2, .na.if.different)
-    ## object@data[1, -spc] <- cols
-    cols <- apply (object@data [, -spc, drop = FALSE], 2, function (x) length (unique (x)))
-    is.na (object@data[1, -spc]) <- cols > 1
-    
-    if (!retain.columns) {
-      cols <- which (cols > 1)
-      cols[cols >= spc] <- cols [cols >= spc] + 1
-      object@data <- object@data[, -cols, drop = FALSE]
+    ## must be done in a loop one column after the other or a matrix in a column
+    ## (e.g. for the independent variate of PLS) will cause an error 
+
+    cols <- rep (TRUE, ncol(object@data))
+    for (i in seq_len (ncol (object@data)) [-spc]) {
+      tmp <- t (apply (object@data[, i, drop = FALSE], 2,
+                       .na.if.different))
+      object@data [1, i] <- tmp
+      if (all (is.na (tmp)))
+        cols [i] <- FALSE
     }
+    if (!retain.columns) 
+      object@data <- object@data[, cols, drop = FALSE]
 
     object@data <- object@data[rep(1, nrow(x)), , drop = FALSE]
     object@data$spc <- I(as.matrix(x))
