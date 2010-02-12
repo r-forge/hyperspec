@@ -27,7 +27,6 @@
       !any (grepl (".wavelength", c(as.character (x),
                                     as.character (dots$groups),
                                     as.character (dots$subset))))) {
-    
     data <- data [, , 1, wl.index = TRUE]
     warning ("Only first wavelength is used for plotting")
   }

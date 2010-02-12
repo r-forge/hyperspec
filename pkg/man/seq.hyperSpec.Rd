@@ -28,7 +28,13 @@ wavelengths of hyperSpec objects.
   wavelength axis. 
 
   \code{seq} had to be implemented as S3 method as the generic has only
-  \dots arguments (on which no dispatch with differing types is possible).
+  \dots arguments (on which no dispatch with differing types is
+  possible).
+
+  \code{\link[base]{seq_along}} is not generic, but returns a sequence
+  of the \code{length} of the object. As hyperSpec provides a Method
+  \code{\link{length}}, it can be used. The result is a
+  sequence of indices for the spectra.
 }
 \value{
   a numeric or hyperSpec object, depending on \code{index}.
@@ -41,6 +47,7 @@ wavelengths of hyperSpec objects.
 }
 \examples{
 seq (flu, index = TRUE)
+seq_along (flu)
 seq (flu, length.out = 3, index = TRUE) # return value is numeric, not integer! 
 seq (flu, by = 2, index = TRUE) 		    # return value is numeric, not integer! 
 

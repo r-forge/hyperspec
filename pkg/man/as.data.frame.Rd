@@ -18,7 +18,7 @@
 }
 \usage{
 \S4method{as.data.frame}{hyperSpec,missing,missing}(x, row.names = NULL, optional = FALSE, \dots)
-as.long.df (x, rownames = FALSE)
+as.long.df (x, rownames = FALSE, wl.factor = FALSE )
 \S4method{as.matrix}{hyperSpec}(x, \dots)
 }
 \arguments{
@@ -26,6 +26,8 @@ as.long.df (x, rownames = FALSE)
   \item{row.names, optional, \dots}{ignored}
   \item{rownames}{should the rownames be in column \code{.rownames} of
 	 the long-format data.frame?}
+  \item{wl.factor}{should the wavelengths be returned as a factor
+	 (instead of numeric)?}
 }
 \value{
   \code{x@data} and \code{x@data$spc}, respectively.

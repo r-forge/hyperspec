@@ -1,6 +1,6 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \SweaveInput{vignettes.defs}
-\hypersetup{pdftitle={Flu},
+\hypersetup{pdftitle={FileIO},
  pdfauthor={C. Beleites},
  pdfsubject={Vignette File Import and Export for R package hyperSpec},
  pdfkeywords={hyperSpec, data format, file, import, export}}
@@ -16,24 +16,146 @@ Vignette for the R package \Rpackage{hyperSpec} }
 
 \warnbox{Reproducing the Examples in this Vignette}{
 The source code of this vignette including the spectra files are available as .zip file at \phy's home page:
- \url{http://r-forge.r-project.org/projects/hyperspec/}
+ \url{http://r-forge.r-project.org/projects/hyperspec/FileIO.zip}
 }
+\tableofcontents
 
-\subsection{ASCII Files} \mFun{\Rfunction{read.txt.long} \Rfunction{read.txt.wide} \Rfunction{write.txt.long} \Rfunction{write.txt.wide}}
+\section{Introduction}
+This document describes how spectra can be imported into \chy objects. Some possibilities to export \chy objects as files are mentioned, too.
 
-Currently, \Rclass{hyperSpec} provides four functions for general
-ASCII data import and export:
-\begin{description}
-\setlength{\labelwidth}{3cm}
-\setlength{\itemindent}{2.2cm}
-\item [{\Rfunction{read.txt.long}}] import long format ASCII files, i.e.
-one intensity value per row
-\item [{\Rfunction{read.txt.wide}}] import wide format ASCII files, i.e.
-one spectrum per row
-\item [{\Rfunction{write.txt.long}}] export long format ASCII files
-\item [{\Rfunction{write.txt.wide}}] export wide format ASCII files
-\end{description}
+The most basic funtion to create \chy objects is \Rfunction{new ("hyperSpec")} (section~\ref{sec:new}). It makes a \chy object from data already in R's workspace. Thus, once the spectra are imported into R, conversion to \chy objects is straightforward.
+
+However, \phy comes with predifined import functions for different data formats.
+This document divides the discussion into dealing with ASCII files (section) and binary file formats.
+If data export for the respective format is possible, it is discussed in the same sections.
+As sometimes the actual data written by the spectrometer software exhibits peculiarities, \phy offers specialized import functions. These are in general named after the data format followed by the manufacturer (\eg read.ENVI.Nicolet).
+
+Finally, we give overview lists of the directly supported file formats: sorted by manufacturer (appendix~\ref{sec:manufacturer}) and by file format (appendix~\ref{sec:fileformats})
+
+
+\section{Creating a \chy object with \Rfunction{new}}
+\label{sec:new}
+If the data is in R's workspace, a \Rclass{hyperSpec} object is created by:
+\begin{Schunk}
+  \begin{Sinput}
+spc <- new ("hyperSpec", spc, wavelength, data, label)}
+\end{Sinput}
+\end{Schunk}
+With the arguments:
+\begin{labeling}{\Rcode{wavelength}}
+\item [\Rcode{spc}] the spectra matrix
+\item [\Rcode{wavelength}] the wavelength axis vector
+\item [\Rcode{data}] the extra data (possibly already including the spectra matrix in column   \texttt{spc})
+\item [\Rcode{label}] a list with the proper labels. Do not forget the
+wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
+axis label in \Rcode{\$spc}.
+\end{labeling}
+
+Thus, once your data is in R's workspace, creating a \chy object is easy. I suggest wrapping the code to import your data and the line joining it into a \chy object by your own import function. You are more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import} gives an example of how to wrap up the code.
+
+\section{ASCII files}
+\label{sec:ascii-files}
+\subsection{ASCII Files} 
+
+Currently, \Rclass{hyperSpec} provides four functions for general ASCII data import and export:
+\begin{labeling}{\Rfunction{write.txt.wide}}
+\item [\Rfunction{read.txt.long}] import long format ASCII files, \ie one intensity value per row
+\item [\Rfunction{read.txt.wide}] import wide format ASCII files, \ie one spectrum per row
+\item [\Rfunction{write.txt.long}] export long format ASCII files
+\item [\Rfunction{write.txt.wide}] export wide format ASCII files
+\end{labeling}
+
 The import functions immediately return a \Rclass{hyperSpec} object.
+
+Internally, they use \Rfunction{read.table}, a very powerful ASCII import function.
+
+R supplies another ASCII import function, \Rfunction{scan}.  \Rfunction{scan} imports numeric data matrices and is faster than \Rfunction{read.table}, but cannot import column names. 
+If your data does not contain a header or it is not important and can safely be skipped, you may want to import your data using \Rfunction{scan}.
+
+
+\subsection{ASCII files with samples in columns}
+\label{sec:ascii-files-cols}
+
+Richard Pena from Pierre Fabre asked about importing another ASCII file type:
+\begin{quote}
+\emph{\noindent Triazine5\_31.txt file corresponds to X ray powder diffraction data (Bruker AXS). The native files data ``.raw'' are read with EVA software then they are converted into .uxd file with the File Exchange software (Bruker AXS). The  .uxd file are opened with Excel software and saved as .txt file, csv file (ChemoSpec) or xls.\\
+The first and following columns corresponds to the angle diffraction and the intensity values of samples respectively.}
+\end{quote}
+
+This file thus differs from the ASCII formats discussed above in that the samples are actually in columns whereas \chy expects them to be in rows. The header line gives the name of the sample.
+Import is straightforward, just the spectra matrix needs to be transposed to make a \chy object:
+<<read.uxd>>=
+file <- read.table ("rawdata/Triazine 5_31.txt", header = TRUE, dec = ",", sep = "\t")
+
+triazine <- new ("hyperSpec", wavelength = file [,1], spc = t (file [, -1]),
+                 data = data.frame (sample = colnames (file [, -1])),
+                 label = list (.wavelength = expression (2 * theta / degree), 
+                               spc = "I / a.u."))
+triazine
+@
+<<plot-triazine, fig = TRUE>>=
+plot (triazine)
+@
+
+\subsection{Manufacturer-Specific ASCII Formats}
+\pageref{sec:writing-Import}
+
+\subsubsection{scan.txt.Renishaw}
+\label{sec:scan.txt.renishaw}
+
+Renishaw's Wire software comes with an file format converter. This program can produce a long ASCII format, .spc or .jdx files.
+
+An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}.
+We cannot recommend using the .spc file format as it does not take into account the varying data point spacing along the wavelength axis (due to the grating geometry)
+
+
+<<scan.txt.Renishaw>>=
+paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
+paracetamol
+@
+
+The converter also offers to write .spc files. We experienced however, that this conversion is not fully reliable: maps were saved as depth profile, loosing all spatial information. Also, an evenly spaced wavelength axis was produced, although this was de-selected in the converter. We therefore recommend using the ASCII format.
+
+
+
+\section{Binary file formats}
+\label{sec:binary-file-formats}
+
+\section{Writing your own Import Function}
+\label{sec:writing-Import}
+This section gives examples of how to write import functions.
+
+\subsection{Example 1: read.txt.PerkinElmer}
+\label{sec:example-1:-read.txt.PE}
+The first example is importing the raw data of the fluorescence data set.
+
+The raw spectra are in Perkin Elmer's ASCII file format, one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
+
+We need a function that automatically reads all files specified by a pattern, such as \texttt{*.txt}. In order to gain some speed, the spectra matrix should be preallocated after the first file is read. 
+
+A short examination of the files (\texttt{flu*.txt} in directory \texttt{rawdata}) reveals that the actual spectrum starts at line 55, after a line containing \texttt{\#DATA}.
+As no other information of the files is to be extracted, it is easier to skip the first 54 lines instead of searching for the line after \texttt{\#DATA}. 
+
+The resulting import function is saved as an .R file, that can be easily  \Rfunction{source}d into an R session:
+\VerbatimInput[frame=single, label={read.txt.PerkinElmer.R}, formatcom=\footnotesize]{read.txt.PerkinElmer.R}
+
+Note, that labels giving the correct units (\eg for axis labels) are set. The label with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
+
+\subsection{Example 2: read.uxd.Bruker}
+\label{sec:read.uxd.Bruker}
+
+
+
+\appendix
+
+\section{I/O Functions by Manufacturer}
+\label{sec:manufacturer}
+
+\section{I/O Functions by File Format}
+\label{sec:fileformats}
+
+
+
 
 \subsection{Matlab Files}
 
@@ -60,19 +182,11 @@ such import filters to \Rpackage{hyperSpec}: send me (\href{mailto:cbeleites@uni
 the documented code (either .R + .Rd file or Roxygen commented .R).
 
 \subsubsection{Renishaw}
-\label{sec:renishaw}
+\label{sec:scan.txt.Renishaw}
 
-For the long ASCII format written by Renishaw's converter, an
-optimized import function is already available: \Rfunction{scan.txt.Renishaw}. \mFun{\Rfunction{scan.txt.Renishaw}}
-
-<<scan.txt.Renishaw>>=
-paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
-paracetamol
-@
-
-The converter also offers to write .spc files. We experienced however, that this conversion is not fully reliable: maps were saved as depth profile, loosing all spatial information. Also, an evenly spaced wavelength axis was produced, although this was de-selected in the converter. We therefore recommend using the ASCII format.
 
 \subsubsection{Bruker FTIR Imaging}
+\label{sec:read.ENVI.Bruker}
 We use \Rfunction{read.ENVI} to import IR-Images collected with a Bruker Hyperion spectrometer with OPUS software. As mentioned above, the header files are frequently missing. We found the necessary information to be:
 <<eval=FALSE>>=
 header <- list (samples = 64 * no.images.in.row,
@@ -85,6 +199,7 @@ header <- list (samples = 64 * no.images.in.row,
 No spatial information is given in the ENVI header (if correctly written). The lateral coordinates can be setup by specifying origin and pixel size for $x$ and $y$ directions. For details please see the help page.
 
 \subsubsection{Nicolet FTIR Imaging}
+\label{sec:read.ENVI.Nicolet}
 Also Nicolet saves imaging data in ENVI files. These files use some non-standard keywords in the header file that should allow to reconstruct the lateral coordinates as well as the spectral axes' units. 
 
 There is indication that the position of the first spectrum is recorded in \mum{}, while the pixel size is in mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
@@ -93,6 +208,7 @@ Also here, giving the correct offset and pixel size values as function arguments
 
 
 \subsubsection{Kaiser Raman Maps}
+\label{sec:read.spc.KaiserMap}
 Spectra obtained using Kaiser's Hologram software can be saved either in their own .hol format and imported into Matlab (from where the data may be written to a .mat file readable by \Rpackage{R.matlab}'s \Rfunction{readMat}. Alternatively, Hologram can write ASCII files and .spc files. We found working with .spc files the best option. 
 
 \phy provides the function \Rfunction{read.spc.KaiserMap} to easily import spatial collections of .spc files written by Kaiser's Hologram software. The filenames of all .spc files to be read into one \chy object can be provided either in a character vector or as a wildcard expression (\eg \textquotedbl path/to/files/*.spc\textquotedbl ).
@@ -120,8 +236,42 @@ axis label in \Rcode{\$spc}.
 \end{description}
 
 \section{Existing Filters}
+
 \section{Extending I/O Functions}
 \section{Completely New Functions}
+
+\noindent
+\begin{footnotesize}
+\begin{tabular}{llll}
+  \textbf{Format} & \textbf{Manufacturer} & \textbf{Function} & \textbf{see} \\[1em]
+\multicolumn{4}{l}{\textbf{ASCII file formats}}\\[1ex]
+<<results=tex, echo = FALSE>>=
+fileformats <- read.table ("fileformats.txt", header = TRUE, sep = "\t")
+i <- order (fileformats$Name)
+res <- apply (fileformats [i,][fileformats$X.Type [i] == "ASCII",], 1, 
+       function (x) {
+         cat (x [2], "&", x [3])
+         if (nchar (x [4]) > 0)
+           cat (" (", x[4],  ")", sep = "")
+         cat (" & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], "}, p. \\pageref{", 
+              x[6],"} \\\\\n",
+              sep = "")
+       })
+@
+\multicolumn{4}{l}{\textbf{binary file formats}}\\[1ex]
+<<results=tex, echo = FALSE>>=
+res <- apply (fileformats [i,][fileformats$X.Type [i] == "binary",], 1, 
+       function (x) {
+         cat (x [2], "&", x [3])
+         if (nchar (x [4]) > 0)
+           cat (" (", x[4],  ")", sep = "")
+         cat (" & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], "}, p. \\pageref{sec:", 
+              x[6],"} \\\\\n",
+              sep = "")
+       })
+@
+\end{tabular}
+\end{footnotesize}
 
 <<cleanup, echo = FALSE, results = hide>>=
 rm (list = ls () ) 

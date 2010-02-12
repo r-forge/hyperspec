@@ -4,7 +4,7 @@
 ###
 ### TODO: look for other matrices/arrays to expand
 
-as.long.df <- function (x, rownames = FALSE) {
+as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE) {
   .is.hy (x)
   validObject (x)
 
@@ -20,6 +20,10 @@ as.long.df <- function (x, rownames = FALSE) {
     tmp <- cbind (data.frame (.wavelength = rep (x@wavelength, each = nrow (x)),
                               spc = as.numeric (x [[]])),
                   tmp)
+    if (wl.factor){
+      tmp$.wavelength <- as.factor (tmp.wavelength)
+      levels (tmp$.wavelength) <- colnames (x@data$spc)
+    }
   }
 
   if (rownames)

@@ -4,6 +4,7 @@
 \alias{nrow,hyperSpec-method}
 \alias{nwl}
 \alias{dim,hyperSpec-method}
+\alias{length,hyperSpec-method}
 
 \title{The Number of Rows (Spectra), Columns, and Data Points per
   Spectrum of an hyperSpec Object)}
@@ -19,28 +20,38 @@
   i.e. the length of each spectrum.
 
   \code{dim} returns all three values in a vector.
+
+  \code{length} is a synonym for \code{nrow}. It is supplied so that
+  \code{seq_along (x)} returns a sequence to index each spectrum.
 }
 \usage{
 \S4method{ncol}{hyperSpec}(x)
 \S4method{nrow}{hyperSpec}(x)
 nwl (x)
 \S4method{dim}{hyperSpec}(x)
+\S4method{length}{hyperSpec}(x)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
 }
 \value{
-  \code{nrow}, \code{ncol}, and \code{nwl} return an \code{integer}.
+  \code{nrow}, \code{ncol}, \code{nwl}, and \code{length},return an \code{integer}.
   
    \code{dim} return a vector of length 3.
 }
 \author{C. Beleites}
-\seealso{\code{\link[base]{nrow}}, \code{\link[base]{ncol}}, and \code{\link[base]{dim}}}
+\seealso{\code{\link[base]{nrow}}, \code{\link[base]{ncol}}, 
+  \code{\link[base]{dim}}, and   \code{\link[base]{length}}
+
+  \code{\link{seq.hyperSpec}}, and  \code{\link[base]{seq_along}}, 
+}
+
 \examples{
 nrow (chondro)
 ncol (chondro)
 nwl  (chondro)
 dim (chondro)
+length (chondro)
 }
 
 \keyword{methods}

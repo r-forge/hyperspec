@@ -45,35 +45,13 @@ The function should automatically read in all files specified by a pattern, such
 
 Note, that labels giving the correct units (e.g. for axis labels) are set. The label with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
 
-<<importfun>>=
-read.PE <- function (files = "*.txt", skip = 54) {
-	files <- Sys.glob (files)
+The function is saved in a .R file:
+\VerbatimInput[frame=single, label={read.txt.PerkinElmer.R}, formatcom=\footnotesize]{read.txt.PerkinElmer.R}
 
-	buffer <- matrix (scan (files [1], skip = skip), ncol = 2, byrow = TRUE)
-
-	wavelength <- buffer [, 1]
-	spc <- matrix (ncol = nrow (buffer), nrow = length (files))
-
-	spc [1, ] <-  buffer [, 2]
-
-	for (f in seq (along = files)[-1]) {
-
-		buffer <- matrix (scan (files [f], skip = skip), ncol = 2, byrow = TRUE)
-
-		if (! all.equal (buffer [, 1], wavelength))
-			stop (paste(files [f], "has different wavelength axis."))
-
-		spc [f, ] <- buffer[, 2]
-	}
-
-	new ("hyperSpec", wavelength = wavelength, spc = spc,
-			label = list (.wavelength = expression (lambda[fl] / nm),
-					spc = "I / a.u."))
-}
-@
-From now on, the function can be used:
-<<import>>=
-flu <- read.PE ("rawdata/flu?.txt")
+That needs to be \Rfunction{source}d before use:
+<<read.txt.PE>>=
+source ("read.txt.PerkinElmer.R")
+flu <- read.txt.PerkinElmer ("rawdata/flu?.txt")
 @
 Now the spectra are in a \Rclass{hyperSpec} object and can be examined e.g. by
 <<rawspc>>=
