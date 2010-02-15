@@ -97,39 +97,14 @@ triazine
 plot (triazine)
 @
 
-\subsection{Manufacturer-Specific ASCII Formats}
-\pageref{sec:writing-Import}
-
-\subsubsection{scan.txt.Renishaw}
-\label{sec:scan.txt.renishaw}
-
-Renishaw's Wire software comes with an file format converter. This program can produce a long ASCII format, .spc or .jdx files.
-
-An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}.
-We cannot recommend using the .spc file format as it does not take into account the varying data point spacing along the wavelength axis (due to the grating geometry)
-
-
-<<scan.txt.Renishaw>>=
-paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
-paracetamol
-@
-
-The converter also offers to write .spc files. We experienced however, that this conversion is not fully reliable: maps were saved as depth profile, loosing all spatial information. Also, an evenly spaced wavelength axis was produced, although this was de-selected in the converter. We therefore recommend using the ASCII format.
-
-
-
-\section{Binary file formats}
-\label{sec:binary-file-formats}
-
 \section{Writing your own Import Function}
 \label{sec:writing-Import}
 This section gives examples of how to write import functions.
 
 \subsection{Example 1: read.txt.PerkinElmer}
 \label{sec:example-1:-read.txt.PE}
-The first example is importing the raw data of the fluorescence data set.
 
-The raw spectra are in Perkin Elmer's ASCII file format, one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
+The raw spectra of the \Robject{flu} data set (see also the respective vignette) are in Perkin Elmer's ASCII file format, one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
 
 We need a function that automatically reads all files specified by a pattern, such as \texttt{*.txt}. In order to gain some speed, the spectra matrix should be preallocated after the first file is read. 
 
@@ -139,10 +114,79 @@ As no other information of the files is to be extracted, it is easier to skip th
 The resulting import function is saved as an .R file, that can be easily  \Rfunction{source}d into an R session:
 \VerbatimInput[frame=single, label={read.txt.PerkinElmer.R}, formatcom=\footnotesize]{read.txt.PerkinElmer.R}
 
-Note, that labels giving the correct units (\eg for axis labels) are set. The label with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
+Note how labels giving the correct units (\eg for axis labels) are set. The label with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
 
 \subsection{Example 2: read.uxd.Bruker}
 \label{sec:read.uxd.Bruker}
+
+Bruker X-ray diffraction data may be converted to .uxd files, a long ASCII format. Again, multiple files need to be imported into one \chy object.
+
+
+\section{Binary file formats}
+\label{sec:binary-file-formats}
+
+\subsection{Matlab Files}
+\label{sec:readMat}
+Matlab files can be read and written using the package \Rpackage{R.matlab}\citep{R.matlab},
+which is available at CRAN and can be installed by \Rcode{install.packages (\textquotedbl R.matlab\textquotedbl)}.
+\begin{Schunk}
+  \begin{Sinput}
+spc.mat <- readMat ("spectra.mat")
+\end{Sinput}
+\end{Schunk}
+will import 
+
+If the .mat file was saved with compression, the additional package \Rpackage{Rcompression} is needed. It can be installed from omegahat: 
+\begin{Schunk}
+  \begin{Sinput}
+install.packages("Rcompression", repos = "http://www.omegahat.org/R")
+)
+\end{Sinput}
+\end{Schunk}
+See the documentation of \Rpackage{R.matlab} for more details and possibly needed further packages.
+
+\Rfunction{readMat} imports the .mat file's contents into a list. The \chy object can be created using \Rfunction{new}, see~\ref{sec:new}~(p.–\pageref{sec:new}).
+
+Again, you probably want to wrap the import of your matlab files into a function.
+
+\subsubsection{Writing Matlab Files}
+\label{sec:writing-matlab-files}
+\Rpackage{R.matlab}'s function \Rfunction{writeMat} can be used to write R objects into .mat files.
+To save an \chy object \Robject{x} for use in Matlab, you most likely want to save:
+\begin{itemize}
+\item the wavelength axis as obtained by \Rcode{wl (x)},
+\item the spectra matrix as obtained by \Rcode{x [[]]}, and
+\item possibly also the extra data as obtained by \Rcode{x\$..}
+\item as well as the axis labels \Rcode{labels (x)}.
+\item Alternatively, \Rcode{x\$.} yields the extra data together with the spectra matrix.
+\end{itemize}
+However, it may be convenient to transform the saved data according to how it is needed in Matlab. The functions \Rfunction{as.long.df} and \Rfunction{as.wide.df} may prove useful for reshaping the data.
+
+\subsection{ENVI Files}
+\label{sec:envi-files}
+\phy's function \Rfunction{read.ENVI} reads ENVI files. ENVI files are binary data accompanied by an ASCII header file.
+
+As we experienced missing header files (Bruker's Opus software frequently produces header files without any content), the data that would usually be read from the header file can also be handed to \Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should contain.
+
+\subsection{spc Files}
+\label{sec:spc-files}
+Thermo Galactic's .spc file format can be read by \Rfunction{read.spc}. 
+
+\section{Manufacturer-Specific Discussion of File Import}
+
+\subsection{Renishaw Raman Spectrometers}
+\label{sec:scan.txt.renishaw}
+
+Renishaw's Wire software comes with an file format converter. This program can produce a long ASCII format, .spc or .jdx files.
+
+An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}.
+
+<<scan.txt.Renishaw>>=
+paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
+paracetamol
+@
+
+The converter also offers to write .spc files. We experienced that this conversion is not fully reliable: maps were saved as depth profile, loosing all spatial information. Also, an evenly spaced wavelength axis was produced, although this was de-selected in the converter. We therefore recommend using the ASCII format.
 
 
 
@@ -157,20 +201,6 @@ Note, that labels giving the correct units (\eg for axis labels) are set. The la
 
 
 
-\subsection{Matlab Files}
-
-Matlab files can be read and written using the package \Rpackage{R.matlab}\citep{R.matlab},
-which is available at CRAN and can be installed by \Rcode{install.packages (\textquotedbl{}R.matlab\textquotedbl{})}.
-
-\subsection{ENVI Files}
-\label{sec:envi-files}
-\phy provides a function to read ENVI files, \Rfunction{read.ENVI}\mFun{read.ENVI}. ENVI files are binary data accomanied by an ASCII header file.
-
-As we experienced missing header files (Bruker's Opus software frequently produces header files without any content), the data that would usually be read from the header file can also be handed to \Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should contain.
-
-\subsection{spc Files}
-\label{sec:spc-files}
-Thermo Galactic's .spc file format can be read by \Rfunction{read.spc}. 
 
 \subsection{Manufacturer Specific Import Functions}
 
@@ -235,16 +265,13 @@ wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
 axis label in \Rcode{\$spc}.
 \end{description}
 
-\section{Existing Filters}
-
-\section{Extending I/O Functions}
-\section{Completely New Functions}
+\section{File Import by Format}
 
 \noindent
 \begin{footnotesize}
-\begin{tabular}{llll}
-  \textbf{Format} & \textbf{Manufacturer} & \textbf{Function} & \textbf{see} \\[1em]
-\multicolumn{4}{l}{\textbf{ASCII file formats}}\\[1ex]
+\begin{tabular}{llllp{3.4cm}}
+  \textbf{Format} & \textbf{Manufacturer} & \textbf{Function} & \textbf{see}  & \textbf{Notes}\\[1em]
+\multicolumn{4}{l}{\emph{ASCII file formats}}\\[1ex]
 <<results=tex, echo = FALSE>>=
 fileformats <- read.table ("fileformats.txt", header = TRUE, sep = "\t")
 i <- order (fileformats$Name)
@@ -254,11 +281,11 @@ res <- apply (fileformats [i,][fileformats$X.Type [i] == "ASCII",], 1,
          if (nchar (x [4]) > 0)
            cat (" (", x[4],  ")", sep = "")
          cat (" & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], "}, p. \\pageref{", 
-              x[6],"} \\\\\n",
+              x[6],"} & ", x [7], "\\\\\n",
               sep = "")
        })
 @
-\multicolumn{4}{l}{\textbf{binary file formats}}\\[1ex]
+\multicolumn{4}{l}{\emph{binary file formats}}\\[1ex]
 <<results=tex, echo = FALSE>>=
 res <- apply (fileformats [i,][fileformats$X.Type [i] == "binary",], 1, 
        function (x) {
@@ -266,7 +293,39 @@ res <- apply (fileformats [i,][fileformats$X.Type [i] == "binary",], 1,
          if (nchar (x [4]) > 0)
            cat (" (", x[4],  ")", sep = "")
          cat (" & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], "}, p. \\pageref{sec:", 
-              x[6],"} \\\\\n",
+              x[6],"} & ", x [7], "\\\\\n",
+              sep = "")
+       })
+@
+\end{tabular}
+\end{footnotesize}
+
+\section{File Import by Manufacturer}
+\noindent
+\begin{footnotesize}
+\begin{tabular}{llllp{3.4cm}}
+  \textbf{Manufacturer} & \textbf{Format} & \textbf{Function} & \textbf{see}  & \textbf{Notes}\\[1em]
+\multicolumn{4}{l}{\emph{Manufacturers}}\\[1ex]
+<<results=tex, echo = FALSE>>=
+res <- apply (fileformats [i,][fileformats$Manufacturer [i] != "",], 1, 
+       function (x) {
+         cat (x [3])
+         if (nchar (x [4]) > 0)
+           cat (" (", x[4],  ")", sep = "")
+         cat ("&", x [2], " & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], 
+              "}, p. \\pageref{sec:", x[6],"} & ", x [7], "\\\\\n",
+              sep = "")
+       })
+@
+%\hspace{1ex}
+\multicolumn{4}{l}{\emph{General import functions}}\\[1ex]
+<<results=tex, echo = FALSE>>=
+fileformats <- read.table ("fileformats.txt", header = TRUE, sep = "\t")
+i <- order (fileformats$Manufacturer)
+res <- apply (fileformats [i,][fileformats$Manufacturer [i] == "",], 1, 
+       function (x) {
+         cat (x [3], "&", x [2], " & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], 
+              "}, p. \\pageref{sec:", x[6],"} & ", x [7], "\\\\\n",
               sep = "")
        })
 @

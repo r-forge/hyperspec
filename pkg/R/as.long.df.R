@@ -21,7 +21,7 @@ as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE) {
                               spc = as.numeric (x [[]])),
                   tmp)
     if (wl.factor){
-      tmp$.wavelength <- as.factor (tmp.wavelength)
+      tmp$.wavelength <- as.factor (tmp$.wavelength)
       levels (tmp$.wavelength) <- colnames (x@data$spc)
     }
   }
