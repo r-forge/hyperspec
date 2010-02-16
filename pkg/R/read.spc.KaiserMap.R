@@ -11,7 +11,12 @@ read.spc.KaiserMap <- function (files,
     
 	if (glob)
 		files <- Sys.glob (files)
-	
+
+   if (length (files) == 0){
+     warning ("No files found.")
+     return (new ("hyperSpec"))
+   }
+
 	keys.log2data <- c ('Stage_X_Position','Stage_Y_Position','Stage_Z_Position', keys.log2data)
 	
 	data <- data.frame (x = rep (NA, length (files)),
@@ -44,6 +49,8 @@ read.spc.KaiserMap <- function (files,
 							last.header = tmp$log$long$header,
 							last.log = tmp$log$long$log))
 
+   data$file <- files
+   
 	new ("hyperSpec", wavelength = spc$wavelength, spc = spc$spc, data = data, 
 			label = tmp$label,
 			log = log)

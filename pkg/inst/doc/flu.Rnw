@@ -41,17 +41,12 @@ Perkin Elmer LS50-B fluorescence spectrometer at 350 nm excitation.
 \section{Writing an Import Function}
 The raw spectra are in Perkin Elmer's ASCII file format, one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
 
-The function should automatically read in all files specified by a pattern, such as \texttt{*.txt}. In order to gain some speed, the spectra matrix is preallocated after the first file is read.  Also, the number of header lines are predefined instead of searching for the line after \texttt{\#DATA}.
+The function to import these files,  \Rfunction{scan.txt.PerkinElmer}, is discussed in the ``FileIO'' vignette, please refer to that document for details.
 
-Note, that labels giving the correct units (e.g. for axis labels) are set. The label with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
-
-The function is saved in a .R file:
-\VerbatimInput[frame=single, label={read.txt.PerkinElmer.R}, formatcom=\footnotesize]{read.txt.PerkinElmer.R}
-
-That needs to be \Rfunction{source}d before use:
+It  needs to be \Rfunction{source}d before use:
 <<read.txt.PE>>=
-source ("read.txt.PerkinElmer.R")
-flu <- read.txt.PerkinElmer ("rawdata/flu?.txt")
+source ("scan.txt.PerkinElmer.R")
+flu <- scan.txt.PerkinElmer ("rawdata/flu?.txt", skip = 54)
 @
 Now the spectra are in a \Rclass{hyperSpec} object and can be examined e.g. by
 <<rawspc>>=
@@ -73,6 +68,14 @@ Now the \Rclass{hyperSpec}  object \Robject{flu} contains two data columns, hold
 respective concentrations. The dollar operator returns such a data column:
 <<newc>>=
 flu$c
+@
+
+\section{Dropping data columns}
+\label{sec:dropp-data-columns}
+\Rfunction{scan.txt.PerkinElmer} added a column with the file names that we don't need.
+It is therefore deleted:
+<<delcol>>=
+flu$file <- NULL
 @
 
 \section{Linear Calibration}

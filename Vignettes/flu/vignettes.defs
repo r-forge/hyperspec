@@ -66,10 +66,10 @@
 \end{tikzpicture}%
 }
 
-\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
-\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
-\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
-\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{\small{#1}}}}{#1}}
+\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
 
 \newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
 \newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}

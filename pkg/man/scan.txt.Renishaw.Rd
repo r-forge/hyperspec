@@ -29,7 +29,12 @@ If the file is so large that it sould be read in chunks and \code{nspc} is not g
 \author{C. Beleites}
 \arguments{\item{file}{file name}
 \item{data}{type of file, one of "spc", "xyspc", "zspc", "depth", "ts", see details.}
-\item{nlines}{number of lines to read in each chunk, if 0 or less read whole file at once}
+\item{nlines}{number of lines to read in each chunk, if 0 or less read
+  whole file at once.
+
+\code{nlines} must cover at least one complete
+spectrum,i.e. \code{nlines} must be at least the number of data points
+per spectrum. Reasonable values start at \textgreater \code{1e6}.}
 \item{nspc}{number of spectra in the file}
 \item{short, user, date}{passed to logentry}}
 \keyword{IO}
