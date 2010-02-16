@@ -1,0 +1,13 @@
+﻿Type	Name	Manufacturer	Spectroscopy	Function	Link	Notes
+ASCII	long txt			read.txt.long	read.txt.long	
+ASCII	wide txt			read.txt.wide	read.txt.wide	
+ASCII	long txt	Renishaw	Raman	scan.txt.Renishaw	scan.txt.Renishaw	
+ASCII	long txt	Perkin Elmer	Fluorescence	read.txt.PerkinElmer	read.txt.PerkinElmer	Reads multiple files.
+ASCII	uxd	Bruker	X-Ray diffraction	scan.uxd.Bruker	scan.uxd.Bruker	Reads multiple files.
+binary	Matlab	Matlab		R.matlab::readMat	readMat	
+binary	ENVI			read.ENVI	read.ENVI	
+binary	ENVI	Bruker	FTIR Imaging	read.ENVI	read.ENVI.Bruker	
+binary	ENVI	Nicolet	FTIR Imaging	read.ENVI.Nicolet	read.ENVI.Nicolet	
+binary	spc			read.spc	read.spc	
+binary	spc	Kaiser	Raman Map	read.spc.KaiserMap	read.spc.KaiserMap	Reads multiple files
+binary	spc	Renishaw	Raman	read.spc	scan.txt.Renishaw	\emph{Not} recommended, see discussion of ASCII files.

@@ -55,23 +55,18 @@ Thus, once your data is in R's workspace, creating a \chy object is easy. I sugg
 
 \section{ASCII files}
 \label{sec:ascii-files}
-\subsection{ASCII Files} 
 
-Currently, \Rclass{hyperSpec} provides four functions for general ASCII data import and export:
+Currently, \Rclass{hyperSpec} provides two functions for general ASCII data import:
 \begin{labeling}{\Rfunction{write.txt.wide}}
-\item [\Rfunction{read.txt.long}] import long format ASCII files, \ie one intensity value per row
-\item [\Rfunction{read.txt.wide}] import wide format ASCII files, \ie one spectrum per row
-\item [\Rfunction{write.txt.long}] export long format ASCII files
-\item [\Rfunction{write.txt.wide}] export wide format ASCII files
+\item [\Rfunction{read.txt.long}] imports long format ASCII files, \ie one intensity value per row
+\item [\Rfunction{read.txt.wide}] imports wide format ASCII files, \ie one spectrum per row
 \end{labeling}
 
 The import functions immediately return a \Rclass{hyperSpec} object.
 
 Internally, they use \Rfunction{read.table}, a very powerful ASCII import function.
-
 R supplies another ASCII import function, \Rfunction{scan}.  \Rfunction{scan} imports numeric data matrices and is faster than \Rfunction{read.table}, but cannot import column names. 
 If your data does not contain a header or it is not important and can safely be skipped, you may want to import your data using \Rfunction{scan}.
-
 
 \subsection{ASCII files with samples in columns}
 \label{sec:ascii-files-cols}
@@ -84,8 +79,8 @@ The first and following columns corresponds to the angle diffraction and the int
 
 This file thus differs from the ASCII formats discussed above in that the samples are actually in columns whereas \chy expects them to be in rows. The header line gives the name of the sample.
 Import is straightforward, just the spectra matrix needs to be transposed to make a \chy object:
-<<read.uxd>>=
-file <- read.table ("rawdata/Triazine 5_31.txt", header = TRUE, dec = ",", sep = "\t")
+<<read.txt.t>>=
+file <- read.table ("txt.t/Triazine 5_31.txt", header = TRUE, dec = ",", sep = "\t")
 
 triazine <- new ("hyperSpec", wavelength = file [,1], spc = t (file [, -1]),
                  data = data.frame (sample = colnames (file [, -1])),
@@ -97,26 +92,36 @@ triazine
 plot (triazine)
 @
 
-\section{Writing your own Import Function}
+\subsection{ASCII Export} 
+ASCII export can be done in wide and long format using \Rfunction{write.txt.long} and \Rfunction{write.txt.wide}. If you need a specific header or footer, use R's functions for writing files: \Rfunction{write.table}, \Rfunction{write}, \Rfunction{cat} and so on offer fine-grained control of writing ASCII files.
+
+\subsection{Writing your own Import Function}
 \label{sec:writing-Import}
 This section gives examples of how to write import functions.
 
-\subsection{Example 1: read.txt.PerkinElmer}
+\subsubsection{Example 1: read.txt.PerkinElmer}
 \label{sec:example-1:-read.txt.PE}
 
 The raw spectra of the \Robject{flu} data set (see also the respective vignette) are in Perkin Elmer's ASCII file format, one spectrum per file. The files are completely ASCII text, with the actual spectra starting at line 55.
 
 We need a function that automatically reads all files specified by a pattern, such as \texttt{*.txt}. In order to gain some speed, the spectra matrix should be preallocated after the first file is read. 
 
-A short examination of the files (\texttt{flu*.txt} in directory \texttt{rawdata}) reveals that the actual spectrum starts at line 55, after a line containing \texttt{\#DATA}.
+A short examination of the files (\texttt{flu*.txt} in directory \texttt{txt.PerkinElmer}) reveals that the actual spectrum starts at line 55, after a line containing \texttt{\#DATA}.
 As no other information of the files is to be extracted, it is easier to skip the first 54 lines instead of searching for the line after \texttt{\#DATA}. 
 
 The resulting import function is saved as an .R file, that can be easily  \Rfunction{source}d into an R session:
-\VerbatimInput[frame=single, label={read.txt.PerkinElmer.R}, formatcom=\footnotesize]{read.txt.PerkinElmer.R}
+\VerbatimInput[frame=single, label={scan.txt.PerkinElmer.R}, formatcom=\footnotesize]{scan.txt.PerkinElmer.R}
 
 Note how labels giving the correct units (\eg for axis labels) are set. The label with the special name \Rcode{.wavelength} corresponds to the wavelength axis, all data columns should have a label with the same name. The spectra are always in a data column called \Rcode{spc}.
 
-\subsection{Example 2: read.uxd.Bruker}
+Thus,
+<<scan.txt.PerkinElmer>>=
+source ("scan.txt.PerkinElmer.R")
+scan.txt.PerkinElmer ("txt.PerkinElmer/*.txt")
+@
+imports the spectra.
+
+\subsubsection{Example 2: read.uxd.Bruker}
 \label{sec:read.uxd.Bruker}
 
 Bruker X-ray diffraction data may be converted to .uxd files, a long ASCII format. Again, multiple files need to be imported into one \chy object.
@@ -140,12 +145,11 @@ If the .mat file was saved with compression, the additional package \Rpackage{Rc
 \begin{Schunk}
   \begin{Sinput}
 install.packages("Rcompression", repos = "http://www.omegahat.org/R")
-)
 \end{Sinput}
 \end{Schunk}
 See the documentation of \Rpackage{R.matlab} for more details and possibly needed further packages.
 
-\Rfunction{readMat} imports the .mat file's contents into a list. The \chy object can be created using \Rfunction{new}, see~\ref{sec:new}~(p.–\pageref{sec:new}).
+\Rfunction{readMat} imports the .mat file's contents as a list. The variables in the .mat file are properly named elements of the list. The \chy object can be created using \Rfunction{new}, see~\ref{sec:new}~(p.~\pageref{sec:new}).
 
 Again, you probably want to wrap the import of your matlab files into a function.
 
@@ -164,13 +168,44 @@ However, it may be convenient to transform the saved data according to how it is
 
 \subsection{ENVI Files}
 \label{sec:envi-files}
-\phy's function \Rfunction{read.ENVI} reads ENVI files. ENVI files are binary data accompanied by an ASCII header file.
+ ENVI files are binary data accompanied by an ASCII header file. \phy's function \Rfunction{read.ENVI} can be used to import them.
 
 As we experienced missing header files (Bruker's Opus software frequently produces header files without any content), the data that would usually be read from the header file can also be handed to \Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should contain.
+
+\subsubsection{ENVI Export}
+\label{sec:envi-export}
+Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI files.
 
 \subsection{spc Files}
 \label{sec:spc-files}
 Thermo Galactic's .spc file format can be read by \Rfunction{read.spc}. 
+
+A vast variety of sub-formats is available. \phy's import function does not support the \emph{old file format} that was used before 1996. In addition, no test data with \emph{w planes} was available -- thus the import of such files could not be tested. If you come across such files, please contact the package maintainer.
+
+These functionality is tested using Thermo Galactic's example files:
+<<read.spc>>=
+## old format files stop with an error:
+old <- paste ("spc", c ('CONTOUR.SPC', 'DEMO 3D.SPC', 'LC DIODE ARRAY.SPC'), sep = "/")
+for (f in old)
+  try (read.spc (f))
+
+## all other files should be good for import
+other <- setdiff (Sys.glob ("spc/*.[sS][pP][cC]"), old)
+for (f in other){
+  spc <- read.spc (f)
+
+  if (is (spc, "hyperSpec"))
+    cat (f, ": ", nrow (spc), " spectrum(a), ", nwl (spc), " data pts / spc.\n", sep = "")
+  else
+    cat (f, ": list of ", length (spc), " spectra, ", 
+         paste (range (sapply (spc, nwl)), collapse = " - "), 
+         " data pts / spc\n", sep = "")
+}
+@
+
+
+Like \Rfunction{read.ENVI}, \Rfunction{read.spc} allows to use pre-defined header values. See the help for 
+
 
 \section{Manufacturer-Specific Discussion of File Import}
 
@@ -182,7 +217,7 @@ Renishaw's Wire software comes with an file format converter. This program can p
 An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}.
 
 <<scan.txt.Renishaw>>=
-paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
+paracetamol <- scan.txt.Renishaw ("txt.Renishaw/paracetamol.txt", "spc")
 paracetamol
 @
 
