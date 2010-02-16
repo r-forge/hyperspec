@@ -1,4 +1,4 @@
-read.txt.PerkinElmer <- function (files = "*.txt", skip = 54, ...) {
+scan.txt.PerkinElmer <- function (files = "*.txt", skip = 54, ...) {
   ## find all files
   files <- Sys.glob (files)
 
@@ -32,4 +32,3 @@ read.txt.PerkinElmer <- function (files = "*.txt", skip = 54, ...) {
        label = list (.wavelength = expression (lambda[fl] / nm),
          spc = "I / a.u."))
 }
-
