@@ -7,8 +7,10 @@
 | ASCII  | JCAMP-DX   |              |                  | -                    | jcamp-dx             | not available                                          |
 | ASCII  | JCAMP-DX   | Renishaw     | Raman            | -                    | jcamp-dx             | not available                                          |
 | binary | Matlab     | Matlab       |                  | R.matlab::readMat    | readMat              |                                                        |
+| binary | hol        | Kaiser       | Raman            | -                    | Kaiser               | via Matlab                                             |
 | binary | ENVI       |              |                  | read.ENVI            | read.ENVI            |                                                        |
 | binary | ENVI       | Bruker       | Infrared Imaging | read.ENVI            | read.ENVI.Bruker     |                                                        |
+| binary | Opus       | Bruker       | Infrared Imaging | -                    | read.ENVI.Bruker     |                                                        |
 | binary | ENVI       | Nicolet      | Infrared Imaging | read.ENVI.Nicolet    | read.ENVI.Nicolet    |                                                        |
 | binary | spc        |              |                  | read.spc             | read.spc             |                                                        |
 | binary | spc        | Kaiser       | Raman Map        | read.spc.KaiserMap   | read.spc.KaiserMap   | Reads multiple files                                   |

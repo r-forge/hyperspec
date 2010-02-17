@@ -3,8 +3,9 @@
 \usepackage{makeidx}
 \makeindex
 
+\input{vignettes}
 \SweaveInput{vignettes.defs}
-\hypersetup{pdftitle={FileIO},
+\hypersetup{pdftitle={FileIO}, 
  pdfauthor={C. Beleites},
  pdfsubject={Vignette File Import and Export for R package hyperSpec},
  pdfkeywords={hyperSpec, data format, file, import, export}}
@@ -37,11 +38,11 @@ maintainer, so that this document can be updated.
 The information should include
 \begin{itemize}
 \item The type of spectroscopy
-\item Spectrometer model and manufacturer
-\item The ``native'' file format
-\item Relevant procedures to convert the file
-\item R code to import the data
-\item Documentation, particularly the description of the data format (if available)
+\item Spectrometer model, manufacturer, and software
+\item The ``native'' file format (including a sample file)
+\item Description of relevant procedures to convert the file
+\item R code to import the data together with an example file that can actually be read by R.
+\item Documentation, particularly the description of the data format
 \end{itemize}
 
 If you need help finding out how to import your data, feel free to ask, preferrably via the mailing
@@ -73,7 +74,6 @@ manufacturer (\eg read.ENVI.Nicolet).
 
 Finally, we give overview lists of the directly supported file formats: sorted by file format
 (appendix~\ref{sec:format}, p.~\pageref{sec:format}), manufacturer (appendix~\ref{sec:manufacturer}, p.~\pageref{sec:manufacturer}),  and by spectroscopy (appendix~\ref{sec:spectroscopy}, p.~\pageref{sec:spectroscopy}).
-
 
 \section{Creating a \chy object with \Rfunction{new}}
 \label{sec:new}
@@ -124,6 +124,7 @@ to import your data using \Rfunction{scan}.
 
 \subsection{ASCII files with samples in columns}
 \label{sec:ascii-files-cols}
+
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("Bruker", "powder diffraction")
 make.all.permutations ("Bruker", "x-ray")
@@ -163,7 +164,7 @@ plot (triazine)
 make.all.permutations ("ASCII", "JCAMP-DX")
 @
 \index{jdx|see{JCAMP-DX}}
-JCAMP-DX files are not supported, as there has not yet been the need to import them.
+JCAMP-DX files\cite{McDonald1988}  are not supported as there has not yet been the need to import them. 
 
 \subsection{ASCII Export} 
 ASCII export can be done in wide and long format using \Rfunction{write.txt.long} and
@@ -219,9 +220,12 @@ data.
 
 \subsection{ENVI Files}
 \label{sec:read.ENVI}
+
 <<echo = FALSE, results = tex>>=
+
 make.all.permutations ("ENVI", "Map", "Infrared")
 make.all.permutations ("ENVI", "Infrared", "Bruker")
+
 @
 \index{FT-IR|see{Infrared}}
 \index{Image|see{Map}}
@@ -239,20 +243,21 @@ Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI fi
 
 \subsection{spc Files}
 \label{sec:read.spc}
+
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("spc", "Kaiser", "Raman")
 make.all.permutations ("spc", "Renishaw", "Raman")
 @
 \index{spc}
 
-Thermo Galactic's .spc file format can be read by \Rfunction{read.spc}. 
+Thermo Galactic's .spc file format\cite{Galactic1997} can be read by \Rfunction{read.spc}. 
 
 A vast variety of sub-formats is available. \phy's import function does not support the \emph{old
 file format} that was used before 1996. In addition, no test data with \emph{w planes} was available
 -- thus the import of such files could not be tested. If you come across such files, please contact
 the package maintainer.
 
-These functionality is tested using Thermo Galactic's example files:
+Here are some tests using Thermo Galactic's example files:
 <<read.spc>>=
 ## old format files stop with an error:
 old <- paste ("spc", c ('CONTOUR.SPC', 'DEMO 3D.SPC', 'LC DIODE ARRAY.SPC'), sep = "/")
@@ -273,10 +278,17 @@ for (f in other){
 }
 @
 
+The header and subheader blocks of spc files store additional information of pre-defined types (see the file format specification\cite{Galactic1997}). Further information can be stored in the so-called log-block at the end of the file, and should be in a key-value format (although even the official example files do not always). 
+This information is often useful (Kaiser's Hologram software \eg stores ).
 
-Like \Rfunction{read.ENVI}, \Rfunction{read.spc} allows to use pre-defined header values. See the
-help for details.
-
+\Rfunction{read.spc} offers four arguments that allow fine-grained control of storing such information in the \chy object. 
+\begin{labeling}{\Rcode{keys.hdr2data}}
+\item[\Rcode{keys.hdr2data}] parameters from the spc file header and subfile header that should become extra data columns
+\item[\Rcode{keys.hdr2log}] parameters from the spc file header and subfile header that should be stored as list entries in the \Rfunarg{long.description} of the log entry
+\item[\Rcode{keys.log2data}] parameters from the spc file log block that should become extra data columns
+\item[\Rcode{keys.log2log}] parameters from the spc file log block that should be stored as list entries in the \Rfunarg{long.description} of the log entry
+\end{labeling}
+The value of these arguments can either be logical or a character vector of parameter names. Note that the header file field names are always lowercase, while the log entries are treated case sensitive.
 
 \section{Manufacturer-Specific Discussion of File Import}
 \subsection{Manufacturer Specific Import Functions}
@@ -286,7 +298,7 @@ spectra into ASCII files. The functions discussed above are written in a very ge
 highly customizable.
 I recommend wrapping these calls with the appropriate settings for
 your spectra format in an import function. You may also consider contributing
-such import filters to \Rpackage{hyperSpec}: send me
+such import filters to \Rpackage{hyperSpec}: send me 
 (\href{mailto:cbeleites@units.it}{cbeleites@units.it})
 the documented code (either .R + .Rd file or Roxygen commented .R).
 
@@ -295,6 +307,7 @@ new converters), please let me know (see the box at the beginning of this docume
 
 \subsection{Bruker FT-IR Imaging}
 \label{sec:read.ENVI.Bruker}
+
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("ENVI", "Infrared", "Bruker")
 make.all.permutations ("ENVI", "Map", "Bruker")
@@ -310,10 +323,10 @@ header <- list (samples = 64 * no.images.in.row,
                 `data type` = 4,
                 interleave = "bip")
 @
-
 No spatial information is given in the ENVI header (if written). The lateral coordinates can be setup
 by specifying origin and pixel size for $x$ and $y$ directions. For details please see the help page.
 
+The proprietary file format of the Opus software is not (yet) supported.
 
 \subsection{Nicolet FT-IR Imaging}
 \label{sec:read.ENVI.Nicolet}
@@ -329,7 +342,9 @@ It seems that the position of the first spectrum is recorded in \mum{}, while th
 mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
 Also here, giving the correct offset and pixel size values as function arguments is possible.
 
-\subsection{Kaiser Optical Systems Raman Maps}
+\subsection{Kaiser Optical Systems Raman}
+\label{sec:Kaiser}
+
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("spc", "Raman", "Kaiser")
 make.all.permutations ("hol", "Raman", "Kaiser")
@@ -345,6 +360,7 @@ unless the spectra are saved in a by-pixel manner.
 
 \subsubsection{Kaiser Optical Systems ASCII Files}
 \label{sec:KaiserASCII}
+
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("ASCII long", "Raman", "Kaiser")
 @
@@ -452,7 +468,7 @@ scan.txt.Renishaw ("txt.Renishaw/chondro.txt", nlines = 1e5, nspc = 875)
 \subsection{Writing your own Import Function}
 \label{sec:writing-Import}
 This section gives examples  how to write import functions. The first example implements an import
-filter for an ASCII file format basically from scratch. 
+filter for an ASCII file format basically from scratch. The second example shows how to implement more details for an already existing import filter. 
 
 \subsubsection{A new ASCII Import Function: scan.txt.PerkinElmer}
 \label{sec:read.txt.PerkinElmer}
@@ -500,6 +516,10 @@ scan.txt.PerkinElmer ("txt.PerkinElmer/*.txt", skip = 54)
 @
 imports the spectra.
 
+This function is not exported by \phy. While it is already useful for importing files, it is not yet general enough to work immediately with new data. The the file header is completely ignored.
+
+
+
 \subsubsection{Deriving a More Specific Function: read.ENVI.Nicolet}
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("ENVI", "Infrared", "Nicolet")
@@ -521,15 +541,25 @@ For using the function, see section~\ref{sec:read.ENVI.Nicolet}~(p.~\pageref{sec
 \VerbatimInput[frame=single, label={read.ENVI.Nicolet.R},
 formatcom=\footnotesize]{read.ENVI.Nicolet.R}
 
-\appendix
+\bibliographystyle{unsrtnat}
+\bibliography{FileIO-pkg,FileIO}
+<<citations, echo = FALSE>>=
+make.bib ("R.matlab", file = "FileIO-pkg.bib")
+@
 
+\clearpage
+\appendix
 \section{File Import  Functions by Format}
 \label{sec:format}
-\noindent
+\renewcommand{\arraystretch}{1.5}
 \begin{footnotesize}
-\begin{tabular}{llllp{3.4cm}}
-  \textbf{Format} & \textbf{Manufacturer} & \textbf{Function} & \textbf{section}  & \textbf{Notes}\\[1em]
-\multicolumn{4}{l}{\emph{ASCII file formats}}\\[1ex]
+  \begin{tabular}{@{} l l l l >{\raggedright}p{3.4cm}}
+  \textbf{Format} & 
+  \textbf{Manufacturer} & 
+  \textbf{Function} & 
+  \textbf{section}  & 
+  \textbf{Notes}\tabularnewline
+  \multicolumn{4}{@{}l}{\emph{\textbf{ASCII file formats}}}\tabularnewline
 <<results=tex, echo = FALSE>>=
 fileformats <- read.table ("fileformats.org", header = TRUE, sep = "|", strip.white=TRUE)
 fileformats <- fileformats [, ! apply (is.na (fileformats), 2, all)]
@@ -541,11 +571,11 @@ res <- apply (fileformats [i,][fileformats$Type [i] == "ASCII",], 1,
          if (nchar (x [4]) > 0)
            cat (" (", x[4],  ")", sep = "")
          cat (" & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], "}, p. \\pageref{sec:", 
-              x[6],"} & ", x [7], "\\\\\n",
+              x[6],"} & ", x [7], "\\tabularnewline\n",
               sep = "")
        })
 @
-\multicolumn{4}{l}{\emph{binary file formats}}\\[1ex]
+\multicolumn{4}{@{}l}{\emph{\textbf{binary file formats}}}\tabularnewline
 <<results=tex, echo = FALSE>>=
 res <- apply (fileformats [i,][fileformats$Type [i] == "binary",], 1, 
        function (x) {
@@ -553,39 +583,32 @@ res <- apply (fileformats [i,][fileformats$Type [i] == "binary",], 1,
          if (nchar (x [4]) > 0)
            cat (" (", x[4],  ")", sep = "")
          cat (" & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], "}, p. \\pageref{sec:", 
-              x[6],"} & ", x [7], "\\\\\n",
+              x[6],"} & ", x [7], "\\tabularnewline\n",
               sep = "")
        })
 @
 \end{tabular}
 \end{footnotesize}
 
-\section{File Import by Functions  Manufacturer}
+\section{File Import  Functions by Manufacturer}
 \label{sec:manufacturer}
-\noindent
 \begin{footnotesize}
-\begin{tabular}{llllp{3.4cm}}
-  \textbf{Manufacturer} & \textbf{Format} & \textbf{Function} & \textbf{section}  & \textbf{Notes}\\[1em]
-\multicolumn{4}{l}{\emph{Manufacturers}}\\[1ex]
+\begin{tabular}{@{} l l l l >{\raggedright}p{3.4cm}}
+  \textbf{Manufacturer} & 
+  \textbf{Format} & 
+  \textbf{Function} & 
+  \textbf{section}  & 
+  \textbf{Notes}\tabularnewline
+\multicolumn{4}{l}{\emph{\textbf{Manufacturers}}}\tabularnewline
 <<results=tex, echo = FALSE>>=
+i <- order (fileformats$Manufacturer)
 res <- apply (fileformats [i,][fileformats$Manufacturer [i] != "",], 1, 
        function (x) {
          cat (x [3])
          if (nchar (x [4]) > 0)
            cat (" (", x[4],  ")", sep = "")
          cat ("&", x [2], " & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], 
-              "}, p. \\pageref{sec:", x[6],"} & ", x [7], "\\\\\n",
-              sep = "")
-       })
-@
-%\hspace{1ex}
-\multicolumn{4}{l}{\emph{General import functions}}\\[1ex]
-<<results=tex, echo = FALSE>>=
-i <- order (fileformats$Manufacturer)
-res <- apply (fileformats [i,][fileformats$Manufacturer [i] == "",], 1, 
-       function (x) {
-         cat (x [3], "&", x [2], " & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], 
-              "}, p. \\pageref{sec:", x[6],"} & ", x [7], "\\\\\n",
+              "}, p. \\pageref{sec:", x[6],"} & ", x [7], "\\tabularnewline\n",
               sep = "")
        })
 @
@@ -593,18 +616,22 @@ res <- apply (fileformats [i,][fileformats$Manufacturer [i] == "",], 1,
 \end{footnotesize}
 \section{File Import Functions by Spectroscopy}
 \label{sec:spectroscopy}
-\noindent
 \begin{footnotesize}
-\begin{tabular}{lllllp{3.4cm}}
-  \textbf{Spectroscopy} & \textbf{Format} & \textbf{Manufacturer} & \textbf{Function} & \textbf{section}  & \textbf{Notes}\\[1em]
+\begin{tabular}{@{} l l l l l >{\raggedright}p{2.7cm}}
+  \textbf{Spectroscopy} & 
+  \textbf{Format} & 
+  \textbf{Manufacturer} & 
+  \textbf{Function} & 
+  \textbf{section}  & 
+  \textbf{Notes}\tabularnewline
 <<results=tex, echo = FALSE>>=
 i <- order (fileformats$Spectroscopy, tolower (fileformats$Name))
-res <- apply (fileformats [i,], 1, 
+res <- apply (fileformats [i,][fileformats$Spectroscopy [i] != "",], 1, 
        function (x) {
          if (nchar (x [4]) > 0) cat (x[4])
          cat ( "&", x [2], "&", x [3])
          cat (" & \\Rfunction{", x[5], "} & \\ref{sec:", x[6], "}, p. \\pageref{sec:", 
-              x[6],"} & ", x [7], "\\\\\n",
+              x[6],"} & ", x [7], "\\tabularnewline\n",
               sep = "")
        })
 @

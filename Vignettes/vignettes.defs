@@ -143,4 +143,45 @@ div.palette <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "
 											  "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
 											  "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
 
+make.bib <- function (..., file = "") {
+  pkg <- c (...)
+
+  toBibtex.citation <- function(object, ...)
+    {
+      z <- paste("@", attr(object, "entry"), "{", attr(object, "key"), ",", sep="")
+      
+      if("author" %in% names(object)){
+        object$author <- toBibtex(object$author)
+      }
+      
+      for(n in names(object))
+        z <- c(z, paste("  ", n, " = {", object[[n]], "},", sep=""))
+      
+      z <- c(z, "}")
+      class(z) <- "Bibtex"
+      z
+    }
+
+  if (length (pkg) == 0) {
+    pkg <- loadedNamespaces()
+    pkg <- pkg [! pkg %in% c("graphics", "grDevices", "grid", "methods", "stats", "utils")]
+  }
+  
+  for (p in pkg){
+    tmp <- citation (p)
+    if (is (tmp, "citation")){
+      attr (tmp, "key") <- p
+      cat ( toBibtex (tmp), file = file, sep = "\n")
+    } else if (length (tmp) == 1){
+      attr (tmp [[1]], "key") <- p
+      cat( toBibtex (tmp [[1]]), file = file, sep = "\n")
+    } else{
+      for (i in seq_along (tmp)){
+        attr (tmp [[i]], "key") <- paste (p, letters [i], sep = ".")
+      cat (toBibtex (tmp[[i]]), file = file, sep = "\n")
+      } 
+    }
+  }
+}
+
 @
