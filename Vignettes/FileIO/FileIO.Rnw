@@ -3,7 +3,6 @@
 \usepackage{makeidx}
 \makeindex
 
-\input{vignettes}
 \SweaveInput{vignettes.defs}
 \hypersetup{pdftitle={FileIO}, 
  pdfauthor={C. Beleites},
@@ -278,17 +277,21 @@ for (f in other){
 }
 @
 
-The header and subheader blocks of spc files store additional information of pre-defined types (see the file format specification\cite{Galactic1997}). Further information can be stored in the so-called log-block at the end of the file, and should be in a key-value format (although even the official example files do not always). 
-This information is often useful (Kaiser's Hologram software \eg stores ).
+The header and subheader blocks of spc files store additional information of pre-defined types (see the file format specification\cite{Galactic1997}). Further information can be stored in the so-called log block at the end of the file, and should be in a key-value format (although even the official example files do not always). 
+This information is often useful (Kaiser's Hologram software \eg stores the stage position in the log block).
 
-\Rfunction{read.spc} offers four arguments that allow fine-grained control of storing such information in the \chy object. 
+\Rfunction{read.spc} has four arguments that allow fine-grained control of storing such information in the \chy object:
 \begin{labeling}{\Rcode{keys.hdr2data}}
 \item[\Rcode{keys.hdr2data}] parameters from the spc file header and subfile header that should become extra data columns
 \item[\Rcode{keys.hdr2log}] parameters from the spc file header and subfile header that should be stored as list entries in the \Rfunarg{long.description} of the log entry
 \item[\Rcode{keys.log2data}] parameters from the spc file log block that should become extra data columns
 \item[\Rcode{keys.log2log}] parameters from the spc file log block that should be stored as list entries in the \Rfunarg{long.description} of the log entry
 \end{labeling}
-The value of these arguments can either be logical or a character vector of parameter names. Note that the header file field names are always lowercase, while the log entries are treated case sensitive.
+The value of these arguments can either be logical (amounting to either use all or none of the information in the file) or a character vector giving the names of the parameters that should be used. Note that the header file field names are always lowercase, while the log entries are treated case sensitive.
+
+\paragraph{Deriving manufacturer specific import filters.}
+Please note that future changes inside the read.spc function are likely to occur. 
+However, if you just post-process the \chy object returned by \Rfunction{read.spc}, you should be fine.
 
 \section{Manufacturer-Specific Discussion of File Import}
 \subsection{Manufacturer Specific Import Functions}
@@ -335,12 +338,17 @@ make.all.permutations ("ENVI", "Infrared", "Nicolet")
 @
 
 Also Nicolet saves imaging data in ENVI files. These files use some non-standard keywords in the
-header file that should allow to reconstruct the lateral coordinates as well as the spectral axes'
-units. \phy has a specialized function \Rfunction{read.ENVI.Nicolet} that uses these header entries.
+header file that should allow to reconstruct the lateral coordinates as well as the wavelength axes and units for wavelength and intensity axis. \phy has a specialized function \Rfunction{read.ENVI.Nicolet} that uses these header entries.
 
 It seems that the position of the first spectrum is recorded in \mum{}, while the pixel size is in
 mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
 Also here, giving the correct offset and pixel size values as function arguments is possible.
+
+<<readENVINicolet>>=
+spc <- read.ENVI.Nicolet ("ENVI/example2.img", nicolet.correction = TRUE) 
+spc ## dummy sample with all intensities zero
+@
+
 
 \subsection{Kaiser Optical Systems Raman}
 \label{sec:Kaiser}
@@ -465,12 +473,12 @@ scan.txt.Renishaw ("txt.Renishaw/chondro.txt", nlines = 1e5, nspc = 875)
 @
 
 
-\subsection{Writing your own Import Function}
+\section{Writing your own Import Function}
 \label{sec:writing-Import}
 This section gives examples  how to write import functions. The first example implements an import
 filter for an ASCII file format basically from scratch. The second example shows how to implement more details for an already existing import filter. 
 
-\subsubsection{A new ASCII Import Function: scan.txt.PerkinElmer}
+\subsection{A new ASCII Import Function: scan.txt.PerkinElmer}
 \label{sec:read.txt.PerkinElmer}
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("ASCII long", "Fluorescence", "Perkin Elmer")
@@ -518,9 +526,8 @@ imports the spectra.
 
 This function is not exported by \phy. While it is already useful for importing files, it is not yet general enough to work immediately with new data. The the file header is completely ignored.
 
+\subsection{Deriving a More Specific Function: read.ENVI.Nicolet}
 
-
-\subsubsection{Deriving a More Specific Function: read.ENVI.Nicolet}
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("ENVI", "Infrared", "Nicolet")
 make.all.permutations ("ENVI", "Infrared", "Map")
@@ -540,6 +547,10 @@ post-processed according to the special header entries.
 For using the function, see section~\ref{sec:read.ENVI.Nicolet}~(p.~\pageref{sec:read.ENVI.Nicolet}).
 \VerbatimInput[frame=single, label={read.ENVI.Nicolet.R},
 formatcom=\footnotesize]{read.ENVI.Nicolet.R}
+
+\subsection{Deriving import filters for spc files}
+Please note that future changes inside the read.spc function are likely to occur. 
+However, if you just post-process the \chy object returned by \Rfunction{read.spc}, you should be fine.
 
 \bibliographystyle{unsrtnat}
 \bibliography{FileIO-pkg,FileIO}

@@ -12,6 +12,8 @@ setMethod ("sweep", "hyperSpec", function (x, MARGIN, STATS, FUN = "-",
   if (is (STATS, "hyperSpec")){
     validObject (STATS)
     STATS <- STATS@data$spc
+  } else if (is (STATS, "function")) {
+    STATS <- apply (x, MARGIN, STATS)@data$spc
   }
 
   x@data$spc <- sweep (x = x@data$spc, MARGIN = MARGIN, STATS = STATS,
