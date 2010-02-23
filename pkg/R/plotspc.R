@@ -1,4 +1,4 @@
-###-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 ###
 ###  plotspc - Plots spectra of hyperSpec object
 ###
@@ -36,6 +36,7 @@ plotspc <- function  (object,
                       ){
   force (zeroline) # otherwise stacking messes up colors
 
+  .is.hy (object)
   validObject (object)
 
   if (nrow (object) == 0)
@@ -253,6 +254,7 @@ plotspc <- function  (object,
       names (title.args$ylab) [1] <- "ylab"
 
     titles <- pmatch (c("main", "sub", "xlab", "ylab"), names (title.args))
+    titles <- titles [!is.na (titles)]
     other <- !(seq (along = title.args) %in% titles)
 
     for (i in titles)
