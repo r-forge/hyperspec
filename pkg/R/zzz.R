@@ -1,6 +1,8 @@
 .onLoad <- function (libname, pkgname){
   require (lattice)
   require (utils)
+  require (plotrix)
+
   if (! require (latticeExtra))
     warning ("package 'latticeExtra' is needed for Voronoi plots.")
 }

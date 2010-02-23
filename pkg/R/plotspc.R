@@ -1,4 +1,4 @@
------------------------------------------------------------------------------
+###--------------------------------------------------------------------------------------------------
 ###
 ###  plotspc - Plots spectra of hyperSpec object
 ###
@@ -6,43 +6,31 @@
 ###
 
 plotspc <- function  (object,
-                      ## what wavelengths to plot
-                      wl.range = NULL,
-                      wl.index = FALSE,
-                      wl.reverse = FALSE,
+                       ## what wavelengths to plot
+                      wl.range = NULL, wl.index = FALSE,  wl.reverse = FALSE,
                       ## what spectra to plot
-                      spc.nmax = 50,
-                      func = NULL,
-                      func.args = list (),
-                      stacked = NULL,
-                      ## plot / lines
-                      add = FALSE,
-                      bty = "l",
-                      col = "black",
-                      plot.args = list() ,
+                      spc.nmax = 50, func = NULL, func.args = list (), stacked = NULL,
+                      ## plot area
+                      add = FALSE, bty = "l", plot.args = list(),
+                      ## lines
+                      col = "black", lines.args = list (),
                       ## axes
-                      xoffset = 0,
-                      yoffset = 0,
-                      nxticks = 10,
-                      axis.args = list () ,
-                      ## parameters for filled regions
-                      fill = NULL,
-                      fill.col = NULL,
-                      border = NA,
+                      xoffset = 0, yoffset = 0, nxticks = 10, axis.args = list (),
+                      break.args = list (),
+                      ## title (axis labels)
                       title.args = list (),
-                      polygon.args = list (),
-                      lines.args = list (),
-                      zeroline =  list (lty = 2, col = col)
-                      ){
+                      ## parameters for filled regions
+                      fill = NULL, fill.col = NULL, border = NA, polygon.args = list (),
+                      ## line indicating zero intensity
+                      zeroline =  list (lty = 2, col = col)){
   force (zeroline) # otherwise stacking messes up colors
 
   .is.hy (object)
   validObject (object)
+  if (nrow (object) == 0) stop ("No spectra.")
 
-  if (nrow (object) == 0)
-    stop ("No spectra.")
-
-  ## prepare wavelengths
+  ## prepare wavelengths ............................................................................
+  ## somewhat more complicated here because of plotting with cut wavelength axis
   if (is.null (wl.range)) {
     wl.range <- seq_along (object@wavelength)
     wl.index <- TRUE
@@ -57,7 +45,7 @@ plotspc <- function  (object,
       tmp [! is.na (tmp)]
     })
 
-  ## xoffset
+  ## xoffset ........................................................................................
   ## may be
   ## - one number for all wl.ranges
   ## - a number for each wl.range
@@ -67,7 +55,8 @@ plotspc <- function  (object,
   else if (length (xoffset) == 1)
     xoffset = rep (xoffset, times = length (wl.range))
   if (!is.numeric(xoffset) || (length (xoffset) != length (wl.range)))
-    stop ("xoffset must be a numeric  vector of the same length (or one less) as the list with wavenumber ranges.")
+    stop ("xoffset must be a numeric  vector of the same length (or one less) as the list with",
+          "wavenumber ranges.")
   xoffset <- cumsum (xoffset)
 
   ## for indexing wavelength.range is needed unlisted
@@ -81,6 +70,7 @@ plotspc <- function  (object,
   for (i in seq_along(x))
     x [[i]] <- x [[i]] - xoffset[i]
 
+  ## prepare spectra ................................................................................
   ## indices into columns of spectra matrix spc
   ispc <- relist (seq_along (u.wl.range), wl.range)
 
@@ -102,7 +92,7 @@ plotspc <- function  (object,
       stop ("No spectra after", func, "was applied.")
   }
 
-  ## yoffset
+  ## yoffset ........................................................................................
   ## either one value for all spectra
   ## or one per spectrum
   if (length (yoffset) != nrow (spc)){
@@ -129,7 +119,7 @@ plotspc <- function  (object,
 
   spc <- sweep (spc, 1, yoffset, "+")
 
-  ## plotting
+  ## plot area --------------------------------------------------------------------------------------
 
   ## should a new plot be set up?
   if (! add){
@@ -158,142 +148,101 @@ plotspc <- function  (object,
     if (diff (plot.args$xlim) < 0)
       plot.args$xlim <- rev(plot.args$xlim)
 
-    ## Axes
+    ## Axes -----------------------------------------------------------------------------------------
+    axis.args <- modifyList (list (x = list (), y = list ()), axis.args)
+
     ## x-axis labels & ticks
     if (bty %in% c("o", "l", "c", "u", "]") ){
-      if (is.null (axis.args$x))
-        axis.args$x <- list ()
-      if (is.null (axis.args$x$side))
-        axis.args$x$side <- 1
-
-      ## Tick mark positions
-      if (is.null (axis.args$x$at)){
-        if (all (xoffset == 0)){
-          axis.args$x$at <- pretty (plot.args$xlim +
-                                    diff(plot.args$xlim) * c(-0.04, 0.04),
-                                    nxticks)
-        } else {
-          axis.args$x$at <- list ()
-
-          part <- apply (sapply (wavelengths, range), 2, diff) /
-            diff (plot.args$xlim)
-
-          for (i in seq_along (x))
-            axis.args$x$at [[i]] <- pretty (wavelengths[[i]],
-                                            part [i] * nxticks + 1)
-        }
-      }
-      if (!is.list (axis.args$x$at))
-        axis.args$x$at <- rep (list (axis.args$x$at), length (x))
-
-      ## calculate cut mark positions and which ticks are to be displayed
-      cutmarks <- numeric (length (x) - 1)
-
-      for (i in seq_along (axis.args$x$at)[-1]){
-        a <- max (x [[i - 1]])
-        b <- min (x [[i    ]])
-        delta <- b - a
-        cutmarks [i - 1] <- a + delta / 2
-
-        a <- a + xoffset [i] + delta / 4
-        b <- b + xoffset [i] - delta / 4
-
-        axis.args$x$at [[i - 1]] <- axis.args$x$at [[i - 1]][axis.args$x$at [[i - 1]] < a]
-        axis.args$x$at [[i    ]] <- axis.args$x$at [[i    ]][axis.args$x$at [[i    ]] > b]
-      }
-
-      ## Tick mark labels
-      if (is.null (axis.args$x$labels)){
-        axis.args$x$labels <- (axis.args$x$at)
-        for (i in seq_along (axis.args$x$at))
-          axis.args$x$at [[i]] <- axis.args$x$at [[i]] - xoffset [i]
-      }
-
-      axis.args$x$at <- unlist (axis.args$x$at)
-      axis.args$x$labels <- unlist (axis.args$x$labels)
-
+      cuts <- .cut.ticks (sapply (wavelengths, min), sapply (wavelengths, max), xoffset, nxticks)
+      
+      axis.args$x <- modifyList (axis.args [! names (axis.args) %in% c ("x", "y")],
+                                 axis.args$x)
+      if (is.null (axis.args$x$labels) & ! is.null (axis.args$x$at))
+        axis.args$x$labels <- axis.args$x$at
+      axis.args$x <- modifyList (list (side = 1, at = cuts$at, labels = cuts$labels),
+                                 axis.args$x)
+                                 
       do.call (axis, axis.args$x)
 
       ## plot cut marks for x axis
-      for (i in seq_along (cutmarks))
-        if (xoffset[i + 1] != 0)
-          mtext("//", at = cutmarks [i], side = 1, padj = -1, adj = 0.5)
+      break.args <- modifyList (list (style = "zigzag"), break.args)
+      break.args$axis <- NULL
+      break.args$breakpos <- NULL
+
+      for (i in cuts$cut)
+        do.call (axis.break, c (list (axis = 1, breakpos = i), break.args))
     }
 
     ## y-axis labels & ticks
     if (bty %in% c("o", "l", "c", "u")){
-      if (is.null (axis.args$y))
-        axis.args$y <- list ()
-      if (is.null (axis.args$y$side))
-        axis.args$y$side <- 2
-      if (is.null (axis.args$y$at) & !is.null (stacked)){
-        axis.args$y$at <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min) 
-        axis.args$y$labels <- stacked$levels 
+      axis.args$y <- modifyList (axis.args [! names (axis.args) %in% c ("x", "y")],
+                                 axis.args$y)
+
+      ## default for stacked plots is marking the groups
+      if (!is.null (stacked)){
+        group.mins <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min)
+        
+        axis.args$y <- modifyList (list (at = group.mins, labels = stacked$levels),
+                                   axis.args$y)
       }
+      
+      axis.args$y <- modifyList (list (side = 2), axis.args$y)
 
       do.call (axis, axis.args$y)
     }
 
-    ## Title
-    if (is.null (title.args$xlab))
-      title.args$xlab <- list ()
-    if (!is.list (title.args$xlab))
-      title.args$xlab <- list (xlab = title.args$xlab)
-    else
-      title.args$xlab$xlab <- I(object@label$.wavelength)
-    if (names (title.args$xlab) [1] == "")
-      names (title.args$xlab) [1] <- "xlab"
+    ## Title: axis labels ---------------------------------------------------------------------------
 
-    if (is.null (title.args$xlab$line))
-      title.args$xlab$line <- 2.5
-
-    if (is.null (title.args$ylab))
-      title.args$ylab <- list ()
-    if (!is.list (title.args$ylab))
-      title.args$ylab <- list (ylab = title.args$ylab)
-    else
-      title.args$ylab$ylab <- I(object@label$spc)
-    if (names (title.args$ylab) [1] == "")
-      names (title.args$ylab) [1] <- "ylab"
-
-    titles <- pmatch (c("main", "sub", "xlab", "ylab"), names (title.args))
-    titles <- titles [!is.na (titles)]
-    other <- !(seq (along = title.args) %in% titles)
-
-    for (i in titles)
-      do.call (title, c(title.args[[i]], title.args[other]))
+    tmp <- title.args [! names (title.args) %in% c ("x","y", "ylab")]
+    tmp <- modifyList (tmp, as.list (title.args$x))
+    tmp <- modifyList (list (xlab = I(object@label$.wavelength), line = 2.5), tmp)
+    do.call (title, tmp)
+    
+    tmp <- title.args [! names (title.args) %in% c ("x","y", "xlab")]
+    tmp <- modifyList (tmp, as.list (title.args$y))
+    tmp <- modifyList (list (ylab = I(object@label$spc)), tmp)
+    do.call (title, tmp)
   }
 
+  ## plot the spectra -------------------------------------------------------------------------------
+  
+  ## if necessary, recycle colors
   col <- rep (col, each = ceiling (nrow (spc) / length (col)), length.out = nrow (spc))
 
   ## start loop over wavelength ranges
   for (i in seq_along (x)){
+    ## filling for polygons ........................................................................
+
+    ## groupings for upper and lower bound of the bands
     if (!is.null (fill)){
-      if (is.character (fill))
+      if (is.character (fill) && length (fill) == 1)
         fill <- unlist (object [[, fill]])
       else if (isTRUE (fill)){
-        fill <- seq_len (nrow (spc)) / 2
+        fill <- seq_len (nrow (spc) / 2)
         if (nrow (spc) %% 2 == 1) # odd number of spectra
           fill <- c (fill, NA, rev (fill))
         else
           fill <- c (fill, rev (fill))
-      }
-      if (is.factor (fill))
+      } else if (is.factor (fill))
         fill <- as.numeric (fill)
       else if (!is.numeric (fill))
-        stop ("fill must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
+        stop ("fill must be either TRUE, the name of the extra data column to use for grouping,",
+              "a factor or a numeric.")
 
       groups = unique (fill)
       groups = groups [!is.na (groups)]
 
-      if (is.null(polygon.args$x))
-        polygon.args <- c(list(x = NULL, y = NULL), polygon.args)
 
+      polygon.args <- modifyList (list (x = NULL, y = NULL),
+                                  polygon.args)
+
+      ## fill color
       if (is.null (fill.col)){
         fill.col <- character (length (groups))
+
         for (j in seq_along (groups)){
           tmp <- which (fill == groups [j])
-          fill.col [j] <- rgb(t(col2rgb(col[tmp[1]]) / 255) / 3 + 2/3)
+          fill.col [j] <- rgb( t (col2rgb (col [tmp[1]]) / 255) / 3 + 2/3)
         }
       } else {
         fill.col <- rep (fill.col, length.out = length (groups))
@@ -301,7 +250,8 @@ plotspc <- function  (object,
 
       border <- rep (border, length.out = length (groups))
 
-      polygon.args$x <- c (x  [[i]]                  , rev (x   [[i]]         ))
+      polygon.args$x <- c (x [[i]], rev (x [[i]]))
+      
       for (j in seq_along (groups)){
         tmp <- which (fill == groups [j])
         polygon.args$y <- c (spc[head(tmp, 1), ispc[[i]]], rev (spc [tail (tmp, 1), ispc[[i]]]))
@@ -312,11 +262,9 @@ plotspc <- function  (object,
       }
     }
 
-    if (is.null(lines.args$x))
-      lines.args <- c(list (x = NULL, y = NULL), lines.args)
+    ## lines ........................................................................................
 
-    if (is.null (lines.args$type))
-      lines.args$type <- "l"
+    lines.args <- modifyList (list (x = NULL, y = NULL, type = "l"), lines.args)
 
     for (j in seq_len (nrow (spc))){
       lines.args$x <- x[[i]]
@@ -327,17 +275,18 @@ plotspc <- function  (object,
     }
   }
 
-
+  ## should the intensity zero be marked?
   if (! is.null (zeroline)){
-    zeroline <- c (list (h = unique (yoffset)), zeroline)
-
+    zeroline <- modifyList (list (h = unique (yoffset)), as.list (zeroline))
     do.call (abline, zeroline)
   }
 
+  ## return some values that are needed by spc.identify
   invisible (list (x = rep (unlist (x), each = nrow (spc)) ,
                    y = spc,
                    wavelengths = rep (unlist (wavelengths), each = nrow (spc))
-                   ))
+                   )
+             )
 }
 
 

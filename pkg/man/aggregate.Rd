@@ -100,9 +100,7 @@ agg$.aggregate
 plot (agg, "spc",  add = TRUE, col = color[agg$.aggregate],
       lines.args = list (lwd = 3, lty = 2))
 }
-
 \author{C. Beleites}
-
 \keyword{methods}
 \keyword{category}
 \keyword{array}

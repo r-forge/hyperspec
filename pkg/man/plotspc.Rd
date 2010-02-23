@@ -7,14 +7,24 @@
   summary values calculated from these may be used.
 }
 \usage{
-plotspc(object, wl.range = NULL, wl.index = FALSE,
-        wl.reverse = FALSE,
-        spc.nmax = 50, func = NULL, func.args = list(), stacked = NULL, 
-        add = FALSE, bty = "l", col = "black", plot.args = list (),
-        xoffset = 0, yoffset = 0, nxticks = 10, axis.args = list (),
-        fill = NULL, fill.col = NULL, border = NA, title.args = list(),
-        polygon.args = list(), lines.args = list(), 
-        zeroline = list (lty = 2, col = col))
+plotspc(object,
+ ## what wavelengths to plot
+ wl.range = NULL, wl.index = FALSE,  wl.reverse = FALSE,
+ ## what spectra to plot
+ spc.nmax = 50, func = NULL, func.args = list (), stacked = NULL,
+ ## plot area
+ add = FALSE, bty = "l", plot.args = list(),
+ ## lines
+ col = "black", lines.args = list (),
+ ## axes
+ xoffset = 0, yoffset = 0, nxticks = 10, axis.args = list (),
+ break.args = list (),
+ ## title (axis labels)
+ title.args = list (),
+ ## parameters for filled regions
+ fill = NULL, fill.col = NULL, border = NA, polygon.args = list (),
+ ## line indicating zero intensity
+ zeroline =  list (lty = 2, col = col))
 }
 \arguments{
   \item{object}{the \code{hyperSpec} object}
@@ -50,21 +60,19 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   \item{col}{see \code{\link[graphics]{par}}. \code{col} might be a
 	 vector giving individual colors for the spectra.}
 
-  \item{plot.args}{\code{list} with further arguments to
-	 \code{\link[graphics]{plot}}}
-  
   \item{xoffset}{vector with abscissa offsets for each of the
 	 \code{wl.range}s. If it has one element less than there are
 	 \code{wl.range}s, 0 is padded at the beginning.
 
 	 The values are interpreted as the distance along the wavelength axis
 	 that the following parts of the spectra are shifted towards the
-	 origin. E.g. if \code{wl.range = list (600 \~ 1800,
-	 2800 \~ 3200)}, \code{xoffset = c(0, 750)} \code{xoffset = 750} would
+	 origin. E.g. if \code{wl.range = list (600 ~ 1800,
+	 2800 ~ 3200)}, \code{xoffset = 750} would
 	 result in a reasonable plot. See also the examples.
   }
 
-  \item{yoffset}{ordinate offset values for the spectra.}
+  \item{yoffset}{ordinate offset values for the spectra. May be
+   \code{\link{stacked.offsets}}}
 
   \item{nxticks}{hint how many tick marks the abscissa should have.}
 
@@ -73,11 +81,6 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
 	 A numeric or factor is interpreted as giving the grouping, character is interpreted as the name 
 	 of the extra data column that holds the groups.} 
 
-  \item{axis.args}{\code{list} with further arguments for
-  \code{\link[graphics]{axis}}. \code{axis.args$x} should contain
-  arguments for plotting the abscissa, \code{axis.args$y} those for the
-  ordinate (again as \code{lists}).}
-  
   \item{fill}{if not \code{NULL}, the area between the specified spectra is filled with color 
   \code{col}. The grouping can be given as factor or numeric, or as a character with the name of  
   the extra data column to use. If a group contains more than 2 spectra, the first and the last are used.
@@ -88,12 +91,19 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   \item{border}{character vector with border color. You will need to set the line color \code{col} to \code{NA} in order see the effect.
    }
 
+  \item{plot.args}{\code{list} with further arguments to
+	 \code{\link[graphics]{plot}}}
+  
+  \item{axis.args}{\code{list} with further arguments for
+  \code{\link[graphics]{axis}}. \code{axis.args$x} should contain
+  arguments for plotting the abscissa, \code{axis.args$y} those for the
+  ordinate (again as \code{lists}).}
+  
   \item{title.args}{list with further arguments to
 	 \code{\link[graphics]{title}}.
 	 
-	 \code{title.args} may consits of up to 4 lists, \code{title.args$main},
-	 \code{$sub}, \code{$xlab}, and \code{$ylab} for which the other
-	 parameters then are given individually.}
+	 \code{title.args} may contain two lists, \code{$x}, and \code{$y} to
+	 set parameters individually for each axis.}
 
   \item{lines.args}{list with further arguments to
 	 \code{\link[graphics]{lines}}.
@@ -101,6 +111,8 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
 	 \code{lines.args$type} defaults to "l".
   }
 
+  \item{break.args}{list with arguments for \code{\link[plotrix]{axis.break}}.}
+  
   \item{polygon.args}{list with further arguments to
 	 \code{\link[graphics]{polygon}} which draws the filled areas.}
 
@@ -116,8 +128,12 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   New plots are created by \code{\link[graphics]{plot}}, but the
   abscissa and ordinate are drawn separately by
   \code{\link[graphics]{axis}}. Also, \code{\link[graphics]{title}} is
-  called explicitly to set up titles and axis labels. This allows a huge
-  freedom in customization of the plots.
+  called explicitly to set up titles and axis labels. This allows
+  fine-grained customization of the plots.
+
+  If package plotrix is available, its function
+  \code{\link[plotrix]{axis.break}} is used to produce break marks for
+  cut wavelength axes.
 }
 \value{
   \code{plotspc} invisibly returns a list with
@@ -138,6 +154,8 @@ plotspc(object, wl.range = NULL, wl.index = FALSE,
   \code{\link[graphics]{title}}, \code{\link[graphics]{lines}},
   \code{\link[graphics]{polygon}}, \code{\link[graphics]{par}} for the
   description of the respective arguments.
+
+  \code{\link[plotrix]{axis.break}} for cut marks
   
   See \code{\link{plot}} for some predefined spectra plots such as mean
   spectrum +/- one standard deviation and the like.
@@ -168,15 +186,13 @@ plotspc (laser, func = mean_pm_sd,
          fill.col = "yellow", border = "blue",
          polygon.args = list (lty = 2, lwd = 4),
          title.args = list (xlab = expression (lambda[emission] / nm),
-                            ylab = list(line = 3.4)),
+                            y = list(line = 3.4),
+                            col.lab = "darkgreen"),
          axis.args = list (x = list (col = "magenta"), y = list (las = 1))
         )
         
-groups <- rep (1 : 3, length.out = nrow (chondro))
-mean.pm.sd <- aggregate (chondro, groups, mean_pm_sd)
+mean.pm.sd <- aggregate (chondro, chondro$clusters, mean_pm_sd)
 plot (mean.pm.sd, col = matlab.palette (3), fill = ".aggregate", stacked = ".aggregate")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{hplot}
 
