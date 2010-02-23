@@ -43,32 +43,31 @@ plotspc <- function  (object,
     stop ("No spectra.")
 
   ## prepare wavelengths
-  if (is.null (wl.range)){
-    wl.range <- list (seq (along = object@wavelength));
-  } else {
-    if (!wl.index){
-      for (i in seq (along = wl.range))
-        wl.range[[i]] <- wl2i (object, wl.range[[i]])
-    }
-
-    if (!is.list (wl.range))
-      wl.range <- list (wl.range)
-
-    for (i in seq (along = wl.range))
-      if (!is.numeric (wl.range[[i]]) && !is (wl.range [[i]], "formula"))
-        stop ("wavelength ranges need to be numeric or formulas.")
-
-    for (i in seq (along = wl.range))
-      wl.range[[i]] <- unique (wl.range[[i]][!is.na (wl.range[[i]])])
+  if (is.null (wl.range)) {
+    wl.range <- seq_along (object@wavelength)
+    wl.index <- TRUE
   }
+  
+  if (!is.list (wl.range))
+    wl.range <- list (wl.range)
+
+  if (!wl.index)
+    wl.range <- lapply (wl.range, function (w) {
+      tmp <- unique (wl2i (object, w))
+      tmp [! is.na (tmp)]
+    })
 
   ## xoffset
+  ## may be
+  ## - one number for all wl.ranges
+  ## - a number for each wl.range
+  ## - one less than wl.ranges: first will be 0
   if (length (xoffset) == length (wl.range) - 1)
     xoffset = c (0, xoffset)
   else if (length (xoffset) == 1)
     xoffset = rep (xoffset, times = length (wl.range))
   if (!is.numeric(xoffset) || (length (xoffset) != length (wl.range)))
-    stop ("xoffset must be a numeric  vector of the same length as the list with wavenumber ranges.")
+    stop ("xoffset must be a numeric  vector of the same length (or one less) as the list with wavenumber ranges.")
   xoffset <- cumsum (xoffset)
 
   ## for indexing wavelength.range is needed unlisted
@@ -79,7 +78,7 @@ plotspc <- function  (object,
 
   ## x are the actual x coordinates
   x <- wavelengths
-  for (i in seq_along(wl.range))
+  for (i in seq_along(x))
     x [[i]] <- x [[i]] - xoffset[i]
 
   ## indices into columns of spectra matrix spc
@@ -90,7 +89,7 @@ plotspc <- function  (object,
   rm (u.wl.range)
 
 
-  ## apply function func to spc
+  ## summary statistics: apply function func to spc
   if (!is.null (func)){
     if (!is.function (func))
       stop ("func needs to be a function.");
@@ -100,18 +99,21 @@ plotspc <- function  (object,
                    ncol = ncol (spc)
                    )
     if (nrow (spc) == 0)
-      stop ("No spectra after func was applied.")
+      stop ("No spectra after", func, "was applied.")
   }
 
-
-
+  ## yoffset
+  ## either one value for all spectra
+  ## or one per spectrum
   if (length (yoffset) != nrow (spc)){
     if (length (yoffset) == 1)
       yoffset <- rep (yoffset, nrow (spc))
     else
-      stop ("yoffset must be single number.")
+      stop ("yoffset must be single number or one number for each spectrum.")
   }
 
+  ## do not plot too many spectra by default: can take very long and there is most probably nothing
+  ## visible on the resulting picture
   if (nrow (spc) > spc.nmax){
     warning (paste ("Number of spectra exceeds spc.nmax. Only the first",
                     spc.nmax, "are plotted."))
@@ -127,33 +129,34 @@ plotspc <- function  (object,
 
   spc <- sweep (spc, 1, yoffset, "+")
 
+  ## plotting
+
+  ## should a new plot be set up?
   if (! add){
-    ## Plot area
-    plot.args$x <- unlist (x)
-    plot.args$y <- spc[1,,drop=FALSE]
-    plot.args$type <- "n"
-    plot.args$bty <- bty
-    plot.args$xaxt <- "n"
-    plot.args$yaxt <- "n"
-    plot.args$xlab <- NA     # title is called later
-    plot.args$ylab <- NA
-
-    if (is.null (plot.args$xlim))
-      plot.args$xlim <- range (unlist (x), na.rm = TRUE)
-
-    if (is.null (plot.args$ylim))
-      plot.args$ylim <- range (spc, na.rm = TRUE)
+    ## set default plot args
+    plot.args <- modifyList (list (xlim = range (unlist (x), na.rm = TRUE),
+                                   ylim = range (spc, na.rm = TRUE)),
+                             plot.args)
+    
+    ## the actual spectra are plotted below, so we do not need any line parametrers here
 
     ## reverse x axis ?
     if (wl.reverse)
       plot.args$xlim <- rev(plot.args$xlim)
 
+    ## some arguments must be overwritten if given:
+    plot.args <- modifyList (plot.args,
+                             list (x = unlist (x), y = spc[1,,drop=FALSE],
+                                   type = "n", bty = bty,
+                                   xaxt = "n", yaxt = "n", # axes and title are called separately 
+                                   xlab = NA,  ylab = NA)) # for finer control
+    
     do.call (plot, plot.args)
 
-    ## reversed x axis ? => would lead to trouble with tick positions
+                             ## reversed x axis leads to trouble with tick positions
+                             ## 
     if (diff (plot.args$xlim) < 0)
       plot.args$xlim <- rev(plot.args$xlim)
-
 
     ## Axes
     ## x-axis labels & ticks
