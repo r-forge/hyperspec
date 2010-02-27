@@ -16,7 +16,7 @@ citEntry(entry="Article", "hyperSpecABC",
      
           textVersion =
           paste("Claudia Beleites and Valter Sergo: `Chemometric Analysis of Spectroscopic Data in R: hyperSpec', ",
-				    "in preparation for Analytical and Bioanalytical Chemistry, ",
+				    "in preparation, ",
                 # "(", year, "). ", 
                 vers, ". http://hyperspec.r-forge.r-project.org", 
                 sep="")

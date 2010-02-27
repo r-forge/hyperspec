@@ -102,7 +102,7 @@ chondro <- spc.loess (chondro, seq (602, 1800, 4))
 chondro
 @    
 
-The spectra are now the same as in the data set \Robject{chondro}. However, the data set also contains the clustering results, see below. They are stored for saving as the distributed demo data:
+The spectra are now the same as in the data set \Robject{chondro}. However, the data set also contains the clustering results (see at the very end of this document). They are stored for saving as the distributed demo data:
 <<save_chondro>>=
 spectra.to.save <- chondro
 @
@@ -334,14 +334,17 @@ The result is shown in figure~\ref{fig:DNA}. While the nucleus of
 the right cell shows up nicely, nothing is detected in the remainders
 of the left cell.
 
+\section{Saving the data set}
+\label{sec:saving-data-set}
+
 Finally, the example data set is put together and saved:
 <<save>>=
-spectra.to.save <- spectra.to.save [-out]
-spectra.to.save$clusters <- chondro$clusters
+spectra.to.save$clusters <- factor (NA, levels = levels (chondro$clusters))
+spectra.to.save$clusters[- out] <- chondro$clusters
 chondro <- spectra.to.save
 save (chondro, file = "chondro.rda")
 @
-
+This is the file distributed with \phy as example data set.
 
 <<cleanup, echo = FALSE, results=hide>>=
 rm (list = ls () ) 

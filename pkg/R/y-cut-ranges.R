@@ -1,11 +1,9 @@
 #################################################################################
 ###
-###  -cut.ticks.R - calculate pretty tick marks for cut axes (for plotspc with
+###  y-cut.ranges.R - calculate pretty tick marks for cut axes (for plotspc with
 ###  multiple wl.ranges
-###  Time-stamp: <Claudia Beleites on Tuesday, 2010-02-23 at 20:40:27 on cb>
-###  
-###  
-###  Version 1.0  2010-02-23 18:39  Claudia Beleites  Claudia.Beleites@gmx.de
+###
+###  Time-stamp: <Claudia Beleites on Wednesday, 2010-02-24 at 09:42:25 on cb>
 ###
 #################################################################################
 
