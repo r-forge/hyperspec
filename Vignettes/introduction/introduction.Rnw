@@ -1,3 +1,4 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*- 
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \SweaveInput{vignettes.defs}
 \hypersetup{pdftitle={hyperSpec Introduction},
@@ -19,7 +20,8 @@ The source data files of the \Robject{flu} and \Robject{laser} data sets as well
 For reproducing the examples in a live session, the full file names of the 
 spectra can be found with the command:\\
 \texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
-"hyperSpec/doc/rawdata/*.txt", sep = "/"))}} 
+"hyperSpec/doc/rawdata/*.txt", sep = "/"))}} \\
+Note that some definitions are executed in \texttt{vignette.defs}.
 
 The source data file of the \Robject{chondro} data, however, needs to be be obtained separately. It is available for download as a .zip file at \Rpackage{hyperSpec}'s home page  (\url{http://r-forge.r-project.org/projects/hyperspec/}, ca. 8.5 MB).
 The original file (ca. 31 MB) is far too large to be included in the package.
@@ -30,10 +32,10 @@ The original file (ca. 31 MB) is far too large to be included in the package.
 \section{Introduction}
 
 \Rpackage{hyperSpec} is a R package that allows convenient handling
-of (hyper)spectroscopic data sets, i.\,e. data sets comprising spectra
-together with further data on a per-spectrum basis. Likewise, the
+of (hyper)spectral data sets, \ie data sets comprising spectra
+together with further data on a per-spectrum basis. The
 spectra can be anything that is recorded over a common discretized
-axis, the wavelength axis. Throughout the documentation of the package,
+axis, the \emph{so-called} wavelength axis. Throughout the documentation of the package,
 the terms intensity and wavelength refer to the spectral ordinate
 and abscissa, respectively.
 
@@ -41,15 +43,6 @@ However, \Rpackage{hyperSpec} works perfectly fine with any data
 that fits in that general scheme, so that the three terms may also
 be used for:
 \begin{labeling}{wavelength: }
-%\setlength{\labelwidth}{2.5cm}
-%\setlength{\itemindent}{1.7cm}
-%\setlength{\leftmargini}{5cm}
-%\showthe\labelindent
-%\showthe\itemindent
-%\showthe\labelwidth
-%\showthe\leftmargin
-%\showthe\labelsep
-%\showthe\listparindent
 \item [wavelength:] frequency, wavenumbers, chemical shift, Raman shift,
 $\frac{m}{z}$, etc.
 \item [intensity:] transmission, absorbance, $\frac{e^{-}}{s}$, \textellipsis

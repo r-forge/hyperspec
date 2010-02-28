@@ -43,7 +43,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <h1>Installation</h1>
 <h2>... from inside R</h2>
-<p>To install the latest nightly build, type in R: 
+<p>To install the latest stable version from CRAN, type in R: 
+<pre>install.packages("hyperSpec")</pre>
+</p>
+<p>To install the latest nightly build (development version), type in R: 
 <pre>install.packages("hyperSpec",repos="http://R-Forge.R-project.org")</pre>
 </p>
 

@@ -1,7 +1,8 @@
 .onLoad <- function (libname, pkgname){
   require (lattice)
   require (utils)
-  require (plotrix)
+  if (! require (plotrix, warn.conflicts = FALSE))
+    warning ("hyperSpec will use its own replacement for plotrix' axis.break")  
 
   if (! require (latticeExtra))
     warning ("package 'latticeExtra' is needed for Voronoi plots.")
@@ -17,7 +18,7 @@
        '   vignette (package = "hyperSpec")\n\n',
        "If you use this package please cite it appropriately.\n",
        "   citation(\"hyperSpec\")\nwill give you the correct reference.", "\n\n",
-       'The project is hosted on http://r-forge.r-project.org/projects/hyperspec/\n\n',
+       "The project's homepage is http://hyperspec.r-forge.r-project.org\n\n",
        sep = "")
 }
 
