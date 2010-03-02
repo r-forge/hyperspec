@@ -16,8 +16,8 @@ More generally, any data that is recorded over a discretized variable, e.g. abso
 \tabular{ll}{
 Package: \tab hyperSpec\cr
 Type: \tab Package\cr
-Version: \tab 0.95\cr
-Date: \tab 2009-10-12\cr
+Version: \tab 0.96\cr
+Date: \tab 2010-10-12\cr
 License: \tab LGPL\cr
 LazyLoad: \tab yes\cr
 LazyData: \tab yes\cr
