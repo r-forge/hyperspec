@@ -2,11 +2,6 @@
   require (lattice)
   require (utils)
 
-  if (! require (plotrix)){
-    cat ("hyperSpec will use its own replacement for plotrix' axis.break\n\n")
-    axis.break <- .axis.break
-  }
-
   if (! require (latticeExtra))
     cat ("package 'latticeExtra' is needed for Voronoi plots.\n\n")
 }
