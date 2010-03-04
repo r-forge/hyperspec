@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#cd $1
+
+sed "s/\(^Version: .*-\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$/\1`date +%F`\2/" pkg/DESCRIPTION > .DESCRIPTION
+sed     "s/\(^Date: .*\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$/\1`date +%F`\2/" .DESCRIPTION > pkg/DESCRIPTION 
+rm .DESCRIPTION
+
+rm hyperSpec*
+
+R CMD check pkg || echo 'CHECK failed' && exit
+rm -r pkg.Rcheck
+
+R CMD build pkg || echo 'CHECK failed' && exit
+mv hyperSpec-*.tar.gz www/hyperSpec-prebuilt.tar.gz
+mv hyperSpec-*.zip www/hyperSpec-prebuilt.zip
+
+cd Vignettes
+zip -u chondrocytes.zip
+
+cd ..
+

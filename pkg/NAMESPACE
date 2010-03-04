@@ -60,8 +60,7 @@ export (bind,
         mean_sd,
         wc,
         stacked.offsets,
-        trellis.factor.key,
-        axis.break
+        trellis.factor.key
         )
 
 exportMethods ("initialize",
