@@ -233,7 +233,6 @@ E.\,g. to read a spectrum saved in Renishaw's ASCII file format, use:
 <<scan.txt.Renishaw>>=
 paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
 paracetamol
-save (paracetamol, file = "paracetamol.rda")
 @
 
 Vignette \texttt{FileIO} discusses the available filters and also how to derive own filters for importing  manufacturer specific data.

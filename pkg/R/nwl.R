@@ -3,10 +3,10 @@
 ##' The number of data points per spectrum (number of wavelengths, number of columns in the spectra
 ##' matrix) 
 ##' 
+##' @export 
 ##' @rdname ncol
 ##' @param x hyperSpec object
 ##' @return number of data points per spectrum
-##' @export 
 ##' @examples
 ##' nwl (chondro)
 

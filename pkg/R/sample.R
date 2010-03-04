@@ -3,6 +3,8 @@
 ###  make sample generic with ... argument
 ###
 
+#setGeneric ("sample", signature = "x")
+
 setGeneric ("sample",
             def = function (x, size, replace = FALSE, prob = NULL, ...){
               standardGeneric ("sample")
@@ -11,6 +13,7 @@ setGeneric ("sample",
               base::sample (x = x, size = size, replace = replace, prob = prob, ...)
             }
 )
+
 
 ###------------------------------------------------------------------------------
 ###
@@ -23,7 +26,7 @@ setMethod ("sample", signature = "hyperSpec",
                      short = "sample", user = NULL, date = NULL) {
              validObject (x)
 
-             s <- sample (nrow (x), size = size, replace = replace, prob = prob)
+             s <- sample.int (nrow (x), size = size, replace = replace, prob = prob)
 
              if (index)
                s
@@ -35,7 +38,7 @@ setMethod ("sample", signature = "hyperSpec",
            }
            )
 
-
+#setGenericImplicit ("sample")
 
 
 

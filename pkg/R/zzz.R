@@ -1,11 +1,9 @@
 .onLoad <- function (libname, pkgname){
   require (lattice)
   require (utils)
-  if (! require (plotrix, warn.conflicts = FALSE))
-    warning ("hyperSpec will use its own replacement for plotrix' axis.break")  
 
   if (! require (latticeExtra))
-    warning ("package 'latticeExtra' is needed for Voronoi plots.")
+    cat ("package 'latticeExtra' is needed for Voronoi plots.\n\n")
 }
 
 .onAttach <- function (libname, pkgname){

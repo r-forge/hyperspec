@@ -62,6 +62,7 @@ This information can be stored together with the spectra, and also gets an appro
 flu$c <- seq (from = 0.05, to = 0.30, by = 0.05)
 labels (flu, "c") <- "c / (mg / l)"
 flu
+save (flu, file = 'flu.rda')
 @
 
 Now the \Rclass{hyperSpec}  object \Robject{flu} contains two data columns, holding the actual spectra and the
