@@ -22,7 +22,7 @@ matlab.dark.palette(n = 100, \dots)
 \author{C. Beleites}
 \seealso{\code{\link[grDevices]{rainbow}}}
 \examples{
-plotmap (chondro, trellis.args = list (col.regions = matlab.palette ()))
+plotmap (chondro [,, 778], col.regions = matlab.palette ())
 plot (flu, col = matlab.dark.palette (nrow (flu)))
 }
 \keyword{color}

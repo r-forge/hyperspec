@@ -34,7 +34,10 @@ spc <- new ("hyperSpec", spc = matrix (rnorm (5) + 1:5, ncol = 5))
 spc <- cbind (spc, spc+.5)
 
 plot (spc, "spc")
-plot (orderwl (spc), "spc", add = TRUE, col = "red")
+text (wl (spc), spc [[]], as.character (1:10))
+spc <- orderwl (spc)
+plot (spc, "spc")
+text (wl (spc), spc [[]], as.character (1:10))
 
 ## Example 2
 spc <- new ("hyperSpec", spc = matrix (rnorm (5)*2 + 1:5, ncol = 5))
@@ -45,7 +48,6 @@ spc[[]]
 
 spc <- orderwl (spc)
 lines (seq_len(nwl(spc)), spc[[]], type = "l", col = "red")
-lines (seq_len(nwl(spc)) / 2 + 0.5, spc[[]], type = "l", col = "blue")
 spc[[]]
 }
 

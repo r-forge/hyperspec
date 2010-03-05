@@ -65,6 +65,10 @@
 }
 \examples{
 
+cluster.means <- aggregate (chondro, chondro$clusters, mean_pm_sd)
+plot(cluster.means, stacked = ".aggregate", fill = ".aggregate",
+     col = matlab.dark.palette (3))
+
 ## make some "spectra"
 spc <- new ("hyperSpec", spc = sweep (matrix (rnorm (10*20), ncol = 20), 1, (1:10)*5, "+"))
 

@@ -69,7 +69,6 @@ plotspc (laser, axis.args=list (x = list (at = seq (404.5, 405.8, .1))))
 for (i in seq_along (wl))
    abline (v = wl[i], col = cols[i], lwd = 2)
 
-X11()
 plotc (laser [,, wl], spc ~ t, groups = .wavelength, type = "b",
        col = cols)
 }
