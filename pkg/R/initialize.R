@@ -8,7 +8,7 @@
 setMethod ("initialize", "hyperSpec",
 		function (.Object, spc = NULL, data = NULL,
 				wavelength = NULL, label = NULL, log = NULL,
-				...,
+				## ...,
 				short = "initialize", user = NULL, date = NULL){
 			long <- list ()
 			

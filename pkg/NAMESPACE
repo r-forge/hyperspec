@@ -1,17 +1,10 @@
 import(methods)
 import(stats)
-#importFrom (methods, initialize)
-#importFrom (methods, Arith)
-#importFrom (methods, show)
-#importFrom (methods, cbind2)
-#importFrom (methods, rbind2)
-#importFrom (stats, aggregate)
 importFrom (graphics, plot)
 importFrom (lattice, trellis.focus)
 importFrom (lattice, panel.identify)
 importFrom (lattice, levelplot)
 importFrom (grDevices, rainbow) 
-#import(graphics)
 
 exportClass (hyperSpec)
 
