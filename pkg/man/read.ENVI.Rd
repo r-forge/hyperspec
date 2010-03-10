@@ -34,7 +34,7 @@ read.ENVI.Nicolet (\dots, x = NA, y = NA, log = list (), keys.hdr2log = TRUE,
   from the ENVI header file. These data is then handed to
     \code{\link[hyperSpec]{initialize}}} 		   
   \item{keys.hdr2data, keys.hdr2log}{determine which fields of the header file should
-  be put into the extra data and which are to be stored in long.description in the 
+  be put into the extra data and which are to be stored in \code{long.description$header} in the 
   hyperSpec object's log. Defaults to putting all header information into the log, 
   and none as extra data.
   

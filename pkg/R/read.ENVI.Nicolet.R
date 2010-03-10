@@ -1,38 +1,37 @@
-####-----------------------------------------------------------------------------
-####
-####  read.ENVI.Nicolet - read ENVI files written by Nicolet instruments
-####  
-
-read.ENVI.Nicolet <- function (..., 
+read.ENVI.Nicolet <- function (..., # goes to read.ENVI
 		# file headerfile, header
 		x = NA, y = NA, # NA means: use the specifications from the header file if possible
 		log = list (),
 		keys.hdr2log = TRUE,
 		nicolet.correction = FALSE) {
 	
+  ## set some defaults
 	log <- modifyList (list (short = "read.ENVI.Nicolet", 
 									 long = list (call = match.call ())),
 							 log)
-	
+  ## the additional keywords to interprete must be read
 	if (! isTRUE (keys.hdr2log))
 		keys.hdr2log <- unique (c ("description", "z plot titles", "pixel size", keys.hdr2log))
 	
+  ## most work is done by read.ENVI
 	spc <- read.ENVI (..., keys.hdr2log = keys.hdr2log,
 			x = if (is.na (x)) 0 : 1 else x,
 			y = if (is.na (y)) 0 : 1 else y,
 			log = log)
 	
-	header <-spc@log$long.description [[1]] 
+  ## get the header for post-processing
+	header <-spc@log$long.description [[1]]$header 
 	
-	### From here on processing the additional keywords in Nicolet's ENVI header
+### From here on processing the additional keywords in Nicolet's ENVI header ************************
 	
-	## z plot titles (Nicolet) ------------------------------------------------------------------------
-	# default labels
+  ## z plot titles ----------------------------------------------------------------------------------
+  ## default labels
 	label <- list (x = expression (`/` (x, micro * m)),
 						y = expression (`/` (y, micro * m)),
 						spc = 'I / a.u.',
 						.wavelength = expression (tilde (nu) / cm^-1))		
 
+  ## get labels from header information
 	if (!is.null (header$'z plot titles')){
 		pattern <- "^[[:blank:]]*([[:print:]^,]+)[[:blank:]]*,.*$"
 		tmp <- sub (pattern, "\\1", header$'z plot titles')
@@ -49,12 +48,15 @@ read.ENVI.Nicolet <- function (...,
 		else
 			label$spc <- tmp
 	}
+  
+  ## modify the labels accordingly 
 	spc@label <- modifyList (label, spc@label)
 		
-	## set up spatial coordinates -------------------------------------------------------------------
+  ## set up spatial coordinates ---------------------------------------------------------------------
 	## look for x and y in the header only if x and y are NULL
-	## they are in decription + pixel size for Nicolet ENVI 
+  ## they are in `description` and `pixel size`
 	
+  ## set up regular expressions to extract the values
 	p.description <- "^Spectrum position [[:digit:]]+ of [[:digit:]]+ positions, X = ([[:digit:].-]+), Y = ([[:digit:].-]+)$"
 	p.pixel.size  <- "^[[:blank:]]*([[:digit:].-]+),[[:blank:]]*([[:digit:].-]+).*$"
 
@@ -68,12 +70,13 @@ read.ENVI.Nicolet <- function (...,
 		x [2] <- as.numeric (sub (p.pixel.size, "\\1", header$'pixel size'))
 		y [2] <- as.numeric (sub (p.pixel.size, "\\2", header$'pixel size'))
 		
-		# it seems that at least for some files the step size is given in mm while the offset is in μm...
+    ## it seems that the step size is given in mm while the offset is in micron
 		if (nicolet.correction) { 
 			x [2] <- x [2] * 1000
 			y [2] <- y [2] * 1000
 		}
 		
+    ## now calculate and set the x and y coordinates
 		x <- x [2] * spc$x + x [1]
 		if (! any (is.na (x)))
 			spc@data$x <- x

@@ -4,6 +4,8 @@
 
   if (! require (latticeExtra))
     cat ("package 'latticeExtra' is needed for Voronoi plots.\n\n")
+  if (! require (plyr))
+    cat ("package 'plyr' is needed for rbind.fill.hyperSpec.\n\n")
 }
 
 .onAttach <- function (libname, pkgname){

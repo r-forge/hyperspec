@@ -50,6 +50,8 @@ list \url{hyperspec-help@lists.r-forge.r-project.org}, subscription and archives
 The source code of this vignette including the spectra files are available as .zip file at \phy's
 home page:
  \url{http://hyperspec.r-forge.r-project.org/FileIO.zip}
+ 
+ Note that some definitions are in file \texttt{vignettes.defs}.
 }
 \clearpage
 \tableofcontents
@@ -66,10 +68,10 @@ In addition, \phy comes with predifined import functions for different data form
 This document divides the discussion into dealing with ASCII files (section~\ref{sec:ascii}, p.~\pageref{sec:ascii}) and binary file formats (section~\ref{sec:binary-file-formats}, p.~\pageref{sec:binary-file-formats}).
 If data export for the respective format is possible, it is discussed in the same sections.
 As sometimes the actual data written by the spectrometer software exhibits peculiarities, \phy offers
-specialized import functions. These are in general named after the data format followed by the
+several specialized import functions. These are in general named after the data format followed by the
 manufacturer (\eg read.ENVI.Nicolet).
 
-Finally, we give overview lists of the directly supported file formats: sorted by file format
+Overview lists of the directly supported file formats are in the appendix: sorted by file format
 (appendix~\ref{sec:format}, p.~\pageref{sec:format}), manufacturer (appendix~\ref{sec:manufacturer}, p.~\pageref{sec:manufacturer}),  and by spectroscopy (appendix~\ref{sec:spectroscopy}, p.~\pageref{sec:spectroscopy}).
 
 \section{Creating a \chy object with \Rfunction{new}}
@@ -78,7 +80,7 @@ Finally, we give overview lists of the directly supported file formats: sorted b
 \index{initialize!hyperSpec object}
 \index{create!hyperSpec object}
 \index{hyperSpec object!create}
-If the data is in R's workspace, a \Rclass{hyperSpec} object is created by:
+To create a \Rclass{hyperSpec} object from data in R's workspace, use:
 \begin{Schunk}
   \begin{Sinput}
 spc <- new ("hyperSpec", spc, wavelength, data, label)}
@@ -86,7 +88,7 @@ spc <- new ("hyperSpec", spc, wavelength, data, label)}
 \end{Schunk}
 With the arguments:
 \begin{labeling}{\Rcode{wavelength}}
-\item [\Rcode{spc}] the spectra matrix
+\item [\Rcode{spc}] the spectra matrix (may also be given as matrix inside column \Rcode{\$spc} of \Rcode{data})
 \item [\Rcode{wavelength}] the wavelength axis vector
 \item [\Rcode{data}] the extra data (possibly already including the spectra matrix in column  
 \texttt{spc})
@@ -97,7 +99,7 @@ axis label in \Rcode{\$spc}.
 
 Thus, once your data is in R's workspace, creating a \chy object is easy. I suggest wrapping the code
 to import your data and the line joining it into a \chy object by your own import function. You are
-more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import}, (p.~\pageref{sec:writing-Import}) gives an example of how to wrap up the code.
+more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import}, (p.~\pageref{sec:writing-Import}) discusses examples of custom import functions.
 
 \section{ASCII files}
 \label{sec:ascii}
@@ -161,7 +163,7 @@ plot (triazine)
 make.all.permutations ("ASCII", "JCAMP-DX")
 @
 \index{jdx|see{JCAMP-DX}}
-JCAMP-DX files\cite{McDonald1988}  are not supported as there has not yet been the need to import them. 
+JCAMP-DX files\cite{McDonald1988} are not supported as there has not yet been the need to import them. 
 
 \subsection{ASCII Export} 
 ASCII export can be done in wide and long format using \Rfunction{write.txt.long} and
@@ -183,7 +185,6 @@ R.matlab\textquotedbl)}.
 spc.mat <- readMat ("spectra.mat")
 \end{Sinput}
 \end{Schunk}
-will import 
 
 If the .mat file was saved with compression, the additional package \Rpackage{Rcompression} is
 needed. It can be installed from omegahat: 
@@ -229,10 +230,17 @@ make.all.permutations ("ENVI", "Infrared", "Bruker")
  ENVI files are binary data accompanied by an ASCII header file. \phy's function
 \Rfunction{read.ENVI} can be used to import them.
 
-As we experienced missing header files (Bruker's Opus software frequently produces header files
+As we experienced missing header files (Bruker's Opus software frequently produced header files
 without any content), the data that would usually be read from the header file can also be handed to
 \Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should
-contain.
+contain, see also the discussion of ENVI files written by Bruker's OPUS software (section~\ref{sec:read.ENVI.Bruker}, p.~\pageref{sec:read.ENVI.Bruker}).
+
+Here is a demonstration of the use of \Rfunction{read.ENVI}:
+<<read.ENVI>>=
+spc <- read.ENVI ("ENVI/example2.img")
+spc
+@
+
 
 \subsubsection{ENVI Export}
 \label{sec:envi-export}
@@ -247,12 +255,11 @@ make.all.permutations ("spc", "Renishaw", "Raman")
 @
 \index{spc}
 
-Thermo Galactic's .spc file format\cite{Galactic1997} can be read by \Rfunction{read.spc}. 
+Thermo Galactic's .spc file format\cite{Galactic1997} can be imported by \Rfunction{read.spc}. 
 
-A vast variety of sub-formats is available. \phy's import function does not support the \emph{old
-file format} that was used before 1996. In addition, no test data with \emph{w planes} was available
--- thus the import of such files could not be tested. If you come across such files, please contact
-the package maintainer.
+A variety of sub-formats exists. \phy's import\Rfunction{read.spc} function does \emph{not} support the old file format that was used before 1996. In addition, no test data with \emph{w planes} was available
+--- thus the import of such files could not be tested. If you come across such files, please contact
+the package maintainer (\mailme).
 
 Here are some tests using Thermo Galactic's example files:
 <<read.spc>>=
@@ -280,12 +287,27 @@ This information is often useful (Kaiser's Hologram software \eg stores the stag
 
 \Rfunction{read.spc} has four arguments that allow fine-grained control of storing such information in the \chy object:
 \begin{labeling}{\Rcode{keys.hdr2data}}
-\item[\Rcode{keys.hdr2data}] parameters from the spc file header and subfile header that should become extra data columns
-\item[\Rcode{keys.hdr2log}] parameters from the spc file header and subfile header that should be stored as list entries in the \Rfunarg{long.description} of the log entry
+\item[\Rcode{keys.hdr2data}] parameters from the spc file and subfile headers that should become extra data columns
+\item[\Rcode{keys.hdr2log}] parameters from the spc file and subfile headers that should be stored as list entries in the \Rfunarg{long.description} of the log entry
 \item[\Rcode{keys.log2data}] parameters from the spc file log block that should become extra data columns
 \item[\Rcode{keys.log2log}] parameters from the spc file log block that should be stored as list entries in the \Rfunarg{long.description} of the log entry
 \end{labeling}
 The value of these arguments can either be logical (amounting to either use all or none of the information in the file) or a character vector giving the names of the parameters that should be used. Note that the header file field names are always lowercase, while the log entries are treated case sensitive.
+
+.spc files may contain multiple spectra that do \emph{not} share a common wavelength axis. In this case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum each. \Rfunction{rbind.fill} may be used to combine this list into one \chy object:
+<<read.spc.list>>=
+spc <- read.spc ("spc/BARBITUATES.SPC")
+class (spc)
+length (spc)
+spc <- do.call (rbind.fill.hyperSpec, spc)
+spc
+spc [[1:10, , 25 ~ 30]]
+@
+<<spc.list.plot, fig = TRUE>>=
+ levelplot (spc ~ .wavelength * z, as.long.df (tmp), panel = panel.leveldotplot, cex = .3,
+            col.regions = colorRampPalette (c ("orange", "darkred")))
+@
+
 
 \paragraph{Deriving manufacturer specific import filters.}
 Please note that future changes inside the read.spc function are likely to occur. 
@@ -345,7 +367,6 @@ Also here, giving the correct offset and pixel size values as function arguments
 spc <- read.ENVI.Nicolet ("ENVI/example2.img", nicolet.correction = TRUE) 
 spc ## dummy sample with all intensities zero
 @
-
 
 \subsection{Kaiser Optical Systems Raman}
 \label{sec:Kaiser}
@@ -517,7 +538,7 @@ data column called \Rcode{spc}.
 Thus,
 <<scan.txt.PerkinElmer>>=
 source ("scan.txt.PerkinElmer.R")
-scan.txt.PerkinElmer ("txt.PerkinElmer/*.txt", skip = 54)
+scan.txt.PerkinElmer ("txt.PerkinElmer/flu?.txt", skip = 54)
 @
 imports the spectra.
 

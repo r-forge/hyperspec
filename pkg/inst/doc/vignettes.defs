@@ -89,9 +89,7 @@
 
 \newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
 
-\newcommamd{\mailme}{\url{\Sexpr{packageDescription ("hyperSpec")$Maintainer}}}
-
-\author{Claudia Beleites (\url{cbeleites@units.it})\\
+\author{Claudia Beleites \url{<cbeleites@units.it>}\\
 CENMAT, DMRN, University of Trieste}
 
 \SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, ps = FALSE}
@@ -196,4 +194,8 @@ make.bib <- function (..., file = "") {
   }
 }
 
+@
+
+<<mailme, results = tex, echo = FALSE, strip.white=FALSE>>=
+cat ("\\newcommand{\\mailme}{\\href{mailto:", packageDescription ("hyperSpec")$Maintainer, "}{\\nolinkurl{", packageDescription ("hyperSpec")$Maintainer,"}}}\n", sep = "")
 @
