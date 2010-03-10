@@ -11,4 +11,4 @@ License: GPL
 LazyLoad: yes
 LazyData: yes
 Depends: methods, utils, lattice
-Suggests: R.matlab, RColorBrewer, latticeExtra, tripack, deldir, plotrix
+Suggests: R.matlab, RColorBrewer, latticeExtra, tripack, deldir, plotrix, plyr

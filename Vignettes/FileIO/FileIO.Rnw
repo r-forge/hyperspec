@@ -303,8 +303,8 @@ spc <- do.call (rbind.fill.hyperSpec, spc)
 spc
 spc [[1:10, , 25 ~ 30]]
 @
-<<spc.list.plot, fig = TRUE>>=
- levelplot (spc ~ .wavelength * z, as.long.df (tmp), panel = panel.leveldotplot, cex = .3,
+<<spclistplot, fig = TRUE>>=
+ levelplot (spc ~ .wavelength * z, spc, panel = panel.leveldotplot, cex = .3,
             col.regions = colorRampPalette (c ("orange", "darkred")))
 @
 
