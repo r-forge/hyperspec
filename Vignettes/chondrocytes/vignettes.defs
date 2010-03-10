@@ -197,5 +197,5 @@ make.bib <- function (..., file = "") {
 @
 
 <<mailme, results = tex, echo = FALSE, strip.white=FALSE>>=
-cat ("\\newcommand{\\mailme}{\\href{mailto:", packageDescription ("hyperSpec")$Maintainer, "}{\\nolinkurl{", packageDescription ("hyperSpec")$Maintainer,"}}}\n", sep = "")
+cat ("\\newcommand{\\mailme}{\\href{mailto:", packageDescription ("hyperSpec")$Maintainer, "}{\\texttt{", packageDescription ("hyperSpec")$Maintainer,"}}}\n", sep = "")
 @

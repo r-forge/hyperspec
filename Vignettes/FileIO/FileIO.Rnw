@@ -44,7 +44,7 @@ The information should include
 \end{itemize}
 
 If you need help finding out how to import your data, \phy has a mailing
-list \url{hyperspec-help@lists.r-forge.r-project.org}, subscription and archives are available at \url{http://r-forge.r-project.org/mail/?group_id=366}.
+list \href{mailto:hyperspec-help@lists.r-forge.r-project.org}{\nolinkurl{hyperspec-help@lists.r-forge.r-project.org}}, subscription and archives are available at \url{http://r-forge.r-project.org/mail/?group_id=366}.
 }\\[1cm]
 \warnbox{Reproducing the Examples in this Vignette}{
 The source code of this vignette including the spectra files are available as .zip file at \phy's
