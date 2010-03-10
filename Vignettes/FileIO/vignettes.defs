@@ -89,6 +89,8 @@
 
 \newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
 
+\newcommamd{\mailme}{\url{\Sexpr{packageDescription ("hyperSpec")$Maintainer}}}
+
 \author{Claudia Beleites (\url{cbeleites@units.it})\\
 CENMAT, DMRN, University of Trieste}
 
@@ -104,7 +106,17 @@ options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6))))
 options ("width" = 100)
 library (hyperSpec)
 
-# redefine lattice functions so that the result is pronted without external print command
+# redefine lattice functions so that the result is printed without external print command
+setMethod ("plot",
+           signature (x = "hyperSpec", y = "character"),
+           function (x, y, ...){
+             tmp <- hyperSpec:::.plot (x, y, ...)
+             if (is (tmp, "trellis"))
+               print (tmp)
+             invisible (tmp)
+           })
+
+
 plotmap <- function (...) print (hyperSpec:::plotmap (...))
 
 setMethod ("levelplot", signature (x = "hyperSpec", data = "missing"),

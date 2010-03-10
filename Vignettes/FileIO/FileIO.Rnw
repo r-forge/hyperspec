@@ -31,8 +31,7 @@ Vignette for the R package \Rpackage{hyperSpec} }
   \phy supports a number of file formats relevant for different types of spectroscopy. This is
 naturally only a subset of the file formats produced by different spectroscopic equipment. 
 
-\indent If you use \phy with data formats not mentioned in this document, please send an email to the
-maintainer, so that this document can be updated. 
+\indent If you use \phy with data formats not mentioned in this document, please send an email to \mailme, so that this document can be updated. 
 
 The information should include
 \begin{itemize}
@@ -44,9 +43,8 @@ The information should include
 \item Documentation, particularly the description of the data format
 \end{itemize}
 
-If you need help finding out how to import your data, feel free to ask, preferrably via the mailing
-list or feature request tracker on \phy's home page
-\url{http://r-forge.r-project.org/projects/hyperspec/}.
+If you need help finding out how to import your data, \phy has a mailing
+list \url{hyperspec-help@lists.r-forge.r-project.org}, subscription and archives are available at \url{http://r-forge.r-project.org/mail/?group_id=366}.
 }\\[1cm]
 \warnbox{Reproducing the Examples in this Vignette}{
 The source code of this vignette including the spectra files are available as .zip file at \phy's
@@ -64,8 +62,8 @@ The most basic funtion to create \chy objects is \Rfunction{new ("hyperSpec")}
 (section~\ref{sec:new}). It makes a \chy object from data already in R's workspace. Thus, once the
 spectra are imported into R, conversion to \chy objects is straightforward.
 
-However, \phy comes with predifined import functions for different data formats.
-This document divides the discussion into dealing with ASCII files (section) and binary file formats.
+In addition, \phy comes with predifined import functions for different data formats.
+This document divides the discussion into dealing with ASCII files (section~\ref{sec:ascii}, p.~\pageref{sec:ascii}) and binary file formats (section~\ref{sec:binary-file-formats}, p.~\pageref{sec:binary-file-formats}).
 If data export for the respective format is possible, it is discussed in the same sections.
 As sometimes the actual data written by the spectrometer software exhibits peculiarities, \phy offers
 specialized import functions. These are in general named after the data format followed by the
@@ -99,10 +97,10 @@ axis label in \Rcode{\$spc}.
 
 Thus, once your data is in R's workspace, creating a \chy object is easy. I suggest wrapping the code
 to import your data and the line joining it into a \chy object by your own import function. You are
-more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import} gives an
-example of how to wrap up the code.
+more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import}, (p.~\pageref{sec:writing-Import}) gives an example of how to wrap up the code.
 
 \section{ASCII files}
+\label{sec:ascii}
 \label{sec:read.txt.long}
 \label{sec:read.txt.wide}
 \index{ASCII!long|see{ASCII long}}
@@ -301,8 +299,7 @@ spectra into ASCII files. The functions discussed above are written in a very ge
 highly customizable.
 I recommend wrapping these calls with the appropriate settings for
 your spectra format in an import function. You may also consider contributing
-such import filters to \Rpackage{hyperSpec}: send me 
-(\href{mailto:cbeleites@units.it}{cbeleites@units.it})
+such import filters to \Rpackage{hyperSpec}: send me \mailme
 the documented code (either .R + .Rd file or Roxygen commented .R).
 
 If you are able to import data of any format not mentioned in this document (even without the need of

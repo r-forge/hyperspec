@@ -78,3 +78,4 @@ setMethod ("plot",
 ### allow choice of spectral or map plot by second argument
 setMethod ("plot",
            signature (x = "hyperSpec", y = "character"), .plot)
+
