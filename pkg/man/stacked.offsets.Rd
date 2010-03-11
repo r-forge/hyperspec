@@ -27,8 +27,8 @@ need fine control over the stacking, you may calculate the y offsets yourself.
 a list containing
 \item{offsets}{numeric with the yoffset for each group in \code{stacked}}
 \item{groups}{numeric with the group number for each spectrum}
+\item{levels}{if \code{stacked} is a factor, the levels of the groups}
 }
-
 \author{C. Beleites}
 \seealso{
 \code{\link[hyperSpec]{plotspc}}

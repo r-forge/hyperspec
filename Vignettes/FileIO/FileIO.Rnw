@@ -1,5 +1,6 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*- 
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\pdfcompresslevel0
 \usepackage{makeidx}
 \makeindex
 
@@ -155,7 +156,7 @@ triazine <- new ("hyperSpec", wavelength = file [,1], spc = t (file [, -1]),
 triazine
 @
 <<plot-triazine, fig = TRUE>>=
-plot (triazine)
+plot (triazine [1])
 @
 
 \subsection{JCAMP-DX}
@@ -426,12 +427,12 @@ make.all.permutations ("spc", "Kaiser", "Map")
 \textquotedbl path/to/files/*.spc\textquotedbl ).
 
 The data for the following example was saved with wavelength axis being camera pixels rather than Raman shift. Thus two files for each spectrum were saved by Hologram. Thus, a file name pattern is difficult to give and a vector of file names is used instead:
-<<readspcKaiserMap, fig = TRUE>>=
+<<readspcKaiserMap>>=
 files <- Sys.glob ("spc.KaiserMap/*.spc")
 spc.low <- read.spc.KaiserMap (files [seq (1, length (files), by = 2)])
 spc.high <- read.spc.KaiserMap (files [seq (2, length (files), by = 2)])
 wl (spc.high) <- wl (spc.high) + 1340
-plot (cbind (spc.low, spc.high))
+spc
 @
 
 \subsection{Renishaw Raman}
