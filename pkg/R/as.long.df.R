@@ -32,7 +32,7 @@ as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE, na.rm = TRUE) {
                        tmp)
 
   if (na.rm)
-    tmp <- subset (tmp, !is.na (spc))
+    tmp <- tmp [!is.na (tmp$spc), ]
   
   tmp
 }

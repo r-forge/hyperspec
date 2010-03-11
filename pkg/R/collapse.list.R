@@ -6,8 +6,11 @@
 ##' Extra data is combined in the same manner.
 ##' 
 ##' @author C. Beleites
+##' @title Collapse hyperSpec objects
 ##' @export
 ##' @param ... hyperSpec objects to be collapsed into one object. Instead of giving several arguments, a list with all objects to be collapsed may be given.
+##' @param orderwl
+##' @param short,user,date handed to logentry
 ##' @return a hyperSpec object
 ##' @examples
 ##'  A <- new ("hyperSpec", spc = c(0, 1, .2), wavelength = c (1, 3, 7))

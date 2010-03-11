@@ -305,10 +305,6 @@ spc <- do.call (rbind.fill.hyperSpec, spc)
 spc
 spc [[1:10, , 25 ~ 30]]
 @
-<<spclistplot, fig = TRUE, width = 8, height = 8>>=
- levelplot (spc ~ .wavelength * z, log  (spc), panel = panel.levelplot.points, cex = .3,
-            col.regions = colorRampPalette (c ("orange", "darkred")), col.symbol = "#00000000")
-@
 
 
 \paragraph{Deriving manufacturer specific import filters.}

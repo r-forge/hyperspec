@@ -8,15 +8,16 @@ rm .DESCRIPTION
 
 rm hyperSpec*
 
-R CMD check pkg || echo 'CHECK failed' && exit
+R CMD check pkg || ( echo 'CHECK failed' && exit )
 rm -r pkg.Rcheck
 
-R CMD build pkg || echo 'CHECK failed' && exit
-mv hyperSpec-*.tar.gz www/hyperSpec-prebuilt.tar.gz
-mv hyperSpec-*.zip www/hyperSpec-prebuilt.zip
+R CMD build pkg || ( echo 'CHECK failed'  && exit )
+mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
+mv hyperSpec_*.zip www/hyperSpec-prebuilt.zip
 
 cd Vignettes
 zip -u chondrocytes.zip
+zip -u FileIO.zip
 
 cd ..
 
