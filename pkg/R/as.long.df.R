@@ -4,7 +4,7 @@
 ###
 ### TODO: look for other matrices/arrays to expand
 
-as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE) {
+as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE, na.rm = TRUE) {
   .is.hy (x)
   validObject (x)
 
@@ -31,6 +31,9 @@ as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE) {
                          length.out = nrow (tmp))),
                        tmp)
 
+  if (na.rm)
+    tmp <- subset (tmp, !is.na (spc))
+  
   tmp
 }
 

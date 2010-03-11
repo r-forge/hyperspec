@@ -4,6 +4,7 @@
 \makeindex
 
 \SweaveInput{vignettes.defs}
+\setkeys{Gin}{width = \textwidth}
 \hypersetup{pdftitle={FileIO}, 
  pdfauthor={C. Beleites},
  pdfsubject={Vignette File Import and Export for R package hyperSpec},
@@ -303,9 +304,9 @@ spc <- do.call (rbind.fill.hyperSpec, spc)
 spc
 spc [[1:10, , 25 ~ 30]]
 @
-<<spclistplot, fig = TRUE>>=
- levelplot (spc ~ .wavelength * z, spc, panel = panel.leveldotplot, cex = .3,
-            col.regions = colorRampPalette (c ("orange", "darkred")))
+<<spclistplot, fig = TRUE, width = 8, height = 8>>=
+ levelplot (spc ~ .wavelength * z, log  (spc), panel = panel.levelplot.points, cex = .3,
+            col.regions = colorRampPalette (c ("orange", "darkred")), col.symbol = "#00000000")
 @
 
 
@@ -320,12 +321,10 @@ Many spectrometer manufacturers provide a function to export their
 spectra into ASCII files. The functions discussed above are written in a very general way, and are
 highly customizable.
 I recommend wrapping these calls with the appropriate settings for
-your spectra format in an import function. You may also consider contributing
-such import filters to \Rpackage{hyperSpec}: send me \mailme
-the documented code (either .R + .Rd file or Roxygen commented .R).
-
+your spectra format in an import function. Please consider contributing
+such import filters to \Rpackage{hyperSpec}: send me the documented code (for details see the box at the beginning of this document).
 If you are able to import data of any format not mentioned in this document (even without the need of
-new converters), please let me know (see the box at the beginning of this document). 
+new converters), please let me know (details again in the box at the beginning of this document). 
 
 \subsection{Bruker FT-IR Imaging}
 \label{sec:read.ENVI.Bruker}
@@ -336,7 +335,7 @@ make.all.permutations ("ENVI", "Map", "Bruker")
 @
 
 We use \Rfunction{read.ENVI} to import IR-Images collected with a Bruker Hyperion spectrometer with
-OPUS software. As mentioned above, the header files are frequently missing. We found the necessary
+OPUS software. As mentioned above, the header files are frequently empty. We found the necessary
 information to be:
 <<eval=FALSE>>=
 header <- list (samples = 64 * no.images.in.row,
@@ -348,7 +347,7 @@ header <- list (samples = 64 * no.images.in.row,
 No spatial information is given in the ENVI header (if written). The lateral coordinates can be setup
 by specifying origin and pixel size for $x$ and $y$ directions. For details please see the help page.
 
-The proprietary file format of the Opus software is not (yet) supported.
+The proprietary file format of the Opus software is not yet supported.
 
 \subsection{Nicolet FT-IR Imaging}
 \label{sec:read.ENVI.Nicolet}
@@ -361,7 +360,7 @@ header file that should allow to reconstruct the lateral coordinates as well as 
 
 It seems that the position of the first spectrum is recorded in \mum{}, while the pixel size is in
 mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
-Also here, giving the correct offset and pixel size values as function arguments is possible.
+Alternatively, the correct offset and pixel size values may be given as function arguments.
 
 <<readENVINicolet>>=
 spc <- read.ENVI.Nicolet ("ENVI/example2.img", nicolet.correction = TRUE) 
@@ -378,11 +377,10 @@ make.all.permutations ("hol", "Raman", "Kaiser")
 
 Spectra obtained using Kaiser's Hologram software can be saved either in their own .hol format and
 imported into Matlab (from where the data may be written to a .mat file readable by
-\Rpackage{R.matlab}'s \Rfunction{readMat}. Alternatively, Hologram can write ASCII files and .spc
+\Rpackage{R.matlab}'s \Rfunction{readMat}. Hologram can also write ASCII files and .spc
 files. We found working with .spc files the best option. 
 
-The spectra are usually interpolated to an evenly spaced wavelength (or $\Delta\tilde\nu$) axis
-unless the spectra are saved in a by-pixel manner.
+The spectra are usually interpolated by Hologram to an evenly spaced wavelength (or $\Delta\tilde\nu$) axis unless the spectra are saved in a by-pixel manner. In this case, the full spectra consist of two files with consecutive file names: one for the low and one for the high wavenumber region. See the example for .spc import.
 
 \subsubsection{Kaiser Optical Systems ASCII Files}
 \label{sec:KaiserASCII}
@@ -397,10 +395,8 @@ We experienced two different problems with these files:
 \begin{enumerate}
 \item If the instrument computer's locale is set so that also the decimal separator is a comma,  
 commas are used both as decimal and as column separator.
-\item Values with a decimal fraction of $0$ are written as e.g. \texttt{2,}. This may be a problem
-for certain conversion functions. 
+\item Values with a decimal fraction of $0$ are written with decimal separator but no further digits (\eg \texttt{2,}). This may be a problem for certain conversion functions (\Rfunction{read.table} works fine, though). 
 \end{enumerate}
-Problems may arise 
 
 Still the files may be imported, though care must be taken:
 <<Kaiser.txt.comma>>=
@@ -418,25 +414,18 @@ spc <- new ("hyperSpec", spc = as.numeric (spc), wavelength = as.numeric (wl))
 
 \subsubsection{Kaiser Optical Systems Raman Maps}
 \label{sec:read.spc.KaiserMap}
+%
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("spc", "Raman", "Kaiser")
 make.all.permutations ("spc", "Kaiser", "Map")
 @
 
-Spectra obtained using Kaiser's Hologram software can be saved either in their own .hol format and
-imported into Matlab (from where the data may be written to a .mat file readable by
-\Rpackage{R.matlab}'s \Rfunction{readMat}. Alternatively, Hologram can write ASCII files and .spc
-files. We found working with .spc files the best option. 
-
 \phy provides the function \Rfunction{read.spc.KaiserMap} to easily import spatial collections of
 .spc files written by Kaiser's Hologram software. The filenames of all .spc files to be read into one
-\chy object can be provided either in a character vector or as a wildcard expression (\eg
+\chy object can be provided either as a character vector or as a wildcard expression (\eg
 \textquotedbl path/to/files/*.spc\textquotedbl ).
 
-The data for the following example was saved with wavelength axis camera pixels rather than Raman
-shift. Thus two files for each spectrum (one low wavenumber region, one high wavenumber region) were
-saved by Hologram. Thus, a file name pattern is difficult to give and consequently a vector of file
-names is used instead:
+The data for the following example was saved with wavelength axis being camera pixels rather than Raman shift. Thus two files for each spectrum were saved by Hologram. Thus, a file name pattern is difficult to give and a vector of file names is used instead:
 <<readspcKaiserMap, fig = TRUE>>=
 files <- Sys.glob ("spc.KaiserMap/*.spc")
 spc.low <- read.spc.KaiserMap (files [seq (1, length (files), by = 2)])
@@ -447,6 +436,7 @@ plot (cbind (spc.low, spc.high))
 
 \subsection{Renishaw Raman}
 \label{sec:scan.txt.renishaw}
+%
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("Raman", "Renishaw")
 make.all.permutations ("spc", "Raman", "Renishaw")
@@ -456,7 +446,7 @@ Renishaw's Wire software comes with an file format converter. This program can p
 format, .spc, or .jdx files.
 
 We experienced that the conversion to .spc is \emph{not} fully reliable: maps were saved as depth
-profile, loosingall spatial information. Also, an evenly spaced wavelength axis was produced,
+profile, loosing all spatial information. In addition, an evenly spaced wavelength axis was produced,
 although this was de-selected in the converter. We therefore recommend using the ASCII format.
 Otherwise the import using \Rfunction{read.spc} worked.
 
@@ -468,11 +458,11 @@ make.all.permutations ("ASCII long", "Raman", "Renishaw")
 An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}.
 The ASCII files can easily become very large, particularly with linefocus- or streamline imaging. 
 \Rfunction{scan.txt.Renishaw} provides two mechanisms to avoid running out of memory during data
-import. First of all, the file may be imported in chunks (of a given number of lines). Secondly, the
-processing of the long ASCII format into the spectra matrix is done by reshaping the vector of
-intensities into a matrix. This process does not allow any missing values in the data.
+import. The file may be imported in chunks of a given number of lines (see the last example). \Rfunction{scan.txt.Renishaw} can calculate the correct number of wavelengths (\ie data points per spectrum) if the system command \texttt{wc} is available on your computer.
+
+In addition, the processing of the long ASCII format into the spectra matrix is done by reshaping the vector of intensities into a matrix. This process does not allow any missing values in the data.
 \emph{Therefore it is not possible to import multi-spectra files with individually ``zapped''
-spectra.}
+spectra using \Rfunction{scan.txt.Renishaw}.} 
 
 The second argument to  \Rfunction{scan.txt.Renishaw} decides what type of experiment is imported.
 Supported types are:
@@ -542,7 +532,7 @@ scan.txt.PerkinElmer ("txt.PerkinElmer/flu?.txt", skip = 54)
 @
 imports the spectra.
 
-This function is not exported by \phy. While it is already useful for importing files, it is not yet general enough to work immediately with new data. The the file header is completely ignored.
+This function is not exported by \phy. While it is already useful for importing files, it is not yet general enough to work immediately with new data: the the file header is completely ignored. Thus information like the excitation wavelength is lost.
 
 \subsection{Deriving a More Specific Function: read.ENVI.Nicolet}
 
@@ -554,7 +544,7 @@ make.all.permutations ("ENVI", "Map", "Nicolet")
 
 The function \Rfunction{read.ENVI.Nicolet} is a good example for a more specific import filter
 derived from a general filter for the respective file type.
-Nicolet FT-IR Imaging software saves some non-standard key-words in the header file of the ENVI data.
+Nicolet FT-IR Imaging software saves some non-standard keywords in the header file of the ENVI data.
 These information can be used to reconstruct the $x$ and $y$ axes of the images. The units of the
 spectra are saved as well.
 

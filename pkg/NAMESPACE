@@ -4,7 +4,6 @@ importFrom (graphics, plot)
 importFrom (lattice, trellis.focus)
 importFrom (lattice, panel.identify)
 importFrom (lattice, levelplot)
-#importFrom (plyr, rbind.fill)
 importFrom (grDevices, rainbow) 
 
 exportClass (hyperSpec)
@@ -16,7 +15,6 @@ export (bind,
         seq.hyperSpec,
         logentry,
         plotmap,
-        panel.leveldotplot,
         plotvoronoi, 
         plotc, 
         plotspc, 

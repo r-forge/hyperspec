@@ -23,7 +23,7 @@
 \S4method{as.data.frame}{hyperSpec,missing,missing}(x, row.names = NULL, optional = FALSE, \dots)
 \S4method{as.matrix}{hyperSpec}(x, \dots)
 
-as.long.df (x, rownames = FALSE, wl.factor = FALSE )
+as.long.df (x, rownames = FALSE, wl.factor = FALSE, na.rm = TRUE)
 as.wide.df (x)
 
 }
@@ -34,6 +34,7 @@ as.wide.df (x)
 	 the long-format data.frame?}
   \item{wl.factor}{should the wavelengths be returned as a factor
 	 (instead of numeric)?}
+  \item{na.rm}{if \code{TRUE}, rows where spc is not \code{NA} are deleted.}
 }
 \value{
   \code{x@data} and \code{x@data$spc}, respectively.
