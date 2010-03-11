@@ -141,6 +141,13 @@ depth.profile <- new ("hyperSpec",
 <<plotdepth, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plot (depth.profile, "depth")
 @
+\\
+\textbf{plot (x, \textquotedbl{}mat\textquotedbl{})}&\tabularnewline \nopagebreak
+  \raisebox{-3.7cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat}} &
+plots the spectra matrix
+<<plotmat, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plot (laser, "mat")
+@
 
 \end{longtable}
 
@@ -192,31 +199,19 @@ plot (fake.mass.spec, lines.args = list (type = "h"))
 use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
 3100)}.
 If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}.
-Cut the wavelength axis appropriately with \Rcode{xoffset = 800}
+Cut the wavelength axis appropriately with \Rcode{xoffset = 750}
 <<wavelength, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plotspc (paracetamol, 
          wl.range = c (300 ~ 1800, 2800 ~ max), 
-         xoffset = 850)
+         xoffset = 750)
 @
 \\
-\textbf{stacked spectra}&\tabularnewline \nopagebreak
- \raisebox{-4.5cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked}} &
-use \Rfunarg{stacked = TRUE}
-<<stacked, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plotspc (chondro[1:3,,], stacked = TRUE)
+\textbf{particular wavelength ranges II }&\tabularnewline \nopagebreak
+ \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-wavelength-2}} &
+or use the extract command: 
+<<wavelength-2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plotspc (paracetamol[,, 700 ~ 1200])
 @
-\\
-\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked2}} &
-oder \Rfunarg{yoffset = }
-<<stacked2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-cluster.means <- aggregate (chondro, 
-                            chondro$clusters, 
-                            mean_pm_sd)
-plotspc (cluster.means, 
-         yoffset = rep (c (0,1500,3000), each = 3), 
-         col = rep (matlab.dark.palette (3), each = 3))
-@
-
 \\
 \textbf{more spectra into an exsisting plot}&\tabularnewline \nopagebreak
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-add}} &
@@ -232,38 +227,174 @@ use \Rcode{zeroline = \emph{list.of.arguments.to.abline}}.
 \Rcode{NULL} suppresses the line.
 <<diffline, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plotspc (paracetamol, 
-         zeroline = list (h=4500, col = "red"))
+         zeroline = list (col = "red"))
 @
+\end{longtable}
+
+\subsection{Stacked spectra}
+\label{sec:stacked-spectra}
+
+
+\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\textbf{stacked = TRUE}&\tabularnewline \nopagebreak
+ \raisebox{-4.5cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked}} &
+use \Rfunarg{stacked = TRUE}
+<<stacked, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plotspc (chondro[1:3,,], 
+         col = matlab.dark.palette (3),
+         stacked = TRUE)
+@
+\\
+\textbf{stacked = ".aggregate"}&\tabularnewline \nopagebreak
+\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked3}} &
+if you want to plot mean spectrum $\pm$ 1 standard deviation of each of the clusters, use \Rfunarg{stacked = ".aggregate"}
+<<stacked3, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+cols <- c ("dark blue", "orange", "#C02020")
+cluster.means <- aggregate (chondro, 
+                            chondro$clusters, 
+                            mean_pm_sd)
+plot (cluster.means, 
+      stacked = ".aggregate",
+      fill = ".aggregate",
+      col = cols)
+@
+\\
+\textbf{yoffset}&\tabularnewline \nopagebreak
+\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked2}} &
+or use \Rfunarg{yoffset = }
+<<stacked2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+cluster.means <- aggregate (chondro, 
+                            chondro$clusters, 
+                            mean_pm_sd)
+plotspc (cluster.means, 
+         yoffset = rep (c (0,1500,3000), each = 3), 
+         col = rep (matlab.dark.palette (3), each = 3))
+@
+\\
+\textbf{Manually}&\tabularnewline \nopagebreak
+\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked4}} &
+it's also possible to stack the spectra like this:
+<<stacked4, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+out <- c (25, 376, 559)
+outcols <- c ("orange", "magenta", "brown")
+
+## coordinate system:
+plot(chondro[1], 
+     plot.args = list (ylim = c (0, length (out) * 1500)), 
+     lines.args = list( type = "n")
+     )
+## stacked spectra:
+for (i in seq (along = out)){
+  plot(chondro, 
+       "spcprctl5", 
+       yoffset = i + (i-1) * 1500,
+       col = "gray",
+       add = TRUE)
+  plot (chondro [out[i]], 
+        yoffset = i + (i-1) * 1500, 
+        col = outcols[i], 
+        add = TRUE, 
+        lines.args = list (lwd = 2))
+  text (650, i + 1000 +(i-1) * 1500, out [i]) }
+@
+\\
+\textbf{Normalized spectra}&\tabularnewline \nopagebreak
+\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked5}} &
+with normalised spectra it would look like this:
+<<>>=
+out <- c (25, 376, 559)
+outcols <- c ("orange", "magenta", "brown")
+@ 
+Preprocessing of the spectra:
+<<>>=
+bl <- spc.fit.poly.below (chondro)
+chondro <- chondro - bl
+chondro <- sweep (chondro, 1, mean, "/")
+chondro <- sweep (chondro, 
+                  2, 
+                  apply (chondro, 
+                         2, 
+                         quantile, 
+                         0.05),
+                  "-")
+@ 
+The figure:
+<<stacked5, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+## coordinate system:
+plot(chondro[1], 
+     plot.args = list (ylim = c (1, length (out) + .7)), 
+     lines.args = list( type = "n")
+     )
+## stacked spectra:
+for (i in seq (along = out)){
+  plot(chondro, 
+       "spcprctl5", 
+       yoffset = i,
+       col = "gray",
+       add = TRUE)
+  plot (chondro [out[i]], 
+        yoffset = i, 
+        col = outcols[i], 
+        add = TRUE, 
+        lines.args = list (lwd = 2))
+  text (650, i + .33, out [i]) }
+@
+
+
 \end{longtable}
 
 \section{Spectra Matrix}
 \label{sec:plotmat}
 It is often useful to plot the spectra against an additional coordinate, \eg the time for time series, the depth for depth profiles, etc. 
 
-This is done by  \Rfunction{levelplot}, or by using \Rcode{plot (object, "mat", model = spc ~ .wavelength * other.data.column)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
+This can be done by \Rcode{plot (object, "mat")} or \Rfunction{levelplot (model = spc ~ .wavelength * other.data.column, object)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
 
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
-\textbf{plotmat: different palette}&\tabularnewline \nopagebreak
+\textbf{different palette}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat1}} &
- 
+<<>>=
+plot (laser, "mat", 
+      col.regions = matlab.palette (20) )
+@
+is the same as 
 <<plotmat1, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-levelplot (spc ~ .wavelength * t, 
+levelplot (spc ~ .wavelength * .row, 
            laser,
            col.regions = matlab.palette (20))
 @
 \\
-\textbf{plotmat: contour}&\tabularnewline \nopagebreak
+\textbf{different y axis}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat1a}} &
+ Changing the y axis is only possible with levelplot:
+<<plotmat1a, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+levelplot (spc ~ .wavelength * t, 
+           laser)
+@
+\\
+\textbf{contour with plot}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat2}} &
- 
+Contourplots are possible with plot and levelplot:
 <<plotmat2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plot (flu, 
       "mat", 
-      model = spc ~ .wavelength * c, 
       contour = TRUE, 
       labels = TRUE, 
       col = "#00000080",
       at = seq (0, 700, by = 50))
 @
+\\
+\textbf{contour with levelplot}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat2a}} &
+Contourplot with a different y axis:
+<<plotmat2a, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+levelplot (spc ~ .wavelength * c,
+           flu,
+           contour = TRUE,
+           labels = TRUE,
+           col = "#00000080",
+           at = seq (0, 700, by = 50))
+@
+
 \end{longtable}
 
 \section{Calibration Plots, (Depth) Profiles, and Time Series Plots}\mFun{\Rfunction{plotc}}
