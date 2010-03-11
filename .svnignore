@@ -16,4 +16,4 @@ fig
 *fig-*.pdf
 *fig-*.pgf
 *fig-*.eps
-
+.Rhistory
