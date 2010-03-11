@@ -133,6 +133,38 @@ plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE],
   corresponding colors in \ref{fig:ts}.}
   \label{fig:tsf}
 \end{figure}
+
+<<laser3d>>=
+library (rgl)
+laser <- laser [,,404.8 ~ 405.6]
+open3d (windowRect=c(0,0,1200, 750))
+persp3d(y = wl(laser), x = laser$t, z = laser$spc ,
+col = matlab.dark.palette (nrow (laser)),
+axes = FALSE, xlab = "", ylab = "", zlab = "")
+aspect3d (c(1, 1, 0.25))
+axes3d(c ('x+-', 'y--', 'z--'))
+mtext3d("t / s", 'x+-', line = 2)
+mtext3d("lambda / nm", 'y--', line = 2)
+mtext3d("I / a.u.", edge = 'z--', line = 2.5)
+@ 
+After nicely rotating and zooming, the parameters to reconstruct this view can be saved:
+<<eval = FALSE>>=
+pars <- par3d (no.readonly=TRUE)
+save (pars, file = "par3d.Rdata")
+@
+and later applied to a replay of the scene:
+<<>>=
+load ("par3d.Rdata")                    
+par3d(pars)
+@
+
+A snapshot of the scene is saved by:
+<<>>=
+rgl.snapshot("fig/laser3d.png", fmt="png", top=TRUE )
+@
+\includegraphics[width = .75\textwidth]{fig/laser3d}
+
+
 <<cleanup, results = hide, echo = FALSE>>=
 rm (list = ls ())
 @ 
