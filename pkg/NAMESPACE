@@ -11,7 +11,7 @@ exportClass (hyperSpec)
 export (bind,
         cbind.hyperSpec,
         rbind.hyperSpec,
-        collapse.hyperSpec,
+        collapse,
         seq.hyperSpec,
         logentry,
         plotmap,

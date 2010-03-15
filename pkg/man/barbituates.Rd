@@ -5,7 +5,7 @@
 \description{
 A time series of mass spectra in a list of hyperSpec objects.
 }
-\usage{data(barbiutates)}
+\usage{data(barbituates)}
 \format{
   The data sets consists of 286 spectra. They the BARBITUATES.SPC
   example data from Thermo Galactic's 
@@ -16,10 +16,12 @@ barbituates
 
 barb <- do.call (collapse, barbituates)
 
-plot (barb [1:10], lines.args = list (type = "h"), col =
-matlab.dark.palette (10), stacked = TRUE)
+plot (barb [1:3], lines.args = list (type = "h"),
+      col = matlab.dark.palette (3), stacked = TRUE,
+      stacked.args = list (add.factor = .2))
 
-plot (log (barb[,,42.9~43.2]), "mat", panel = panel.levelplot.points, cex = 0.3,
+
+plot (log (barb), "mat", panel = panel.levelplot.points, cex = 0.3,
       col = "#00000000", col.regions = matlab.palette (20))
 
 plotc (apply (barb [,, 42.9~43.2], 1, sum, na.rm = TRUE), spc ~ z,

@@ -11,7 +11,8 @@ plotspc(object,
  ## what wavelengths to plot
  wl.range = NULL, wl.index = FALSE,  wl.reverse = FALSE,
  ## what spectra to plot
- spc.nmax = 50, func = NULL, func.args = list (), stacked = NULL,
+ spc.nmax = 50, func = NULL, func.args = list (),
+ stacked = NULL, stacked.args = list (),
  ## plot area
  add = FALSE, bty = "l", plot.args = list(),
  ## lines
@@ -80,6 +81,8 @@ plotspc(object,
 	 example. \code{stacked} may be \code{TRUE} to stack single spectra. 
 	 A numeric or factor is interpreted as giving the grouping, character is interpreted as the name 
 	 of the extra data column that holds the groups.} 
+
+  \item{stacked.args}{a list with further arguments to \code{\link{stacked.offsets}}.} 
 
   \item{fill}{if not \code{NULL}, the area between the specified spectra is filled with color 
   \code{col}. The grouping can be given as factor or numeric, or as a character with the name of  

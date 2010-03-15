@@ -8,27 +8,32 @@
 ##' @author C. Beleites
 ##' @title Collapse hyperSpec objects
 ##' @export
-##' @param ... hyperSpec objects to be collapsed into one object. Instead of giving several arguments, a list with all objects to be collapsed may be given.
-##' @alias collapse
-##' @alias collapse.hyperSpec
-##' @alias rbind.fill.hyperSpec
+##' @param ... hyperSpec objects to be collapsed into one object. Instead of giving several
+##' arguments, a list with all objects to be collapsed may be given.
+##' @aliases collapse
+##' @aliases collapse.hyperSpec
+##' @aliases merge.hyperSpec
+##' @aliases rbind.fill.hyperSpec
+##' @seealso \code{\link[base]{merge}},  \code{\link[base]{rbind}},  \code{\link[plyr]{rbind.fill}}, 
 ##' @param orderwl
 ##' @param short,user,date handed to logentry
 ##' @return a hyperSpec object
 ##' @keywords manip
 ##' @examples
-##'  A <- new ("hyperSpec", spc = c(0, 1, .2), wavelength = c (1, 3, 7))
-##'  B <- new ("hyperSpec", spc = runif (4), wavelength = c (1, 2, 4, 5))
-##'  plotspc (A)
-##'  plotspc (B, add = TRUE, col = "darkgray")
-##'  plotspc (collapse (A, B), add = TRUE, col = c("red", "blue"),
-##'           lines.args = list (type = "p", pch = 20))
+##' barbituates [1:3]
+##' barb <- do.call (collapse, barbituates [1:3])
+##' barb
 ##' 
-##' A$.
-##' B$.
-##' collapse (A,B)$.
-
-collapse.hyperSpec <- function (..., orderwl = TRUE, short.log = TRUE, short = "collapse", user = NULL, date = NULL){
+##' a <- barbituates [[1]]
+##' b <- barbituates [[2]]
+##' c <- barbituates [[3]]
+##' 
+##' a
+##' b
+##' c
+##' collapse (a, b, c)
+##' 
+collapse <- function (..., orderwl = TRUE, short.log = TRUE, short = "collapse", user = NULL, date = NULL){
   dots <- list (...)
 
   ## check the arguments
@@ -47,7 +52,7 @@ collapse.hyperSpec <- function (..., orderwl = TRUE, short.log = TRUE, short = "
 
   ## prepare new labels
   labels <- unlist (lapply (dots, slot, "label"))
-  labels <- label [unique (names (labels))]
+  labels <- labels [unique (names (labels))]
   
   ## merge data & spectra matrices
   dots <- lapply (dots, .wl2cln)
@@ -68,3 +73,4 @@ collapse.hyperSpec <- function (..., orderwl = TRUE, short.log = TRUE, short = "
   colnames (x@data$spc) <- formatC (x@wavelength, digits = 17)
   x
 }
+

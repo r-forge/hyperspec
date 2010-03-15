@@ -7,7 +7,9 @@
   \code{\link[hyperSpec]{plotspc}}.	
 }
 \usage{
-stacked.offsets(x, stacked = TRUE, min.zero FALSE, .spc = NULL)
+stacked.offsets(x, stacked = TRUE,
+                min.zero = FALSE, add.factor = 0.05, add.sum = 0,
+                .spc = NULL)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
@@ -17,9 +19,10 @@ stacked.offsets(x, stacked = TRUE, min.zero FALSE, .spc = NULL)
 	 of the extra data column of \code{x} that holds the grouping.}
   \item{min.zero}{if \code{TRUE}, the lesser of zero and the minimum
 	 intensity of the spectrum is used as minimum.}
+  \item{add.factor, add.sum}{proportion and absolute amount of space
+	 that should be added.}
   \item{.spc}{for internal use. If given, the ranges are evaluated on
-	 \code{.spc}. 
-	 However, this may change in future.}
+	 \code{.spc}. However, this may change in future.}
 }
 \details{
 Usually, the \code{stacked} argument of \code{\link[hyperSpec]{plotspc}} will do fine, but if you 
@@ -44,4 +47,9 @@ plot (mean.pm.sd, fill.col = matlab.palette (3), fill = ".aggregate",
  	
 plot (aggregate (chondro, chondro$clusters, mean), yoffset = offset$offsets,
       lines.args = list (lty = 2, lwd = 2), add = TRUE)
+
+barb <- do.call (collapse, barbituates [1:3])
+plot (barb, lines.args = list (type = "h"), stacked = TRUE,
+      stacked.args = list (add.factor = .2))
+
 }
