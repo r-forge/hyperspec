@@ -7,7 +7,7 @@
   \code{\link[hyperSpec]{plotspc}}.	
 }
 \usage{
-stacked.offsets(x, stacked = TRUE, .spc = NULL)
+stacked.offsets(x, stacked = TRUE, min.zero FALSE, .spc = NULL)
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}
@@ -15,6 +15,8 @@ stacked.offsets(x, stacked = TRUE, .spc = NULL)
 	 A numeric or factor is interpreted as giving the grouping, 
 	 a character is interpreted as the name 
 	 of the extra data column of \code{x} that holds the grouping.}
+  \item{min.zero}{if \code{TRUE}, the lesser of zero and the minimum
+	 intensity of the spectrum is used as minimum.}
   \item{.spc}{for internal use. If given, the ranges are evaluated on
 	 \code{.spc}. 
 	 However, this may change in future.}

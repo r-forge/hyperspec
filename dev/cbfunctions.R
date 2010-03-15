@@ -339,17 +339,80 @@ mark.dendrogram <- function (dendrogram, clusters,
   points (seq_along (dendrogram$order), rep (y, length (dendrogram$order)),
           col = col [clusters [dendrogram$order]], pch = pch, ...)
 
-colsdiv <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
-                              "#E0E3E3", "#F8F8B0", "#F7E6C2", "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
-                              "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
+ ## colsdiv <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
+##                               "#E0E3E3", "#F8F8B0", "#F7E6C2", "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
+##                               "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
 
-colsseq <- colorRampPalette (rev (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
-                              "#E0E3E3")), space = "Lab")
+## colsseq <- colorRampPalette (rev (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", "#AC95D1", "#C1AFDC", "#D5C9E8",
+##                               "#E0E3E3")), space = "Lab")
 
-colsqual.dark <- c ("#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","black")
-colsqual.dark <- c ("#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#D7619F","black")
-colsqual.dark <- c ("#D42A2C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#D7619F","black")
-colsqual.light <- c ("#E41A1C80","#377EB880","#4DAF4A80","#984EA380","#FF7F0080","#A6562880","#D7619F80","#00000080")
+## colsqual.dark <- c ("#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","black")
+## colsqual.dark <- c ("#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#D7619F","black")
+## colsqual.dark <- c ("#D42A2C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#D7619F","black")
+## colsqual.light <- c ("#E41A1C80","#377EB880","#4DAF4A80","#984EA380","#FF7F0080","#A6562880","#D7619F80","#00000080")
 
 
-brewer.pal (9, "Set1") [-6] [-8], "black")
+#brewer.pal (9, "Set1") [-6] [-8], "black")
+
+
+
+abbr <- function (x, first = 3, last = 1){
+  cln <- colnames (x)
+  if (is.null (cln)) cln <- seq_len (ncol (x))
+  cln <- paste (",", cln, sep = "")
+  
+  rwn <- rownames (x)
+  if (is.null (rwn)) rwn <- seq_len (nrow (x))
+  rwn <- paste (rwn, ",", sep = "")
+  
+  x <- format (x)
+
+  dot <- format ('.', justify = "centre", width = nchar (x [1]))
+
+  if (nrow (x) > first + last) {
+    o <- min (nrow (x), first)
+    u <- min (nrow (x) - first, last)
+
+    x <- rbind (head (x, o), dot, tail (x, u))
+    rownames (x) <- c (head (rwn, o), "", tail (rwn, u))
+  } else {
+    rownames (x) <- rwn
+  }
+  x <- t (x)
+
+  if (ncol (x) > first + last) {
+    f <- min (ncol (x), first)
+    l <- min (ncol (x) - first, last)
+
+    x <- rbind (head (x, f), dot, tail (x, l))
+    rownames (x) <- c (head (cln, f), "", tail (cln, l))
+  } else {
+    rownames (x) <- cln
+  }
+
+  x <- t (x)
+
+  x
+}
+
+
+str.matrix <- function (x) {
+  cat (typeof (x), " ", class (x),
+       " (", paste (dim (x), collapse = " x "), " = ", length (x), ")\n",
+       sep = "")
+  x <- abbr (x)
+
+  cln <- format (colnames (x), justify = "centre", width = nchar (x [1]))
+  rwn <- format (rownames (x))
+
+  if (nchar (cln [1]) > nchar (x [1]))
+    x <- format (x, width = nchar (cln [1]), justify = "right")
+  cln <- c (format ("", width = nchar (rwn [1])), cln)
+
+  cat (cln, "\n", sep = '  ')
+  for (i in 1 : nrow (x))
+    cat (rwn [i], x [i,], "\n", sep = '  ')
+
+  invisible ()
+}
+

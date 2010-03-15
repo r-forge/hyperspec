@@ -298,12 +298,13 @@ The value of these arguments can either be logical (amounting to either use all 
 
 .spc files may contain multiple spectra that do \emph{not} share a common wavelength axis. In this case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum each. \Rfunction{rbind.fill} may be used to combine this list into one \chy object:
 <<read.spc.list>>=
-spc <- read.spc ("spc/BARBITUATES.SPC")
-class (spc)
-length (spc)
-spc <- do.call (rbind.fill.hyperSpec, spc)
-spc
-spc [[1:10, , 25 ~ 30]]
+barbituates <- read.spc ("spc/BARBITUATES.SPC")
+save (barbituates, file = "barbituates.rda")
+class (barbituates)
+length (barbituates)
+barbituates <- do.call (rbind.fill.hyperSpec, barbituates)
+barbituates
+barbituates [[1:10, , 25 ~ 30]]
 @
 
 

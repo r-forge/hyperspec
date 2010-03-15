@@ -21,6 +21,8 @@
        
        if (range) 
          x <- sort (unique (as.vector (x)))
+       else
+         x <- as.vector (x)
        
        if (length (x) > max.print){
          from <- format (head (x, shorten.to [1]), digits = digits, trim = TRUE)

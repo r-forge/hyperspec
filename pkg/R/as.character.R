@@ -7,11 +7,10 @@
 
 setMethod (as.character, "hyperSpec", function (x,
                                                 digits = getOption ("digits"),
+                                                range = TRUE,
                                                 max.print = 5,
                                                 shorten.to = c(2,1),
-                                                log = TRUE){#, ...){
-
-
+                                                log = TRUE){
   ## input checking
   validObject (x)
 
@@ -44,7 +43,8 @@ setMethod (as.character, "hyperSpec", function (x,
   if (n.cols > 0)
     for (n in names (x@data))
       chr <- c(chr, .paste.row (x@data[[n]], x@label[[n]], n, ins = 3,
-                                i = match (n, names (x@data)), val = TRUE,
+                                i = match (n, names (x@data)),
+                                val = TRUE, range = range,
                                 shorten.to = shorten.to, max.print = max.print))
   
   if (log){

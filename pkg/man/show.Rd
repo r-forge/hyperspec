@@ -12,12 +12,16 @@
 \S4method{show}{hyperSpec}(object)
 \S4method{print}{hyperSpec}(x, log = FALSE, \dots)
 \S4method{summary}{hyperSpec}(object, log = TRUE, \dots)
-\S4method{as.character}{hyperSpec}(x, digits = getOption ("digits"), max.print = 5, shorten.to = c(2, 1), log = TRUE)
+\S4method{as.character}{hyperSpec}(x, digits = getOption ("digits"),
+   range = TRUE, max.print = 5, shorten.to = c(2, 1), log = TRUE)
 }
 \arguments{
   \item{x, object}{a \code{hyperSpec} object}
   
   \item{digits}{number of digits handed over to \code{format}}
+
+  \item{range}{should the values be indicated as range rather then first
+  and last elements?}
   
   \item{max.print}{maximum number of elements to be printed (of a
   variable)}

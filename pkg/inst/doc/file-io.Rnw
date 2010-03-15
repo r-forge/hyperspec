@@ -1,0 +1,31 @@
+\documentclass[english,a4paper, 10pt, smallheadings, DIV11]{scrartcl} % ursprünglich DIV 15
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{color}
+\usepackage{babel}
+
+\usepackage{pdfpages}
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[numbers]{natbib}
+\usepackage[unicode=true,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
+ {hyperref}
+\hypersetup{pdftitle={FileIO Vignette},
+ pdfauthor={C. Beleites},
+ pdfsubject={Vignette on Import and Export for hyperSpec},
+ pdfkeywords={hyperSpec, file, spectra, import, export}}
+\usepackage{hyphenat}
+
+% Meta information - fill between {} and do not remove %
+% \VignetteIndexEntry{Vignette on spectra file import and export for hyperSpec.}
+% \VignetteKeywords{hyperSpec, file, spectra, spectrum, import, export}
+% \VignettePackage{hyperSpec}
+\begin{document}
+\includepdf[pages=-,fitpaper=true]{FileIO.pdf}
+\end{document}

@@ -9,7 +9,8 @@ plotspc <- function  (object,
                        ## what wavelengths to plot
                       wl.range = NULL, wl.index = FALSE,  wl.reverse = FALSE,
                       ## what spectra to plot
-                      spc.nmax = 50, func = NULL, func.args = list (), stacked = NULL,
+                      spc.nmax = 50, func = NULL, func.args = list (),
+                      stacked = NULL, stacked.args = list (),
                       ## plot area
                       add = FALSE, bty = "l", plot.args = list(),
                       ## lines
@@ -113,7 +114,13 @@ plotspc <- function  (object,
 
   ## stacked plot
   if (!is.null (stacked)){
-    stacked <- stacked.offsets (object, stacked, spc)
+    stacked.args <- modifyList (stacked.args,
+                                list (x = object, stacked = stacked, .spc = spc))
+    
+    if (! is.null (lines.args$type) && lines.args$type == "h")
+      stacked.args <- modifyList (stacked.args, list (min.zero = TRUE))
+
+    stacked <- do.call (stacked.offsets, stacked.args)
     yoffset <- stacked$offsets [stacked$groups]
   }
 
@@ -188,10 +195,12 @@ plotspc <- function  (object,
 
       ## default for stacked plots is marking the groups
       if (!is.null (stacked)){
-        group.mins <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min)
+        if (! is.null (stacked.args$min.zero) && stacked.args$min.zero)
+          group.mins <- stacked$offsets
+        else
+          group.mins <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min, na.rm = TRUE)
         
-        axis.args$y <- modifyList (list (at = group.mins, labels = stacked$levels),
-                                   axis.args$y)
+        axis.args$y <- modifyList (list (at = group.mins, labels = stacked$levels), axis.args$y)
       }
       
       axis.args$y <- modifyList (list (side = 2), axis.args$y)
@@ -274,12 +283,29 @@ plotspc <- function  (object,
 
     lines.args <- modifyList (list (x = NULL, y = NULL, type = "l"), lines.args)
 
-    for (j in seq_len (nrow (spc))){
-      lines.args$x <- x[[i]]
-      lines.args$y <- spc [j, ispc[[i]]]
-      lines.args$col <- col [j]
-
-      do.call (lines, lines.args)
+    if (lines.args$type == "h" && is.list (stacked)) {
+    ## specialty: lines from the stacked zero line on!
+      for (j in seq_len (nrow (spc))){
+        keep <- ! is.na (spc [j, ispc[[i]]])
+        lines.args$x <- rep (x[[i]] [keep], each = 3)
+        lines.args$y <- as.numeric (matrix (c (rep (yoffset [j], sum (keep)),
+                                               spc [j, ispc[[i]]] [keep],
+                                               rep (NA, sum (keep))),
+                                            byrow = TRUE, nrow = 3))
+        lines.args$type = "l"
+        lines.args$col <- col [j]
+        do.call (lines, lines.args)
+      }
+    } else {
+      for (j in seq_len (nrow (spc))){
+        keep <- ! is.na (spc [j, ispc[[i]]])
+                
+        lines.args$x <- x[[i]][keep]
+        lines.args$y <- spc [j, ispc[[i]]] [keep]
+        lines.args$col <- col [j]
+        
+        do.call (lines, lines.args)
+      }
     }
   }
 

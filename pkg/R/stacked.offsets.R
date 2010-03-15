@@ -3,7 +3,10 @@
 ###  stacked.offsets
 ###
 
-stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
+stacked.offsets <- function (x, stacked = TRUE,
+                             min.zero = FALSE, add.factor = 0.05, add.sum = 0,
+                             #tight = FALSE, TODO
+                             .spc = NULL){
   lvl <- NULL
 
   if (is.character (stacked))
@@ -27,7 +30,15 @@ stacked.offsets <- function (x, stacked = TRUE, .spc = NULL){
   for (i in seq_along (groups))
     offset[, i] <- range (.spc [stacked == groups [i], ], na.rm = TRUE)
 
+  ## should the minimum be at zero (or less)?
+  if (min.zero)
+    offset [1, ] <- sapply (offset [1, ], min, 0, na.rm = TRUE)
+
   offset [2,] <- offset[2,] - offset [1,]
+
+  ## add some extra space
+  offset [2,] <- offset [2, ] *  (1 + add.factor) + add.sum
+  
   offset <- c(-offset[1,], 0) + c (0, cumsum (offset[2,]))
   
   list (offsets = offset [seq_along (groups)],
