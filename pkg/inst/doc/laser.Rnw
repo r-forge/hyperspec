@@ -134,15 +134,73 @@ plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE],
   \label{fig:tsf}
 \end{figure}
 
-<<laser3d>>=
+Another option is to condition the plot on $\lambda$:
+<<tsextra, fig = TRUE, width = 12, include = FALSE>>=
+nice.strip <- function (which.panel, factor.levels, ...){
+  lvl <-  factor.levels [which.panel]
+  
+  lvl <- bquote (lambda == .(lvl) * " nm")
+  panel.rect (0, 0, 1, 1, col = "grey90")
+  panel.text (0.5, .5, lvl)
+}
+
+plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE], spc ~ t | .wavelength, 
+       type = "b", cex = .5,  strip = nice.strip, col = "black")
+@ 
+\begin{figure}[tbh]
+  \centering
+  \includegraphics[width=\textwidth]{fig/fig-tsextra}}  
+  \caption{The time series plots can also be conditioned on \Rcode{\$.wavelength}.}
+  \label{fig:tsextra}
+\end{figure}
+
+\section{False-colour plot of the spectral intensity over wavelength and time}
+\label{sec:plotmat}
+\phy supplies functions to draw the spectral matrix using \Rpackage{lattice}'s \Rfunction{levelplot}.
+<<plotmatr, fig = TRUE, include = FALSE>>=
+plot (laser, "mat", col.regions = rev (gray (seq (0.5, .9, length.out = 20))), 
+      contour = TRUE, col = "#00000060")
+@
+
+\phy's \Rfunction{levelplot} method can be used to display the spectra matrix over a data column (instead of the row number)). Note that the \chy object is the \emph{second} argument to the function (according to the notation in \Rfunction{levelplot}).
+<<plotmatt, fig = TRUE, include = FALSE>>=
+levelplot (spc ~ .wavelength * t, laser, col.regions = matlab.palette (20), 
+           contour = TRUE, col ="#00000080")
+@
+\begin{figure}[tbh]
+  \centering
+  \subfloat[\label{fig:row}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatr}}
+  \subfloat[\label{fig:t}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatt}}  
+  \caption{The spectra matrix of the \Robject{laser} data set. The ordinate of the plot may be the number of the spectrum accessed by \Rcode{\$.row} \subref{fig:row} or any other extra data column, here \Rcode{\$t} \subref{fig:t}.}
+  \label{fig:tsf}
+\end{figure}
+
+
+\section{3d plot of the spectral intensity over wavelength and time}
+\label{sec:3d-plot-spectral}
+\chy objects  can easily be drawn with \Rpackge{rgl}\cite{rgl}:
+
+<<libraryrgl>>=
 library (rgl)
+@
+<<echo = FALSE, results = hide>>=
+open3d (windowRect=c(0,0,1200, 750))    # this is needed only for automatically 
+                                        # producing the snapshot
+@ 
+\Rpackge{rgl}'s \Rfunction{persp3d} plots a surface in 3d defined by points in x, y, and z. Handing over the appropriate data columns of the \chy object is easy (fig.~\ref{fig:laser3d}):
+
+<<>>=
 laser <- laser [,,404.8 ~ 405.6]
-open3d (windowRect=c(0,0,1200, 750))
-persp3d(y = wl(laser), x = laser$t, z = laser$spc ,
-col = matlab.dark.palette (nrow (laser)),
-axes = FALSE, xlab = "", ylab = "", zlab = "")
+cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
+
+surface3d(y = wl(laser), x = laser$t, z = laser$spc, col =  cols)
+surface3d(y = wl(laser), x = laser$t, z = laser$spc + .1 * min (laser), 
+          col =  "black", alpha = .2,front = "lines", line_antialias = TRUE)
+
 aspect3d (c(1, 1, 0.25))
-axes3d(c ('x+-', 'y--', 'z--'))
+
+axes3d(c('x+-', 'y--', 'z--'))
+axes3d ('y--', nticks = 25, labels= FALSE)
 mtext3d("t / s", 'x+-', line = 2)
 mtext3d("lambda / nm", 'y--', line = 2)
 mtext3d("I / a.u.", edge = 'z--', line = 2.5)
@@ -158,11 +216,16 @@ load ("par3d.Rdata")
 par3d(pars)
 @
 
-A snapshot of the scene is saved by:
+The snapshot of the scene in fig.~\ref{fig:laser3d} is saved by:
 <<>>=
 rgl.snapshot("fig/laser3d.png", fmt="png", top=TRUE )
 @
-\includegraphics[width = .75\textwidth]{fig/laser3d}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width = .75\textwidth]{fig/laser3d}  
+  \caption{The 3d plot of the laser data}
+  \label{fig:laser3d}
+\end{figure}
 
 
 <<cleanup, results = hide, echo = FALSE>>=

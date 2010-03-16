@@ -41,7 +41,7 @@ plotc <- function (object, model = spc ~ c, groups = NULL,
                       dots)
 
   ## expand the data.frame
-  df <- as.long.df (object, rownames = TRUE)
+  df <- as.long.df (object, rownames = TRUE, wl.factor = TRUE)
 
   ## if plots should be grouped or conditioned by wavelength,
   ## it is better to have a factor
