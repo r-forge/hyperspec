@@ -11,7 +11,7 @@ setMethod ("initialize", "hyperSpec",
 				## ...,
 				short = "initialize", user = NULL, date = NULL){
 			long <- list ()
-			
+
 			if (is.null (data))
 				.Object@data <- data.frame (spc = I (matrix (NA, 0, 0)))
 			else {
@@ -23,20 +23,20 @@ setMethod ("initialize", "hyperSpec",
 				if (is.numeric (spc) && !is.matrix (spc))
 					spc <- as.matrix (t (spc)) # make a 1 row matrix
 				
-				if (nrow (.Object) == nrow (spc)){
+				if (nrow (.Object@data) == nrow (spc)){
 					
 					if (!is.null (.Object@data$spc))
 						warning ("data$spc replaced by spc.")
 					
 					.Object@data$spc <- I (as.matrix (spc))
 					
-				} else if (nrow (.Object) == 0) {
+				} else if (nrow (.Object@data) == 0) {
 					.Object@data <- data.frame (spc = I (as.matrix (spc)))
 				} else {
 					stop ("data and spc need to have the same number of rows.")
 				}
 				
-				long$spc <- .paste.row (spc, val = TRUE)
+				long$spc <- .paste.row (spc, val = TRUE, range = FALSE)
 			}
 			
 			if (is.null (wavelength)){
