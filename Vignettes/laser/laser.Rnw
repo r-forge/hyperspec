@@ -21,12 +21,10 @@ The source data files can be found with the command:\\
 \texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
 "hyperSpec/doc/rawdata/laser.txt", sep = "/"))}}.
 
-In order to reproduce the examples by typing in the commands, have a look at the definitions of
-color palettes used in this document are defined in \texttt{vignettes.defs}. Also, the package \phy needs to be loaded first via \Rcode{library (hyperSpec)}. 
-}
+In order to reproduce the examples by typing in the commands, have a look at the definitions in \texttt{vignettes.defs}.}
 
 \section{Introduction}
-This data set consists of a time series of 84 spectra of an
+This data set consists of a time series of \Sexpr{nrow (laser)} spectra of an
 unstable laser emission at 405 nm recorded during ca. 1.5 h. 
 
 The spectra were recorded  during the installation of the 405~nm laser at a Raman spectrometer.
@@ -42,7 +40,7 @@ This document shows
 
 \section{Loading the Data and Preprocessing}
 
-<<rawspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
+<<rawspc, fig = TRUE, width = 5, height = 3, include = FALSE>>=
 laser <- scan.txt.Renishaw ("rawdata/laser.txt", data = "ts")
 plot (laser, "spcprctl5") 
 @
@@ -53,7 +51,7 @@ As most of the spectra do not show any signal (fig. \ref{fig:rawspc}), so the sp
 can be cut to -75~--~0~cm\textsuperscript{-1}. 
 Note that negative numbers in the spectral range specification with the tilde do not exclude the spectral range but rather mean negative values of the wavelength axis.
 The results are shown in figure \ref{fig:cutspc}.
-<<cut, fig = TRUE, width = 5, height = 5, include = FALSE>>=
+<<cut, fig = TRUE, width = 5, height = 3, include = FALSE>>=
 laser <- laser [,,-75~0]
 plot (laser, "spcprctl5") 
 @
@@ -90,7 +88,7 @@ wl (laser) <- list (
    label = expression (lambda / nm)
    )
 @ 
-<<wlspc, fig = TRUE, width = 5, height = 5, include = FALSE >>=
+<<wlspc, fig = TRUE, width = 5, height = 3, include = FALSE >>=
 plot (laser, "spcprctl5") 
 @ 
 Note that the new wavelength axis label is immediately assigned as well.
@@ -107,11 +105,15 @@ measurement are data points 13, 17, 21, and 23 (fig. \ref{fig:markedspc}).
 
 Alternateively they can be extracted from the graph using \Rfunction{locator} which reads out the coordinates of the points the user clicks with the mouse (use middle or right click to end the input):
 <<locator, eval=FALSE>>=
-wl2i (laser, locator()$x)
+wls <- locator()$x
 @ 
-<<markspc, fig = TRUE, width = 5, height = 5, include = FALSE>>=
+<<echo = FALSE, results = hide>>=
+wls <-  wl (laser)[c (13, 17, 21, 23)]
+@
+<<markspc, fig = TRUE, width = 5, height = 3, include = FALSE>>=
 plot (laser, "spcmeansd")
-abline (v = wl (laser)[c (13, 17, 21, 23)], col = c("black", "blue", "red", "darkgreen") )  
+cols <- c("black", "blue", "red", "darkgreen")
+abline (v = wls, col = cols )  
 @ 
 
 \Rfunction{plotc} can also be used to plot time-series. In that case,
@@ -120,11 +122,10 @@ time is stored in column \Rcode{\$t} in seconds from start of the
 measurement, and can be handed over as the column name. The resulting
 time series are shown in figure \ref{fig:ts}
 variable, 
-<<ts, fig = TRUE, width = 10, height = 5, include = FALSE>>=
-plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE], 
-       spc ~ t, groups = .wavelength, type = "b", col = c ("black", "blue", "red", "darkgreen"))
+<<ts, fig = TRUE, width = 10, height = 3, include = FALSE>>=
+plotc (laser [,, wls], spc ~ t, groups = .wavelength, type = "b",  cex = 0.3, col = cols)
 @ 
-\begin{figure}[tbh]
+\begin{figure}[t]
   \centering
   \subfloat[\label{fig:markedspc}]{\includegraphics[width=.33\textwidth]{fig/fig-markspc}}
   \subfloat[\label{fig:ts}]{\includegraphics[width=.66\textwidth]{fig/fig-ts}}  
@@ -136,18 +137,9 @@ plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE],
 
 Another option is to condition the plot on $\lambda$:
 <<tsextra, fig = TRUE, width = 12, include = FALSE>>=
-nice.strip <- function (which.panel, factor.levels, ...){
-  lvl <-  factor.levels [which.panel]
-  
-  lvl <- bquote (lambda == .(lvl) * " nm")
-  panel.rect (0, 0, 1, 1, col = "grey90")
-  panel.text (0.5, .5, lvl)
-}
-
-plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE], spc ~ t | .wavelength, 
-       type = "b", cex = .5,  strip = nice.strip, col = "black")
+plotc (laser [,, wls], spc ~ t | .wavelength, type = "b", cex = 0.3, col = "black")
 @ 
-\begin{figure}[tbh]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{fig/fig-tsextra}}  
   \caption{The time series plots can also be conditioned on \Rcode{\$.wavelength}.}
@@ -158,14 +150,12 @@ plotc (laser [,, c (13, 17, 21, 23), wl.index = TRUE], spc ~ t | .wavelength,
 \label{sec:plotmat}
 \phy supplies functions to draw the spectral matrix using \Rpackage{lattice}'s \Rfunction{levelplot}.
 <<plotmatr, fig = TRUE, include = FALSE>>=
-plot (laser, "mat", col.regions = rev (gray (seq (0.5, .9, length.out = 20))), 
-      contour = TRUE, col = "#00000060")
+plot (laser, "mat", contour = TRUE, col = "#00000060")
 @
 
 \phy's \Rfunction{levelplot} method can be used to display the spectra matrix over a data column (instead of the row number)). Note that the \chy object is the \emph{second} argument to the function (according to the notation in \Rfunction{levelplot}).
 <<plotmatt, fig = TRUE, include = FALSE>>=
-levelplot (spc ~ .wavelength * t, laser, col.regions = matlab.palette (20), 
-           contour = TRUE, col ="#00000080")
+levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
 @
 \begin{figure}[tbh]
   \centering
