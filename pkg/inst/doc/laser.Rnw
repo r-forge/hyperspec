@@ -168,7 +168,7 @@ levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
 
 \section{3d plot of the spectral intensity over wavelength and time}
 \label{sec:3d-plot-spectral}
-\chy objects  can easily be drawn with \Rpackge{rgl}\cite{rgl}:
+\chy objects  can easily be drawn with \Rpackage{rgl}\cite{rgl}:
 
 <<libraryrgl>>=
 library (rgl)
