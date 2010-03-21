@@ -296,13 +296,13 @@ This information is often useful (Kaiser's Hologram software \eg stores the stag
 \end{labeling}
 The value of these arguments can either be logical (amounting to either use all or none of the information in the file) or a character vector giving the names of the parameters that should be used. Note that the header file field names are always lowercase, while the log entries are treated case sensitive.
 
-.spc files may contain multiple spectra that do \emph{not} share a common wavelength axis. In this case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum each. \Rfunction{rbind.fill} may be used to combine this list into one \chy object:
+.spc files may contain multiple spectra that do \emph{not} share a common wavelength axis. In this case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum each. \Rfunction{collapse} may be used to combine this list into one \chy object:
 <<read.spc.list>>=
 barbituates <- read.spc ("spc/BARBITUATES.SPC")
 save (barbituates, file = "barbituates.rda")
 class (barbituates)
 length (barbituates)
-barbituates <- do.call (rbind.fill.hyperSpec, barbituates)
+barbituates <- do.call (collapse, barbituates)
 barbituates
 barbituates [[1:10, , 25 ~ 30]]
 @

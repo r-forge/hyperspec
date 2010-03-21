@@ -141,7 +141,7 @@ plotc (laser [,, wls], spc ~ t | .wavelength, type = "b", cex = 0.3, col = "blac
 @ 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{fig/fig-tsextra}}  
+  \includegraphics[width=\textwidth]{fig/fig-tsextra}
   \caption{The time series plots can also be conditioned on \Rcode{\$.wavelength}.}
   \label{fig:tsextra}
 \end{figure}
@@ -153,7 +153,7 @@ plotc (laser [,, wls], spc ~ t | .wavelength, type = "b", cex = 0.3, col = "blac
 plot (laser, "mat", contour = TRUE, col = "#00000060")
 @
 
-\phy's \Rfunction{levelplot} method can be used to display the spectra matrix over a data column (instead of the row number)). Note that the \chy object is the \emph{second} argument to the function (according to the notation in \Rfunction{levelplot}).
+\phy's \Rfunction{levelplot} method can be used to display the spectra matrix over a data column (instead of the row number): figure~\ref{fig:tsmat}. Note that the \chy object is the \emph{second} argument to the function (according to the notation in \Rfunction{levelplot}).
 <<plotmatt, fig = TRUE, include = FALSE>>=
 levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
 @
@@ -162,7 +162,7 @@ levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
   \subfloat[\label{fig:row}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatr}}
   \subfloat[\label{fig:t}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatt}}  
   \caption{The spectra matrix of the \Robject{laser} data set. The ordinate of the plot may be the number of the spectrum accessed by \Rcode{\$.row} \subref{fig:row} or any other extra data column, here \Rcode{\$t} \subref{fig:t}.}
-  \label{fig:tsf}
+  \label{fig:tsmat}
 \end{figure}
 
 
@@ -177,7 +177,7 @@ library (rgl)
 open3d (windowRect=c(0,0,1200, 750))    # this is needed only for automatically 
                                         # producing the snapshot
 @ 
-\Rpackge{rgl}'s \Rfunction{persp3d} plots a surface in 3d defined by points in x, y, and z. Handing over the appropriate data columns of the \chy object is easy (fig.~\ref{fig:laser3d}):
+\Rpackage{rgl}'s \Rfunction{persp3d} plots a surface in 3d defined by points in x, y, and z. Handing over the appropriate data columns of the \chy object is easy (fig.~\ref{fig:laser3d}):
 
 <<>>=
 laser <- laser [,,404.8 ~ 405.6]
