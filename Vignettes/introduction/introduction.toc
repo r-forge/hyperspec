@@ -9,45 +9,46 @@
 \contentsline {section}{\numberline {4}The structure of {\language \langwohyphens \textit {hyperSpec}} objects}{4}{section.4}
 \contentsline {section}{\numberline {5}Functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{5}{section.5}
 \contentsline {section}{\numberline {6}Obtaining Basic Information about {\language \langwohyphens \textit {hyperSpec}} Objects}{5}{section.6}
-\contentsline {section}{\numberline {7}Creating a {\language \langwohyphens \textit {hyperSpec}} Object, Data Import and Export}{6}{section.7}
+\contentsline {section}{\numberline {7}Creating a {\language \langwohyphens \textit {hyperSpec}} Object, Data Import and Export}{7}{section.7}
 \contentsline {subsection}{\numberline {7.1}Creating a {\language \langwohyphens \textit {hyperSpec}} Object from Spectra Matrix and Wavelength Vector}{7}{subsection.7.1}
-\contentsline {section}{\numberline {8}Decomposition}{7}{section.8}
-\contentsline {section}{\numberline {9}Combining {\language \langwohyphens \textit {hyperspec}} Objects}{7}{section.9}
-\contentsline {subsection}{\numberline {9.1}Matrix Multiplication}{7}{subsection.9.1}
-\contentsline {subsection}{\numberline {9.2}Binding Objects together}{8}{subsection.9.2}
-\contentsline {section}{\numberline {10}Access to the data}{8}{section.10}
-\contentsline {subsection}{\numberline {10.1}Selecting and Deleting Spectra}{8}{subsection.10.1}
-\contentsline {subsection}{\numberline {10.2}Accessing the Extra Data }{9}{subsection.10.2}
-\contentsline {subsection}{\numberline {10.3}Wavelengths and Spectral Axis}{10}{subsection.10.3}
-\contentsline {subsubsection}{\numberline {10.3.1}Wavelength Indices}{10}{subsubsection.10.3.1}
-\contentsline {subsubsection}{\numberline {10.3.2}Wavelength Axis Conversion}{11}{subsubsection.10.3.2}
-\contentsline {subsection}{\numberline {10.4}Fast Access to Parts of the {\language \langwohyphens \textit {hyperSpec}} Object}{11}{subsection.10.4}
-\contentsline {section}{\numberline {11}Plotting}{12}{section.11}
-\contentsline {subsection}{\numberline {11.1}Plotting Spectra}{12}{subsection.11.1}
-\contentsline {subsection}{\numberline {11.2}Plotting the Spectra Matrix}{13}{subsection.11.2}
-\contentsline {subsection}{\numberline {11.3}Calibration Plots, (Depth) Profiles, and Time Series Plots}{13}{subsection.11.3}
-\contentsline {subsection}{\numberline {11.4}Plotting False-Colour Maps}{14}{subsection.11.4}
-\contentsline {paragraph}{The colour-coded axis. }{14}{section*.6}
-\contentsline {paragraph}{Conditioning.}{14}{section*.7}
-\contentsline {section}{\numberline {12}Spectral (Pre)processing}{14}{section.12}
-\contentsline {subsection}{\numberline {12.1}Cutting the Spectral Range}{14}{subsection.12.1}
-\contentsline {subsection}{\numberline {12.2}Spectral Interpolation and Smoothing}{15}{subsection.12.2}
-\contentsline {subsection}{\numberline {12.3}Background Correction}{15}{subsection.12.3}
-\contentsline {subsection}{\numberline {12.4}Offset Correction}{16}{subsection.12.4}
-\contentsline {subsection}{\numberline {12.5}Baseline Correction}{16}{subsection.12.5}
-\contentsline {subsection}{\numberline {12.6}Intensity Calibration}{16}{subsection.12.6}
-\contentsline {subsubsection}{\numberline {12.6.1}Correcting by a constant, e.\tmspace +\thinmuskip {.1667em}g. Readout Bias}{16}{subsubsection.12.6.1}
-\contentsline {subsubsection}{\numberline {12.6.2}Correcting Wavelength Dependence}{17}{subsubsection.12.6.2}
-\contentsline {subsubsection}{\numberline {12.6.3}Spectra Dependent Correction}{17}{subsubsection.12.6.3}
-\contentsline {subsection}{\numberline {12.7}Normalization}{17}{subsection.12.7}
-\contentsline {subsection}{\numberline {12.8}Centering the Data}{17}{subsection.12.8}
-\contentsline {subsection}{\numberline {12.9}Variance Scaling}{18}{subsection.12.9}
-\contentsline {subsection}{\numberline {12.10}Multiplicative Scatter Correction (MSC)}{18}{subsection.12.10}
-\contentsline {subsection}{\numberline {12.11}Spectral Arithmetic}{18}{subsection.12.11}
-\contentsline {section}{\numberline {13}Data Analysis }{19}{section.13}
-\contentsline {subsection}{\numberline {13.1}Data Analysis Methods using a data.frame \\ e.\tmspace +\thinmuskip {.1667em}g. Principal Component Analysis with {\language \langwohyphens \texttt {prcomp}}}{19}{subsection.13.1}
-\contentsline {subsubsection}{\numberline {13.1.1}PCA as Noise Filter}{20}{subsubsection.13.1.1}
-\contentsline {subsection}{\numberline {13.2}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g. Hierarchical Cluster Analysis}{21}{subsection.13.2}
-\contentsline {subsection}{\numberline {13.3}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{21}{subsection.13.3}
-\contentsline {subsection}{\numberline {13.4}Splitting an Object}{22}{subsection.13.4}
+\contentsline {section}{\numberline {8}Combining and Decomposing {\language \langwohyphens \textit {hyperspec}} Objects}{7}{section.8}
+\contentsline {subsection}{\numberline {8.1}Binding Objects together}{7}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}Binding Objects that do not share the same extra data and/or wavelength axis}{8}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}Matrix Multiplication}{8}{subsection.8.3}
+\contentsline {subsection}{\numberline {8.4}Decomposition}{8}{subsection.8.4}
+\contentsline {section}{\numberline {9}Access to the data}{8}{section.9}
+\contentsline {subsection}{\numberline {9.1}Selecting and Deleting Spectra}{8}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Accessing the Extra Data }{9}{subsection.9.2}
+\contentsline {subsection}{\numberline {9.3}Wavelengths and Spectral Axis}{10}{subsection.9.3}
+\contentsline {subsubsection}{\numberline {9.3.1}Wavelength Indices}{10}{subsubsection.9.3.1}
+\contentsline {subsubsection}{\numberline {9.3.2}Wavelength Axis Conversion}{11}{subsubsection.9.3.2}
+\contentsline {subsection}{\numberline {9.4}Fast Access to Parts of the {\language \langwohyphens \textit {hyperSpec}} Object}{11}{subsection.9.4}
+\contentsline {section}{\numberline {10}Plotting}{12}{section.10}
+\contentsline {subsection}{\numberline {10.1}Plotting Spectra}{12}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}Plotting the Spectra Matrix}{13}{subsection.10.2}
+\contentsline {subsection}{\numberline {10.3}Calibration Plots, (Depth) Profiles, and Time Series Plots}{14}{subsection.10.3}
+\contentsline {subsection}{\numberline {10.4}Plotting False-Colour Maps}{14}{subsection.10.4}
+\contentsline {paragraph}{The colour-coded axis. }{14}{section*.7}
+\contentsline {paragraph}{Conditioning.}{14}{section*.8}
+\contentsline {section}{\numberline {11}Spectral (Pre)processing}{15}{section.11}
+\contentsline {subsection}{\numberline {11.1}Cutting the Spectral Range}{15}{subsection.11.1}
+\contentsline {subsection}{\numberline {11.2}Spectral Interpolation and Smoothing}{15}{subsection.11.2}
+\contentsline {subsection}{\numberline {11.3}Background Correction}{16}{subsection.11.3}
+\contentsline {subsection}{\numberline {11.4}Offset Correction}{16}{subsection.11.4}
+\contentsline {subsection}{\numberline {11.5}Baseline Correction}{16}{subsection.11.5}
+\contentsline {subsection}{\numberline {11.6}Intensity Calibration}{17}{subsection.11.6}
+\contentsline {subsubsection}{\numberline {11.6.1}Correcting by a constant, e.\tmspace +\thinmuskip {.1667em}g. Readout Bias}{17}{subsubsection.11.6.1}
+\contentsline {subsubsection}{\numberline {11.6.2}Correcting Wavelength Dependence}{17}{subsubsection.11.6.2}
+\contentsline {subsubsection}{\numberline {11.6.3}Spectra Dependent Correction}{17}{subsubsection.11.6.3}
+\contentsline {subsection}{\numberline {11.7}Normalization}{17}{subsection.11.7}
+\contentsline {subsection}{\numberline {11.8}Centering the Data}{18}{subsection.11.8}
+\contentsline {subsection}{\numberline {11.9}Variance Scaling}{18}{subsection.11.9}
+\contentsline {subsection}{\numberline {11.10}Multiplicative Scatter Correction (MSC)}{18}{subsection.11.10}
+\contentsline {subsection}{\numberline {11.11}Spectral Arithmetic}{19}{subsection.11.11}
+\contentsline {section}{\numberline {12}Data Analysis }{19}{section.12}
+\contentsline {subsection}{\numberline {12.1}Data Analysis Methods using a data.frame \\ e.\tmspace +\thinmuskip {.1667em}g. Principal Component Analysis with {\language \langwohyphens \texttt {prcomp}}}{19}{subsection.12.1}
+\contentsline {subsubsection}{\numberline {12.1.1}PCA as Noise Filter}{21}{subsubsection.12.1.1}
+\contentsline {subsection}{\numberline {12.2}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g. Hierarchical Cluster Analysis}{21}{subsection.12.2}
+\contentsline {subsection}{\numberline {12.3}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{22}{subsection.12.3}
+\contentsline {subsection}{\numberline {12.4}Splitting an Object}{22}{subsection.12.4}
 \contentsline {section}{\numberline {A}Overview of the functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{23}{appendix.A}

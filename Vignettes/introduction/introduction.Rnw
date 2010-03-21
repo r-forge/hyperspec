@@ -18,15 +18,17 @@
 \warnbox{Reproducing the Examples in this Vignette}{
 All spectra used in this manual are installed automatically with \phy. 
 
-The source data files of the \Robject{flu} and \Robject{laser} data sets as well as of the paracetamol spectrum are shipped with the package.
-For reproducing the examples in a live session, the full file names of the 
-spectra can be found with the command:\\
-\texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
-"hyperSpec/doc/rawdata/*.txt", sep = "/"))}} \\
+% The source data files of the \Robject{flu} and \Robject{laser} data sets as well as of the 
+%  paracetamol spectrum are shipped with the package.
+% For reproducing the examples in a live session, the full file names of the 
+% spectra can be found with the command:\\
+% \texttt{\small\textsl{> Sys.glob (paste (.libPaths (),
+% "hyperSpec/doc/rawdata/*.txt", sep = "/"))}} \\
 Note that some definitions are executed in \texttt{vignette.defs}.
 
-The source data file of the \Robject{chondro} data, however, needs to be be obtained separately. It is available for download as a .zip file at \Rpackage{hyperSpec}'s home page  (\url{http://r-forge.r-project.org/projects/hyperspec/}, ca. 8.5 MB).
-The original file (ca. 31 MB) is far too large to be included in the package.
+% The source data file of the \Robject{chondro} data, however, needs to be be obtained separately. It % is available for download as a .zip file at \Rpackage{hyperSpec}'s home page  
+% (\url{http://r-forge.r-project.org/projects/hyperspec/}, ca. 8.5 MB).
+% The original file (ca. 31 MB) is far too large to be included in the package.
 }
 
 \tableofcontents{}
@@ -54,19 +56,26 @@ series), class membership information, etc. \\
 Note that there is no restriction on the number of extra data columns.
 \end{labeling}
 This vignette gives an introduction on basic working techniques using
-the R package \Rpackage{hyperSpec}. It comes with three data sets,
+the R package \Rpackage{hyperSpec}. It comes with five data sets,
 \begin{labeling}{wavelength: }
 \item [\Robject{chondro}] a Raman map of chondrocytes in cartilage,
 \item [\Robject{flu}] a set of fluorescence spectra of a calibration
 series, and
 \item [\Robject{laser}] a time series of an unstable laser emission
+\item [\Robject{paracetamol}] a Raman spectrum of paracetamol (acetaminophen) ranging from 100 to 3200\,cm\textsuperscript{-1} with some overlapping wavelength ranges. \\ It is used mainly in the \emph{plotting} vignette.
+  \item [\Robject{barbituates}] GC-MS spectra with differing wavelength axes as a list of
+    \Sexpr{length (barbituates)} \chy objects.
 \end{labeling}
-In this vignette, all three data sets are used in an intermixed way
-to illustrate appropriate procedures for different tasks.
+In this vignette, the data sets are used to illustrate appropriate procedures for different tasks and different spectra.
 
-In addition, each of the data sets is accompanied by an vignette that shows an exemplary work flow how to analyze the data.
+In addition, the first three data sets are accompanied by vignetted that show exemplary work flows for the respective data type.
 
 This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. It is therefore recommended to look up the methods in R's help system using  \Rcode{?{} command}.
+
+After some remarks on the notation used in the document and on the general behaviour of R, sections~\ref{sec:loading-package} shows how to load the package. Section~\ref{sec:structure-chy} describes how \chy objects are organized internally. 
+
+A list of all functions available in \phy is given in appendix~\ref{tab:functions}~(\pageref{tab:functions})
+
 
 \subsection{Notation}
 
@@ -103,21 +112,18 @@ table~\ref{tab:generic} on page~\pageref{tab:generic}.
 
 \subsection{Functionality Can be Extended at Runtime}
 The concept of functions in \R offers much flexibility. Functions may be added or changed by the user in his \emph{workspace} at any time. This is also true for methods belonging to a certain class.
-Neither restart of R nor reloading of the package or anything the like is needed. At the same time, the original function is not deleted, it is just masked by the user's new function but stays accessible if the change should be reverted.
+Neither restart of R nor reloading of the package or anything the like is needed. If the original function resides in a namespace (as it is the case for all functions in \phy), the original function is not deleted. It is just masked by the user's new function but stays accessible via the \Rcode{::} operator.
 
 This offers the opportunity of easily writing specialized functions that are adapted to specific tasks. 
 
-As an example, see the setup of the plotting function for the spectra matrix in section~\ref{sec:plotmat} (page~\pageref{sec:plotmat})
+For examples, see the setup of the lattice plotting functions in the \texttt{vignettes.defs} file accompanying all \phy vignettes.
 
 \subsection{Validity Checking}
 S4 classes have a mechanism to define and enforce that the data actually stored in the object is appropriate for this class. In other words, there is a mechanism of \emph{validity checking}. 
 
-The functions provided by \Rpackage{hyperSpec} check the validity
-of \Rclass{hyperSpec} objects at the beginning, and --- if the validity
-could be broken by inappropriate arguments --- also before leaving
-the function.
+The functions provided by \Rpackage{hyperSpec} check the validity of \Rclass{hyperSpec} objects at the beginning, and --- if the validity could be broken by inappropriate arguments --- also before leaving the function.
  
-It is highly recommended to use validity checking also for user-defined functions. In addition, non-generic functions need to ensure that the argument actually is a \chy object. The two tasks are accomplished by:
+It is highly recommended to use validity checking also for user-defined functions. In addition, non-generic functions should first ensure that the argument actually is a \chy object. The two tasks are accomplished by:
 <<eval = FALSE>>=
 .is.hy (object)
 validObject (object)
@@ -127,6 +133,7 @@ Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise a
 
 
 \section{Loading the package}
+\label{sec:loading-package}
 
 To load \Rpackage{hyperSpec}, use
 \nopagebreak
@@ -136,6 +143,7 @@ library (hyperSpec)
 
 
 \section{The structure of \Rclass{hyperSpec} objects}
+\label{sec:structure-chy}
 
 \Rclass{hyperSpec} is a S4 (or new-style) class. It has four so-called
 \emph{slots} that hold the data:
@@ -150,37 +158,33 @@ for axis annotations)
 done with the object
 \end{labeling}
 However, it is good practice to use the functions provided by \Rpackage{hyperSpec}
-to handle the objects rather than accessing the slots directly. This
-also helps ensuring that proper (\emph{valid}) objects are retained.
+to handle the objects rather than accessing the slots directly (tab~). This
+also ensures that proper (\emph{valid}) objects are retained.
 
-Most of the data is stored in \Rcode{@data}. This \Rclass{data.frame}
-has one special column, \Rcode{\$spc}. It is the column that actually
-contains the spectra. The spectra are stored in a matrix inside this
-column, as illustrated in figure~\ref{fig:structure}. Even if there
-are no spectra, \Rcode{\$spc} must still be present but it can contain
-a matrix with zero columns.
+\begin{table}[tbh]
+  \centering
+  \begin{tabular}{>{\Robject}lll}
+    \toprule
+    \textbf{slot} & \textbf{get} & \textbf{set}\\
+    \cmidrule(lr){1-1}    \cmidrule(lr){2-2}    \cmidrule(lr){3-3}
+    @wavelength & \verb+wl+ & wl<- \\ 
+    @data       & \verb+[+, \verb+[[+, \verb+$+, \verb+as.data.frame+, \verb+as.long.df+, \ldots & \verb+[<-+, \verb+[[<-+, \verb+$<-+\\ 
+    @label & \verb+labels+ & \verb+labels<-+\\
+    @log & \verb+logbook+ & \verb+logentry+\\
+    \bottomrule
+  \end{tabular}
+  \caption{Get and set functions for the slots of \chy objects}
+  \label{tab:getset}
+\end{table}
 
-%
-\begin{figure}
+Most of the data is stored in \Robject{@data}. This \Rclass{data.frame} has one special column, \Rcode{\$spc}. It is the column that actually contains the spectra. The spectra are stored in a matrix inside this column, as illustrated in figure~\ref{fig:structure}. Even if there are no spectra, \Rcode{\$spc} must still be present but it can contain a matrix with zero columns.
+\begin{figure}[bth]
 \noindent \centering
 \include{Strukturhyperspec}
 \caption{\label{fig:structure}The structure of the data in a \Rpackage{hyperSpec} object.}
 \end{figure}
 
-
-Slot \Rcode{@label} contains an element for each of the columns in
-\Rcode{@data} plus one holding the label for the wavelength axis,
-\Rcode{.wavelength}. The elements of the list may be anything suitable
-for axis annotations, i.\,e. they should be either character strings
-or expressions for prettier axis annotations (see figure~\ref{fig:example-plots} on page~\pageref{fig:example-plots}).
-To get familiar with expressions for axis annotation, see
-<<help1, eval = FALSE>>=
-? plotmath
-@
-and
-<<help2, eval = FALSE>>=
-demo (plotmath)
-@
+Slot \Rcode{@label} contains an element for each of the columns in \Rcode{@data} plus one holding the label for the wavelength axis, \Rcode{.wavelength}. The elements of the list may be anything suitable for axis annotations, \ie they should be either character strings or expressions for ``pretty'' axis annotations (see figure~\ref{fig:example-plots} on page~\pageref{fig:example-plots}).  To get familiar with expressions for axis annotation, see \verb+? plotmath+ and \verb+demo (plotmath)+.
 
 \section{Functions provided by \phy}
 \label{sec:funct-prov-phy}
@@ -251,22 +255,8 @@ wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
 axis label in \Rcode{\$spc}.
 \end{description}
 
-\section{Decomposition}
-Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a principal component analysis are two matrices, the so-called scores and loadings. 
-The results can have either the same number of rows as the spectra matrix they were calculated from (scores-like), or they have as many wavelengths as the spectra (loadings-like).
 
-Both types of result objects can be ``re-imported'' into \chy objects with function \Rfunction{decomposition}. A scores-like object retains all per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are replaced. 
-A loadings-like object retains the wavelength information, while extra data is deleted (set to \Rcode{NA}) unless the value is constant for all spectra.
-
-For an example, see below (section~\ref{sec:pca} on page \pageref{sec:pca}).
-
-\section{Combining \Rclass{hyperspec} Objects} 
-\mFun{\Rfunction{\%*\%}}
-\subsection{Matrix Multiplication}
-
-Matrix multiplication is the reverse of the above mentioned decomposition.
-Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}. Again, this function is discussed with the principal component analysis example below (section~\ref{sec:pca} on page \pageref{sec:pca}).
-
+\section{Combining and Decomposing \Rclass{hyperspec} Objects} 
 
 \subsection{Binding Objects together}
 \mFun{\Rfunction{cbind} \Rfunction{rbind}}
@@ -283,6 +273,25 @@ There is also a more general function, \Rfunction{bind}, taking the
 direction (\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}})
 as first argument and then all objects to bind either in separate
 arguments or in a list.
+
+\mFun{\Rfunction{collapse}}
+\subsection{Binding Objects that do not share the same extra data and/or wavelength axis}
+
+
+\mFun{\Rfunction{\%*\%}}
+\subsection{Matrix Multiplication}
+
+Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}. For an example, see the principal component analysis below (section~\ref{sec:pca} on page \pageref{sec:pca}).
+
+\mFun{decomposition}
+\subsection{Decomposition}
+Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a principal component analysis are two matrices, the so-called scores and loadings. 
+The results can have either the same number of rows as the spectra matrix they were calculated from (scores-like), or they have as many wavelengths as the spectra (loadings-like).
+
+Both types of result objects can be ``re-imported'' into \chy objects with function \Rfunction{decomposition}. A scores-like object retains all per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are replaced. 
+A loadings-like object retains the wavelength information, while extra data is deleted (set to \Rcode{NA}) unless the value is constant for all spectra.
+
+A demonstration can be found in the principal component analysis example (section~\ref{sec:pca}) on page \pageref{sec:pca}.
 
 \section{Access to the data}
 
@@ -305,7 +314,7 @@ chondro  [chondro$y > 10]
 The second argument of the extraction functions \Rfunction{[]}
 and \Rfunction{[[]]} specifies the (extra) data columns.
 They can be given like any column specification for a \Rclass{data.frame},
-i.\,e. numeric, logical, or by a vector of the column names:
+\ie numeric, logical, or by a vector of the column names:
 
 <<data>>=
 colnames (chondro)
@@ -423,7 +432,7 @@ access to the data:
 \begin{description}
 %\setlength{\labelwidth}{2.5cm}
 %\setlength{\itemindent}{1.7cm}
-\item [{\Rcode{plotspc}}] plots the spectra, i.~e. the intensities \Rcode{\$spc} over the wavelengths \Rcode{@wavelength}.
+\item [{\Rcode{plotspc}}] plots the spectra, \ie the intensities \Rcode{\$spc} over the wavelengths \Rcode{@wavelength}.
 \item [{\Rcode{plotmap}}] plots a false colour map: a single value (e.\,g. average intensity or cluster membership) over two data columns (default \Rcode{\$x} and \Rcode{\$y}).
 \item [{\Rcode{plotc}}] plots a time series or calibration plot: e.\,g. an intensity over a single other data column (like concentration, depth, or time).
 \end{description}
