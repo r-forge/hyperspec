@@ -261,12 +261,9 @@ axis label in \Rcode{\$spc}.
 to append a new spectral range or by columns to append new spectra
 
 <<cbind>>=
-a <- chondro [, , 600 ~ 800]
-b <- chondro [,, 1600 ~ 1800]
-dim (a)
-dim (b)
-dim (cbind (a, a))
-dim (rbind (a, a))
+dim (flu)
+dim (cbind (flu, flu))
+dim (rbind (flu, flu))
 @
 Thus, you can use \Rfunction{cbind} to add new spectral ranges, and \Rfunction{rbind} to add new spectra to your object.
 
@@ -321,11 +318,19 @@ The main functions to retrieve the data of a \chy object are \Rfunction{[]} and 
 
 The extraction function \Rfunction{[]} (or \Rfunction{[[]]}, if the spectra \Rclass{matrix} or the \Rclass{data.frame} is needed rather than a \Rclass{hyperSpec} object) takes the spectra as first argument (For detailed help: \Rcode{? \textquotedbl[\textquotedbl}). It may be a vector giving the indices of the spectra to extract (select), a vector with negative indices indicating which spectra should be deleted, or a logical. Note that a matrix given to  \Rfunction{[]} will be treated as a vector.
 
-<<delspc,fig = TRUE>>=
-flu [1 : 3]
-flu [-3]
+<<delspc1, fig = TRUE>>=
+plot (flu, col = "gray")
+plot (flu [1 : 3], add = TRUE)
+@ 
+
+<<delspc2, fig = TRUE>>=
+plot (flu, col = "gray")
+plot (flu [-3], add = TRUE)
+@
+<<>>=
 chondro  [chondro$y > 10]
 @
+
 
 \subsection{Accessing the Extra Data }
 \label{sec:accessing-extra-data}
