@@ -111,7 +111,7 @@ a specialized way by each class.
 table~\ref{tab:generic} on page~\pageref{tab:generic}.
 
 \subsection{Functionality Can be Extended at Runtime}
-The concept of functions in \R offers much flexibility. Functions may be added or changed by the user in his \emph{workspace} at any time. This is also true for methods belonging to a certain class.
+ \R's  concept of functions offers much flexibility. Functions may be added or changed by the user in his \emph{workspace} at any time. This is also true for methods belonging to a certain class.
 Neither restart of R nor reloading of the package or anything the like is needed. If the original function resides in a namespace (as it is the case for all functions in \phy), the original function is not deleted. It is just masked by the user's new function but stays accessible via the \Rcode{::} operator.
 
 This offers the opportunity of easily writing specialized functions that are adapted to specific tasks. 
@@ -146,7 +146,7 @@ library (hyperSpec)
 \label{sec:structure-chy}
 
 \Rclass{hyperSpec} is a S4 (or new-style) class. It has four so-called
-\emph{slots} that hold the data:
+\emph{slots} that contain parts of the object:
 \begin{labeling}{@wavelength }
 \item [{\Robject{@wavelength}}] containing a numeric vector with the wavelength
 axis of the spectra.
@@ -177,7 +177,7 @@ also ensures that proper (\emph{valid}) objects are retained.
   \label{tab:getset}
 \end{table}
 
-Most of the data is stored in \Robject{@data}. This \Rclass{data.frame} has one special column, \Rcode{\$spc}. It is the column that actually contains the spectra. The spectra are stored in a matrix inside this column, as illustrated in figure~\ref{fig:structure}. Even if there are no spectra, \Rcode{\$spc} must still be present but it can contain a matrix with zero columns.
+Most of the data is stored in \Robject{@data}. This \Rclass{data.frame} has one special column, \Rcode{\$spc}. It is the column that actually contains the spectra. The spectra are stored in a matrix inside this column, as illustrated in figure~\ref{fig:structure}. Even if there are no spectra, \Rcode{\$spc} must still be present. It is then a matrix with zero columns.
 \begin{figure}[bth]
 \noindent \centering
 \include{Strukturhyperspec}
@@ -192,7 +192,7 @@ Slot \Rcode{@label} contains an element for each of the columns in \Rcode{@data}
 Table~\ref{tab:functions}~(p.~\pageref{tab:functions}) in the appendix gives an overview of the functions implemented by \phy. 
 
 \section{Obtaining Basic Information about \Rpackage{hyperSpec} Objects}
-
+\mFun{print, show, summary}
 As usual, the \Rmethod{print} and \Rmethod{show} methods display
 information about the object, and \Rmethod{summary} yields some additional
 details about the data handling done so far:
@@ -202,6 +202,7 @@ chondro
 summary (chondro)
 @
 
+\mFun{nrow, ncol, nwl, dim} 
 The data set \Robject{chondro} consists of \Sexpr{nrow (chondro)}
 spectra with \Sexpr{nwl (chondro)} data points each, and \Sexpr{ncol (chondro)}
 data columns: two for the spatial information plus \Robject{\$spc}.
@@ -214,17 +215,21 @@ ncol (chondro)
 dim (chondro)
 @
 
+\mFun{colnames, rownames, dimnames, \emph{wl}} 
 The names of the columns in \Rcode{@data} are accessed by
-
 <<names>>=
 colnames (chondro)
 @
 
 Likewise, \Rmethod{rownames} returns the names assigned to the spectra,
 and \Rmethod{dimnames} yields a list of these three vectors (including
-also the column names of \Robject{\$spc}).
+also the column names of \Robject{\$spc}). The column names of the spectra matrix are the wavelengths. They are accessed by \Rfunction{wl}, see section~\ref{sec:wavel-axis-conv}.
+
+\mFun{colnames<-, rownames<-} 
+Extra data column names and rownames of the object may be set by \Rfunction{colnames<-} and \Rfunction{rownames<-}, respectively. \Rfunction{colnames<-} renames the labels as well.
 
 \section{Creating a \Rclass{hyperSpec} Object, Data Import and Export}
+\label{sec:create}
 \phy comes with filters for a variety of file formats. ASCII files are supported for import and export, Matlab files can be read and written with the help of package \Rpackage{R.matlab}. ENVI files can be read (for writing, see e.\,g. package \Rpackage{caTools}). Also reading of Thermo Galactic's .spc file format is supported.
 
 E.\,g. to read a spectrum saved in Renishaw's ASCII file format, use:
@@ -257,6 +262,7 @@ axis label in \Rcode{\$spc}.
 
 
 \section{Combining and Decomposing \Rclass{hyperspec} Objects} 
+\label{sec:combine}
 
 \subsection{Binding Objects together}
 \mFun{\Rfunction{cbind} \Rfunction{rbind}}
@@ -276,15 +282,17 @@ arguments or in a list.
 
 \mFun{\Rfunction{collapse}}
 \subsection{Binding Objects that do not share the same extra data and/or wavelength axis}
-
+\label{sec:collapse}
 
 \mFun{\Rfunction{\%*\%}}
 \subsection{Matrix Multiplication}
+\label{sec:matmult}
 
 Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}. For an example, see the principal component analysis below (section~\ref{sec:pca} on page \pageref{sec:pca}).
 
 \mFun{decomposition}
 \subsection{Decomposition}
+\label{sec:decomposition}
 Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a principal component analysis are two matrices, the so-called scores and loadings. 
 The results can have either the same number of rows as the spectra matrix they were calculated from (scores-like), or they have as many wavelengths as the spectra (loadings-like).
 
@@ -294,8 +302,10 @@ A loadings-like object retains the wavelength information, while extra data is d
 A demonstration can be found in the principal component analysis example (section~\ref{sec:pca}) on page \pageref{sec:pca}.
 
 \section{Access to the data}
+\label{sec:access-parts}
 
 \subsection{Selecting and Deleting Spectra}
+\label{sec:select-delete-spectra}
 
 The extraction function \Rfunction{[]} (or \Rfunction{[[]]},
 if the spectra \Rclass{matrix} or the \Rclass{data.frame} is needed
@@ -311,6 +321,7 @@ chondro  [chondro$y > 10]
 @
 
 \subsection{Accessing the Extra Data }
+\label{sec:accessing-extra-data}
 The second argument of the extraction functions \Rfunction{[]}
 and \Rfunction{[[]]} specifies the (extra) data columns.
 They can be given like any column specification for a \Rclass{data.frame},
@@ -340,7 +351,9 @@ flu$n <- list (1 : 6, label = "sample no.")
 This function will append new columns, if necessary.
 
 \subsection{Wavelengths and Spectral Axis}
+\label{sec:wavelength-axis}
 \subsubsection{Wavelength Indices}\mFun{\Rfunction{wl2i} \Rfunction{i2wl}}
+\label{sec:wavelength-indices}
 
 Spectra in \Rpackage{hyperSpec} have always discretized wavelength
 axes, they are stored in a matrix with column corresponding to one
@@ -409,9 +422,11 @@ This mechanism also works for the wavelength arguments of \Rfunction{[]},
 
 %TODO Wl-Achse ändern
 \subsubsection{Wavelength Axis Conversion}
+\label{sec:wavel-axis-conv}
 
-
-\subsection{Fast Access to Parts of the \Rclass{hyperSpec} Object}\mFun{\Rfunction{[[]] \$. \$..}}
+\subsection{Fast Access to Parts of the \Rclass{hyperSpec} Object}
+\label{sec:fast-access-parts}
+\mFun{\Rfunction{[[]] \$. \$..}}
 
 \Rclass{hyperSpec} comes with three abbreviation functions for easy
 access to the data:

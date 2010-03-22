@@ -32,6 +32,8 @@ rownames (x) <- value
 
 If changing the colnames, be careful not to touch \code{spc}. Otherwise
 an error about an invalid hyperSpec object results.
+
+\code{colnames<-} renames the respective labels as well.
 }
 \arguments{
   \item{x}{a \code{hyperSpec} object}

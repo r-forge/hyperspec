@@ -18,6 +18,7 @@ setMethod ("colnames", "hyperSpec", function (x, do.NULL = TRUE, prefix = "col")
 setReplaceMethod ("colnames", "hyperSpec", function (x, value){
   validObject (x)
 
+  names (x@label [colnames (x@data)]) <- value
   colnames (x@data) <- value
   
   validObject (x)                       # necessary: $spc could be renamed!
