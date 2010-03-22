@@ -21,7 +21,7 @@
 ##' @keywords manip
 ##' @examples
 ##' barbituates [1:3]
-##' barb <- do.call (collapse, barbituates [1:3])
+##' barb <- collapse (barbituates [1:3])
 ##' barb
 ##' 
 ##' a <- barbituates [[1]]
@@ -35,6 +35,10 @@
 ##' 
 collapse <- function (..., orderwl = TRUE, short.log = TRUE, short = "collapse", user = NULL, date = NULL){
   dots <- list (...)
+
+  ## accept also a list of hyperSpec objects
+  if (length (dots) == 1 && is.list (dots [[1]]))
+    dots <- dots [[1]]
 
   ## check the arguments
   lapply (dots, .is.hy)

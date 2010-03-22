@@ -230,16 +230,7 @@ Extra data column names and rownames of the object may be set by \Rfunction{coln
 
 \section{Creating a \Rclass{hyperSpec} Object, Data Import and Export}
 \label{sec:create}
-\phy comes with filters for a variety of file formats. ASCII files are supported for import and export, Matlab files can be read and written with the help of package \Rpackage{R.matlab}. ENVI files can be read (for writing, see e.\,g. package \Rpackage{caTools}). Also reading of Thermo Galactic's .spc file format is supported.
-
-E.\,g. to read a spectrum saved in Renishaw's ASCII file format, use:
-<<scan.txt.Renishaw>>=
-paracetamol <- scan.txt.Renishaw ("rawdata/paracetamol.txt", "spc")
-paracetamol
-save (paracetamol, file = "paracetamol.rda")
-@
-
-Vignette \texttt{FileIO} discusses the available filters and also how to derive own filters for importing  manufacturer specific data.
+\phy comes with filters for a variety of file formats. These are discussed in detail in a separate document. Use \verb+vignette ("file-io")+ to read about import and export of spectra into \chy objects.
 
 \subsection{Creating a \Rclass{hyperSpec} Object from Spectra Matrix
 and Wavelength Vector}
@@ -249,16 +240,14 @@ created by:\\
 \Rcode{spc <- new (\textquotedbl{}hyperSpec\textquotedbl{}, spc =
   spectra.matrix, wavelength = wavelength.vector, data = extra.data)}\\
 You will usually give the following arguments:
-\begin{description}
-\setlength{\labelwidth}{2.5cm}
-\setlength{\itemindent}{1.7cm}
+\begin{labeling}{\Rcode{wavelength}}
 \item [{\Rcode{spc}}] the spectra matrix
 \item [{\Rcode{wavelength}}] the wavelength axis vector
 \item [{\Rcode{data}}] the extra data (possibly already including the spectra matrix in column   \texttt{spc})
 \item [{\Rcode{label}}] a list with the proper labels. Do not forget the
 wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
 axis label in \Rcode{\$spc}.
-\end{description}
+\end{labeling}
 
 
 \section{Combining and Decomposing \Rclass{hyperspec} Objects} 
@@ -271,18 +260,39 @@ axis label in \Rcode{\$spc}.
 to append a new spectral range or by columns to append new spectra
 
 <<cbind>>=
-cbind (chondro [, , 600 ~ 800], chondro [, , 1600 ~ 1800])
-rbind (chondro [, , 600 ~ 800], chondro [, , 600 ~ 800])
+a <- chondro [, , 600 ~ 800]
+b <- chondro [,, 1600 ~ 1800]
+dim (a)
+dim (b)
+dim (cbind (a, a))
+dim (rbind (a, a))
 @
+Thus, you can use \Rfunction{cbind} to add new spectral ranges, and \Rfunction{rbind} to add new spectra to your object.
 
 There is also a more general function, \Rfunction{bind}, taking the
 direction (\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}})
 as first argument and then all objects to bind either in separate
 arguments or in a list.
 
+As usual for \Rfunction{rbind} and \Rfunction{cbind}, the objects that should be bound together must have the same rows and columns, respectively.
+
 \mFun{\Rfunction{collapse}}
 \subsection{Binding Objects that do not share the same extra data and/or wavelength axis}
 \label{sec:collapse}
+
+\Rfunction{collapse} combines objects that should be bound together by row, but they do not share the columns and/or spectral range.
+The resulting object has all columns from all input objects, and all wavelengths from the input objects. If an input object does not have a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
+
+The \Robject{barbituates} data is a list of \Sexpr{length (barbituates)} \chy objects, each containing one mass spectrum. The spectra have \Sexpr{(min (sapply (barbituates, nwl)))} to 
+\Sexpr{(max (sapply (barbituates, nwl)))} data points. 
+
+<<collapse>>=
+barb <- collapse (barbituates)
+barb [[1:3, , min ~ min + 10i]]
+@
+
+
+
 
 \mFun{\Rfunction{\%*\%}}
 \subsection{Matrix Multiplication}
@@ -443,203 +453,8 @@ access to the data:
 
 
 \section{Plotting}
-\Rpackage{hyperSpec} comes with three predefined plotting functions.
-\begin{description}
-%\setlength{\labelwidth}{2.5cm}
-%\setlength{\itemindent}{1.7cm}
-\item [{\Rcode{plotspc}}] plots the spectra, \ie the intensities \Rcode{\$spc} over the wavelengths \Rcode{@wavelength}.
-\item [{\Rcode{plotmap}}] plots a false colour map: a single value (e.\,g. average intensity or cluster membership) over two data columns (default \Rcode{\$x} and \Rcode{\$y}).
-\item [{\Rcode{plotc}}] plots a time series or calibration plot: e.\,g. an intensity over a single other data column (like concentration, depth, or time).
-\end{description}
-
-All three plus some more handy abbreviations are also accessible via \Rmethod{plot}: \mFun{\Rfunction{plot}}
-
-\begin{description}
-%\setlength{\labelwidth}{2.4cm}
-%\setlength{\itemindent}{1.7cm}
-\item [{\Rcode{plot (flu, \textquotedbl{}spc\textquotedbl{})}}] is equivalent to \Rcode{plotspc (flu)}
-\item [{\Rcode{plot (chondro, \textquotedbl{}spcmeansd\textquotedbl{})}}] plots mean spectrum $\pm$ 1 standard deviation
-\item [{\Rcode{plot (chondro, \textquotedbl{}spcprctl\textquotedbl{})}}] plots median, 16$^{\text{th}}$ and 84$^{\text{th}}$ percentile. This is similar to \Rcode{\textquotedbl{}spcmeansd\textquotedbl{}}. Spectroscopic data frequently are not Gaussian distributed. The percentiles give a better idea of the true distribution. They are also less sensitive to outliers.
-\item [{\Rcode{plot (chondro, \textquotedbl{}spcprctl5\textquotedbl{})}}] like \Rcode{\textquotedbl{}spcprctl\textquotedbl{}} plus 5$^{\text{th}}$ and 95$^{\text{th}}$percentile.
-\item [{\Rcode{plot (chondro, \textquotedbl{}map\textquotedbl{})}}] is equivalent to \Rcode{plotmap (chondro)}
-\item [{\Rcode{plot (flu, \textquotedbl{}c\textquotedbl{})}}] is equivalent to \Rcode{plotc (flu)}
-\item [{\Rcode{plot (laser, \textquotedbl ts\textquotedbl )}}] plots a time series plot, equivalent to \Rcode{plotc (laser, use.c = \textquotedbl{}t\textquotedbl{})}
-\item [{\Rcode{plot (x, \textquotedbl{}depth\textquotedbl{})}}] plots a depth profile plot, equivalent to \Rcode{plotc (laser, use.c = \textquotedbl{}z\textquotedbl{})}
-\end{description}
-Figure~\ref{fig:example-plots} shows some example plots.
-
-\Rfunction{plot} uses its second argument to determine which of the
-three specialized plot functions to call. All further arguments are
-handed over to this function.
-
-%
-\begin{figure}
-\hspace*{-0.5cm}
-\setkeys{Gin}{width = .245\textwidth}
-\subfloat[\label{fig-plot-spc}]{
-<<plotspc, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-plotspc (flu)
-@
-}
-\subfloat[\label{fig-plot-spcmeansd}]{
-<<plotspcmeansd, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-plot (chondro, "spcmeansd")
-@
-}
-\subfloat[\label{fig-plot-c}]{
-<<plotc, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-plotc (flu)
-@
-}
-\subfloat[\label{fig-plot-map}]{
-<<plotmap, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-YG <- colorRampPalette (c ("white", "gold", "dark green"), space = "Lab")
-plotmap (chondro, col.regions = YG (20))
-@
-}
-
-\caption{\label{fig:example-plots}Some example plots. \subref{fig-plot-spc}\Rcode{plotspc (flu)},
-\subref{fig-plot-spcmeansd}\Rcode{plot (chondro, \textquotedbl{}spcmeansd\textquotedbl{})},
-\subref{fig-plot-c}\Rcode{plotc (flu)}, and \subref{fig-plot-map}\Rcode{plotmap (chondro, col.regions = YG (20))} (using a yellow-green palette).}
-
-\end{figure}
-
-
-
-\subsection{Plotting Spectra}\mFun{\Rfunction{plotspc}}
-
-\Rfunction{plotspc} offers a variety of parameters for customized
-plots. To plot ...
-\begin{description}
-\setlength{\labelwidth}{2.5cm}
-\setlength{\itemindent}{1.7cm}
-\item [with reversed abscissa] use \Rcode{wl.reverse = TRUE}
-\item [in different colours] colours use \Rcode{col = vector.of.colours}
-\item [dots instead of lines] use \Rcode{lines.args = list (pch = 20, type = \textquotedbl{}p\textquotedbl{})}
-\item [mass spectra] use \Rcode{lines.args = list (type = \textquotedbl{}h\textquotedbl{})}
-\item [particular wavelength ranges] use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
-3100)}\\
-If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}\\
-Cut the wavelength axis appropriately with \Rcode{xoffset = 800}
-\item [stacked spectra] use \Rfunarg{stacked}
-\item [more spectra into an existing plot] use \Rcode{add = TRUE}
-\item [with different line at $I =0$] use \Rcode{zeroline = \emph{list.of.arguments.to.abline}}.
-\Rcode{NULL} suppresses the line.
-\end{description}
-<<ms, fig = TRUE, width = 8, height = 5, echo = FALSE, include = FALSE>>=
-fake.mass.spec <- new ("hyperSpec", spc = matrix (100*runif (25), nrow = 1),
-   wavelength = 1 : 25 + 28,
-   label = list (spc = expression (e^"-" / s), .wavelength = expression (m / z)))
-plot (fake.mass.spec, lines.args = list (type = "h"))
-@
-<<plotspcadd, fig = TRUE, width = 8, height = 5, echo = FALSE, include = FALSE>>=
-plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, wl.reverse = TRUE, col = "blue")
-@
-
-%
-\begin{figure}
-\subfloat[\label{fig-plotspc-ms}]{\includegraphics[width=0.33\textwidth]{fig/fig-ms}}%
-\subfloat[\label{fig-plotspc-paracetamol}]{\includegraphics[width=0.33\textwidth]{fig/fig-plotspcadd}}%
-\subfloat[\label{fig-plotmap-factor}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmap}}
-\caption{Arguments to \Rfunction{plotspc}. \subref{fig-plotspc-ms}
-\Rcode{plot (fake.mass.spec, lines.args = list (type = \textquotedbl{}h\textquotedbl{}))}
-\subref{fig-plotspc-paracetamol} \Rcode{plotspc (paracetamol, wl.range = c (300 \textasciitilde{} 1800, 2800
-\textasciitilde{} max), xoffset = 850, wl.reverse = TRUE)} \subref{fig-plotmap-factor} \Rcode{plotmap} with a factor,
-see section \ref{HCA}.}
-\end{figure}
-
-\subsection{Plotting the Spectra Matrix}
-\label{sec:plotmat}
-It is often useful to plot the spectra against an additional coordinate, \eg the time for time series, the depth for depth profiles, etc. 
-
-This is done by  \Rfunction{levelplot}, or by using \Rcode{plot (object, "mat", model = spc ~ .wavelength * other.data.column)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
-See figure~\ref{fig:plotmat}
-<<plotmat1, fig = TRUE, include = FALSE>>=
-levelplot (spc ~ .wavelength * t, laser, col.regions = YG (20))
-@
-<<plotmat2, fig = TRUE, include = FALSE>>=
-print (plot (flu, "mat", contour = TRUE, labels = TRUE, col = "#00000080"))
-@
-\begin{figure}
-\subfloat[\label{fig-plotmat-a}\Rcode{levelplot (spc ~ .wavelength * t, laser, col.regions = YG (20))}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat1}}%
-\subfloat[\label{fig-plotmat-b}\Rcode{plot (flu, "mat", contour = TRUE, labels = TRUE, col = "\#00000080")}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat2}}%
-\caption{\label{fig:plotmat}plotting the spectra matrix. 
-}
-\end{figure}
-
-% <<plotdef>>=
-% showMethods ("plot", classes = "hyperSpec", includeDefs = TRUE)
-% @
-% The actual dispatching of the plots according to the second (character) argument is done by  %\Rfunction{.plot}. Thus, the new switchyard function can just act if \Rcode{y == \textquotedbl       % ms\textquotedbl}, and otherwise call \Rfunction{.plot}. As \Rfunction{.plot} is not exported from  % \phy's namespace, it must be called including its namespace.
-% <<newplot>>=
-% .my.mass.plot <- function (x, y, ...) {
-%   if (y == "ms") {
-%     dots <- list (object = x, ...)
-%     dots <- modifyList (dots, list (lines.args = list (type = "h")))
-%     do.call (plotspc, dots)
-%   } else {
-%     hyperSpec:::.plot (x, y, ...)
-%   }
-% }
-% @ 
-% Finally, \R needs to know that the new switchyard function should be used for plotting of \chy 
-%  objects:
-% <<setmethod>>=
-% setMethod ("plot", signature (x = "hyperSpec", y = "character"), .my.mass.plot)
-% @
-
-% From now on, \Rcode{plot (x, \textquotedbl ms\textquotedbl)} will produce a plot with vertical %lines % as used for mass spectra. All other plot types are unaffected. 
-
-% Patching \Rfunction{.plot} in \phy if the changes could be useful 
-
-
-
-\subsection{Calibration Plots, (Depth) Profiles, and Time Series Plots}\mFun{\Rfunction{plotc}}
-
-\Rfunction{plotc} plots an intensity over one of the extra data columns.
-The abscissa uses column \Rcode{\$c} by default, another column can
-be specified using \Rfunarg{use.c}\Rcode{ = name}. The ordinate can
-be calculated as a sum characteristic (with parameter \Rfunarg{func}\Rcode{= function},
-defaulting to \Rmethod{sum}). If parameter \Rfunarg{z} is given,
-these values are used instead. \Rfunarg{z} may be the name of an extra
-data column, or a \Rclass{numeric} that should be used directly.
-
-To customize the plot, give any arguments that you would usually supply
-to \Rmethod{plot} as a list using argument \Rfunarg{plot.args}.
-
-
-\subsection{Plotting False-Colour Maps}\mFun{\Rfunction{plotmap}}
-
-\Rcode{plotmap} uses \Rcode{levelplot}, a \Rpackage{lattice} function.
-Therefore, in loops, functions, Sweave chunks, etc. the lattice object
-needs to be printed explicitly by \Rcode{print (plotmap (object))}
-(\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R FAQ: Why do lattice/trellis graphics not work?}).
-
-\Rfunction{plotmap} produces a 3d plot, with the $z$ axis colour-coded.
-\Rfunction{plotmap}'s arguments \Rfunarg{x} and \Rfunarg{y} take
-the name of extra data columns.
-
-
-\paragraph{The colour-coded axis. }
-
-Also \Rfunarg{z} can be used to select one column of the extra data
-by name. Alternatively, it may be a numeric or factor directly giving
-the values to be used. Each level of a factor will have one colour.
-It is also possible to plot a sum characteristic of the spectra: supply
-the function in argument \Rfunarg{func}. The default setting is to
-plot the average intensity (no \Rfunarg{z} and \Rfunarg{func}\Rcode{= mean}).
-
-To plot with a different palette, use \Rfunarg{trellis.args}\Rcode{= list (col.regions = palette)}.
-
-
-\paragraph{Conditioning.}
-Lattice graphics have a concept of conditioning a plot. Instead of
-plotting all data in one diagram, a diagram is produced for each of
-the groups specified by the condition. \Rfunction{plotmap}'s argument
-\Rfunarg{cond} takes he name of the extra data column used for conditioning.
-This could e.\,g. be a column containing the sample number of a \Rclass{hyperSpec}
-object that contains several samples.
-
+\phy offers a variety of possibilities to plot spectra, spectral maps, the spectra matrix, time series, depth profiles, etc..
+This all is discussed in a separate document: see \verb+vignette ("plotting")+.
 
 \section{Spectral (Pre)processing}
 \subsection{Cutting the Spectral Range}\mFun{\Rfunction{[]} \Rfunction{[[]]}}

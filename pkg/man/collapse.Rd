@@ -23,13 +23,13 @@ arguments, a list with all objects to be collapsed may be given.}
 }
 \examples{
 barbituates [1:3]
-barb <- do.call (collapse, barbituates [1:3])
+
+barb <- collapse (barbituates [1:3])
 barb
 
 a <- barbituates [[1]]
 b <- barbituates [[2]]
 c <- barbituates [[3]]
-
 a
 b
 c

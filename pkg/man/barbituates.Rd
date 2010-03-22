@@ -14,7 +14,7 @@ A time series of mass spectra in a list of hyperSpec objects.
 \examples{
 barbituates
 
-barb <- do.call (collapse, barbituates)
+barb <- collapse (barbituates)
 
 plot (barb [1:3], lines.args = list (type = "h"),
       col = matlab.dark.palette (3), stacked = TRUE,
@@ -25,6 +25,6 @@ plot (log (barb), "mat", panel = panel.levelplot.points, cex = 0.3,
       col = "#00000000", col.regions = matlab.palette (20))
 
 plotc (apply (barb [,, 42.9~43.2], 1, sum, na.rm = TRUE), spc ~ z,
-       panel = panel.lines)
+       panel = panel.lines, ylab = expression (I[m/z == 43] / "a.u."))
 }
 \keyword{datasets}

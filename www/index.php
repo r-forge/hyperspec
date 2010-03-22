@@ -38,8 +38,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 </table>
 
 
-<p> The package is now publicly accessible from the <a href="http://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/?root=hyperspec">SVN repository</a>. </p>
-<p> You find the <strong>project summary page</strong> <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p> The package is publicly accessible from the <a href="http://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/?root=hyperspec">SVN repository</a>. </p>
+<p> You find the <strong>R-forge project summary page</strong> <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
 <h1><tt>hyperSpec</tt> participates in the <a href="http://socghop.appspot.com/gsoc/program/home/google/gsoc2010"/>Google Summer of Code 2010</a></h1>
 Info about <tt>hyperSpec</tt>:
@@ -72,6 +72,7 @@ You may contact me about the topic and outline of your solution.
 <li>Install the package:<br/>
 <tt>R CMD INSTALL <i>filename</i></tt></li>
 </ol>
+Please note that the automatic windows build on r-forge is often one or two days behind.
 
 <h2>... from svn source</h2>
 <ol><li>
@@ -89,7 +90,6 @@ get an svn checkout using your favourite svn client program, or<br/>
 <li>Install the package:<br/>
 <tt>R CMD INSTALL <i>filename</i></tt></li>
 </ol>
-
 These may be a bit outdated, but they work if the nightly build fails.
 
 <h1>Documentation</h1>
@@ -117,19 +117,12 @@ the <a href="FileIO.zip">zipped directory containing all data</a> is needed to r
 <li><a href="http://r-forge.r-project.org/tracker/?atid=1501&group_id=366&func=browse">bugs</a> are also found on r-forge.</li>
 </ul>
 
-<h1>Other Useful Packages for Chemometric Data Analysis</h1>
-<p>By no means complete, if you have suggestions, send me an email.</p>
-<ul>
-<li><tt>R.matlab</tt>: Read & write .mat files, run external calculations in Matlab</li>
-<li><tt>pls</tt>: Partial Least Squares regression</li>
-</ul>
-
 <h1>Impressum</h1>
 <p>
 Claudia Beleites<br/>
 CENMAT, Materials and Natural Resources Dept.<br/> 
 University of Trieste<br/>
-e-mail: cbeleites at units.it
+e-mail: cbeleites at units dot it
 </p>
 </body>
 </html>
