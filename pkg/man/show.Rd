@@ -10,7 +10,7 @@
 }
 \usage{
 \S4method{show}{hyperSpec}(object)
-\S4method{print}{hyperSpec}(x, log = FALSE, \dots)
+\S4method{print}{hyperSpec}(x, log = FALSE, range = FALSE, \dots)
 \S4method{summary}{hyperSpec}(object, log = TRUE, \dots)
 \S4method{as.character}{hyperSpec}(x, digits = getOption ("digits"),
    range = TRUE, max.print = 5, shorten.to = c(2, 1), log = TRUE)
@@ -34,6 +34,12 @@
 
   \item{\dots}{\code{print} hands any arguments to \code{as.character}}
 }
+\details{
+  \code{print}, \code{show}, and \code{summary} differ only in the
+  defaults. \code{print} shows the overview giving the first and last
+  values of each data column (fastest). \code{show} displays the range
+  of values instead, and \code{summary} displays the logbook as well.
+}
 \value{
   \code{as.character} returns a character vector fit to be printed by
   \code{cat} with \code{sep = "\\n"}.
@@ -50,7 +56,12 @@
 \examples{
 chondro
 
+show (chondro)
+
+summary (chondro)
+
 print (chondro, log = TRUE)
+print (chondro, range = TRUE)
 
 logbook (chondro)
 }  

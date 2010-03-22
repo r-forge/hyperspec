@@ -40,6 +40,21 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <p> The package is now publicly accessible from the <a href="http://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/?root=hyperspec">SVN repository</a>. </p>
 <p> You find the <strong>project summary page</strong> <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<h1><tt>hyperSpec</tt> in the <link href="http://socghop.appspot.com/gsoc/program/home/google/gsoc2010"/>Google Summer of Code 2010</link></h1>
+Info about <tt>hyperSpec</tt>:
+<ul>
+<li>here</li>
+<li><link href="http://rwiki.sciviews.org/doku.php?id=packages:cran:hyperspec"/>R Wiki</link></li>
+<li><link href="http://rwiki.sciviews.org/doku.php?id=developers:projects:gsoc2010:hyperspec"/>Idea List for GSoC project</link></li>
+<li><link href="http://www.r-project.org"/>R</link></li>
+</ul>
+Students please note:
+<ul>
+<li>For the official application to Google you need to solve one of the "stand alone" tasks of the <link href="http://rwiki.sciviews.org/doku.php?id=developers:projects:gsoc2010:hyperspec"/>Idea List for GSoC project</link><br />
+You may contact me about the topic and outline of your solution.
+</li>
+<li>Application deadline is April 9th</li>
+</ul>
 
 <h1>Installation</h1>
 <h2>... from inside R</h2>

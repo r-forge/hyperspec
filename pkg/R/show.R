@@ -4,6 +4,6 @@
 ###
 
 setMethod ("show", "hyperSpec", function (object){
-  print (object)
+  print (object, range = TRUE)
   invisible (NULL)
 })
