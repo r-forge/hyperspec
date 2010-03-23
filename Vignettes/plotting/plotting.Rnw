@@ -26,7 +26,17 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 \tableofcontents{}
 
 \section{Predefined functions}
-\Rpackage{hyperSpec} comes with three predefined plotting functions.
+\Rpackage{hyperSpec} comes with 5 major predefined plotting functions.
+
+\begin{labeling}{levelplot}
+\item[plot] main switchyard for most plotting tasks
+\item[levelplot] \chy has a levelplot method
+\vspace*{1ex}
+\item[plotspc] plots spectra
+\item[plotc] calibration plot,time series, depth profile
+\item[plotmap] version of levelplot allowing some more preprocessing of the data. 
+  
+\end{labeling}
 
 \setkeys{Gin}{width = \textwidth}
 
@@ -38,18 +48,31 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 plotspc (paracetamol)
 @ 
 \\
-\textbf{plotmap}  &\tabularnewline \nopagebreak
-  \raisebox{-4cm}{\includegraphics[width = .45\textwidth]{fig/fig-plotmapcho}} &
-  plots a false colour map: a single value (e.\,g. average intensity or cluster membership) over two data columns (default \Rcode{\$x} and \Rcode{\$y}).
-<<plotmapcho, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plotmap (chondro)
-@
-\\
 \textbf{plotc} &\tabularnewline  \nopagebreak
   \raisebox{-3.7cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotflu}} &
-    plots a time series or calibration plot: e.\,g. an intensity over a single other data column (like concentration, depth, or time).
+    plots an intensity over a single other data column. \eg
+    \begin{itemize}
+    \item time series
+    \item calibration
+    \item depth profile
+    \end{itemize}
 <<plotflu, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plotc (flu)
+@
+\\
+\textbf{levelplot}  &\tabularnewline \nopagebreak
+  \raisebox{-4cm}{\includegraphics[width = .45\textwidth]{fig/fig-levelplot}} &
+  plots a false colour map, defined by a formula.
+<<levelplot, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+levelplot ( spc ~ x * y, chondro, aspect = "iso")
+@
+Warning: only the first wavelength is used.
+\\
+\textbf{plotmap}  &\tabularnewline \nopagebreak
+  \raisebox{-4cm}{\includegraphics[width = .45\textwidth]{fig/fig-plotmap}} &
+  plotmap is a specialized version of levelplot. It uses a single value (e.\,g. average intensity or cluster membership) over two data columns (default \Rcode{\$x} and \Rcode{\$y})
+<<plotmap, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plotmap (chondro)
 @
 \end{longtable}
 
@@ -69,12 +92,13 @@ plotc (flu)
 
 
 
-All three plus some more handy abbreviations are also accessible via \Rmethod{plot}: \mFun{\Rfunction{plot}}
+The three specialized functions are also accessible via \Rmethod{plot}:
 
-\Rfunction{plot} uses its second argument to determine which of the
+\chy 's \Rfunction{plot} method uses the second argument to determine which of the
 three specialized plot functions to call. All further arguments are
 handed over to this function.
 
+This allows a few more handy abbreviations.
 
 %\begin{tabular}{@{}p{.45\textwidth} p{.55\textwidth}}
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
@@ -94,14 +118,14 @@ plot (chondro, "spcmeansd")
 \\ \vspace*{2ex}
 \textbf{plot (x, \textquotedbl{}spcprctile\textquotedbl{})}&\tabularnewline  \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotchoprctl}} &
-plots median, 16$^{\text{th}}$ and 84$^{\text{th}}$ percentile. This is similar to \Rcode{\textquotedbl{}spcmeansd\textquotedbl{}}. Spectroscopic data frequently are not Gaussian distributed. The percentiles give a better idea of the true distribution. They are also less sensitive to outliers.
+plots median, 16\textsuperscript{th} and 84\textsuperscript{th} percentile for each wavelength. For Gaussian distributed data, 16\textsuperscript{th}, 50\textsuperscript{th} and 84\textsuperscript{th} percentile are equal to mean $\pm$ standard deviation. Spectroscopic data frequently are not Gaussian distributed. The percentiles give a better idea of the true distribution. They are also less sensitive to outliers.
 <<plotchoprctl, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plot (chondro, "spcprctile")
 @
 \\ \vspace*{2ex}
 \textbf{plot (x, \textquotedbl{}spcprctl5\textquotedbl{})}&\tabularnewline  \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotchoprctl5}} &
-like \Rcode{\textquotedbl{}spcprctl\textquotedbl{}} plus 5$^{\text{th}}$ and 95$^{\text{th}}$percentile.
+like \Rcode{\textquotedbl{}spcprctl\textquotedbl{}} plus 5\textsuperscript{th} and 95\textsuperscript{th}percentile.
 <<plotchoprctl5, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plot (chondro, "spcprctl5")
 @
@@ -144,9 +168,13 @@ plot (depth.profile, "depth")
 \\
 \textbf{plot (x, \textquotedbl{}mat\textquotedbl{})}&\tabularnewline \nopagebreak
   \raisebox{-3.7cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat}} &
-plots the spectra matrix
+plots the spectra matrix.
 <<plotmat, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plot (laser, "mat")
+@
+Equivalent to 
+<<include = FALSE>>=
+levelplot (spc ~ .wavelength * .row, laser)
 @
 
 \end{longtable}
@@ -208,7 +236,7 @@ plotspc (paracetamol,
 \\
 \textbf{particular wavelength ranges II }&\tabularnewline \nopagebreak
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-wavelength-2}} &
-or use the extract command: 
+if only one wavelength range is needed, the extract command is handier: 
 <<wavelength-2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plotspc (paracetamol[,, 700 ~ 1200])
 @
@@ -234,21 +262,20 @@ plotspc (paracetamol,
 \subsection{Stacked spectra}
 \label{sec:stacked-spectra}
 
-
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
 \textbf{stacked = TRUE}&\tabularnewline \nopagebreak
- \raisebox{-4.5cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked}} &
+ \raisebox{-4.5cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked1}} &
 use \Rfunarg{stacked = TRUE}
-<<stacked, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+<<stacked1, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plotspc (chondro[1:3,,], 
          col = matlab.dark.palette (3),
          stacked = TRUE)
 @
 \\
-\textbf{stacked = ".aggregate"}&\tabularnewline \nopagebreak
-\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked3}} &
-if you want to plot mean spectrum $\pm$ 1 standard deviation of each of the clusters, use \Rfunarg{stacked = ".aggregate"}
-<<stacked3, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+\textbf{Stacking groups of spectra}&\tabularnewline \nopagebreak
+\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked2}} &
+if you want to plot mean spectrum $\pm$ 1 standard deviation of each of the clusters, use \Rfunarg{stacked = grouping.column ".name"}
+<<stacked2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 cols <- c ("dark blue", "orange", "#C02020")
 cluster.means <- aggregate (chondro, 
                             chondro$clusters, 
@@ -260,9 +287,9 @@ plot (cluster.means,
 @
 \\
 \textbf{yoffset}&\tabularnewline \nopagebreak
-\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked2}} &
+\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked3}} &
 or use \Rfunarg{yoffset = }
-<<stacked2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+<<stacked3, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 cluster.means <- aggregate (chondro, 
                             chondro$clusters, 
                             mean_pm_sd)
@@ -271,36 +298,9 @@ plotspc (cluster.means,
          col = rep (matlab.dark.palette (3), each = 3))
 @
 \\
-\textbf{Manually}&\tabularnewline \nopagebreak
+\textbf{Manually with normalized spectra}&\tabularnewline \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked4}} &
-it's also possible to stack the spectra like this:
-<<stacked4, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-out <- c (25, 376, 559)
-outcols <- c ("orange", "magenta", "brown")
-
-## coordinate system:
-plot(chondro[1], 
-     plot.args = list (ylim = c (0, length (out) * 1500)), 
-     lines.args = list( type = "n")
-     )
-## stacked spectra:
-for (i in seq (along = out)){
-  plot(chondro, 
-       "spcprctl5", 
-       yoffset = i + (i-1) * 1500,
-       col = "gray",
-       add = TRUE)
-  plot (chondro [out[i]], 
-        yoffset = i + (i-1) * 1500, 
-        col = outcols[i], 
-        add = TRUE, 
-        lines.args = list (lwd = 2))
-  text (650, i + 1000 +(i-1) * 1500, out [i]) }
-@
-\\
-\textbf{Normalized spectra}&\tabularnewline \nopagebreak
-\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked5}} &
-with normalised spectra it would look like this:
+it's also possible to normalize and stack the spectra like this:
 <<>>=
 out <- c (25, 376, 559)
 outcols <- c ("orange", "magenta", "brown")
@@ -319,7 +319,7 @@ chondro <- sweep (chondro,
                   "-")
 @ 
 The figure:
-<<stacked5, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+<<stacked4, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 ## coordinate system:
 plot(chondro[1], 
      plot.args = list (ylim = c (1, length (out) + .7)), 
@@ -339,15 +339,22 @@ for (i in seq (along = out)){
         lines.args = list (lwd = 2))
   text (650, i + .33, out [i]) }
 @
-
-
 \end{longtable}
+
+\section{Levelplot}
+\label{sec:levelplot}
+
+Levelplot can use two  special column names:
+\begin{labeling}{.wavelength}
+\item[.wavelength] for the wavelengths
+\item[.row] for the row index (\ie spectrum number) in the data
+\end{labeling}
 
 \section{Spectra Matrix}
 \label{sec:plotmat}
 It is often useful to plot the spectra against an additional coordinate, \eg the time for time series, the depth for depth profiles, etc. 
 
-This can be done by \Rcode{plot (object, "mat")} or \Rfunction{levelplot (model = spc ~ .wavelength * other.data.column, object)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
+This can be done by \Rcode{plot (object, "mat")} or \Rfunction{levelplot (model = spc \textasciitilde .wavelength * other.data.column, object)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
 
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
 \textbf{different palette}&\tabularnewline \nopagebreak
@@ -371,7 +378,7 @@ levelplot (spc ~ .wavelength * t,
            laser)
 @
 \\
-\textbf{contour with plot}&\tabularnewline \nopagebreak
+\textbf{contour lines with plot}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat2}} &
 Contourplots are possible with plot and levelplot:
 <<plotmat2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
@@ -383,7 +390,7 @@ plot (flu,
       at = seq (0, 700, by = 50))
 @
 \\
-\textbf{contour with levelplot}&\tabularnewline \nopagebreak
+\textbf{contour lines with levelplot}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat2a}} &
 Contourplot with a different y axis:
 <<plotmat2a, fig = TRUE, width = 4, height = 3,include = FALSE>>=
@@ -407,8 +414,30 @@ defaulting to \Rmethod{sum}). If parameter \Rfunarg{z} is given,
 these values are used instead. \Rfunarg{z} may be the name of an extra
 data column, or a \Rclass{numeric} that should be used directly.
 
-To customize the plot, give any arguments that you would usually supply
-to \Rmethod{plot} as a list using argument \Rfunarg{plot.args}.
+\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\textbf{}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc2}} &
+<<plotc2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (laser [,, c (13, 17, 21, 23), 
+              wl.index = TRUE], 
+       spc ~ t | factor (round (.wavelength, 2)), 
+       type = "b", 
+       cex = .3)
+@
+\\
+\textbf{}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc3}} &
+<<plotc3, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+ plotc (laser [,, c (13, 17, 21, 23), 
+               wl.index = TRUE], 
+        spc ~ t, 
+        groups = .wavelength, 
+        type = "b", 
+        col = c ("black", "blue", "red", "darkgreen"))
+@
+\end{longtable}
+
+
 
 
 \section{False-Colour Maps}\mFun{\Rfunction{plotmap}}
@@ -423,6 +452,7 @@ needs to be printed explicitly by \Rcode{print (plotmap (object))}
 the name of extra data columns.
 
 
+
 \paragraph{The colour-coded axis. }
 
 Also \Rfunarg{z} can be used to select one column of the extra data
@@ -432,7 +462,23 @@ It is also possible to plot a sum characteristic of the spectra: supply
 the function in argument \Rfunarg{func}. The default setting is to
 plot the average intensity (no \Rfunarg{z} and \Rfunarg{func}\Rcode{= mean}).
 
+\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+ \textbf{plotting clusters}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-clu}} &
+<<plotmap-clu, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plotmap (chondro, clusters ~ x * y)
+@
+\\
+  \textbf{different palette}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-col}} &
 To plot with a different palette, use \Rfunarg{trellis.args}\Rcode{= list (col.regions = palette)}.
+<<plotmap-col, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+cols <- c ("dark blue", "orange", "#C02020") 
+print (plotmap (chondro,
+                clusters ~ x * y,
+                col.regions = cols))
+@
+\end{longtable}
 
 
 \paragraph{Conditioning.}
@@ -451,10 +497,25 @@ voronoi
 \section{3 D}
 \label{sec:3-d}
 
+\section{No output is produced}
+\label{sec:no-output-produced}
 
+\Rcode{plotmap} and \Rcode{plotc} use \Rcode{levelplot}, a \Rpackage{lattice} function.
+Therefore, in loops, functions, Sweave chunks, etc. the lattice object
+needs to be printed explicitly by \Rcode{print (plotmap (object))}
+(\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R FAQ: Why do lattice/trellis graphics not work?}).
 
+In \Rcode{vignettes.defs} is shown how the lattice functions can be redefined so that the result is printed without external print command.  
 
+\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\textbf{in functions}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap}} &
+<<plotmap-print, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+print (plotmap (chondro))
+@
+\end{longtable}
 
+ 
 
 
 
