@@ -509,7 +509,7 @@ In \Rcode{vignettes.defs} is shown how the lattice functions can be redefined so
 
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
 \textbf{in functions}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap}} &
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-print}} &
 <<plotmap-print, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 print (plotmap (chondro))
 @
