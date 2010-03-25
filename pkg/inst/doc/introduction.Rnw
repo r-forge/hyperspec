@@ -253,9 +253,10 @@ axis label in \Rcode{\$spc}.
 \label{sec:combine}
 
 \subsection{Binding Objects together}
-\mFun{\Rfunction{cbind} \Rfunction{rbind}}
 \label{sec:bind}
-\Rclass{hyperspec} Objects can be bound together, either by rows
+\Rclass{hyperspec}
+\mFun{\Rfunction{cbind} \Rfunction{rbind}}
+Objects can be bound together, either by rows
 to append a new spectral range or by columns to append new spectra
 
 <<cbind>>=
@@ -273,10 +274,10 @@ arguments or in a list.
 As usual for \Rfunction{rbind} and \Rfunction{cbind}, the objects that should be bound together must have the same rows and columns, respectively.
 
 
-\subsection{Binding Objects that do not share the same extra data and/or wavelength axis}\mFun{\Rfunction{collapse}}
+\subsection{Binding Objects that do not share the same extra data and/or wavelength axis}
 \label{sec:collapse}
 
-\Rfunction{collapse} combines objects that should be bound together by row, but they do not share the columns and/or spectral range.
+\Rfunction{collapse} \mFun{\Rfunction{collapse}} combines objects that should be bound together by row, but they do not share the columns and/or spectral range.
 The resulting object has all columns from all input objects, and all wavelengths from the input objects. If an input object does not have a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
 
 The \Robject{barbituates} data is a list of \Sexpr{length (barbituates)} \chy objects, each containing one mass spectrum. The spectra have \Sexpr{(min (sapply (barbituates, nwl)))} to 
@@ -287,85 +288,78 @@ barb <- collapse (barbituates)
 barb [[1:3, , min ~ min + 10i]]
 @
 
-
-
-
-
-\subsection{Matrix Multiplication}\mFun{\Rfunction{\%*\%}}
+\subsection{Matrix Multiplication}
 \label{sec:matmult}
 
-Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}. For an example, see the principal component analysis below (section~\ref{sec:pca} on page \pageref{sec:pca}).
+Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}\mFun{\Rfunction{\%*\%}}. For an example, see the principal component analysis below (section~\ref{sec:pca} on page \pageref{sec:pca}).
 
-\mFun{decomposition}
 \subsection{Decomposition}
 \label{sec:decomposition}
 Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a principal component analysis are two matrices, the so-called scores and loadings. 
 The results can have either the same number of rows as the spectra matrix they were calculated from (scores-like), or they have as many wavelengths as the spectra (loadings-like).
 
-Both types of result objects can be ``re-imported'' into \chy objects with function \Rfunction{decomposition}. A scores-like object retains all per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are replaced. 
+Both types of result objects can be ``re-imported'' into \chy objects with function \Rfunction{decomposition}\mFun{\Rfunction{decomposition}}. A scores-like object retains all per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are replaced. 
 A loadings-like object retains the wavelength information, while extra data is deleted (set to \Rcode{NA}) unless the value is constant for all spectra.
 
 A demonstration can be found in the principal component analysis example (section~\ref{sec:pca}) on page \pageref{sec:pca}.
 
 \section{Access to the data}
 \label{sec:access-parts}
-The main functions to retrieve the data of a \chy object are \Rfunction{[]} and \Rfunction{[[]]}. 
+The main functions to retrieve the data of a \chy object are \Rfunction{[]}\mFun{\Rfunction{[]}, \Rfunction{[[]]}} and \Rfunction{[[]]}. 
+
+The difference between these functions is that  \Rfunction{[]} returns a \chy object, whereas the result of \Rfunction{[[]]} is a data.frame if extra data columns were selected or otherwise the spectra matrix. Single extra data columns may be retrieved by \Rfunction{\$}\mFun{\Rfunction{\$}}.
+
+In order to change data, use \Rfunction{[]<-}, \Rfunction{[[]]<-}, and \Rfunction{\$<-}\mFun{\Rfunction{[]<-}, \Rfunction{[[]]<-}, \Rfunction{\$<-}}.
 
 \subsection{Selecting and Deleting Spectra}
 \label{sec:select-delete-spectra}
 
-The extraction function \Rfunction{[]} (or \Rfunction{[[]]}, if the spectra \Rclass{matrix} or the \Rclass{data.frame} is needed rather than a \Rclass{hyperSpec} object) takes the spectra as first argument (For detailed help: \Rcode{? \textquotedbl[\textquotedbl}). It may be a vector giving the indices of the spectra to extract (select), a vector with negative indices indicating which spectra should be deleted, or a logical. Note that a matrix given to  \Rfunction{[]} will be treated as a vector.
+The extraction function \Rfunction{[]} takes the spectra as first argument (For detailed help: see \verb+? `[`+). It may be a vector giving the indices of the spectra to extract (select), a vector with negative indices indicating which spectra should be deleted, or a logical. Note that a matrix given to  \Rfunction{[]} will be treated as a vector.
 
-<<delspc1, fig = TRUE>>=
+<<selspc, fig = TRUE>>=
 plot (flu, col = "gray")
 plot (flu [1 : 3], add = TRUE)
 @ 
 
-<<delspc2, fig = TRUE>>=
+<<delspc, fig = TRUE>>=
 plot (flu, col = "gray")
 plot (flu [-3], add = TRUE)
 @
-<<>>=
-chondro  [chondro$y > 10]
+<<selspc2, fig = TRUE>>=
+plot (flu, col = "gray")
+plot (flu [flu$c > 0.2], add = TRUE)
 @
 
-
-\subsection{Accessing the Extra Data }
-\label{sec:accessing-extra-data}
-The second argument of the extraction functions \Rfunction{[]}
-and \Rfunction{[[]]} specifies the (extra) data columns.
-They can be given like any column specification for a \Rclass{data.frame},
-\ie numeric, logical, or by a vector of the column names:
-
-<<data>>=
-colnames (chondro)
-chondro [[1 : 3, 1]]
-chondro [[1 : 3, -3]]
-chondro [[1 : 3, "x"]]
-chondro [[1 : 3, c (TRUE, FALSE, FALSE)]]
-@
-
-To select one column, the \Rcode{\$} operator is more convenient:
-
-<<data2>>=
-flu$c
-@
-
-The extra data may also be set this way:\\
-
-
-<<data3>>=
-flu$n <- list (1 : 6, label = "sample no.")
-@
-
-This function will append new columns, if necessary.
-
-\subsection{Wavelengths and Spectral Axis}
+\subsection{Selecting Wavelength Ranges}
 \label{sec:wavelength-axis}
-\subsubsection{Wavelength Indices}\mFun{\Rfunction{wl2i} \Rfunction{i2wl}}
-\label{sec:wavelength-indices}
+Wavelength ranges can easily be selected using \Rfunction{[]}'s third argument:
+<<fig = TRUE>>=
+plot (paracetamol [,, 2800 ~ 3200])
+@
+ By default, the values given are treated as wavelengths, if they are indices into the columns of the spectra matrix, use \Rcode{wl.index = TRUE}:
+<<fig = TRUE>>=
+plot (paracetamol [,, 2800 : 3200, wl.index = TRUE])
+@
+Section~\ref{sec:wavelength-indices}~(p.~\pageref{sec:wavelength-indices}) details into the different possibilities of specifying wavelengths.
 
-Spectra in \Rpackage{hyperSpec} have always discretized wavelength
+\subsection{Deleting Wavelength Ranges}
+\label{sec:del-wavelengths}
+Deleting wavelength ranges may be accomplished using negative index vectors together with \Rcode{wl.index = TRUE}. 
+<<fig = TRUE>>=
+plot (paracetamol [,, -(500 : 1000), wl.index = TRUE])
+@
+However, this mechanism works only if the proper indices are known. 
+
+If the range to be cut out is rather known in the units of the wavelength axis, it is easier to select the remainder of the spectrum instead. To delete the spectral range from 1750 to 2800\,cm\textsuperscript{-1} of the paracetamol spectrum one can thus use:
+<<fig = TRUE>>=
+plot (paracetamol [,, c (min ~ 1750, 2800 ~ max)])
+@
+(It is possible to produce a plot of this data where the cut range is not bridged by a line and the wavelength axis is cut in order to save space. For details see the ``plotting'' vignette).
+
+\subsubsection{Converting Wavelengths to Indices and vice versa}
+\label{sec:wavelength-indices}
+Spectra\mFun{\Rfunction{wl2i} \Rfunction{i2wl}}
+in \Rpackage{hyperSpec} have always discretized wavelength
 axes, they are stored in a matrix with column corresponding to one
 wavelength. \Rpackage{hyperSpec} provides two conversion functions:
 \Rfunction{i2wl} returns the wavelength corresponding to the given
@@ -383,7 +377,7 @@ conversion in three ways:
 \item The colon operator for constructing vectors accepts only integer numbers,
 the tilde (for formulas) does not have this restriction.
 \item If the vector does not take into account the spectral resolution,
-one may get only every $n^{th}$ point or repetitions of the same
+one may get only every $n$\textsuperscript{th} point or repetitions of the same
 index:\\
 <<wl2ivec>>=
 wl2i (flu, 405 : 410)
@@ -398,7 +392,7 @@ wl2i (chondro, 1000 : 1010)
 wl2i (chondro, 1000 ~ 1010)
 @
 \item If the object's wavelength axis is not ordered, the formula approach
-doesn't work. In that (rare) case, use \Rfunction{orderwl} first
+will give weird results. In that (probably rare) case, use \Rfunction{orderwl} first
 to obtain an object with ordered wavelength axis.
 \end{itemize}
 \emph{start} and \emph{end} may contain the special variables \Robject{min}
@@ -430,14 +424,78 @@ wl2i (flu, c (min ~ 406.5, max - 2i ~ max))
 This mechanism also works for the wavelength arguments of \Rfunction{[]},
 \Rfunction{[[]]}, and \Rfunction{plotspc}.
 
-%TODO Wl-Achse ändern
-\subsubsection{Wavelength Axis Conversion}
+\subsubsection{Changing the Wavelength Axis}
 \label{sec:wavel-axis-conv}
 
-\subsection{The Square-Bracket Operators}
-\label{sec:square-brack-oper}
+Sometimes wavelength axes need to be transformed, \eg converting from wavelengths to frequencies. In this case, retrieve the wavelength axis vector with \Rfunction{wl}\mFun{\Rfunction{wl}, \Rfunction{wl<-}}, convert each value of the resulting vector and assign the result with \Rfunction{wl<-}. Also the label of the wavelength axis may need to be adjusted.
 
-In addition, \Rfunction{[[]]} accepts index matrices of size $n \times 2$.
+As an example, convert the wavelength axis of \Robject{laser} to frequencies. As the wavelengths are in nanometers, and the frequencies are easiest expressed in terahertz, an additional conversion factor of 1000 is needed:
+<<>>=
+laser
+wavelengths <- wl (laser)
+frequencies <- 2.998e8 / wavelengths / 1000
+wl (laser) <- frequencies
+labels (laser, ".wavelength") <- "f / THz"
+laser
+rm (laser)
+@
+
+There are other possibilities of invoking \Rfunction{wl<-} including the new label, \eg
+<<>>=
+wl (laser, "f / THz") <- frequencies
+@
+and
+<<>>=
+wl (laser) <- list (wl = frequencies, label = "f / THz")
+@
+see \verb+?`wl<-`+ for more information.
+
+
+\subsection{Selecting Extra Data Columns }
+\label{sec:accessing-extra-data}
+The second argument of the extraction functions \Rfunction{[]} specifies the (extra) data columns. They can be given like any column specification for a \Rclass{data.frame}, \ie numeric, logical, or by a vector of the column names:
+
+<<>>=
+chondro [1 : 3, 1]
+@
+
+ 
+They can be given like any column specification for a \Rclass{data.frame},
+\ie numeric, logical, or by a vector of the column names:
+
+<<data>>=
+colnames (chondro)
+chondro [[1 : 3, 1]]
+chondro [[1 : 3, -3]]
+chondro [[1 : 3, "x"]]
+chondro [[1 : 3, c (TRUE, FALSE, FALSE)]]
+@
+
+To select one column, the \Rcode{\$} operator is more convenient:
+
+<<data2>>=
+flu$c
+@
+
+The extra data may also be set this way:
+<<data3>>=
+flu$n <- list (1 : 6, label = "sample no.")
+@
+This function will append new columns, if necessary.
+
+\subsection{Accessing the Spectra Matrix}
+\label{sec:access-spectra-matr}
+If the spectra matrix (or the data.frame including the extra data) is needed, use \Rfunction{[[]]}\mFun{\Rfunction{[[]]}}.
+It accepts the same arguments as \Rfunction{[]}. 
+
+if the spectra \Rclass{matrix} or the \Rclass{data.frame} is needed rather than a \Rclass{hyperSpec} object)
+
+\subsection{More on the Square-Bracket Operators for Getting and Replacing Values}
+\label{sec:square-brack-replace}
+
+\
+
+\Rfunction{[[]]} also accepts index matrices of size $n \times 2$.
 <<data2>>=
 indexmatrix <- matrix (c (1 : 3, 1 : 3), ncol = 2)
 indexmatrix
