@@ -13,7 +13,7 @@
 % \VignetteIndexEntry{hyperSpec plotting functions}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
-   \renewenvironment{Schunk}{\begin{small}}{\end{small}}
+  % \renewenvironment{Schunk}{\begin{small}}{\end{small}}
 \begin{document}
 \title{\Rpackage{hyperSpec} Plotting functions }
 \maketitle
@@ -462,6 +462,9 @@ It is also possible to plot a sum characteristic of the spectra: supply
 the function in argument \Rfunarg{func}. The default setting is to
 plot the average intensity (no \Rfunarg{z} and \Rfunarg{func}\Rcode{= mean}).
 
+\paragraph{Examples}
+\label{sec:examples}
+
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
  \textbf{plotting clusters}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-clu}} &
@@ -478,7 +481,16 @@ print (plotmap (chondro,
                 clusters ~ x * y,
                 col.regions = cols))
 @
+\\
+\textbf{defined wavelengths}&\tabularnewline \nopagebreak
+\raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-wave}} &
+To plot a map with particular wavelengths use this:  
+<<plotmap-wave, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plotmap (chondro[, , c( 728, 782, 1098, 1240, 
+                       1482, 1577)])
+@ 
 \end{longtable}
+
 
 
 \paragraph{Conditioning.}
@@ -623,7 +635,7 @@ print (plotmap (chondro))
 % \label{sec:plotmat}
 % It is often useful to plot the spectra against an additional coordinate, \eg the time for time % series, the depth for depth profiles, etc. 
 
-% This is done by  \Rfunction{levelplot}, or by using \Rcode{plot (object, "mat", model = spc ~ % .wavelength * other.data.column)}. The actual plotting is done by \Rfunction{levelplot}, so the plots % can be grouped or conditioned.
+% This is done by  \Rfunction{levelplot}, or by using \Rcode{plot (object, "mat", model = spc ~ % Y.wavelength * other.data.column)}. The actual plotting is done by \Rfunction{levelplot}, so the plots % can be grouped or conditioned.
 % See figure~\ref{fig:plotmat}
 % <<plotmat1, fig = TRUE, include = FALSE>>=
 % levelplot (spc ~ .wavelength * t, laser, col.regions = YG (20))
