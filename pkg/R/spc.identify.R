@@ -27,7 +27,9 @@ spc.identify <- function (x, y = NULL, wavelengths = NULL, ispc = NULL, ...){
                  ...
                  )
 
-  data.frame (i = ispc [i], wavelengths = wavelengths [i])
+  data.frame (ispc = ispc [i],
+              wavelengths = wavelengths [i],
+              spc = y [i])
 }
 
 

@@ -186,6 +186,25 @@ levelplot (spc ~ .wavelength * .row, laser)
 \Rfunction{plotspc} offers a variety of parameters for customized
 plots. To plot ... 
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\textbf{particular wavelength ranges }&\tabularnewline \nopagebreak
+ \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-wavelength}} &
+use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
+3100)}.
+If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}.
+Cut the wavelength axis appropriately with \Rcode{xoffset = 750}
+<<wavelength, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plotspc (paracetamol, 
+         wl.range = c (300 ~ 1800, 2800 ~ max), 
+         xoffset = 750)
+@
+\\
+\textbf{particular wavelength ranges II }&\tabularnewline \nopagebreak
+ \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-wavelength-2}} &
+if only one wavelength range is needed, the extract command is handier: 
+<<wavelength-2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plotspc (paracetamol[,, 700 ~ 1200])
+@
+\\
   \textbf{with reversed abscissa}&\tabularnewline \nopagebreak
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-abscissa}} &
 use \Rcode{wl.reverse = TRUE}
@@ -204,7 +223,7 @@ plotspc (flu, col = matlab.dark.palette(6) )
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-dots}} &
 use \Rcode{lines.args = list (pch = 20, type = \textquotedbl{}p\textquotedbl{})}
 <<dots, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plotspc (paracetamol, 
+plotspc (paracetamol [,, 2800 ~ 3200], 
          lines.args = list (pch = 20, type = "p"))
 @
 \\
@@ -212,33 +231,7 @@ plotspc (paracetamol,
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-mass}} &
 use \Rcode{lines.args = list (type = \textquotedbl{}h\textquotedbl{})}
 <<mass, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-fake.mass.spec <- new ("hyperSpec", 
-                       spc = matrix (100 * runif (25), 
-                         nrow = 1),
-                       wavelength = 1 : 25 + 28,
-                       label = list (
-                         spc = expression (e^"-" / s), 
-                         .wavelength = expression (m / z)))
-plot (fake.mass.spec, lines.args = list (type = "h"))
-@
-\\
-\textbf{particular wavelength ranges }&\tabularnewline \nopagebreak
- \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-wavelength}} &
-use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
-3100)}.
-If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}.
-Cut the wavelength axis appropriately with \Rcode{xoffset = 750}
-<<wavelength, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plotspc (paracetamol, 
-         wl.range = c (300 ~ 1800, 2800 ~ max), 
-         xoffset = 750)
-@
-\\
-\textbf{particular wavelength ranges II }&\tabularnewline \nopagebreak
- \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-wavelength-2}} &
-if only one wavelength range is needed, the extract command is handier: 
-<<wavelength-2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plotspc (paracetamol[,, 700 ~ 1200])
+plot (barbituates [[1]], lines.args = list (type = "h"))
 @
 \\
 \textbf{more spectra into an exsisting plot}&\tabularnewline \nopagebreak
@@ -408,11 +401,9 @@ levelplot (spc ~ .wavelength * c,
 
 \Rfunction{plotc} plots an intensity over one of the extra data columns.
 The abscissa uses column \Rcode{\$c} by default, another column can
-be specified using \Rfunarg{use.c}\Rcode{ = name}. The ordinate can
+be specified using a proper formula. The ordinate can
 be calculated as a sum characteristic (with parameter \Rfunarg{func}\Rcode{= function},
-defaulting to \Rmethod{sum}). If parameter \Rfunarg{z} is given,
-these values are used instead. \Rfunarg{z} may be the name of an extra
-data column, or a \Rclass{numeric} that should be used directly.
+defaulting to \Rmethod{sum}). 
 
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
 \textbf{}&\tabularnewline \nopagebreak
@@ -420,7 +411,7 @@ data column, or a \Rclass{numeric} that should be used directly.
 <<plotc2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
 plotc (laser [,, c (13, 17, 21, 23), 
               wl.index = TRUE], 
-       spc ~ t | factor (round (.wavelength, 2)), 
+       spc ~ t | .wavelength, 
        type = "b", 
        cex = .3)
 @
@@ -509,7 +500,9 @@ voronoi
 \section{3 D}
 \label{sec:3-d}
 
-\section{No output is produced}
+\section{Troubleshooting}
+\label{sec:troubleshooting}
+\subsection{No output is produced}
 \label{sec:no-output-produced}
 
 \Rcode{plotmap} and \Rcode{plotc} use \Rcode{levelplot}, a \Rpackage{lattice} function.
@@ -527,9 +520,49 @@ print (plotmap (chondro))
 @
 \end{longtable}
 
- 
+
+\section{Interactive Graphics}
+\label{sec:interactive-graphics}
+
+\phy offers two basic interaction functions, \Rfunction{spc.identify}, and \Rfunction{map.identify}. They identify points in spectra plots and map plots, respectively.
+
+\subsection{\Rfunction{spc.identify}: finding out wavelength, intensity and spectrum}
+\label{sec:spc.identify}
+
+\Rfunction{spc.identify} allows to measure points in graphics produced by \Rfunction{plotspc}. It works correctly with reversed and cut wavelength axes.
+
+<<eval = FALSE>>=
+spc.identify (plotspc (paracetamol, wl.range = c (600 ~ 1800, 2800 ~ 3200), xoffset = 800))
+@
+The result is a data.frame with the indices of the spectra, the wavelength, and its intensity. 
+
+\subsection{\Rfunction{map.identify}: finding a spectrum in a map plot}
+\label{sec:map.identify}
+
+\Rfunction{map.identify} returns the spectra indices of the clicked points.
+<<eval = FALSE>>=
+map.identify (chondro)
+@
 
 
+\subsection{Related functions provided by base graphics and lattice}
+\label{sec:identify-other}
+
+For base graphics (as produced by \Rfunction{plotspc}), \Rfunction{locator} may be useful as well. It returns the clicked coordinates. Note that these are \emph{not} transformed according to xoffset \& Co.
+
+For lattice graphics, \Rfunction{grid.locator} may be used instead. If it is not called in the panel function, a preceeding call to \Rfunction{trellis.focus} is needed:
+<<eval = FALSE>>=
+plot (laser, "mat")
+trellis.focus ()
+grid.locator ()
+@
+
+\Rfunction{identify} (or \Rfunction{panel.identify} for lattice graphics) allows to identify points of the plot directly. Note that the returned indices correspond to the plotted object.
+
+\subsection{Interactively changing graphics}
+\label{sec:inter-chang-graph}
+
+\phy's lattice functions work with \Rpackage{playwith} and \Rpackage{latticist}. These packages allow easy customization of the plots and also identification of points.
 
 
 

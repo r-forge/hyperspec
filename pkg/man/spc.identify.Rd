@@ -28,13 +28,14 @@ spc.identify(x, y = NULL, wavelengths = NULL, ispc = NULL, \dots)
 }
 \value{
   a \code{data.frame} with columns
-  \item{i}{spectra indices of the identified points, i.e. the rows of
+  \item{ispc}{spectra indices of the identified points, i.e. the rows of
 	 the \code{hyperSpec} object that was plotted.
  
 	 If \code{ispc} is given, \code{ispc [i]} is returned rather than
   \code{i}. 
   }
   \item{wavelengths}{the wavelengths of the identified points}
+  \item{spc}{the intensities of the identified points}
 }
 \author{C. Beleites}
 \seealso{\code{\link[graphics]{identify}}, \code{\link{plotspc}}}
@@ -45,10 +46,14 @@ ispc
 
 identified <- spc.identify (plotspc (laser[ispc]))
 ## convert to the "real" spectra indices
-ispc [identified$i]
+ispc [identified$ispc]
 identified$wavelength
+identified$spc
 
 spc.identify (plotspc (laser[ispc]), ispc = ispc)
+
+spc.identify (plotspc (paracetamol, xoffset = 800, wl.reverse = TRUE, 
+                       wl.range = c (600 ~ 1800, 2800 ~ 3200)))
 }
 }
 \keyword{iplot}
