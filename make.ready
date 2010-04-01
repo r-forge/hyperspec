@@ -9,7 +9,7 @@ rm .DESCRIPTION
 rm hyperSpec*
 
 R CMD check pkg || ( echo 'CHECK failed' && exit )
-rm -r pkg.Rcheck
+rm -rf pkg.Rcheck
 
 R CMD build pkg || ( echo 'CHECK failed'  && exit )
 mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz

@@ -303,6 +303,7 @@ save (barbituates, file = "barbituates.rda")
 class (barbituates)
 length (barbituates)
 barbituates <- do.call (collapse, barbituates)
+barbituates <- orderwl (barbituates)
 barbituates
 barbituates [[1:10, , 25 ~ 30]]
 @

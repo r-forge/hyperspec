@@ -1,7 +1,7 @@
 \name{collapse}
 \alias{collapse}
 \title{Collapse hyperSpec objects}
-\usage{collapse(..., orderwl=TRUE, short.log=TRUE, short="collapse", user, date)
+\usage{collapse(..., short.log=TRUE, short="collapse", user, date)
 }
 \description{collapse/bind several hyperSpec objects into one object}
 \details{The spectra from all objects will be put into one object.
@@ -18,22 +18,21 @@ Extra data is combined in the same manner.}
 \keyword{manip}
 \arguments{\item{...}{hyperSpec objects to be collapsed into one object. Instead of giving several
 arguments, a list with all objects to be collapsed may be given.}
-\item{orderwl}{}
-\item{short,user,date}{handed to logentry}
+\item{short.log}{if \code{TRUE}, only the dimensions of the hyperSpec objects are logged}
+\item{short}{handed over to \code{logentry}}
+\item{user}{handed over to \code{logentry}}
+\item{date}{handed over to \code{logentry}}
 }
-\examples{
-barbituates [1:3]
-
+\examples{barbituates [1:3]
 barb <- collapse (barbituates [1:3])
 barb
 
 a <- barbituates [[1]]
 b <- barbituates [[2]]
 c <- barbituates [[3]]
+
 a
 b
 c
-collapse (a, b, c)
-
-}
+collapse (a, b, c)}
 

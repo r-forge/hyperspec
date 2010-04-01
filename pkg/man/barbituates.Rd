@@ -15,6 +15,7 @@ A time series of mass spectra in a list of hyperSpec objects.
 barbituates
 
 barb <- collapse (barbituates)
+barb <- orderwl (barb)
 
 plot (barb [1:3], lines.args = list (type = "h"),
       col = matlab.dark.palette (3), stacked = TRUE,

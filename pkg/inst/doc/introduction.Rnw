@@ -309,7 +309,7 @@ The main functions to retrieve the data of a \chy object are \Rfunction{[]}\mFun
 
 The difference between these functions is that  \Rfunction{[]} returns a \chy object, whereas the result of \Rfunction{[[]]} is a data.frame if extra data columns were selected or otherwise the spectra matrix. Single extra data columns may be retrieved by \Rfunction{\$}\mFun{\Rfunction{\$}}.
 
-In order to change data, use \Rfunction{[]<-}, \Rfunction{[[]]<-}, and \Rfunction{\$<-}\mFun{\Rfunction{[]<-}, \Rfunction{[[]]<-}, \Rfunction{\$<-}}.
+In order to change data, use \Rfunction{[]<-}, \Rfunction{[[]]<-}, and \Rfunction{\$<-}\mFun{\Rfunction{[]<-}, \Rfunction{[[]]<-}, \Rfunction{\$<-}} (see~).
 
 \subsection{Selecting and Deleting Spectra}
 \label{sec:select-delete-spectra}
@@ -329,6 +329,34 @@ plot (flu [-3], add = TRUE)
 plot (flu, col = "gray")
 plot (flu [flu$c > 0.2], add = TRUE)
 @
+
+\subsection{Selecting Extra Data Columns }
+\label{sec:accessing-extra-data}
+The second argument of the extraction functions \Rfunction{[]} and  \Rfunction{[[]]} specifies the (extra) data columns. They can be given like any column specification for a \Rclass{data.frame}, \ie numeric, logical, or by a vector of the column names:
+
+They can be given like any column specification for a \Rclass{data.frame},
+\ie numeric, logical, or by a vector of the column names:
+
+<<data>>=
+colnames (chondro)
+chondro [[1 : 3, 1]]
+chondro [[1 : 3, -3]]
+chondro [[1 : 3, "x"]]
+chondro [[1 : 3, c (TRUE, FALSE, FALSE)]]
+@
+
+To select one column, the \Rfunction{\$} operator is more convenient\mFun{\Rfunction{\$}}:
+
+<<data2>>=
+flu$c
+@
+
+The extra data may also be set this way\mFun{\Rfunction{\$<-}}:
+<<data3>>=
+flu$n <- list (1 : 6, label = "sample no.")
+@
+This function will append new columns, if necessary.
+
 
 \subsection{Selecting Wavelength Ranges}
 \label{sec:wavelength-axis}
@@ -451,51 +479,23 @@ wl (laser) <- list (wl = frequencies, label = "f / THz")
 see \verb+?`wl<-`+ for more information.
 
 
-\subsection{Selecting Extra Data Columns }
-\label{sec:accessing-extra-data}
-The second argument of the extraction functions \Rfunction{[]} specifies the (extra) data columns. They can be given like any column specification for a \Rclass{data.frame}, \ie numeric, logical, or by a vector of the column names:
 
-<<>>=
-chondro [1 : 3, 1]
-@
 
- 
-They can be given like any column specification for a \Rclass{data.frame},
-\ie numeric, logical, or by a vector of the column names:
-
-<<data>>=
-colnames (chondro)
-chondro [[1 : 3, 1]]
-chondro [[1 : 3, -3]]
-chondro [[1 : 3, "x"]]
-chondro [[1 : 3, c (TRUE, FALSE, FALSE)]]
-@
-
-To select one column, the \Rcode{\$} operator is more convenient:
-
-<<data2>>=
-flu$c
-@
-
-The extra data may also be set this way:
-<<data3>>=
-flu$n <- list (1 : 6, label = "sample no.")
-@
-This function will append new columns, if necessary.
-
-\subsection{Accessing the Spectra Matrix}
-\label{sec:access-spectra-matr}
-If the spectra matrix (or the data.frame including the extra data) is needed, use \Rfunction{[[]]}\mFun{\Rfunction{[[]]}}.
-It accepts the same arguments as \Rfunction{[]}. 
-
-if the spectra \Rclass{matrix} or the \Rclass{data.frame} is needed rather than a \Rclass{hyperSpec} object)
-
-\subsection{More on the Square-Bracket Operators for Getting and Replacing Values}
+\subsection{More on the Square-Bracket Operators for  Replacing Values}
 \label{sec:square-brack-replace}
 
-\
 
-\Rfunction{[[]]} also accepts index matrices of size $n \times 2$.
+
+\Rfunction{[[]]} also accepts index matrices of size $n \times 2$. In this case, a vector of values from the spectra matrix is returned.
+<<data2>>=
+indexmatrix <- matrix (c (1 : 3, 1 : 3), ncol = 2)
+indexmatrix
+chondro [[indexmatrix, wl.index = TRUE]]
+diag (chondro [[1 : 3, , min ~ min + 2i]])
+@
+
+
+\Rfunction{[[]]<-} also accepts index matrices of size $n \times 2$.
 <<data2>>=
 indexmatrix <- matrix (c (1 : 3, 1 : 3), ncol = 2)
 indexmatrix

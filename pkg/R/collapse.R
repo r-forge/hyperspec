@@ -10,13 +10,15 @@
 ##' @export
 ##' @param ... hyperSpec objects to be collapsed into one object. Instead of giving several
 ##' arguments, a list with all objects to be collapsed may be given.
+##' @param short.log if \code{TRUE}, only the dimensions of the hyperSpec objects are logged
+##' @param short handed over to \code{logentry}
+##' @param user handed over to \code{logentry}
+##' @param date handed over to \code{logentry}
 ##' @aliases collapse
 ##' @aliases collapse.hyperSpec
 ##' @aliases merge.hyperSpec
 ##' @aliases rbind.fill.hyperSpec
 ##' @seealso \code{\link[base]{merge}},  \code{\link[base]{rbind}},  \code{\link[plyr]{rbind.fill}}, 
-##' @param orderwl
-##' @param short,user,date handed to logentry
 ##' @return a hyperSpec object
 ##' @keywords manip
 ##' @examples
@@ -33,7 +35,7 @@
 ##' c
 ##' collapse (a, b, c)
 ##' 
-collapse <- function (..., orderwl = TRUE, short.log = TRUE, short = "collapse", user = NULL, date = NULL){
+collapse <- function (..., short.log = TRUE, short = "collapse", user = NULL, date = NULL){
   dots <- list (...)
 
   ## accept also a list of hyperSpec objects
@@ -67,9 +69,6 @@ collapse <- function (..., orderwl = TRUE, short.log = TRUE, short = "collapse",
   x <- new ("hyperSpec", wavelength = wl, data = dots, label = labels,
             log = list (short = short, long = logs, user = user, date = date))
   
-  if (orderwl)
-    x <- orderwl (x)
-
   x
 }
 
