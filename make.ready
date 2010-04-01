@@ -11,6 +11,9 @@ rm hyperSpec*
 R CMD check pkg || ( echo 'CHECK failed' && exit )
 rm -rf pkg.Rcheck
 
+rm Vignettes/*/Rplots.pdf
+cp Vignettes/*/*.pdf pkg/inst/doc
+
 R CMD build pkg || ( echo 'CHECK failed'  && exit )
 mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
 mv hyperSpec_*.zip www/hyperSpec-prebuilt.zip
