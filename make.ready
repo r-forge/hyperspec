@@ -13,11 +13,11 @@ rm -rf pkg.Rcheck
 
 #rm Vignettes/*/Rplots.pdf
 cd Vignettes
-for v in *
+for i in *
 do
    if [ -d $i ]
 	then
-		 makeVignette $i
+		 ./makeVignette $i
 		 cp $i/$i.pdf ../pkg/inst/doc
 	fi
 done	 
