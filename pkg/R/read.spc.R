@@ -515,7 +515,7 @@ read.spc <- function (filename,
 							log = tmp$log.long,
 							header = getbynames (hdr, keys.hdr2log)))
 
-	data <- c (data, tmp$extra.data)
+	data <- c (data, tmp$extra.data, getbynames (hdr, keys.hdr2data))
 	
 	
 	## try to preallocate spectra matrix and extra data data.frame
