@@ -1,7 +1,7 @@
 \name{flu}
 \alias{flu}
 \docType{data}
-\title{Chitin Fluorescence Spectra}
+\title{Quinine Fluorescence Spectra}
 \description{
 Fluorescence spectra of different dilutions of quinine forming a
 calibration set.

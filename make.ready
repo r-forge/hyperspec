@@ -8,6 +8,30 @@ rm .DESCRIPTION
 
 rm hyperSpec*
 
+# copy vignette files
+cp -av Vignettes/baseline/baseline.Rnw                       pkg/inst/doc/
+cp -av Vignettes/chondrocytes/chondrocytes.pdf               pkg/inst/doc/
+cp -av Vignettes/chondrocytes/chondro.rda                    pkg/data/
+cp -av Vignettes/chondrocytes/rawdata/chondro.txt            pkg/inst/doc/rawdata/
+cp -av Vignettes/FileIO/FileIO.pdf                           pkg/inst/doc/
+cp -av Vignettes/FileIO/txt.Renishaw/paracetamol.txt         pkg/inst/doc/rawdata/
+cp -av Vignettes/FileIO/barbituates.rda                      pkg/data/ 
+cp -av Vignettes/FileIO/scan.txt.PerkinElmer.R               pkg/inst/doc/
+cp -av Vignettes/flu/flu.Rnw                                 pkg/inst/doc/
+cp -av Vignettes/flu/rawdata/flu?.txt                        pkg/inst/doc/rawdata/
+cp -av Vignettes/flu/flu.rda                                 pkg/data/ 
+cp -av Vignettes/introduction/functions.RData                pkg/inst/doc/
+cp -av Vignettes/introduction/hyperSpec-schema-annotated.pdf pkg/inst/doc/
+cp -av Vignettes/introduction/introduction.bib               pkg/inst/doc/
+cp -av Vignettes/introduction/introduction.Rnw               pkg/inst/doc/
+cp -av Vignettes/introduction/paracetamol.rda                pkg/data/
+cp -av Vignettes/introduction/Strukturhyperspec.pdf          pkg/data/
+cp -av Vignettes/laser/laser.Rnw                             pkg/inst/doc/
+cp -av Vignettes/laser/laser.rda                             pkg/data/
+cp -av Vignettes/laser/par3d.Rdata                           pkg/inst/doc/
+cp -av Vignettes/plotting/plotting.pdf                       pkg/inst/doc/
+cp -av Vignettes/vignettes.defs
+
 R CMD check pkg || ( echo 'CHECK failed' && exit )
 rm -rf pkg.Rcheck
 
