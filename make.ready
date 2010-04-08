@@ -8,11 +8,22 @@ rm .DESCRIPTION
 
 rm hyperSpec*
 
+
+#rm Vignettes/*/Rplots.pdf
+cd Vignettes
+for i in *
+do
+   if [ -d $i ]
+	then
+		 ./makeVignette $i
+	fi
+done	 
+cd ..
+
 # copy vignette files
 cp -av Vignettes/baseline/baseline.Rnw                       pkg/inst/doc/
 cp -av Vignettes/chondrocytes/chondrocytes.pdf               pkg/inst/doc/
 cp -av Vignettes/chondrocytes/chondro.rda                    pkg/data/
-cp -av Vignettes/chondrocytes/rawdata/chondro.txt            pkg/inst/doc/rawdata/
 cp -av Vignettes/FileIO/FileIO.pdf                           pkg/inst/doc/
 cp -av Vignettes/FileIO/txt.Renishaw/paracetamol.txt         pkg/inst/doc/rawdata/
 cp -av Vignettes/FileIO/barbituates.rda                      pkg/data/ 
@@ -25,27 +36,15 @@ cp -av Vignettes/introduction/hyperSpec-schema-annotated.pdf pkg/inst/doc/
 cp -av Vignettes/introduction/introduction.bib               pkg/inst/doc/
 cp -av Vignettes/introduction/introduction.Rnw               pkg/inst/doc/
 cp -av Vignettes/introduction/paracetamol.rda                pkg/data/
-cp -av Vignettes/introduction/Strukturhyperspec.pdf          pkg/data/
+cp -av Vignettes/introduction/Strukturhyperspec.pdf          pkg/inst/doc/
 cp -av Vignettes/laser/laser.Rnw                             pkg/inst/doc/
 cp -av Vignettes/laser/laser.rda                             pkg/data/
 cp -av Vignettes/laser/par3d.Rdata                           pkg/inst/doc/
 cp -av Vignettes/plotting/plotting.pdf                       pkg/inst/doc/
-cp -av Vignettes/vignettes.defs
+cp -av Vignettes/vignettes.defs                              pkg/inst/doc/
 
 R CMD check pkg || ( echo 'CHECK failed' && exit )
 rm -rf pkg.Rcheck
-
-#rm Vignettes/*/Rplots.pdf
-cd Vignettes
-for i in *
-do
-   if [ -d $i ]
-	then
-		 ./makeVignette $i
-		 cp $i/$i.pdf ../pkg/inst/doc
-	fi
-done	 
-cd ..
 
 R CMD build pkg || ( echo 'BUILD failed'  && exit )
 mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
