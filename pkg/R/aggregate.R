@@ -12,10 +12,11 @@ setMethod ("aggregate", "hyperSpec",
                      FUN = stop ("FUN is needed."),
                      ...,
                      out.rows = NULL, append.rows = NULL,
+                     by.isindex = FALSE,
                      short = "aggregate", date = NULL, user = NULL){
   validObject (x)
 
-  if (!is.list (by))
+  if (!is.list (by) || ! by.isindex)
     by <- split (seq (x, index = TRUE), by, drop = TRUE)
 
   ## main work here is to avoid calling stats::aggregate as there splitting and

@@ -16,6 +16,7 @@
     \dots,
     out.rows = NULL,
     append.rows = NULL,
+    by.isindex = FALSE,
     short =  "aggregate", date = NULL, user = NULL)
 }
 \arguments{
@@ -36,6 +37,9 @@
     Defaults to 100 or an estimate based on the percentage of groups
     that are still to be done, whatever is larger.
   }
+  \item{by.isindex}{If a list is given in \code{by}: does the list
+    already contain the row indices of the groups? If \code{FALSE}, the
+    list in \code{by} is computed first (as in \code{\link[base]{aggregate}}).}
   \item{\dots}{further arguments passed to \code{FUN}}
   
   \item{short, date, user}{aguments passed to \code{logentry}}
