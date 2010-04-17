@@ -405,6 +405,9 @@ be specified using a proper formula. The ordinate can
 be calculated as a sum characteristic (with parameter \Rfunarg{func}\Rcode{= function},
 defaulting to \Rmethod{sum}). 
 
+\subsection{Time series}
+\label{sec:time-series}
+
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
 \textbf{}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc2}} &
@@ -416,7 +419,7 @@ plotc (laser [,, c (13, 17, 21, 23),
        cex = .3)
 @
 \\
-\textbf{}&\tabularnewline \nopagebreak
+\textbf{In one panel}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc3}} &
 <<plotc3, fig = TRUE, width = 4, height = 3,include = FALSE>>=
  plotc (laser [,, c (13, 17, 21, 23), 
@@ -426,6 +429,140 @@ plotc (laser [,, c (13, 17, 21, 23),
         type = "b", 
         col = c ("black", "blue", "red", "darkgreen"))
 @
+\end{longtable}
+
+\subsection{Linear Calibration plots}
+\label{sec:line-calibr-plots}
+
+\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\textbf{The spectra}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-1}} &
+<<lin-cal-1, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plot (flu)
+@
+\\
+\textbf{Intensities over concentration}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2}} &
+Plotting the Intensities over the concentration for univariate calibration. 
+
+Preparing a hyperSpec object with relevant data:
+<<>>=
+flu$file <- NULL
+flu <- flu[,,450]
+labels (flu, "spc") <- expression (I ["450 nm"] / a.u.)
+@
+
+The plot:
+<<lin-cal-2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu)
+@
+\\
+\textbf{Axes starting at origin}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-3}} &
+Use \Rcode{xlim} and \Rcode{ylim} for setting the origin
+<<lin-cal-3, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu,
+       xlim = range (0, flu$c), 
+       ylim = range (0, flu$spc))
+@
+\\
+\textbf{Calibration - customized panel function}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-4}} &
+The calibration model:
+<<>>=
+calibration <- lm (c ~ spc, data = flu$.)
+@
+Prediction for new measurements with \eg an intensity of 125 or 400 units:
+<<>>=
+I <- c (125, 400)
+conc <- predict (calibration,
+                 newdata = list (spc = as.matrix (I)),
+                 interval = "prediction",
+                 level = .99)
+@
+
+
+Calibration function and its 99\% confidence interval:
+<<>>=
+int <- list (spc = as.matrix (seq (min (flu), length.out = 25) ) )
+ci <- predict (calibration, 
+               newdata = int, 
+               interval = "confidence", 
+               level = .99)
+panel.ci <- function (x, y, ...,
+                      intensity, ci.lwr, ci.upr, ci.col = "#606060") {
+  panel.xyplot (x, y, ...)
+  panel.lmline (x, y, ...)
+  panel.lines (ci.lwr, intensity, col = ci.col)
+  panel.lines (ci.upr, intensity, col = ci.col)
+}
+@
+And now the plot:
+<<lin-cal-4, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu, 
+       panel = panel.ci,
+       intensity = int$spc,
+       ci.lwr = ci [, 2],
+       ci.upr = ci [, 3])
+@
+\\
+\textbf{Calibration - alternative}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-5}} &
+<<>>=
+flu$type <- "data points"
+@
+Calculated confidence intervals are appended:
+<<>>=
+tmp <- new ("hyperSpec", 
+            spc = as.matrix (seq (min (flu), max (flu), length.out = 25)),
+            wavelength = 450)
+ci <- predict (calibration,
+               newdata = tmp$.,
+               interval = "confidence",
+               level = .99)
+tmp <- tmp [rep (seq (tmp, index = TRUE), 3)]
+tmp$c <- as.numeric (ci)
+tmp$type <- rep (colnames (ci), each = 25)
+flu <- rbind (flu, tmp)
+@
+Another panel function:
+<<>>=
+panel.predict <- function (x, y, ...,
+                           intensity, 
+                           ci,
+                           pred.col = "red",
+                           pred.pch = 19,
+                           pred.cex = 1) {
+  panel.xyplot (x, y, ...)
+  mapply (function (i, lwr, upr, ...) {
+    panel.lines (c (lwr, upr), rep (i, 2), ...)
+    }, 
+          intensity, 
+          ci [, 2],
+          ci [, 3],
+          MoreArgs = list (col = pred.col))
+  panel.xyplot (ci [, 1], 
+                intensity, 
+                col = pred.col, 
+                pch = pred.pch, 
+                cex = pred.cex, 
+                type = "p")
+}
+@
+<<lin-cal-5, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu,
+       groups = type,
+       type = c ("1", "p"),
+       col = c ("black", "black", "#606060", "#606060"),
+       pch = c (19, NA, NA, NA),
+       cex = 0.5,
+       lty = c (0, 1, 1, 1),
+       panel = panel.predict,
+       intensity = I,
+       ci = conc,
+       pred.cex = 0.5)
+@
+
 \end{longtable}
 
 
