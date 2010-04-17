@@ -96,7 +96,7 @@ The square bracket operator extracts parts of a \Rclass{hyperSpec} object.
 The first coordinate defines which spectra are to be used, the second which data columns, and the
 third gives the spectral range.
 
-We discard all the wavelengths but 445 nm:
+We discard all the wavelengths but 450 nm:
 
 <<cutspc>>=
 flu <- flu [,,450]
