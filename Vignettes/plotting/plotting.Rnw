@@ -254,6 +254,9 @@ plotspc (paracetamol,
 \textbf{adding lines}&\tabularnewline \nopagebreak
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-add-line}} &
  use \Rcode{abline} for adding lines 
+<<echo = false>>=
+rm (laser)
+@
 <<add-line, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plot (laser, "spcmeansd")
 abline (v = wl (laser)[c (13, 17, 21, 23)], 
@@ -644,6 +647,42 @@ voronoi
 
 \section{3 D}
 \label{sec:3-d}
+
+\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+  \textbf{3D figures are possible with \Rpackage{rgl}}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-3D}} &
+<<>>=
+library (rgl)
+@
+<<echo = FALSE, results = hide>>=
+open3d (windowRect=c(0,0,1200, 750))    # this is needed only for automatically 
+                                        # producing the snapshot
+@
+<<>>=
+laser <- laser [,,404.8 ~ 405.6]
+cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
+surface3d (y = wl (laser), x = laser$t, 
+           z = laser$spc, col =  cols)
+aspect3d (c(1, 1, 0.25))
+axes3d(c('x+-', 'y--', 'z--'))
+axes3d ('y--', nticks = 25, labels= FALSE)
+mtext3d("t / s", 'x+-', line = 2)
+mtext3d("lambda / nm", 'y--', line = 2)
+mtext3d("I / a.u.", edge = 'z--', line = 2.5)
+@
+After zooming and rotating, the figure can be saved:
+<<eval = FALSE>>=
+pars <- par3d (no.readonly=TRUE)
+save (pars, file = "par3d.Rdata")
+@
+Saving the figure:
+<<>>=
+load ("par3d.Rdata")                    
+par3d(pars)
+rgl.snapshot("fig/fig-3D.png", fmt="png", top=TRUE )
+@
+\end{longtable}
+
 
 \section{Troubleshooting}
 \label{sec:troubleshooting}
