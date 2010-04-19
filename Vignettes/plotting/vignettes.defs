@@ -13,7 +13,8 @@
 \usepackage{graphicx}
 \usepackage[numbers]{natbib}
 \usepackage[unicode = true,
-            bookmarks = true,
+%            draft = true, % wieder rausnehmen!
+				bookmarks = true,
             bookmarksnumbered = false,
             bookmarksopen = false,
             breaklinks = false,

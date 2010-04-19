@@ -250,7 +250,18 @@ use \Rcode{zeroline = \emph{list.of.arguments.to.abline}}.
 plotspc (paracetamol, 
          zeroline = list (col = "red"))
 @
+\\
+\textbf{adding lines}&\tabularnewline \nopagebreak
+ \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-add-line}} &
+ use \Rcode{abline} for adding lines 
+<<add-line, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+plot (laser, "spcmeansd")
+abline (v = wl (laser)[c (13, 17, 21, 23)], 
+        col = c("black", "blue", "red", "darkgreen") )
+@
 \end{longtable}
+
+
 
 \subsection{Stacked spectra}
 \label{sec:stacked-spectra}
@@ -409,7 +420,7 @@ defaulting to \Rmethod{sum}).
 \label{sec:time-series}
 
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
-\textbf{}&\tabularnewline \nopagebreak
+\textbf{Grouping with \Rfunction{plotc}}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc2}} &
 <<plotc2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
 plotc (laser [,, c (13, 17, 21, 23), 
@@ -437,23 +448,26 @@ plotc (laser [,, c (13, 17, 21, 23),
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
 \textbf{The spectra}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-1}} &
+The original spectra:
 <<lin-cal-1, fig = TRUE, width = 4, height = 3,include = FALSE>>=
 plot (flu)
 @
 \\
-\textbf{Intensities over concentration}&\tabularnewline \nopagebreak
+\textbf{Intensities over concentration I}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2}} &
-Plotting the Intensities over the concentration for univariate calibration. 
-
-Preparing a hyperSpec object with relevant data:
+Plotting the Intensities of one wavelength over the concentration for univariate calibration. 
+<<lin-cal-2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu [,,450])
+@
+\\
+\textbf{Intensities over concentration II}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2a}} &
+Alternative with different label for y-axis:
 <<>>=
-flu$file <- NULL
 flu <- flu[,,450]
 labels (flu, "spc") <- expression (I ["450 nm"] / a.u.)
 @
-
-The plot:
-<<lin-cal-2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+<<lin-cal-2a, fig = TRUE, width = 4, height = 3,include = FALSE>>=
 plotc (flu)
 @
 \\
@@ -484,13 +498,15 @@ conc <- predict (calibration,
 
 Calibration function and its 99\% confidence interval:
 <<>>=
-int <- list (spc = as.matrix (seq (min (flu), length.out = 25) ) )
+int <- list (spc = as.matrix (seq (min (flu), 
+               max (flu), length.out = 25) ) )
 ci <- predict (calibration, 
                newdata = int, 
                interval = "confidence", 
                level = .99)
 panel.ci <- function (x, y, ...,
-                      intensity, ci.lwr, ci.upr, ci.col = "#606060") {
+                      intensity, ci.lwr, ci.upr, 
+                      ci.col = "#606060") {
   panel.xyplot (x, y, ...)
   panel.lmline (x, y, ...)
   panel.lines (ci.lwr, intensity, col = ci.col)
@@ -511,62 +527,54 @@ plotc (flu,
 <<>>=
 flu$type <- "data points"
 @
-Calculated confidence intervals are appended:
+Calculated confidence intervals are added to the hyperSpec object:
 <<>>=
 tmp <- new ("hyperSpec", 
-            spc = as.matrix (seq (min (flu), max (flu), length.out = 25)),
+            spc = as.matrix(seq (min (flu), 
+              max(flu), length.out = 25)),
             wavelength = 450)
-ci <- predict (calibration,
-               newdata = tmp$.,
-               interval = "confidence",
-               level = .99)
+ci <-  predict (calibration, newdata = tmp$., 
+                interval = "confidence", 
+                level = 0.99)
 tmp <- tmp [rep (seq (tmp, index = TRUE), 3)]
 tmp$c <- as.numeric (ci)
 tmp$type <- rep (colnames (ci), each = 25)
+flu$file <- NULL
 flu <- rbind (flu, tmp)
 @
 Another panel function:
 <<>>=
-panel.predict <- function (x, y, ...,
-                           intensity, 
-                           ci,
-                           pred.col = "red",
-                           pred.pch = 19,
+panel.predict <- function (x, y, ..., 
+                 intensity, ci, pred.col = "red", 
+                           pred.pch = 19, 
                            pred.cex = 1) {
-  panel.xyplot (x, y, ...)
-  mapply (function (i, lwr, upr, ...) {
-    panel.lines (c (lwr, upr), rep (i, 2), ...)
-    }, 
-          intensity, 
-          ci [, 2],
-          ci [, 3],
-          MoreArgs = list (col = pred.col))
-  panel.xyplot (ci [, 1], 
-                intensity, 
-                col = pred.col, 
-                pch = pred.pch, 
-                cex = pred.cex, 
-                type = "p")
+   panel.xyplot (x, y, ...)
+   mapply (function (i, lwr, upr, ...) {
+                 panel.lines (c (lwr, upr), 
+                              rep (i, 2), ...)
+              }, 
+           intensity, ci [, 2], ci [, 3], 
+           MoreArgs = list (col = pred.col))
+   panel.xyplot (ci [, 1], intensity, 
+                 col = pred.col, pch = pred.pch, 
+                 cex = pred.cex, type = "p")
 }
 @
+The final plot:
 <<lin-cal-5, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu,
-       groups = type,
-       type = c ("1", "p"),
-       col = c ("black", "black", "#606060", "#606060"),
-       pch = c (19, NA, NA, NA),
-       cex = 0.5,
+plotc (flu, groups = type, type = c("l", "p"),
+       col = c ("black", "black", "#606060", 
+         "#606060"), 
+       pch = c (19, NA, NA, NA), cex = 0.5, 
        lty = c (0, 1, 1, 1),
        panel = panel.predict,
        intensity = I,
        ci = conc,
        pred.cex = 0.5)
 @
-
 \end{longtable}
 
-
-
+\pagebreak
 
 \section{False-Colour Maps}\mFun{\Rfunction{plotmap}}
 
@@ -700,153 +708,6 @@ grid.locator ()
 \label{sec:inter-chang-graph}
 
 \phy's lattice functions work with \Rpackage{playwith} and \Rpackage{latticist}. These packages allow easy customization of the plots and also identification of points.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% Figure~\ref{fig:example-plots} shows some example plots.
-
-
-% %
-% \begin{figure}
-% \hspace*{-0.5cm}
-% \setkeys{Gin}{width = .245\textwidth}
-% \subfloat[\label{fig-plot-spc}]{
-
-% <<plotspcflu, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-% plotspc (flu)
-% @
-% }
-% \subfloat[\label{fig-plot-spcmeansd}]{
-% <<plotspcmeansd, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-% plot (chondro, "spcmeansd")
-% @
-% }
-% \subfloat[\label{fig-plot-c}]{
-% <<plotc, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-% plotc (flu)
-% @
-% }
-% \subfloat[\label{fig-plot-map}]{
-% <<plotmap, fig = TRUE, width = 4, height = 3, echo = FALSE>>=
-% YG <- colorRampPalette (c ("white", "gold", "dark green"), space = "Lab")
-% plotmap (chondro, col.regions = YG (20))
-% @
-% }
-
-% \caption{\label{fig:example-plots}Some example plots. \subref{fig-plot-spc}\Rcode{plotspc (flu)},
-% \subref{fig-plot-spcmeansd}\Rcode{plot (chondro, \textquotedbl{}spcmeansd\textquotedbl{})},
-% \subref{fig-plot-c}\Rcode{plotc (flu)}, and \subref{fig-plot-map}\Rcode{plotmap (chondro, 
-%    col.regions % = YG (20))} (using a yellow-green palette).}
-
-% % \end{figure}
-
-
-
-% \subsection{Plotting Spectra}\mFun{\Rfunction{plotspc}}
-
-% \Rfunction{plotspc} offers a variety of parameters for customized
-% plots. To plot ...
-% \begin{description}
-% \setlength{\labelwidth}{2.5cm}
-% \setlength{\itemindent}{1.7cm}
-% \item [with reversed abscissa] use \Rcode{wl.reverse = TRUE}
-% \item [in different colours] colours use \Rcode{col = vector.of.colours}
-% \item [dots instead of lines] use \Rcode{lines.args = list (pch = 20, type = % \textquotedbl{}p\textquotedbl{})}
-% \item [mass spectra] use \Rcode{lines.args = list (type = \textquotedbl{}h\textquotedbl{})}
-% \item [particular wavelength ranges] use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 % \textasciitilde{}
-% 3100)}\\
-% If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}\\
-% Cut the wavelength axis appropriately with \Rcode{xoffset = 800}
-% \item [stacked spectra] use \Rfunarg{stacked}
-% \item [more spectra into an existing plot] use \Rcode{add = TRUE}
-% \item [with different line at $I =0$] use \Rcode{zeroline = \emph{list.of.arguments.to.abline}}.
-% \Rcode{NULL} suppresses the line.
-% \end{description}
-% <<ms, fig = TRUE, width = 8, height = 5, echo = FALSE, include = FALSE>>=
-% fake.mass.spec <- new ("hyperSpec", spc = matrix (100*runif (25), nrow = 1),
-%    wavelength = 1 : 25 + 28,
-%    label = list (spc = expression (e^"-" / s), .wavelength = expression (m / z)))
-% plot (fake.mass.spec, lines.args = list (type = "h"))
-% @
-% <<plotspcadd, fig = TRUE, width = 8, height = 5, echo = FALSE, include = FALSE>>=
-% plot (paracetamol, wl.range = c (300 ~ 1800, 2800 ~ max), xoffset = 850, wl.reverse = TRUE, col = 
-%  "blue")
-% @
-
-% %
-% \begin{figure}
-% \subfloat[\label{fig-plotspc-ms}]{\includegraphics[width=0.33\textwidth]{fig/fig-ms}}
-% 
-% \subfloat[\label{fig-plotspc-paracetamol}]{\includegraphics[width=0.33\textwidth]{fig/fig-plotspcadd}}
-% 
-% \subfloat[\label{fig-plotmap-factor}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmap}}
-% \caption{Arguments to \Rfunction{plotspc}. \subref{fig-plotspc-ms}
-% \Rcode{plot (fake.mass.spec, lines.args = list (type = \textquotedbl{}h\textquotedbl{}))}
-% \subref{fig-plotspc-paracetamol} \Rcode{plotspc (paracetamol, wl.range = c (300 \textasciitilde{} 
-%    1800, 2800
-% \textasciitilde{} max), xoffset = 850, wl.reverse = TRUE)} \subref{fig-plotmap-factor} % \Rcode{plotmap} with a factor,
-% see section \ref{HCA}.}
-% \end{figure}
-
-% \subsection{Plotting the Spectra Matrix}
-% \label{sec:plotmat}
-% It is often useful to plot the spectra against an additional coordinate, \eg the time for time % series, the depth for depth profiles, etc. 
-
-% This is done by  \Rfunction{levelplot}, or by using \Rcode{plot (object, "mat", model = spc ~ % Y.wavelength * other.data.column)}. The actual plotting is done by \Rfunction{levelplot}, so the plots % can be grouped or conditioned.
-% See figure~\ref{fig:plotmat}
-% <<plotmat1, fig = TRUE, include = FALSE>>=
-% levelplot (spc ~ .wavelength * t, laser, col.regions = YG (20))
-% @
-% <<plotmat2, fig = TRUE, include = FALSE>>=
-% print (plot (flu, "mat", contour = TRUE, labels = TRUE, col = "#00000080"))
-% @
-% \begin{figure}
-% \subfloat[\label{fig-plotmat-a}\Rcode{levelplot (spc ~ .wavelength * t, laser, col.regions = YG % (20))}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat1}}%
-% \subfloat[\label{fig-plotmat-b}\Rcode{plot (flu, "mat", contour = TRUE, labels = TRUE, col = % "\#00000080")}]{\includegraphics[width=0.495\textwidth]{fig/fig-plotmat2}}%
-% \caption{\label{fig:plotmat}plotting the spectra matrix. 
-% }
-% \end{figure}
-
-% <<plotdef>>=
-% showMethods ("plot", classes = "hyperSpec", includeDefs = TRUE)
-% @
-% The actual dispatching of the plots according to the second (character) argument is done by  %\Rfunction{.plot}. Thus, the new switchyard function can just act if \Rcode{y == \textquotedbl       % ms\textquotedbl}, and otherwise call \Rfunction{.plot}. As \Rfunction{.plot} is not exported from  % \phy's namespace, it must be called including its namespace.
-% <<newplot>>=
-% .my.mass.plot <- function (x, y, ...) {
-%   if (y == "ms") {
-%     dots <- list (object = x, ...)
-%     dots <- modifyList (dots, list (lines.args = list (type = "h")))
-%     do.call (plotspc, dots)
-%   } else {
-%     hyperSpec:::.plot (x, y, ...)
-%   }
-% }
-% @ 
-% Finally, \R needs to know that the new switchyard function should be used for plotting of \chy 
-%  objects:
-% <<setmethod>>=
-% setMethod ("plot", signature (x = "hyperSpec", y = "character"), .my.mass.plot)
-% @
-
-% From now on, \Rcode{plot (x, \textquotedbl ms\textquotedbl)} will produce a plot with vertical %lines % as used for mass spectra. All other plot types are unaffected. 
-
-% Patching \Rfunction{.plot} in \phy if the changes could be useful 
-
-
-
 
 <<cleanup, echo = FALSE, results = hide>>=
 rm (list = ls () )
