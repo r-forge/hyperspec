@@ -385,6 +385,21 @@ levelplot (spc ~ .wavelength * t,
            laser)
 @
 \\
+\textbf{different panel}&\tabularnewline \nopagebreak
+\raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-barb}} &
+<<>>=
+class (barbituates)
+barbituates <- do.call (collapse, barbituates)
+barbituates <- orderwl (barbituates)
+@
+<<plotmap-barb, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+levelplot (spc ~ .wavelength * z, barbituates, 
+           panel = panel.levelplot.points,
+           cex = .5, 
+           col.regions = colorRampPalette (c ("orange", "darkred"))
+           )
+@
+\\
 \textbf{contour lines with plot}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat2}} &
 Contourplots are possible with plot and levelplot:
@@ -577,7 +592,7 @@ plotc (flu, groups = type, type = c("l", "p"),
 @
 \end{longtable}
 
-\pagebreak
+%\pagebreak
 
 \section{False-Colour Maps}\mFun{\Rfunction{plotmap}}
 
@@ -627,6 +642,28 @@ To plot a map with particular wavelengths use this:
 <<plotmap-wave, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 plotmap (chondro[, , c( 728, 782, 1098, 1240, 
                        1482, 1577)])
+@ 
+\\
+\textbf{}&\tabularnewline \nopagebreak
+\raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-pca}} &
+Preprocessing of the data:
+<<>>=
+baselines <- spc.fit.poly.below (chondro)
+chondro <- chondro - baselines
+chondro <- sweep (chondro, 1, apply (chondro, 1, mean), "/")
+chondro <- sweep (chondro, 2, apply (chondro, 2, quantile, 
+                                     0.05), "-")
+pca <- prcomp (~ spc, data = chondro$., center = TRUE)
+scores <- decomposition (chondro, pca$x, 
+                         label.wavelength = "PC", 
+                         label.spc = "score /  a.u.")
+@
+The plot:
+<<plotmap-pca, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+levelplot (spc ~ x * y | as.factor(.wavelength), 
+           scores [,,1:3], 
+           aspect = "iso",
+           col.regions = matlab.dark.palette(20))
 @ 
 \end{longtable}
 
@@ -699,9 +736,12 @@ In \Rcode{vignettes.defs} is shown how the lattice functions can be redefined so
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
 \textbf{in functions}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-print}} &
-<<plotmap-print, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-print (plotmap (chondro))
-@
+%<<results = hide, fig = FALSE>>=
+%print (plotmap (chondro))
+%@
+%<<plotmap-print, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+%plotmap (chondro)
+%@
 \end{longtable}
 
 
