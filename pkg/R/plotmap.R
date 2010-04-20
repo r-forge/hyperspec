@@ -9,7 +9,7 @@ plotmap <- function (object, model = spc ~ x * y,
   .is.hy (object)
   validObject (object)
 
-  if (nwl (object) > 1)
+  if (nwl (object) > 1 & ! is.null (func))
     object <- do.call (apply, c (list (object, 1, func), func.args))
   
   dots <- modifyList (list (aspect = "iso"),
