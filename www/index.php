@@ -40,7 +40,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <p> The package is publicly accessible from the <a href="http://r-forge.r-project.org/plugins/scmsvn/viewcvs.php/?root=hyperspec">SVN repository</a>. </p>
 <p> You find the <strong>R-forge project summary page</strong> <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
-
+<!--
 <h1><tt>hyperSpec</tt> participates in the <a href="http://socghop.appspot.com/gsoc/program/home/google/gsoc2010"/>Google Summer of Code 2010</a></h1>
 Info about <tt>hyperSpec</tt>:
 <ul>
@@ -56,7 +56,7 @@ You may contact me about the topic and outline of your solution.
 </li>
 <li>Application deadline is April 9th</li>
 </ul>
-
+-->
 <h1>Installation</h1>
 <h2>... from inside R</h2>
 <p>To install the latest stable version from CRAN, type in R: 
