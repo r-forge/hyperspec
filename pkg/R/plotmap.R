@@ -4,6 +4,8 @@
 ###  
 ###  plots intensity or extra data column over 2 extra data columns
 
+## TODO: check wheter func should be applied or not
+
 plotmap <- function (object, model = spc ~ x * y,
                      func = mean, func.args = list (), ...){
   .is.hy (object)

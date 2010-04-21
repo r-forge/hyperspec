@@ -17,6 +17,11 @@
 \begin{document}
 \title{\Rpackage{hyperSpec} Plotting functions }
 \maketitle
+\warnbox{Vignette under Development}{
+This file is currently undergoing a thorough revision. Changes may happen frequently.
+
+Even if the file is not yet nice to read, the shown code does work.
+}
 \warnbox{Reproducing the Examples in this Vignette}{
 All spectra used in this manual are installed automatically with \phy. 
 
@@ -460,34 +465,34 @@ plotc (laser [,, c (13, 17, 21, 23),
 @
 \end{longtable}
 
-\subsection{Linear Calibration plots}
+\subsection{Calibration plots}
 \label{sec:line-calibr-plots}
 
 \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
-\textbf{The spectra}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-1}} &
-The original spectra:
-<<lin-cal-1, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plot (flu)
-@
-\\
-\textbf{Intensities over concentration I}&\tabularnewline \nopagebreak
+%\textbf{The spectra}&\tabularnewline \nopagebreak
+% \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-1}} &
+%The original spectra:
+%<<lin-cal-1, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+%plot (flu)
+%@
+%\\
+\textbf{Intensities over concentration}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2}} &
 Plotting the Intensities of one wavelength over the concentration for univariate calibration. 
 <<lin-cal-2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu [,,450])
+plotc (flu)
 @
 \\
-\textbf{Intensities over concentration II}&\tabularnewline \nopagebreak
+\textbf{Changing Axis Labels (and other parameters)}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2a}} &
 Alternative with different label for y-axis:
 <<>>=
 flu <- flu[,,450]
-labels (flu, "spc") <- expression (I ["450 nm"] / a.u.)
 @
 <<lin-cal-2a, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu)
+plotc (flu, ylab = expression (I ["450 nm"] / a.u.))
 @
+Arguments for \Rfunction{xyplot} can be given to \Rfunction{plotc}.
 \\
 \textbf{Axes starting at origin}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-3}} &
@@ -707,13 +712,7 @@ mtext3d("t / s", 'x+-', line = 2)
 mtext3d("lambda / nm", 'y--', line = 2)
 mtext3d("I / a.u.", edge = 'z--', line = 2.5)
 @
-After zooming and rotating, the figure can be saved:
-<<eval = FALSE>>=
-pars <- par3d (no.readonly=TRUE)
-save (pars, file = "par3d.Rdata")
-@
-Saving the figure:
-<<>>=
+<<echo = FALSE>>=
 load ("par3d.Rdata")                    
 par3d(pars)
 rgl.snapshot("fig/fig-3D.png", fmt="png", top=TRUE )

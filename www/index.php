@@ -95,10 +95,11 @@ These may be a bit outdated, but they work if the nightly build fails.
 <h1>Documentation</h1>
 <p><tt>hyperSpec</tt> comes with some pdf documentation (vignettes) in addition to the R help files:</p>
 <ul>
-<li><a href="introduction.pdf">Introduction</a>: a user manual from aspectroscopist's point of view</li>
+<li><a href="introduction.pdf">Introduction</a>: user manual written from a spectroscopist's point of view</li>
 <li><a href="FileIO.pdf">FileIO</a>: Detailed discussion of import and export of spectra files,<br/>
 the <a href="FileIO.zip">zipped directory containing all data</a> is needed to reproduce the vignette.
 </li>
+<li><a href="plotting.pdf">plotting</a>: graphical manual: example plots together with the code to produce the plots</li>
 <li>Example work-flow: <a href="flu.pdf">calibration of quinine fluorescence emission</a>: how to program import functions for other file formats, and how to set up a calibration.</li>
 <li>Example work-flow: <a href="laser.pdf">Unstable Laser Emission</a>: working with time series, conversion of the spectral abscissa ("wavelength axis")</li>
 <li>Example work-flow: <a href="chondrocytes.pdf"> Raman map of chondrocytes in cartilage</a>: principal component analysis, cluster analysis, working with spectral maps/images.<br/>

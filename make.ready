@@ -40,19 +40,31 @@ cp -av Vignettes/introduction/Strukturhyperspec.pdf          pkg/inst/doc/
 cp -av Vignettes/laser/laser.Rnw                             pkg/inst/doc/
 cp -av Vignettes/laser/laser.rda                             pkg/data/
 cp -av Vignettes/laser/par3d.Rdata                           pkg/inst/doc/
-cp -av Vignettes/plotting/plotting.pdf                       pkg/inst/doc/
+cp -av Vignettes/plotting/plotting.Rnw                       pkg/inst/doc/
 cp -av Vignettes/vignettes.defs                              pkg/inst/doc/
+
+
 
 R CMD check pkg || ( echo 'CHECK failed' && exit )
 rm -rf pkg.Rcheck
 
 R CMD build pkg || ( echo 'BUILD failed'  && exit )
-mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
-mv hyperSpec_*.zip www/hyperSpec-prebuilt.zip
 
 cd Vignettes
 zip -u chondrocytes.zip
 zip -u FileIO.zip
-
 cd ..
+
+# copy files into homepage section
+cp -av Vignettes/chondrocytes/chondrocytes.pdf               www/
+cp -av Vignettes/FileIO/FileIO.pdf                           www/
+cp -av Vignettes/flu/flu.pdf                                 www/
+cp -av Vignettes/introduction/introduction.pdf               www/
+cp -av Vignettes/laser/laser.pdf                             www/
+cp -av Vignettes/plotting/plotting.pdf                       www/
+cp -av Vignettes/chondrocytes.zip                            www/
+cp -av Vignettes/FileIO.zip                                  www/
+mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
+mv hyperSpec_*.zip www/hyperSpec-prebuilt.zip
+
 

@@ -39,7 +39,7 @@
   }
   \item{by.isindex}{If a list is given in \code{by}: does the list
     already contain the row indices of the groups? If \code{FALSE}, the
-    list in \code{by} is computed first (as in \code{\link[base]{aggregate}}).}
+    list in \code{by} is computed first (as in \code{\link[stats]{aggregate}}).}
   \item{\dots}{further arguments passed to \code{FUN}}
   
   \item{short, date, user}{aguments passed to \code{logentry}}
