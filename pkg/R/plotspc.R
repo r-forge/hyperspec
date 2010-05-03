@@ -176,7 +176,7 @@ plotspc <- function  (object,
       break.args$axis <- NULL
       break.args$breakpos <- NULL
 
-      if (length (cuts$cut) > 1) {
+      if (length (cuts$cut) > 0) {
         if (! require (plotrix)){
           cat ("hyperSpec will use its own replacement for plotrix' axis.break\n\n")
           break.fun <- .axis.break

@@ -2,12 +2,12 @@
 tr <- function (x) { sum (diag (x)) }
 
 # Sensitivität
-sens <- function (x, class) {
+sens.classic <- function (x, class) {
   x[class, class] / sum (x[class,])
 }
 
 #Spezifizität
-spez <- function (x, class) {
+spec.classic <- function (x, class) {
     sum (x[-class, -class]) / sum (x[-class,])
 }
 
@@ -25,91 +25,43 @@ mv <- function (x, class, cutoff = 0) {
 		NaN		
   }
 }
-# confusion matrix
 
-confmat <- function (pred, truth, levels = levels(as.factor(truth))) {
-  dummy <- split (pred[!is.na(pred)], factor(truth[!is.na(pred)], levels=levels))
-  #cat (names (dummy))
-#  print (levels(as.factor(truth)))
-  if (length (dummy) == 0) # no predictions done
-    matrix (nrow = length (levels), ncol = length (levels))
-  else {
-     colname <- levels(as.factor(unlist(dummy)));
-	  dummy <- lapply (dummy, factor, levels=levels)
-	  dummy <- lapply (dummy, summary);
-	 #print (dummy)
-    #cat ("\n")
- #   print (dummy)
- #   cat ("nrow: ", length(dummy), "el: ", length (unlist (dummy)))
-     dummy <- matrix (unlist (dummy), nrow=length(dummy), byrow=TRUE);
-	  #print (dummy)
-     rownames (dummy) = levels;
-	  colnames (dummy) = colname;
-	  dummy
-  }
-}
-
-TIKZboxwhisker <- function (x, hint=NULL, xpos="X", farbe="FARBE", dy="DYmm"){
-  prc <- quantile (x, probs = c(0.05, 0.25, 0.50, 0.75, 0.95), na.rm=TRUE)
-  out <- x[x > prc[5] | x < prc[1]];
-  mindist <- (x[length(x)] - x [1]) * 0.025; # kleinster unterscheidbarer Abstand: 2.5 % von der Gesamtspanne 
-  # out <- sort (unique (out[!is.na(out)]))
-  out <- sort (unique (round (out[!is.na(out)] / mindist) * mindist))
+## TIKZboxwhisker <- function (x, hint=NULL, xpos="X", farbe="FARBE", dy="DYmm"){
+##   prc <- quantile (x, probs = c(0.05, 0.25, 0.50, 0.75, 0.95), na.rm=TRUE)
+##   out <- x[x > prc[5] | x < prc[1]];
+##   mindist <- (x[length(x)] - x [1]) * 0.025; # kleinster unterscheidbarer Abstand: 2.5 % von der Gesamtspanne 
+##   # out <- sort (unique (out[!is.na(out)]))
+##   out <- sort (unique (round (out[!is.na(out)] / mindist) * mindist))
   
-	prc <- format (prc, digits = 4);
-	out <- format (out, digits=4);
-  paste ("\\boxwhisker{", xpos, 
-		  "}{", prc[1], 
-		  "}{", prc[2], 
-		  "}{", prc[3], 
-		  "}{", prc[4], 
-		  "}{", prc[5], 
-		  "}{", paste (out, collapse=", "), 
-		  "}{", farbe, 
-		  "}{", dy, 
-		  "}     % ", hint, "\n", sep="");
-}
+## 	prc <- format (prc, digits = 4);
+## 	out <- format (out, digits=4);
+##   paste ("\\boxwhisker{", xpos, 
+## 		  "}{", prc[1], 
+## 		  "}{", prc[2], 
+## 		  "}{", prc[3], 
+## 		  "}{", prc[4], 
+## 		  "}{", prc[5], 
+## 		  "}{", paste (out, collapse=", "), 
+## 		  "}{", farbe, 
+## 		  "}{", dy, 
+## 		  "}     % ", hint, "\n", sep="");
+## }
 
-TIKZline <- function (x, y, hint=NULL, cycle=FALSE, options=NULL){
-  x <- format (x, digits=4, scientific=FALSE);
-  y <- format (y, digits=4, scientific=FALSE);
-  cat ("\\draw [", options, "] (", sep="")
-  cat (matrix (c(x, y), nrow=2, byrow=TRUE), sep=c(", ", ") -- ("))
-  if (cycle) 
-	cat (") -- cycle; % ", hint, "\n", sep="")
-  else
-     cat ("); % ", hint, "\n", sep="")
-}
+## TIKZline <- function (x, y, hint=NULL, cycle=FALSE, options=NULL){
+##   x <- format (x, digits=4, scientific=FALSE);
+##   y <- format (y, digits=4, scientific=FALSE);
+##   cat ("\\draw [", options, "] (", sep="")
+##   cat (matrix (c(x, y), nrow=2, byrow=TRUE), sep=c(", ", ") -- ("))
+##   if (cycle) 
+## 	cat (") -- cycle; % ", hint, "\n", sep="")
+##   else
+##      cat ("); % ", hint, "\n", sep="")
+## }
 
-TIKZSpektren <- function (x, y, hint=NULL, options=NULL){
+## TIKZSpektren <- function (x, y, hint=NULL, options=NULL){
 
-}
+## }
 
-get.mesh <- function (x, y) {
-	grid.x <- sort (unique (x));
-	grid.y <- sort(unique (y));
-	
-	mesh <- matrix (nrow = length (grid.x), ncol = length (grid.y));
-	
-	for (i in 1:length(x)) {
-		z <- which (grid.x == x[i]);
-		s <- which (grid.y == y[i]);
-		mesh[z,s] <- i;
-	}
-	
-	mesh
-}
-
-
-
-########################################################################
-#
-plot.map <- function (x, y, value, ...) {
-	mesh <- get.mesh (x, y);
-	m <- matrix (value [mesh], ncol = ncol(mesh))
-	#levelplot (m, xlab = sort (unique (x)), ylab = sort (unique (y)), ...)
-	image (m, ...)		
-}
 ########################################################################
 #
 modell.tabelle <- function (x, by) {
