@@ -591,9 +591,8 @@ flu [,, min ~ 408.5]
 flu [[,, c (min ~ min + 2i, max - 2i ~ max)]]
 @
 
-
 \subsection{Spectral Interpolation and Smoothing}
-\mFun{\Rfunction{spc.bin} \Rfunction{spc.loess}} Sometimes, spectra need to be interpolated onto a new wavelength axis. \eg because measurements resulted in slightly shifted wavelength axes. Or data from a grating spectrometer with unequal data point spacing should be interpolated onto an evenly spaced wavelength axis. Also, the spectra can be smoothed: reducing the spectral resolution allows to increase the signal to noise ratio.  For chemometric data analysis reducing the number of data points per spectrum may be crucial as it reduces the dimensionality of the data.
+\mFun{\Rfunction{spc.bin} \Rfunction{spc.loess}} Sometimes, spectra need to be interpolated onto a new wavelength axis, \eg because measurements resulted in slightly shifted wavelength axes. Or data from a grating spectrometer with unequal data point spacing should be interpolated onto an evenly spaced wavelength axis. Also, the spectra can be smoothed: reducing the spectral resolution allows to increase the signal to noise ratio.  For chemometric data analysis reducing the number of data points per spectrum may be crucial as it reduces the dimensionality of the data.
 
 \Rpackage{hyperSpec} provides two functions to do so: \Rfunction{spc.bin} and \Rfunction{spc.loess}.
 

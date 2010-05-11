@@ -730,18 +730,18 @@ Therefore, in loops, functions, Sweave chunks, etc. the lattice object
 needs to be printed explicitly by \Rcode{print (plotmap (object))}
 (\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R FAQ: Why do lattice/trellis graphics not work?}).
 
-In \Rcode{vignettes.defs} is shown how the lattice functions can be redefined so that the result is printed without external print command.  
+In \Rcode{vignettes.defs} is shown how the lattice functions can be redefined so that the result is printed without external print command. 
 
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
-\textbf{in functions}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-print}} &
-%<<results = hide, fig = FALSE>>=
-%print (plotmap (chondro))
-%@
-%<<plotmap-print, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-%plotmap (chondro)
-%@
-\end{longtable}
+% \begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+% \textbf{in functions}&\tabularnewline \nopagebreak
+%  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-print}} &
+% <<eval = FALSE>>=
+% print (plotmap (chondro))
+% @
+% <<plotmap-print, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+% plotmap (chondro)
+% @
+% \end{longtable}
 
 
 \section{Interactive Graphics}
