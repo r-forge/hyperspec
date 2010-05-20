@@ -5,7 +5,7 @@
 ###
 
 logbook <- function (x){
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
 
   x@log

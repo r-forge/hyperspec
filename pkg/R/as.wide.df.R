@@ -5,7 +5,7 @@
 ### TODO: look for other matrices/arrays to expand
 
 as.wide.df <- function (x) {
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
 
   ispc <- match ("spc", colnames (x@data))

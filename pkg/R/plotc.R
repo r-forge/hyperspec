@@ -6,7 +6,7 @@
 
 plotc <- function (object, model = spc ~ c, groups = NULL,
                      func = sum, func.args = list (), ...){
-  .is.hy (object)
+  chk.hy (object)
   validObject (object)
 
   ## allow to plot against the row number

@@ -16,8 +16,8 @@ Take a sample of the specified size from the elements of x with or without repla
 \item{\code{signature(x = "hyperSpec")}}{sample spectra of hyperSpec objects}
 }}
 \usage{
- \S4method{sample}{hyperSpec}(x, size, replace = FALSE, prob = NULL)
-  %, short = "sample", user = NULL, date = NULL)
+ \S4method{sample}{hyperSpec}(x, size, replace = FALSE, prob = NULL,
+                              short = "sample", user = NULL, date = NULL)
 isample (x, size, replace = FALSE, prob = NULL)
 }
 \arguments{
@@ -26,7 +26,7 @@ isample (x, size, replace = FALSE, prob = NULL)
   \item{replace}{Should sampling be with replacement?}
   \item{prob}{A vector of probability weights for obtaining the elements
     of the vector being sampled.}
-%  \item{short, user, date}{are handed to \code{\link{logentry}}}
+  \item{short, user, date}{are handed to \code{\link{logentry}}}
 }
 \details{
   \code{isample} returns an vector of indices, \code{sample} returns the

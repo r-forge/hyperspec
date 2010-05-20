@@ -11,7 +11,7 @@
 ##' nwl (chondro)
 
 nwl <- function (x){
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
   
   ncol (x@data$spc)

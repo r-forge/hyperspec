@@ -4,17 +4,16 @@
 ###
 
 setMethod ("sample", signature = "hyperSpec",
-           function (x, size, replace = FALSE, prob = NULL  
-                     ## short = "sample", user = NULL, date = NULL
-                     ## to be done in 2.11 - when sample is implicit Generic
+           function (x, size, replace = FALSE, prob = NULL,
+                     short = "sample", user = NULL, date = NULL
                      ) {
              validObject (x)
 
              s <- sample.int (nrow (x@data), size = size, replace = replace, prob = prob)
 
-             .logentry (x [s], short = "sample",
-                        long = list (size = size, replace = replace, prob = prob))
-## for 2.11                        user = user, date = date)
+             .logentry (x [s], short = short,
+                        long = list (size = size, replace = replace, prob = prob,
+                        user = user, date = date))
            }
            )
 
@@ -31,7 +30,7 @@ setMethod ("sample", signature = "hyperSpec",
 ##' isample (chondro, 3)
 ##' isample (chondro, 3, replace = FALSE)
 isample <- function (x, size, replace = FALSE, prob = NULL) {
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
 
   sample.int (nrow (x), size = size, replace = replace, prob = prob)

@@ -4,7 +4,7 @@
 ###  
 
 map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...){
-  .is.hy (object)
+  chk.hy (object)
   validObject (object)
 
   dots <- modifyList (list (object = object, model = model, ...),

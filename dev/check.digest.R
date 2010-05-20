@@ -13,11 +13,11 @@
 
 	if (is.list (target)) {
 		## may be a list of hyperSpec objects	
-		lapply (target, .is.hy)
+		lapply (target, chk.hy)
 		lapply (target, validObject)
 		serialization <- unlist (lapply (target, .serialize.hyperSpec))
 	} else {
-		.is.hy (target)		
+		chk.hy (target)		
 		validObject (target)
 		serialization <- .serialize.hyperSpec (target)
 	}

@@ -5,7 +5,7 @@
 ### TODO: look for other matrices/arrays to expand
 
 as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE, na.rm = TRUE) {
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
 
   ispc <- match ("spc", colnames (x@data))

@@ -28,7 +28,7 @@ setMethod ("labels", "hyperSpec", function (object, which = NULL, drop = TRUE, .
 "labels<-" <- function (object, which = NULL, ...,
                         short = "labels<-", user = NULL, date = NULL,
                         value){
-  .is.hy (object)
+  chk.hy (object)
   validObject (object)
 
   if (is.null (which))

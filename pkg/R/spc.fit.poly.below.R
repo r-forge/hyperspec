@@ -8,9 +8,9 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1,
                                 npts.min = NULL, noise = 0,
                                 short = "spc.fit.poly.below", user = NULL,
                                 date = NULL){
-  .is.hy (fit.to)
+  chk.hy (fit.to)
   if (! is.null (apply.to))
-    .is.hy (apply.to)
+    chk.hy (apply.to)
 
   validObject (fit.to)
   validObject (apply.to)

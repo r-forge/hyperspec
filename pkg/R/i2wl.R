@@ -5,7 +5,7 @@
 ###
 
 i2wl <- function (x, i){
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
 
   x@wavelength [i]

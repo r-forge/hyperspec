@@ -43,7 +43,7 @@ collapse <- function (..., short.log = TRUE, short = "collapse", user = NULL, da
     dots <- dots [[1]]
 
   ## check the arguments
-  lapply (dots, .is.hy)
+  lapply (dots, chk.hy)
   lapply (dots, validObject)
 
   logs <- list()

@@ -8,7 +8,7 @@
 
 plotmap <- function (object, model = spc ~ x * y,
                      func = mean, func.args = list (), ...){
-  .is.hy (object)
+  chk.hy (object)
   validObject (object)
 
   if (nwl (object) > 1 & ! is.null (func))

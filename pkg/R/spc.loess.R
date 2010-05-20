@@ -23,7 +23,7 @@ spc.loess <- function (spc, newx, enp.target = nwl (spc) / 4,
   }
 
   
-  .is.hy (spc)
+  chk.hy (spc)
   validObject (spc)
 
   if (any (newx < min (spc@wavelength)) || any (newx > max (spc@wavelength)))

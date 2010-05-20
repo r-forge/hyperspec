@@ -4,7 +4,7 @@
 ###
 orderwl <- function (x, na.last = TRUE, decreasing = FALSE,
                      short = "orderwl", date = NULL, user = NULL){
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
   
   ord <- order (x@wavelength, na.last = na.last, decreasing = decreasing)

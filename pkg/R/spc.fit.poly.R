@@ -5,9 +5,9 @@
 ###
 spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
                           short = "spc.fit.poly", user = NULL, date = NULL){
-  .is.hy (fit.to)
+  chk.hy (fit.to)
   if (! is.null (apply.to))
-    .is.hy (apply.to)
+    chk.hy (apply.to)
 
   validObject (fit.to)
   validObject (apply.to)

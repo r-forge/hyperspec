@@ -26,7 +26,7 @@ plotspc <- function  (object,
                       zeroline =  list (lty = 2, col = col)){
   force (zeroline) # otherwise stacking messes up colors
 
-  .is.hy (object)
+  chk.hy (object)
   validObject (object)
   if (nrow (object) == 0) stop ("No spectra.")
 

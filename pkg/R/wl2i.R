@@ -4,7 +4,7 @@
 ###
 ###
 wl2i <- function (x, wavelength = stop ("wavelengths are required.")){
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
 
   ## special in formula

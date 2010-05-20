@@ -5,7 +5,7 @@
 
 spc.bin <- function (spc, by = stop ("reduction factor needed"), na.rm = TRUE,
                      short = "spc.bin", user = NULL, date = NULL) {
-  .is.hy (spc)
+  chk.hy (spc)
   validObject (spc)
 
   long <- list (by = deparse (by), na.rm = na.rm)

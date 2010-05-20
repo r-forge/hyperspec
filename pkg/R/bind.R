@@ -17,7 +17,7 @@ bind <- function (direction = stop ("direction ('c' or 'r') required"),
     validObject (dots[[1]])
     dots[[1]]
   } else {                              # binding is actually needed.
-    lapply (dots, .is.hy)
+    lapply (dots, chk.hy)
     lapply (dots, validObject)
     
     logs <- list()

@@ -115,15 +115,15 @@ The functions provided by \Rpackage{hyperSpec} check the validity of \Rclass{hyp
  
 It is highly recommended to use validity checking also for user-defined functions. In addition, non-generic functions should first ensure that the argument actually is a \chy object. The two tasks are accomplished by:
 <<eval = FALSE>>=
-.is.hy (object)
+chk.hy (object)
 validObject (object)
 @
 The first line checks whether \Robject{object} is a \chy object, the second checks its validity. 
 Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise an error and stop. 
-\Rfunction{.is.hy} is not exported by \phy. 
+\Rfunction{chk.hy} is not exported by \phy. 
 If functions are to be tested outside \phy's namespace
 <<>>=
-.is.hy <- hyperSpec:::.is.hy
+chk.hy <- hyperSpec:::chk.hy
 @
 makes it accessible in the workspace.
 

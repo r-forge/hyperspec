@@ -5,7 +5,7 @@
 ###
 
 wl <- function (x){
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
   
   x@wavelength
@@ -31,7 +31,7 @@ wl <- function (x){
 
 "wl<-" <- function (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value){
 
-  .is.hy (x)
+  chk.hy (x)
   validObject (x)
 
   if (is.numeric (value)){
