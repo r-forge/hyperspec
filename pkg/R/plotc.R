@@ -5,21 +5,22 @@
 ###  C. Beleites
 
 plotc <- function (object, model = spc ~ c, groups = NULL,
-                     func = sum, func.args = list (), ...){
+                     func = NULL, func.args = list (), ...){
   chk.hy (object)
   validObject (object)
 
+  dots <- list (...)
+
+  if (! is.null (func)) 
+    object <- do.call (apply, c (list (object, 1, func), func.args))
+  
   ## allow to plot against the row number
   object$.row <- row.seq (object)
 
-  
   groups <- substitute (groups)
   
-  dots <- list (...)
-
   ## find out whether the wavelengths are needed individually,
-  ## if not, apply a summary statistic _before_ expanding the
-  ## data.frame
+  ## if not, use only the first wavelength and issue a warning
   parsed.formula <- latticeParseFormula (model,
         as.long.df (object [1, , 1, wl.index = TRUE], rownames = TRUE),
         groups = groups, dimension = 2)
@@ -27,16 +28,34 @@ plotc <- function (object, model = spc ~ c, groups = NULL,
   use.c <- parsed.formula$right.name
   use.spc <- parsed.formula$left.name
 
-  if (use.spc == "spc" && nwl (object) > 1 &&
+  if (use.spc == "spc" && nwl (object) > 1 && is.null (func) &&
       !any (grepl (".wavelength", c(as.character (model),
                                     as.character (groups),
                                     as.character (dots$subset))))) {
-    object <- do.call (apply, c (list (object, 1, func), func.args))
+    object <- object [,, 1, wl.index = TRUE]
+    warning ("Intensity at first wavelengh only is used.")
   }
 
+  if (is.null (func))
+    ylab <- object@label [[use.spc]]
+  else {
+    ylab <- substitute (func ())
+    ylab [[2]] <- object@label [[use.spc]][[1]]
+    for (i in seq_along (func.args)){
+      if (names (func.args)[[i]] == "")
+        ylab [[i + 2]] <- func.args [[i]]
+      else
+        ylab [[i + 2]] <- bquote (.(x) == .(y),
+                                  list (x = names (func.args) [[i]],
+                                        y = as.character (func.args [[i]])))
+      
+      }
+    ylab <- as.expression (ylab)
+  }
+  
   ## set defaults: axis labels, plot style
   dots <- modifyList (list (xlab = object@label [[use.c]],
-                            ylab = object@label [[use.spc]],
+                            ylab = ylab,
                             pch = 19),
                       dots)
 

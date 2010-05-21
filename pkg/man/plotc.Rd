@@ -8,7 +8,7 @@
 }
 \usage{
 plotc(object, model = spc ~ c, groups = NULL,
-                     func = sum, func.args = list (), \dots)
+                     func = NUL, func.args = list (), \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,23 +22,30 @@ plotc(object, model = spc ~ c, groups = NULL,
   \item{\dots}{further arguments to \code{\link[lattice]{xyplot}}.}
 }
 \details{
-  If \code{object} has more than one wavelength, and the wavelength is
-  not used in the model specification nor in \code{groups}, nor for
-  specifying \code{subsets}, then the summary characteristic is
+  If \code{func} is not \code{NULL}, the summary characteristic is
   calculated first by applying \code{func} with the respective arguments
-  (in \code{func.args}) to each of the spectra.
+  (in \code{func.args}) to each of the spectra. If  \code{func} returns
+  more than one value (for each spectrum), the different values end up
+  as different wavelengths.
+  
+  If the wavelength is not used in the model specification nor in \code{groups}, nor for
+  specifying \code{subsets}, and neither is \code{func} given, then only
+  the first wavelength's intensities are plotted and a warning is issued.
 
   The special column names \code{.rownames} and \code{.wavelength} may
   be used.
   
-  The plotting is done by \code{\link[lattice]{xyplot}}.
+  The actual plotting is done by \code{\link[lattice]{xyplot}}.
 }
 \seealso{\code{\link[lattice]{xyplot}}}
 \author{C. Beleites}
 \examples{
 
 ## example 1: calibration of fluorescence 
-plotc (flu)
+plotc (flu) ## gives a warning
+
+plotc (flu, func = mean)
+plotc (flu, func = range, groups = .wavlength)
 
 plotc (flu[,,450], ylab = expression (I ["450 nm"] / a.u.))
 
