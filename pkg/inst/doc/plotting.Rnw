@@ -15,6 +15,11 @@
 % \VignettePackage{hyperSpec}
   % \renewenvironment{Schunk}{\begin{small}}{\end{small}}
 \begin{document}
+\newlength{\plotcol}
+\newlength{\textcol}
+\setlength{\plotcol}{0.4\textwidth}
+\setlength{\textcol}{\textwidth}
+\addtolength{\textcol}{-\plotcol}
 \title{\Rpackage{hyperSpec} Plotting functions }
 \maketitle
 \warnbox{Vignette under Development}{
@@ -30,6 +35,18 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 
 \tableofcontents{}
 
+For some plots of the \Robject{chondro} dataset, the pre-processed spectra are preferred, and their cluster averages $\pm$ one standard deviation:
+<<preproc-chondro>>=
+chondro.preproc <- chondro - spc.fit.poly.below (chondro)
+chondro.preproc <- sweep (chondro.preproc, 1, mean, "/")
+chondro.preproc <- sweep (chondro.preproc, 2, apply (chondro.preproc, 2, quantile, 0.05), "-")
+
+cluster.cols <- c ("dark blue", "orange", "#C02020")
+cluster.meansd <- aggregate (chondro.preproc, chondro$clusters, mean_pm_sd)
+cluster.means  <- aggregate (chondro.preproc, chondro$clusters, mean)
+@
+For details about the pre-processing, please refer to the vignette \verb+vignette ("chondro")+, or the help \verb+? chondro+.
+
 \section{Predefined functions}
 \Rpackage{hyperSpec} comes with 5 major predefined plotting functions.
 
@@ -38,14 +55,15 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 \item[levelplot] \chy has a levelplot method
 \vspace*{1ex}
 \item[plotspc] plots spectra
-\item[plotc] calibration plot,time series, depth profile
-\item[plotmap] version of levelplot allowing some more preprocessing of the data. 
-  
+\item[plotc] calibration plot,time series, depth profile\\
+  \Rfunction{plotc} is a \Rpackage{lattice} function
+\item[plotmap] more specialized version of levelplot for map or image plots.\\
+    \Rfunction{plotmap} is a \Rpackage{lattice} function
 \end{labeling}
 
 \setkeys{Gin}{width = \textwidth}
 
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \textbf{plotspc} &\tabularnewline  \nopagebreak
   \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotspc}} &
    plots the spectra, \ie the intensities \Rcode{\$spc} over the wavelengths \Rcode{@wavelength}.
@@ -71,7 +89,7 @@ plotc (flu)
 <<levelplot, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 levelplot ( spc ~ x * y, chondro, aspect = "iso")
 @
-Warning: only the first wavelength is used.
+Warning: \verb+Only first wavelength is used for plotting+
 \\
 \textbf{plotmap}  &\tabularnewline \nopagebreak
   \raisebox{-4cm}{\includegraphics[width = .45\textwidth]{fig/fig-plotmap}} &
@@ -106,7 +124,7 @@ handed over to this function.
 This allows a few more handy abbreviations.
 
 %\begin{tabular}{@{}p{.45\textwidth} p{.55\textwidth}}
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \textbf{plot (x, \textquotedbl{}spc\textquotedbl{})} \vspace*{2ex} &\tabularnewline  \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotspcflu}} &
 is equivalent to \Rcode{plotspc (flu)}
@@ -118,21 +136,21 @@ plot (flu, "spc")
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotchomean}} &
 plots mean spectrum $\pm$ 1 standard deviation
 <<plotchomean, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plot (chondro, "spcmeansd")
+plot (chondro.preproc, "spcmeansd")
 @
 \\ \vspace*{2ex}
 \textbf{plot (x, \textquotedbl{}spcprctile\textquotedbl{})}&\tabularnewline  \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotchoprctl}} &
 plots median, 16\textsuperscript{th} and 84\textsuperscript{th} percentile for each wavelength. For Gaussian distributed data, 16\textsuperscript{th}, 50\textsuperscript{th} and 84\textsuperscript{th} percentile are equal to mean $\pm$ standard deviation. Spectroscopic data frequently are not Gaussian distributed. The percentiles give a better idea of the true distribution. They are also less sensitive to outliers.
 <<plotchoprctl, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plot (chondro, "spcprctile")
+plot (chondro.preproc, "spcprctile")
 @
 \\ \vspace*{2ex}
 \textbf{plot (x, \textquotedbl{}spcprctl5\textquotedbl{})}&\tabularnewline  \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotchoprctl5}} &
 like \Rcode{\textquotedbl{}spcprctl\textquotedbl{}} plus 5\textsuperscript{th} and 95\textsuperscript{th}percentile.
 <<plotchoprctl5, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plot (chondro, "spcprctl5")
+plot (chondro.preproc, "spcprctl5")
 @
 \\ \vspace*{2ex}
 \textbf{plot (x, \textquotedbl{}map\textquotedbl{})}&\tabularnewline \nopagebreak
@@ -190,7 +208,7 @@ levelplot (spc ~ .wavelength * .row, laser)
 
 \Rfunction{plotspc} offers a variety of parameters for customized
 plots. To plot ... 
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \textbf{particular wavelength ranges }&\tabularnewline \nopagebreak
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-wavelength}} &
 use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
@@ -243,8 +261,8 @@ plot (barbituates [[1]], lines.args = list (type = "h"))
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-add}} &
 use \Rfunarg{add = TRUE}
 <<add, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plotspc (chondro[30,,])
-plotspc (chondro[300,,], add = TRUE, col = "blue")
+plotspc (chondro.preproc [ 30,,])
+plotspc (chondro.preproc [300,,], add = TRUE, col = "blue")
 @
 \\
 \textbf{with different line at $I =0$}&\tabularnewline \nopagebreak
@@ -256,7 +274,7 @@ plotspc (paracetamol,
          zeroline = list (col = "red"))
 @
 \\
-\textbf{adding lines}&\tabularnewline \nopagebreak
+\textbf{adding lines, etc.}&\tabularnewline \nopagebreak
  \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-add-line}} &
  use \Rcode{abline} for adding lines 
 <<echo = false>>=
@@ -269,87 +287,174 @@ abline (v = wl (laser)[c (13, 17, 21, 23)],
 @
 \end{longtable}
 
-
-
 \subsection{Stacked spectra}
 \label{sec:stacked-spectra}
 
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \textbf{stacked = TRUE}&\tabularnewline \nopagebreak
  \raisebox{-4.5cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked1}} &
 use \Rfunarg{stacked = TRUE}
 <<stacked1, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-plotspc (chondro[1:3,,], 
-         col = matlab.dark.palette (3),
+plotspc (cluster.means, 
+         col = cluster.cols,
          stacked = TRUE)
 @
 \\
 \textbf{Stacking groups of spectra}&\tabularnewline \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked2}} &
-if you want to plot mean spectrum $\pm$ 1 standard deviation of each of the clusters, use \Rfunarg{stacked = grouping.column ".name"}
+The spectra to be stacked can be grouped: \Rfunarg{stacked = "grouping.column.name"}
+The same applies to 
 <<stacked2, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-cols <- c ("dark blue", "orange", "#C02020")
-cluster.means <- aggregate (chondro, 
-                            chondro$clusters, 
-                            mean_pm_sd)
-plot (cluster.means, 
+plot (cluster.meansd, 
       stacked = ".aggregate",
       fill = ".aggregate",
-      col = cols)
+      col = cluster.cols)
 @
 \\
-\textbf{yoffset}&\tabularnewline \nopagebreak
+\textbf{Manually giving yoffset}&\tabularnewline \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked3}} &
-or use \Rfunarg{yoffset = }
+Stacking values can also be given manually as numeric values in \Rfunarg{yoffset}:
 <<stacked3, fig = TRUE, width = 4, height = 3,include = FALSE >>=
-cluster.means <- aggregate (chondro, 
-                            chondro$clusters, 
-                            mean_pm_sd)
-plotspc (cluster.means, 
-         yoffset = rep (c (0,1500,3000), each = 3), 
-         col = rep (matlab.dark.palette (3), each = 3))
+plotspc (cluster.meansd, 
+         yoffset = rep (0:2, each = 3), 
+         col = rep (cluster.cols, each = 3))
 @
 \\
-\textbf{Manually with normalized spectra}&\tabularnewline \nopagebreak
 \raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked4}} &
-it's also possible to normalize and stack the spectra like this:
-<<>>=
-out <- c (25, 376, 559)
-outcols <- c ("orange", "magenta", "brown")
-@ 
-Preprocessing of the spectra:
-<<>>=
-bl <- spc.fit.poly.below (chondro)
-chondro <- chondro - bl
-chondro <- sweep (chondro, 1, mean, "/")
-chondro <- sweep (chondro, 
-                  2, 
-                  apply (chondro, 
-                         2, 
-                         quantile, 
-                         0.05),
-                  "-")
-@ 
-The figure:
+To obtain a denser stacking:
 <<stacked4, fig = TRUE, width = 4, height = 3,include = FALSE >>=
 ## coordinate system:
-plot(chondro[1], 
-     plot.args = list (ylim = c (1, length (out) + .7)), 
+yoffsets <- apply (cluster.means [[]], 2, diff)
+yoffsets <- - apply (yoffsets, 1, min) 
+plot (cluster.means, yoffset = c (0, cumsum (yoffsets)), col = cluster.cols)
+@
+\\
+\textbf{Elaborate example}&\tabularnewline \nopagebreak
+\raisebox{-4cm}{\includegraphics[width = .40\textwidth]{fig/fig-stacked5}} &
+A more elaborate example of manual stacking:
+<<stacked5, fig = TRUE, width = 4, height = 3,include = FALSE >>=
+## coordinate system:
+yoffset <- apply (chondro.preproc, 2, quantile, c(0.05, 0.95))
+yoffset <- range (yoffset)
+plot(chondro.preproc[1], 
+     plot.args = list (ylim = c (0, 2) * yoffset),
      lines.args = list( type = "n")
      )
+yoffset <- (0:1) * diff (yoffset)
 ## stacked spectra:
-for (i in seq (along = out)){
-  plot(chondro, 
-       "spcprctl5", 
-       yoffset = i,
-       col = "gray",
-       add = TRUE)
-  plot (chondro [out[i]], 
-        yoffset = i, 
-        col = outcols[i], 
+for (i in 1 : 3){
+  plot(chondro.preproc, "spcprctl5", 
+       yoffset = yoffset [i],
+       col = "gray", add = TRUE)
+  plot (chondro.preproc [i], 
+        yoffset = yoffset [i], 
+        col = matlab.dark.palette (3) [i], 
         add = TRUE, 
         lines.args = list (lwd = 2))
-  text (650, i + .33, out [i]) }
+}
+@
+\end{longtable}
+
+
+\section{Calibration Plots, (Depth) Profiles, and Time Series Plots}\mFun{\Rfunction{plotc}}
+
+
+\subsection{Calibration plots}
+\label{sec:line-calibr-plots}
+
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
+%\textbf{The spectra}&\tabularnewline \nopagebreak
+% \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-1}} &
+%The original spectra:
+%<<lin-cal-1, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+%plot (flu)
+%@
+%\\
+\textbf{Intensities over concentration}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-1}} &
+Plotting the Intensities of one wavelength over the concentration for univariate calibration:
+<<lin-cal-1, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu [,, 450])
+@
+\\\textbf{Integral Intensity over concentration}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2}} &
+The default is to use the first intensity:
+<<lin-cal-2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu)
+@
+Warning: \verb+In plotc(flu) : Intensity at first wavelengh only is used.+
+\\
+\textbf{Other Summary Intensities over concentration}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-3}} &
+A function to compute a summary of the intensities before drawing can be used:
+<<lin-cal-3, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu, func = range, groups = .wavelength)
+@
+If \Rfunction{func} returns more than one value, the different results are accessible by
+\verb+.wavelength+.
+\\
+\textbf{Condidioning: plotting more traces separately}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc2}} &
+<<plotc2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu [,, c (405, 445)], spc ~ c | .wavelength, 
+       cex = .3, scales = list (alternating = c(1, 1)))
+@
+\\
+\textbf{Grouping: plot more traces in one panel}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc3}} &
+<<plotc3, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+ plotc (flu [,, c (405, 445)], groups = .wavelength)
+@
+\\
+\textbf{Changing Axis Labels (and other parameters)}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-4}} &
+Arguments for \Rfunction{xyplot} can be given to \Rfunction{plotc}:
+<<lin-cal-4, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu [,, 450], 
+       ylab = expression (I ["450 nm"] / a.u.),
+       xlim = range (0, flu$c + .01), 
+       ylim = range (0, flu$spc + 10),
+       pch = 4)
+@
+\\
+\textbf{Adding things to the plot: customized panel function}&\tabularnewline \nopagebreak 
+\raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-5}}& 
+As \Rfunction{plotc} uses the \Rpackage{lattice} function \Rfunction{xyplot}, additions to 
+the plot must be made via the panel function:
+<<lin-cal>>=
+panel.calibration <- function (x, y, ..., 
+      clim = range (x), level = .95) {
+  panel.xyplot (x, y, ...)
+  lm <- lm (y ~ x)
+  panel.abline (coef (lm), ...)
+  cx <- seq (clim [1], clim [2], length.out = 50)
+  cy <- predict (lm, data.frame (x = cx), 
+                 interval = "confidence", 
+                 level = level) 
+  panel.lines (cx, cy [,2], col = "gray")
+  panel.lines (cx, cy [,3], col = "gray")
+}
+@
+<<lin-cal-5, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+plotc (flu [,,405], panel = panel.calibration,
+       pch = 4, clim = c (0, 0.35), level = .99)
+@
+\end{longtable}
+%\pagebreak
+\subsection{Time series and other Plots of the Type Intensity-over-Something}
+\label{sec:time-series}
+
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
+\textbf{Abscissae other than c}&\tabularnewline \nopagebreak
+ \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc4}} &
+ Other abscissae may be specified by explicitly giving the model formula:
+<<plotc4, fig = TRUE, width = 4, height = 3,include = FALSE>>=
+ plotc (laser [,, c (13, 17, 21, 23), 
+               wl.index = TRUE], 
+        spc ~ t, 
+        groups = .wavelength, 
+        type = "b", 
+        col = c ("black", "blue", "red", "darkgreen"))
 @
 \end{longtable}
 
@@ -368,7 +473,7 @@ It is often useful to plot the spectra against an additional coordinate, \eg the
 
 This can be done by \Rcode{plot (object, "mat")} or \Rfunction{levelplot (model = spc \textasciitilde .wavelength * other.data.column, object)}. The actual plotting is done by \Rfunction{levelplot}, so the plots can be grouped or conditioned.
 
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \textbf{different palette}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmat1}} &
 <<>>=
@@ -431,173 +536,6 @@ levelplot (spc ~ .wavelength * c,
 
 \end{longtable}
 
-\section{Calibration Plots, (Depth) Profiles, and Time Series Plots}\mFun{\Rfunction{plotc}}
-
-\Rfunction{plotc} plots an intensity over one of the extra data columns.
-The abscissa uses column \Rcode{\$c} by default, another column can
-be specified using a proper formula. The ordinate can
-be calculated as a sum characteristic (with parameter \Rfunarg{func}\Rcode{= function},
-defaulting to \Rmethod{sum}). 
-
-\subsection{Time series}
-\label{sec:time-series}
-
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
-\textbf{Grouping with \Rfunction{plotc}}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc2}} &
-<<plotc2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (laser [,, c (13, 17, 21, 23), 
-              wl.index = TRUE], 
-       spc ~ t | .wavelength, 
-       type = "b", 
-       cex = .3)
-@
-\\
-\textbf{In one panel}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotc3}} &
-<<plotc3, fig = TRUE, width = 4, height = 3,include = FALSE>>=
- plotc (laser [,, c (13, 17, 21, 23), 
-               wl.index = TRUE], 
-        spc ~ t, 
-        groups = .wavelength, 
-        type = "b", 
-        col = c ("black", "blue", "red", "darkgreen"))
-@
-\end{longtable}
-
-\subsection{Calibration plots}
-\label{sec:line-calibr-plots}
-
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
-%\textbf{The spectra}&\tabularnewline \nopagebreak
-% \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-1}} &
-%The original spectra:
-%<<lin-cal-1, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-%plot (flu)
-%@
-%\\
-\textbf{Intensities over concentration}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2}} &
-Plotting the Intensities of one wavelength over the concentration for univariate calibration. 
-<<lin-cal-2, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu)
-@
-\\
-\textbf{Changing Axis Labels (and other parameters)}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-2a}} &
-Alternative with different label for y-axis:
-<<>>=
-flu <- flu[,,450]
-@
-<<lin-cal-2a, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu, ylab = expression (I ["450 nm"] / a.u.))
-@
-Arguments for \Rfunction{xyplot} can be given to \Rfunction{plotc}.
-\\
-\textbf{Axes starting at origin}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-3}} &
-Use \Rcode{xlim} and \Rcode{ylim} for setting the origin
-<<lin-cal-3, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu,
-       xlim = range (0, flu$c), 
-       ylim = range (0, flu$spc))
-@
-\\
-\textbf{Calibration - customized panel function}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-4}} &
-The calibration model:
-<<>>=
-calibration <- lm (c ~ spc, data = flu$.)
-@
-Prediction for new measurements with \eg an intensity of 125 or 400 units:
-<<>>=
-I <- c (125, 400)
-conc <- predict (calibration,
-                 newdata = list (spc = as.matrix (I)),
-                 interval = "prediction",
-                 level = .99)
-@
-
-
-Calibration function and its 99\% confidence interval:
-<<>>=
-int <- list (spc = as.matrix (seq (min (flu), 
-               max (flu), length.out = 25) ) )
-ci <- predict (calibration, 
-               newdata = int, 
-               interval = "confidence", 
-               level = .99)
-panel.ci <- function (x, y, ...,
-                      intensity, ci.lwr, ci.upr, 
-                      ci.col = "#606060") {
-  panel.xyplot (x, y, ...)
-  panel.lmline (x, y, ...)
-  panel.lines (ci.lwr, intensity, col = ci.col)
-  panel.lines (ci.upr, intensity, col = ci.col)
-}
-@
-And now the plot:
-<<lin-cal-4, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu, 
-       panel = panel.ci,
-       intensity = int$spc,
-       ci.lwr = ci [, 2],
-       ci.upr = ci [, 3])
-@
-\\
-\textbf{Calibration - alternative}&\tabularnewline \nopagebreak
- \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-lin-cal-5}} &
-<<>>=
-flu$type <- "data points"
-@
-Calculated confidence intervals are added to the hyperSpec object:
-<<>>=
-tmp <- new ("hyperSpec", 
-            spc = as.matrix(seq (min (flu), 
-              max(flu), length.out = 25)),
-            wavelength = 450)
-ci <-  predict (calibration, newdata = tmp$., 
-                interval = "confidence", 
-                level = 0.99)
-tmp <- tmp [rep (seq (tmp, index = TRUE), 3)]
-tmp$c <- as.numeric (ci)
-tmp$type <- rep (colnames (ci), each = 25)
-flu$file <- NULL
-flu <- rbind (flu, tmp)
-@
-Another panel function:
-<<>>=
-panel.predict <- function (x, y, ..., 
-                 intensity, ci, pred.col = "red", 
-                           pred.pch = 19, 
-                           pred.cex = 1) {
-   panel.xyplot (x, y, ...)
-   mapply (function (i, lwr, upr, ...) {
-                 panel.lines (c (lwr, upr), 
-                              rep (i, 2), ...)
-              }, 
-           intensity, ci [, 2], ci [, 3], 
-           MoreArgs = list (col = pred.col))
-   panel.xyplot (ci [, 1], intensity, 
-                 col = pred.col, pch = pred.pch, 
-                 cex = pred.cex, type = "p")
-}
-@
-The final plot:
-<<lin-cal-5, fig = TRUE, width = 4, height = 3,include = FALSE>>=
-plotc (flu, groups = type, type = c("l", "p"),
-       col = c ("black", "black", "#606060", 
-         "#606060"), 
-       pch = c (19, NA, NA, NA), cex = 0.5, 
-       lty = c (0, 1, 1, 1),
-       panel = panel.predict,
-       intensity = I,
-       ci = conc,
-       pred.cex = 0.5)
-@
-\end{longtable}
-
-%\pagebreak
 
 \section{False-Colour Maps}\mFun{\Rfunction{plotmap}}
 
@@ -624,7 +562,7 @@ plot the average intensity (no \Rfunarg{z} and \Rfunarg{func}\Rcode{= mean}).
 \paragraph{Examples}
 \label{sec:examples}
 
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
  \textbf{plotting clusters}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-plotmap-clu}} &
 <<plotmap-clu, fig = TRUE, width = 4, height = 3,include = FALSE >>=
@@ -690,7 +628,7 @@ voronoi
 \section{3 D}
 \label{sec:3-d}
 
-\begin{longtable}{@{}p{.45\textwidth} p{.55\textwidth}}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
   \textbf{3D figures are possible with \Rpackage{rgl}}&\tabularnewline \nopagebreak
  \raisebox{-4.25cm}{\includegraphics[width = .40\textwidth]{fig/fig-3D}} &
 <<>>=

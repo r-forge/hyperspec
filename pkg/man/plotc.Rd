@@ -8,7 +8,7 @@
 }
 \usage{
 plotc(object, model = spc ~ c, groups = NULL,
-                     func = NUL, func.args = list (), \dots)
+      func = NULL, func.args = list (), \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -45,7 +45,7 @@ plotc(object, model = spc ~ c, groups = NULL,
 plotc (flu) ## gives a warning
 
 plotc (flu, func = mean)
-plotc (flu, func = range, groups = .wavlength)
+plotc (flu, func = range, groups = .wavelength)
 
 plotc (flu[,,450], ylab = expression (I ["450 nm"] / a.u.))
 

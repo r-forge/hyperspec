@@ -120,12 +120,6 @@ validObject (object)
 @
 The first line checks whether \Robject{object} is a \chy object, the second checks its validity. 
 Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise an error and stop. 
-\Rfunction{chk.hy} is not exported by \phy. 
-If functions are to be tested outside \phy's namespace
-<<>>=
-chk.hy <- hyperSpec:::chk.hy
-@
-makes it accessible in the workspace.
 
 \subsection{Special Function Names}
 \label{sec:spec-funct-names}
