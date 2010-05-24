@@ -17,8 +17,8 @@ A time series of an unstable laser emission.
 \examples{
 laser
 
-cols <- c ("black", "blue", "#008000", "red")
-wl <- i2wl (laser, c(13, 17, 21, 23))
+cols <- c ("black", "blue", "darkgreen", "red")
+wl <- c (405.0, 405.1, 405.3, 405.4)
 plotspc (laser, axis.args=list (x = list (at = seq (404.5, 405.8, .1))))
 for (i in seq_along (wl))
    abline (v = wl[i], col = cols[i], lwd = 2, lty = 2)

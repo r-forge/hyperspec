@@ -14,6 +14,8 @@ plotvoronoi <- function (object, model = spc ~ x * y,
                             panel = "panel.voronoi",
                             prepanel = "prepanel.default.levelplot",
                             pch = 19, cex = .25,
+                            col.symbol = "#00000020",
+                            border = "#00000020",
                             use.tripack = use.tripack),
                       list (...))
   do.call (plotmap, dots)
