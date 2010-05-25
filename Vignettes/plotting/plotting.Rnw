@@ -16,7 +16,8 @@
   % \renewenvironment{Schunk}{\begin{small}}{\end{small}}
 
 \newcommand{\plottab}[2]{
-\multicolumn{2}{l}{\textbf{#1} \vspace*{2ex}}\tabularnewline\nopagebreak
+\vspace{1ex}\tabularnewline
+  \multicolumn{2}{l}{\textbf{#1}}\tabularnewline\nopagebreak
 \vtop{%
   \vskip-\baselineskip
   \hbox{%
@@ -257,6 +258,12 @@ use \Rfunarg{add = TRUE}
 <<add, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (chondro [ 30,,])
 plotspc (chondro [300,,], add = TRUE, col = "blue")
+@
+\\
+\plottab{Summary characteristics}{sd} \Rfunarg{func} may be used to calculate summary
+characteristics prior to plotting. To plot \eg the standard deviation of the spectra, use:
+<<sd, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+plotspc (chondro, func = sd, col = 1 : 2)
 @
 \\
 \plottab{with different line at $I =0$}{diffline}
@@ -502,9 +509,16 @@ functions, Sweave chunks, etc. the lattice object needs to be printed explicitly
 be summarized by a function before plotting (default: \Rfunction{mean}). The same scale is
 used for x and y axes (\Rfunarg{aspect = "iso"}).
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
- \plottab{plotting clusters}{plotmap-clu}
-<<plotmap-clu, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+ \plottab{plotting map}{plotmap-clu}
+<<plotmap-chondro, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotmap (chondro)
+@
+\\
+ \plottab{plotting maps with other than x and y}{plotmap-yx}
+ specify the colour-coded variable, abscissa and ordinate as formula:
+\Rcode{colour.coded \textasciitilde\ abscissa * ordinate}
+<<plotmap-yx, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+plotmap (chondro, spc ~ y * x)
 @
 \\
 \plottab{colour-coded factors}{plotmap-clu}
@@ -524,7 +538,8 @@ print (plotmap (chondro, clusters ~ x * y,
 \plottab{defined wavelengths}{plotmap-wave}
 To plot a map with particular wavelengths use this:  
 <<plotmap-wave, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plotmap (chondro.preproc [, , c( 728, 782, 1098, 1240, 1482, 1577)],
+plotmap (chondro.preproc [, , c(728, 782, 1098, 
+                                1240, 1482, 1577)],
          col.regions = matlab.palette)
 @ 
 \\
@@ -535,11 +550,11 @@ plotmap (chondro,
          col.regions = matlab.palette(20))
 @ 
 \\
-\plottab{Conditioning on \Rcode{.wavelength}}{plotmap-pca}
+\plottab{Conditioning on \Rcode{.wavelength}}{plotmap-pca2}
 \Rfunction{plotmap} automatically applies the function in \Rfunarg{func} before plotting. This defaults to the \Rfunction{mean}. In order to suppress this, use \Rcode{func = NULL}. This allows conditioning on the wavelengths.
 
 To plot \eg the first two score maps of a principal component analysis:
-<<plotmap-pca, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+<<plotmap-pca2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 pca <- prcomp (~ spc, data = chondro.preproc$.)
 scores <- decomposition (chondro, pca$x, 
                          label.wavelength = "PC", 
@@ -550,9 +565,9 @@ plotmap (scores [,,1:2],
          col.regions = matlab.palette(20))
 @ 
 \\
-\plottab{Conditioning on \Rcode{.wavelength} II}{plotmap-pca-2}
+\plottab{Conditioning on \Rcode{.wavelength} II}{plotmap-pca3}
 Alternatively, use \Rfunction{levelplot} directly:
-<<plotmap-pca-2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+<<plotmap-pca3, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 levelplot (spc ~ y * x | as.factor(.wavelength), 
            scores [,,1:2], 
            aspect = "iso",
@@ -576,10 +591,12 @@ mark.missing <- function (x, y, z, ...){
   miss <- merge (miss, data.frame (x, y, TRUE), 
                  all.x = TRUE)
   miss <- miss [is.na (miss[, 3]),]
-  panel.xyplot (miss [, 1], miss [, 2], pch = 4)
+  panel.xyplot (miss [, 1], miss [, 2], pch = 4, ...)
 }
 
-plotmap (sample (chondro, 850), col.regions = matlab.palette(20),
+plotmap (sample (chondro, 865), 
+         col.regions = matlab.palette(20),
+         col = "black",
          panel = mark.missing)
 @ 
 \end{longtable}
