@@ -101,14 +101,14 @@ laser
 
 \section{Inspecting the time dependency of the laser emission}
 The maxima of the different emission lines encountered during this
-measurement are data points 13, 17, 21, and 23 (fig. \ref{fig:markedspc}).
+measurement are at 405.0, 405.1, 405.3, and 405.4\,nm (fig. \ref{fig:markedspc}).
 
 Alternateively they can be extracted from the graph using \Rfunction{locator} which reads out the coordinates of the points the user clicks with the mouse (use middle or right click to end the input):
 <<locator, eval=FALSE>>=
 wls <- locator()$x
 @ 
 <<echo = FALSE, results = hide>>=
-wls <-  wl (laser)[c (13, 17, 21, 23)]
+wls <-  c (405.0, 405.1, 405.3, 405.4)
 @
 <<markspc, fig = TRUE, width = 5, height = 3, include = FALSE>>=
 plot (laser, "spcmeansd")

@@ -13,8 +13,7 @@
 \usepackage{graphicx}
 \usepackage[numbers]{natbib}
 \usepackage[unicode = true,
-%            draft = true, % wieder rausnehmen!
-				bookmarks = true,
+            bookmarks = true,
             bookmarksnumbered = false,
             bookmarksopen = false,
             breaklinks = false,
@@ -101,7 +100,17 @@ CENMAT, DMRN, University of Trieste}
 \setkeys{Gin}{width = .5\textwidth}
 }
 <<startup, echo = FALSE, results = hide>>=
-options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, 1, .6))))
+options(SweaveHooks=list(fig=function() {
+  par(mar = c (4.1, 4.1, 1, .6))
+
+  trellis.pars <- trellis.par.get ("layout.heights")
+  trellis.pars [grep ("padding", names (trellis.pars))] <- 0
+  trellis.par.set(layout.heights = trellis.pars)
+  
+  trellis.pars <- trellis.par.get ("layout.widths")
+  trellis.pars [grep ("padding", names (trellis.pars))] <- 0
+  trellis.par.set(layout.widths = trellis.pars)
+}))
 options ("width" = 100)
 library (hyperSpec)
 

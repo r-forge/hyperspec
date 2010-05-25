@@ -51,7 +51,7 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
 	 errors if the data was spatially ordered. Randomly rearrangig the rows
 	 of the hyperSpec object circumvents this problem.}
   
-  \item{voronoi}{Should the plot for identifying spectr by mouse click
+  \item{voronoi}{Should the plot for identifying spectra by mouse click
 	 be produced by \code{plotmap} (default) or \code{plotvoronoi}?}
   
   \item{\dots}{further arguments are passed down the call chain, and
@@ -127,11 +127,9 @@ plotmap (chondro, clusters ~ x * y, col.regions = gray (seq (0, 1, 0.05)))
 smpl <- sample (chondro, 300)
 plotmap (smpl, clusters ~ x * y)
 if (require (tripack)) 
-    plotvoronoi (smpl, clusters ~ x * y,
-                 border = "#00000020", col = "#00000020")
+    plotvoronoi (smpl, clusters ~ x * y)
 if (require (deldir)) 
     plotvoronoi (smpl, clusters ~ x * y,
-                 border = "#00000020", col = "#00000020",
                  use.tripack = FALSE)
 }
 \keyword{hplot}
