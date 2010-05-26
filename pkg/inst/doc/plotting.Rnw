@@ -263,7 +263,7 @@ plotspc (chondro [300,,], add = TRUE, col = "blue")
 \plottab{Summary characteristics}{sd} \Rfunarg{func} may be used to calculate summary
 characteristics prior to plotting. To plot \eg the standard deviation of the spectra, use:
 <<sd, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plotspc (chondro, func = sd, col = 1 : 2)
+plotspc (chondro, func = sd)
 @
 \\
 \plottab{with different line at $I =0$}{diffline}
