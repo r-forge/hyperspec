@@ -55,4 +55,4 @@
 \contentsline {subsection}{\numberline {12.3}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g.\xspace Hierarchical Cluster Analysis}{25}{subsection.12.3}
 \contentsline {subsection}{\numberline {12.4}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{25}{subsection.12.4}
 \contentsline {subsection}{\numberline {12.5}Splitting an Object, and Binding a List of {\language \langwohyphens \textit {hyperSpec}}\xspace Objects}{26}{subsection.12.5}
-\contentsline {section}{\numberline {A}Overview of the functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{27}{appendix.A}
+\contentsline {section}{\numberline {A}Overview of the functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{26}{appendix.A}
