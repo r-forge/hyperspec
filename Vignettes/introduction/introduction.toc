@@ -20,15 +20,15 @@
 \contentsline {subsection}{\numberline {8.3}Matrix Multiplication}{9}{subsection.8.3}
 \contentsline {subsection}{\numberline {8.4}Decomposition}{9}{subsection.8.4}
 \contentsline {section}{\numberline {9}Access to the data}{9}{section.9}
-\contentsline {subsection}{\numberline {9.1}Selecting and Deleting Spectra}{10}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.1}Selecting and Deleting Spectra}{9}{subsection.9.1}
 \contentsline {subsubsection}{\numberline {9.1.1}Random Samples}{10}{subsubsection.9.1.1}
 \contentsline {subsubsection}{\numberline {9.1.2}Sequences}{11}{subsubsection.9.1.2}
 \contentsline {subsection}{\numberline {9.2}Selecting Extra Data Columns }{11}{subsection.9.2}
 \contentsline {subsection}{\numberline {9.3}Selecting Wavelength Ranges}{12}{subsection.9.3}
 \contentsline {subsection}{\numberline {9.4}Deleting Wavelength Ranges}{13}{subsection.9.4}
-\contentsline {subsubsection}{\numberline {9.4.1}Converting Wavelengths to Indices and vice versa}{14}{subsubsection.9.4.1}
+\contentsline {subsubsection}{\numberline {9.4.1}Converting Wavelengths to Indices and vice versa}{13}{subsubsection.9.4.1}
 \contentsline {subsubsection}{\numberline {9.4.2}Changing the Wavelength Axis}{15}{subsubsection.9.4.2}
-\contentsline {subsubsection}{\numberline {9.4.3}Ordering the Wavelength Axis}{16}{subsubsection.9.4.3}
+\contentsline {subsubsection}{\numberline {9.4.3}Ordering the Wavelength Axis}{15}{subsubsection.9.4.3}
 \contentsline {subsection}{\numberline {9.5}More on the Square-Bracket Operators for Replacing Values}{16}{subsection.9.5}
 \contentsline {subsection}{\numberline {9.6}Fast Access to Parts of the {\language \langwohyphens \textit {hyperSpec}} Object}{17}{subsection.9.6}
 \contentsline {subsection}{\numberline {9.7}Conversion to Long-Format data.frame}{17}{subsection.9.7}
@@ -55,4 +55,4 @@
 \contentsline {subsection}{\numberline {12.3}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g.\xspace Hierarchical Cluster Analysis}{25}{subsection.12.3}
 \contentsline {subsection}{\numberline {12.4}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{25}{subsection.12.4}
 \contentsline {subsection}{\numberline {12.5}Splitting an Object, and Binding a List of {\language \langwohyphens \textit {hyperSpec}}\xspace Objects}{26}{subsection.12.5}
-\contentsline {section}{\numberline {A}Overview of the functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{26}{appendix.A}
+\contentsline {section}{\numberline {A}Overview of the functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{27}{appendix.A}

@@ -8,8 +8,9 @@ importFrom (grDevices, rainbow)
 
 exportClass (hyperSpec)
 
-export (chk.hy,
-		bind,
+export (.DollarNames.hyperSpec,
+        chk.hy,
+        bind,
         cbind.hyperSpec,
         rbind.hyperSpec,
         collapse,
