@@ -46,6 +46,6 @@ bind <- function (direction = stop ("direction ('c' or 'r') required"),
   }
 }
 
-cbind.hyperSpec <- function (..., deparse.level) bind ("c", ..., short = "cbind")
-rbind.hyperSpec <- function (..., deparse.level) bind ("r", ..., short = "cbind")
+cbind.hyperSpec <- function (..., short = "cbind", deparse.level) bind ("c", ..., short = "cbind")
+rbind.hyperSpec <- function (..., short = "rbind", deparse.level) bind ("r", ..., short = "rbind")
 
