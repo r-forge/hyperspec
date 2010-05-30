@@ -367,7 +367,7 @@
 ##
 
 .spc.log <- function (raw.data, pos, log.bin, log.disk, log.txt, keys.log2data,  keys.log2log,
-                      replace.nul = raw (13), iconv.from = "latin1", iconv.to = "utf8") {
+                      replace.nul = as.raw (255), iconv.from = "latin1", iconv.to = "utf8") {
 	
 	if (pos == 0) # no log block exists
 		return (list (data = list (),
@@ -396,8 +396,11 @@
 	## read text part of log
 	if (log.txt) {
 		log.txt <- raw.data [pos + loghdr$logtxto + seq_len (loghdr$logsizd - loghdr$logtxto)]
+      if (tail (log.txt, 1) ==  .nul)   # throw away nul at the end
+        log.txt <- head (log.txt, -1)
       log.txt [log.txt == .nul] <- replace.nul
       log.txt <- readChar (log.txt, length (log.txt), useBytes=T)
+      log.txt <- gsub (rawToChar (replace.nul), '\r\n', log.txt)
       log.txt <- iconv (log.txt, iconv.from, iconv.to)
 #		log.txt <- paste (rawToChar (log.txt, multiple = TRUE), collapse = "")
 		log.txt <- split.string (log.txt, "\r\n") ## spc file spec says \r\n regardless of OS
