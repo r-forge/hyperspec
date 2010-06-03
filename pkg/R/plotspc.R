@@ -93,16 +93,6 @@ plotspc <- function  (object,
       stop ("No spectra after", func, "was applied.")
   }
 
-  ## yoffset ........................................................................................
-  ## either one value for all spectra
-  ## or one per spectrum
-  if (length (yoffset) != nrow (spc)){
-    if (length (yoffset) == 1)
-      yoffset <- rep (yoffset, nrow (spc))
-    else
-      stop ("yoffset must be single number or one number for each spectrum.")
-  }
-
   ## do not plot too many spectra by default: can take very long and there is most probably nothing
   ## visible on the resulting picture
   if (nrow (spc) > spc.nmax){
@@ -121,9 +111,22 @@ plotspc <- function  (object,
       stacked.args <- modifyList (stacked.args, list (min.zero = TRUE))
 
     stacked <- do.call (stacked.offsets, stacked.args)
-    yoffset <- stacked$offsets [stacked$groups]
+    if (all (yoffset == 0))
+      yoffset <- stacked$offsets [stacked$groups]
+    else if (length (yoffset) == length (unique (stacked$groups)))
+      yoffset <- yoffset [stacked$groups]
   }
 
+  ## yoffset ........................................................................................
+  ## either one value for all spectra
+  ## or one per spectrum or one per group
+  if (length (yoffset) != nrow (spc)){
+    if (length (yoffset) == 1)
+      yoffset <- rep (yoffset, nrow (spc))
+    else
+      stop ("yoffset must be single number or one number for each spectrum (or stacking group).")
+  }
+  
   spc <- sweep (spc, 1, yoffset, "+")
 
   ## plot area --------------------------------------------------------------------------------------
@@ -226,6 +229,13 @@ plotspc <- function  (object,
   ## if necessary, recycle colors
   col <- rep (col, each = ceiling (nrow (spc) / length (col)), length.out = nrow (spc))
 
+ 
+  ## should the intensity zero be marked?
+  if (! is.null (zeroline)){
+    zeroline <- modifyList (list (h = unique (yoffset)), as.list (zeroline))
+    do.call (abline, zeroline)
+  }
+
   ## start loop over wavelength ranges
   for (i in seq_along (x)){
     ## filling for polygons ........................................................................
@@ -307,12 +317,6 @@ plotspc <- function  (object,
         do.call (lines, lines.args)
       }
     }
-  }
-
-  ## should the intensity zero be marked?
-  if (! is.null (zeroline)){
-    zeroline <- modifyList (list (h = unique (yoffset)), as.list (zeroline))
-    do.call (abline, zeroline)
   }
 
   ## return some values that are needed by spc.identify

@@ -73,7 +73,8 @@ plotspc(object,
   }
 
   \item{yoffset}{ordinate offset values for the spectra. May be
-   \code{\link{stacked.offsets}}}
+   offsets to stack the spectra (\code{\link{stacked.offsets}}). Either
+   one for all spectra, one per spectrum or one per group in \code{stacked}.}
 
   \item{nxticks}{hint how many tick marks the abscissa should have.}
 
