@@ -96,11 +96,11 @@ zcolors <- function (z, colors, scale.individual = TRUE, enh = function (x) x, .
       z <- z / max (z)
     } 
       
-    colmix.rgb (enh (z), col.regions)
+    colmix.rgb (enh (z), colors)
 }
 
 panel.mixlevelplot <- function (x, y, z, subscripts, shrink, 
-    border = "transparent", ..., col.regions = regions$col) 
+    border = "transparent", ..., col.regions = trellis.par.get ("regions")$col) 
 {
     if (length(subscripts) == 0) 
         return()
