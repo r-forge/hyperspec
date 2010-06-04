@@ -2,10 +2,12 @@ load ("~/hyperspec.rforge/Vignettes/introduction/functions.RData")
 
 
 ## find all exported functions
+ns <- asNamespace ("hyperSpec")
+
 new.functions <- data.frame (name = ls (envir = ns), group = NA, method = FALSE, description = NA)
 
 ## find all exported methods
-tmp <- getGenerics (where = asNamespace ("hyperSpec"))@.Data
+tmp <- getGenerics (where = ns)@.Data
 new.functions <- rbind (functions,
                         data.frame (name = tmp, group = NA, method = TRUE, description = ""))
 

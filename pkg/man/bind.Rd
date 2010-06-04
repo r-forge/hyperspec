@@ -15,8 +15,8 @@
   versions of \code{cbind} and \code{rbind} do work at the moment.
 }
 \usage{
-cbind.hyperSpec (\dots, deparse.level)
-rbind.hyperSpec (\dots, deparse.level)
+cbind.hyperSpec (\dots, short = "cbind", deparse.level)
+rbind.hyperSpec (\dots, short = "rbind", deparse.level)
 
 \S4method{cbind2}{hyperSpec,hyperSpec}(x, y)
 \S4method{rbind2}{hyperSpec,hyperSpec}(x, y)
