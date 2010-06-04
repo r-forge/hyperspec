@@ -16,9 +16,9 @@ Take a sample of the specified size from the elements of x with or without repla
 \item{\code{signature(x = "hyperSpec")}}{sample spectra of hyperSpec objects}
 }}
 \usage{
- \S4method{sample}{hyperSpec}(x, size, replace = FALSE, prob = NULL,
+ \S4method{sample}{hyperSpec}(x, size = nrow (x), replace = FALSE, prob = NULL,
                               short = "sample", user = NULL, date = NULL)
-isample (x, size, replace = FALSE, prob = NULL)
+isample (x, size = nrow (x), replace = FALSE, prob = NULL)
 }
 \arguments{
   \item{x}{The hyperSpec object to sample from}

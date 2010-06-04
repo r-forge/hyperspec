@@ -4,7 +4,7 @@
 ###
 
 setMethod ("sample", signature = "hyperSpec",
-           function (x, size, replace = FALSE, prob = NULL,
+           function (x, size = nrow (x), replace = FALSE, prob = NULL,
                      short = "sample", user = NULL, date = NULL
                      ) {
              validObject (x)
@@ -20,16 +20,16 @@ setMethod ("sample", signature = "hyperSpec",
 ##' @rdname sample
 ##' @export
 ##' @author C. Beleites
-##' @seealso sample
-##' @param x
-##' @param size
-##' @param replace
-##' @param prob
+##' @seealso \code{\link[base]{sample}}
+##' @param x hyperSpec object
+##' @param size number of spectra to draw
+##' @param replace draw with replacement?
+##' @param prob probablilities for each spectrum
 ##' @return vector with indices suitable for row-indexing x
 ##' @examples
 ##' isample (chondro, 3)
 ##' isample (chondro, 3, replace = FALSE)
-isample <- function (x, size, replace = FALSE, prob = NULL) {
+isample <- function (x, size = nrow (x), replace = FALSE, prob = NULL) {
   chk.hy (x)
   validObject (x)
 
