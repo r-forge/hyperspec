@@ -6,8 +6,9 @@
 ### reading to save memory.
 ###
 
-scan.txt.Renishaw <- function (file = stop ("filename is required"),
-                               data = "xyspc", nlines = 0, nspc = NULL, 
+scan.txt.Renishaw <- function (file = stop ("file is required"),
+                               data = "xyspc", nlines = 0, nspc = NULL,
+                               zip = NA,
                                short = "scan.txt.Renishaw", user = NULL,
                                date = NULL){
   cols <- switch (data,
@@ -22,7 +23,17 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"),
   cols <- c  (cols, list (.wavelength = expression (Delta * tilde(nu) / cm^-1) ,
                           spc = "I / a.u."))
 
+  if (!is (file, "connection"))
+    file <- gzfile (file, "r")
+
+  on.exit(close(file))
+
   first <- scan(file, nlines = 1, quiet = TRUE)
+
+#  if (! isSeekable(file))
+#    stop ("Only seekable connections are supported.")
+#  seek (file, 0L, origin = "start")
+  
   ncol <- length (first)
 
   if (ncol == 0)
@@ -31,11 +42,8 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"),
   if (ncol != length (cols))
     stop (paste ("File has", ncol, "columns, while 'cols' gives", length (cols)))
 
-  file <- file (file, "r")
-  on.exit(close(file))
-
-  fbuf <- matrix (scan (file, quiet = TRUE, nlines = nlines), ncol = ncol,
-                  byrow = TRUE)
+  fbuf <- matrix (c (first, scan (file, quiet = TRUE, nlines = nlines)),
+                     ncol = ncol,  byrow = TRUE)
 
   ## wavelength axis
   wl <- rep (TRUE,  nrow (fbuf))
@@ -99,3 +107,6 @@ scan.txt.Renishaw <- function (file = stop ("filename is required"),
            ))
 }
 
+scan.zip.Renishaw <- function (file = stop ("filename is required"),
+                               txt.file = sub ("[.]zip", ".txt", basename (file)), ...)
+  scan.txt.Renishaw (file = unz (file, filename = txt.file, "r"), ...)

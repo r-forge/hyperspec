@@ -454,7 +454,7 @@ Otherwise the import using \Rfunction{read.spc} worked.
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("ASCII long", "Raman", "Renishaw")
 @
-An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}.
+An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}. The file may be compressed via gzip, bzip2, xz or lzma. zip compressed files are read via \Rfunction{scan.zip.Renishaw}.
 The ASCII files can easily become very large, particularly with linefocus- or streamline imaging. 
 \Rfunction{scan.txt.Renishaw} provides two mechanisms to avoid running out of memory during data
 import. The file may be imported in chunks of a given number of lines (see the last example). \Rfunction{scan.txt.Renishaw} can calculate the correct number of wavelengths (\ie data points per spectrum) if the system command \texttt{wc} is available on your computer.
@@ -473,10 +473,17 @@ coordinates (default)
 \item[\Rcode{\textquotedbl ts\textquotedbl}] time series
 \end{labeling}
 
+Instead of a file name, \Rfunction{scan.txt.Renishaw} accepts also a connection.
+
 <<scan.txt.Renishaw>>=
 scan.txt.Renishaw ("txt.Renishaw/paracetamol.txt", "spc")
 scan.txt.Renishaw ("txt.Renishaw/laser.txt", "ts")
 scan.txt.Renishaw ("txt.Renishaw/chondro.txt", nlines = 1e5, nspc = 875)
+scan.txt.Renishaw ("txt.Renishaw/chondro.gz")
+scan.txt.Renishaw ("txt.Renishaw/chondro.xz")
+scan.txt.Renishaw ("txt.Renishaw/chondro.lzma")
+scan.txt.Renishaw ("txt.Renishaw/chondro.gz")
+scan.txt.Renishaw ("txt.Renishaw/chondro.bz2")
 @
 
 
