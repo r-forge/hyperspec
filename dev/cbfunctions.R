@@ -291,6 +291,15 @@ mark.dendrogram <- function (dendrogram, clusters,
   points (seq_along (dendrogram$order), rep (y, length (dendrogram$order)),
           col = col [clusters [dendrogram$order]], pch = pch, ...)
 
+mark.dendrogram.r <- function (dendrogram, clusters,
+                             col = matlab.dark.palette (nlevels (clusters)),
+                               y1 = -3, y2 = -4, border = NA, ...){
+  if (! is.factor (clusters))
+    clusters <- as.factor (clusters)
+  n <- length (dendrogram$order)
+  rect (seq_len (n) - 0.5, rep (y1, n), seq_len (n) + 0.5, rep (y2, n),
+          col = col [clusters [dendrogram$order]], border = border, ...)
+}
 
 abbr <- function (x, first = 3, last = 1){
   cln <- colnames (x)
