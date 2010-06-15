@@ -99,7 +99,6 @@ plotspc <- function  (object,
     warning (paste ("Number of spectra exceeds spc.nmax. Only the first",
                     spc.nmax, "are plotted."))
     spc <- spc [seq_len (spc.nmax), , drop = FALSE]
-    yoffset <- yoffset [seq_len (spc.nmax)]
   }
 
   ## stacked plot
@@ -123,6 +122,8 @@ plotspc <- function  (object,
   if (length (yoffset) != nrow (spc)){
     if (length (yoffset) == 1)
       yoffset <- rep (yoffset, nrow (spc))
+    else if (length (yoffset) > nrow (spc))
+      yoffset <- yoffset [seq_len (nrow (spc))]
     else
       stop ("yoffset must be single number or one number for each spectrum (or stacking group).")
   }

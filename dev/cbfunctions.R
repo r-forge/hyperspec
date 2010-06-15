@@ -361,3 +361,26 @@ str.matrix <- function (x) {
   invisible ()
 }
 
+
+##' Transpose an Array
+##' 
+##' transposing an array is a special case of array permutation \code{\link[base]{aperm}}: the first
+##' two dimensions are exchanged.
+##' 
+##' @aliases t.array
+##' @author C. Beleites
+##' @seealso  \code{\link[base]{aperm}} \code{\link[base]{t}}
+##' @export 
+##' @callGraph
+##' @keywords array
+##' @examples 
+##' a <- array (1 : 24, 4 : 2)
+##' a
+##' t (a)
+##' stopifnot (all (t (t (a)) == a))
+##' @log C. Beleites 2010-06-15
+
+t.array <- function (x){
+  dims <- seq_along (dim (x))
+  aperm (x, c (2, 1, dims [- (1 : 2)]))
+}

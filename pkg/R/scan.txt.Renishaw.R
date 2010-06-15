@@ -8,7 +8,6 @@
 
 scan.txt.Renishaw <- function (file = stop ("file is required"),
                                data = "xyspc", nlines = 0, nspc = NULL,
-                               zip = NA,
                                short = "scan.txt.Renishaw", user = NULL,
                                date = NULL){
   cols <- switch (data,
