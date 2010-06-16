@@ -1,8 +1,8 @@
 Package: hyperSpec
 Type: Package
 Title: Interface for hyperspectral data sets, i.e. spectra + meta information (spatial, time, concentration, ...)
-Version: 0.96-20100604
-Date: 2010-06-04
+Version: 0.96-20100616
+Date: 2010-06-16
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <cbeleites@units.it>
 Description: This package gives an interface to handle hyperspectral data sets in R.  I.e. spatially
