@@ -26,6 +26,6 @@ for (i in seq_along (wl))
 plotc (laser [,, wl], spc ~ t, groups = .wavelength, type = "b",
        col = cols)
 
-vignette ("laser", package="hyperSpec")
+\dontrun{vignette ("laser", package="hyperSpec")}
 }
 \keyword{datasets}

@@ -8,20 +8,22 @@
 \title{Import and Export of hyperSpec objects}
 \description{
   Besides \code{\link[base]{save}} and \code{\link[base]{load}}, two
-  principal ways to import and export data into \code{hyperSpec} objects
+  general ways to import and export data into \code{hyperSpec} objects
   exist.
 
-  The data can be exchanged via ASCII files, and the 
-  Functions to import and export hyperSpec objects as ASCII
-  files.
+  Firstly, hyperSpec objects can be imported  and exported as ASCII files.
 
   A second option is using the package \code{\link[R.matlab]{R.matlab}}
   which provides the functions \code{\link[R.matlab]{readMat}} and
-  \code{\link[R.matlab]{writeMat}}. 
+  \code{\link[R.matlab]{writeMat}}.
+
+  hyperSpec comes with a number of pre-defined functions to import
+  manufacturer specific file formats. For details, see \code{vignette
+  ("file-io")}.
   
-  \code{\link[hyperSpec]{read.spc}} imports Thermo Galactic's .spc file format, and
-  ENVI files may be read using \code{\link[hyperSpec]{read.ENVI}}.
-}
+  \code{\link[hyperSpec]{read.spc}} imports Thermo Galactic's .spc file
+  format, and ENVI files may be read using
+  \code{\link[hyperSpec]{read.ENVI}}.  }
 
 \usage{
 read.txt.long (file = stop ("filename is required"),
@@ -104,6 +106,9 @@ Manufacturer specific file formats: \code{\link{scan.txt.Renishaw}}
 }
 \author{C. Beleites}
 \examples{
+
+\dontrun{vignette  ("file-io")}
+
 ## export & import matlab files
 if (require (R.matlab)){
    # export to matlab file
@@ -136,6 +141,7 @@ write.txt.wide (flu,  file = "flu.txt", col.labels = FALSE, row.names = FALSE)
 read.txt.wide (file = "flu.txt", 
       cols = list (c=expression ("/"("c", "mg/l")), spc="I / a.u", .wavelength = "lambda / nm"),
 		header = TRUE)
+
 }
 
 \keyword{IO}

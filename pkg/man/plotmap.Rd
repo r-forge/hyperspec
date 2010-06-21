@@ -99,7 +99,7 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
 }
 \author{C. Beleites}
 \seealso{
-  \code{vignette (mapplot)}, \code{vignette (introduction)}
+  \code{vignette (plotting)}, \code{vignette (introduction)}
 
   \code{\link{plot}}
 
@@ -107,6 +107,11 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
   \code{\link[latticeExtra]{panel.voronoi}} 
 }
 \examples{
+\dontrun{
+vignette (plotting)
+vignette (introduction)
+}
+
 levelplot (chondro)                     # throws warning: only first wl is used
 levelplot (spc ~ y * x, chondro [,,1003]) # properly rotated
 levelplot (chondro [,,1003], aspect = "iso")

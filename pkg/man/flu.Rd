@@ -23,6 +23,6 @@ plot (flu)
 
 plotc (flu)
 
-vignette ("flu", package = "hyperSpec")
+\dontrun{vignette ("flu", package = "hyperSpec")}
 }
 \keyword{datasets}

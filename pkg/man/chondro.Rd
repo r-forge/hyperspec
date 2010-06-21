@@ -55,6 +55,6 @@ plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", col = cols)
 plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)],
        col.regions = colorRampPalette (c("white", "gold", "dark green"), space = "Lab") (20))
 
-vignette ("chondro", package = "hyperSpec")
+\dontrun{vignette ("chondro", package = "hyperSpec")}
 }
 \keyword{datasets}

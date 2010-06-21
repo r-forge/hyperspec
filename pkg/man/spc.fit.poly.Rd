@@ -32,7 +32,7 @@ spc.fit.poly.below  (fit.to, apply.to = fit.to, poly.order = 1, npts.min = NULL,
   to the \emph{complete} spectra given in \code{fit.to}. Thus \code{fit.to} needs to be cut appropriately.
   
   \code{spc.fit.poly.below} tries to fit the baseline on appropriate spectral ranges of the spectra in \code{fit.to}. 
-  For details, see the vignette \url{../doc/baseline.pdf}.
+  For details, see the \code{vignette ("baseline")}.
 }
 \value{
   \code{hyperspec} object containing the baselines in the spectra matrix,
@@ -47,7 +47,7 @@ plot(chondro - baselines, "spcprctl5")
 baselines <- spc.fit.poly.below(chondro)
 plot(chondro - baselines, "spcprctl5")
 
-vignette ("baseline", package = "hyperSpec")
+\dontrun{vignette ("baseline", package = "hyperSpec")}
 }
 \keyword{manip}
 \keyword{datagen}
