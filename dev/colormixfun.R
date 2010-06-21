@@ -91,13 +91,14 @@ colmix.lookup <- function (x, col.list = stop ("col.list must be given"),
 colmix.lookup <- NULL
 
 zcolors <- function (z, colors, scale.individual = TRUE, enh = function (x) x, ...){
-    if (scale.individual){
-      z <- sweep (z, 2, apply (z, 2, min), `-`)
-      z <- sweep (z, 2, apply (z, 2, max), `/`)
-    } else {
-      z <- z - min (z)
-      z <- z / max (z)
-    } 
+    if (scale.individual)
+      if (is.matrix (z)){
+        z <- sweep (z, 2, apply (z, 2, min), `-`)
+        z <- sweep (z, 2, apply (z, 2, max), `/`)
+      } else {
+        z <- z - min (z)
+        z <- z / max (z)
+      } 
       
     colmix.rgb (enh (z), colors)
 }
