@@ -10,7 +10,10 @@ colmix.rgb <- function (x, purecol, against = 1, min = 0, max = 1, sub = TRUE){
   x [x < min] <- min
   x [x > max] <- max
 
-  rgb (x)
+  cols <- rep (NA, nrow (x))
+  cols [! is.na (x [,1])] <-   rgb (x [!is.na (x [, 1]),])
+
+  cols
 }
 
 ##' color mixing by lookup
@@ -105,13 +108,20 @@ panel.mixlevelplot <- function (x, y, z, subscripts, shrink,
     if (length(subscripts) == 0) 
         return()
 
-    ## fix subscripts
+    ## fix subscripts for matrices
     if (is.matrix (z))
       subscripts <- unique (row (z) [subscripts])
-  
-    zcol <- zcolors (z, col.regions, ...)
+
+    if (is.factor (z) & all (is.na (as.numeric (levels (z))))){ # character wurden zu factor umgewandelt
+      zcol <- as.character (z)
+      z <- as.numeric (z)
+    } else {
+      zcol <- zcolors (z, col.regions, ...)
+    }
+
+    ncol <- ncol (z)
+    if (is.null (ncol)) ncol <- 1
     
-    ncol = ncol (z)
     x.is.factor <- is.factor(x)
     y.is.factor <- is.factor(y)
     x <- as.numeric(x)
@@ -214,6 +224,38 @@ panel.mixcol <- function (x, y, z, subscripts = TRUE, pch = 19, ...,
   panel.xyplot(x [subscripts], y [subscripts], col = zcol [subscripts], pch = pch, ...)
 }
 
+mixcol.legend <- function (purecol, data, labels = names (purecol), ...){
+  top.vp <- viewport(layout = grid.layout(2, 2,
+                 widths = unit(c(3.5, 1), c("lines", "null")),
+                 heights = unit(c(1, 3), c("null", "lines"))))
+  margin <- viewport(layout.pos.col = 1, layout.pos.row = 1,name = "margin")
+  legend <- viewport(layout.pos.col = 2, layout.pos.row = 1,name = "legend")
+
+  splot <- vpTree(top.vp, vpList(margin, legend))
+  pushViewport(splot)
+
+  seekViewport("margin")
+  grid.text("fraction", x = unit(0.5, "lines"), rot = 90)
+
+  if (missing (data))
+    colmax <- rep (1, length (purecol))
+  else
+    colmax <- apply (data, 2, max)
+
+  seekViewport("legend")
+  pushViewport(dataViewport(0 : (length (purecol) + 1), c(0, max (colmax)), name = "plotlegend"))
+  
+  for (i in seq_along (purecol)) {
+    cls <- colmix.rgb (seq (0, 1, length.out = 20), purecol [i])
+    grid.rect (unit (rep (i, 20), "native"), unit (seq (0, colmax [i], length.out = 20), "native"),
+               width = unit (1, "native"), height = unit (colmax [i] / 20, "native"),
+               gp = gpar (fill = cls, col = cls))
+    grid.text ( labels [i], unit (i, "native"), unit (0.5, "lines"), rot = -90, just = 0)
+  }
+ # grid.xaxis (at = seq_along (purecol), label=labels)
+  grid.yaxis ()
+}
+
 
 myhist <- function (h, xlim, ylim, class, mix, purecol){
 colmax <- apply (mix, 2, max)
@@ -224,6 +266,7 @@ mix <- sweep (mix, 2, apply (mix, 2, max), `/`)
 top.vp <- viewport(layout = grid.layout(3, 4,
                      widths = unit(c(4, 1, 3, 4), c("lines", "null", "lines", "lines")),
                      heights = unit(c(2, 1, 5), c("lines", "null", "lines"))))
+
 margin1 <- viewport(layout.pos.col = 2, layout.pos.row = 3, name = "margin1")
 margin2 <- viewport(layout.pos.col = 1, layout.pos.row = 2,name = "margin2")
 margin3 <- viewport(layout.pos.col = 2, layout.pos.row = 1,name = "margin3")
