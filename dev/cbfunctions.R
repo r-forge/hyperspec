@@ -399,7 +399,9 @@ sel.poly <- function (pch = 19, size = 0.3, ...){
         pts <- cbind (pts, matrix (NA, nrow = 100, ncol = 2))
       pts [pos, ] <- as.numeric (pt)
       
-      grid.points (pt$x, pt$y, pch = pch, size = size, gp = gpar (...))
+      grid.points (unit (pts [pos, 1], "native"),
+                   unit (pts [pos, 2], "native"), pch = pch,
+                   size = unit (size, "char"), gp = gpar (...))
       if (pos > 1)
         grid.lines (unit (pts [(pos - 1) : pos, 1], "native"),
                     unit (pts [(pos - 1) : pos, 2], "native"), gp = gpar (...))
