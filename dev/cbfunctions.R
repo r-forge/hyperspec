@@ -199,7 +199,6 @@ count.rows <- function(x) {
               x)
 }
 
-
 ## strat.kfold <- function (x, cprobe, cclass, nset, probs = c (1, .5), n = NULL){
 
 ##   ip <- 2 + (1 : length (cprobe)) # col index into n
