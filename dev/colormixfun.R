@@ -258,67 +258,72 @@ mixcol.legend <- function (purecol, data, labels = names (purecol), ...){
 }
 
 
-myhist <- function (h, xlim, ylim, class, mix, purecol){
-colmax <- apply (mix, 2, max)
-mix <- sweep (mix, 2, apply (mix, 2, max), `/`)
+myhist <- function (h, xlim, ylim, class, mix, purecol, xlab = NULL, ylab = NULL){
+  if (missing (xlim))  xlim <- h@xbnds
+  if (missing (ylim))  ylim <- h@ybnds
+  
+  colmax <- apply (mix, 2, max)
+  mix <- sweep (mix, 2, apply (mix, 2, max), `/`)
 
   grid.newpage()
 
-top.vp <- viewport(layout = grid.layout(3, 4,
-                     widths = unit(c(4, 1, 3, 4), c("lines", "null", "lines", "lines")),
-                     heights = unit(c(2, 1, 5), c("lines", "null", "lines"))))
+  top.vp <- viewport(layout = grid.layout(3, 4,
+                       widths = unit(c(4, 1, 3, 4), c("lines", "null", "lines", "lines")),
+                       heights = unit(c(2, 1, 5), c("lines", "null", "lines"))))
 
-margin1 <- viewport(layout.pos.col = 2, layout.pos.row = 3, name = "margin1")
-margin2 <- viewport(layout.pos.col = 1, layout.pos.row = 2,name = "margin2")
-margin3 <- viewport(layout.pos.col = 2, layout.pos.row = 1,name = "margin3")
-margin4 <- viewport(layout.pos.col = 4, layout.pos.row = 2,name = "margin4")
-margin4l <- viewport(layout.pos.col = 3, layout.pos.row = 2,name = "margin4l")
-plot <- dataViewport(c(-4, 4), c(-2.5,5), layout.pos.col = 2, layout.pos.row = 2, name = "plot")
+  margin1 <- viewport(layout.pos.col = 2, layout.pos.row = 3, name = "margin1")
+  margin2 <- viewport(layout.pos.col = 1, layout.pos.row = 2,name = "margin2")
+  margin3 <- viewport(layout.pos.col = 2, layout.pos.row = 1,name = "margin3")
+  margin4 <- viewport(layout.pos.col = 4, layout.pos.row = 2,name = "margin4")
+  margin4l <- viewport(layout.pos.col = 3, layout.pos.row = 2,name = "margin4l")
+  plot <- dataViewport(c(-4, 4), c(-2.5,5), layout.pos.col = 2, layout.pos.row = 2, name = "plot")
 
-splot <- vpTree(top.vp, vpList(margin1, margin2,margin3, margin4,  plot, margin4l))
+  splot <- vpTree(top.vp, vpList(margin1, margin2,margin3, margin4,  plot, margin4l))
 
-pushViewport(splot)
-seekViewport("plot")
+  pushViewport(splot)
+  seekViewport("plot")
 
-atx <- pretty (xlim, 7)
-aty <- pretty (ylim, 7)
+  atx <- pretty (xlim, 7)
+  aty <- pretty (ylim, 7)
 
-dx <- as.numeric (convertWidth (unit (1, "native"), "inches") ) 
-dy <- as.numeric (convertHeight (unit (1, "native"), "inches")) 
+  dx <- as.numeric (convertWidth (unit (1, "native"), "inches") ) 
+  dy <- as.numeric (convertHeight (unit (1, "native"), "inches")) 
 
-cat ("adjust", dx / diff (xlim) / dy * diff (ylim), "\n")
+  cat ("adjust", dx / diff (xlim) / dy * diff (ylim), "\n")
+  
+  if (dx / diff (xlim) > dy / diff (ylim)) {
+    tmp <- dx / dy * diff (ylim) - diff (xlim)
+    xlim <- xlim + c (-tmp, tmp) / 2
+  } else {
+    tmp <- dy / dx * diff (xlim) - diff (ylim)
+    ylim <- ylim + c (-tmp, tmp) / 2
+  }
 
-if (dx / diff (xlim) > dy / diff (ylim)) {
-  tmp <- dx / dy * diff (ylim) - diff (xlim)
-  xlim <- xlim + c (-tmp, tmp) / 2
-} else {
-  tmp <- dy / dx * diff (xlim) - diff (ylim)
-  ylim <- ylim + c (-tmp, tmp) / 2
-}
+  pushViewport(dataViewport(xlim, ylim, name = "plotarea", clip = "on"))
+  grid.hexagons(h, style= "constant.col", border = "transparent", pen = colmix.rgb (mix, purecol))
+#  popViewport ()
+  pushViewport(dataViewport(xlim, ylim, name = "plotareaaxes", clip = "off"))
+  grid.xaxis(at = atx, label = TRUE)
+  grid.yaxis(at = aty, label = TRUE)
+  
+  seekViewport("margin1")
+  grid.text(xlab, y = unit(1, "lines"))
+  seekViewport("margin2")
+  grid.text(ylab, x = unit(1, "lines"), rot = 90)
+  seekViewport("margin4l")
+  grid.text("Counts", x = unit(0.5, "lines"), rot = 90)
 
-pushViewport(dataViewport(xlim, ylim, name = "plotarea"))
-grid.hexagons(h, style= "constant.col", border = "transparent", pen = colmix.rgb (mix, purecol))
-grid.xaxis(at = atx, label = TRUE)
-grid.yaxis(at = aty, label = TRUE)
+  seekViewport("margin4")
+  pushViewport(dataViewport(0:4, c(0, max (colmax)), name = "plotlegend"))
+  for (i in 1 : 3) {
+    cls <- colmix.rgb (seq (0, 1, length.out = 20), purecol [i])
+    grid.rect (unit (rep (i, 20), "native"), unit (seq (0, colmax [i], length.out = 20), "native"),
+               width = unit (1, "native"), height = unit (colmax [i] / 20, "native"),
+               gp = gpar (fill = cls, col = cls))
+    grid.text ( class [i], unit (i, "native"), unit (0.5, "lines"), rot = 90, just = 1)
+  }
+  grid.yaxis ()
 
-seekViewport("margin1")
-grid.text("LD 1", y = unit(1, "lines"))
-seekViewport("margin2")
-grid.text("LD 2", x = unit(1, "lines"), rot = 90)
-seekViewport("margin4l")
-grid.text("Counts", x = unit(0.5, "lines"), rot = 90)
-
-seekViewport("margin4")
-pushViewport(dataViewport(0:4, c(0, max (colmax)), name = "plotlegend"))
-for (i in 1 : 3) {
-  cls <- colmix.rgb (seq (0, 1, length.out = 20), purecol [i])
-  grid.rect (unit (rep (i, 20), "native"), unit (seq (0, colmax [i], length.out = 20), "native"),
-             width = unit (1, "native"), height = unit (colmax [i] / 20, "native"),
-             gp = gpar (fill = cls, col = cls))
-  grid.text ( class [i], unit (i, "native"), unit (0.5, "lines"), rot = 90, just = 1)
-}
-grid.yaxis ()
-
-seekViewport("plotarea")
+  seekViewport("plotarea")
 }
 
