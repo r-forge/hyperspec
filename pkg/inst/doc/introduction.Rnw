@@ -235,16 +235,20 @@ The names of the columns in \Rcode{@data} are accessed by\mFun{colnames, rowname
 colnames (chondro)
 @
 
-Likewise, \Rmethod{rownames} returns the names assigned to the spectra,
-and \Rmethod{dimnames} yields a list of these three vectors (including
-also the column names of \Robject{\$spc}). The column names of the spectra matrix are the wavelengths. They are accessed by \Rfunction{wl}, see section~\ref{sec:wavel-axis-conv}.
+Likewise, \Rmethod{rownames} returns the names assigned to the spectra, and \Rmethod{dimnames} yields
+a list of these three vectors (including also the column names of \Robject{\$spc}). The column names
+of the spectra matrix are the wavelengths. They are accessed by \Rfunction{wl}, see
+section~\ref{sec:wavel-axis-conv}.
 
-Extra\mFun{colnames<-, rownames<-} 
-data column names and rownames of the object may be set by \Rfunction{colnames<-} and \Rfunction{rownames<-}, respectively. \Rfunction{colnames<-} renames the labels as well.
+Extra\mFun{colnames<-, rownames<-} data column names and rownames of the object may be set by
+\Rfunction{colnames<-} and \Rfunction{rownames<-}, respectively. \Rfunction{colnames<-} renames the
+labels as well.
 
 \section{Creating a \Rclass{hyperSpec} Object, Data Import and Export}
 \label{sec:create}
-\phy comes with filters for a variety of file formats. These are discussed in detail in a separate document. Use \verb+vignette ("file-io")+ to read about import and export of spectra into \chy objects.
+\phy comes with filters for a variety of file formats. These are discussed in detail in a separate
+document. Use \verb+vignette ("file-io")+ to read about import and export of spectra into \chy
+objects.
 
 \subsection{Creating a \Rclass{hyperSpec} Object from Spectra Matrix
 and Wavelength Vector}
@@ -269,10 +273,8 @@ axis label in \Rcode{\$spc}.
 
 \subsection{Binding Objects together}
 \label{sec:bind}
-\Rclass{hyperspec}
-\mFun{\Rfunction{cbind} \Rfunction{rbind}}
-Objects can be bound together, either by rows
-to append a new spectral range or by columns to append new spectra
+\Rclass{hyperspec} \mFun{\Rfunction{cbind} \Rfunction{rbind}} Objects can be bound together, either
+by columns to append a new spectral range or by row to append new spectra
 
 <<cbind>>=
 dim (flu)
@@ -289,14 +291,18 @@ arguments or in a list.
 As usual for \Rfunction{rbind} and \Rfunction{cbind}, the objects that should be bound together must have the same rows and columns, respectively.
 
 
-\subsection{Binding Objects that do not share the same extra data and/or wavelength axis}
+\subsection{Binding Objects that do not Share the Same Extra Data and/or Wavelength Axis}
 \label{sec:collapse}
 
-\Rfunction{collapse} \mFun{\Rfunction{collapse}} combines objects that should be bound together by row, but they do not share the columns and/or spectral range.
-The resulting object has all columns from all input objects, and all wavelengths from the input objects. If an input object does not have a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
+\Rfunction{collapse} \mFun{\Rfunction{collapse}} combines objects that should be bound together by
+row, but they do not share the columns and/or spectral range.  The resulting object has all columns
+from all input objects, and all wavelengths from the input objects. If an input object does not have
+a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
 
-The \Robject{barbituates} data is a list of \Sexpr{length (barbituates)} \chy objects, each containing one mass spectrum. The spectra have \Sexpr{(min (sapply (barbituates, nwl)))} to 
-\Sexpr{(max (sapply (barbituates, nwl)))} data points. As a second step, the resulting object's wavelelength axis is sorted:
+The \Robject{barbituates} data is a list of \Sexpr{length (barbituates)} \chy objects, each
+containing one mass spectrum. The spectra have \Sexpr{(min (sapply (barbituates, nwl)))} to
+\Sexpr{(max (sapply (barbituates, nwl)))} data points. As a second step, the resulting object's
+wavelelength axis is sorted:
 <<collapse>>=
 barb <- collapse (barbituates)
 wl (barb) [1:100]
@@ -304,28 +310,94 @@ barb <- orderwl (barb)
 barb [[1:3, , min ~ min + 10i]]
 @
 
+\subsection{Binding Objects that do not Share the Same Spectra}
+\label{sec:merge}
+
+\Rfunction{merge} \mFun{\Rfunction{merge}} adds a new spectral range (like \Rfunction{cbind}), but
+works even if spectra are missing in one of the objects. 
+
+The arguments \Rfunarg{by}, \Rfunarg{by.x}, and \Rfunarg{by.y} specify which columns should be used
+to decide which spectra are the same. 
+
+The arguments \Rfunarg{all}, \Rfunarg{all.x}, and \Rfunarg{all.y} determine whether spectra should be
+kept for the result set if they appear in only one of the objects.
+
+For details on \Rfunction{merge}, see the help on \Rpackage{base::merge}.
+
+As an example, let's construct a version of the \Robject{chondro} data like being taken as two maps with
+different spectral ranges. In each data set, some spectra are missing.
+<<collapse>>=
+chondro.low <- sample (chondro [,, 600 ~ 1200], 870)
+nrow (chondro.low)
+chondro.high <- sample (chondro [,, 1400 ~ 1800], 870)
+nrow (chondro.high)
+@ 
+
+As all extra data columns are the same, no special declarations are needed for merging the data:
+<<>>=
+chondro.merged <- merge (chondro.low, chondro.high)
+nrow (chondro.merged)
+@
+By default, the result consists of only those spectra, where \emph{both} spectral ranges were available.
+To keep all spectra, regardless of the other part, use:
+<<>>=
+chondro.merged <- merge (chondro.low, chondro.high, all = TRUE)
+nrow (chondro.merged)
+@
+\begin{figure}
+\setkeys{Gin}{width = .66\textwidth}
+\subfloat[\label{fig-merge-map}]{
+<<missing, fig = TRUE, width = 10, height = 5, echo = FALSE>>=
+print (levelplot (spc ~ x * y | as.factor (paste (.wavelength, "  1/cm")), chondro.merged [,,c(1000, 1650)], 
+           aspect = "iso", col.regions = matlab.palette ()))
+@ 
+}
+\setkeys{Gin}{width = .33\textwidth}
+\subfloat[\label{fig-merge-mat}]{
+<<merged, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
+print (plot (chondro.merged, "mat", col.regions = matlab.dark.palette ()))
+rm (chondro)
+@ 
+}
+\caption{\label{fig:merge}
+  \subref{fig-merge-map} For both spectral ranges some spectra are missing.  
+  \subref{fig-merge-mat} The missing parts of the spectra are filled with \Rcode{NA}.}
+\end{figure}
+
 \subsection{Matrix Multiplication}
 \label{sec:matmult}
 
-Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}\mFun{\Rfunction{\%*\%}}. For an example, see the principal component analysis below (section~\ref{sec:pca} on page \pageref{sec:pca}).
+Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}\mFun{\Rfunction{\%*\%}}. For an
+example, see the principal component analysis below (section~\ref{sec:pca} on page
+\pageref{sec:pca}).
 
 \subsection{Decomposition}
 \label{sec:decomposition}
-Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a principal component analysis are two matrices, the so-called scores and loadings. 
-The results can have either the same number of rows as the spectra matrix they were calculated from (scores-like), or they have as many wavelengths as the spectra (loadings-like).
+Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a
+principal component analysis are two matrices, the so-called scores and loadings.  The results can
+have either the same number of rows as the spectra matrix they were calculated from (scores-like), or
+they have as many wavelengths as the spectra (loadings-like).
 
-Both types of result objects can be ``re-imported'' into \chy objects with function \Rfunction{decomposition}\mFun{\Rfunction{decomposition}}. A scores-like object retains all per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are replaced. 
-A loadings-like object retains the wavelength information, while extra data is deleted (set to \Rcode{NA}) unless the value is constant for all spectra.
+Both types of result objects can be ``re-imported'' into \chy objects with function
+\Rfunction{decomposition}\mFun{\Rfunction{decomposition}}. A scores-like object retains all
+per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are
+replaced.  A loadings-like object retains the wavelength information, while extra data is deleted
+(set to \Rcode{NA}) unless the value is constant for all spectra.
 
-A demonstration can be found in the principal component analysis example (section~\ref{sec:pca}) on page \pageref{sec:pca}.
+A demonstration can be found in the principal component analysis example (section~\ref{sec:pca}) on
+page \pageref{sec:pca}.
 
 \section{Access to the data}
 \label{sec:access-parts}
-The main functions to retrieve the data of a \chy object are \Rfunction{[]}\mFun{\Rfunction{[]}, \Rfunction{[[]]}} and \Rfunction{[[]]}. 
+The main functions to retrieve the data of a \chy object are \Rfunction{[]}\mFun{\Rfunction{[]},
+  \Rfunction{[[]]}} and \Rfunction{[[]]}.
 
-The difference between these functions is that  \Rfunction{[]} returns a \chy object, whereas the result of \Rfunction{[[]]} is a data.frame if extra data columns were selected or otherwise the spectra matrix. Single extra data columns may be retrieved by \Rfunction{\$}\mFun{\Rfunction{\$}}.
+The difference between these functions is that \Rfunction{[]} returns a \chy object, whereas the
+result of \Rfunction{[[]]} is a data.frame if extra data columns were selected or otherwise the
+spectra matrix. Single extra data columns may be retrieved by \Rfunction{\$}\mFun{\Rfunction{\$}}.
 
-In order to change data, use \Rfunction{[]<-}, \Rfunction{[[]]<-}, and \Rfunction{\$<-}\mFun{\Rfunction{[]<-}, \Rfunction{[[]]<-}, \Rfunction{\$<-}} (see~).
+In order to change data, use \Rfunction{[]<-}, \Rfunction{[[]]<-}, and
+\Rfunction{\$<-}\mFun{\Rfunction{[]<-}, \Rfunction{[[]]<-}, \Rfunction{\$<-}} (see~).
 
 \subsection{Selecting and Deleting Spectra}
 \label{sec:select-delete-spectra}
@@ -551,45 +623,196 @@ diag (chondro [[1 : 3, , min ~ min + 2i]])
 \label{sec:fast-access-parts}
 \mFun{\Rfunction{[[]] \$. \$..}}
 
-\Rclass{hyperSpec} comes with three abbreviation functions for easy
-access to the data:
+\Rclass{hyperSpec} comes with three abbreviation functions for easy access to the data:
 \begin{description}
 \item [\Robject{x} \Rfunction{[[]]}] returns the spectra matrix (\Rcode{x\$spc}).
-\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]}] the cut spectra matrix is returned if wavelengths are specified in \Rfunarg{l}.
-\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, \Rfunarg{j}, \Rfunarg{l}]]}] If data columns are selected (second index), the result is a \Rclass{data.frame}.
-\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]] <-}] Also, parts of the spectra matrix can be set (only indices for spectra and wavelength are allowed for this function).
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]}] the cut spectra matrix is returned if
+  wavelengths are specified in \Rfunarg{l}.
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, \Rfunarg{j}, \Rfunarg{l}]]}] If data columns are
+  selected (second index), the result is a \Rclass{data.frame}.
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]] <-}] Also, parts of the spectra matrix
+  can be set (only indices for spectra and wavelength are allowed for this function).
 \item [\Robject{x} \Rfunction{[\Rfunarg{i}, \Rfunarg{j}] <-}] sets parts of \Rcode{x@data}.
-\item [\Robject{x} \Rfunction{\$.}] returns the complete \Rclass{data.frame} \Rcode{x@data}, with the spectra in column \Rcode{\$spc}.
+\item [\Robject{x} \Rfunction{\$.}] returns the complete \Rclass{data.frame} \Rcode{x@data}, with the
+  spectra in column \Rcode{\$spc}.
 \item [\Robject{x} \Rfunction{\$..}] returns the extra data (\Rcode{x@data} without \Rcode{x\$spc}).
-\item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without \Rcode{x\$spc}). However, the columns must match exactly in this case.
+\item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without
+  \Rcode{x\$spc}). However, the columns must match exactly in this case.
 \end{description}
 
 \subsection{Conversion to Long-Format data.frame}
 \label{sec:conv-long-form}
-Some functions need the data being an \emph{unstacked} or \emph{long-format} data.frame. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion function.
+Some functions need the data being an \emph{unstacked} or \emph{long-format}
+data.frame. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion
+function.
 
 \section{Plotting}
-\phy offers a variety of possibilities to plot spectra, spectral maps, the spectra matrix, time series, depth profiles, etc..
-This all is discussed in a separate document: see \verb+vignette ("plotting")+.
+\phy offers a variety of possibilities to plot spectra, spectral maps, the spectra matrix, time
+series, depth profiles, etc..  This all is discussed in a separate document: see
+\verb+vignette ("plotting")+.
 
 \section{Spectral (Pre)processing}
 \subsection{Cutting the Spectral Range}\mFun{\Rfunction{[]} \Rfunction{[[]]}}
-The extraction functions \Rfunction{[]} and \Rfunction{[[]]}
-can be used to cut the spectra: Their third argument takes wavelength
-specifications as discussed above and also logicals (i.e. vectors
+The extraction functions \Rfunction{[]} and \Rfunction{[[]]} can be used to cut the spectra: Their
+third argument takes wavelength specifications as discussed above and also logicals (i.e. vectors
 specifying with \Rcode{TRUE}/\Rcode{FALSE} for each column of \Rcode{\$spc}
 whether it should be included or not.\\
-\Rfunction{[]} returns a \Rclass{hyperSpec} object, \Rfunction{[[]]}
-the spectra matrix \Rcode{\$spc} (or the data.frame \Rcode{@data}
-if in addition data columns were specified) only.
+\Rfunction{[]} returns a \Rclass{hyperSpec} object, \Rfunction{[[]]} the spectra matrix \Rcode{\$spc}
+(or the data.frame \Rcode{@data} if in addition data columns were specified) only.
 
 <<cut.wl>>=
 flu [,, min ~ 408.5]
 flu [[,, c (min ~ min + 2i, max - 2i ~ max)]]
 @
+\subsection{Shifting Spectra}
+Sometimes, spectra need to be aligned along the spectral axis.
 
-\subsection{Spectral Interpolation and Smoothing}
-\mFun{\Rfunction{spc.bin} \Rfunction{spc.loess}} Sometimes, spectra need to be interpolated onto a new wavelength axis, \eg because measurements resulted in slightly shifted wavelength axes. Or data from a grating spectrometer with unequal data point spacing should be interpolated onto an evenly spaced wavelength axis. Also, the spectra can be smoothed: reducing the spectral resolution allows to increase the signal to noise ratio.  For chemometric data analysis reducing the number of data points per spectrum may be crucial as it reduces the dimensionality of the data.
+In general, two options are available for shifting spectra along the wavelength axis. 
+\begin{enumerate}
+\item The wavelength axis can be shifted, while the intensities stay unaffected.
+\item the spectra are interpolated onto a new wavelength axis, while the nominal wavelengths stay.
+\end{enumerate}
+
+The first method is very straightforward:
+<<>>=
+tmp <- chondro
+wl (tmp) <- wl (tmp) - 10
+@
+<<shift-wl, fig = TRUE, echo = FALSE, include = FALSE>>=
+plot (chondro [135])
+plot (tmp [135,,], add = TRUE, col = "red")
+@
+but it cannot be used if each spectrum (or groups of spectra) are shifted individually.
+
+In that case, interpolation is needed.  R offers many possibilities to interpolate (\eg
+\Rfunction{approx} for constant / linear approximation, \Rfunction{spline} for spline interpolation,
+\Rfunction{loess} can be used to obtain smoothed approximations, etc.). The appropriate interpolation
+strategy will depend on the spectra, and \phy therefore leaves it up to the user to select a sensible
+interpolation function.
+
+As an example, we will use natural splines to do the interpolation. It is convenient to set it up as
+a function:
+<<>>=
+interpolate <- function (spc, shift, wl){
+  spline (wl + shift, spc, xout = wl, method = "natural")$y
+}
+@
+
+This function can now be applied to a set of spectra:
+<<>>=
+tmp <- apply (chondro, 1, interpolate, shift = -10, wl = wl (chondro))
+@
+<<shift-interp, fig = TRUE, include = FALSE, echo = FALSE, results=hide>>=
+plot (chondro [135])
+plot (tmp [135], add = TRUE, col = "red")
+@
+<<shift-untsch, fig = TRUE, include = FALSE, echo = FALSE, results=hide>>=
+tmp <- chondro [135,, 990 ~ 1010]
+plot (tmp, lines.args = list (type = "b", pch = 19, cex = 0.5))
+wl (tmp) <- wl(tmp) - 0.5
+plot (tmp, lines.args = list (type = "b", pch = 19, cex = 0.5), add = TRUE, col = "red")
+tmp <- chondro [135]
+tmp <- apply (tmp, 1, function (x, wl, shift)
+              spline (wl + shift, x, xout = wl)$y,
+              wl = wl (tmp), shift = -0.5)
+plot (tmp, lines.args = list (type = "b", pch = 19, cex = 0.5), add = TRUE, col = "blue")
+@
+
+If different spectra need to be offset by different shift, use a loop\footnote{\Rfunction{sweep}
+  cannot be used hare, and while there is the possibility to use sapply or mapply, they are not
+  faster than the for loop in this case. Make sure to work on a copy of the spectra matrix, as that
+  is much faster than row-wise extracting and changing the spectra by \Rfunction{[[} and
+  \Rfunction{[[<-}.}
+<<>>=
+shifts <- rnorm (nrow (chondro))
+tmp <- chondro [[]]
+for (i in seq_len (nrow (chondro)))
+  tmp [i, ] <- interpolate (tmp [i, ], shifts [i], wl = wl (chondro))
+chondro [[]] <- tmp
+@
+
+\begin{figure}[t]
+  \subfloat[\label{fig:shift:wl} \Rfunction{wl<-}]{\includegraphics[width=.33\linewidth]{fig/fig-shift-wl}}
+  \subfloat[\label{fig:shift:interp} interpolation]{\includegraphics[width=.33\linewidth]{fig/fig-shift-interp}}
+  \subfloat[\label{fig:shift:untsch} ]{\includegraphics[width=.33\linewidth]{fig/fig-shift-untsch}}
+  \caption{Shifting the Spectra along the Wavelength Axis. \subref{fig:shift:wl} Changing the
+    wavelength values. \subref{fig:shift:interp} Interpolation. \subref{fig:shift:untsch} Detail view
+    of the phenylalanine band: shifting by \Rfunction{wl<-} (red) does not affect the intensities,
+    while the spectrum is slightly changed by interpolations (blue).}
+  \label{fig:shift}
+\end{figure}
+
+\subsubsection{Calculating the Shift}
+\label{sec:calculating-shift}
+Often, the shift in the spectra is determined by aligning a particular signal. This strategy works
+best with spectrally oversampled data that allows accurate deterimnation of the signal position.
+
+For the \Robject{chondro} data, let's use the maximum of the phenylalanine band between 990 and
+\rcm{1020}. As just the very maximum is too coarse, we'll use the maximum of a square polynomial
+fitted to the maximum and its two neighbours.
+<<>>=
+
+find.max <- function (y, x){
+  pos <- which.max (y) + (-1:1)
+  X <- x [pos] - x [pos [2]]
+  Y <- y [pos] - y [pos [2]]
+  
+  X <- cbind (1, X, X^2)
+  coef <- qr.solve (X, Y)
+
+  - coef [2] / coef [3] / 2 + x [pos [2]]
+}
+
+bandpos <- apply (chondro [[,, 990 ~ 1020]], 1, find.max,  wl (chondro [,, 990 ~ 1020]))
+refpos <- find.max (colMeans (chondro[[,, 990 ~ 1020]]),  wl (chondro [,, 990 ~ 1020]))
+
+shift1 <- refpos - bandpos
+@
+
+A second possibility is to optimize the shift. For this strategy, the spectra must be sufficiently
+similar, while low spectral resolution is compensated by using larger spectral windows.
+<<>>=
+chondro <- chondro - spc.fit.poly.below (chondro [,,min+3i ~ max - 3i], chondro)
+chondro <- sweep (chondro, 1, rowMeans (chondro [[]], na.rm = TRUE), "/")
+@
+
+
+<<>>=
+targetfn <- function (shift, wl, spc, targetspc){
+  error <- spline (wl + shift, spc, xout = wl)$y - targetspc
+  sum (error^2)
+}
+
+shift2 <- numeric (nrow (chondro))
+tmp <- chondro [[]]
+target <- colMeans (chondro [[]])
+for (i in 1 : nrow (chondro))
+  shift2 [i] <- unlist (optimize (targetfn, interval = c (-5, 5), wl = chondro@wavelength, 
+                                 spc = tmp[i,], targetspc = target)$minimum)
+@
+
+Figure~\ref{fig:fit-shift} shows that the second correction method works better for the chondrocyte data. This was expected, as the spectra are hardly or not oversampled, but are very similar to each other.
+\begin{figure}[t]
+  \centering
+<<shift-fit, fig = TRUE, echo = FALSE>>=
+df <- array2df (cbind (shifts, shifts + shift1, shifts + shift2), 
+                levels= list (NULL, method = c ("original", "find maximum", "interpolation")),
+                label.x = "shift")
+plot (histogram (~ shift | method, data = df, breaks = do.breaks(range (df$shift), 25),
+           layout = c (3,1)))
+@
+\caption{The shifts used to disturb the chondrocyte data (original), and the remaining shift after
+  correction with the two methods discussed here.}
+\label{fig:fit-shift}
+\end{figure}
+
+
+\subsection{Smoothing Interpolation}
+\mFun{\Rfunction{spc.bin} \Rfunction{spc.loess}} Spectra acquired by grating instruments are
+frequently interpolated onto a new wavelength axis, \eg because the unequal data point spacing should
+be removed. Also, the spectra can be smoothed: reducing the spectral resolution allows to increase
+the signal to noise ratio.  For chemometric data analysis reducing the number of data points per
+spectrum may be crucial as it reduces the dimensionality of the data.
 
 \Rpackage{hyperSpec} provides two functions to do so: \Rfunction{spc.bin} and \Rfunction{spc.loess}.
 
@@ -613,7 +836,9 @@ plot (b [, , 1600 ~ 1670], col = "blue", add = TRUE)
 \begin{figure}
 \includegraphics[width=0.66\textwidth]{fig/fig-fig-loess}
 \includegraphics[width=0.33\textwidth]{fig/fig-fig-loess-kl}
-\caption{\label{fig-spcloess}Smoothing interpolation by \Rfunction{spc.loess} with new data point   spacing of 2 cm\textsuperscript{-1} (red) and \Rfunction{spc.bin} (blue). The magnification on the   right shows how interpolation may cause a loss in signal height.}
+\caption{\label{fig-spcloess}Smoothing interpolation by \Rfunction{spc.loess} with new data point
+  spacing of 2 cm\textsuperscript{-1} (red) and \Rfunction{spc.bin} (blue). The magnification on the
+  right shows how interpolation may cause a loss in signal height.}
 \end{figure}
 
 \Rfunction{spc.loess} applies R's \Rfunction{loess} function for

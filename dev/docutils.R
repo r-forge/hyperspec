@@ -4,21 +4,30 @@ load ("~/hyperspec.rforge/Vignettes/introduction/functions.RData")
 ## find all exported functions
 ns <- asNamespace ("hyperSpec")
 
-new.functions <- data.frame (name = ls (envir = ns), group = NA, method = FALSE, description = NA)
+new.functions <- data.frame (name = ls (envir = ns), group = NA, method = FALSE, description = NA, internal = FALSE)
 
 ## find all exported methods
 tmp <- getGenerics (where = ns)@.Data
-new.functions <- rbind (functions,
-                        data.frame (name = tmp, group = NA, method = TRUE, description = ""))
+new.functions <- rbind (new.functions,
+                        data.frame (name = tmp, group = NA, method = TRUE, description = "", internal = FALSE))
 
 tmp <- match (functions$name, new.functions$name)
-
 cat ("vanished functions:\n", paste (functions$name [is.na (tmp)], collapse = "\n"), "\n\n")
 
+tmp <- match (new.functions$name, functions$name)
 
-functions <- merge (functions, new.functions, all.y = TRUE, all.x = TRUE)
+
+functions <- rbind (functions, new.functions [is.na (tmp),,drop = FALSE])
+
+
+library ("RGtk2DfEdit")
+
+attributes (functions$group)$class <- "factor"
+dfedit(functions)
+attributes (functions$group)$class <- c("ordered", "factor")
 
 save (functions, file = "~/hyperspec.rforge/Vignettes/introduction/functions.RData")
+
 
 
 make.fn.table <- function (){
