@@ -8,6 +8,7 @@ library (sp)
 
 source ("ggplot-gliomas-functions.R")
 load ("astrocytomas.RData")
+load ("astro.RData")
 astro
 
 cols <- c (N = "#008000", `A°II` = "#0000FF", `A°III+` = "#FF0000", all = "black")
@@ -27,7 +28,7 @@ memberships <- rbind.w.name (memberships)
 summary (memberships)
 dim (memberships)
 
-png ("membership.png", width = 400, height = 250)
+png ("membership.png", width = 600, height = 350, res = 100)
 ggplot (data = memberships, aes(x = x, y = y, colour = class)) +
   geom_step () +
   scale_colour_manual ("class", value = cols) +
@@ -65,7 +66,7 @@ p <- p + ylab (labels (spc, "spc"))  +
   scale_x_continuous (name = labels (spc, ".wavelength"), breaks = seq (800, 3000, 200), expand = c (0, 50))  +
     opts (legend.position = "none")
 
-png ("spc.png", width = 750, height = 300)
+png ("spc.png", width = 750, height = 450, res = 100)
 p
 dev.off ()
 
@@ -81,7 +82,7 @@ h$col <- colmix.rgb (h$col, purecol = cols [1:3])
 
 p <- ggplot (data = h, aes (x = x, y = y, fill = col, colour = col, group = 1)) + geom_hex (stat = StatIdentity) +
    coord_equal () + scale_fill_identity() + scale_colour_identity() +
-  opts (panel.background = theme_rect(fill = NA, colour = NA),
+  opts (panel.background = theme_rect(fill = NA, colour = "gray75"),
         panel.grid.major = theme_line(colour = NA), 
         panel.grid.minor = theme_line(colour = NA),
         plot.margin = unit(c(0.5, 0, 0 ,0), "lines")
@@ -106,7 +107,7 @@ p <- p + geom_point (data = median, aes (x = x, y = y), fill = "white", col = "b
 
 l <- legend (cols [-4], h$counts)
 
-png ("hist2d.png", width = 500, height = 300)
+png ("hist2d.png", width = 750, height = 450, res = 100)
 plot.with.legend.right (p, l)
 dev.off ()
 
@@ -120,7 +121,7 @@ h.hard$col <- colmix.rgb (h.hard$col, purecol = cols [1:3])
 
 p <- ggplot (data = h.hard, aes (x = x, y = y, fill = col, colour = col, group = 1)) + geom_hex (stat = StatIdentity) +
    coord_equal () + scale_fill_identity() + scale_colour_identity() +
-  opts (panel.background = theme_rect(fill = NA, colour = NA),
+  opts (panel.background = theme_rect(fill = NA, colour = "gray75"),
         panel.grid.major = theme_line(colour = NA), 
         panel.grid.minor = theme_line(colour = NA),
         plot.margin = unit(c(0.5, 0, 0 ,0), "lines")
@@ -141,7 +142,7 @@ for (class in seq_along (colnames (astro$label))){
 }
 p <- p + geom_point (data = median, aes (x = x, y = y), fill = "white", col = "black", shape = 21, size = 3)
 
-png ("hist2dhard.png", width = 500, height = 300)
+png ("hist2dhard.png", width = 750, height = 450, res = 100)
 plot.with.legend.right (p, l)
 dev.off ()
 
