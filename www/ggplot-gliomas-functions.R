@@ -1,3 +1,10 @@
+### Helper functions for the ggplot2 case study
+###
+### (c) 2010 Claudia Beleites, cbeleites at units dot it
+###
+### This code is released under GPL 3 http://www.gnu.org/licenses/gpl-3.0.html
+###
+
 ## function to tabulate values against fraction of objects
 fraction <- function (max.membership){
   max.membership <- round (max.membership, digits = 3)

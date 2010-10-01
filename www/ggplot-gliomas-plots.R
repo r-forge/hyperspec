@@ -145,4 +145,4 @@ png ("hist2dhard.png", width = 500, height = 300)
 plot.with.legend.right (p, l)
 dev.off ()
 
-p
+
