@@ -326,7 +326,7 @@ For details on \Rfunction{merge}, see the help on \Rpackage{base::merge}.
 
 As an example, let's construct a version of the \Robject{chondro} data like being taken as two maps with
 different spectral ranges. In each data set, some spectra are missing.
-<<collapse>>=
+<<merge-sample>>=
 chondro.low <- sample (chondro [,, 600 ~ 1200], 870)
 nrow (chondro.low)
 chondro.high <- sample (chondro [,, 1400 ~ 1800], 870)
@@ -334,7 +334,7 @@ nrow (chondro.high)
 @ 
 
 As all extra data columns are the same, no special declarations are needed for merging the data:
-<<>>=
+<<merge>>=
 chondro.merged <- merge (chondro.low, chondro.high)
 nrow (chondro.merged)
 @
@@ -570,7 +570,7 @@ This mechanism also works for the wavelength arguments of \Rfunction{[]},
 Sometimes wavelength axes need to be transformed, \eg converting from wavelengths to frequencies. In this case, retrieve the wavelength axis vector with \Rfunction{wl}\mFun{\Rfunction{wl}, \Rfunction{wl<-}}, convert each value of the resulting vector and assign the result with \Rfunction{wl<-}. Also the label of the wavelength axis may need to be adjusted.
 
 As an example, convert the wavelength axis of \Robject{laser} to frequencies. As the wavelengths are in nanometers, and the frequencies are easiest expressed in terahertz, an additional conversion factor of 1000 is needed:
-<<>>=
+<<merged>>=
 laser
 wavelengths <- wl (laser)
 frequencies <- 2.998e8 / wavelengths / 1000

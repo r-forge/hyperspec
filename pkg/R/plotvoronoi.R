@@ -5,7 +5,7 @@
 ###  plots intensity or extra data column over 2 extra data columns
 
 plotvoronoi <- function (object, model = spc ~ x * y,
-                         use.tripack = TRUE, mix = TRUE, ...){
+                         use.tripack = FALSE, mix = FALSE, ...){
   if (use.tripack && mix)
       object@data <- object@data [sample (nrow (object)),]
 

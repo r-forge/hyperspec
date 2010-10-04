@@ -22,7 +22,7 @@ plotmap (object, model = spc ~ x * y,
          \dots)
 
 plotvoronoi (object, model = spc ~ x * y,
-             use.tripack = TRUE, mix = TRUE,
+             use.tripack = FALSE, mix = FALSE,
              \dots)
 
 map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
@@ -80,7 +80,10 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
   On the \code{\link{chondro}} data set, \code{plotmap} is roughly 5
   times faster than \code{plotvoronoi} using tripack, and ca. 15 times
   faster than \code{plotvoronoi} using deldir. Package tripack, however, is
-  free only for non-commercial use.
+  free only for non-commercial use. Also, it seems that tripack version
+  hang (R running at full CPU power, but not responding nor finishing
+  the calculation) for certain data sets. In this case, \code{mix =
+  TRUE} may help.
   
   \code{map.identify} calls \code{plotmap} and \code{plotvoronoi},
   respectively and waits for (left) mouse clicks on points. Other mouse

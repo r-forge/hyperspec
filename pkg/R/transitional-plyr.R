@@ -122,7 +122,7 @@ rbind.fill <- function(...) {
   if (is.list(dfs[[1]]) && !is.data.frame(dfs[[1]])) {
     dfs <- dfs[[1]]
   }
-  dfs <- compact(dfs)
+  dfs <- dfs [!sapply (dfs, is.null)]  # compact(dfs) -> dependency plyr.
   
   if (length(dfs) == 1) return(dfs[[1]])
   

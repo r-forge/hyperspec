@@ -1,7 +1,6 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*- 
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \SweaveInput{vignettes.defs}
-
 \usepackage{longtable}
 \usepackage{array}
 
@@ -13,7 +12,7 @@
 % \VignetteIndexEntry{hyperSpec plotting functions}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
-  % \renewenvironment{Schunk}{\begin{small}}{\end{small}}
+% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2}
 
 \newcommand{\plottab}[2]{
 \vspace{1ex}\tabularnewline
