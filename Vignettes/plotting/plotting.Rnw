@@ -1,7 +1,6 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*- 
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \SweaveInput{vignettes.defs}
-
 \usepackage{longtable}
 \usepackage{array}
 
@@ -13,7 +12,7 @@
 % \VignetteIndexEntry{hyperSpec plotting functions}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
-  % \renewenvironment{Schunk}{\begin{small}}{\end{small}}
+% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2}
 
 \newcommand{\plottab}[2]{
 \vspace{1ex}\tabularnewline
@@ -276,12 +275,9 @@ plotspc (paracetamol,
 \\
 \plottab{adding to a spectra plot}{add-line} \Rfunction{plotspc} uses base graphics. After plotting
 the spectra, more content may be added to the graphic by \Rfunction{abline}, \Rfunction{lines}, \Rfunction{points}, etc.
-<<echo = false>>=
-rm (laser)
-@
 <<add-line, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plot (laser, "spcmeansd")
-abline (v = c (405, 405.1, 405.3, 405.4), 
+abline (v = c(405.0063, 405.1121, 405.2885, 405.3591), 
         col = c("black", "blue", "red", "darkgreen"))
 @
 \end{longtable}
@@ -390,9 +386,8 @@ plotc (flu [,, 450],
 \plottab{Adding things to the plot: customized panel function}{lin-cal-5} 
 As \Rfunction{plotc} uses the \Rpackage{lattice} function \Rfunction{xyplot}, additions to 
 the plot must be made via the panel function:
-<<lin-cal-5, fig = TRUE, width = 4, height = 2.6,include = FALSE>>=
-panel.calibration <- function (x, y, ..., 
-      clim = range (x), level = .95) {
+<<lincal-panel>>=
+panelcalibration <- function (x, y, ..., clim = range (x), level = .95) {
   panel.xyplot (x, y, ...)
   lm <- lm (y ~ x)
   panel.abline (coef (lm), ...)
@@ -403,8 +398,9 @@ panel.calibration <- function (x, y, ...,
   panel.lines (cx, cy [,2], col = "gray")
   panel.lines (cx, cy [,3], col = "gray")
 }
-
-plotc (flu [,,405], panel = panel.calibration,
+@
+<<lin-cal-5, fig = TRUE, width = 4, height = 2.6,include = FALSE>>=
+plotc (flu [,,405], panel = panelcalibration,
        pch = 4, clim = c (0, 0.35), level = .99)
 @
 \end{longtable}
@@ -416,7 +412,7 @@ plotc (flu [,,405], panel = panel.calibration,
 \plottab{Abscissae other than c}{plotc4}
  Other abscissae may be specified by explicitly giving the model formula:
 <<plotc4, fig = TRUE, width = 4, height = 2.6,include = FALSE>>=
- plotc (laser [,, c (405.0, 405.1, 405.3, 405.4)], 
+ plotc (laser [,, c(405.0063, 405.1121, 405.2885, 405.3591)], 
         spc ~ t, 
         groups = .wavelength, 
         type = "b", 

@@ -108,7 +108,7 @@ Alternateively they can be extracted from the graph using \Rfunction{locator} wh
 wls <- locator()$x
 @ 
 <<echo = FALSE, results = hide>>=
-wls <-  c (405.0, 405.1, 405.3, 405.4)
+wls <-  c(405.0063, 405.1121, 405.2885, 405.3591)
 @
 <<markspc, fig = TRUE, width = 5, height = 3, include = FALSE>>=
 plot (laser, "spcmeansd")
