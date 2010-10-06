@@ -1,7 +1,216 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{color}
+\usepackage{babel}
+
+\usepackage{array}
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[numbers]{natbib}
+\usepackage[unicode = true,
+            bookmarks = true,
+            bookmarksnumbered = false,
+            bookmarksopen = false,
+            breaklinks = false,
+            pdfborder = {0 0 1},
+            backref = false,
+            colorlinks = true,
+            citecolor=green!50!black,        % color of links to bibli
+            filecolor=blue!50!black,      % color of file links
+            urlcolor=blue!50!black,           % color of external links
+            linkcolor=blue!50!black          % color of internal links
+           ]{hyperref}
+\usepackage{hyphenat}
+
+\AtBeginDocument{
+  	\setlength{\parskip}{\medskipamount}
+	\setlength{\parindent}{0pt}
+   \fvset{listparameters={\setlength{\topsep}{0pt}}}
+   \renewenvironment{Schunk}{\vspace{\topsep}\begin{small}}{\end{small}\vspace{\topsep}
+   }
+}
+
+% my preferred packages
+\usepackage{xspace}
+\usepackage{tikz}
+\usepackage{subfig}
+\usepackage{booktabs}
+
+\usepackage{hyphenat}
+\usepackage{fancyvrb}
+%\usepackage{siunitx}
+%\usepackage{relsize}
+
+\makeatletter
+\@ifundefined{showcaptionsetup}{}{%
+ \PassOptionsToPackage{caption=false}{subfig}}
+\usepackage{subfig}
+\makeatother
+
+% fancy warning box
+\newcommand{\warnbox}[2]{
+\begin{tikzpicture}
+\node [draw=red, very thick, rectangle, rounded corners, inner sep=10pt] (box){%
+    \begin{minipage}{\linewidth}
+      \vspace{0.5\baselineskip}
+      #2
+    \end{minipage}
+};
+\node[fill = red, text = white, right=5mm, rounded corners] at (box.north west)
+  {\sffamily\bfseries\large #1};
+\end{tikzpicture}%
+}
+
+\newcommand{\Rcode}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Robject}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rcommand}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+\newcommand{\Rfunction}[1]{\texorpdfstring{\nohyphens{\texttt{#1}}}{#1}}
+
+\newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rmethod}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+\newcommand{\Rclass}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
+
+\newcommand{\mFun}[1]{\marginpar{\scriptsize \Rfunction{#1}}}
+
+\newcommand{\phy}{\texorpdfstring{\nohyphens{\textit{hyperSpec}}}{hyperSpec}\xspace}
+\newcommand{\chy}{\Rclass{hyperSpec}\xspace}
+
+\newcommand{\eg}{e.\,g.\xspace}
+\newcommand{\ie}{i.\,e.\xspace}
+
+\newcommand{\mum}[1]{\ensuremath{#1\;}\textmu m\xspace}
+\newcommand{\rcm}[1]{\ensuremath{#1\;\mathrm{cm^{-1}}}\xspace}
+
+\newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
+
+\author{Claudia Beleites \url{<cbeleites@units.it>}\\
+CENMAT, DMRN, University of Trieste}
+
+\SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, ps = FALSE}
+\SweaveOpts{width=6,height=3}
+\SweaveOpts{prefix.string=fig/fig}
+\SweaveOpts{keep.source = TRUE, strip.white=TRUE}
+\AtBeginDocument{
+\setkeys{Gin}{width = .5\textwidth}
+}
+<<startup, echo = FALSE, results = hide>>=
+options(SweaveHooks=list(fig=function() {
+  par(mar = c (4.1, 4.1, 1, .6))
+
+  trellis.pars <- trellis.par.get ("layout.heights")
+  trellis.pars [grep ("padding", names (trellis.pars))] <- 0
+  trellis.par.set(layout.heights = trellis.pars)
+  
+  trellis.pars <- trellis.par.get ("layout.widths")
+  trellis.pars [grep ("padding", names (trellis.pars))] <- 0
+  trellis.par.set(layout.widths = trellis.pars)
+}))
+options ("width" = 100)
+library (hyperSpec)
+
+# redefine lattice functions so that the result is printed without external print command
+setMethod ("plot",
+           signature (x = "hyperSpec", y = "character"),
+           function (x, y, ...){
+             tmp <- hyperSpec:::.plot (x, y, ...)
+             if (is (tmp, "trellis"))
+               print (tmp)
+             invisible (tmp)
+           })
+
+
+plotmap <- function (...) print (hyperSpec:::plotmap (...))
+
+setMethod ("levelplot", signature (x = "hyperSpec", data = "missing"),
+   function (x, data, ...) {
+	   l <- hyperSpec:::.levelplot (x = formula (spc ~ x * y), data = x, ...)
+		print (l)
+	}
+)
+
+setMethod ("levelplot", signature (x = "formula", data = "hyperSpec"), 
+   function (x, data, ...) print (hyperSpec:::.levelplot (x, data, ...))
+)
+
+plotc <- function (...){
+   call <- match.call () 
+   call [[1]] <- hyperSpec:::plotc 
+   print (eval (call))
+}
+
+plotvoronoi <- function (...) print (hyperSpec:::plotvoronoi (...))
+
+# set standardized color palettes 
+seq.palette <- colorRampPalette (c ("white", "dark green"), space = "Lab")
+
+#seq.palette   <- colorRampPalette (brewer.pal (9, "Greens"), space = "Lab")
+
+#seqsq.palette <- function (n) rgb (colorRamp (brewer.pal (9, "Greens"), space = "Lab") 
+#                                   (seq (1/3, 1, length.out = n)^2), maxColorValue = 255)
+
+YG.palette <- function (n) rgb (colorRamp (brewer.pal (9, "Greens"), space = "Lab") 
+                                (seq (1/3, 1, length.out = n)^2), maxColorValue = 255)
+
+										  
+div.palette <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "#8164BA", "#967CC5", 
+                                   "#AC95D1", "#C1AFDC", "#D5C9E8", "#E0E3E3", "#F8F8B0", "#F7E6C2", 
+											  "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
+											  "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
+
+make.bib <- function (..., file = "") {
+  pkg <- c (...)
+
+  toBibtex.citation <- function(object, ...)
+    {
+      z <- paste("@", attr(object, "entry"), "{", attr(object, "key"), ",", sep="")
+      
+      if("author" %in% names(object)){
+        object$author <- toBibtex(object$author)
+      }
+      
+      for(n in names(object))
+        z <- c(z, paste("  ", n, " = {", object[[n]], "},", sep=""))
+      
+      z <- c(z, "}")
+      class(z) <- "Bibtex"
+      z
+    }
+
+  if (length (pkg) == 0) {
+    pkg <- loadedNamespaces()
+    pkg <- pkg [! pkg %in% c("graphics", "grDevices", "grid", "methods", "stats", "utils")]
+  }
+  
+  for (p in pkg){
+    tmp <- citation (p)
+    if (is (tmp, "citation")){
+      attr (tmp, "key") <- p
+      cat ( toBibtex (tmp), file = file, sep = "\n")
+    } else if (length (tmp) == 1){
+      attr (tmp [[1]], "key") <- p
+      cat( toBibtex (tmp [[1]]), file = file, sep = "\n")
+    } else{
+      for (i in seq_along (tmp)){
+        attr (tmp [[i]], "key") <- paste (p, letters [i], sep = ".")
+      cat (toBibtex (tmp[[i]]), file = file, sep = "\n")
+      } 
+    }
+  }
+}
+
+@
 
 <<mailme, results = tex, echo = FALSE, strip.white=FALSE>>=
-cat ("\\newcommand{\\mailme}{\\href{mailto:", packageDescription ("hyperSpec")$Maintainer, "}{\\texttt{", packageDescription ("hyperSpec")$Maintainer,"}}}\n", sep = "")
+cat ("\\newcommand{\\mailme}{\\href{mailto:", 
+     packageDescription ("hyperSpec")$Maintainer, 
+	  "}{\\texttt{", 
+	  packageDescription ("hyperSpec")$Maintainer,
+	  "}}}\n", 
+	  sep = "")
 @

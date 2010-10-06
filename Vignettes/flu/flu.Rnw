@@ -1,6 +1,6 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \SweaveInput{vignettes.defs}
-\hypersetup{pdftitle={Flu},
+\hypersetup{pdftitle={hyperSpec vignette flu},
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's flu data set},
  pdfkeywords={hyperSpec, flu, calibration}}
