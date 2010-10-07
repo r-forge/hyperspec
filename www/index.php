@@ -7,10 +7,46 @@
 $domain=ereg_replace('[^\.]*\.(.*)$','\1',$_SERVER['HTTP_HOST']);
 $group_name=ereg_replace('([^\.]*)\..*$','\1',$_SERVER['HTTP_HOST']);
 $themeroot='http://r-forge.r-project.org/themes/rforge/';
-
+$group_id=366;
 echo '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
-<!DOCTYPE html
+
+<?php
+	function TableOfContents($depth)
+	/*AutoTOC function written by Alex Freeman
+	* Released under CC-by-sa 3.0 license
+	* http://www.10stripe.com/  */
+	{
+	$filename = __FILE__;
+	//read in the file
+	$file = fopen($filename,"r");
+	$html_string = fread($file, filesize($filename));
+	fclose($file);
+ 
+	//get the headings down to the specified depth
+	$pattern = '/<h[1-'.$depth.']*[^>]*>.*?<\/h[1-'.$depth.']>/';
+	$whocares = preg_match_all($pattern,$html_string,$winners);
+ 
+	//reformat the results to be more usable
+	$heads = implode("\n",$winners[0]);
+	$heads = str_replace('<a name="','<a href="#',$heads);
+	$heads = str_replace('</a>','',$heads);
+	$heads = preg_replace('/<h([1-'.$depth.'])[^>]*>/','<li class="toc$1">',$heads);
+	$heads = preg_replace('/<\/h[1-'.$depth.']>/','</a></li>',$heads);
+ 
+	//plug the results into appropriate HTML tags
+	$contents = '<div id="toc"> 
+	<p id="toc-header"><strong>Contents</strong></p>
+	<ul>
+	'.$heads.'
+	</ul>
+	</div>';
+	echo $contents;
+	}
+ ?>
+ 
+ 
+ <!DOCTYPE html
   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en   ">
@@ -40,31 +76,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 </tr>
 </table>
 
+<?php TableOfContents (2); ?>
 
 <p> The package is publicly accessible from the
-  <a href="http://<?php echo $domain; ?>/scm/<?php echo $group_name; ?>/">SVN repository</a>.
+  <a href="http://<?php echo $domain; ?>/scm/?group_id=<?php echo $group_id; ?>">SVN repository</a>.
 </p>
-<p> You find the <strong>R-forge project summary page
-<a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</a></strong>. </p>
-<!--
-<h1><tt>hyperSpec</tt> participates in the <a href="http://socghop.appspot.com/gsoc/program/home/google/gsoc2010"/>Google Summer of Code 2010</a></h1>
-Info about <tt>hyperSpec</tt>:
-<ul>
-<li>here</li>
-<li><a href="http://rwiki.sciviews.org/doku.php?id=packages:cran:hyperspec"/>R Wiki</a></li>
-<li><a href="http://rwiki.sciviews.org/doku.php?id=developers:projects:gsoc2010:hyperspec"/>Idea List for GSoC project</a></li>
-<li><a href="http://www.r-project.org"/>R</a></li>
-</ul>
-Students please note:
-<ul>
-<li>For the official application to Google you need to solve one of the "stand alone" tasks of the <link href="http://rwiki.sciviews.org/doku.php?id=developers:projects:gsoc2010:hyperspec"/>Idea List for GSoC project</link><br />
-You may contact me about the topic and outline of your solution.
-</li>
-<li>Application deadline is April 9th</li>
-</ul>
--->
-<h1>Installation</h1>
-<h2>... inside R</h2>
+<p> There is also a <a href="http://<?php echo $domain; ?>/projects/?group_id=<?php echo $group_id; ?>">R-forge project summary page</a>. </p>
+
+<h1><a name="Installation">Installation</a></h1>
+<h2><a name="Installation in R">Inside R</a></h2>
 <ul>
 	<li>To install the latest stable version from CRAN, type in R: 
 		<pre>install.packages("hyperSpec")</pre>
@@ -74,16 +94,16 @@ You may contact me about the topic and outline of your solution.
 	</li>
 </ul>
 
-<h2>... from source or binaries automatically built by r-forge (nightly build)</h2>
+<h2><a name="Installation archive">From source or binary archives automatically built by r-forge (nightly build)</a></h2>
 <ol>
-<li><a href="http://<?php echo $domain; ?>/R/<?php echo $group_name; ?>/">Download</a> the appropriate file.</li>
+<li><a href="http://<?php echo $domain; ?>/R/?group_id=<?php echo $group_id; ?>">Download the appropriate file</a>.</li>
 <li>Install the package:<br/>
 <tt>R CMD INSTALL <i>filename</i></tt></li>
 </ol>
 Please note that the automatic windows build on r-forge is often one or two days behind. Windows
 users: do not unzip the archive.
 
-<h2>... from svn source</h2>
+<h2><a name="Installation svn">From svn source</a></h2>
 <ol>
   <li>get an svn checkout using your favourite svn client program, or<br/>
     <tt>svn checkout svn://svn.r-forge.r-project.org/svnroot/hyperspec/pkg</tt>
@@ -94,10 +114,10 @@ users: do not unzip the archive.
   </li>
 </ol>
 
-<h2>... via package built on my computer</h2>
+<h2><a name="Installation prebuilt">Via package built on my computer</a></h2>
 <ol>
-  <li><a href="hyperSpec-prebuilt.tar.gz">Download</a> the prebuilt .tar.gz source package.<br/>
-    Windows users will probably need the <a href="hyperSpec-prebuilt.zip">compiled .zip package</a>
+  <li>Download the <a href="hyperSpec-prebuilt.tar.gz">prebuilt .tar.gz source</a>.<br/>
+    Windows users will probably need the <a href="hyperSpec-prebuilt.zip">compiled .zip archive</a>
   </li>
   <li>Install the package:<br/>
     <tt>R CMD INSTALL <i>filename</i></tt>
@@ -105,7 +125,7 @@ users: do not unzip the archive.
 </ol>
 These may be a bit outdated (the date is pkg/DESCRIPTION), but they work if the nightly build fails.
 
-<h1>Documentation</h1>
+<h1><a name="Documentation">Documentation</a></h1>
 
 <ul>
 	<li>The <a href="http://rwiki.sciviews.org/doku.php?id=packages:cran:hyperspec">Wiki-page</a> gives an overview and</li>
@@ -136,7 +156,7 @@ These may be a bit outdated (the date is pkg/DESCRIPTION), but they work if the 
 	</li>
 </ul>
 
-<h1>Help, Suggestions, Feature Requests, and Bugs</h1>
+<h1><a name="Help">Help, Suggestions, Feature Requests, and Bug Reports</a></h1>
 <ul>
 	<li>There is a <a href="http://r-forge.r-project.org/forum/forum.php?forum_id=1218">help forum</a>
     on <tt>hyperSpec</tt></li>
@@ -156,7 +176,7 @@ These may be a bit outdated (the date is pkg/DESCRIPTION), but they work if the 
   <li><a href="http://r-forge.r-project.org/tracker/?atid=1501&group_id=366&func=browse">bugs</a> are also found on r-forge.</li>
 </ul>
 
-<h1>Maintainer</h1>
+<h1><a name="Contact">Contact</a></h1>
 <p>
 Claudia Beleites<br/>
 CENMAT, Materials and Natural Resources Dept.<br/> 
