@@ -76,12 +76,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 </tr>
 </table>
 
-<?php TableOfContents (2); ?>
+<?php TableOfContents (1); ?>
 
 <p> The package is publicly accessible from the
   <a href="http://<?php echo $domain; ?>/scm/?group_id=<?php echo $group_id; ?>">SVN repository</a>.
 </p>
-<p> There is also a <a href="http://<?php echo $domain; ?>/projects/?group_id=<?php echo $group_id; ?>">R-forge project summary page</a>. </p>
+<p> There is also a <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/">R-forge project summary page</a>. </p>
 
 <h1><a name="Installation">Installation</a></h1>
 <h2><a name="Installation in R">Inside R</a></h2>
