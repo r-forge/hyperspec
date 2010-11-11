@@ -24,10 +24,9 @@ logentry(x, short = NULL, long = NULL, date = NULL, user = NULL)
   The name of the funtion that called \code{logentry} is used for
   \code{short}, and its call for \code{long}.
 
-  For \code{date}, the
-  current \code{\link[base]{Sys.time}()} is used, and \code{user} is
-  constructed from \code{\link[base]{Sys.info}()}'s \code{user} and
-  \code{nodename}. 
+  For \code{date}, the current \code{\link[base]{Sys.time}()} is used,
+  and \code{user} is constructed from \code{\link[base]{Sys.info}()}'s
+  \code{user} and \code{nodename}.
 }
 \value{
   \code{x@log} (\emph{\code{data.frame}}) including the new row.

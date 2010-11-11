@@ -12,7 +12,15 @@ logbook(x)
   \item{x}{a \code{hyperSpec} object}
 }
 \details{
-A \code{data.frame} in slot \code{x@log} keeps track of the changes done to the \code{hyperSpec} object.
+A \code{data.frame} in slot \code{x@log} keeps track of the changes done
+to the \code{hyperSpec} object.
+
+If option \code{log} is \code{TRUE}, entries will be generated automatically by
+hyperSpec functions that do assignments (see \code{\link{hyperSpec.setOptions}}). Entries
+can also be created manually via \code{\link{logentry}}.
+}
+\seealso{
+  \code{\link{hyperSpec.setOptions}}, \code{\link{logentry}}.
 }
 \value{
 a \code{data.frame} containing \code{x@log}}

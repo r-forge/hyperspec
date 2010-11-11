@@ -12,16 +12,33 @@
 }
 \arguments{
   \item{X, spc}{a \code{hyperSpec} object}
-  \item{MARGIN}{The subscript which the function will be
-    applied over. \code{1} indicates rows, \code{2} indicates columns,
-	 \code{1:2} indicates that \code{FUN} should be applied to all
-	 elements of the spectra matrix.
-    }
+  
+  \item{MARGIN}{The subscript which the function will be applied over.
+
+	 \code{1} indicates rows (\code{FUN} is applied to each spectrum),
+
+	 \code{2} indicates columns (\code{FUN} is applied to each
+	 wavelength),
+	 
+	 \code{1 : 2} indicates that \code{FUN} should be applied to each
+	 single element of the spectra matrix. Note that many basic
+	 mathematical functions are already defined for hyperSpec objects
+	 (see \code{\link{Math}}).
+
+	 If \code{MARGIN} is missing, the whole spectra matrix is handed to
+    \code{FUN}, see also the examples.
+  }
+
   \item{FUN}{function to compute the summary statistics}
+
   \item{\dots}{further arguments passed to \code{FUN}}
-  \item{label.wl,label.spc}{new labels for wavelength and spectral intensity axes}
-  \item{new.wavelength}{for \code{MARGIN = 2}: numeric vector or name of the argument in \dots 
-  that is to be used (character) as wavelength axis of the resulting object.}
+  
+  \item{label.wl, label.spc}{new labels for wavelength and spectral intensity axes}
+  
+  \item{new.wavelength}{for \code{MARGIN = 2}: numeric vector or name
+	 of the argument in \dots that is to be used (character) as
+	 wavelength axis of the resulting object.}
+
   \item{short, long, user, date}{aguments passed to \code{logentry}}
 }
 \value{
@@ -49,14 +66,21 @@
 }
 \examples{
 
-plot (apply (chondro, 2, range), "spc")
+plotspc (apply (chondro, 2, range))
 
-plot (apply (chondro, 1, mean), "map")
+avgflu <- apply (flu, 1, mean,
+                 label.spc = expression (bar (I)),
+                 new.wavelength = mean (wl (flu)))
+avgflu
 
 flu[[,,405:407]]
 apply (flu, 1:2, "*", -1)[[,,405:407]]
 
-all (apply (flu, 1:2, log)[[]] - log(flu[[]]) == 0)
+## without MARGIN the whole matrix is handed to FUN
+apply (flu [,,405:407], , print) [[]]
+
+## whereas MARGIN = 1 : 2 leads to FUN being called for each element separately
+apply (flu [,,405:407], 1 : 2, print) [[]]
 }
 
 \author{C. Beleites}

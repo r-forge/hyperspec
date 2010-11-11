@@ -21,7 +21,6 @@ spc.loess <- function (spc, newx, enp.target = nwl (spc) / 4,
     else
       predict (loess, x)
   }
-
   
   chk.hy (spc)
   validObject (spc)

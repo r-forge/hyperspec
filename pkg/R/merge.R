@@ -33,7 +33,7 @@
   tmp$spc <- I (cbind (spc.x, spc.y))
   
   x@data <- tmp
-  x@wavelength <- c (x@wavelength, y@wavelength)
+  .wl (x) <- c (x@wavelength, y@wavelength)
 
   x
 }

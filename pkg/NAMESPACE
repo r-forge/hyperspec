@@ -58,7 +58,10 @@ export (.DollarNames.hyperSpec,
         wc,
         stacked.offsets,
         trellis.factor.key,
-        isample
+        isample,
+        hyperSpec.getOptions,
+        hyperSpec.getOption,
+        hyperSpec.setOptions
         )
 
 exportMethods ("initialize",

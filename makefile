@@ -31,7 +31,7 @@ Vignettes/FileIO/FileIO.Rnw: Vignettes/FileIO/scan.txt.PerkinElmer.R
 $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).Rnw): $(foreach V,$(VIGNETTES),Vignettes/$(V)/vignettes.defs) 
 #	touch $@
 
-Vignettes/*.zip: FORCE
+#Vignettes/*.zip: FORCE
 
 Vignettes/%.zip: 
 	cd $(dir $@) && zip -u $(notdir $@)
@@ -138,6 +138,12 @@ build: DESCRIPTION $(SRC)
 
 check: $(SRC)
 	R CMD check pkg
+
+checkfast: $(SRC)
+	R CMD check --no-examples --no-tests --no-manual --no-vignettes pkg
+
+checktest: $(SRC)
+	R CMD check --no-manual --no-vignettes pkg
 
 clean: FORCE
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).tex) 
