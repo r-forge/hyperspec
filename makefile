@@ -11,7 +11,7 @@ SRC := $(shell find pkg -type f)
 all: vignettes data www DESCRIPTION check build
 #		@echo all vignettes: $(VIGNETTES)
 
-FORCE: # always done, like .PHONY, but doesn't remove file
+.FORCE: # always done, like .PHONY, but doesn't remove file
 
 .INTERMEDIATE: $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).tex)
 #.SECONDARY: Vignettes/*.zip
@@ -33,7 +33,7 @@ $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).Rnw): $(foreach V,$(VIGNETTES),Vign
 
 #Vignettes/*.zip: FORCE
 
-Vignettes/%.zip: 
+Vignettes/%.zip: .FORCE
 	cd $(dir $@) && zip -u $(notdir $@)
 
 Vignettes/flu/flu.Rnw: Vignettes/flu/scan.txt.PerkinElmer.R 

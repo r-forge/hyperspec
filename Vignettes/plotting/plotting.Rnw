@@ -475,6 +475,11 @@ levelplot (spc ~ .wavelength * t, laser)
 <<plotmap-barb, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 barb <- do.call (collapse, barbituates[1:50])
 barb <- orderwl (barb)
+if (!require (latticeExtra)){
+  panel.levelplot.points <- function (...) 
+    panel.levelplot (...)
+  warning ('package latticeExtra required, panel.levelplot.points replaced by dummy')
+}
 levelplot (spc ~ .wavelength * z, barb, 
            panel = panel.levelplot.points,
            cex = .33, col.symbol = NA,

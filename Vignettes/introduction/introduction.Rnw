@@ -156,11 +156,17 @@ library (hyperSpec)
 
 The global behaviour of \phy can be configured via options. The values of the options can be
 retrieved with \Rfunction{hyperSpec.getOptions} and \Rfunction{hyperSpec.getOption}, and changed with
-\Rfunction{hyperSpec.setOptions}.  Currently, the only option provided is \Robject{log}, a logical
-specifying whether assignment functions should automatically add entries to the logbook (see
-\ref{sec:structure-chy} and ).
+\Rfunction{hyperSpec.setOptions}.  
 
+Currently, the only option provided is \Robject{log}, a logical specifying whether assignment
+functions should automatically add entries to the logbook (see \ref{sec:structure-chy} and
+\ref{sec:speed-considerations} on page \pageref{sec:speed-considerations}).
 
+The default behaviour is to automatically log changes to the object. As the automatic logging
+mechanism can only log function calls and parameters (as opposed to the intention of the function
+call), you may obtain a more useful log by switching off the automatic logging and 
+
+TODO
 
 \section{The structure of \Rclass{hyperSpec} objects}
 \label{sec:structure-chy}
@@ -386,7 +392,7 @@ approxfun <- function (y, wl, new.wl){
           )$y
 }
 @
-which can be applied to all spectra.
+which can be applied to the spectra:
 
 <<>>=
 merged <- merge (chondro [1:7,, 610 ~ 620], chondro [5:10,, 615 ~ 625], all = TRUE)
@@ -713,6 +719,7 @@ flu [,, min ~ 408.5]
 flu [[,, c (min ~ min + 2i, max - 2i ~ max)]]
 @
 \subsection{Shifting Spectra}
+\label{sec:shifting-spectra}
 Sometimes, spectra need to be aligned along the spectral axis.
 
 In general, two options are available for shifting spectra along the wavelength axis. 
@@ -771,6 +778,7 @@ If different spectra need to be offset by different shift, use a loop\footnote{\
   faster than the for loop in this case. Make sure to work on a copy of the spectra matrix, as that
   is much faster than row-wise extracting and changing the spectra by \Rfunction{[[} and
   \Rfunction{[[<-}.}
+
 <<>>=
 shifts <- rnorm (nrow (chondro))
 tmp <- chondro [[]]
@@ -1236,8 +1244,21 @@ page~\pageref{sec:bind}).  Another, similar way to combine a number of \chy obje
 wavelength axes or extra data columns is \Rfunction{collapse}\mFun{\Rfunction{collapse}} (see
 section~\ref{sec:collapse}, page~\pageref{sec:collapse}).
 
-\subsection{Speed Considerations}
-Sometimes the 
+\section{Speed Considerations}
+\label{sec:speed-considerations}
+While most of \phy's functions work at a decent speed for interactive sessions (of course depending
+on the size of the object), iterated (repeated) calculations as for bootstrapping or iterated cross
+validation may ask for special speed considerations.
+
+In that case, one possibility to speed up is to switch of the automatic logging of how the objects
+are transformed. Logging involves appending rows to the data.frame in slot \Rcode{@log}.  While the
+absolute amount of time needed to add a logbook entry is small, it may be executed very often
+(e.g. during each call of \Rfunction{[}).
+
+
+
+Another, 
+
 
 \bibliographystyle{unsrtnat}
 \bibliography{introduction}
