@@ -159,14 +159,7 @@ retrieved with \Rfunction{hyperSpec.getOptions} and \Rfunction{hyperSpec.getOpti
 \Rfunction{hyperSpec.setOptions}.  
 
 Currently, the only option provided is \Robject{log}, a logical specifying whether assignment
-functions should automatically add entries to the logbook (see \ref{sec:structure-chy} and
-\ref{sec:speed-considerations} on page \pageref{sec:speed-considerations}).
-
-The default behaviour is to automatically log changes to the object. As the automatic logging
-mechanism can only log function calls and parameters (as opposed to the intention of the function
-call), you may obtain a more useful log by switching off the automatic logging and 
-
-TODO
+functions should automatically add entries to the logbook (see \ref{sec:logbook}).
 
 \section{The structure of \Rclass{hyperSpec} objects}
 \label{sec:structure-chy}
@@ -221,11 +214,9 @@ expressions for axis annotation, see \verb+? plotmath+ and \verb+demo (plotmath)
 Table~\ref{tab:functions}~(p.~\pageref{tab:functions}) in the appendix gives an overview of the functions implemented by \phy. 
 
 \section{Obtaining Basic Information about \phy Objects}
-As
-\mFun{print, show, summary}
-usual, the \Rmethod{print} and \Rmethod{show} methods display
-information about the object, and \Rmethod{summary} yields some additional
-details about the data handling done so far:
+As \mFun{print, show, summary} usual, the \Rmethod{print} and \Rmethod{show} methods display
+information about the object, and \Rmethod{summary} yields some additional details about the data
+handling done so far:
 
 <<print>>=
 chondro
@@ -279,6 +270,37 @@ You will usually give the following arguments:
 wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
 axis label in \Rcode{\$spc}.
 \end{labeling}
+
+\section{The Logbook}
+\label{sec:logbook}
+Slot \Rcode{@log} of \chy objects is intended to keep track of the history of the object. 
+
+This logbook part of the output of the \Rfunction{summary}, and can also be retrieved by
+\Rfunction{logbook}. 
+
+<<logbook>>=
+logbook (flu)
+@
+
+\mFun{logentry, logbook}
+New entries can be created manually by calling \Rfunction{logentry}:
+<<>>=
+tmp <- logentry (flu, short = "test", long = "This could also be a list of parameters")
+logbook (tmp)
+@
+
+In addition, \phy by default logs automatically all changes to the object. 
+<<>>=
+tmp <- tmp [1:3]
+logbook (tmp)
+@
+The automatic logging mechanism can only log function calls and parameters (as opposed to the
+intention of the function call). Most \phy func
+
+
+
+TODO
+
 
 
 \section{Combining and Decomposing \Rclass{hyperspec} Objects} 
