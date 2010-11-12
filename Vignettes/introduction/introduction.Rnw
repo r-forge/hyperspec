@@ -293,15 +293,18 @@ In addition, \phy by default logs automatically all changes to the object.
 <<>>=
 tmp <- tmp [1:3]
 logbook (tmp)
-@
+@ 
+%
 The automatic logging mechanism can only log function calls and parameters (as opposed to the
-intention of the function call). Most \phy func
-
-
-
-TODO
-
-
+intention of the function call). \phy functions that return a changed object allow to use more
+meaningful short descriptions: they are assigned via the argument \Rfunarg{short}:
+<<>>=
+tmp <- sweep (tmp, 2, mean, short = "centering")
+logbook (tmp)
+@ 
+<<echo=hide, results=hide>>=
+rm (tmp)
+@
 
 \section{Combining and Decomposing \Rclass{hyperspec} Objects} 
 \label{sec:combine}
@@ -1109,8 +1112,8 @@ The basic arithmetic operators work element-wise in R. Thus they
 all need either a scalar, or a matrix (or \Rclass{hyperSpec} object)
 of the correct size.
 
-Matrix multiplication is done by \Rfunction{\%{*}\%} \mFun{\Rfunction{\%{*}\%}},
-again each of the operands may be a matrix or a \Rclass{hyperSpec} object, and must have the correct dimensions.
+Matrix multiplication is done by \Rfunction{\%{*}\%} \mFun{\Rfunction{\%{*}\%}}, again each of the
+operands may be a matrix or a \Rclass{hyperSpec} object, and must have the correct dimensions.
 
 
 \section{Data Analysis }
@@ -1124,7 +1127,9 @@ a \Rclass{data.frame}. The column names can then be used in the formula:
 pca <- prcomp (~ spc, data = chondro$., center = FALSE)
 @
 
-Results of such a \mFun{\Rfunction{decomposition}} decomposition can be put again into \Rclass{hyperSpec} objects. This allows to plot \eg the loading like spectra, or score maps, see figure~\ref{fig:pca}.
+Results of such a \mFun{\Rfunction{decomposition}} decomposition can be put again into
+\Rclass{hyperSpec} objects. This allows to plot \eg the loading like spectra, or score maps, see
+figure~\ref{fig:pca}.
 
 <<decomp>>=
 scores <- decomposition (chondro, pca$x, label.wavelength = "PC", 
@@ -1138,9 +1143,14 @@ loadings <- decomposition (chondro, t(pca$rotation), scores = FALSE,
                            label.spc = "loading I / a.u.")
 loadings
 @
-There is, however, one important difference. The loadings are thought of as values computed from all spectra togehter. Thus no meaningful extra data can be assigned for the loadings object (at least not if the column consists of different values). Therefore, the loadings object lost all extra data (see above). 
+%
+There is, however, one important difference. The loadings are thought of as values computed from all
+spectra together. Thus no meaningful extra data can be assigned for the loadings object (at least not
+if the column consists of different values). Therefore, the loadings object lost all extra data (see
+above).
 
-\Rfunarg{retain.columns} triggers whether columns that contain different values should be dropped. If it is set to \Rcode{TRUE}, the columns are retained, but contain \Rcode{NA}s:
+\Rfunarg{retain.columns} triggers whether columns that contain different values should be dropped. If
+it is set to \Rcode{TRUE}, the columns are retained, but contain \Rcode{NA}s:
 <<retain.col>>=
 loadings <- decomposition (chondro, t(pca$rotation), scores = FALSE, 
                            retain.columns = TRUE, label.spc = "loading I / a.u.")
@@ -1272,14 +1282,42 @@ While most of \phy's functions work at a decent speed for interactive sessions (
 on the size of the object), iterated (repeated) calculations as for bootstrapping or iterated cross
 validation may ask for special speed considerations.
 
-In that case, one possibility to speed up is to switch of the automatic logging of how the objects
-are transformed. Logging involves appending rows to the data.frame in slot \Rcode{@log}.  While the
+In that case, the calculations may be sped up considerably if the required parts of the \chy object
+are extracted into a data.frame or matrices beforehand. A related tip is that that many model fitting
+functions in \R are much faster if the formula interface is avoided and the appropriate data.frames
+or matrices are handed over directly. 
+
+Another possibility to speed up is to switch of the automatic logging of how the objects are
+transformed. Logging involves appending rows to the data.frame in slot \Rcode{@log}.  While the
 absolute amount of time needed to add a logbook entry is small, it may be executed very often
-(e.g. during each call of \Rfunction{[}).
+(e.g. during each call of \Rfunction{[}). However, the first strategy will usually allow for far
+larger gains in speed.
 
+As an example, let's again consider the code for shifting the spectra:
+<<>>=
+system.time ({
+  for (i in seq_len (nrow (chondro)))
+    chondro [[i]] <- interpolate (tmp [[i]], shifts [i], wl = wl (chondro))
+})
+rm (chondro)
 
+hyperSpec.setOptions (log = FALSE)
+system.time ({
+  for (i in seq_len (nrow (chondro)))
+    tmp [[i]] <- interpolate (tmp [[i]], shifts [i], wl = wl (chondro))
+})
+hyperSpec.setOptions (log = TRUE)
+rm (chondro)
 
-Another, 
+system.time ({
+  tmp <- chondro [[]]
+  for (i in seq_len (nrow (chondro)))
+    tmp [i, ] <- interpolate (tmp [i, ], shifts [i], wl = wl (chondro))
+  chondro [[]] <- tmp
+})
+rm (chondro)
+@
+
 
 
 \bibliographystyle{unsrtnat}

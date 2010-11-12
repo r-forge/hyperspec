@@ -33,8 +33,10 @@ $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).Rnw): $(foreach V,$(VIGNETTES),Vign
 
 #Vignettes/*.zip: FORCE
 
-Vignettes/%.zip: .FORCE
-	cd $(dir $@) && zip -u $(notdir $@)
+Vignettes/%.zip: `zip -sf $@`
+	echo "$@ before" 
+	cd $(dir $@) && zip -f -v $(notdir $@)
+	echo "$@ done" 
 
 Vignettes/flu/flu.Rnw: Vignettes/flu/scan.txt.PerkinElmer.R 
 #	touch $@
@@ -124,7 +126,7 @@ www: www/*.zip
 www/%.pdf: Vignettes/%/%.pdf
 	@cp -av $< $@
 
-www/%.zip: Vignettes/%.zip
+www/%.zip: Vignettes/%.zip #how do I do this only for the existing .zips? I.e. exclude hyperSpec-prebuilt.zip
 	@cp -av $< $@
 
 DESCRIPTION: $(shell find pkg -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIPTION") #only if not modified today

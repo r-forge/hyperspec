@@ -14,49 +14,50 @@
 \contentsline {section}{\numberline {6}Obtaining Basic Information about {\language \langwohyphens \textit {hyperSpec}}\xspace Objects}{6}{section.6}
 \contentsline {section}{\numberline {7}Creating a {\language \langwohyphens \textit {hyperSpec}} Object, Data Import and Export}{7}{section.7}
 \contentsline {subsection}{\numberline {7.1}Creating a {\language \langwohyphens \textit {hyperSpec}} Object from Spectra Matrix and Wavelength Vector}{7}{subsection.7.1}
-\contentsline {section}{\numberline {8}Combining and Decomposing {\language \langwohyphens \textit {hyperspec}} Objects}{8}{section.8}
-\contentsline {subsection}{\numberline {8.1}Binding Objects together}{8}{subsection.8.1}
-\contentsline {subsection}{\numberline {8.2}Binding Objects that do not Share the Same Extra Data and/or Wavelength Axis}{8}{subsection.8.2}
-\contentsline {subsection}{\numberline {8.3}Binding Objects that do not Share the Same Spectra}{9}{subsection.8.3}
-\contentsline {subsection}{\numberline {8.4}Matrix Multiplication}{11}{subsection.8.4}
-\contentsline {subsection}{\numberline {8.5}Decomposition}{11}{subsection.8.5}
-\contentsline {section}{\numberline {9}Access to the data}{11}{section.9}
-\contentsline {subsection}{\numberline {9.1}Selecting and Deleting Spectra}{11}{subsection.9.1}
-\contentsline {subsubsection}{\numberline {9.1.1}Random Samples}{12}{subsubsection.9.1.1}
-\contentsline {subsubsection}{\numberline {9.1.2}Sequences}{13}{subsubsection.9.1.2}
-\contentsline {subsection}{\numberline {9.2}Selecting Extra Data Columns }{13}{subsection.9.2}
-\contentsline {subsection}{\numberline {9.3}Selecting Wavelength Ranges}{14}{subsection.9.3}
-\contentsline {subsection}{\numberline {9.4}Deleting Wavelength Ranges}{15}{subsection.9.4}
-\contentsline {subsubsection}{\numberline {9.4.1}Converting Wavelengths to Indices and vice versa}{15}{subsubsection.9.4.1}
-\contentsline {subsubsection}{\numberline {9.4.2}Changing the Wavelength Axis}{17}{subsubsection.9.4.2}
-\contentsline {subsubsection}{\numberline {9.4.3}Ordering the Wavelength Axis}{17}{subsubsection.9.4.3}
-\contentsline {subsection}{\numberline {9.5}More on the Square-Bracket Operators for Replacing Values}{18}{subsection.9.5}
-\contentsline {subsection}{\numberline {9.6}Fast Access to Parts of the {\language \langwohyphens \textit {hyperSpec}} Object}{19}{subsection.9.6}
-\contentsline {subsection}{\numberline {9.7}Conversion to Long-Format data.frame}{19}{subsection.9.7}
-\contentsline {section}{\numberline {10}Plotting}{19}{section.10}
-\contentsline {section}{\numberline {11}Spectral (Pre)processing}{19}{section.11}
-\contentsline {subsection}{\numberline {11.1}Cutting the Spectral Range}{19}{subsection.11.1}
-\contentsline {subsection}{\numberline {11.2}Shifting Spectra}{20}{subsection.11.2}
-\contentsline {subsubsection}{\numberline {11.2.1}Calculating the Shift}{21}{subsubsection.11.2.1}
-\contentsline {subsection}{\numberline {11.3}Smoothing Interpolation}{22}{subsection.11.3}
-\contentsline {subsection}{\numberline {11.4}Background Correction}{23}{subsection.11.4}
-\contentsline {subsection}{\numberline {11.5}Offset Correction}{23}{subsection.11.5}
-\contentsline {subsection}{\numberline {11.6}Baseline Correction}{23}{subsection.11.6}
-\contentsline {subsection}{\numberline {11.7}Intensity Calibration}{23}{subsection.11.7}
-\contentsline {subsubsection}{\numberline {11.7.1}Correcting by a constant, e.\tmspace +\thinmuskip {.1667em}g. Readout Bias}{23}{subsubsection.11.7.1}
-\contentsline {subsubsection}{\numberline {11.7.2}Correcting Wavelength Dependence}{24}{subsubsection.11.7.2}
-\contentsline {subsubsection}{\numberline {11.7.3}Spectra Dependent Correction}{24}{subsubsection.11.7.3}
-\contentsline {subsection}{\numberline {11.8}Normalization}{24}{subsection.11.8}
-\contentsline {subsection}{\numberline {11.9}Centering the Data}{24}{subsection.11.9}
-\contentsline {subsection}{\numberline {11.10}Variance Scaling}{25}{subsection.11.10}
-\contentsline {subsection}{\numberline {11.11}Multiplicative Scatter Correction (MSC)}{26}{subsection.11.11}
-\contentsline {subsection}{\numberline {11.12}Spectral Arithmetic}{26}{subsection.11.12}
-\contentsline {section}{\numberline {12}Data Analysis }{26}{section.12}
-\contentsline {subsection}{\numberline {12.1}Data Analysis Methods using a data.frame \\ e.\tmspace +\thinmuskip {.1667em}g. Principal Component Analysis with {\language \langwohyphens \texttt {prcomp}}}{26}{subsection.12.1}
-\contentsline {subsubsection}{\numberline {12.1.1}PCA as Noise Filter}{27}{subsubsection.12.1.1}
-\contentsline {subsection}{\numberline {12.2}Data Analysis using long-format data.frame\\ e.\tmspace +\thinmuskip {.1667em}g.\xspace plotting with ggplot2}{28}{subsection.12.2}
-\contentsline {subsection}{\numberline {12.3}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g.\xspace Hierarchical Cluster Analysis}{29}{subsection.12.3}
-\contentsline {subsection}{\numberline {12.4}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{29}{subsection.12.4}
-\contentsline {subsection}{\numberline {12.5}Splitting an Object, and Binding a List of {\language \langwohyphens \textit {hyperSpec}}\xspace Objects}{30}{subsection.12.5}
-\contentsline {subsection}{\numberline {12.6}Speed Considerations}{30}{subsection.12.6}
+\contentsline {section}{\numberline {8}The Logbook}{8}{section.8}
+\contentsline {section}{\numberline {9}Combining and Decomposing {\language \langwohyphens \textit {hyperspec}} Objects}{8}{section.9}
+\contentsline {subsection}{\numberline {9.1}Binding Objects together}{8}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Binding Objects that do not Share the Same Extra Data and/or Wavelength Axis}{9}{subsection.9.2}
+\contentsline {subsection}{\numberline {9.3}Binding Objects that do not Share the Same Spectra}{9}{subsection.9.3}
+\contentsline {subsection}{\numberline {9.4}Matrix Multiplication}{11}{subsection.9.4}
+\contentsline {subsection}{\numberline {9.5}Decomposition}{12}{subsection.9.5}
+\contentsline {section}{\numberline {10}Access to the data}{12}{section.10}
+\contentsline {subsection}{\numberline {10.1}Selecting and Deleting Spectra}{12}{subsection.10.1}
+\contentsline {subsubsection}{\numberline {10.1.1}Random Samples}{13}{subsubsection.10.1.1}
+\contentsline {subsubsection}{\numberline {10.1.2}Sequences}{13}{subsubsection.10.1.2}
+\contentsline {subsection}{\numberline {10.2}Selecting Extra Data Columns }{14}{subsection.10.2}
+\contentsline {subsection}{\numberline {10.3}Selecting Wavelength Ranges}{15}{subsection.10.3}
+\contentsline {subsection}{\numberline {10.4}Deleting Wavelength Ranges}{15}{subsection.10.4}
+\contentsline {subsubsection}{\numberline {10.4.1}Converting Wavelengths to Indices and vice versa}{16}{subsubsection.10.4.1}
+\contentsline {subsubsection}{\numberline {10.4.2}Changing the Wavelength Axis}{17}{subsubsection.10.4.2}
+\contentsline {subsubsection}{\numberline {10.4.3}Ordering the Wavelength Axis}{18}{subsubsection.10.4.3}
+\contentsline {subsection}{\numberline {10.5}More on the Square-Bracket Operators for Replacing Values}{19}{subsection.10.5}
+\contentsline {subsection}{\numberline {10.6}Fast Access to Parts of the {\language \langwohyphens \textit {hyperSpec}} Object}{19}{subsection.10.6}
+\contentsline {subsection}{\numberline {10.7}Conversion to Long-Format data.frame}{20}{subsection.10.7}
+\contentsline {section}{\numberline {11}Plotting}{20}{section.11}
+\contentsline {section}{\numberline {12}Spectral (Pre)processing}{20}{section.12}
+\contentsline {subsection}{\numberline {12.1}Cutting the Spectral Range}{20}{subsection.12.1}
+\contentsline {subsection}{\numberline {12.2}Shifting Spectra}{20}{subsection.12.2}
+\contentsline {subsubsection}{\numberline {12.2.1}Calculating the Shift}{21}{subsubsection.12.2.1}
+\contentsline {subsection}{\numberline {12.3}Smoothing Interpolation}{22}{subsection.12.3}
+\contentsline {subsection}{\numberline {12.4}Background Correction}{23}{subsection.12.4}
+\contentsline {subsection}{\numberline {12.5}Offset Correction}{23}{subsection.12.5}
+\contentsline {subsection}{\numberline {12.6}Baseline Correction}{24}{subsection.12.6}
+\contentsline {subsection}{\numberline {12.7}Intensity Calibration}{24}{subsection.12.7}
+\contentsline {subsubsection}{\numberline {12.7.1}Correcting by a constant, e.\tmspace +\thinmuskip {.1667em}g. Readout Bias}{24}{subsubsection.12.7.1}
+\contentsline {subsubsection}{\numberline {12.7.2}Correcting Wavelength Dependence}{24}{subsubsection.12.7.2}
+\contentsline {subsubsection}{\numberline {12.7.3}Spectra Dependent Correction}{24}{subsubsection.12.7.3}
+\contentsline {subsection}{\numberline {12.8}Normalization}{25}{subsection.12.8}
+\contentsline {subsection}{\numberline {12.9}Centering the Data}{25}{subsection.12.9}
+\contentsline {subsection}{\numberline {12.10}Variance Scaling}{26}{subsection.12.10}
+\contentsline {subsection}{\numberline {12.11}Multiplicative Scatter Correction (MSC)}{26}{subsection.12.11}
+\contentsline {subsection}{\numberline {12.12}Spectral Arithmetic}{26}{subsection.12.12}
+\contentsline {section}{\numberline {13}Data Analysis }{27}{section.13}
+\contentsline {subsection}{\numberline {13.1}Data Analysis Methods using a data.frame \\ e.\tmspace +\thinmuskip {.1667em}g. Principal Component Analysis with {\language \langwohyphens \texttt {prcomp}}}{27}{subsection.13.1}
+\contentsline {subsubsection}{\numberline {13.1.1}PCA as Noise Filter}{28}{subsubsection.13.1.1}
+\contentsline {subsection}{\numberline {13.2}Data Analysis using long-format data.frame\\ e.\tmspace +\thinmuskip {.1667em}g.\xspace plotting with ggplot2}{29}{subsection.13.2}
+\contentsline {subsection}{\numberline {13.3}Data Analysis Methods using a matrix \\ e.\tmspace +\thinmuskip {.1667em}g.\xspace Hierarchical Cluster Analysis}{29}{subsection.13.3}
+\contentsline {subsection}{\numberline {13.4}Calculating group-wise Sum Characteristics \\ e.\tmspace +\thinmuskip {.1667em}g. Cluster Mean Spectra}{30}{subsection.13.4}
+\contentsline {subsection}{\numberline {13.5}Splitting an Object, and Binding a List of {\language \langwohyphens \textit {hyperSpec}}\xspace Objects}{30}{subsection.13.5}
+\contentsline {section}{\numberline {14}Speed Considerations}{31}{section.14}
 \contentsline {section}{\numberline {A}Overview of the functions provided by {\language \langwohyphens \textit {hyperSpec}}\xspace }{31}{appendix.A}
