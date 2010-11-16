@@ -5,7 +5,7 @@
 ###
 
 write.txt.wide <- function (object,
-                            file = stop ("filename required"),
+                            file = stop ("file is required"),
                             cols = NULL,
                             quote = FALSE, sep = "\t",
                             row.names = FALSE,

@@ -6,6 +6,9 @@
 
 plotvoronoi <- function (object, model = spc ~ x * y,
                          use.tripack = FALSE, mix = FALSE, ...){
+  if (!require (latticeExtra))
+    stop ("package latticeExtra is needed for Voronoi plots.")
+  
   if (use.tripack && mix)
       object@data <- object@data [sample (nrow (object)),]
 

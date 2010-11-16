@@ -26,28 +26,28 @@
   \code{\link[hyperSpec]{read.ENVI}}.  }
 
 \usage{
-read.txt.long (file = stop ("filename is required"),
+read.txt.long (file = stop ("file is required"),
    cols = list (.wavelength = expression (lambda / nm), spc = "I / a.u."),
    header = TRUE, \dots)
 
-read.txt.wide (file = stop ("filename is required"),
+read.txt.wide (file = stop ("file is required"),
    cols = list (spc = "I / a.u.", .wavelength = expression (lambda / nm)),
    check.names = FALSE,
    \dots)
 
-write.txt.long (object, file = stop("filename required"),
+write.txt.long (object, file = stop("file is required"),
    order = c(".rownames", ".wavelength"), 
    na.last = TRUE, decreasing = FALSE, quote = FALSE, sep = "\t", 
    row.names = FALSE, cols = NULL, col.names = TRUE, 
    col.labels = FALSE, append = FALSE, \dots)
 
-write.txt.wide (object, file = stop ("filename required"), cols = NULL,
+write.txt.wide (object, file = stop ("file is required"), cols = NULL,
    quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE,
    header.lines = 1, col.labels = if (header.lines == 1) FALSE else TRUE, 
    append = FALSE, \dots)
 }
 \arguments{
-  \item{file}{filename}
+  \item{file}{filename or connection}
 
   \item{cols}{the column names specifying the column order. 
   
@@ -85,12 +85,14 @@ write.txt.wide (object, file = stop ("filename required"), cols = NULL,
 These functions are very flexible and provide lots of arguments. 
 
 If you use them to read or write manufacturer specific ASCII formats,
-please consider writing a 
-wrapper function and contributing this function to \pkg{hyperSpec}. 
-An example is in the \dQuote{flu} vignette (see \code{vignette ("flu", package = "hyperSpec"}). 
+please consider writing a wrapper function and contributing this
+function to \pkg{hyperSpec}.  An example is in the \dQuote{flu} vignette
+(see \code{vignette ("flu", package = "hyperSpec"}).
 
-For further information, see the
-examples below and the documentation of
+Note that R accepts many packed formats for ASCII files, see
+\code{\link[base]{connections}}. For .zip files, see \code{\link[utils]{unzip}}.
+
+For further information, see the examples below and the documentation of
 \code{\link[R.matlab]{R.matlab}}.
 }
 \seealso{

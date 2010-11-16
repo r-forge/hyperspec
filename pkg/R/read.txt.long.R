@@ -6,7 +6,7 @@
 ###  (y x) wl int
 ###
 
-read.txt.long <- function (file = stop ("filename is required"),
+read.txt.long <- function (file = stop ("file is required"),
                            cols = list (
                              .wavelength = expression (lambda / nm),
                              spc = "I / a.u."),

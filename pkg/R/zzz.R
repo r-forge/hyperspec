@@ -2,8 +2,8 @@
   require (lattice)
   require (utils)
 
-  if (! require (latticeExtra))
-    cat ("package 'latticeExtra' is needed for Voronoi plots.\n\n")
+#  if (! require (latticeExtra))
+#    cat ("package 'latticeExtra' is needed for Voronoi plots.\n\n")
 #  if (! require (plyr))
 #    cat ("package 'plyr' is needed for 'collapse'.\n\n")
 }

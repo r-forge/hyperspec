@@ -5,7 +5,7 @@
 ###  Format:
 ###  x y ... int (wl1)  int (wl2) ... int (wl p) z ...
 ###
-read.txt.wide <- function (file = stop ("filename is required"),
+read.txt.wide <- function (file = stop ("file is required"),
                            cols = list (
                              spc = "I / a.u.",
                              .wavelength = expression (lambda / nm)),

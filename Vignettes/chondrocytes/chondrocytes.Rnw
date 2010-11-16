@@ -346,7 +346,8 @@ save (chondro, file = "chondro.rda")
 @
 This is the file distributed with \phy as example data set.
 
-<<cleanup, echo = FALSE, results=hide>>=
+<<cleanup, echo = FALSE>>=
+sessionInfo ()
 rm (list = ls () ) 
 @ 
 \end{document}

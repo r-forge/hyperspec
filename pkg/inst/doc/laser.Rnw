@@ -8,7 +8,7 @@
 % \VignetteIndexEntry{laser: Vignette on the laser data set, example of a time series. Shows also how to change the spectral abscissa.}
 % \VignetteKeywords{hyperSpec, laser, time series}
 % \VignettePackage{hyperSpec}
-
+% \VignetteDepends{rgl}
 \begin{document}
 \title{Unstable Laser Emission\\
 Vignette for the Data Set \Robject{laser} of the R package \Rpackage{hyperSpec} }
@@ -218,7 +218,8 @@ rgl.snapshot("fig/laser3d.png", fmt="png", top=TRUE )
 \end{figure}
 
 
-<<cleanup, results = hide, echo = FALSE>>=
+<<cleanup, results = hide>>=
+sessionInfo ()
 rm (list = ls ())
 @ 
 \end{document}

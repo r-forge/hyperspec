@@ -701,8 +701,9 @@ of the plot directly. Note that the returned indices correspond to the plotted o
 \phy's lattice functions work with \Rpackage{playwith} and \Rpackage{latticist}. These packages allow
 easy customization of the plots and also identification of points.
 
-<<cleanup, echo = FALSE, results = hide>>=
-rm (list = ls () )
+<<cleanup, echo = FALSE>>=
+sessionInfo ()
+rm (list = ls ())
 @
 
 \end{document}

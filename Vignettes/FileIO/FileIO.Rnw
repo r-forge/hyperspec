@@ -14,44 +14,40 @@
 % \VignetteIndexEntry{FileIO: Import and Export of Spectra into R/hyperSpec}
 % \VignetteKeywords{hyperSpec, import, export, .spc, ENVI, ASCII}
 % \VignettePackage{hyperSpec}
+% \VignetteDepends{e1071, R.matlab}
 
 <<echo = FALSE, results = hide>>=
-library (e1071)
-make.all.permutations <- function (...){
-  x <- c (...)
-  x <- matrix (x [permutations (length (x))], ncol = length (x))
-  x <- apply (x, 1,  paste, collapse = "!")
-  cat (paste ("\\index{", x, "}\n", sep = ""), sep = "")
-}
+library (R.matlab)
 @
 \begin{document}
 \title{Import and Export of Spectra Files\\
 Vignette for the R package \Rpackage{hyperSpec} }
 \maketitle
 
-\warnbox{Supported File Formats}{
-  \phy supports a number of file formats relevant for different types of spectroscopy. This is
-naturally only a subset of the file formats produced by different spectroscopic equipment. 
+\warnbox{Supported File Formats}{ \phy supports a number of file formats relevant for different types
+  of spectroscopy. This is naturally only a subset of the file formats produced by different
+  spectroscopic equipment.
 
-\indent If you use \phy with data formats not mentioned in this document, please send an email to \mailme, so that this document can be updated. 
+  \indent If you use \phy with data formats not mentioned in this document, please send an email to
+  \mailme, so that this document can be updated.
 
-The information should include
-\begin{itemize}
-\item The type of spectroscopy
-\item Spectrometer model, manufacturer, and software
-\item The ``native'' file format (including a sample file)
-\item Description of relevant procedures to convert the file
-\item R code to import the data together with an example file that can actually be read by R.
-\item Documentation, particularly the description of the data format
-\end{itemize}
+  The information should include
+  \begin{itemize}
+  \item The type of spectroscopy
+  \item Spectrometer model, manufacturer, and software
+  \item The ``native'' file format (including a sample file)
+  \item Description of relevant procedures to convert the file
+  \item R code to import the data together with an example file that can actually be read by R.
+  \item Documentation, particularly the description of the data format
+  \end{itemize}
 
-If you need help finding out how to import your data, \phy has a mailing
-list \href{mailto:hyperspec-help@lists.r-forge.r-project.org}{\nolinkurl{hyperspec-help@lists.r-forge.r-project.org}}, subscription and archives are available at \url{http://r-forge.r-project.org/mail/?group_id=366}.
+  If you need help finding out how to import your data, \phy has a mailing list
+  \href{mailto:hyperspec-help@lists.r-forge.r-project.org}{\nolinkurl{hyperspec-help@lists.r-forge.r-project.org}},
+  subscription and archives are available at \url{http://r-forge.r-project.org/mail/?group_id=366}.
 }\\[1cm]
-\warnbox{Reproducing the Examples in this Vignette}{
-The source code of this vignette including the spectra files are available as .zip file at \phy's
-home page:
- \url{http://hyperspec.r-forge.r-project.org/FileIO.zip}
+\warnbox{Reproducing the Examples in this Vignette}{ The source code of this vignette including the
+  spectra files are available as .zip file at \phy's home page:
+  \url{http://hyperspec.r-forge.r-project.org/FileIO.zip}
  
  Note that some definitions are in file \texttt{vignettes.defs}.
 }
@@ -66,21 +62,24 @@ The most basic funtion to create \chy objects is \Rfunction{new ("hyperSpec")}
 (section~\ref{sec:new}). It makes a \chy object from data already in R's workspace. Thus, once the
 spectra are imported into R, conversion to \chy objects is straightforward.
 
-In addition, \phy comes with predifined import functions for different data formats.
-This document divides the discussion into dealing with ASCII files (section~\ref{sec:ascii}, p.~\pageref{sec:ascii}) and binary file formats (section~\ref{sec:binary-file-formats}, p.~\pageref{sec:binary-file-formats}).
-If data export for the respective format is possible, it is discussed in the same sections.
-As sometimes the actual data written by the spectrometer software exhibits peculiarities, \phy offers
-several specialized import functions. These are in general named after the data format followed by the
-manufacturer (\eg read.ENVI.Nicolet).
+In addition, \phy comes with predifined import functions for different data formats.  This document
+divides the discussion into dealing with ASCII files (section~\ref{sec:ascii},
+p.~\pageref{sec:ascii}) and binary file formats (section~\ref{sec:binary-file-formats},
+p.~\pageref{sec:binary-file-formats}).  If data export for the respective format is possible, it is
+discussed in the same sections.  As sometimes the actual data written by the spectrometer software
+exhibits peculiarities, \phy offers several specialized import functions. These are in general named
+after the data format followed by the manufacturer (\eg read.ENVI.Nicolet).
 
 Overview lists of the directly supported file formats are in the appendix: sorted by file format
-(appendix~\ref{sec:format}, p.~\pageref{sec:format}), manufacturer (appendix~\ref{sec:manufacturer}, p.~\pageref{sec:manufacturer}),  and by spectroscopy (appendix~\ref{sec:spectroscopy}, p.~\pageref{sec:spectroscopy}).
+(appendix~\ref{sec:format}, p.~\pageref{sec:format}), manufacturer (appendix~\ref{sec:manufacturer},
+p.~\pageref{sec:manufacturer}), and by spectroscopy (appendix~\ref{sec:spectroscopy},
+p.~\pageref{sec:spectroscopy}).
 
 \section{Creating a \chy object with \Rfunction{new}}
 \label{sec:new}
-\index{new!hyperSpec object}
-\index{initialize!hyperSpec object}
-\index{create!hyperSpec object}
+\index{new hyperSpec object}
+\index{initialize hyperSpec object}
+\index{create hyperSpec object}
 \index{hyperSpec object!create}
 To create a \Rclass{hyperSpec} object from data in R's workspace, use:
 \begin{Schunk}
@@ -101,14 +100,15 @@ axis label in \Rcode{\$spc}.
 
 Thus, once your data is in R's workspace, creating a \chy object is easy. I suggest wrapping the code
 to import your data and the line joining it into a \chy object by your own import function. You are
-more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import}, (p.~\pageref{sec:writing-Import}) discusses examples of custom import functions.
+more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import},
+(p.~\pageref{sec:writing-Import}) discusses examples of custom import functions.
 
 \section{ASCII files}
 \label{sec:ascii}
 \label{sec:read.txt.long}
 \label{sec:read.txt.wide}
-\index{ASCII!long|see{ASCII long}}
-\index{ASCII!wide|see{ASCII wide}}
+\index{ASCII!wide}
+\index{ASCII!long}
 Currently, \Rclass{hyperSpec} provides two functions for general ASCII data import:
 \begin{labeling}{\Rfunction{write.txt.wide}}
 \item [\Rfunction{read.txt.long}] imports long format ASCII files, \ie one intensity value per row
@@ -117,19 +117,22 @@ Currently, \Rclass{hyperSpec} provides two functions for general ASCII data impo
 
 The import functions immediately return a \Rclass{hyperSpec} object.
 
-Internally, they use \Rfunction{read.table}, a very powerful ASCII import function.
-R supplies another ASCII import function, \Rfunction{scan}.  \Rfunction{scan} imports numeric data
-matrices and is faster than \Rfunction{read.table}, but cannot import column names. 
-If your data does not contain a header or it is not important and can safely be skipped, you may want
-to import your data using \Rfunction{scan}.
+Internally, they use \Rfunction{read.table}, a very powerful ASCII import function.  R supplies
+another ASCII import function, \Rfunction{scan}.  \Rfunction{scan} imports numeric data matrices and
+is faster than \Rfunction{read.table}, but cannot import column names.  If your data does not contain
+a header or it is not important and can safely be skipped, you may want to import your data using
+\Rfunction{scan}.
+
+Note that R allows to use a variety of compressed file formats directly as ASCII files (for examples,
+see section \ref{sec:scan.txt.Renishaw} on p.~\pageref{sec:scan.txt.Renishaw}). Also, both
+\Rfunction{read.txt.long} and \Rfunction{read.txt.wide} accept connections instead of file names.
 
 \subsection{ASCII files with samples in columns}
 \label{sec:ascii-files-cols}
-
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("Bruker", "powder diffraction")
-make.all.permutations ("Bruker", "x-ray")
-@
+\index{Bruker!powder diffraction}
+\index{powder diffraction!Bruker}
+\index{Bruker!x-ray}
+\index{x-ray!Bruker}
 \index{Bruker!AXS}
 \index{ASCII!transposed}
 \index{ASCII!samples in columns}
@@ -161,9 +164,8 @@ plot (triazine [1])
 
 \subsection{JCAMP-DX}
 \label{sec:jcamp-dx}
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("ASCII", "JCAMP-DX")
-@
+\index{ASCII!JCAMP-DX}
+\index{JCAMP-DX!ASCII}
 \index{jdx|see{JCAMP-DX}}
 JCAMP-DX files\cite{McDonald1988} are not supported as there has not yet been the need to import them. 
 
@@ -220,13 +222,12 @@ data.
 
 \subsection{ENVI Files}
 \label{sec:read.ENVI}
-
-<<echo = FALSE, results = tex>>=
-
-make.all.permutations ("ENVI", "Map", "Infrared")
-make.all.permutations ("ENVI", "Infrared", "Bruker")
-
-@
+\index{ENVI!Map}
+\index{ENVI!Infrared}
+\index{ENVI!Bruker}
+\index{Map!ENVI}
+\index{Infrared!ENVI}
+\index{Bruker!ENVI}
 \index{FT-IR|see{Infrared}}
 \index{Image|see{Map}}
  ENVI files are binary data accompanied by an ASCII header file. \phy's function
@@ -235,7 +236,8 @@ make.all.permutations ("ENVI", "Infrared", "Bruker")
 As we experienced missing header files (Bruker's Opus software frequently produced header files
 without any content), the data that would usually be read from the header file can also be handed to
 \Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should
-contain, see also the discussion of ENVI files written by Bruker's OPUS software (section~\ref{sec:read.ENVI.Bruker}, p.~\pageref{sec:read.ENVI.Bruker}).
+contain, see also the discussion of ENVI files written by Bruker's OPUS software
+(section~\ref{sec:read.ENVI.Bruker}, p.~\pageref{sec:read.ENVI.Bruker}).
 
 Here is a demonstration of the use of \Rfunction{read.ENVI}:
 <<read.ENVI>>=
@@ -250,18 +252,22 @@ Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI fi
 
 \subsection{spc Files}
 \label{sec:read.spc}
-
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("spc", "Kaiser", "Raman")
-make.all.permutations ("spc", "Renishaw", "Raman")
-@
 \index{spc}
+\index{spc!Raman}
+\index{spc!Renishaw}
+\index{spc!Kaiser}
+\index{Raman!spc}
+\index{Raman!Kaiser}
+\index{Raman!Renishaw}
+\index{Renishaw!spc}
+\index{Kaiser!spc}
 
 Thermo Galactic's .spc file format\cite{Galactic1997} can be imported by \Rfunction{read.spc}. 
 
-A variety of sub-formats exists. \phy's import\Rfunction{read.spc} function does \emph{not} support the old file format that was used before 1996. In addition, no test data with \emph{w planes} was available
---- thus the import of such files could not be tested. If you come across such files, please contact
-the package maintainer (\mailme).
+A variety of sub-formats exists. \phy's import\Rfunction{read.spc} function does \emph{not} support
+the old file format that was used before 1996. In addition, no test data with \emph{w planes} was
+available --- thus the import of such files could not be tested. If you come across such files,
+please contact the package maintainer (\mailme).
 
 Here are some tests using Thermo Galactic's example files:
 <<read.spc>>=
@@ -284,19 +290,32 @@ for (f in other){
 }
 @
 
-The header and subheader blocks of spc files store additional information of pre-defined types (see the file format specification\cite{Galactic1997}). Further information can be stored in the so-called log block at the end of the file, and should be in a key-value format (although even the official example files do not always). 
-This information is often useful (Kaiser's Hologram software \eg stores the stage position in the log block).
+The header and subheader blocks of spc files store additional information of pre-defined types (see
+the file format specification\cite{Galactic1997}). Further information can be stored in the so-called
+log block at the end of the file, and should be in a key-value format (although even the official
+example files do not always).  This information is often useful (Kaiser's Hologram software \eg
+stores the stage position in the log block).
 
-\Rfunction{read.spc} has four arguments that allow fine-grained control of storing such information in the \chy object:
+\Rfunction{read.spc} has four arguments that allow fine-grained control of storing such information
+in the \chy object:
 \begin{labeling}{\Rcode{keys.hdr2data}}
-\item[\Rcode{keys.hdr2data}] parameters from the spc file and subfile headers that should become extra data columns
-\item[\Rcode{keys.hdr2log}] parameters from the spc file and subfile headers that should be stored as list entries in the \Rfunarg{long.description} of the log entry
-\item[\Rcode{keys.log2data}] parameters from the spc file log block that should become extra data columns
-\item[\Rcode{keys.log2log}] parameters from the spc file log block that should be stored as list entries in the \Rfunarg{long.description} of the log entry
+\item[\Rcode{keys.hdr2data}] parameters from the spc file and subfile headers that should become
+  extra data columns
+\item[\Rcode{keys.hdr2log}] parameters from the spc file and subfile headers that should be stored as
+  list entries in the \Rfunarg{long.description} of the log entry
+\item[\Rcode{keys.log2data}] parameters from the spc file log block that should become extra data
+  columns
+\item[\Rcode{keys.log2log}] parameters from the spc file log block that should be stored as list
+  entries in the \Rfunarg{long.description} of the log entry
 \end{labeling}
-The value of these arguments can either be logical (amounting to either use all or none of the information in the file) or a character vector giving the names of the parameters that should be used. Note that the header file field names are always lowercase, while the log entries are treated case sensitive.
+The value of these arguments can either be logical (amounting to either use all or none of the
+information in the file) or a character vector giving the names of the parameters that should be
+used. Note that the header file field names are always lowercase, while the log entries are treated
+case sensitive.
 
-.spc files may contain multiple spectra that do \emph{not} share a common wavelength axis. In this case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum each. \Rfunction{collapse} may be used to combine this list into one \chy object:
+.spc files may contain multiple spectra that do \emph{not} share a common wavelength axis. In this
+case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum
+each. \Rfunction{collapse} may be used to combine this list into one \chy object:
 <<read.spc.list>>=
 barbituates <- read.spc ("spc/BARBITUATES.SPC")
 save (barbituates, file = "barbituates.rda")
@@ -310,28 +329,28 @@ barbituates [[1:10, , 25 ~ 30]]
 
 
 \paragraph{Deriving manufacturer specific import filters.}
-Please note that future changes inside the read.spc function are likely to occur. 
-However, if you just post-process the \chy object returned by \Rfunction{read.spc}, you should be fine.
+Please note that future changes inside the read.spc function are likely to occur.  However, if you
+just post-process the \chy object returned by \Rfunction{read.spc}, you should be fine.
 
 \section{Manufacturer-Specific Discussion of File Import}
 \subsection{Manufacturer Specific Import Functions}
 
-Many spectrometer manufacturers provide a function to export their
-spectra into ASCII files. The functions discussed above are written in a very general way, and are
-highly customizable.
-I recommend wrapping these calls with the appropriate settings for
-your spectra format in an import function. Please consider contributing
-such import filters to \Rpackage{hyperSpec}: send me the documented code (for details see the box at the beginning of this document).
-If you are able to import data of any format not mentioned in this document (even without the need of
-new converters), please let me know (details again in the box at the beginning of this document). 
+Many spectrometer manufacturers provide a function to export their spectra into ASCII files. The
+functions discussed above are written in a very general way, and are highly customizable.  I
+recommend wrapping these calls with the appropriate settings for your spectra format in an import
+function. Please consider contributing such import filters to \Rpackage{hyperSpec}: send me the
+documented code (for details see the box at the beginning of this document).  If you are able to
+import data of any format not mentioned in this document (even without the need of new converters),
+please let me know (details again in the box at the beginning of this document).
 
 \subsection{Bruker FT-IR Imaging}
 \label{sec:read.ENVI.Bruker}
-
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("ENVI", "Infrared", "Bruker")
-make.all.permutations ("ENVI", "Map", "Bruker")
-@
+\index{ENVI!Map}
+\index{ENVI!Infrared}
+\index{ENVI!Bruker}
+\index{Map!ENVI}
+\index{Infrared!ENVI}
+\index{Bruker!ENVI}
 
 We use \Rfunction{read.ENVI} to import IR-Images collected with a Bruker Hyperion spectrometer with
 OPUS software. As mentioned above, the header files are frequently empty. We found the necessary
@@ -350,15 +369,20 @@ The proprietary file format of the Opus software is not yet supported.
 
 \subsection{Nicolet FT-IR Imaging}
 \label{sec:read.ENVI.Nicolet}
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("ENVI", "Infrared", "Nicolet")
-@
+\index{ENVI!Map}
+\index{ENVI!Infrared}
+\index{ENVI!Nicolet}
+\index{Map!ENVI}
+\index{Infrared!ENVI}
+\index{Nicolet!ENVI}
 
 Also Nicolet saves imaging data in ENVI files. These files use some non-standard keywords in the
-header file that should allow to reconstruct the lateral coordinates as well as the wavelength axes and units for wavelength and intensity axis. \phy has a specialized function \Rfunction{read.ENVI.Nicolet} that uses these header entries.
+header file that should allow to reconstruct the lateral coordinates as well as the wavelength axes
+and units for wavelength and intensity axis. \phy has a specialized function
+\Rfunction{read.ENVI.Nicolet} that uses these header entries.
 
 It seems that the position of the first spectrum is recorded in \mum{}, while the pixel size is in
-mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000. 
+mm. Thus a flag \Rfunarg{nicolet.correction} is provided that divides the pixel size by 1000.
 Alternatively, the correct offset and pixel size values may be given as function arguments.
 
 <<readENVINicolet>>=
@@ -368,33 +392,43 @@ spc ## dummy sample with all intensities zero
 
 \subsection{Kaiser Optical Systems Raman}
 \label{sec:Kaiser}
-
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("spc", "Raman", "Kaiser")
-make.all.permutations ("hol", "Raman", "Kaiser")
-@
+\index{spc!Raman}
+\index{spc!Kaiser}
+\index{hol!Kaiser}
+\index{Raman!spc}
+\index{Raman!Kaiser}
+\index{Raman!hol}
+\index{Kaiser!hol}
+\index{Kaiser!spc}
 
 Spectra obtained using Kaiser's Hologram software can be saved either in their own .hol format and
 imported into Matlab (from where the data may be written to a .mat file readable by
-\Rpackage{R.matlab}'s \Rfunction{readMat}. Hologram can also write ASCII files and .spc
-files. We found working with .spc files the best option. 
+\Rpackage{R.matlab}'s \Rfunction{readMat}. Hologram can also write ASCII files and .spc files. We
+found working with .spc files the best option.
 
-The spectra are usually interpolated by Hologram to an evenly spaced wavelength (or $\Delta\tilde\nu$) axis unless the spectra are saved in a by-pixel manner. In this case, the full spectra consist of two files with consecutive file names: one for the low and one for the high wavenumber region. See the example for .spc import.
+The spectra are usually interpolated by Hologram to an evenly spaced wavelength (or
+$\Delta\tilde\nu$) axis unless the spectra are saved in a by-pixel manner. In this case, the full
+spectra consist of two files with consecutive file names: one for the low and one for the high
+wavenumber region. See the example for .spc import.
 
 \subsubsection{Kaiser Optical Systems ASCII Files}
 \label{sec:KaiserASCII}
+\index{ASCII!long!Raman}
+\index{ASCII!long!Kaiser}
+\index{Raman!Kaiser}
+\index{Raman!ASCII long}
+\index{Kaiser!ASCII long}
 
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("ASCII long", "Raman", "Kaiser")
-@
 The ASCII files are long format that can be imported by \Rfunction{read.txt.long} (see
 section~\ref{sec:read.txt.long}, p.~\pageref{sec:read.txt.long}). 
 
 We experienced two different problems with these files:
 \begin{enumerate}
-\item If the instrument computer's locale is set so that also the decimal separator is a comma,  
-commas are used both as decimal and as column separator.
-\item Values with a decimal fraction of $0$ are written with decimal separator but no further digits (\eg \texttt{2,}). This may be a problem for certain conversion functions (\Rfunction{read.table} works fine, though). 
+\item If the instrument computer's locale is set so that also the decimal separator is a comma,
+  commas are used both as decimal and as column separator.
+\item Values with a decimal fraction of $0$ are written with decimal separator but no further digits
+  (\eg \texttt{2,}). This may be a problem for certain conversion functions (\Rfunction{read.table}
+  works fine, though).
 \end{enumerate}
 
 Still the files may be imported, though care must be taken:
@@ -412,19 +446,24 @@ spc <- new ("hyperSpec", spc = as.numeric (spc), wavelength = as.numeric (wl))
 @
 
 \subsubsection{Kaiser Optical Systems Raman Maps}
-\label{sec:read.spc.Kaisermap}
-%
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("spc", "Raman", "Kaiser")
-make.all.permutations ("spc", "Kaiser", "Map")
-@
+\label{sec:read.spc.KaiserMap}
+\index{Map}
+\index{Map!Raman}
+\index{Map!Kaiser}
+\index{Raman!Map}
+\index{Raman!Kaiser}
+\index{Raman!spc}
+\index{Kaiser!Map}
+\index{Kaiser!spc}
 
 \phy provides the function \Rfunction{read.spc.KaiserMap} to easily import spatial collections of
 .spc files written by Kaiser's Hologram software. The filenames of all .spc files to be read into one
 \chy object can be provided either as a character vector or as a wildcard expression (\eg
 \textquotedbl path/to/files/*.spc\textquotedbl ).
 
-The data for the following example was saved with wavelength axis being camera pixels rather than Raman shift. Thus two files for each spectrum were saved by Hologram. Thus, a file name pattern is difficult to give and a vector of file names is used instead:
+The data for the following example was saved with wavelength axis being camera pixels rather than
+Raman shift. Thus two files for each spectrum were saved by Hologram. Thus, a file name pattern is
+difficult to give and a vector of file names is used instead:
 <<readspcKaiserMap>>=
 files <- Sys.glob ("spc.Kaisermap/*.spc")
 spc.low <- read.spc.KaiserMap (files [seq (1, length (files), by = 2)])
@@ -435,11 +474,11 @@ spc
 
 \subsection{Renishaw Raman}
 \label{sec:scan.txt.renishaw}
-%
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("Raman", "Renishaw")
-make.all.permutations ("spc", "Raman", "Renishaw")
-@
+\index{Raman!Renishaw!spc}
+\index{Renishaw!Raman}
+\index{Renishaw!spc}
+\index{spc!Renishaw}
+\index{spc!Raman}
 
 Renishaw's Wire software comes with an file format converter. This program can produce a long ASCII
 format, .spc, or .jdx files.
@@ -451,17 +490,28 @@ Otherwise the import using \Rfunction{read.spc} worked.
 
 \subsubsection{Renishaw ASCII data}
 \label{sec:scan.txt.Renishaw}
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("ASCII long", "Raman", "Renishaw")
-@
-An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}. The file may be compressed via gzip, bzip2, xz or lzma. zip compressed files are read via \Rfunction{scan.zip.Renishaw}.
-The ASCII files can easily become very large, particularly with linefocus- or streamline imaging. 
-\Rfunction{scan.txt.Renishaw} provides two mechanisms to avoid running out of memory during data
-import. The file may be imported in chunks of a given number of lines (see the last example). \Rfunction{scan.txt.Renishaw} can calculate the correct number of wavelengths (\ie data points per spectrum) if the system command \texttt{wc} is available on your computer.
+\index{ASCII!long!Raman}
+\index{ASCII!long!Renishaw}
+\index{ASCII!compressed}
+\index{ASCII!zip}
+\index{Raman!ASCII long}
+\index{Raman!Renishaw!ASCII}
+\index{Renishaw!Raman}
+\index{Renishaw!ASCII long}
+%
+An optimized import function for the ASCII files is available: \Rfunction{scan.txt.Renishaw}. The
+file may be compressed via gzip, bzip2, xz or lzma. zip compressed files are read via
+\Rfunction{scan.zip.Renishaw}.  The ASCII files can easily become very large, particularly with
+linefocus- or streamline imaging.  \Rfunction{scan.txt.Renishaw} provides two mechanisms to avoid
+running out of memory during data import. The file may be imported in chunks of a given number of
+lines (see the last example). \Rfunction{scan.txt.Renishaw} can calculate the correct number of
+wavelengths (\ie data points per spectrum) if the system command \texttt{wc} is available on your
+computer.
 
-In addition, the processing of the long ASCII format into the spectra matrix is done by reshaping the vector of intensities into a matrix. This process does not allow any missing values in the data.
-\emph{Therefore it is not possible to import multi-spectra files with individually ``zapped''
-spectra using \Rfunction{scan.txt.Renishaw}.} 
+In addition, the processing of the long ASCII format into the spectra matrix is done by reshaping the
+vector of intensities into a matrix. This process does not allow any missing values in the data.
+\emph{Therefore it is not possible to import multi-spectra files with individually ``zapped'' spectra
+  using \Rfunction{scan.txt.Renishaw}.}
 
 The second argument to  \Rfunction{scan.txt.Renishaw} decides what type of experiment is imported.
 Supported types are:
@@ -478,7 +528,15 @@ Instead of a file name, \Rfunction{scan.txt.Renishaw} accepts also a connection.
 <<scan.txt.Renishaw>>=
 scan.txt.Renishaw ("txt.Renishaw/paracetamol.txt", "spc")
 scan.txt.Renishaw ("txt.Renishaw/laser.txt", "ts")
+@ 
+
+Very large files can  be read in chunks to save  memory:
+<<scan.txt.Renishaw>>=
 scan.txt.Renishaw ("txt.Renishaw/chondro.txt", nlines = 1e5, nspc = 875)
+@ 
+
+R accepts a variety of compressed file formats for ASCII files:
+<<scan.txt.Renishaw-compressed, results = hide>>=
 scan.txt.Renishaw ("txt.Renishaw/chondro.gz")
 scan.txt.Renishaw ("txt.Renishaw/chondro.xz")
 scan.txt.Renishaw ("txt.Renishaw/chondro.lzma")
@@ -486,17 +544,26 @@ scan.txt.Renishaw ("txt.Renishaw/chondro.gz")
 scan.txt.Renishaw ("txt.Renishaw/chondro.bz2")
 @
 
+For .zip packed files, however, a connection must be used:
+<<scan.txt.Renishaw-zip, results = hide>>=
+scan.txt.Renishaw (unzip ("txt.Renishaw/chondro.zip"))
+@
+
 
 \section{Writing your own Import Function}
 \label{sec:writing-Import}
-This section gives examples  how to write import functions. The first example implements an import
-filter for an ASCII file format basically from scratch. The second example shows how to implement more details for an already existing import filter. 
+This section gives examples how to write import functions. The first example implements an import
+filter for an ASCII file format basically from scratch. The second example shows how to implement
+more details for an already existing import filter.
 
 \subsection{A new ASCII Import Function: scan.txt.PerkinElmer}
 \label{sec:read.txt.PerkinElmer}
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("ASCII long", "Fluorescence", "Perkin Elmer")
-@
+\index{ASCII!long!Fluorescence}
+\index{ASCII!long!Perkin Elmer}
+\index{Fluorescence!ASCII long}
+\index{Fluorescence!Perkin Elmer!ASCII}
+\index{Perkin Elmer!Fluorescence}
+\index{Perkin Elmer!ASCII long}
 The raw spectra of the \Robject{flu} data set (see also the respective vignette) are in Perkin
 Elmer's ASCII file format, one spectrum per file. 
 
@@ -538,15 +605,20 @@ scan.txt.PerkinElmer ("txt.PerkinElmer/flu?.txt", skip = 54)
 @
 imports the spectra.
 
-This function is not exported by \phy. While it is already useful for importing files, it is not yet general enough to work immediately with new data: the the file header is completely ignored. Thus information like the excitation wavelength is lost.
+This function is not exported by \phy. While it is already useful for importing files, it is not yet
+general enough to work immediately with new data: the the file header is completely ignored. Thus
+information like the excitation wavelength is lost.
 
 \subsection{Deriving a More Specific Function: read.ENVI.Nicolet}
-
-<<echo = FALSE, results = tex>>=
-make.all.permutations ("ENVI", "Infrared", "Nicolet")
-make.all.permutations ("ENVI", "Infrared", "Map")
-make.all.permutations ("ENVI", "Map", "Nicolet")
-@
+\index{Infrared!ENVI}
+\index{Infrared!Map}
+\index{Infrared!Nicolet}
+\index{ENVI!Infrared!Nicolet}
+\index{ENVI!Map}
+\index{ENVI!Nicolet}
+\index{Nicolet!ENVI}
+\index{Nicolet!Map}
+\index{Nicolet!Infrared}
 
 The function \Rfunction{read.ENVI.Nicolet} is a good example for a more specific import filter
 derived from a general filter for the respective file type.
@@ -663,11 +735,14 @@ res <- apply (fileformats [i,][fileformats$Spectroscopy [i] != "",], 1,
 \end{tabular}
 \end{footnotesize}
 
-\printindex
-<<cleanup, echo = FALSE, results = hide>>=
+\begin{footnotesize}
+\printindex  
+
+<<cleanup, echo = FALSE>>=
 sessionInfo ()
 rm (list = ls () ) 
 @ 
+\end{footnotesize}
 \end{document}
 
 

@@ -5,7 +5,7 @@
 ###
 
 write.txt.long <- function (object,
-                            file = stop ("filename required"),
+                            file = stop ("file is required"),
                             order = c (".rownames", ".wavelength"),
                             na.last = TRUE, decreasing = FALSE,
                             quote = FALSE, sep = "\t",

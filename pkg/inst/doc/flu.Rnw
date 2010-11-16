@@ -232,7 +232,8 @@ plotc (flu, groups = type, type = c("l", "p"),
        pred.cex = 0.5)
 @ 
 
-<<cleanup, echo = FALSE, results = hide>>=
+<<cleanup, echo = FALSE>>=
+sessionInfo ()
 rm (list = ls () ) 
 @ 
 \end{document}

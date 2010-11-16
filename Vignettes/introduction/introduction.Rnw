@@ -11,6 +11,7 @@
 % \VignetteIndexEntry{hyperSpec Introduction}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
+% \VignetteDepends{ggplot2, pls}
 
 \begin{document}
 \title{\phy Introduction }
@@ -282,8 +283,7 @@ This logbook part of the output of the \Rfunction{summary}, and can also be retr
 logbook (flu)
 @
 
-\mFun{logentry, logbook}
-New entries can be created manually by calling \Rfunction{logentry}:
+New entries can be created manually by calling \Rfunction{logentry}\mFun{\Rfunction{logentry}, \Rfunction{logbook}}:
 <<>>=
 tmp <- logentry (flu, short = "test", long = "This could also be a list of parameters")
 logbook (tmp)
@@ -302,7 +302,7 @@ meaningful short descriptions: they are assigned via the argument \Rfunarg{short
 tmp <- sweep (tmp, 2, mean, short = "centering")
 logbook (tmp)
 @ 
-<<echo=hide, results=hide>>=
+<<echo=FALSE, results=hide>>=
 rm (tmp)
 @
 
@@ -1294,21 +1294,24 @@ absolute amount of time needed to add a logbook entry is small, it may be execut
 larger gains in speed.
 
 As an example, let's again consider the code for shifting the spectra:
-<<>>=
+<<speed1>>=
+
 system.time ({
   for (i in seq_len (nrow (chondro)))
-    chondro [[i]] <- interpolate (tmp [[i]], shifts [i], wl = wl (chondro))
+    chondro [[i]] <- interpolate (chondro [[i]], shifts [i], wl = wl (chondro))
 })
 rm (chondro)
-
+@ 
+<<speed2>>=
 hyperSpec.setOptions (log = FALSE)
 system.time ({
   for (i in seq_len (nrow (chondro)))
-    tmp [[i]] <- interpolate (tmp [[i]], shifts [i], wl = wl (chondro))
+    chondro [[i]] <- interpolate (chondro [[i]], shifts [i], wl = wl (chondro))
 })
 hyperSpec.setOptions (log = TRUE)
 rm (chondro)
-
+@
+<<speed3>>=
 system.time ({
   tmp <- chondro [[]]
   for (i in seq_len (nrow (chondro)))
@@ -1361,7 +1364,8 @@ make.fn.table()
 \end{longtable}
 \end{small}
 
-<<cleanup, echo = FALSE, results = hide>>=
-rm (list = ls () )
+<<cleanup, echo = FALSE>>=
+sessionInfo ()
+rm (list = ls ())
 @
 \end{document}
