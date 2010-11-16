@@ -412,7 +412,7 @@ spc <- new ("hyperSpec", spc = as.numeric (spc), wavelength = as.numeric (wl))
 @
 
 \subsubsection{Kaiser Optical Systems Raman Maps}
-\label{sec:read.spc.KaiserMap}
+\label{sec:read.spc.Kaisermap}
 %
 <<echo = FALSE, results = tex>>=
 make.all.permutations ("spc", "Raman", "Kaiser")
@@ -426,7 +426,7 @@ make.all.permutations ("spc", "Kaiser", "Map")
 
 The data for the following example was saved with wavelength axis being camera pixels rather than Raman shift. Thus two files for each spectrum were saved by Hologram. Thus, a file name pattern is difficult to give and a vector of file names is used instead:
 <<readspcKaiserMap>>=
-files <- Sys.glob ("spc.KaiserMap/*.spc")
+files <- Sys.glob ("spc.Kaisermap/*.spc")
 spc.low <- read.spc.KaiserMap (files [seq (1, length (files), by = 2)])
 spc.high <- read.spc.KaiserMap (files [seq (2, length (files), by = 2)])
 wl (spc.high) <- wl (spc.high) + 1340
@@ -665,6 +665,7 @@ res <- apply (fileformats [i,][fileformats$Spectroscopy [i] != "",], 1,
 
 \printindex
 <<cleanup, echo = FALSE, results = hide>>=
+sessionInfo ()
 rm (list = ls () ) 
 @ 
 \end{document}

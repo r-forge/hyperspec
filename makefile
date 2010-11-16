@@ -33,10 +33,8 @@ $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).Rnw): $(foreach V,$(VIGNETTES),Vign
 
 #Vignettes/*.zip: FORCE
 
-Vignettes/%.zip: `zip -sf $@`
-	echo "$@ before" 
-	cd $(dir $@) && zip -f -v $(notdir $@)
-	echo "$@ done" 
+Vignettes/%.zip: .FORCE
+	cd $(dir $@) && zip -u $(notdir $@) || echo "check zips"
 
 Vignettes/flu/flu.Rnw: Vignettes/flu/scan.txt.PerkinElmer.R 
 #	touch $@
@@ -44,18 +42,26 @@ Vignettes/flu/flu.Rnw: Vignettes/flu/scan.txt.PerkinElmer.R
 Vignettes/flu/scan.txt.PerkinElmer.R: Vignettes/FileIO/scan.txt.PerkinElmer.R 
 	@cp -av Vignettes/FileIO/scan.txt.PerkinElmer.R Vignettes/flu/
 
-Vignettes/introduction/introduction.tex: Vignettes/introduction/strukturhyperspec.pdf
+Vignettes/introduction/introduction.tex: Vignettes/introduction/strukturhyperspec.pdf 
 	touch $@
+
+Vignettes/introduction/introduction.tex: Vignettes/introduction/introduction.Rnw
+	cd $(dir $<) && R CMD Sweave $(notdir $<) 
+
 Vignettes/introduction/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.tex
 	cd $(dir $<) && latexmk -pdf $(notdir $<) 
+
 Vignettes/introduction/introduction.Rnw: Vignettes/introduction/functions.RData Vignettes/flu/vignettes.defs
 
 Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
 
 # for Rnw -> pdf conversion, first Sweave, then use latexmk which takes care of .bib etc.
-%.pdf: %.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<) && latexmk -pdf $(basename $(notdir $<)).tex
+%.tex: %.Rnw
+	cd $(dir $<) && R CMD Sweave $(notdir $<) 
+
+%.pdf: %.tex
+	cd $(dir $<) && latexmk -pdf $(basename $(notdir $<)).tex
 
 # data ##############################################################################################
 instdoc: pkg/inst/doc/*.Rnw 
@@ -121,12 +127,15 @@ pkg/inst/doc/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt
 
 
 # www
-www: www/*.zip
+www: www/*.zip www/*.pdf
 
 www/%.pdf: Vignettes/%/%.pdf
 	@cp -av $< $@
 
-www/%.zip: Vignettes/%.zip #how do I do this only for the existing .zips? I.e. exclude hyperSpec-prebuilt.zip
+www/hyperSpec-prebuilt.zip: # built manually 
+	touch $@
+
+www/%.zip: Vignettes/%.zip
 	@cp -av $< $@
 
 DESCRIPTION: $(shell find pkg -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIPTION") #only if not modified today
