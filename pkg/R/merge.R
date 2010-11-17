@@ -30,7 +30,7 @@
   spc.y <- matrix (NA, nrow = nrow (tmp), ncol = nwl (y))
   spc.y [! is.na (tmp$.ny),] <- y@data [tmp$.ny[! is.na (tmp$.ny)], y.spc]
 
-  tmp$spc <- I (cbind (spc.x, spc.y))
+  tmp$spc <- cbind (spc.x, spc.y) # omit I ()
   
   x@data <- tmp
   .wl (x) <- c (x@wavelength, y@wavelength)
