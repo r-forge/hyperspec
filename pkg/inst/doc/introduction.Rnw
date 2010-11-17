@@ -26,177 +26,173 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 
 \section{Introduction}
 
-\phy is a R package that allows convenient handling
-of (hyper)spectral data sets, \ie data sets comprising spectra
-together with further data on a per-spectrum basis. The
-spectra can be anything that is recorded over a common discretized
-axis, the \emph{so-called} wavelength axis. Throughout the documentation of the package,
-the terms intensity and wavelength refer to the spectral ordinate
-and abscissa, respectively.
+\phy is a R package that allows convenient handling of (hyper)spectral data sets, \ie data sets
+comprising spectra together with further data on a per-spectrum basis. The spectra can be anything
+that is recorded over a common discretized axis. 
 
-However, \phy works perfectly fine with any data
-that fits in that general scheme, so that the three terms may also
-be used for:
+\phy works with any data that fits in this general scheme, so that the three terms may also be used
+for:
 \begin{labeling}{wavelength: }
-\item [wavelength:] frequency, wavenumbers, chemical shift, Raman shift,
-$\frac{m}{z}$, etc.
+\item [wavelength:] frequency, wavenumbers, chemical shift, Raman shift, $\frac{m}{z}$, etc.
 \item [intensity:] transmission, absorbance, $\frac{e^{-}}{s}$, \textellipsis
-\item [extra~data: \hfill] spatial information (spectral images, maps, or profiles),
-temporal information (kinetics, time series), concentrations (calibration
-series), class membership information, etc. \\
-Note that there is no restriction on the number of extra data columns.
+\item [extra data:] spatial information (spectral images, maps, or profiles), temporal information
+  (kinetics, time series), concentrations (calibration  series), class membership information, etc. \\
+  Note that there is no restriction on the number of extra data columns.
 \end{labeling}
-This vignette gives an introduction on basic working techniques using
-the R package \phy. It comes with five data sets,
+Throughout the documentation of the package, the terms intensity and wavelength axes refer to the
+spectral ordinate and abscissa, respectively.
+
+This vignette gives an introduction on basic working techniques using the R package \phy. 
+
+\phy comes with five data sets,
 \begin{labeling}{wavelength: }
 \item [\Robject{chondro}] a Raman map of chondrocytes in cartilage,
-\item [\Robject{flu}] a set of fluorescence spectra of a calibration
-series, and
+\item [\Robject{flu}] a set of fluorescence spectra of a calibration series, and
 \item [\Robject{laser}] a time series of an unstable laser emission
-\item [\Robject{paracetamol}] a Raman spectrum of paracetamol (acetaminophen) ranging from 100 to 3200\,cm\textsuperscript{-1} with some overlapping wavelength ranges. \\ It is used mainly in the \emph{plotting} vignette.
-  \item [\Robject{barbituates}] GC-MS spectra with differing wavelength axes as a list of
-    \Sexpr{length (barbituates)} \chy objects.
+\item [\Robject{paracetamol}] a Raman spectrum of paracetamol (acetaminophene) ranging from 100 to
+  \rcm{3200} with overlapping wavelength ranges.
+\item [\Robject{barbituates}] GC-MS spectra with differing wavelength axes as a list of
+  \Sexpr{length (barbituates)} \chy objects.
 \end{labeling}
-In this vignette, the data sets are used to illustrate appropriate procedures for different tasks and different spectra.
+In this vignette, the data sets are used to illustrate appropriate procedures for different tasks and
+different spectra.  In addition, the first three data sets are accompanied by their own vignettes
+showing exemplary work flows for the respective data type.
 
-In addition, the first three data sets are accompanied by vignetted that show exemplary work flows for the respective data type.
+This document describes how to accomplish typical tasks in the analysis of spectra. It does not give
+a complete reference on particular functions. It is therefore recommended to look up the methods in
+R's help system using \Rcode{?{} command}.
 
-This document describes how to accomplish spectroscopic tasks. It does not give a complete reference on particular functions. It is therefore recommended to look up the methods in R's help system using  \Rcode{?{} command}.
-
-After some remarks on the notation used in the document and on the general behaviour of R, sections~\ref{sec:loading-package} shows how to load the package. Section~\ref{sec:structure-chy} describes how \chy objects are organized internally. 
-
-A list of all functions available in \phy is given in appendix~\ref{tab:functions}~(\pageref{tab:functions})
+A list of all functions available in \phy is given in
+appendix~\ref{tab:functions}~(p.~\pageref{tab:functions}).
 
 
 \subsection{Notation}
 
-This vignette demonstrates working techniques mostly from a spectroscopic
-point of view: rather than going through the functions provided by
-\phy, it is organized more closely on spectroscopic
-tasks. However, the functions discussed are printed on the margin
-for a fast overview.
+This vignette demonstrates working techniques mostly from a spectroscopic point of view: rather than
+going through the functions provided by \phy, it is organized more closely on spectroscopic
+tasks. However, the functions discussed are printed on the margin for a fast overview.
 
-In R, slots of a S4 class can be accessed directly by the \Rcommand{@}
-operator. In this vignette, the notation \Rcode{@xxx} will thus mean
-\emph{``slot xxx of an object''} see figure~\ref{fig:structure} on page~\pageref{fig:structure}).
-%TODO vref
-
-Likewise, named elements of a \Rclass{list}, like the columns of
-a \Rclass{data.frame}, are accessed by the \Rcode{\$} operator,
-and \Rcode{\$xxx} will be used for \emph{``column xxx''}, and
-as an abbreviation for \emph{``column xxx of the data.frame in slot
-data of the object''} see figure~\ref{fig:structure} on page~\pageref{fig:structure}) .%TODO vref
-
+In R, slots of a S4 class can be accessed directly by the \Rcommand{@} operator. In this vignette,
+the notation \Rcode{@xxx} will thus mean \emph{``slot xxx of an object''}.  Likewise, named elements
+of a \Rclass{list}, like the columns of a \df, are accessed by the \Rcode{\$}
+operator, and \Rcode{\$xxx} will be used for \emph{``column xxx''}, and as an abbreviation for
+\emph{``column xxx of the \df in slot data of the object''}.
 
 \section{Remarks on R}
-
-
 \subsection{Generic Functions}
 
-\emph{Generic Functions} are functions that apply to a wide range
-of data types or classes, e.\,g. \Rmethod{plot}, \Rmethod{print},
-mathematical operators, etc. These functions can be implemented in
-a specialized way by each class.
-
-\Rclass{hyperSpec} implements with a variety of such functions, see
+\emph{Generic Functions} are functions that apply to a wide range of data types or classes, \eg
+\Rmethod{plot}, \Rmethod{print}, mathematical operators, etc. These functions can be implemented in a
+specialized way by each class.  \Rclass{hyperSpec} implements with a variety of such functions, see
 the table in appendix~\ref{tab:functions} on page~\pageref{tab:functions}.
 
 \subsection{Functionality Can be Extended at Runtime}
- \R's  concept of functions offers much flexibility. Functions may be added or changed by the user in his \emph{workspace} at any time. This is also true for methods belonging to a certain class.
-Neither restart of R nor reloading of the package or anything the like is needed. If the original function resides in a namespace (as it is the case for all functions in \phy), the original function is not deleted. It is just masked by the user's new function but stays accessible via the \Rcode{::} operator.
+\R's concept of functions offers much flexibility. Functions may be added or changed by the user in
+his \emph{workspace} at any time. This is also true for methods belonging to a certain class.
+Neither restart of R nor reloading of the package or anything the like is needed. If the original
+function resides in a namespace (as it is the case for all functions in \phy), the original function
+is not deleted. It is just masked by the user's new function but stays accessible via the \Rcode{::}
+operator.
 
-This offers the opportunity of easily writing specialized functions that are adapted to specific tasks. 
-
-For examples, see the setup of the lattice plotting functions in the \texttt{vignettes.defs} file accompanying all \phy vignettes.
+This offers the opportunity of easily writing specialized functions that are adapted to specific
+tasks. \phy's vignettes use this to set up special versions of the lattice graphics functions that
+are already wrapped in \Rfunction{print} (see also
+\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R
+  FAQ: Why do lattice/trellis graphics not work?}) and allow the code in the code chunks of the
+vignettes to be exactly what one would type during an interactive \R session. For the code, check the
+\texttt{vignettes.defs} file accompanying all \phy vignettes.
 
 \subsection{Validity Checking}
-S4 classes have a mechanism to define and enforce that the data actually stored in the object is appropriate for this class. In other words, there is a mechanism of \emph{validity checking}. 
+S4 classes have a mechanism to define and enforce that the data actually stored in the object is
+appropriate for this class. In other words, there is a mechanism of \emph{validity checking}.
 
-The functions provided by \phy check the validity of \Rclass{hyperSpec} objects at the beginning, and --- if the validity could be broken by inappropriate arguments --- also before leaving the function.
+The functions provided by \phy check the validity of \Rclass{hyperSpec} objects at the beginning, and
+-- if the validity could be broken by inappropriate arguments -- also before leaving the function.
  
-It is highly recommended to use validity checking also for user-defined functions. In addition, non-generic functions should first ensure that the argument actually is a \chy object. The two tasks are accomplished by:
+It is highly recommended to use validity checking also for user-defined functions. In addition,
+non-generic functions should first ensure that the argument actually is a \chy object. The two tasks
+are accomplished by:
 <<eval = FALSE>>=
-chk.hy (object)
-validObject (object)
-@
-The first line checks whether \Robject{object} is a \chy object, the second checks its validity. 
-Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise an error and stop. 
+chk.hy (object)                         
+validObject (object)                    
+@ 
+%
+The first line checks whether \Robject{object} is a \chy object, the second checks its validity.
+Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise an error and stop.
 
 \subsection{Special Function Names}
 \label{sec:spec-funct-names}
 \subsubsection{The Names of Operators}
 \label{sec:names-operators}
-Operators such as \verb/+/,  \verb+*+, \verb+%%+, etc. are in fact functions in R. Thus they can be handed over as arguments to other functions (particularly to the vectorization functions \Rfunction{*apply}, \Rfunction{sweep}, etc.). In this case the name of the function must be quoted: \verb+`*`+ is the recommended style (although \verb+"*"+ will often work as well), \eg:
+Operators such as \verb/+/, \verb+*+, \verb+%%+, etc. are in fact functions in R. Thus they can be
+handed over as arguments to other functions (particularly to the vectorization functions
+\Rfunction{*apply}, \Rfunction{sweep}, etc.). In this case the name of the function must be quoted:
+\verb+`*`+ is the recommended style (although \verb+"*"+ will often work as well), \eg:
 <<eval = FALSE>>=
 sweep (flu, 2, mean, `-`)
 @
 
-These functions can also be called in a more function-like style:
+These functions can also be called in a more function-like style (prefix notation):
 <<>>=
 `+` (3, 5)
 @
 
 \subsubsection{Assignment Functions}
 \label{sec:assignment-functions}
-R allows the definition of functions that do an assignment (or set some value), such as:
+R allows the definition of functions that do an assignment (set some part of the object), such as:
 <<eval = false>>=
 wl (flu) <- new.wavelength.values
-@
-The actual name of the function is \verb+wl<-+ and must be quoted in order to avoid confusion with an assignment to variable \verb+wl+: \verb+`wl<-`+.
-
-These functions actually change the object.
+@ The actual name of the function is \verb+wl<-+ and must be quoted in order to avoid confusion with
+an assignment to variable \verb+wl+: \verb+`wl<-`+.
 
 \section{Loading and the package and configuration}
 \label{sec:loading-package}
-
-To load \phy, use
-\nopagebreak
+To load \phy, use\nopagebreak
 <<init>>=
 library (hyperSpec)
 @
 
-The global behaviour of \phy can be configured via options. The values of the options can be
+The global behaviour of \phy can be configured via options. The values of the options are
 retrieved with \Rfunction{hyperSpec.getOptions} and \Rfunction{hyperSpec.getOption}, and changed with
-\Rfunction{hyperSpec.setOptions}.  
+\Rfunction{hyperSpec.setOptions}.
 
 Currently, the only option provided is \Robject{log}, a logical specifying whether assignment
-functions should automatically add entries to the logbook (see \ref{sec:logbook}).
+functions should automatically add entries to the logbook (see section \ref{sec:logbook},
+p.~\pageref{sec:logbook}).
 
 \section{The structure of \Rclass{hyperSpec} objects}
 \label{sec:structure-chy}
 
-\Rclass{hyperSpec} is a S4 (or new-style) class. It has four so-called \emph{slots} that contain
-parts of the object:
+\Rclass{hyperSpec} is a S4 (or new-style) class. Four slots contain the parts of the object:
 \begin{labeling}{@wavelength }
 \item [{\Robject{@wavelength}}] containing a numeric vector with the wavelength axis of the spectra.
-\item [{\Robject{@data}}] a \Rclass{data.frame}with the spectra and all further information belonging
-  to the spectra
+\item [{\Robject{@data}}] a \df with the spectra and all further information belonging to the spectra
 \item [{\Robject{@label}}] a list with appropriate labels (particularly for axis annotations)
-\item [{\Robject{@log}}] a \Rclass{data.frame} keeping track of what is done with the object
+\item [{\Robject{@log}}] a \df keeping track of what is done with the object
 \end{labeling}
-However, it is good practice to use the functions provided by \phy to handle the
-objects rather than accessing the slots directly (tab.~\ref{tab:getset}). This also ensures that
-proper (\emph{valid}) objects are retained.
+While the parts of the \chy object can be accessed directly, it is good practice to use the functions
+provided by \phy to handle the objects rather than accessing the slots directly
+(tab.~\ref{tab:getset}). This also ensures that proper (\emph{valid}) objects are retained.
 \begin{table}[t]
   \centering
   \begin{tabular}{>{\Robject}lll}
     \toprule
-    \textbf{slot} & \textbf{get} & \textbf{set}\\
-    \cmidrule(lr){1-1}    \cmidrule(lr){2-2}    \cmidrule(lr){3-3}
-    @wavelength & \verb+wl+ & wl<- \\ 
-    @data       & \verb+[+, \verb+[[+, \verb+$+, \verb+as.data.frame+, \verb+as.long.df+, \ldots & \verb+[<-+, \verb+[[<-+, \verb+$<-+\\ %]
-    @label & \verb+labels+ & \verb+labels<-+\\
-    @log & \verb+logbook+ & \verb+logentry+\\
+    \textbf{slot} & \textbf{get}                                                                   & \textbf{set}                        \\
+    \cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-3}
+    @wavelength   & \verb+wl+                                                                      & wl<-                                \\ 
+    @data         & \verb+[+, \verb+[[+, \verb+$+, \verb+as.data.frame+, \verb+as.long.df+, \ldots & \verb+[<-+, \verb+[[<-+, \verb+$<-+ \\ %] needed or emacs font lock is confused
+    @label        & \verb+labels+                                                                  & \verb+labels<-+                     \\
+    @log          & \verb+logbook+                                                                 & \verb+logentry+                     \\
     \bottomrule
   \end{tabular}
   \caption{Get and set functions for the slots of \chy objects}
   \label{tab:getset}
 \end{table}
 
-Most of the data is stored in \Robject{@data}. This \Rclass{data.frame} has one special column,
-\Rcode{\$spc}. It is the column that actually contains the spectra. The spectra are stored in a
-matrix inside this column, as illustrated in figure~\ref{fig:structure}. Even if there are no
-spectra, \Rcode{\$spc} must still be present. It is then a matrix with zero columns.
+Most of the data is stored in \Robject{@data}. This \df has one special column, \Rcode{\$spc}. It is
+the column that actually contains the spectra. The spectra are stored in a matrix inside this column,
+as illustrated in figure~\ref{fig:structure}. Even if there are no spectra, \Rcode{\$spc} must still
+be present. It is then a matrix with zero columns.
 \begin{figure}[bt]
 \noindent \centering
 \includegraphics{strukturhyperspec}
@@ -206,13 +202,14 @@ spectra, \Rcode{\$spc} must still be present. It is then a matrix with zero colu
 Slot \Rcode{@label} contains an element for each of the columns in \Rcode{@data} plus one holding the
 label for the wavelength axis, \Rcode{.wavelength}. The elements of the list may be anything suitable
 for axis annotations, \ie they should be either character strings or expressions for ``pretty'' axis
-annotations (see figure~\ref{fig-spcloess} on page~\pageref{fig-spcloess}).  To get familiar with
+annotations (see \eg figure~\ref{fig-spcloess} on page~\pageref{fig-spcloess}).  To get familiar with
 expressions for axis annotation, see \verb+? plotmath+ and \verb+demo (plotmath)+.
 
 \section{Functions provided by \phy}
 \label{sec:funct-prov-phy}
 
-Table~\ref{tab:functions}~(p.~\pageref{tab:functions}) in the appendix gives an overview of the functions implemented by \phy. 
+Table~\ref{tab:functions}~(p.~\pageref{tab:functions}) in the appendix gives an overview of the
+functions implemented by \phy.
 
 \section{Obtaining Basic Information about \phy Objects}
 As \mFun{print, show, summary} usual, the \Rmethod{print} and \Rmethod{show} methods display
@@ -223,11 +220,11 @@ handling done so far:
 chondro
 summary (chondro)
 @
-
-The\mFun{nrow, ncol, nwl, dim}  data set \Robject{chondro} consists of \Sexpr{nrow (chondro)}
-spectra with \Sexpr{nwl (chondro)} data points each, and \Sexpr{ncol (chondro)}
-data columns: two for the spatial information plus \Robject{\$spc}.
-These informations can be directly obtained by
+%
+The\mFun{nrow, ncol, nwl, dim} data set \Robject{chondro} consists of \Sexpr{nrow (chondro)} spectra
+with \Sexpr{nwl (chondro)} data points each, and \Sexpr{ncol (chondro)} data columns: two for the
+spatial information, one factor with the results of a cluster analysis plus \Robject{\$spc}.  These
+informations can be directly obtained by
 <<nwl>>=
 nrow (chondro)
 nwl (chondro)
@@ -235,7 +232,7 @@ ncol (chondro)
 dim (chondro)
 @
 
-The names of the columns in \Rcode{@data} are accessed by\mFun{colnames, rownames, dimnames, \emph{wl}} 
+The names of the columns in \Rcode{@data} are accessed by\mFun{colnames, rownames, dimnames, wl} 
 <<names>>=
 colnames (chondro)
 @
@@ -252,44 +249,42 @@ labels as well.
 \section{Creating a \Rclass{hyperSpec} Object, Data Import and Export}
 \label{sec:create}
 \phy comes with filters for a variety of file formats. These are discussed in detail in a separate
-document. Use \verb+vignette ("file-io")+ to read about import and export of spectra into \chy
-objects.
+vignette accessible via \verb+vignette ("file-io")+.
 
 \subsection{Creating a \Rclass{hyperSpec} Object from Spectra Matrix
 and Wavelength Vector}
 
-If the data is in R's workspace, a \Rclass{hyperSpec} object is
-created by:\\
-\Rcode{spc <- new (\textquotedbl{}hyperSpec\textquotedbl{}, spc =
-  spectra.matrix, wavelength = wavelength.vector, data = extra.data)}\\
-You will usually give the following arguments:
+If the data is in R's workspace, a \Rclass{hyperSpec} object is created by:\\
+<<eval=FALSE>>=
+spc <- new ("hyperSpec", spc = spectra.matrix, wavelength = wavelength.vector, data = extra.data)
+@
+%
+The most frequently needed arguments are:
 \begin{labeling}{\Rcode{wavelength}}
 \item [{\Rcode{spc}}] the spectra matrix
 \item [{\Rcode{wavelength}}] the wavelength axis vector
-\item [{\Rcode{data}}] the extra data (possibly already including the spectra matrix in column   \texttt{spc})
-\item [{\Rcode{label}}] a list with the proper labels. Do not forget the
-wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
-axis label in \Rcode{\$spc}.
+\item [{\Rcode{data}}] the extra data (can already contain the spectra matrix in column \Rcode{\$spc})
+\item [{\Rcode{label}}] a list with the proper labels. Do not forget the wavelength axis label in
+  \Rcode{\$.wavelength} and the spectral intensity axis label in \Rcode{\$spc}.
 \end{labeling}
 
 \section{The Logbook}
 \label{sec:logbook}
-Slot \Rcode{@log} of \chy objects is intended to keep track of the history of the object. 
-
-This logbook part of the output of the \Rfunction{summary}, and can also be retrieved by
-\Rfunction{logbook}. 
-
+Slot \Rcode{@log} of \chy objects is intended to keep track of the history of the object.  This
+logbook part of the output of the \Rfunction{summary}, and can also be retrieved by
+\Rfunction{logbook}.
 <<logbook>>=
 logbook (flu)
 @
 
-New entries can be created manually by calling \Rfunction{logentry}\mFun{\Rfunction{logentry}, \Rfunction{logbook}}:
+New entries can be created manually by calling \Rfunction{logentry}\mFun{\Rfunction{logentry},
+  \Rfunction{logbook}}:
 <<>>=
 tmp <- logentry (flu, short = "test", long = "This could also be a list of parameters")
 logbook (tmp)
 @
 
-In addition, \phy by default logs automatically all changes to the object. 
+In addition, \phy by default logs automatically all changes to the object:
 <<>>=
 tmp <- tmp [1:3]
 logbook (tmp)
@@ -312,23 +307,19 @@ rm (tmp)
 \subsection{Binding Objects together}
 \label{sec:bind}
 \Rclass{hyperspec} \mFun{\Rfunction{cbind} \Rfunction{rbind}} Objects can be bound together, either
-by columns to append a new spectral range or by row to append new spectra
-
+by columns (\Rfunction{cbind}) to append a new spectral range or by row (\Rfunction{rbind}) to append new spectra:
 <<cbind>>=
 dim (flu)
 dim (cbind (flu, flu))
 dim (rbind (flu, flu))
-@ Thus, you can use \Rfunction{cbind} to add new spectral ranges, and \Rfunction{rbind} to add new
-spectra to your object.
+@ 
 
-There is also a more general function, \Rfunction{bind}, taking the
-direction (\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}})
-as first argument and then all objects to bind either in separate
-arguments or in a list.
+There is also a more general function, \Rfunction{bind}, taking the direction
+(\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}}) as first
+argument followed by the objects to bind either in separate arguments or in a list.
 
 As usual for \Rfunction{rbind} and \Rfunction{cbind}, the objects that should be bound together must
 have the same rows and columns, respectively.
-
 
 \subsection{Binding Objects that do not Share the Same Extra Data and/or Wavelength Axis}
 \label{sec:collapse}
@@ -339,12 +330,14 @@ from all input objects, and all wavelengths from the input objects. If an input 
 a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
 
 The \Robject{barbituates} data is a list of \Sexpr{length (barbituates)} \chy objects, each
-containing one mass spectrum. The spectra have \Sexpr{(min (sapply (barbituates, nwl)))} to
-\Sexpr{(max (sapply (barbituates, nwl)))} data points. As a second step, the resulting object's
-wavelelength axis is sorted:
+containing one mass spectrum. The spectra have between \Sexpr{(min (sapply (barbituates, nwl)))} and
+\Sexpr{(max (sapply (barbituates, nwl)))} data points each. 
 <<collapse>>=
 barb <- collapse (barbituates)
-wl (barb) [1:100]
+wl (barb) [1 : 25]
+@ 
+The resulting object does not have an ordered wavelength axis. This can be obtained in a second step:
+<<collapse-orderwl>>=
 barb <- orderwl (barb)
 barb [[1:3, , min ~ min + 10i]]
 @
@@ -353,22 +346,18 @@ barb [[1:3, , min ~ min + 10i]]
 \label{sec:merge}
 
 \Rfunction{merge} \mFun{\Rfunction{merge}} adds a new spectral range (like \Rfunction{cbind}), but
-works even if spectra are missing in one of the objects. 
-
-The arguments \Rfunarg{by}, \Rfunarg{by.x}, and \Rfunarg{by.y} specify which columns should be used
-to decide which spectra are the same. 
-
-The arguments \Rfunarg{all}, \Rfunarg{all.x}, and \Rfunarg{all.y} determine whether spectra should be
-kept for the result set if they appear in only one of the objects.
-
-For details on \Rfunction{merge}, see the help on \Rpackage{base::merge}.
+works also if spectra are missing in one of the objects. The arguments \Rfunarg{by}, \Rfunarg{by.x},
+and \Rfunarg{by.y} specify which columns should be used to decide which spectra are the same.  The
+arguments \Rfunarg{all}, \Rfunarg{all.x}, and \Rfunarg{all.y} determine whether spectra should be
+kept for the result set if they appear in only one of the objects.  For details, see also the help on
+the base function \Rpackage{merge}.
 
 As an example, let's construct a version of the \Robject{chondro} data like being taken as two maps with
 different spectral ranges. In each data set, some spectra are missing.
 <<merge-sample>>=
-chondro.low <- sample (chondro [,, 600 ~ 1200], 870)
+chondro.low <- sample (chondro [,, 600 ~ 1200], 700)
 nrow (chondro.low)
-chondro.high <- sample (chondro [,, 1400 ~ 1800], 870)
+chondro.high <- sample (chondro [,, 1400 ~ 1800], 700)
 nrow (chondro.high)
 @ 
 
@@ -378,7 +367,7 @@ chondro.merged <- merge (chondro.low, chondro.high)
 nrow (chondro.merged)
 @
 By default, the result consists of only those spectra, where \emph{both} spectral ranges were available.
-To keep all spectra, regardless of the other part, use:
+To keep all spectra replacing missing parts by \Rcode{NA}:
 <<>>=
 chondro.merged <- merge (chondro.low, chondro.high, all = TRUE)
 nrow (chondro.merged)
@@ -386,15 +375,16 @@ nrow (chondro.merged)
 \begin{figure}
 \setkeys{Gin}{width = .66\textwidth}
 \subfloat[\label{fig-merge-map}]{
-<<missing, fig = TRUE, width = 10, height = 5, echo = FALSE>>=
-print (levelplot (spc ~ x * y | as.factor (paste (.wavelength, "  1/cm")), chondro.merged [,,c(1000, 1650)], 
-           aspect = "iso", col.regions = matlab.palette ()))
+<<missing, fig = TRUE, width = 10, height = 4.25, echo = FALSE>>=
+print (levelplot (spc ~ x * y | as.factor (paste (.wavelength, "  1/cm")), 
+                  chondro.merged [,,c(1000, 1650)], 
+                  aspect = "iso", col.regions = matlab.palette ()))
 @ 
 }
 \setkeys{Gin}{width = .33\textwidth}
 \subfloat[\label{fig-merge-mat}]{
-<<merged, fig = TRUE, width = 5, height = 5, echo = FALSE>>=
-print (plot (chondro.merged, "mat", col.regions = matlab.dark.palette ()))
+<<merged, fig = TRUE, width = 5, height = 4.25, echo = FALSE>>=
+print (plot (chondro.merged [1 : 100], "mat", col.regions = matlab.dark.palette ()))
 rm (chondro)
 @ 
 }
@@ -403,11 +393,20 @@ rm (chondro)
   \subref{fig-merge-mat} The missing parts of the spectra are filled with \Rcode{NA}.}
 \end{figure}
 
-If the spectra overlap, the result will have both data points. The appropriate method to deal with
-this situation depends on the data at hand. One possibility, however, is removing duplicated
-wavelength by using the mean intensity. This can conveniently be done by using \Rfunction{approx}
-using \Rcode{method = "constant"}.  For duplicated wavelengths, the intensities will be combined by
-the tie function. This already defaults to the mean, but we need it with \Rcode{na.rm = TRUE}.
+<<>>=
+merged <- merge (chondro [1:7,, 610 ~ 620], chondro [5:10,, 615 ~ 625], all = TRUE)
+merged$.
+@
+%
+If the spectra overlap, the result will have both data points.  In the example here one could easily
+delete duplicate wavelengths. For real data, however, the duplicated wavelength will hardly ever
+contain the same values. The appropriate method to deal with this situation depends on the data at
+hand, but it will usually be some kind of spectral interpolation.
+
+One possibility is removing duplicated wavelengths by using the mean intensity. This can conveniently
+be done by using \Rfunction{approx} using \Rcode{method = "constant"}.  For duplicated wavelengths,
+the intensities will be combined by the tie function. This already defaults to the mean, but we need
+\Rcode{na.rm = TRUE}.
 
 Thus, the function to calculate the new spectral intensities is
 <<approxfun>>=
@@ -417,11 +416,9 @@ approxfun <- function (y, wl, new.wl){
           )$y
 }
 @
+%
 which can be applied to the spectra:
-
 <<>>=
-merged <- merge (chondro [1:7,, 610 ~ 620], chondro [5:10,, 615 ~ 625], all = TRUE)
-merged$.
 merged <- apply (merged, 1, approxfun, 
                  wl = wl (merged), new.wl = unique (wl (merged)), 
                  new.wavelength = "new.wl")
@@ -457,7 +454,7 @@ The main functions to retrieve the data of a \chy object are \Rfunction{[]}\mFun
   \Rfunction{[[]]}} and \Rfunction{[[]]}.
 
 The difference between these functions is that \Rfunction{[]} returns a \chy object, whereas the
-result of \Rfunction{[[]]} is a data.frame if extra data columns were selected or otherwise the
+result of \Rfunction{[[]]} is a \df if extra data columns were selected or otherwise the
 spectra matrix. Single extra data columns may be retrieved by \Rfunction{\$}\mFun{\Rfunction{\$}}.
 
 In order to change data, use \Rfunction{[]<-}, \Rfunction{[[]]<-}, and
@@ -508,10 +505,10 @@ Here, indices may be requested using \Rcode{index = TRUE}.
 \subsection{Selecting Extra Data Columns }
 \label{sec:accessing-extra-data}
 The second argument of the extraction functions \Rfunction{[]} and \Rfunction{[[]]} specifies the
-(extra) data columns. They can be given like any column specification for a \Rclass{data.frame}, \ie
+(extra) data columns. They can be given like any column specification for a \df, \ie
 numeric, logical, or by a vector of the column names:
 
-They can be given like any column specification for a \Rclass{data.frame},
+They can be given like any column specification for a \df,
 \ie numeric, logical, or by a vector of the column names:
 
 <<data>>=
@@ -708,21 +705,21 @@ diag (chondro [[1 : 3, , min ~ min + 2i]])
 \item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]}] the cut spectra matrix is returned if
   wavelengths are specified in \Rfunarg{l}.
 \item [\Robject{x} \Rfunction{[[\Rfunarg{i}, \Rfunarg{j}, \Rfunarg{l}]]}] If data columns are
-  selected (second index), the result is a \Rclass{data.frame}.
+  selected (second index), the result is a \df.
 \item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]] <-}] Also, parts of the spectra matrix
   can be set (only indices for spectra and wavelength are allowed for this function).
 \item [\Robject{x} \Rfunction{[\Rfunarg{i}, \Rfunarg{j}] <-}] sets parts of \Rcode{x@data}.
-\item [\Robject{x} \Rfunction{\$.}] returns the complete \Rclass{data.frame} \Rcode{x@data}, with the
+\item [\Robject{x} \Rfunction{\$.}] returns the complete \df \Rcode{x@data}, with the
   spectra in column \Rcode{\$spc}.
 \item [\Robject{x} \Rfunction{\$..}] returns the extra data (\Rcode{x@data} without \Rcode{x\$spc}).
 \item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without
   \Rcode{x\$spc}). However, the columns must match exactly in this case.
 \end{description}
 
-\subsection{Conversion to Long-Format data.frame}
+\subsection{Conversion to Long-Format \df}
 \label{sec:conv-long-form}
 Some functions need the data being an \emph{unstacked} or \emph{long-format}
-data.frame. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion
+\df. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion
 function.
 
 \section{Plotting}
@@ -737,7 +734,7 @@ third argument takes wavelength specifications as discussed above and also logic
 specifying with \Rcode{TRUE}/\Rcode{FALSE} for each column of \Rcode{\$spc}
 whether it should be included or not.\\
 \Rfunction{[]} returns a \Rclass{hyperSpec} object, \Rfunction{[[]]} the spectra matrix \Rcode{\$spc}
-(or the data.frame \Rcode{@data} if in addition data columns were specified) only.
+(or the \df \Rcode{@data} if in addition data columns were specified) only.
 
 <<cut.wl>>=
 flu [,, min ~ 408.5]
@@ -1117,11 +1114,11 @@ operands may be a matrix or a \Rclass{hyperSpec} object, and must have the corre
 
 
 \section{Data Analysis }
-\subsection{Data Analysis Methods using a data.frame \\
+\subsection{Data Analysis Methods using a \df \\
 e.\,g. Principal Component Analysis with \Rfunction{prcomp}}
 \label{sec:pca}
 \mFun{\Rfunction{\$.}} The \Rcode{\$.} notation is handy, if a data analysis function expects
-a \Rclass{data.frame}. The column names can then be used in the formula:
+a \df. The column names can then be used in the formula:
 
 <<pca>>=
 pca <- prcomp (~ spc, data = chondro$., center = FALSE)
@@ -1199,9 +1196,9 @@ smoothed <- scores [,, 1:10] %*% loadings [1:10]
 Keep in mind, though, that we cannot be sure how much \emph{useful} information was discarded with the higher components. This kind of noise reduction may influence further modeling of the data. Mathematically speaking, the rank of the new 
 \Sexpr{nrow (chondro)} $\times$ \Sexpr{nwl (chondro)} spectra matrix is only 10.
 
-\subsection{Data Analysis using long-format data.frame\\ \eg plotting with ggplot2}
+\subsection{Data Analysis using long-format \df\\ \eg plotting with ggplot2}
 \label{sec:as.long.df}
-Some functions need the data being an \emph{unstacked} or \emph{long-format} data.frame. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion function.
+Some functions need the data being an \emph{unstacked} or \emph{long-format} \df. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion function.
 <<>>=
 library (ggplot2)
 p <- ggplot (as.long.df (chondro [1]), aes (x = .wavelength, y = spc)) + geom_line ()                           
@@ -1283,12 +1280,12 @@ on the size of the object), iterated (repeated) calculations as for bootstrappin
 validation may ask for special speed considerations.
 
 In that case, the calculations may be sped up considerably if the required parts of the \chy object
-are extracted into a data.frame or matrices beforehand. A related tip is that that many model fitting
-functions in \R are much faster if the formula interface is avoided and the appropriate data.frames
+are extracted into a \df or matrices beforehand. A related tip is that that many model fitting
+functions in \R are much faster if the formula interface is avoided and the appropriate \df{}s
 or matrices are handed over directly. 
 
 Another possibility to speed up is to switch of the automatic logging of how the objects are
-transformed. Logging involves appending rows to the data.frame in slot \Rcode{@log}.  While the
+transformed. Logging involves appending rows to the \df in slot \Rcode{@log}.  While the
 absolute amount of time needed to add a logbook entry is small, it may be executed very often
 (e.g. during each call of \Rfunction{[}). However, the first strategy will usually allow for far
 larger gains in speed.

@@ -1,6 +1,11 @@
 \name{initialize}
 \docType{methods}
 \alias{initialize,hyperSpec-method}
+\alias{initialize}
+\alias{create}
+\alias{create,hyperSpec-method}
+\alias{new,hyperSpec-method}
+\alias{new}
 \title{Creating a hyperSpec Object}
 \description{
 Like other S4 objects, a hyperSpec object can be created by

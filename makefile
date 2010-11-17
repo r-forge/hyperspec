@@ -42,16 +42,17 @@ Vignettes/flu/flu.Rnw: Vignettes/flu/scan.txt.PerkinElmer.R
 Vignettes/flu/scan.txt.PerkinElmer.R: Vignettes/FileIO/scan.txt.PerkinElmer.R 
 	@cp -av Vignettes/FileIO/scan.txt.PerkinElmer.R Vignettes/flu/
 
-Vignettes/introduction/introduction.tex: Vignettes/introduction/strukturhyperspec.pdf 
-	touch $@
+#Vignettes/introduction/introduction.tex: Vignettes/introduction/introduction.Rnw
+#	cd $(dir $<) && R CMD Sweave $(notdir $<) 
 
-Vignettes/introduction/introduction.tex: Vignettes/introduction/introduction.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<) 
+#Vignettes/introduction/introduction.pdf: Vignettes/introduction/strukturhyperspec.pdf 
+#	touch Vignettes/introduction/introduction.tex
 
 Vignettes/introduction/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.tex
 	cd $(dir $<) && latexmk -pdf $(notdir $<) 
 
-Vignettes/introduction/introduction.Rnw: Vignettes/introduction/functions.RData Vignettes/flu/vignettes.defs
+Vignettes/introduction/introduction.Rnw: Vignettes/introduction/functions.RData Vignettes/introduction/vignettes.defs
+Vignettes/introduction/introduction.pdf: Vignettes/introduction/introduction.tex Vignettes/introduction/strukturhyperspec.pdf
 
 Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
