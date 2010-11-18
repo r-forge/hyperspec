@@ -343,6 +343,7 @@ figure~\ref{fig:noise}
 \Rcode{noise} may be a single value for all spectra, or a vector with the noise level for each of the
 spectra separately.
 
+\section*{Session Info}
 <<cleanup, echo = FALSE>>=
 sessionInfo()
 rm (list = ls () ) 

@@ -10,11 +10,14 @@
 \Rpackage{hyperSpec}'s \texttt{chondro} data set }
 \maketitle
 
-\warnbox{Reproducing this vignette}{ The data set and source file of this vignette are available as a   zipped archive at \Rpackage{hyperSpec}'s homepage,   \url{http://hyperspec.r-forge.r-project.org/chondrocytes.zip} (ca. 9 MB).  The original data file (ca. 31   MB) is far too large to be included in the package. 
+\warnbox{Reproducing this vignette}{ The data set and source file of this vignette are available as a
+  zipped archive at \Rpackage{hyperSpec}'s homepage,
+  \url{http://hyperspec.r-forge.r-project.org/chondrocytes.zip} (ca. 9 MB).  The original data file
+  (ca. 31 MB) is far too large to be included in the package.
 
-In order to reproduce the examples by typing in the commands, have a look at the definitions of
-color palettes used in this document are defined in \texttt{vignettes.defs}. Also, the package \phy needs to be loaded first via \Rcode{library (hyperSpec)}. 
-}
+  In order to reproduce the examples by typing in the commands, have a look at the definitions of
+  color palettes used in this document are defined in \texttt{vignettes.defs}. Also, the package \phy
+  needs to be loaded first via \Rcode{library (hyperSpec)}.  }
 
 <<startup, echo = FALSE, results = hide>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
@@ -23,7 +26,8 @@ options ("width" = 100)
 
 \section{Introduction}
 
-This vignette describes the \Robject{chondro} data set. It shows a complete data analysis work flow on a Raman map demonstrating frequently needed preprocessing methods
+This vignette describes the \Robject{chondro} data set. It shows a complete data analysis work flow
+on a Raman map demonstrating frequently needed preprocessing methods
 \begin{itemize}
 \item baseline correction
 \item normalization
@@ -53,10 +57,13 @@ packages.
   \includegraphics[width=0.5\textwidth]{080606d-flip-ausw}
   \par
 \end{centering}
-\caption{\label{fig:vis-all}Microphotograph of the cartilage section. The frame indicates the   measurement area (\mum{35~\times~21}).}
+\caption{\label{fig:vis-all}Microphotograph of the cartilage section. The frame indicates the
+  measurement area (\mum{35~\times~21}).}
 \end{figure}
 
-Raman spectra of a cartilage section were measured on each point of a grid, resulting in a so-called \emph{Raman map}. Figure~\ref{fig:vis-all} shows a microscope picture of the measured area and its surroundings.
+Raman spectra of a cartilage section were measured on each point of a grid, resulting in a so-called
+\emph{Raman map}. Figure~\ref{fig:vis-all} shows a microscope picture of the measured area and its
+surroundings.
 
 The measurement parameters were:
 \begin{description}
@@ -68,7 +75,15 @@ The measurement parameters were:
 \end{description}
 
 \section{Data Import}
-Renishaw provides a converter to export their proprietary data in a so-called long format ASCII file. Raman maps are exported having four columns, \emph{y}, \emph{x}, \emph{raman shift}, and \emph{intensity}.  \Rpackage{hyperSpec} comes with a function to import such files, \Rfunction{scan.txt.Renishaw}. The function assumes a map as default, but can also handle single spectra (\Rcode{data = \textquotedbl{}spc\textquotedbl{}}), time series (\Rcode{data =   \textquotedbl{}ts\textquotedbl{}}), and depth profiles (data = \textquotedbl{}depth\textquotedbl{}).  In addition, large files may be processed in chunks. In order to speed up the reading \Rfunction{scan.txt.Renishaw} does not allow missing values, but it does work with \Rcode{NA}.
+Renishaw provides a converter to export their proprietary data in a so-called long format ASCII
+file. Raman maps are exported having four columns, \emph{y}, \emph{x}, \emph{raman shift}, and
+\emph{intensity}.  \Rpackage{hyperSpec} comes with a function to import such files,
+\Rfunction{scan.txt.Renishaw}. The function assumes a map as default, but can also handle single
+spectra (\Rcode{data = \textquotedbl{}spc\textquotedbl{}}), time series (\Rcode{data =
+  \textquotedbl{}ts\textquotedbl{}}), and depth profiles (data =
+\textquotedbl{}depth\textquotedbl{}).  In addition, large files may be processed in chunks. In order
+to speed up the reading \Rfunction{scan.txt.Renishaw} does not allow missing values, but it does work
+with \Rcode{NA}.
 <<import>>=
 chondro <- scan.txt.Renishaw ("rawdata/chondro.txt", data = "xyspc")
 chondro
@@ -118,7 +133,7 @@ chondro <- chondro - baselines
 @
 
 \begin{figure}[tbh]
-\subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{fig/fig-norm}}\quad
+\subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{fig/fig-norm}}\quad%
 \subfloat[\label{fig:bl:perc} The spectra after subtracting the 5\textsuperscript{th} percentile spectrum.]{\includegraphics[width=0.4\textwidth]{fig/fig-perc}}
 \caption{\label{fig:bl}The preprocessed spectra.}
 \end{figure}
@@ -227,10 +242,9 @@ chondro <- chondro [- out]
 
 %
 \begin{figure}[tbh]
-\subfloat[\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-pairs2}
-
-}\subfloat[The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-outspc}}\caption{Outlier removal by PCA}
-
+\subfloat[\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-pairs2}}%
+\subfloat[The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-outspc}}
+\caption{Outlier removal by PCA}
 \end{figure}
 
 
@@ -267,8 +281,10 @@ either by height or by the number of clusters.
 <<dendcut>>=
 chondro$clusters <- as.factor (cutree (dendrogram, k = 3))
 cols <- c ("dark blue", "orange", "#C02020")
-@
-The result for $k$= 3 clusters is plotted as a map (figure~\ref{fig:clustmap}). If the color-coded variate (left hand side of the formula) is a factor, the legend bar does not show intermediate colors, and \chy's \Rfunction{levelplot} method uses the levels of the factor for the legend.
+@ %
+The result for $k$= 3 clusters is plotted as a map (figure~\ref{fig:clustmap}). If the color-coded
+variate (left hand side of the formula) is a factor, the legend bar does not show intermediate
+colors, and \chy's \Rfunction{levelplot} method uses the levels of the factor for the legend.
 
 Thus  meaningful names are assigned
 <<clustname>>=
@@ -346,6 +362,7 @@ save (chondro, file = "chondro.rda")
 @
 This is the file distributed with \phy as example data set.
 
+\section*{Session Info}
 <<cleanup, echo = FALSE>>=
 sessionInfo ()
 rm (list = ls () ) 

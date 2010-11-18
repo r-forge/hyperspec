@@ -168,7 +168,7 @@ levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
 
 \section{3d plot of the spectral intensity over wavelength and time}
 \label{sec:3d-plot-spectral}
-\chy objects  can easily be drawn with \Rpackage{rgl}\cite{rgl}:
+\chy objects  can easily be drawn with \Rpackage{rgl}\Sexpr{cite.pkg ("rgl")}:
 
 <<libraryrgl>>=
 library (rgl)
@@ -217,8 +217,15 @@ rgl.snapshot("fig/laser3d.png", fmt="png", top=TRUE )
   \label{fig:laser3d}
 \end{figure}
 
+<<makebib, echo=FALSE, results = hide>>=
+make.bib (file = "laser-pkg.bib")
+@
+\bibliographystyle{unsrtnat}
+\bibliography{laser-pkg}
 
-<<cleanup, results = hide>>=
+\section*{Session Info}
+<<cleanup, echo = FALSE>>=
+make.bib (file = "laser-pkg.bib")
 sessionInfo ()
 rm (list = ls ())
 @ 

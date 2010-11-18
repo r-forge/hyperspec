@@ -232,6 +232,7 @@ plotc (flu, groups = type, type = c("l", "p"),
        pred.cex = 0.5)
 @ 
 
+\section*{Session Info}
 <<cleanup, echo = FALSE>>=
 sessionInfo ()
 rm (list = ls () ) 

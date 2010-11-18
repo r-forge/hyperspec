@@ -12,7 +12,7 @@
 % \VignetteIndexEntry{hyperSpec plotting functions}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
-% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2}
+% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2, playwith, latticist}
 
 \newcommand{\plottab}[2]{
 \vspace{1ex}\tabularnewline
@@ -143,8 +143,12 @@ plots mean spectrum $\pm$ 1 standard deviation
 plot (chondro.preproc, "spcmeansd")
 @
 \\
-\plottab{plot (x, \textquotedbl{}spcprctile\textquotedbl{})}{plotchoprctl}
-plots median, 16\textsuperscript{th} and 84\textsuperscript{th} percentile for each wavelength. For Gaussian distributed data, 16\textsuperscript{th}, 50\textsuperscript{th} and 84\textsuperscript{th} percentile are equal to mean $\pm$ standard deviation. Spectroscopic data frequently are not Gaussian distributed. The percentiles give a better idea of the true distribution. They are also less sensitive to outliers.
+\plottab{plot (x, \textquotedbl{}spcprctile\textquotedbl{})}{plotchoprctl}%
+plots median, 16\textsuperscript{th} and 84\textsuperscript{th} percentile for each wavelength. For
+Gaussian distributed data, 16\textsuperscript{th}, 50\textsuperscript{th} and 84\textsuperscript{th}
+percentile are equal to mean $\pm$ standard deviation. Spectroscopic data frequently are not Gaussian
+distributed. The percentiles give a better idea of the true distribution. They are also less
+sensitive to outliers.
 <<plotchoprctl, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plot (chondro.preproc, "spcprctile")
 @
@@ -225,10 +229,11 @@ plotspc (paracetamol,
          wl.range = c (300 ~ 1800, 2800 ~ max), 
          xoffset = 750)
 @
-If available, the package \Rpackage{plotrix} is used to produce the cut mark.
+%
+If available, the package \Rpackage{plotrix}\Sexpr{cite.pkg("plotrix")} is used to produce the cut
+mark.
 \\
-\plottab{with reversed abscissa}{abscissa}
-use \Rcode{wl.reverse = TRUE}
+\plottab{with reversed abscissa}{abscissa} use \Rcode{wl.reverse = TRUE}
 <<abscissa, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (paracetamol, wl.reverse = TRUE )
 @
@@ -549,10 +554,12 @@ plotmap (chondro.preproc [, , c(728, 782, 1098,
 plotmap (chondro, 
          spc ~ y * x | x > 5, 
          col.regions = matlab.palette(20))
-@ 
+@
 \\
-\plottab{Conditioning on \Rcode{.wavelength}}{plotmap-pca2}
-\Rfunction{plotmap} automatically applies the function in \Rfunarg{func} before plotting. This defaults to the \Rfunction{mean}. In order to suppress this, use \Rcode{func = NULL}. This allows conditioning on the wavelengths.
+\plottab{Conditioning on \Rcode{.wavelength}}{plotmap-pca2} %
+\Rfunction{plotmap} automatically applies the function in \Rfunarg{func} before plotting. This
+defaults to the \Rfunction{mean}. In order to suppress this, use \Rcode{func = NULL}. This allows
+conditioning on the wavelengths.
 
 To plot \eg the first two score maps of a principal component analysis:
 <<plotmap-pca2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
@@ -580,9 +587,15 @@ levelplot (spc ~ y * x | as.factor(.wavelength),
 plotvoronoi (sample (chondro, 300), clusters ~ x * y, 
              col.regions = matlab.palette(20))
 @
+%
+Voronoi uses \Rfunction{panel.voronoi} from
+\Rpackage{latticeExtra}\Sexpr{cite.pkg("latticeExtra")}. The tesselation is calculated by default
+using \Rpackage{deldir}\Sexpr{cite.pkg("deldir")}, but \Rpackage{tripack}\Sexpr{cite.pkg("tripack")}
+can also be used. \Rpackage{tripack} seems to faster in general, but may ``hang'' with certain data
+sets (particularly regular grids with missing spectra as in this example). Furthermore, it is not
+FOSS (free and open source software).
 \\
-\plottab{Mark missing spectra I}{missing} 
-If the spectra come from a rectangular grid, missing
+\plottab{Mark missing spectra}{missing} If the spectra come from a rectangular grid, missing
 positions can be marked with this panel function:
 <<missing, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 mark.missing <- function (x, y, z, ...){
@@ -608,8 +621,9 @@ plotmap (sample (chondro, 865),
 \label{sec:3-d}
 
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
-  \plottab{3D plots with \Rpackage{rgl}}{3D} \Rpackage{rgl} offers fast 3d plotting in R. As
-  \Rpackage{rgl}'s axis annotations are sometimes awkward. They may better be set manually:
+  \plottab{3D plots with \Rpackage{rgl}}{3D} \Rpackage{rgl}\Sexpr{cite.pkg("rgl")} offers fast 3d
+  plotting in R. As \Rpackage{rgl}'s axis annotations are sometimes awkward, they may better be set
+  manually:
 <<>>=
 library (rgl)
 @
@@ -622,20 +636,83 @@ laser <- laser [,,404.8 ~ 405.6]
 cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
 surface3d (y = wl (laser), x = laser$t, 
            z = laser$spc, col =  cols)
-aspect3d (c(1, 1, 0.25))
-axes3d(c('x+-', 'y--', 'z--'))
+aspect3d (c (1, 1, 0.25))
+axes3d (c ('x+-', 'y--', 'z--'))
 axes3d ('y--', nticks = 25, labels= FALSE)
-mtext3d("t / s", 'x+-', line = 2)
-mtext3d("lambda / nm", 'y--', line = 2)
-mtext3d("I / a.u.", edge = 'z--', line = 2.5)
+mtext3d ("t / s", 'x+-', line = 2)
+mtext3d ("lambda / nm", 'y--', line = 2)
+mtext3d ("I / a.u.", edge = 'z--', line = 2.5)
 @
 <<echo = FALSE>>=
-load ("par3d.Rdata")                    
-par3d(pars)
-rgl.snapshot("fig/fig-3D.png", fmt="png", top=TRUE )
+load ("par3d.Rdata") # original in Vignettes/laser
+par3d (pars)
+rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
 @
 \end{longtable}
 
+\section{Using \Rpackage{ggplot2} with \phy objects}
+\label{sec:ggplot2}
+\chy objects do not yet directly support plotting with \Rpackage{ggplot2}
+\Sexpr{cite.pkg("ggplot2")}. Nevertheless, \Rpackage{ggplot2} graphics can easily be obtained.
+<<>>=
+library (ggplot2)
+@
+
+In general, \Rfunction{as.long.df} transforms a \chy object into a long-form \df that is suitable for
+\Rfunction{qplot}, \Rfunction{ggplot}, etc:
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
+  \plottab{plot ("spc") with \Rpackage{longdf}}{ggplotspc} 
+<<ggplotspc, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+df <- as.long.df (flu, rownames = TRUE)
+p <- ggplot (df, aes (x = .wavelength, y = spc, 
+                      colour = c, groups = .rownames)) + 
+  geom_line () +
+  xlab (labels (flu)$.wavelength) +
+  ylab (labels (flu)$spc) 
+print (p)
+@ 
+The two special columns \Rcode{.wavelength} and \Rcode{.rownames} contain the wavelength axis and
+allow to distinguish the spectra.
+\end{longtable}
+
+Note however, that long \df{}s can be \emph{very} memory consuming as they are of size $nrow \cdot
+nwl \times (ncol + 2)$ with respect to the dimensions of the \chy object. Thus, \eg the
+\Robject{chondro} data set (\Sexpr{round (object.size (chondro) / 1048576, digits = 0)}\,MB) as \chy
+object) needs
+\Sexpr{round (object.size (as.long.df (chondro, rownames = TRUE)) / 1048576, digits = 0)}\,MB as
+long-format \df. It is therefore highly recommended to calculate the particular data to be plotted
+beforehand. Moreover, depending on the particular plot \Rfunction{as.data.frame} may be more suitable
+than \Rfunction{as.long.df}:
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
+  \plottab{Map with \Rpackage{ggplot2}}{ggplotmeansd} 
+<<ggplotmeansd, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+df <- as.long.df (apply (chondro, 1, mean))
+print (object.size (df))
+p <- ggplot (df,aes (x = x, y = y, fill = spc)) +
+  geom_tile() + 
+  scale_fill_continuous ("spc", matlab.palette ()) +
+  scale_x_continuous (expand = c (0, 0)) +
+  scale_y_continuous (expand = c (0, 0)) +
+  coord_equal ()
+print (p)
+@
+\\
+\plottab{Cut spectra with \Rpackage{ggplot2}}{ggplotspccut} %
+Cut axes can be simulated by factetting. A factor is needed that indicates the respective ranges:
+<<ggplotspccut, fig=TRUE, width = 4, height = 2.6,include = FALSE >>=
+df <- paracetamol [,, c( min ~ 1800, 2800 ~ max)]
+df <- as.long.df (df)
+df$range <- factor (df$.wavelength > 2000)
+p <- ggplot (df, aes (x = .wavelength, y = spc)) +
+  geom_line () + 
+  facet_grid (. ~ range, labeller = function (...) "",
+              scales = "free", space = "free") +
+  scale_x_continuous (breaks = seq (0, 3200, 200)) +
+  opts (strip.background = theme_blank ())
+print (p)
+@
+
+\end{longtable}
 
 \section{Troubleshooting}
 \label{sec:troubleshooting}
@@ -646,7 +723,7 @@ rgl.snapshot("fig/fig-3D.png", fmt="png", top=TRUE )
 in loops, functions, Sweave chunks, etc. the lattice object needs to be printed explicitly by
 \Rcode{print (plotmap (object))}
 (\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R
-  FAQ: Why do lattice/trellis graphics not work?}).
+  FAQ: Why do lattice/trellis graphics not work?}). The same holds for \Rpackage{ggplot2} graphics.
 
 For suggestions how the lattice functions can be redefined so that the result is printed without
 external print command, see \Rcode{vignettes.defs}.
@@ -657,7 +734,7 @@ external print command, see \Rcode{vignettes.defs}.
 \phy offers two basic interaction functions, \Rfunction{spc.identify}, and
 \Rfunction{map.identify}. They identify points in spectra plots and map plots, respectively.
 
-\subsection{\Rfunction{spc.identify}: finding out wavelength, intensity and spectrum}
+\subsection{\Rfunction[]{spc.identify}: finding out wavelength, intensity and spectrum}
 \label{sec:spc.identify}
 
 \Rfunction{spc.identify} allows to measure points in graphics produced by \Rfunction{plotspc}. It
@@ -698,10 +775,16 @@ of the plot directly. Note that the returned indices correspond to the plotted o
 \subsection{Interactively changing graphics}
 \label{sec:inter-chang-graph}
 
-\phy's lattice functions work with \Rpackage{playwith} and \Rpackage{latticist}. These packages allow
-easy customization of the plots and also identification of points.
+\phy's lattice functions work with \Rpackage{playwith}\Sexpr{cite.pkg("playwith")} and
+\Rpackage{latticist} \Sexpr{cite.pkg("latticist")}. These packages allow easy customization of the
+plots and also identification of points.
 
+\bibliographystyle{unsrtnat}
+\bibliography{plotting-pkg}
+ 
+\section*{Session Info}
 <<cleanup, echo = FALSE>>=
+make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith", "latticist", "plotrix", "deldir", "tripack"), file = "plotting-pkg.bib")
 sessionInfo ()
 rm (list = ls ())
 @

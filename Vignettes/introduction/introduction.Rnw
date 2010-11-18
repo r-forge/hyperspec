@@ -1360,7 +1360,8 @@ make.fn.table()
 \bottomrule
 \end{longtable}
 \end{small}
-
+ 
+\section*{Session Info}
 <<cleanup, echo = FALSE>>=
 sessionInfo ()
 rm (list = ls ())

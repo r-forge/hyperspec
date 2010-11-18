@@ -738,6 +738,8 @@ res <- apply (fileformats [i,][fileformats$Spectroscopy [i] != "",], 1,
 \begin{footnotesize}
 \printindex  
 
+
+\section*{Session Info}
 <<cleanup, echo = FALSE>>=
 sessionInfo ()
 rm (list = ls () ) 

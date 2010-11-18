@@ -32,8 +32,8 @@
   	\setlength{\parskip}{\medskipamount}
 	\setlength{\parindent}{0pt}
    \fvset{listparameters={\setlength{\topsep}{0pt}}}
-   \renewenvironment{Schunk}{\vspace{-6pt}\begin{small}}{\end{small}\vspace{0pt}}
-   \RecustomVerbatimEnvironment{Sinput}{Verbatim}{formatcom=\color{green!33!black}\small}
+   \renewenvironment{Schunk}{\vspace{0pt}\begin{small}}{\end{small}\vspace{0pt}}
+   \RecustomVerbatimEnvironment{Sinput}{Verbatim}{formatcom=\small}
    \RecustomVerbatimEnvironment{Soutput}{Verbatim}{formatcom=\footnotesize}
 }
 
@@ -68,10 +68,10 @@
 \end{tikzpicture}%
 }
  
-\newcommand{\Rcode}[2][\small]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
-\newcommand{\Robject}[2][\small]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
-\newcommand{\Rcommand}[2][\small]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
-\newcommand{\Rfunction}[2][\small]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
+\newcommand{\Rcode}[2][]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
+\newcommand{\Robject}[2][]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
+\newcommand{\Rcommand}[2][]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
+\newcommand{\Rfunction}[2][]{\texorpdfstring{\nohyphens{#1\texttt{#2}}}{#2}}
 
 \newcommand{\Rfunarg}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
 \newcommand{\Rpackage}[1]{\texorpdfstring{\nohyphens{\textit{#1}}}{#1}}
@@ -207,8 +207,8 @@ citation.with.key <- function (pkg = "base"){
   tmp
 }
 
-cite.pkg <- function (p, entries){
-  cat ("\\cite{", paste (make.cite.keys (p, entries), collapse = ", "), "}", sep = "")
+cite.pkg <- function (p, entries, citefun = "cite"){
+  paste ("\\\\", citefun, "{", paste (make.cite.keys (p, entries), collapse = ", "), "}", sep = "")
 }
 
 make.bib <- function (..., file = "", insert.citations = TRUE) {
