@@ -134,7 +134,7 @@ Vignettes/plotting/par3d.Rdata:                   Vignettes/laser/par3d.Rdata
 # zip files .........................................................................................
 
 Vignettes/%.zip: .FORCE
-	cd $(dir $@) && zip -u $(notdir $@) || echo "check zips"
+	cd $(dir $@) && echo `zip -u $(notdir $@) || [ "$$?" -ne 12 ]` # error 12 is "nothing to do"
 
 # general rules .....................................................................................
 %.tex: %.Rnw
@@ -171,7 +171,9 @@ pkg/inst/doc/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
 pkg/inst/doc/FileIO.pdf: Vignettes/FileIO/FileIO.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/flu.Rnw: Vignettes/flu/flu.Rnw pkg/inst/doc/rawdata/flu?.txt pkg/inst/doc/scan.txt.PerkinElmer.R 
+pkg/inst/doc/flu.Rnw: Vignettes/flu/flu.Rnw \
+                      pkg/inst/doc/rawdata/flu?.txt \
+                      pkg/inst/doc/scan.txt.PerkinElmer.R 
 	@cp -av $< $@
 
 pkg/inst/doc/rawdata/flu%.txt: Vignettes/flu/rawdata/flu%.txt
@@ -206,7 +208,7 @@ pkg/inst/doc/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt
 	@cp -av $< $@
 
 
-# www
+# www ###############################################################################################
 www: www/*.zip www/*.pdf
 
 www/%.pdf: Vignettes/%/%.pdf
@@ -234,10 +236,32 @@ DESCRIPTION: $(shell find pkg -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIP
 	rm .DESCRIPTION
 
 build: DESCRIPTION $(SRC) vignettes
-	R CMD build pkg
+	R CMD build pkg  && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
+
+devbuild: DESCRIPTION $(SRC) vignettes
+	~/r-devel/bin/R CMD build pkg && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
+
+winbuild: .FORCE
+	cd www && ftp -n -d win-builder.r-project.org << EOT
+user anonymous cbeleites@units.it
+cd R-release
+put hyperSpec-prebuilt.tar.gz
+bye
+EOT
+
+windevbuild: .FORCE
+	cd www && ftp -n -d win-builder.r-project.org << EOT
+user anonymous cbeleites@units.it
+cd R-devel
+put hyperSpec-prebuilt.tar.gz
+bye
+EOT
 
 check: $(SRC)
 	R CMD check pkg
+
+devcheck: $(SRC)
+	~/r-devel/bin/R CMD check pkg
 
 checkfast: $(SRC)
 	R CMD check --no-examples --no-tests --no-manual --no-vignettes pkg
@@ -245,7 +269,7 @@ checkfast: $(SRC)
 checktest: $(SRC)
 	R CMD check --no-manual --no-vignettes pkg
 
-clean: FORCE
+clean: .FORCE
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).tex) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.aux) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.toc) 

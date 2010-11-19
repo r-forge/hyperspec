@@ -43,7 +43,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 	</div>';
 	echo $contents;
 	}
- ?>
+?>
  
  
  <!DOCTYPE html
@@ -116,8 +116,14 @@ users: do not unzip the archive.
 
 <h2><a name="Installation prebuilt">Via package built on my computer</a></h2>
 <ol>
-  <li>Download the <a href="hyperSpec-prebuilt.tar.gz">prebuilt .tar.gz source</a>.<br/>
-    Windows users will probably need the <a href="hyperSpec-prebuilt.zip">compiled .zip archive</a>
+  <li>Download the <a href="hyperSpec-prebuilt.tar.gz">prebuilt .tar.gz source
+		(<?php echo date ("Y-M-d", filectime ("hyperSpec-prebuilt.tar.gz")) ?>)</a>.<br/>
+    Windows users will probably need the <a href="hyperSpec-prebuilt.zip">compiled .zip archive
+		(<?php echo date ("Y-M-d", filectime ("hyperSpec-prebuilt.zip")) ?>)</a><br/>
+		Versions for r-devel: <a href="hyperSpec-prebuilt-devel.tar.gz">tar.gz
+		(<?php echo date ("Y-M-d", filectime ("hyperSpec-prebuilt-devel.tar.gz")) ?>)</a>
+<!--		and <a href="hyperSpec-prebuilt-devel.zip">zip
+		(<?php echo date ("Y-M-d", filectime ("hyperSpec-prebuilt-devel.zip")) ?>)</a> -->
   </li>
   <li>Install the package:<br/>
     <tt>R CMD INSTALL <i>filename</i></tt>
