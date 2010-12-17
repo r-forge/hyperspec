@@ -243,19 +243,19 @@ devbuild: DESCRIPTION $(SRC) vignettes
 
 winbuild: .FORCE
 	cd www && ftp -n -d win-builder.r-project.org << EOT
-user anonymous cbeleites@units.it
-cd R-release
-put hyperSpec-prebuilt.tar.gz
-bye
-EOT
+	user anonymous cbeleites@units.it
+	cd R-release
+	put hyperSpec-prebuilt.tar.gz
+	bye
+	EOT
 
 windevbuild: .FORCE
 	cd www && ftp -n -d win-builder.r-project.org << EOT
-user anonymous cbeleites@units.it
-cd R-devel
-put hyperSpec-prebuilt.tar.gz
-bye
-EOT
+	user anonymous cbeleites@units.it
+	cd R-devel
+	put hyperSpec-prebuilt.tar.gz
+	bye
+	EOT
 
 check: $(SRC)
 	R CMD check pkg

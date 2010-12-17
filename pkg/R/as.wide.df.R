@@ -28,3 +28,18 @@ as.wide.df <- function (x) {
   x
 }
 
+###-----------------------------------------------------------------------------
+###
+### as.t.df
+###
+
+as.t.df <- function (x) {
+  chk.hy (x)
+  validObject (x)
+
+  df <- as.data.frame (t (unclass (x@data$spc)))
+  colnames (df) <- rownames (x@data)
+  
+  cbind (wavelength = x@wavelength, df)
+}
+

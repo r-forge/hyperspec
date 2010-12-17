@@ -7,6 +7,6 @@
 mean_pm_sd <- function (x, na.rm = TRUE){
   m <- mean (x, na.rm = na.rm)
   s <- sd (x, na.rm = na.rm)
-  c(m - s, m, m + s)
+  c("mean.minus.sd" = m - s, "mean" = m, "mean.plus.sd" = m + s)
 }
 

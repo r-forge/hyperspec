@@ -1,4 +1,7 @@
-.options <- list (log = TRUE)
+.options <- list (log = TRUE,           # for .logentry
+                  debuglevel = 0L,      # for spc.identify
+                  gc = FALSE            # frequent calling of gc in read.ENVI & initialize
+                  )
 
 hyperSpec.getOptions <- function (){
   .options

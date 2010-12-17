@@ -2,6 +2,7 @@
 \alias{hyperSpec.getOptions}
 \alias{hyperSpec.setOptions}
 \alias{hyperSpec.getOption}
+\alias{hyperSpec options}
 \title{
 Options for package hyperSpec
 }
@@ -19,9 +20,11 @@ hyperSpec.setOptions (\dots)
 }
 \details{
   Currently, the following options are defined:
-  \tabular{lll}{
-	 \bold{Name} \tab \bold{Default Value} \tab \bold{Description} \cr
-	 log \tab TRUE \tab Should \code{\link{logbook}} entries be created automatically?
+  \tabular{llll}{
+	 \bold{Name} 		  \tab \bold{Default Value (range)} \tab	 \bold{Description} 							 \tab \bold{Used by}\cr
+	 debuglevel 		  \tab 0 (1L 2L) 							\tab amount of debugging information produced \tab \code{\link{spc.identify}} \cr
+	 gc 					  \tab FALSE 								\tab triggers frequent calling of gc () 		 \tab \code{\link{read.ENVI}}, \code{new ("hyperSpec")}\cr
+	 log 					  \tab TRUE 								\tab automatically create entries 				 \tab \code{\link{logbook}}\cr
   }
 
   \code{hyperSpec.setOptions} will discard any values that were given

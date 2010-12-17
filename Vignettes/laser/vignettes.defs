@@ -211,7 +211,7 @@ cite.pkg <- function (p, entries, citefun = "cite"){
   paste ("\\\\", citefun, "{", paste (make.cite.keys (p, entries), collapse = ", "), "}", sep = "")
 }
 
-make.bib <- function (..., file = "", insert.citations = TRUE) {
+make.bib <- function (..., file = NULL, insert.citations = TRUE) {
   pkg <- c (...)
 
   if (length (pkg) == 0L) {
@@ -223,7 +223,10 @@ make.bib <- function (..., file = "", insert.citations = TRUE) {
   l <- lapply (pkg, citation.with.key)
   l <- do.call ("c", l)
 
-  cat (toBibtex (l), file = file, sep = "\n")
+  if (!is.null (file))
+    cat (toBibtex (l), file = file, sep = "\n")
+  
+  invisible (l)
 }
 
 @

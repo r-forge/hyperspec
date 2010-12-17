@@ -5,5 +5,7 @@
 ###
 
 mean_sd <- function (x, na.rm = TRUE)
-  c(mean (x, na.rm = na.rm),  sd (x, na.rm = na.rm))
+  c(mean = mean (x, na.rm = na.rm),
+    sd = sd (x, na.rm = na.rm)
+    )
 

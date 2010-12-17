@@ -22,7 +22,12 @@ as.long.df <- function (x, rownames = FALSE, wl.factor = FALSE, na.rm = TRUE) {
                   tmp)
     if (wl.factor){
       tmp$.wavelength <- as.factor (tmp$.wavelength)
-      levels (tmp$.wavelength) <- colnames (x@data$spc)
+      wl <- colnames (x@data$spc)       # there may be a fancily formatted version in the column
+                                        # names
+      if (is.null (wl))
+        wl <- x@wavelength              # if not, use the wavelength vector
+      
+      levels (tmp$.wavelength) <- wl
     }
   }
 

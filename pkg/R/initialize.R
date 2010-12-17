@@ -8,56 +8,50 @@
 .initialize <- function (.Object, spc = NULL, data = NULL, wavelength = NULL, label = NULL, log = NULL,
                          ## ...,
                          short = "initialize", user = NULL, date = NULL){
+  if (is.null (log) && .options$log)    # avoid if no log is needed: involves copy of data
+    long <- list (data       = if (missing (data))       "missing" else .paste.row (data, val = TRUE),
+                  spc        = if (missing (spc))        "missing" else .paste.row (spc, val = TRUE,
+                    range = FALSE),
+                  wavelength = if (missing (wavelength)) "missing" else wavelength,
+                  label      = if (missing (label))      "missing" else label)
+  else
+    long <- list ()
 
-  long <- list (data       = if (missing (data))       "missing" else .paste.row (data, val = TRUE),
-                spc        = if (missing (spc))        "missing" else .paste.row (spc, val = TRUE,
-                  range = FALSE),
-                wavelength = if (missing (wavelength)) "missing" else wavelength,
-                label      = if (missing (label))      "missing" else label)
+  ## do the small stuff first, so we need not be too careful about copies
+
+  ## the wavelength axis
+  if (!is.null (spc))
+    nwl <- ncol (spc)
+  else if (!is.null (data$spc))
+    nwl <- ncol (data$spc)
+  else
+    nwl <- 0
+
   
-        
-  if (! is.null (data$spc) && ! (is.null (spc)))
-    warning ("Spectra in data are overwritten by argument spc.")
-        
-  ## deal with spectra
-  if (is.null (spc)){
-    if (is.null (data$spc)){
-      spc <- structure(numeric (0), .Dim = c(0L, 0L))
-    } else {
-      spc <- data$spc
-    }
-  } else if (!is.matrix (spc)) {
-    spc <- structure (spc, dim = c (1L, length (spc)), # use spc as row vector
-                      dimnames = list (NULL, names (spc))) 
-  } 
-
-  ## deal with extra data
-  if (is.null (data)){
-    data <- data.frame (spc = I (spc))
-  } else {
-    data$spc <- I (spc)
-  }
-  data$spc <- unclass (data$spc)
-
-  .Object@data <- data
-
-  ## now the wavelength axis
   if (is.null (wavelength)){
     ## guess from spc's colnames
-    wavelength <- as.numeric (colnames (spc))
+    if (!is.null (spc))
+      wavelength <- as.numeric (colnames (spc))
     
     if (length (wavelength) == 0L || any (is.na (wavelength)))
-      wavelength <- seq_len (ncol (spc)) # guessing didn't work
+      wavelength <- as.numeric (colnames (data$spc))
+    
+    if (length (wavelength) == 0L || any (is.na (wavelength)))
+      wavelength <- seq_len (nwl) # guessing didn't work
   } 
-  .wl (.Object) <- wavelength
+  .Object@wavelength <- wavelength
   
   ## column + wavelength axis labels
-  if (is.null (label) || length (label) == 0L)
-    label <- structure (vector ("list", length (colnames (.Object@data)) + 1),
-                                        # only for named columns! not ncol
-                        .Names = c(".wavelength", colnames (.Object@data)))
+  if (is.null (label) || length (label) == 0L){
+    cln <- c (colnames (data), '.wavelength')
+    if (! any (grepl ("spc", cln)))
+      cln <- c (cln, "spc")
+    label <- vector ("list", length (cln))
+    names (label) <- cln
+    rm (cln)
+  }
   
-  ## transform them all into expressions
+  ## transform labels into expressions
   .make.expression <- function (x){	
     if (is.language (x) && ! is.expression (x))
       class (x) <- "expression"
@@ -69,6 +63,9 @@
   label <- lapply (label, .make.expression)
   
   .Object@label <- label
+
+  rm (label, wavelength)
+  if (.options$gc) gc ()
   
   ## even the logbook may be given...
   if (is.data.frame (log)) {
@@ -80,6 +77,43 @@
     
     .Object <- .logentry (.Object, .entry = log)
   }
+  rm (log)
+  if (.options$gc) gc ()
+        
+  if (! is.null (data$spc) && ! (is.null (spc)))
+    warning ("Spectra in data are overwritten by argument spc.")
+  
+  ## deal with spectra
+  if (is.null (spc) && is.null (data$spc)){
+    spc <- structure(numeric (0), .Dim = c(0L, 0L))
+  } 
+
+  if (! is.null (spc) && !is.matrix (spc)) {
+    spc <- structure (spc,
+                      dim = c (1L, length (spc)), # use spc as row vector
+                      dimnames = list (NULL, names (spc))) 
+  } 
+  if (.options$gc) gc ()
+
+  if (! is.null (spc)){
+    attr (spc, "class") <- "AsIs"       # I seems to make more than one copy
+    if (.options$gc) gc ()
+  }
+  
+  ## deal with extra data
+  if (is.null (data)){
+    data <- data.frame (spc = spc)
+  } else if (is.null (data$spc)){
+    data$spc <- spc
+  }
+  rm (spc)
+  if (.options$gc) gc ()
+  
+  attr (data$spc, "class") <- NULL      # more than one copy!?
+  if (.options$gc) gc ()
+
+  .Object@data <- data
+  if (.options$gc) gc ()
   
   ## finally: check whether we got a valid hyperSpec object
   validObject (.Object)

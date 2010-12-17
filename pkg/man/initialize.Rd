@@ -18,15 +18,11 @@ using the given parameters.
 }
 }
 \section{Usage}{
-\code{new ("hyperSpec", spc = NULL, data = NULL,}
+  new ("hyperSpec", spc = NULL, data = NULL,
+       wavelength = NULL, label = NULL, log = NULL)
 
-\code{     wavelength = NULL, label = NULL, log = NULL)}
-
-
-
-\code{initialize (.Object, spc = NULL, data = NULL,}
-
-\code{            wavelength = NULL, label = NULL, log = NULL)}
+  initialize (.Object, spc = NULL, data = NULL,
+              wavelength = NULL, label = NULL, log = NULL)
 }
 \arguments{
   \item{.Object}{the new \code{hyperSpec} object.}
@@ -36,8 +32,8 @@ using the given parameters.
     A matrix can be entered as \emph{one} column of a data frame by: 
     \code{data.frame (spc = I (as.matrix (spc)))}.
 
-    However, it will
-    usually be more convenient if the spectra are given in \code{spc}
+    However, it will usually be more convenient if the spectra are given
+    in \code{spc}
   }
 
   \item{spc}{the spectra matrix.
@@ -67,12 +63,19 @@ using the given parameters.
     \code{\link{logentry}}.
   }
 }
+\details{ 
+  If option \code{gc} is \code{TRUE}, the initialization will have
+  frequent calls to \code{gc ()} which can help to avoid swapping or
+  running out of memory. 
+}
 \author{C.Beleites}
 \seealso{\code{\link[methods]{new}} for more information on creating and
   initializing S4 objects.
   
   \code{\link[grDevices]{plotmath}} on expressions for math annotations
   as for slot \code{label}.
+
+  \code{\link{hyperSpec.setOptions}}
 }
   
 

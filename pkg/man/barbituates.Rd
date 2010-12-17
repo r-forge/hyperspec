@@ -12,7 +12,8 @@ A time series of mass spectra in a list of hyperSpec objects.
 }
 \author{C. Beleites}
 \examples{
-barbituates
+barbituates [1:3]
+length (barbituates)
 
 barb <- collapse (barbituates)
 barb <- orderwl (barb)

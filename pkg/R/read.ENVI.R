@@ -5,7 +5,7 @@
 ###  * read.ENVI.Nicolet for ENVI files written by Nicolet spectrometers 
 ###  * adapted from caTools read.ENVI
 ###
-###  Time-stamp: <Claudia Beleites on Thursday, 2010-01-28 at 17:08:07 on cb>
+###  Time-stamp: <Claudia Beleites on Wednesday, 2010-12-15 at 11:42:47 on cb>
 ###
 ####################################################################################################
 
@@ -15,7 +15,13 @@
     headerfilename <- paste (dirname (file), sub ("[.][^.]+$", ".*", basename (file)), sep = "/")
     tmp <- Sys.glob (headerfilename)
     headerfilename <- tmp [! grepl (file, tmp)]
-      
+
+    if (length (headerfilename) > 1) {
+      headerfilename <- headerfilename [grepl ("[.][hH][dD][rR]$", headerfilename)]
+      if (length (headerfilename == 1))
+        message ("Guessing header file name ", headerfilename)
+    }
+    
     if (length (headerfilename) != 1)
       stop ("Cannot guess header file name")
     else
@@ -88,7 +94,8 @@
 
   if (is.null (header$`byte order`)){
     header$`byte order` <- .Platform$endian
-    cat (".read.ENVI.bin: 'byte order' not given or incorrect. Guessing '", .Platform$endian, "'\n", sep = '')
+    message (".read.ENVI.bin: 'byte order' not given or incorrect. Guessing '",
+             .Platform$endian, "'\n", sep = '')
   }
   if (! header$`byte order` %in% c ("big", "little", "swap")) {
     header$`byte order` <- as.numeric (header$`byte order`)
@@ -131,10 +138,21 @@
     header$interleave <- "bsq"    # de
   
   switch (tolower (header$interleave),
-          bil = {dim (spc) <- c(header$samples, header$bands, header$lines); spc <- aperm(spc, c(3, 1, 2))},
-          bip = {dim (spc) <- c(header$bands, header$samples, header$lines); spc <- aperm(spc, c(3, 2, 1))},
-          bsq = {dim (spc) <- c(header$samples, header$lines, header$bands); spc <- aperm(spc, c(2, 1, 3))},
-          stop ("Unknown interleave (", header$interleave, ", should be one of 'bsq', 'bil', 'bip')")
+          bil = {
+            dim (spc) <- c(header$samples, header$bands, header$lines);
+            spc <- aperm(spc, c(3, 1, 2))
+          },
+          bip = {
+            dim (spc) <- c(header$bands, header$samples, header$lines);
+            spc <- aperm(spc, c(3, 2, 1))
+          },
+          bsq = {
+            dim (spc) <- c(header$samples, header$lines, header$bands);
+            spc <- aperm(spc, c(2, 1, 3))
+          },
+          stop ("Unknown interleave (",
+                header$interleave,
+                ", should be one of 'bsq', 'bil', 'bip')")
           )
 
   dim (spc) <- c (header$samples * header$lines, header$bands)
@@ -184,6 +202,8 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
 				               long = list (call = match.call (),
 											       header = getbynames (header, keys.hdr2log))),
 							log)
+
+  if (.options$gc) gc ()
   
   if (length (extra.data) > 0) {
 	  extra.data <- lapply (extra.data, rep, length.out = length (x))
@@ -191,9 +211,11 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
   } else {
 	  data <- data.frame (x = x, y = y)
   }
+  
+  if (.options$gc) gc ()
 
   ## finally put together the hyperSpec object
-  new ("hyperSpec", spc = spc, data = data, 
+  new ("hyperSpec", data = data, spc = spc,
        wavelength = wavelength, label = label, log = log)
 }
 
