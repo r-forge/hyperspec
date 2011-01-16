@@ -241,21 +241,21 @@ build: DESCRIPTION $(SRC) vignettes
 devbuild: DESCRIPTION $(SRC) vignettes
 	~/r-devel/bin/R CMD build pkg && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
 
-winbuild: .FORCE
-	cd www && ftp -n -d win-builder.r-project.org << EOT
-	user anonymous cbeleites@units.it
-	cd R-release
-	put hyperSpec-prebuilt.tar.gz
-	bye
-	EOT
+#winbuild: .FORCE
+#	cd www && ftp -n -d win-builder.r-project.org << EOT
+#user anonymous cbeleites@units.it
+#cd R-release
+#put hyperSpec-prebuilt.tar.gz
+#bye
+#EOT
 
-windevbuild: .FORCE
-	cd www && ftp -n -d win-builder.r-project.org << EOT
-	user anonymous cbeleites@units.it
-	cd R-devel
-	put hyperSpec-prebuilt.tar.gz
-	bye
-	EOT
+#windevbuild: .FORCE
+#	cd www && ftp -n -d win-builder.r-project.org << EOT
+#user anonymous cbeleites@units.it
+#cd R-devel
+#put hyperSpec-prebuilt.tar.gz
+#bye
+#EOT
 
 check: $(SRC)
 	R CMD check pkg

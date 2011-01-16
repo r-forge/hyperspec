@@ -3,8 +3,8 @@
                   gc = FALSE            # frequent calling of gc in read.ENVI & initialize
                   )
 
-hyperSpec.getOptions <- function (){
-  .options
+hyperSpec.getOptions <- function (...){
+  .options [c (...)]
 }
 
 hyperSpec.getOption <- function (name){
