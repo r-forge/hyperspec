@@ -23,7 +23,7 @@ plotspc <- function  (object,
                       ## parameters for filled regions
                       fill = NULL, fill.col = NULL, border = NA, polygon.args = list (),
                       ## line indicating zero intensity
-                      zeroline =  list (lty = 2, col = col)){
+                      zeroline = list (lty = 2, col = col)){
   force (zeroline) # otherwise stacking messes up colors
   if (is.null (zeroline))
     stop ("NULL zeroline")
@@ -150,7 +150,7 @@ plotspc <- function  (object,
     ## some arguments must be overwritten if given:
     plot.args <- modifyList (plot.args,
                              list (x = unlist (x), y = spc[1,,drop=FALSE],
-                                   type = "n", bty = bty,
+                                   type = "n", bty = "n",
                                    xaxt = "n", yaxt = "n", # axes and title are called separately 
                                    xlab = NA,  ylab = NA)) # for finer control
     
@@ -165,7 +165,7 @@ plotspc <- function  (object,
     axis.args <- modifyList (list (x = list (), y = list ()), axis.args)
 
     ## x-axis labels & ticks
-    if (bty %in% c("o", "l", "c", "u", "]") ){
+    if (bty %in% c("o", "l", "c", "u", "]", "x") ){
       cuts <- .cut.ticks (sapply (wavelengths, min), sapply (wavelengths, max), xoffset, nxticks)
       
       axis.args$x <- modifyList (axis.args [! names (axis.args) %in% c ("x", "y")],
@@ -174,9 +174,10 @@ plotspc <- function  (object,
         axis.args$x$labels <- axis.args$x$at
       axis.args$x <- modifyList (list (side = 1, at = cuts$at, labels = cuts$labels),
                                  axis.args$x)
-                                 
-      do.call (axis, axis.args$x)
 
+      axis (side = 1, at = max (abs (plot.args$xlim)) * c(-1.1, 1.1))
+      do.call (axis, axis.args$x)
+      
       ## plot cut marks for x axis
       break.args <- modifyList (list (style = "zigzag"), break.args)
       break.args$axis <- NULL
@@ -195,7 +196,7 @@ plotspc <- function  (object,
     }
 
     ## y-axis labels & ticks
-    if (bty %in% c("o", "l", "c", "u")){
+    if (bty %in% c("o", "l", "c", "u", "y")){
       axis.args$y <- modifyList (axis.args [! names (axis.args) %in% c ("x", "y")],
                                  axis.args$y)
 
@@ -206,11 +207,13 @@ plotspc <- function  (object,
         else
           group.mins <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min, na.rm = TRUE)
         
-        axis.args$y <- modifyList (list (at = group.mins, labels = stacked$levels), axis.args$y)
+        axis.args$y <- modifyList (list (at = group.mins,
+                                         labels = stacked$levels [!duplicated (stacked$levels)]),
+                                   axis.args$y)
       }
       
       axis.args$y <- modifyList (list (side = 2), axis.args$y)
-
+      axis (side = 2, at = max (abs (plot.args$ylim)) * c(-1.1, 1.1))
       do.call (axis, axis.args$y)
     }
 
@@ -234,7 +237,7 @@ plotspc <- function  (object,
 
  
   ## should the intensity zero be marked?
-  if (is.logical (zeroline) && ! is.na (zeroline)){
+  if (!is.logical (zeroline) && !is.na (zeroline)){
     zeroline <- modifyList (list (h = unique (yoffset)), as.list (zeroline))
     do.call (abline, zeroline)
   }
