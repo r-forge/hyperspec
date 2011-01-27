@@ -177,8 +177,7 @@ plot (chondro [1], add = TRUE)
 \subsection*{Specifying the spectral range}
 <<trace, echo = FALSE, results = hide>>=
 	trace (spc.fit.poly.below, quote ({ls ();
-	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"),zeroline
-= NULL);
+	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NA);
 	}), at = 12, print = FALSE)
 @
 <<figspcrange, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 8, height = 4, include = FALSE>>=
@@ -195,7 +194,7 @@ abline (bl[[]], col = "blue")
 @
 <<trace2, echo = FALSE, results = hide>>=
 	trace (spc.fit.poly.below, quote ({ls ();
-	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NULL);
+	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NA);
 	lines (fit.to@wavelength, bl, col = cl);
 	}), at = 12, print = FALSE)
 @
@@ -253,7 +252,7 @@ spc <- new ("hyperSpec", spc = matrix (rnorm (30, mean = 100, sd = 2), ncol = 30
 noise <- 10
 plot (spc)
 trace (spc.fit.poly.below, quote ({
-					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"), zeroline = NULL);
+					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"), zeroline = NA);
 					lines (fit.to@wavelength, bl, col = cl);
 					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
 				}), at = 12, print = FALSE)
@@ -270,14 +269,14 @@ for (iter in seq_along (cols)){
 }
 cl <- "black"
 trace (spc.fit.poly.below, quote ({
-					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (type = "p"), zeroline = NULL);
+					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (type = "p"), zeroline = NA);
 					lines (fit.to@wavelength, bl, col = cl);
 				}), at = 12, print = FALSE)
 bl <- spc.fit.poly.below (spc, poly.order = 0)
 @
 <<fig4, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 4, include = FALSE>>=
 trace (spc.fit.poly.below, quote ({
-					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"), zeroline = NULL);
+					plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = 20, type = "p"), zeroline = NA);
 					lines (fit.to@wavelength, bl, col = cl);
 					lines (fit.to@wavelength, bl + noise, col = cl, lty = 2)
 				}), at = 12, print = FALSE)

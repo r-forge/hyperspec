@@ -3,15 +3,15 @@
                   gc = FALSE            # frequent calling of gc in read.ENVI & initialize
                   )
 
-hyperSpec.getOptions <- function (...){
+hy.getOptions <- function (...){
   .options [c (...)]
 }
 
-hyperSpec.getOption <- function (name){
+hy.getOption <- function (name){
   .options [[name]]
 }
 
-hyperSpec.setOptions <- function (...){
+hy.setOptions <- function (...){
   new <- list (...)
   names <- nzchar (names (new))
 

@@ -25,7 +25,9 @@ plotspc <- function  (object,
                       ## line indicating zero intensity
                       zeroline =  list (lty = 2, col = col)){
   force (zeroline) # otherwise stacking messes up colors
-
+  if (is.null (zeroline))
+    stop ("NULL zeroline")
+  
   chk.hy (object)
   validObject (object)
   if (nrow (object) == 0) stop ("No spectra.")
@@ -232,7 +234,7 @@ plotspc <- function  (object,
 
  
   ## should the intensity zero be marked?
-  if (! is.null (zeroline)){
+  if (is.logical (zeroline) && ! is.na (zeroline)){
     zeroline <- modifyList (list (h = unique (yoffset)), as.list (zeroline))
     do.call (abline, zeroline)
   }

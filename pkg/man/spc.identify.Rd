@@ -137,8 +137,12 @@ are not clipped. As a dirty shortcut, \code{xpd = NA} may help.
   \item{spc}{the intensities of the identified points}
 }
 \author{C. Beleites}
-\seealso{\code{\link[graphics]{locator}}, \code{\link{plotspc}},
-  \code{\link{hyperSpec options}}}
+\seealso{\code{\link[graphics]{locator}},
+  \code{\link{plotspc}},
+  \code{\link{hyperSpec options}}
+
+  \code{\link{map.identify}}
+}
 \examples{
 \donttest{
 ispc <- sample (nrow (laser), 10)

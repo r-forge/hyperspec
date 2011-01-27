@@ -3,6 +3,9 @@ VIGNETTES := baseline chondrocytes FileIO flu introduction laser plotting
 ZIPS := Vignettes/*.zip
 
 SRC := pkg/R/*.R pkg/NAMESPACE 
+DOC := pkg/man/*.Rd
+RNW := pkg/inst/doc/*.Rnw
+
 
 all: vignettes data www DESCRIPTION build check
 		@echo all vignettes: $(VIGNETTES)
@@ -71,7 +74,7 @@ Vignettes/flu/flu.pdf:          						  Vignettes/flu/flu.tex
 
 Vignettes/flu/flu.tex:          						  Vignettes/flu/flu.Rnw
 
-Vignettes/flu/flu.Rnw:          						  Vignettes/flu/vignettes.defs $(SRC)    \
+Vignettes/flu/flu:          						  Vignettes/flu/vignettes.defs $(SRC)    \
                                                   Vignettes/flu/rawdata/* \
                                                   Vignettes/flu/scan.txt.PerkinElmer.R
 	touch $@
@@ -235,10 +238,10 @@ DESCRIPTION: $(shell find pkg -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIP
 	sed "s/\(^Date: .*\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$$/\1`date +%F`\2/" .DESCRIPTION > pkg/DESCRIPTION 
 	rm .DESCRIPTION
 
-build: DESCRIPTION $(SRC) vignettes
+build: DESCRIPTION $(SRC) $(RNW) $(DOC) vignettes
 	R CMD build pkg  && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
 
-devbuild: DESCRIPTION $(SRC) vignettes
+devbuild: DESCRIPTION $(SRC) $(RNW) $(DOC) vignettes
 	~/r-devel/bin/R CMD build pkg && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
 
 #winbuild: .FORCE
@@ -257,10 +260,10 @@ devbuild: DESCRIPTION $(SRC) vignettes
 #bye
 #EOT
 
-check: $(SRC)
+check: $(SRC) $(RNW) $(DOC) 
 	R CMD check pkg
 
-devcheck: $(SRC)
+devcheck: $(SRC) $(RNW) $(DOC) 
 	~/r-devel/bin/R CMD check pkg
 
 checkfast: $(SRC)

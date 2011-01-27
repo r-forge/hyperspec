@@ -1,8 +1,7 @@
 import(methods)
 import(stats)
 importFrom (graphics, plot)
-importFrom (lattice, trellis.focus)
-importFrom (lattice, panel.identify)
+#importFrom (lattice, trellis.focus)
 importFrom (lattice, levelplot)
 importFrom (grDevices, rainbow) 
 

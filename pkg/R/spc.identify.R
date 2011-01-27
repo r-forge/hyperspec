@@ -19,7 +19,7 @@ spc.identify <- function (x, y = NULL, wavelengths = NULL, ispc = NULL,
     x <- x$x
   }
 
-  debuglevel <- hyperSpec.getOption ("debuglevel")
+  debuglevel <- hy.getOption ("debuglevel")
 
   if ((length (x) != length (y)) | (length (x) != length (wavelengths)))
     stop ("x, y, and wavelength need to have the same length.")

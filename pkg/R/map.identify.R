@@ -3,12 +3,15 @@
 ###  map.identify - identify spectra in map plot
 ###  
 
-map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...){
+map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...,
+                          tol = .02, warn = TRUE){
+  require (grid)
   chk.hy (object)
   validObject (object)
 
   dots <- modifyList (list (object = object, model = model, ...),
                       list (subscripts = TRUE))
+  
   if (voronoi) {
     dots <- modifyList (list (col = "black", border = "#00000080"),
                         dots)
@@ -28,27 +31,39 @@ map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...){
   print (lattice)
   trellis.focus ()
 
-  ## PROBLEM: panel.identify does _not_ keep the order of the selection.
-  ## End of input is right click, i.e. empty return value of panel.identify.
-  ## "no observations within 18 points" or the like should not break the loop, though.
-  ## Thus, count the warnings, and if the number increases, do not break.
+  tol = tol^2
+  xn <- lattice$panel.args.common$x [mix]
+  yn <- lattice$panel.args.common$y [mix]
+  x = as.numeric (convertX (unit (xn, "native"), "npc"))
+  y = as.numeric (convertY (unit (yn, "native"), "npc"))
 
-  .nwarn <- function () 
-    if (exists ("last.warning")) length (last.warning) else 0
-  
-  nwarn <- .nwarn ()
+  debuglevel <- hy.getOption ("debuglevel")
+
   res <- numeric (0)
   repeat {
-    tmp <- panel.identify (x = lattice$panel.args.common$x [mix], 
-                           y = lattice$panel.args.common$y [mix],
-                           n = 1)
+    tmp <- grid.locator (unit = "npc")
+    if (debuglevel == 2L)
+      grid.circle (tmp[1], tmp[2], sqrt (tol), gp = gpar (col = "red"))
 
-    if (length (tmp) == 0 && .nwarn () == nwarn)
+    if (is.null (tmp))
       break
-    else
-      res <- c (res, tmp)
-
-    nwarn <- .nwarn ()
+    
+    tmp <- as.numeric (tmp)
+    d2 <- (x - tmp [1])^2 + (y - tmp [2])^2
+    pt <- which.min (d2)
+    if (d2 [pt] <= tol) {
+      res <- c (res, pt)
+      if (debuglevel >= 1L)
+        ltext (xn [pt], yn [pt], label = pt)
+    } else {
+      if (warn) {
+        warning ("No point within tolerance (", tol, " = ",
+                 convertX (unit (sqrt (tol), "npc"), "native")," x-units or",
+                 convertY (unit (sqrt (tol), "npc"), "native")," y-units).")
+        if (debuglevel == 1L)
+          grid.circle (tmp[1], tmp[2], sqrt (tol), gp = gpar (col = "red"))
+      }
+    }
   }
 
   res

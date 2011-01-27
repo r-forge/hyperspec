@@ -25,7 +25,8 @@ plotvoronoi (object, model = spc ~ x * y,
              use.tripack = FALSE, mix = FALSE,
              \dots)
 
-map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
+map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots,
+              tol = .02, warn = TRUE)
 }
 
 \arguments{
@@ -56,6 +57,12 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
   
   \item{\dots}{further arguments are passed down the call chain, and
 	 finally to \code{\link[lattice]{levelplot}}
+  }
+  \item{tol}{tolerance for \code{map.identify} as fraction of the
+	 viewport (i.e. in "npc" \link[grid]{unit}s)
+  }
+  \item{warn}{should a warning be issued if no point is within the
+	 specified tolerance? See also details.
   }
 }
 \details{
@@ -93,9 +100,14 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
   \code{map.identify} are in the same order as the points were
   clicked. Also, multiple clicks on the same point are returned as
   multiple entries with the same index.
+
+  \code{map.identify} uses option \code{debuglevel} similar to
+  \code{\link{spc.identify}}: \code{debuglevel == 1} will plot the
+  tolerance window if no data point was inside (and additionally labels
+  the point) while \code{debuglevel == 2} will always plot the tolerance
+  window.
 }
-\value{
-  \code{map.identify} returns a vector of row indices into \code{object}
+\value{\code{map.identify} returns a vector of row indices into \code{object}
   of the clicked points.
 
   The other functions return a lattice object.
@@ -107,7 +119,10 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots)
   \code{\link{plot}}
 
   \code{\link[lattice]{levelplot}}
-  \code{\link[latticeExtra]{panel.voronoi}} 
+  \code{\link[latticeExtra]{panel.voronoi}}
+
+  \code{\link{hyperSpec options}}
+  \code{\link{spc.identify}}
 }
 \examples{
 \dontrun{

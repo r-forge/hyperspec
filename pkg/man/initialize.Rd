@@ -75,7 +75,7 @@ using the given parameters.
   \code{\link[grDevices]{plotmath}} on expressions for math annotations
   as for slot \code{label}.
 
-  \code{\link{hyperSpec.setOptions}}
+  \code{\link{hy.setOptions}}
 }
   
 

@@ -120,9 +120,9 @@ plotspc(object,
   \item{polygon.args}{list with further arguments to
 	 \code{\link[graphics]{polygon}} which draws the filled areas.}
 
-  \item{zeroline}{\code{NULL} or a list with arguments \code{\link[graphics]{abline}}, used to plot line (s) marking I = 0.
+  \item{zeroline}{\code{NA} or a list with arguments \code{\link[graphics]{abline}}, used to plot line (s) marking I = 0.
   
-  \code{NULL} suppresses plotting of the line.  The line is by default turned off if  \code{yoffset} 
+  \code{NA} suppresses plotting of the line.  The line is by default turned off if  \code{yoffset} 
   is not 0. 
   }
 }

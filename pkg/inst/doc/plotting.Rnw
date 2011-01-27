@@ -704,5 +704,4 @@ easy customization of the plots and also identification of points.
 <<cleanup, echo = FALSE, results = hide>>=
 rm (list = ls () )
 @
-
 \end{document}
