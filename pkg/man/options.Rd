@@ -10,7 +10,7 @@ Options for package hyperSpec
 Functions to access and set hyperSpec's options. 
 }
 \usage{
-hy.getOptions ()
+hy.getOptions (\dots)
 hy.getOption (name)
 hy.setOptions (\dots)
 }

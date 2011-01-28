@@ -47,6 +47,10 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 
 For some plots of the \Robject{chondro} dataset, the pre-processed spectra are preferred, and their cluster averages $\pm$ one standard deviation:
 <<preproc-chondro>>=
+runif (1)
+save (.Random.seed, file = "randomseed.RData")
+#load ("randomseed.RData")               
+
 chondro.preproc <- chondro - spc.fit.poly.below (chondro)
 chondro.preproc <- sweep (chondro.preproc, 1, mean, "/")
 chondro.preproc <- sweep (chondro.preproc, 2, apply (chondro.preproc, 2, quantile, 0.05), "-")

@@ -153,8 +153,8 @@ library (hyperSpec)
 @
 
 The global behaviour of \phy can be configured via options. The values of the options are
-retrieved with \Rfunction{hyperSpec.getOptions} and \Rfunction{hyperSpec.getOption}, and changed with
-\Rfunction{hyperSpec.setOptions}.
+retrieved with \Rfunction{hy.getOptions} and \Rfunction{hy.getOption}, and changed with
+\Rfunction{hy.setOptions}.
 
 Currently, the only option provided is \Robject{log}, a logical specifying whether assignment
 functions should automatically add entries to the logbook (see section \ref{sec:logbook},
@@ -1300,12 +1300,12 @@ system.time ({
 rm (chondro)
 @ 
 <<speed2>>=
-hyperSpec.setOptions (log = FALSE)
+hy.setOptions (log = FALSE)
 system.time ({
   for (i in seq_len (nrow (chondro)))
     chondro [[i]] <- interpolate (chondro [[i]], shifts [i], wl = wl (chondro))
 })
-hyperSpec.setOptions (log = TRUE)
+hy.setOptions (log = TRUE)
 rm (chondro)
 @
 <<speed3>>=

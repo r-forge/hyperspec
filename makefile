@@ -144,8 +144,11 @@ Vignettes/%.zip: .FORCE
 	cd $(dir $<) && R CMD Sweave $(notdir $<) 
 
 %.pdf: %.tex
+#	cd $(dir $<) && rubber --pdf -s $(basename $(notdir $<)).tex
 	cd $(dir $<) && latexmk -pdf $(basename $(notdir $<)).tex
 
+%.dvi: # should not happen!
+	rm $@
 # data ##############################################################################################
 data: pkg/data/*.rda
 
