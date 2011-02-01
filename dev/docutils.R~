@@ -1,6 +1,0 @@
-
-
-## find all exported methods
-tmp <- getGenerics (where = asNamespace ("hyperSpec"))@.Data
-new.functions <- rbind (functions,
-                        data.frame (name = tmp, group = NA, method = TRUE, description = "")

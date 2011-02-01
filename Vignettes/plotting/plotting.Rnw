@@ -14,11 +14,11 @@
 % \VignettePackage{hyperSpec}
 % \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2, playwith, latticist}
 
-\newcommand{\plottab}[2]{
+\newcommand{\plottab}[2]{gg
 \vspace{1ex}\tabularnewline
   \multicolumn{2}{l}{\textbf{#1}}\tabularnewline\nopagebreak
 \vtop{%
-  \vskip-\baselineskip
+  \vskip-0.9\baselineskip
   \hbox{%
     \includegraphics[width = .40\textwidth]{fig/fig-#2}%
   }%
@@ -34,23 +34,37 @@
 \maketitle
 \warnbox{Vignette under Development}{
 This file is currently undergoing a thorough revision. Changes may happen frequently.
-
-Even if the file is not yet nice to read, the shown code does work.
 }
 \warnbox{Reproducing the Examples in this Vignette}{
 All spectra used in this manual are installed automatically with \phy. 
 
-Note that some definitions are executed in \texttt{vignette.defs}.
+Note that some definitions are executed in \texttt{vignette.defs}, and others invisibly at the
+beginning of the file in order to have the code as similar as possible to interactive sessions.
 }
 
 \tableofcontents{}
 
+\warnbox[blue!50!black]{Suggested Packages}{
+\begin{labeling}{latticeExtra}
+<<check-required, echo = FALSE, results = tex>>=
+required.pkgs <- c("latticeExtra", "deldir", "rgl", "ggplot2")
+
+dummies <- check.req.pkg ("latticeExtra", ploterrors = c ("plotvoronoi", "panel.levelplot.points"))
+dummies <- c (dummies, check.req.pkg ("deldir", ploterrors = "plotvoronoi"))
+
+for (i in seq_along (dummies))
+  eval (dummies [[i]])
+
+for (p in required.pkgs [! required.pkgs %in% c("latticeExtra", "deldir")])
+  check.req.pkg (p, donothing = "")
+@
+\end{labeling}
+In addition \Rpackage{tripack}, \Rpackage{playwith}, and \Rpackage{latticist} are discussed, but not
+needed for calculations.
+}
+\section*{Preliminary Calculations}
 For some plots of the \Robject{chondro} dataset, the pre-processed spectra are preferred, and their cluster averages $\pm$ one standard deviation:
 <<preproc-chondro>>=
-runif (1)
-save (.Random.seed, file = "randomseed.RData")
-#load ("randomseed.RData")               
-
 chondro.preproc <- chondro - spc.fit.poly.below (chondro)
 chondro.preproc <- sweep (chondro.preproc, 1, mean, "/")
 chondro.preproc <- sweep (chondro.preproc, 2, apply (chondro.preproc, 2, quantile, 0.05), "-")
@@ -295,7 +309,7 @@ abline (v = c(405.0063, 405.1121, 405.2885, 405.3591),
 \label{sec:stacked-spectra}
 
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
-\plottab{stacked = TRUE}{stacked1}
+\plottab{stacked}{stacked1}
 use \Rfunarg{stacked = TRUE}
 <<stacked1, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (cluster.means, 
@@ -484,11 +498,6 @@ levelplot (spc ~ .wavelength * t, laser)
 <<plotmap-barb, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 barb <- do.call (collapse, barbituates[1:50])
 barb <- orderwl (barb)
-if (!require (latticeExtra)){
-  panel.levelplot.points <- function (...) 
-    panel.levelplot (...)
-  warning ('package latticeExtra required, panel.levelplot.points replaced by dummy')
-}
 levelplot (spc ~ .wavelength * z, barb, 
            panel = panel.levelplot.points,
            cex = .33, col.symbol = NA,
@@ -628,14 +637,7 @@ plotmap (sample (chondro, 865),
   \plottab{3D plots with \Rpackage{rgl}}{3D} \Rpackage{rgl}\Sexpr{cite.pkg("rgl")} offers fast 3d
   plotting in R. As \Rpackage{rgl}'s axis annotations are sometimes awkward, they may better be set
   manually:
-<<>>=
-library (rgl)
-@
-<<echo = FALSE, results = hide>>=
-open3d (windowRect=c(0,0,1200, 750))    # this is needed only for automatically 
-                                        # producing the snapshot
-@
-<<>>=
+<<rgl-plot, eval = FALSE>>=  evaluation in rgl-do
 laser <- laser [,,404.8 ~ 405.6]
 cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
 surface3d (y = wl (laser), x = laser$t, 
@@ -647,33 +649,40 @@ mtext3d ("t / s", 'x+-', line = 2)
 mtext3d ("lambda / nm", 'y--', line = 2)
 mtext3d ("I / a.u.", edge = 'z--', line = 2.5)
 @
-<<echo = FALSE>>=
-load ("par3d.Rdata") # original in Vignettes/laser
-par3d (pars)
-rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
-@
 \end{longtable}
+<<rgl-do, echo = FALSE, results = hide>>=
+if (require (rgl)){
+  open3d (windowRect=c(0,0,1200, 750))  # this is needed only for automatically 
+                                        # producing the snapshot
+<<rgl-plot>>
+  load ("par3d.Rdata") # original in Vignettes/laser
+  par3d (pars)
+  rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
+} else {
+  png ("fig/fig-3D.png")
+  ploterrormsg ("", "rgl")
+  dev.off ()
+}
+@
+
+
 
 \section{Using \Rpackage{ggplot2} with \phy objects}
 \label{sec:ggplot2}
 \chy objects do not yet directly support plotting with \Rpackage{ggplot2}
 \Sexpr{cite.pkg("ggplot2")}. Nevertheless, \Rpackage{ggplot2} graphics can easily be obtained.
-<<>>=
-library (ggplot2)
-@
 
 In general, \Rfunction{as.long.df} transforms a \chy object into a long-form \df that is suitable for
 \Rfunction{qplot}, \Rfunction{ggplot}, etc:
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
-  \plottab{plot ("spc") with \Rpackage{longdf}}{ggplotspc} 
-<<ggplotspc, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+  \plottab{plot spectra with \Rfunction{as.long.df}}{ggplotspc} 
+<<ggplotspc, eval = FALSE>>=
 df <- as.long.df (flu, rownames = TRUE)
-p <- ggplot (df, aes (x = .wavelength, y = spc, 
-                      colour = c, groups = .rownames)) + 
+ggplot (df, aes (x = .wavelength, y = spc, 
+                 colour = c, groups = .rownames)) + 
   geom_line () +
   xlab (labels (flu)$.wavelength) +
   ylab (labels (flu)$spc) 
-print (p)
 @ 
 The two special columns \Rcode{.wavelength} and \Rcode{.rownames} contain the wavelength axis and
 allow to distinguish the spectra.
@@ -689,34 +698,46 @@ beforehand. Moreover, depending on the particular plot \Rfunction{as.data.frame}
 than \Rfunction{as.long.df}:
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
   \plottab{Map with \Rpackage{ggplot2}}{ggplotmeansd} 
-<<ggplotmeansd, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+<<ggplotmeansd, eval = FALSE>>=
 df <- as.long.df (apply (chondro, 1, mean))
-print (object.size (df))
-p <- ggplot (df,aes (x = x, y = y, fill = spc)) +
+ggplot (df,aes (x = x, y = y, fill = spc)) +
   geom_tile() + 
   scale_fill_continuous ("spc", matlab.palette ()) +
   scale_x_continuous (expand = c (0, 0)) +
   scale_y_continuous (expand = c (0, 0)) +
   coord_equal ()
-print (p)
 @
 \\
 \plottab{Cut spectra with \Rpackage{ggplot2}}{ggplotspccut} %
 Cut axes can be simulated by factetting. A factor is needed that indicates the respective ranges:
-<<ggplotspccut, fig=TRUE, width = 4, height = 2.6,include = FALSE >>=
-df <- paracetamol [,, c( min ~ 1800, 2800 ~ max)]
+<<ggplotspccut, eval = FALSE>>=
+df <- paracetamol [,, c( min ~ 1800, 2800 ~ max)] / 1e4
 df <- as.long.df (df)
 df$range <- factor (df$.wavelength > 2000)
-p <- ggplot (df, aes (x = .wavelength, y = spc)) +
+ggplot (df, aes (x = .wavelength, y = spc)) +
   geom_line () + 
   facet_grid (. ~ range, labeller = function (...) "",
               scales = "free", space = "free") +
-  scale_x_continuous (breaks = seq (0, 3200, 200)) +
+  scale_x_continuous (breaks = seq (0, 3200, 400)) +
   opts (strip.background = theme_blank ())
-print (p)
 @
-
 \end{longtable}
+<<ggplot2-do, echo = FALSE, results = hide>>=
+if (require (ggplot2)){
+<<ggplotspc>>
+  ggsave("fig/fig-ggplotspc.pdf", width = 4, height = 2.6)
+<<ggplotmeansd>>
+  ggsave("fig/fig-ggplotmeansd.pdf", width = 4, height = 2.6)
+<<ggplotspccut>>
+  ggsave("fig/fig-ggplotspccut.pdf", width = 4, height = 2.6)
+} else {
+  for (f in c ("ggplotspc", "ggplotmeansd", "ggplotspccut")){
+    pdf (sprintf ("fig/fig-%s.pdf", f), width = 4, height = 2.6) 
+    ploterrormsg ("", "ggplot2")
+    dev.off ()
+  }
+}
+@
 
 \section{Troubleshooting}
 \label{sec:troubleshooting}
@@ -787,9 +808,17 @@ plots and also identification of points.
 \bibliography{plotting-pkg}
  
 \section*{Session Info}
-<<cleanup, echo = FALSE>>=
-make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith", "latticist", "plotrix", "deldir", "tripack"), file = "plotting-pkg.bib")
+\begin{footnotesize}
+<<sessionInfo, echo = FALSE>>=
 sessionInfo ()
+@
+\end{footnotesize}
+
+<<bib, echo = FALSE>>=
+make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith", "latticist", "plotrix", "deldir", "tripack"), 
+          file = "plotting-pkg.bib")
+@
+<<cleanup, echo = FALSE>>=
 rm (list = ls ())
 @
 

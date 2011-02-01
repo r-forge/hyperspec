@@ -3,7 +3,7 @@
 ###  Tests for the interaction functions
 ###  Must be run interactively.
 ###  
-###  Time-stamp: <Claudia Beleites on Friday, 2010-12-17 at 14:59:51 on cb>
+###  Time-stamp: <Claudia Beleites on Dienstag, 2011-02-01 at 15:56:47 on cb>
 ###
 #################################################################################
 
@@ -25,10 +25,11 @@ map.identify (spc) == 7
 i <- c (10, 5, 8, 11, 4, 6, 7, 12, 1)
 map.identify (spc [i]) == 7
 
-map.identify (spc [i], "y", "x")
-map.identify (spc [i], "x", "z")
+map.identify (spc [i], spc ~ x * y, tol = .1)
+map.identify (spc [i], spc ~ x * y, voronoi = TRUE)
+map.identify (spc [i], spc ~ y * x)
+map.identify (spc [i], spc ~ x * z)
 
-map.identify (spc[i], "x", "y")
 
 
 #################################################################################

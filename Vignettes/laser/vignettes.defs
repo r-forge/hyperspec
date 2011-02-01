@@ -55,16 +55,16 @@
 \makeatother
 
 % fancy warning box
-\newcommand{\warnbox}[2]{
+\newcommand{\warnbox}[3][red]{
 \begin{tikzpicture}
-\node [draw=red, very thick, rectangle, rounded corners, inner sep=10pt] (box){%
+\node [draw=#1, very thick, rectangle, rounded corners, inner sep=10pt] (box){%
     \begin{minipage}{\linewidth}
       \vspace{0.5\baselineskip}
-      #2
+      #3
     \end{minipage}
 };
-\node[fill = red, text = white, right=5mm, rounded corners] at (box.north west)
-  {\sffamily\bfseries\large #1};
+\node[fill = #1, text = white, right=5mm, rounded corners] at (box.north west)
+  {\sffamily\bfseries\large #2};
 \end{tikzpicture}%
 }
  
@@ -148,6 +148,55 @@ plotc <- function (...){
    print (eval (call))
 }
 
+ploterrormsg <- function (fn, pkg) {
+  plot (0, 0, type = "n", axes = FALSE, bty = "n", xlab = "", ylab = "")
+  text (0, 0, paste ("Function", fn, "not available:\npackage", pkg, "needed."))
+}
+texterrormsg <- function (fn, pkg) {
+  cat ("Function", fn, "not available:\npackage", pkg, "needed.\n")
+}
+
+nice.paste <- function (...){
+  fnames <- c (...)
+  
+  if (length (fnames) == 2L)
+    fnames <- paste (fnames, collapse = " and ")
+  if (length (fnames) > 1L){
+    fnames [length (fnames)] <- paste ("and", tail (fnames, 1))
+    fnames <- paste (fnames, collapse = ", ")
+  }
+
+  fnames
+}
+
+check.req.pkg <- function (pkg = stop ("pkg needed"), texterrors = NULL, ploterrors = NULL, 
+                           special = NULL, donothing = NULL, v = TRUE){
+  if (v) cat ("\\item[\\Rpackage{", pkg, "}:] ", sep = "")
+  
+  dummies <- list ()
+  
+  if (pkg.exists (pkg)){
+    if (v) cat ("available\n")
+  } else {
+    for (fn in as.character (texterrors))
+      dummies <- c (dummies, bquote (.(fn) <- function (...) texterrormsg (.(fn), .(pkg))))
+    for (fn in as.character (ploterrors))
+      dummies <- c (dummies, bquote (.(fn) <- function (...) ploterrormsg (.(fn), .(pkg))))
+    dummies <- c (dummies, special)
+
+    fnames <- nice.paste (texterrors, ploterrors, names (special))
+    if (v && length (fnames) > 0L) cat (fnames, "replaced.\n")
+    
+    for (fn in as.character (donothing))
+      dummies <- c (dummies, bquote (.(fn) <- function (...) invisible (NULL)))
+    
+    fnames <- nice.paste (donothing)
+    if (v && length (fnames) > 0L) cat (fnames, "missing.\n")
+  }
+  
+  dummies
+}
+
 plotvoronoi <- function (...) print (hyperSpec:::plotvoronoi (...))
 
 # set standardized color palettes 
@@ -164,19 +213,41 @@ div.palette <- colorRampPalette (c("#00008B", "#351C96", "#5235A2", "#6A4CAE", "
 											  "#EFCFC6", "#E6B7AB", "#DCA091", "#D08977", "#C4725E", "#B75B46",
 											  "#A9432F", "#9A2919", "#8B0000"), space = "Lab")
 
-pkg.or.base <- function (pkg){
-  basepkgs <- sapply (pkg, function (p) isTRUE (packageDescription(p)$Priority == "base"))
+pkgSuggests <- function (...)
+  strsplit (packageDescription (..., fields="Suggests"), ",\\s*")[[1]]
+
+pkg.exists <- function (pkg = stop ("package name needed"), lib.loc = NULL){
+  dir <- sapply (pkg, function (p) system.file (package = p, lib.loc = lib.loc))
+  nzchar (dir) > 0L 
+}
   
-  pkg [basepkgs] <- "base"
+is.basepkg <- function (pkg){
+  pkg.exists (pkg) && grepl ("^base$", packageDescription (pkg, fields = "Priority"))
+}
+
+pkg.or.base <- function (pkg){
+  pkg [sapply (pkg, is.basepkg)] <- "base"
   
   pkg
+}
+
+citation.or.file <- function (pkg, svd.cit = sprintf ("%s.CITATION", pkg)){
+  if (pkg.exists (pkg))
+    citation (pkg)
+  else if (file.exists (svd.cit))
+    readCitationFile (file = svd.cit)
+  else
+    NULL
 }
 
 make.cite.keys <- function (pkg, entries){
   pkg <- pkg.or.base (pkg)
 
+  if (! pkg.exists (pkg))
+    return (pkg)
+  
   if (missing (entries))
-    entries <- citation (pkg)
+    entries <- citation.or.file (pkg)
   
   keys <- sapply (unclass (entries), attr, "key")
   
@@ -197,13 +268,13 @@ make.cite.keys <- function (pkg, entries){
 citation.with.key <- function (pkg = "base"){
   pkg <- pkg.or.base (pkg)
 
-  tmp <- citation (pkg)
+  tmp <- citation.or.file (pkg)
   
   keys <- make.cite.keys (pkg, tmp)
 
   for (entry in seq_along (tmp))
     tmp [entry]$"key" <- keys [[entry]]
-    
+
   tmp
 }
 
@@ -211,7 +282,7 @@ cite.pkg <- function (p, entries, citefun = "cite"){
   paste ("\\\\", citefun, "{", paste (make.cite.keys (p, entries), collapse = ", "), "}", sep = "")
 }
 
-make.bib <- function (..., file = NULL, insert.citations = TRUE) {
+make.bib <- function (..., file = NULL) {
   pkg <- c (...)
 
   if (length (pkg) == 0L) {
@@ -221,7 +292,7 @@ make.bib <- function (..., file = NULL, insert.citations = TRUE) {
   }
   
   l <- lapply (pkg, citation.with.key)
-  l <- do.call ("c", l)
+  l <- do.call ("c", l [! sapply (l, is.null)])
 
   if (!is.null (file))
     cat (toBibtex (l), file = file, sep = "\n")

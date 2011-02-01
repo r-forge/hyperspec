@@ -300,3 +300,5 @@ clean: .FORCE
 	@rm -f pkg/inst/doc/Rplots.pdf
 	@rm -f pkg/inst/doc/*.fdb_latexmk
 #	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard pkg/inst/doc/*.Rnw)) #should not be necessary
+
+

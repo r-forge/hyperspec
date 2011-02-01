@@ -1,4 +1,4 @@
-context ("stacked.offsets")
+context ("plotspc")
 
 test_that("BARBITUATES", {
   spc <- do.call (collapse, barbituates [1:3])
