@@ -217,6 +217,9 @@ pkg/inst/doc/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt
 # www ###############################################################################################
 www: www/*.zip www/*.pdf
 
+www/plotting.pdf: Vignettes/plotting/plotting.pdf
+	@cp -av $< $@
+
 www/%.pdf: Vignettes/%/%.pdf
 	@cp -av $< $@
 
