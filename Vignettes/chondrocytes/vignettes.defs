@@ -182,19 +182,20 @@ check.req.pkg <- function (pkg = stop ("pkg needed"), texterrors = NULL, ploterr
       dummies <- c (dummies, bquote (.(fn) <- function (...) texterrormsg (.(fn), .(pkg))))
     for (fn in as.character (ploterrors))
       dummies <- c (dummies, bquote (.(fn) <- function (...) ploterrormsg (.(fn), .(pkg))))
-    dummies <- c (dummies, special)
 
     fnames <- nice.paste (texterrors, ploterrors, names (special))
-    if (v && length (fnames) > 0L) cat (fnames, "replaced.\n")
+    if (v && length (fnames) > 0L) cat (fnames, "replaced.")
     
     for (fn in as.character (donothing))
       dummies <- c (dummies, bquote (.(fn) <- function (...) invisible (NULL)))
     
     fnames <- nice.paste (donothing)
-    if (v && length (fnames) > 0L) cat (fnames, "missing.\n")
+    if (v && length (fnames) > 0L) cat (fnames, "missing.")
+    
+    if (v) cat ("\n")
   }
   
-  dummies
+  invisible (dummies)
 }
 
 plotvoronoi <- function (...) print (hyperSpec:::plotvoronoi (...))
@@ -295,7 +296,10 @@ make.bib <- function (..., file = NULL) {
   l <- do.call ("c", l [! sapply (l, is.null)])
 
   if (!is.null (file))
-    cat (toBibtex (l), file = file, sep = "\n")
+    if (is.null (l))
+      cat (NULL, file = file)           # touches file
+    else
+      cat (toBibtex (l), file = file, sep = "\n")
   
   invisible (l)
 }

@@ -14,7 +14,7 @@
 % \VignettePackage{hyperSpec}
 % \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2, playwith, latticist}
 
-\newcommand{\plottab}[2]{gg
+\newcommand{\plottab}[2]{
 \vspace{1ex}\tabularnewline
   \multicolumn{2}{l}{\textbf{#1}}\tabularnewline\nopagebreak
 \vtop{%
@@ -49,7 +49,7 @@ beginning of the file in order to have the code as similar as possible to intera
 <<check-required, echo = FALSE, results = tex>>=
 required.pkgs <- c("latticeExtra", "deldir", "rgl", "ggplot2")
 
-dummies <- check.req.pkg ("latticExtra", ploterrors = c ("panel.levelplot.points"), 
+dummies <- check.req.pkg ("latticeExtra", ploterrors = c ("panel.levelplot.points"), 
                           special = list (plotvoronoi = NA))
 for (i in seq_along (dummies))
   eval (dummies [[i]])
