@@ -217,10 +217,19 @@ pkg/inst/doc/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt
 # www ###############################################################################################
 www: www/*.zip www/*.pdf
 
-www/plotting.pdf: Vignettes/plotting/plotting.pdf
+www/baselinebelow.pdf: Vignettes/baselinebelow/baselinebelow.pdf
 	@cp -av $< $@
-
-www/%.pdf: Vignettes/%/%.pdf
+www/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
+	@cp -av $< $@
+www/FileIO.pdf: Vignettes/FileIO/FileIO.pdf
+	@cp -av $< $@
+www/flu.pdf: Vignettes/flu/flu.pdf
+	@cp -av $< $@
+www/introduction.pdf: Vignettes/introduction/introduction.pdf
+	@cp -av $< $@
+www/laser.pdf: Vignettes/laser/laser.pdf
+	@cp -av $< $@
+www/plotting.pdf: Vignettes/plotting/plotting.pdf
 	@cp -av $< $@
 
 www/hyperSpec-prebuilt.zip: # built manually 
