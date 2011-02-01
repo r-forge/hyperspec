@@ -155,6 +155,7 @@ ploterrormsg <- function (fn, pkg) {
 griderrormsg <- function (fn, pkg) {
   require (grid)
   grid.text (label = paste ("Function", fn, "not available:\npackage", pkg, "needed."))
+  NA
 }
 texterrormsg <- function (fn, pkg) {
   cat ("Function", fn, "not available:\npackage", pkg, "needed.\n")
@@ -193,15 +194,15 @@ check.req.pkg <- function (pkg = stop ("pkg needed"),
 
     for (fn in as.character (hynstext))
       assignInNamespace (x = fn, 
-                         value = eval (bquote (function (...) ploterrormsg (texterrormsg (.(fn), .(pkg))))), 
+                         value = eval (bquote (function (...) texterrormsg (.(fn), .(pkg)))), 
                          ns = "hyperSpec")
     for (fn in as.character (hynsplot))
       assignInNamespace (x = fn, 
-                         value = eval (bquote (function (...) ploterrormsg (ploterrormsg (.(fn), .(pkg))))), 
+                         value = eval (bquote (function (...) ploterrormsg (.(fn), .(pkg)))), 
                          ns = "hyperSpec")
     for (fn in as.character (hynsgrid))
       assignInNamespace (x = fn, 
-                         value = eval (bquote (function (...) ploterrormsg (griderrormsg (.(fn), .(pkg))))), 
+                         value = eval (bquote (function (...) griderrormsg (.(fn), .(pkg)))), 
                          ns = "hyperSpec")
 
     fnames <- nice.paste (texterrors, ploterrors, griderrors, hynstext, hynsplot, hynsgrid, names (special))

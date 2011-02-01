@@ -49,12 +49,12 @@ beginning of the file in order to have the code as similar as possible to intera
 <<check-required, echo = FALSE, results = tex>>=
 required.pkgs <- c("latticeExtra", "deldir", "rgl", "ggplot2")
 
-dummies <- check.req.pkg ("latticeExtra", griderrors = "panel.levelplot.points", 
-                          hynsplot = "plotvoronoi")
+dummies <- check.req.pkg ("latticeExtra", griderrors = "panel.levelplot.points",
+                          hynsgrid = "plotvoronoi")
 for (i in seq_along (dummies))
   eval (dummies [[i]])
 
-check.req.pkg ("deldir", hynsplot = "plotvoronoi")
+check.req.pkg ("deldir", hynsgrid = "plotvoronoi")
 
 for (p in required.pkgs [! required.pkgs %in% c("latticeExtra", "deldir")])
   check.req.pkg (p, donothing = "")
