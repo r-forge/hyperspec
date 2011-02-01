@@ -294,8 +294,13 @@ make.bib <- function (..., file = NULL) {
   l <- lapply (pkg, citation.with.key)
   l <- do.call ("c", l [! sapply (l, is.null)])
 
+  str (l)
+  
   if (!is.null (file))
-    cat (toBibtex (l), file = file, sep = "\n")
+    if (is.null (l))
+      cat (NULL, file = file)           # touches file
+    else
+      cat (toBibtex (l), file = file, sep = "\n")
   
   invisible (l)
 }
