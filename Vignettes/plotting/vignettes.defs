@@ -152,6 +152,10 @@ ploterrormsg <- function (fn, pkg) {
   plot (0, 0, type = "n", axes = FALSE, bty = "n", xlab = "", ylab = "")
   text (0, 0, paste ("Function", fn, "not available:\npackage", pkg, "needed."))
 }
+griderrormsg <- function (fn, pkg) {
+  require (grid)
+  grid.text (label = paste ("Function", fn, "not available:\npackage", pkg, "needed."))
+}
 texterrormsg <- function (fn, pkg) {
   cat ("Function", fn, "not available:\npackage", pkg, "needed.\n")
 }
@@ -169,8 +173,10 @@ nice.paste <- function (...){
   fnames
 }
 
-check.req.pkg <- function (pkg = stop ("pkg needed"), texterrors = NULL, ploterrors = NULL, 
-                           special = NULL, donothing = NULL, v = TRUE){
+check.req.pkg <- function (pkg = stop ("pkg needed"), 
+                           texterrors = NULL, ploterrors = NULL, griderrors = NULL,
+                           hynstext = NULL, hynsplot = NULL, hynsgrid = NULL, 
+                           donothing = NULL, special = NULL, v = TRUE){
   if (v) cat ("\\item[\\Rpackage{", pkg, "}:] ", sep = "")
   
   dummies <- list ()
@@ -182,8 +188,23 @@ check.req.pkg <- function (pkg = stop ("pkg needed"), texterrors = NULL, ploterr
       dummies <- c (dummies, bquote (.(fn) <- function (...) texterrormsg (.(fn), .(pkg))))
     for (fn in as.character (ploterrors))
       dummies <- c (dummies, bquote (.(fn) <- function (...) ploterrormsg (.(fn), .(pkg))))
+    for (fn in as.character (griderrors))
+      dummies <- c (dummies, bquote (.(fn) <- function (...) griderrormsg (.(fn), .(pkg))))
 
-    fnames <- nice.paste (texterrors, ploterrors, names (special))
+    for (fn in as.character (hynstext))
+      assignInNamespace (x = fn, 
+                         value = eval (bquote (function (...) ploterrormsg (texterrormsg (.(fn), .(pkg))))), 
+                         ns = "hyperSpec")
+    for (fn in as.character (hynsplot))
+      assignInNamespace (x = fn, 
+                         value = eval (bquote (function (...) ploterrormsg (ploterrormsg (.(fn), .(pkg))))), 
+                         ns = "hyperSpec")
+    for (fn in as.character (hynsgrid))
+      assignInNamespace (x = fn, 
+                         value = eval (bquote (function (...) ploterrormsg (griderrormsg (.(fn), .(pkg))))), 
+                         ns = "hyperSpec")
+
+    fnames <- nice.paste (texterrors, ploterrors, griderrors, hynstext, hynsplot, hynsgrid, names (special))
     if (v && length (fnames) > 0L) cat (fnames, "replaced.")
     
     for (fn in as.character (donothing))
