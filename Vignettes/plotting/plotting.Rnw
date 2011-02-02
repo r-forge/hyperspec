@@ -695,11 +695,11 @@ nwl \times (ncol + 2)$ with respect to the dimensions of the \chy object. Thus, 
 object) needs
 \Sexpr{round (object.size (as.long.df (chondro, rownames = TRUE)) / 1048576, digits = 0)}\,MB as
 long-format \df. It is therefore highly recommended to calculate the particular data to be plotted
-beforehand. Moreover, depending on the particular plot \Rfunction{as.data.frame} may be more suitable
-than \Rfunction{as.long.df}:
+beforehand. Moreover, depending on the particular plot \Rfunction{as.data.frame} or
+\Rfunction{as.t.df} may be more suitable than \Rfunction{as.long.df}:
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
-  \plottab{Map with \Rpackage{ggplot2}}{ggplotmeansd} 
-<<ggplotmeansd, eval = FALSE>>=
+  \plottab{Map with \Rpackage{ggplot2}}{ggplotmap} 
+<<ggplotmap, eval = FALSE>>=
 df <- as.long.df (apply (chondro, 1, mean))
 ggplot (df,aes (x = x, y = y, fill = spc)) +
   geom_tile() + 
@@ -709,7 +709,18 @@ ggplot (df,aes (x = x, y = y, fill = spc)) +
   coord_equal ()
 @
 \\
-\plottab{Cut spectra with \Rpackage{ggplot2}}{ggplotspccut} %
+  \plottab{Mean $\pm$ standard deviation with \Rpackage{ggplot2}}{ggplotmeansd} 
+<<ggplotmeansd, eval = FALSE>>=
+df <- as.t.df (apply (chondro, 2, mean_pm_sd))
+ggplot (df, aes (x = .wavelength)) +
+  geom_ribbon (aes (ymin = mean.minus.sd, 
+                    ymax = mean.plus.sd), 
+               fill = "#00000040") +
+  geom_line (aes (y = mean)) +
+  xlab (labels (chondro)$.wavelength) +
+  ylab (labels (chondro)$spc) 
+@
+\\\plottab{Cut spectra with \Rpackage{ggplot2}}{ggplotspccut} %
 Cut axes can be simulated by factetting. A factor is needed that indicates the respective ranges:
 <<ggplotspccut, eval = FALSE>>=
 df <- paracetamol [,, c( min ~ 1800, 2800 ~ max)] / 1e4
@@ -727,6 +738,8 @@ ggplot (df, aes (x = .wavelength, y = spc)) +
 if (require (ggplot2)){
 <<ggplotspc>>
   ggsave("fig/fig-ggplotspc.pdf", width = 4, height = 2.6)
+<<ggplotmap>>
+  ggsave("fig/fig-ggplotmap.pdf", width = 4, height = 2.6)
 <<ggplotmeansd>>
   ggsave("fig/fig-ggplotmeansd.pdf", width = 4, height = 2.6)
 <<ggplotspccut>>

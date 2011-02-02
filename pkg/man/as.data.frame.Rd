@@ -3,6 +3,7 @@
 \alias{as.data.frame}
 \alias{as.long.df}
 \alias{as.wide.df}
+\alias{as.t.df}
 \alias{as.data.frame-methods}
 \alias{as.data.frame,hyperSpec,missing,missing-method}
 \alias{as.data.frame,hyperSpec-method}
@@ -25,6 +26,7 @@
 
 as.long.df (x, rownames = FALSE, wl.factor = FALSE, na.rm = TRUE)
 as.wide.df (x)
+as.t.df (x)
 
 }
 \arguments{
@@ -45,6 +47,10 @@ as.wide.df (x)
   \code{as.wide.df} returns a data.frame that consists of the extra data
   and the spectra matrix converted to a data.frame. The spectra matrix
   is expanded \emph{in place}.
+  
+  \code{as.t.df} returns a data.frame similar to \code{as.long.df}, but
+  each spectrum in its own column. This is useful for exporting summary
+  spectra, see the example.
 }
 \details{
 The data.frame returned by \code{as.long.df} is guaranteed to have
@@ -76,7 +82,16 @@ summary (as.long.df (flu [,, 405 ~ 410], wl.factor = TRUE))
 
 as.wide.df (chondro [1:5,, 600 ~ 610])
 summary (as.wide.df (chondro [1:5,, 600 ~ 610]))
-}
 
+df <- as.t.df (apply (chondro, 2, mean_pm_sd))
+head (df)
+
+if (require (ggplot2)){
+  ggplot (df, aes (x = .wavelength)) +
+    geom_ribbon (aes (ymin = mean.minus.sd, ymax = mean.plus.sd),
+      fill = "#00000040") +
+    geom_line (aes (y = mean))
+}
+}
 \keyword{methods}
 

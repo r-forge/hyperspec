@@ -217,7 +217,7 @@ pkg/inst/doc/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt
 # www ###############################################################################################
 www: www/*.zip www/*.pdf
 
-www/baselinebelow.pdf: Vignettes/baselinebelow/baselinebelow.pdf
+www/baseline.pdf: Vignettes/baseline/baseline.pdf
 	@cp -av $< $@
 www/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
 	@cp -av $< $@

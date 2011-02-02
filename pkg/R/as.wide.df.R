@@ -40,6 +40,6 @@ as.t.df <- function (x) {
   df <- as.data.frame (t (unclass (x@data$spc)))
   colnames (df) <- rownames (x@data)
   
-  cbind (wavelength = x@wavelength, df)
+  cbind (.wavelength = x@wavelength, df)
 }
 
