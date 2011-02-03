@@ -7,7 +7,8 @@
 \code{labels}
 }
 \usage{
-\S4method{labels}{hyperSpec}(object, which = NULL, drop = TRUE, \dots)
+\S4method{labels}{hyperSpec}(object, which = bquote (), drop = TRUE, \dots,
+        use.colnames = TRUE)
 labels (object, which = NULL, ...,
         short = "labels<-", user = NULL, date = NULL) <- value
 }
@@ -17,6 +18,8 @@ labels (object, which = NULL, ...,
   \item{drop}{if the result would be a list with only one element, 
   	should the element be returned instead?}
  \item{\dots}{ignored}
+ \item{use.colnames}{should missing labels be replaced by column names
+	of the extra data?}
  \item{short, user, date}{handed to \code{\link[hyperSpec]{logentry}}}
   \item{value}{the new label(s)}
 }
