@@ -353,12 +353,22 @@ of the left cell.
 \section{Saving the data set}
 \label{sec:saving-data-set}
 
-Finally, the example data set is put together and saved:
+Finally, the example data set is put together and saved. In order to keep the package size small,
+only a PCA-compressed version with 10 PCs is shipped as example data set of the package.
 <<save>>=
 spectra.to.save$clusters <- factor (NA, levels = levels (chondro$clusters))
 spectra.to.save$clusters[- out] <- chondro$clusters
-chondro <- spectra.to.save
-save (chondro, file = "chondro.rda")
+
+pca <- prcomp (spectra.to.save [[]])
+.scores   <- pca$x      [, seq_len (10)]
+.loadings <- pca$rot    [, seq_len (10)]
+.center   <- pca$center
+.wl       <- wl (chondro)
+.labels   <- labels (chondro)
+.extra    <- chondro$..
+
+save (.scores, .loadings, .center, .wl, .labels, .extra, 
+      file = "chondro.rda")
 @
 This is the file distributed with \phy as example data set.
 
