@@ -360,15 +360,16 @@ spectra.to.save$clusters <- factor (NA, levels = levels (chondro$clusters))
 spectra.to.save$clusters[- out] <- chondro$clusters
 
 pca <- prcomp (spectra.to.save [[]])
-.scores   <- pca$x      [, seq_len (10)]
-.loadings <- pca$rot    [, seq_len (10)]
-.center   <- pca$center
-.wl       <- wl (chondro)
-.labels   <- labels (chondro)
-.extra    <- chondro$..
+.chondro.scores   <- pca$x      [, seq_len (10)]
+.chondro.loadings <- pca$rot    [, seq_len (10)]
+.chondro.center   <- pca$center
+.chondro.wl       <- wl (chondro)
+.chondro.labels   <- lapply (labels (chondro), as.expression)
+.chondro.extra    <- spectra.to.save$..
 
-save (.scores, .loadings, .center, .wl, .labels, .extra, 
-      file = "chondro.rda")
+save (.chondro.scores, .chondro.loadings, .chondro.center, 
+      .chondro.wl, .chondro.labels, .chondro.extra, 
+      file = "chondro-internal.rda")
 @
 This is the file distributed with \phy as example data set.
 

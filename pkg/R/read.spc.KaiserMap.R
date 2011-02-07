@@ -52,7 +52,7 @@ read.spc.KaiserMap <- function (files,
    data$file <- files
    
 	new ("hyperSpec", wavelength = spc$wavelength, spc = spc$spc, data = data, 
-			label = tmp$label,
+			labels = tmp$label,
 			log = log)
 }
 

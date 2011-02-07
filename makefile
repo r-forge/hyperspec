@@ -152,7 +152,7 @@ Vignettes/%.zip: .FORCE
 # data ##############################################################################################
 data: pkg/data/*.rda
 
-pkg/data/chondro.rda:     Vignettes/chondrocytes/chondro.rda 
+pkg/data/chondro-internal.rda:     Vignettes/chondrocytes/chondro-internal.rda 
 	@cp -av $< $@
 pkg/data/barbituates.rda: Vignettes/FileIO/barbituates.rda 
 	@cp -av $< $@

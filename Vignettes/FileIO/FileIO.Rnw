@@ -84,7 +84,7 @@ p.~\pageref{sec:spectroscopy}).
 To create a \Rclass{hyperSpec} object from data in R's workspace, use:
 \begin{Schunk}
   \begin{Sinput}
-spc <- new ("hyperSpec", spc, wavelength, data, label)}
+spc <- new ("hyperSpec", spc, wavelength, data, labels)}
 \end{Sinput}
 \end{Schunk}
 With the arguments:
@@ -93,7 +93,7 @@ With the arguments:
 \item [\Rcode{wavelength}] the wavelength axis vector
 \item [\Rcode{data}] the extra data (possibly already including the spectra matrix in column  
 \texttt{spc})
-\item [\Rcode{label}] a list with the proper labels. Do not forget the
+\item [\Rcode{labels}] a list with the proper labels. Do not forget the
 wavelength axis label in \Rcode{\$.wavelength} and the spectral intensity
 axis label in \Rcode{\$spc}.
 \end{labeling}
@@ -154,7 +154,7 @@ file <- read.table ("txt.t/Triazine 5_31.txt", header = TRUE, dec = ",", sep = "
 
 triazine <- new ("hyperSpec", wavelength = file [,1], spc = t (file [, -1]),
                  data = data.frame (sample = colnames (file [, -1])),
-                 label = list (.wavelength = expression (2 * theta / degree), 
+                 labels = list (.wavelength = expression (2 * theta / degree), 
                                spc = "I / a.u."))
 triazine
 @

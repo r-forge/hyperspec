@@ -66,7 +66,7 @@ collapse <- function (..., short.log = TRUE, short = "collapse", user = NULL, da
   wl <- as.numeric (colnames (dots$spc))
 
   ## make a new hyperSpec object
-  x <- new ("hyperSpec", wavelength = wl, data = dots, label = labels,
+  x <- new ("hyperSpec", wavelength = wl, data = dots, labels = labels,
             log = list (short = short, long = logs, user = user, date = date))
   
   x

@@ -9,6 +9,7 @@ exportClass (hyperSpec)
 
 export (.DollarNames.hyperSpec,
         chk.hy,
+        chondro,
         bind,
         cbind.hyperSpec,
         rbind.hyperSpec,

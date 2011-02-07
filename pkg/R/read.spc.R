@@ -561,7 +561,7 @@ read.spc <- function (filename,
 					wavelength = wavelength$x,
 					data = data,
 					log = log,
-					label = label)
+					labels = label)
 		}
 		
 	} else { ## multiple y data blocks behind each other
@@ -583,10 +583,10 @@ read.spc <- function (filename,
 	if (hdr$ftflgs ['TXYXYS'] && hdr$ftflgs ['TMULTI']) 
 		spc
 	else if (no.object)
-		list (spc = spc, wavelength = wavelength, data = data, log = log, label = label)
+		list (spc = spc, wavelength = wavelength, data = data, log = log, labels = label)
 	else 
 		new ("hyperSpec",  spc = spc, wavelength = wavelength,
-				data = data [rep (1, hdr$fnsub), ], log = log, label = label)
+				data = data [rep (1, hdr$fnsub), ], log = log, labels = label)
 }
 
 

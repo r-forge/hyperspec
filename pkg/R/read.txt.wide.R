@@ -34,7 +34,7 @@ read.txt.wide <- function (file = stop ("file is required"),
 
   new ("hyperSpec",
        data = txtfile,
-       label = cols,
+       labels = cols,
        log = list (
          short = "read.txt.long",
          long = list (file = file, cols = I (cols), ...)

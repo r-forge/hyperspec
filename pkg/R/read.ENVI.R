@@ -5,7 +5,7 @@
 ###  * read.ENVI.Nicolet for ENVI files written by Nicolet spectrometers 
 ###  * adapted from caTools read.ENVI
 ###
-###  Time-stamp: <Claudia Beleites on Wednesday, 2010-12-15 at 11:42:47 on cb>
+###  Time-stamp: <Claudia Beleites on Saturday, 2011-02-05 at 19:19:00 on cb>
 ###
 ####################################################################################################
 
@@ -216,6 +216,6 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
 
   ## finally put together the hyperSpec object
   new ("hyperSpec", data = data, spc = spc,
-       wavelength = wavelength, label = label, log = log)
+       wavelength = wavelength, labels = label, log = log)
 }
 

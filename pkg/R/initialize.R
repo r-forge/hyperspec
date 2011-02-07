@@ -5,15 +5,17 @@
 ###  C. Beleites
 ###
 
-.initialize <- function (.Object, spc = NULL, data = NULL, wavelength = NULL, label = NULL, log = NULL,
+.initialize <- function (.Object, spc = NULL, data = NULL, wavelength = NULL, labels = NULL, log = NULL,
                          ## ...,
                          short = "initialize", user = NULL, date = NULL){
+
+  
   if (is.null (log) && .options$log)    # avoid if no log is needed: involves copy of data
     long <- list (data       = if (missing (data))       "missing" else .paste.row (data, val = TRUE),
                   spc        = if (missing (spc))        "missing" else .paste.row (spc, val = TRUE,
                     range = FALSE),
                   wavelength = if (missing (wavelength)) "missing" else wavelength,
-                  label      = if (missing (label))      "missing" else label)
+                  labels      = if (missing (labels))      "missing" else labels)
   else
     long <- list ()
 
@@ -42,12 +44,12 @@
   .Object@wavelength <- wavelength
   
   ## column + wavelength axis labels
-  if (is.null (label) || length (label) == 0L){
+  if (is.null (labels) || length (labels) == 0L){
     cln <- c (colnames (data), '.wavelength')
     if (! any (grepl ("spc", cln)))
       cln <- c (cln, "spc")
-    label <- vector ("list", length (cln))
-    names (label) <- cln
+    labels <- vector ("list", length (cln))
+    names (labels) <- cln
     rm (cln)
   }
   
@@ -59,12 +61,12 @@
       x <- as.expression (x)
     x
   }
-  
-  label <- lapply (label, .make.expression)
-  
-  .Object@label <- label
 
-  rm (label, wavelength)
+  labels <- lapply (labels, .make.expression)
+  
+  .Object@label <- labels
+
+  rm (labels, wavelength)
   if (.options$gc) gc ()
   
   ## even the logbook may be given...

@@ -5,7 +5,7 @@
 \description{
 A Raman-map (laterally resolved Raman spectra) of chondrocytes in cartilage. 
 }
-\usage{data(chondro)}
+\usage{chondro}
 \format{
 The data set has 796 Raman spectra measured on a 23 \eqn{\times}{x} 35 grid with 1
 micron step size. Spatial information is in \code{chondro$x} and \code{chondro$y}.

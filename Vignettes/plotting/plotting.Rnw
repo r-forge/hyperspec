@@ -197,7 +197,7 @@ plots a depth profile plot
 depth.profile <- new ("hyperSpec",
     spc = as.matrix (rnorm (20) + 1:20),
     data = data.frame (z = 1 : 20),
-    label = list (spc = "I / a.u.", 
+    labels = list (spc = "I / a.u.", 
        z = expression (`/` (z, mu*m)),
        .wavelength = expression (lambda)))
 plot (depth.profile, "depth")
@@ -833,7 +833,7 @@ make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith", "latticist", "plotrix"
           file = "plotting-pkg.bib")
 @
 <<cleanup, echo = FALSE>>=
-rm (list = ls ())
+#rm (list = ls ())
 @
 
 \end{document}

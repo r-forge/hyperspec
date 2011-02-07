@@ -383,10 +383,13 @@ print (levelplot (spc ~ x * y | as.factor (paste (.wavelength, "  1/cm")),
 }
 \setkeys{Gin}{width = .33\textwidth}
 \subfloat[\label{fig-merge-mat}]{
-<<merged, fig = TRUE, width = 5, height = 4.25, echo = FALSE>>=
+<<echo = FALSE, results = hide>>=
+png ("fig/fig-merged.png", width = 500, height = 425, res=100)
 print (plot (chondro.merged [1 : 100], "mat", col.regions = matlab.dark.palette ()))
+dev.off()
 rm (chondro)
 @ 
+\includegraphics[width = .33\textwidth]{fig/fig-merged}
 }
 \caption{\label{fig:merge}
   \subref{fig-merge-map} For both spectral ranges some spectra are missing.  
@@ -1364,6 +1367,6 @@ make.fn.table()
 \section*{Session Info}
 <<cleanup, echo = FALSE>>=
 sessionInfo ()
-rm (list = ls ())
+#rm (list = ls ())
 @
 \end{document}
