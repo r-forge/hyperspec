@@ -150,7 +150,7 @@ plotvoronoi (sample (chondro, 300), clusters ~ x * y)
 
 %\begin{tabular}{@{}p{.45\textwidth} p{.55\textwidth}}
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
-\plottab{plot (x, \textquotedbl{}spc\textquotedbl{})}{plotspcflu}
+\plottab{plot (x, \textquotedbl{}spc\textquotedbl{})}{plotspcflu} 
 is equivalent to \Rcode{plotspc (flu)}
 <<plotspcflu, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plot (flu, "spc")

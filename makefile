@@ -147,7 +147,7 @@ Vignettes/%.zip: .FORCE
 %.pdf: %.tex
 #	cd $(dir $<) && rubber --pdf -s $(basename $(notdir $<)).tex
 	cd $(dir $<) && latexmk -pdf $(basename $(notdir $<)).tex 
-#	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH \
+	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH \
 	-sOutputFile=tmp.pdf $@ && mv tmp.pdf $@
 
 %.dvi: # should not happen!
