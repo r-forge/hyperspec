@@ -341,5 +341,5 @@ cat ("\\newcommand{\\mailme}{\\href{mailto:",
 sessionInfo ()
 rm (list = ls ())
 for (f in Sys.glob ("fig/*.pdf")) 
-  system (sprintf ("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=tmp.pdf %s && mv tmp.pdf %s", f, f))
+  system (sprintf ("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -dAutoRotatePages=/None -sOutputFile=tmp.pdf %s && mv tmp.pdf %s", f, f))
 @ 
