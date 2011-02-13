@@ -4,7 +4,7 @@ ZIPS := Vignettes/*.zip
 
 SRC := pkg/R/*.R pkg/NAMESPACE 
 DOC := pkg/man/*.Rd
-RNW := pkg/inst/doc/*.Rnw
+RNW := pkg/inst/doc/src/*.Rnw
 
 
 all: vignettes data www DESCRIPTION build check
@@ -19,7 +19,7 @@ zip: $(ZIPS)
 #.SECONDARY: Vignettes/*.zip
 
 # VIGNETTES in subdirs ##############################################################################
-vignettes: $(VIGNETTES) $(ZIPS) pkg/inst/doc/vignettes.defs pkg/inst/doc/*
+vignettes: $(VIGNETTES) $(ZIPS) pkg/inst/doc/src/vignettes.defs pkg/inst/doc/src/* pkg/inst/doc/pdf/*
 
 Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
@@ -38,7 +38,7 @@ Vignettes/baseline/baseline.Rnw:                  Vignettes/baseline/vignettes.d
 chondrocytes:                                     Vignettes/chondrocytes/chondrocytes.pdf Vignettes/chondrocytes.zip
 
 Vignettes/chondrocytes/chondrocytes.pdf:          Vignettes/chondrocytes/chondrocytes.tex 	 \
-                                                  Vignettes/chondrocytes/080606d-flip-ausw.pdf
+                                                  Vignettes/chondrocytes/080606d-flip-ausw.jpg
 
 Vignettes/chondrocytes/chondrocytes.tex:          Vignettes/chondrocytes/chondrocytes.Rnw
 
@@ -47,7 +47,8 @@ Vignettes/chondrocytes/chondrocytes.Rnw:          Vignettes/chondrocytes/vignett
 	touch $@
 
 Vignettes/chondrocytes/*.rda:	                    Vignettes/chondrocytes/chondrocytes.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<)
+	cd $(dir $<) && R CMD Sweave $(notdir $<) && \
+
 
 # FileIO ............................................................................................
 FileIO:                                           Vignettes/FileIO/FileIO.pdf Vignettes/FileIO.zip
@@ -113,8 +114,8 @@ Vignettes/laser/laser.pdf:          				  Vignettes/laser/laser.tex
 Vignettes/laser/laser.tex:          				  Vignettes/laser/laser.Rnw
 
 Vignettes/laser/laser.Rnw:          				  Vignettes/laser/vignettes.defs $(SRC)    \
-                                                  Vignettes/laser/rawdata/* \
-                                                  Vignettes/laser/par3d.Rdata 
+                                                  Vignettes/laser/rawdata/* #\
+#                                                  Vignettes/laser/par3d.Rdata 
 	touch $@
 
 Vignettes/laser/*.rda:	                          Vignettes/laser/laser.Rnw
@@ -127,12 +128,12 @@ Vignettes/plotting/plotting.pdf:          		  Vignettes/plotting/plotting.tex
 
 Vignettes/plotting/plotting.tex:          		  Vignettes/plotting/plotting.Rnw
 
-Vignettes/plotting/plotting.Rnw:          		  Vignettes/plotting/vignettes.defs $(SRC)    \
-                                                  Vignettes/plotting/par3d.Rdata 
+Vignettes/plotting/plotting.Rnw:          		  Vignettes/plotting/vignettes.defs $(SRC)    
+#                                                  Vignettes/plotting/par3d.Rdata 
 	touch $@
 
-Vignettes/plotting/par3d.Rdata:                   Vignettes/laser/par3d.Rdata
-	cp -av $< $@
+#Vignettes/plotting/par3d.Rdata:                   Vignettes/laser/par3d.Rdata
+#	cp -av $< $@
 
 # zip files .........................................................................................
 
@@ -145,7 +146,9 @@ Vignettes/%.zip: .FORCE
 
 %.pdf: %.tex
 #	cd $(dir $<) && rubber --pdf -s $(basename $(notdir $<)).tex
-	cd $(dir $<) && latexmk -pdf $(basename $(notdir $<)).tex
+	cd $(dir $<) && latexmk -pdf $(basename $(notdir $<)).tex 
+#	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH \
+	-sOutputFile=tmp.pdf $@ && mv tmp.pdf $@
 
 %.dvi: # should not happen!
 	rm $@
@@ -164,55 +167,69 @@ pkg/data/laser.rda:       Vignettes/laser/laser.rda
 	@cp -av $< $@
 
 # instdoc ###########################################################################################
-pkg/inst/doc/vignettes.defs: Vignettes/vignettes.defs
+pkg/inst/doc/src/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
-	@touch pkg/inst/doc/*.Rnw
+	@touch pkg/inst/doc/src/*.Rnw
 
-pkg/inst/doc/baseline.Rnw: Vignettes/baseline/baseline.Rnw 
+pkg/inst/doc/src/baseline.Rnw: Vignettes/baseline/baseline.Rnw 
 	@cp -av $< $@
 
-pkg/inst/doc/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
+pkg/inst/doc/src/flu.Rnw: Vignettes/flu/flu.Rnw \
+                      pkg/inst/doc/src/rawdata/flu?.txt \
+                      pkg/inst/doc/src/scan.txt.PerkinElmer.R 
 	@cp -av $< $@
 
-pkg/inst/doc/FileIO.pdf: Vignettes/FileIO/FileIO.pdf     
+pkg/inst/doc/src/rawdata/flu%.txt: Vignettes/flu/rawdata/flu%.txt
 	@cp -av $< $@
 
-pkg/inst/doc/flu.Rnw: Vignettes/flu/flu.Rnw \
-                      pkg/inst/doc/rawdata/flu?.txt \
-                      pkg/inst/doc/scan.txt.PerkinElmer.R 
+pkg/inst/doc/src/scan.txt.PerkinElmer.R: Vignettes/flu/scan.txt.PerkinElmer.R 
 	@cp -av $< $@
 
-pkg/inst/doc/rawdata/flu%.txt: Vignettes/flu/rawdata/flu%.txt
+pkg/inst/doc/src/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
+                               pkg/inst/doc/src/functions.RData \
+                               pkg/inst/doc/src/introduction.bib \
+                               pkg/inst/doc/src/strukturhyperspec.pdf
 	@cp -av $< $@
 
-pkg/inst/doc/scan.txt.PerkinElmer.R: Vignettes/flu/scan.txt.PerkinElmer.R 
+pkg/inst/doc/src/functions.RData: Vignettes/introduction/functions.RData
 	@cp -av $< $@
 
-pkg/inst/doc/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
-                               pkg/inst/doc/functions.RData \
-                               pkg/inst/doc/introduction.bib \
-                               pkg/inst/doc/strukturhyperspec.pdf
+pkg/inst/doc/src/introduction.bib: Vignettes/introduction/introduction.bib 
 	@cp -av $< $@
 
-pkg/inst/doc/functions.RData: Vignettes/introduction/functions.RData
-	@cp -av $< $@
-
-pkg/inst/doc/introduction.bib: Vignettes/introduction/introduction.bib 
-	@cp -av $< $@
-
-pkg/inst/doc/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
+pkg/inst/doc/src/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
 	@cp -av $< $@
 
 
-pkg/inst/doc/laser.Rnw: Vignettes/laser/laser.Rnw \
-                        pkg/inst/doc/par3d.Rdata \
-                        pkg/inst/doc/rawdata/laser.txt
+pkg/inst/doc/src/laser.Rnw: Vignettes/laser/laser.Rnw \
+                        pkg/inst/doc/src/rawdata/laser.txt
+#                        pkg/inst/doc/par3d.Rdata \
 	@cp -av $< $@
-pkg/inst/doc/par3d.Rdata: Vignettes/laser/par3d.Rdata
-	@cp -av $< $@
-pkg/inst/doc/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt 
+#pkg/inst/doc/par3d.Rdata: Vignettes/laser/par3d.Rdata
+#	@cp -av $< $@
+pkg/inst/doc/src/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt 
 	@cp -av $< $@
 
+pkg/inst/doc/pdf/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
+	@cp -av $< $@
+
+pkg/inst/doc/pdf/FileIO.pdf: Vignettes/FileIO/FileIO.pdf     
+	@cp -av $< $@
+
+pkg/inst/doc/pdf/baseline.pdf: Vignettes/baseline/baseline.pdf     
+	@cp -av $< $@
+
+pkg/inst/doc/pdf/flu.pdf: Vignettes/flu/flu.pdf     
+	@cp -av $< $@
+
+pkg/inst/doc/pdf/introduction.pdf: Vignettes/introduction/introduction.pdf     
+	@cp -av $< $@
+
+pkg/inst/doc/pdf/laser.pdf: Vignettes/laser/laser.pdf     
+	@cp -av $< $@
+
+pkg/inst/doc/pdf/plotting.pdf: Vignettes/plotting/plotting.pdf     
+	@cp -av $< $@
 
 # www ###############################################################################################
 www: www/*.zip www/*.pdf
@@ -254,9 +271,11 @@ DESCRIPTION: $(shell find pkg -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIP
 	rm .DESCRIPTION
 
 build: DESCRIPTION $(SRC) $(RNW) $(DOC) vignettes
+	rm -f hyperSpec_*.tar.gz
 	R CMD build pkg  && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
 
 devbuild: DESCRIPTION $(SRC) $(RNW) $(DOC) vignettes
+	rm -f hyperSpec_*.tar.gz
 	~/r-devel/bin/R CMD build pkg && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
 
 #winbuild: .FORCE
@@ -290,6 +309,7 @@ checktest: $(SRC)
 clean: .FORCE
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/$(V).tex) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.aux) 
+	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.dvi) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.toc) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.log) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.out) 
@@ -301,6 +321,7 @@ clean: .FORCE
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.fdb_latexmk) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/Rplots.pdf) 
 	@rm -f pkg/inst/doc/*.aux
+	@rm -f pkg/inst/doc/*.dvi
 	@rm -f pkg/inst/doc/*.log
 	@rm -f pkg/inst/doc/*.toc
 	@rm -f pkg/inst/doc/*.out
@@ -310,7 +331,21 @@ clean: .FORCE
 	@rm -f pkg/inst/doc/*.ilg 
 	@rm -f pkg/inst/doc/*.ind
 	@rm -f pkg/inst/doc/Rplots.pdf
-	@rm -f pkg/inst/doc/*.fdb_latexmk
-#	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard pkg/inst/doc/*.Rnw)) #should not be necessary
+	@rm -f pkg/inst/doc/*/*.fdb_latexmk
+	@rm -f pkg/inst/doc/*/*.aux
+	@rm -f pkg/inst/doc/*/*.dvi
+	@rm -f pkg/inst/doc/*/*.log
+	@rm -f pkg/inst/doc/*/*.toc
+	@rm -f pkg/inst/doc/*/*.out
+	@rm -f pkg/inst/doc/*/*.bbl
+	@rm -f pkg/inst/doc/*/*.blg
+	@rm -f pkg/inst/doc/*/*.idx 
+	@rm -f pkg/inst/doc/*/*.ilg 
+	@rm -f pkg/inst/doc/*/*.ind
+	@rm -f pkg/inst/doc/*/Rplots.pdf
+	@rm -f pkg/inst/doc/*/*.fdb_latexmk#	
+	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard pkg/inst/doc/*/*.Rnw)) #should not be necessary
+	@rm -rf pkg/inst/doc/auto
+	@rm -rf pkg/inst/doc/*/auto
 
 

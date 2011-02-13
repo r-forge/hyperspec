@@ -639,25 +639,31 @@ plotmap (sample (chondro, 865),
   plotting in R. As \Rpackage{rgl}'s axis annotations are sometimes awkward, they may better be set
   manually:
 <<rgl-plot, eval = FALSE>>=  evaluation in rgl-do
-laser <- laser [,,404.8 ~ 405.6]
+laser <- laser [,,404.8 ~ 405.6] / 10000
+laser$t <- laser$t / 3600
 cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
 surface3d (y = wl (laser), x = laser$t, 
            z = laser$spc, col =  cols)
 aspect3d (c (1, 1, 0.25))
 axes3d (c ('x+-', 'y--', 'z--'))
 axes3d ('y--', nticks = 25, labels= FALSE)
-mtext3d ("t / s", 'x+-', line = 2)
-mtext3d ("lambda / nm", 'y--', line = 2)
+mtext3d ("t / h", 'x+-', line = 2.5)
+mtext3d ("λ / nm", 'y--', line = 2.5)
 mtext3d ("I / a.u.", edge = 'z--', line = 2.5)
 @
 \end{longtable}
 <<rgl-do, echo = FALSE, results = hide>>=
 if (require (rgl)){
-  open3d (windowRect=c(0,0,1200, 750))  # this is needed only for automatically 
+  open3d (windowRect=c(20,20,600, 350))  # this is needed only for automatically 
                                         # producing the snapshot
 <<rgl-plot>>
-  load ("par3d.Rdata") # original in Vignettes/laser
-  par3d (pars)
+  par3d (userMatrix = matrix (c (-0.52,  0.4, -0.75, 0, 
+                                 -0.85, -0.28, 0.44, 0, 
+                                 -0.04,  0.87, 0.49, 0, 
+                                 -0.75,  0.75,     0, 1), ncol = 4L),
+         scale = c (2.75, 5, 0.175),
+         windowRect = c(20L, 50L, 520L, 330L),
+         zoom = 0.75)
   rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
 } else {
   png ("fig/fig-3D.png")
@@ -823,17 +829,10 @@ plots and also identification of points.
  
 \section*{Session Info}
 \begin{footnotesize}
-<<sessionInfo, echo = FALSE>>=
-sessionInfo ()
-@
-\end{footnotesize}
-
 <<bib, echo = FALSE>>=
 make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith", "latticist", "plotrix", "deldir", "tripack"), 
           file = "plotting-pkg.bib")
+<<cleanup>>
 @
-<<cleanup, echo = FALSE>>=
-#rm (list = ls ())
-@
-
+\end{footnotesize}
 \end{document}

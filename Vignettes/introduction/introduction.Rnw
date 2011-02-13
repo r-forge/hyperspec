@@ -22,7 +22,7 @@ All spectra used in this manual are installed automatically with \phy.
 Note that some definitions are executed in \texttt{vignette.defs}.
 }
 
-\tableofcontents{}
+\tableofcontents
 
 \section{Introduction}
 
@@ -1365,8 +1365,9 @@ make.fn.table()
 \end{small}
  
 \section*{Session Info}
-<<cleanup, echo = FALSE>>=
-sessionInfo ()
-#rm (list = ls ())
+\begin{footnotesize}
+<<echo = FALSE>>=
+<<cleanup>>
 @
+\end{footnotesize}
 \end{document}

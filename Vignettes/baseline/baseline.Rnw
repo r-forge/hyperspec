@@ -14,7 +14,8 @@
 \title{Fitting Polynomial Baselines to Spectra}
 \maketitle
 
-\subsection*{Introduction}
+\tableofcontents
+\section{Introduction}
 \label{sec:introduction}
 
 This document discusses baseline correction methods that can be used with \phy. \phy provides two
@@ -30,7 +31,7 @@ squares fit through the complete spectrum that is given in \Rfunarg{fit.to} wher
 \Rfunction{spc.fit.poly.below} tries to find appropriate spectal regions to fit the baseline to.
 
 \newlength{\tmplength}
-\subsection*{Syntax \& parameters}
+\section{Syntax \& parameters}
 \settowidth{\tmplength}{\Rcode{spc.fit.poly (}}
 \Rcode{spc.fit.poly (fit.to, apply.to = fit.to, poly.order = 1\\
 \hspace*{\tmplength}short = NULL, user = NULL, date = NULL)}\\[1ex]
@@ -57,7 +58,7 @@ squares fit through the complete spectrum that is given in \Rfunarg{fit.to} wher
 <<init, echo = FALSE, results = hide>>=
 #library (colorspace)
 @
-\subsection*{General Use}
+\section{General Use}
 Both functions fit the polynomial to the spectral range given in \chy object \Rfunarg{fit.to}. If
 \Rfunarg{apply.to} is not \Rcode{NULL}, the polynomials are evaluated on the spectral range of
 \Rfunarg{apply.to}. Otherwise, the polynomial coefficients are returned.
@@ -65,7 +66,7 @@ Both functions fit the polynomial to the spectral range given in \chy object \Rf
 Substracting the baseline is up to the user, it is easily done as \chy provides the \Rcode{-} (minus)
 operator.
 
-\subsection*{Fitting polynomial baselines using least squares }
+\section{Fitting polynomial baselines using least squares }
 \label{sec:fitt-polyn-basel}
 
 Commonly, baselines are fit using (single) support points that are specified by the user. Also,
@@ -108,7 +109,7 @@ the resulting baseline than a region with just a few data points. It is up to th
 whether this should be corrected for by selecting appropriate numbers of data points (e.g. by using
 replicates of the shorter spectral region).
 
-\subsection*{The mechanism of automatically fitting the baseline in \Rfunction{spc.fit.poly.below}}
+\section{The mechanism of automatically fitting the baseline in \Rfunction{spc.fit.poly.below}}
 \Rfunction{spc.fit.poly.below} tries to automatically find appropriate spectral regions for baseline
 fitting.  This is done by excluding spectral regions that contain signals from the baseline
 fitting. The idea is that all data points that lie above a fitted polynomial (initially through the
@@ -174,7 +175,7 @@ plot (chondro [1], add = TRUE)
 \end{figure}
 
 
-\subsection*{Specifying the spectral range}
+\section{Specifying the spectral range}
 <<trace, echo = FALSE, results = hide>>=
 	trace (spc.fit.poly.below, quote ({ls ();
 	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NA);
@@ -222,7 +223,7 @@ system.time (spc.fit.poly.below (chondro [,, c (min ~ 700, 1700 ~ max)], NULL, n
 The choice of the spectral range in \Rcode{fit.to} influences the resulting baselines to a certain
 extent, as becomes clear from figure~\ref{fig:spectralrange}.
 
-\subsection*{Fitting  polynomials of different orders}
+\section{Fitting  polynomials of different orders}
 <<figorder, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 4, include = FALSE>>=
 plot (chondro [1], lines.args = list (type = "n"))
 cols <- c ("black", "blue", "#008000", "red")
@@ -246,7 +247,7 @@ Figure~\ref{fig:order} shows the resulting baseline polynomial of
 with \Rcode{order} $=$ 0 to 3 for the first spectrum of the chondro data set.
 
 
-\subsection*{The noise level}
+\section{The noise level}
 <<fig3, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 8, height = 3, include = FALSE>>=
 spc <- new ("hyperSpec", spc = matrix (rnorm (30, mean = 100, sd = 2), ncol = 30))
 noise <- 10
@@ -343,8 +344,7 @@ figure~\ref{fig:noise}
 spectra separately.
 
 \section*{Session Info}
-<<cleanup, echo = FALSE>>=
-sessionInfo()
-rm (list = ls () ) 
+<<echo = FALSE>>=
+<<cleanup>>
 @ 
 \end{document}

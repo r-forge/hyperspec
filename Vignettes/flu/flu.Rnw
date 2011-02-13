@@ -25,6 +25,8 @@ spectra can be found with the command:\\
 Note that loading the package, and some definitions e.g. of the color palettes are executed in \texttt{vignettes.def}.
 }
 
+\tableofcontents
+
 This vignette gives an example how to
 \begin{itemize}
 \item write an import function for a spectrometer manufacturer's proprietary ASCII files,
@@ -233,10 +235,11 @@ plotc (flu, groups = type, type = c("l", "p"),
 @ 
 
 \section*{Session Info}
-<<cleanup, echo = FALSE>>=
-sessionInfo ()
-rm (list = ls () ) 
+\begin{footnotesize}
+<<echo = FALSE>>=
+<<cleanup>>
 @ 
+\end{footnotesize}
 \end{document}
 
 

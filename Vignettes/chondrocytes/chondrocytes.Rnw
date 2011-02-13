@@ -19,6 +19,8 @@
   color palettes used in this document are defined in \texttt{vignettes.defs}. Also, the package \phy
   needs to be loaded first via \Rcode{library (hyperSpec)}.  }
 
+\tableofcontents
+
 <<startup, echo = FALSE, results = hide>>=
 options(SweaveHooks=list(fig=function() par(mar = c (4.1, 4.1, .6, .6))))
 options ("width" = 100)
@@ -229,8 +231,10 @@ and also by looking where these spectra appear in the scores \Rfunction{pairs}
 plot (figure~):
 
 <<pca-pairs2, include = FALSE, results = hide>>=
-png ("fig/fig-pca-pairs2.png", width = 1000, height = 1000)
-pairs (scores [[,,1:7]], pch = 19, cex = 1, col = cols)
+png ("fig/fig-pca-pairs2.png", width = 500, height = 500)
+pch <- rep (46L, nrow (chondro))
+pch [out] <- 19L
+pairs (scores [[,,1:7]], pch = pch, cex = 1, col = cols)
 dev.off ()
 @
 
@@ -374,8 +378,9 @@ save (.chondro.scores, .chondro.loadings, .chondro.center,
 This is the file distributed with \phy as example data set.
 
 \section*{Session Info}
-<<cleanup, echo = FALSE>>=
-sessionInfo ()
-rm (list = ls () ) 
+\begin{footnotesize}
+<<echo = FALSE>>=
+<<cleanup>>
 @ 
+\end{footnotesize}
 \end{document}

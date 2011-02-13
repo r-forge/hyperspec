@@ -1,7 +1,7 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*- 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-
+\DeclareUnicodeCharacter{03BB}{\ensuremath{\lambda}}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
 \usepackage{color}
@@ -337,3 +337,9 @@ cat ("\\newcommand{\\mailme}{\\href{mailto:",
 	  sep = "")
 @
 
+<<cleanup, eval=FALSE, echo=FALSE>>=
+sessionInfo ()
+rm (list = ls ())
+for (f in Sys.glob ("fig/*.pdf")) 
+  system (sprintf ("gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=tmp.pdf %s && mv tmp.pdf %s", f, f))
+@ 
