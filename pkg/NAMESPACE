@@ -68,7 +68,8 @@ export (.DollarNames.hyperSpec,
         isample,
         hy.getOptions,
         hy.getOption,
-        hy.setOptions
+        hy.setOptions,
+        hy.unittest
         )
 
 exportMethods ("initialize",
@@ -111,7 +112,11 @@ exportMethods ("initialize",
                "plot",
                "levelplot",
                "sample",
-               "is.na"
+               "is.na",
+               "rowSums", 
+               "rowMeans",
+               "colSums",
+               "colMeans"
                ) 
 
 

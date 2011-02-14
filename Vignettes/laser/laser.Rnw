@@ -8,7 +8,6 @@
 % \VignetteIndexEntry{laser: Vignette on the laser data set, example of a time series. Shows also how to change the spectral abscissa.}
 % \VignetteKeywords{hyperSpec, laser, time series}
 % \VignettePackage{hyperSpec}
-% \VignetteDepends{rgl}
 \begin{document}
 \title{Unstable Laser Emission\\
 Vignette for the Data Set \Robject{laser} of the R package \Rpackage{hyperSpec} }
@@ -23,6 +22,13 @@ The source data files can be found with the command:\\
 In order to reproduce the examples by typing in the commands, have a look at the definitions in \texttt{vignettes.defs}.}
 
 \tableofcontents
+\warnbox[blue!50!black]{Suggested Packages}{
+\begin{labeling}{latticeExtra}
+<<check-required, echo = FALSE, results = tex>>=
+check.req.pkg ("rgl", donothing = "")
+@
+\end{labeling}
+}
 
 \section{Introduction}
 This data set consists of a time series of \Sexpr{nrow (laser)} spectra of an
@@ -172,15 +178,11 @@ levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
 \chy objects  can easily be drawn with \Rpackage{rgl}\Sexpr{cite.pkg ("rgl")}:
 
 <<libraryrgl>>=
-library (rgl)
+require (rgl)
 @
-<<echo = FALSE, results = hide>>=
-open3d (windowRect=c(0,0,1200, 750))    # this is needed only for automatically 
-                                        # producing the snapshot
-@ 
 \Rpackage{rgl}'s \Rfunction{persp3d} plots a surface in 3d defined by points in x, y, and z. Handing over the appropriate data columns of the \chy object is easy (fig.~\ref{fig:laser3d}):
 
-<<>>=
+<<rgl-plot, eval = FALSE>>=
 laser <- laser [,,404.8 ~ 405.6] / 10000
 laser$t <- laser$t / 3600
 cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
@@ -197,20 +199,24 @@ mtext3d ("t / h",    'x+-', line = 2.5)
 mtext3d ("λ / nm",   'y--', line = 2.5)
 mtext3d ("I / a.u.", 'z--', line = 2.5)
 @ 
-After nicely rotating and zooming, the parameters to reconstruct this view can be re-applied:
-<<>>=
-par3d(userMatrix = matrix (c (-0.52,  0.4, -0.75, 0, 
+<<rgl-do, echo = FALSE, results = hide>>=
+if (require (rgl)){
+  open3d (windowRect=c(20,20,600, 350))  # this is needed only for automatically 
+                                        # producing the snapshot
+<<rgl-plot>>
+  par3d (userMatrix = matrix (c (-0.52,  0.4, -0.75, 0, 
                                  -0.85, -0.28, 0.44, 0, 
                                  -0.04,  0.87, 0.49, 0, 
-                                 -0.80,  0.75,     0, 1), ncol = 4L),
+                                 -0.75,  0.75,     0, 1), ncol = 4L),
          scale = c (2.75, 5, 0.175),
-         windowRect = c(20L, 50L, 400L, 270L),
+         windowRect = c(20L, 50L, 520L, 330L),
          zoom = 0.75)
-@
-
-The snapshot of the scene in fig.~\ref{fig:laser3d} is saved by:
-<<>>=
-rgl.snapshot("fig/fig-3D.png", fmt="png", top=TRUE )
+  rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
+} else {
+  png ("fig/fig-3D.png")
+  ploterrormsg ("", "rgl")
+  dev.off ()
+}
 @
 \begin{figure}[t]
   \centering

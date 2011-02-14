@@ -751,7 +751,7 @@ if (require (ggplot2)){
 <<ggplotspccut>>
   ggsave("fig/fig-ggplotspccut.pdf", width = 4, height = 2.6)
 } else {
-  for (f in c ("ggplotspc", "ggplotmeansd", "ggplotspccut")){
+  for (f in c ("ggplotspc", "ggplotmap", "ggplotmeansd", "ggplotspccut")){
     pdf (sprintf ("fig/fig-%s.pdf", f), width = 4, height = 2.6) 
     ploterrormsg ("", "ggplot2")
     dev.off ()

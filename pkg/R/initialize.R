@@ -22,9 +22,16 @@
   ## do the small stuff first, so we need not be too careful about copies
 
   ## the wavelength axis
-  if (!is.null (spc))
-    nwl <- ncol (spc)
-  else if (!is.null (data$spc))
+  if (!is.null (spc)){
+    if (is.null (dim (spc))){
+      nwl <- length (spc)
+      if (.options$gc) gc ()
+      dim (spc) <- c(1, nwl)
+      if (.options$gc) gc ()
+    } else {
+      nwl <- ncol (spc)
+    }
+  } else if (!is.null (data$spc))
     nwl <- ncol (data$spc)
   else
     nwl <- 0

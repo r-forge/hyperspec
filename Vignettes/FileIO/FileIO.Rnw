@@ -14,14 +14,10 @@
 % \VignetteIndexEntry{FileIO: Import and Export of Spectra into R/hyperSpec}
 % \VignetteKeywords{hyperSpec, import, export, .spc, ENVI, ASCII}
 % \VignettePackage{hyperSpec}
-% \VignetteDepends{e1071, R.matlab}
 
-<<echo = FALSE, results = hide>>=
-library (R.matlab)
-@
 \begin{document}
-\title{Import and Export of Spectra Files\\
-Vignette for the R package \Rpackage{hyperSpec} }
+\title{Import and Export of Spectra Files}
+\subtitle{Vignette for the R package \Rpackage{hyperSpec}}
 \maketitle
 
 \warnbox{Supported File Formats}{ \phy supports a number of file formats relevant for different types
@@ -51,7 +47,7 @@ Vignette for the R package \Rpackage{hyperSpec} }
  
  Note that some definitions are in file \texttt{vignettes.defs}.
 }
-\clearpage
+
 \tableofcontents
 
 \section{Introduction}

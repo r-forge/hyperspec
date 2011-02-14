@@ -29,8 +29,13 @@
 }
 
 test (.labels) <- function (){
-  checkEquals (labels (flu), flu@label)
-
+  .sort <- function (x)
+    x [order (names (x))]
+  
+  checkEquals (.sort (labels (flu, use.colnames = FALSE)), .sort (flu@label))
+  tmp <- c (flu@label, file = "file")
+  checkEquals (.sort (labels (flu)), .sort (tmp))
+  
   tmp <- flu
   tmp@label$file <- NULL
   checkEquals (labels (tmp, c ("c", "file", "fil"), use.colnames = FALSE),
