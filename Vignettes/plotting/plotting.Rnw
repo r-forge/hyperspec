@@ -665,6 +665,7 @@ if (require (rgl)){
          windowRect = c(20L, 50L, 520L, 330L),
          zoom = 0.75)
   rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
+  rgl.quit() 
 } else {
   png ("fig/fig-3D.png")
   ploterrormsg ("", "rgl")

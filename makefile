@@ -99,9 +99,12 @@ Vignettes/introduction/introduction.pdf:          Vignettes/introduction/introdu
 Vignettes/introduction/introduction.tex:          Vignettes/introduction/introduction.Rnw
 
 Vignettes/introduction/introduction.Rnw:          Vignettes/introduction/vignettes.defs $(SRC)    \
-                                                  Vignettes/introduction/rawdata/* \
                                                   Vignettes/introduction/functions.RData
+#                                                  Vignettes/introduction/rawdata/paracetamol.txt.gz 
 	touch $@
+
+#Vignettes/introduction/rawdata/paracetamol.txt.gz: Vignettes/FileIO/txt.Renishaw/paracetamol.txt.gz
+#	@cp -av $< $@ 
 
 Vignettes/introduction/*.rda:	                    Vignettes/introduction/introduction.Rnw
 	cd $(dir $<) && R CMD Sweave $(notdir $<)
@@ -114,9 +117,10 @@ Vignettes/laser/laser.pdf:          				  Vignettes/laser/laser.tex
 Vignettes/laser/laser.tex:          				  Vignettes/laser/laser.Rnw
 
 Vignettes/laser/laser.Rnw:          				  Vignettes/laser/vignettes.defs $(SRC)    \
-                                                  Vignettes/laser/rawdata/* #\
-#                                                  Vignettes/laser/par3d.Rdata 
-	touch $@
+                                                  Vignettes/laser/rawdata/laser.txt.gz
+
+Vignettes/laser/rawdata/laser.txt.gz:             Vignettes/FileIO/txt.Renishaw/laser.txt.gz
+	cp -av $< $@
 
 Vignettes/laser/*.rda:	                          Vignettes/laser/laser.Rnw
 	cd $(dir $<) && R CMD Sweave $(notdir $<)
@@ -189,7 +193,11 @@ pkg/inst/doc/src/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
                                pkg/inst/doc/src/functions.RData \
                                pkg/inst/doc/src/introduction.bib \
                                pkg/inst/doc/src/strukturhyperspec.pdf
+#                               pkg/inst/doc/src/rawdata/paracetamol.txt.gz
 	@cp -av $< $@
+
+#pkg/inst/doc/src/rawdata/paracetamol.txt.gz: Vignettes/introduction/rawdata/paracetamol.txt.gz
+#	@cp -av $< $@
 
 pkg/inst/doc/src/functions.RData: Vignettes/introduction/functions.RData
 	@cp -av $< $@
@@ -202,12 +210,9 @@ pkg/inst/doc/src/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec
 
 
 pkg/inst/doc/src/laser.Rnw: Vignettes/laser/laser.Rnw \
-                        pkg/inst/doc/src/rawdata/laser.txt
-#                        pkg/inst/doc/par3d.Rdata \
-	@cp -av $< $@
-#pkg/inst/doc/par3d.Rdata: Vignettes/laser/par3d.Rdata
-#	@cp -av $< $@
-pkg/inst/doc/src/rawdata/laser.txt: Vignettes/laser/rawdata/laser.txt 
+                        pkg/inst/doc/src/rawdata/laser.txt.gz
+
+pkg/inst/doc/src/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
 	@cp -av $< $@
 
 pkg/inst/doc/pdf/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf

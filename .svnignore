@@ -18,3 +18,4 @@ hyperSpec_*.tar.gz
 Rplots.pdf
 fig*.*
 .Rhistory
+auto

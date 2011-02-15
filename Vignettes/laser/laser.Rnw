@@ -17,7 +17,7 @@ Vignette for the Data Set \Robject{laser} of the R package \Rpackage{hyperSpec} 
 All spectra used in this manual are installed automatically with \phy. 
 
 The source data files can be found with the command:\\
-\texttt{\small\textsl{> system.file ("doc/src/rawdata/laser.txt", package = "hyperSpec")}}.
+\texttt{\small\textsl{> system.file ("doc/src/rawdata/laser.txt.gz", package = "hyperSpec")}}.
 
 In order to reproduce the examples by typing in the commands, have a look at the definitions in \texttt{vignettes.defs}.}
 
@@ -48,7 +48,7 @@ This document shows
 \section{Loading the Data and Preprocessing}
 
 <<rawspc, fig = TRUE, width = 5, height = 3, include = FALSE>>=
-laser <- scan.txt.Renishaw ("rawdata/laser.txt", data = "ts")
+laser <- scan.txt.Renishaw ("rawdata/laser.txt.gz", data = "ts")
 plot (laser, "spcprctl5") 
 @
 
@@ -212,6 +212,7 @@ if (require (rgl)){
          windowRect = c(20L, 50L, 520L, 330L),
          zoom = 0.75)
   rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
+  rgl.quit ()
 } else {
   png ("fig/fig-3D.png")
   ploterrormsg ("", "rgl")

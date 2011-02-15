@@ -523,7 +523,7 @@ Instead of a file name, \Rfunction{scan.txt.Renishaw} accepts also a connection.
 
 <<scan.txt.Renishaw>>=
 scan.txt.Renishaw ("txt.Renishaw/paracetamol.txt", "spc")
-scan.txt.Renishaw ("txt.Renishaw/laser.txt", "ts")
+scan.txt.Renishaw ("txt.Renishaw/laser.txt.gz", "ts")
 @ 
 
 Very large files can  be read in chunks to save  memory:
