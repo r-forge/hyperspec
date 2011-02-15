@@ -104,6 +104,7 @@ CENMAT, DMRN, University of Trieste}
 \setkeys{Gin}{width = .5\textwidth}
 }
 <<startup, echo = FALSE, results = hide>>=
+system ("mkdir fig")
 options(SweaveHooks=list(fig=function() {
   par(mar = c (4.1, 4.1, 1, .6))
 
