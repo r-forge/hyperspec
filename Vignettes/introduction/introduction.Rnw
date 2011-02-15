@@ -525,9 +525,9 @@ They can be given like any column specification for a \df,
 <<data>>=
 colnames (chondro)
 chondro [[1 : 3, 1]]
-chondro [[1 : 3, -3]]
+chondro [[1 : 3, -4]]
 chondro [[1 : 3, "x"]]
-chondro [[1 : 3, c (TRUE, FALSE, FALSE)]]
+chondro [[1 : 3, c (TRUE, FALSE)]]      # note the recycling!
 @
 
 To select one column, the \Rfunction{\$} operator is more convenient\mFun{\Rfunction{\$}}:
@@ -1174,12 +1174,12 @@ loadings[1]$..
 \begin{figure}
 \setkeys{Gin}{width = .495\textwidth}
 \subfloat[\label{fig-pca-load}]{
-<<pca-load, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
+<<pca-load, fig = TRUE, width = 8, height = 4, echo = FALSE>>=
 plot (loadings [1:3], stacked = TRUE)
 @
 }
 \subfloat[\label{fig-pca-score}]{
-<<pca-score, fig = TRUE, width = 8, height = 5, echo = FALSE>>=
+<<pca-score, fig = TRUE, width = 8, height = 4, echo = FALSE>>=
 plotmap (scores [,,3], col.regions = div.palette (20))
 @
 }
@@ -1214,14 +1214,17 @@ Some functions need the data being an \emph{unstacked} or \emph{long-format} \df
 require (ggplot2)
 ggplot (as.long.df (chondro [1]), aes (x = .wavelength, y = spc)) + geom_line ()                           
 @
-<<fig = TRUE, width = 10, height = 5, echo = FALSE>>=
+<<ggplot-do, echo = FALSE>>=
 if (require (ggplot2)){
 <<ggplot>>
+  ggsave (file = "fig/fig-ggplot-do.pdf", width = 8, height = 4)
 } else {
+  pdf ("fig/fig-ggplot-do.pdf", width = 8, height = 4)
   ploterrormsg (NULL, "ggplot2")
+  dev.off()
 }
 @ 
-
+\includegraphics[width=.5\linewidth]{fig/fig-ggplot-do.pdf}
 
 \subsection{Data Analysis Methods using a matrix \\
 \eg Hierarchical Cluster Analysis}

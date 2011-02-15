@@ -1,11 +1,9 @@
-all: *.pdf clean 
+all: baseline.pdf chondro.pdf fileio.pdf flu.pdf introduction.pdf laser.pdf plotting.pdf clean 
 
-chondro.pdf: chondro.Rnw
-	touch chondro.pdf
+chondro.pdf: 
 	rm -f chondro.tex
 
-fileio.pdf: fileio.Rnw
-	touch fileio.pdf
+fileio.pdf: 
 	rm -f fileio.tex
 
 %.pdf: %.Rnw
@@ -18,7 +16,7 @@ fileio.pdf: fileio.Rnw
 	rm Rplots.pdf
 
 clean: 
-	rm -f flu.rda
+	rm -f flu.rda laser.rda
 	rm -rf fig 	
-	rm Rplots.pdf
-	rm *.tex
+	rm -f Rplots.pdf
+	rm -f *.tex
