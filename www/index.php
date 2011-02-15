@@ -141,23 +141,23 @@ These may be a bit outdated (the date is pkg/DESCRIPTION), but they work if the 
 		<ul>
 			<li><a href="introduction.pdf">Introduction</a>: user manual written from a spectroscopist's point
 				of view</li>
-			<li><a href="FileIO.pdf">FileIO</a>: Detailed discussion of import and export of spectra files,<br/>
-				the <a href="FileIO.zip">zipped directory containing all data</a> is needed to reproduce the vignette.</li>
+			<li><a href="fileio.pdf">fileio</a>: Detailed discussion of import and export of spectra files,<br/>
+				the <a href="fileio.zip">zipped directory containing all data</a> is needed to reproduce the vignette.</li>
 			<li><a href="plotting.pdf">plotting</a>: graphical manual: example plots together with the code to
 				produce the plots</li>
 			<li>Example work-flow: <a href="flu.pdf">calibration of quinine fluorescence emission</a>: how to
 				program import functions for other file formats, and how to set up a calibration.</li>
 			<li>Example work-flow: <a href="laser.pdf">Unstable Laser Emission</a>: working with time series,
 				conversion of the spectral abscissa ("wavelength axis")</li>
-			<li>Example work-flow: <a href="chondrocytes.pdf"> Raman map of chondrocytes in cartilage</a>:
+			<li>Example work-flow: <a href="chondro.pdf"> Raman map of chondrocytes in cartilage</a>:
 				principal component analysis, cluster analysis, working with spectral maps/images.<br/>
-				the <a href="chondrocytes.zip">zipped directory containing all data</a> is needed to reproduce
+				the <a href="chondro.zip">zipped directory containing all data</a> is needed to reproduce
 				the vignette.</li>
-			<li>A more technical <a href="baselinebelow.pdf">explanation of the baseline fitting technique
+			<li>A more technical <a href="baseline.pdf">explanation of the baseline fitting technique
 				used by <tt>spc.fit.poly.below</tt></a></li>
 		</ul>
 		<p> In the standard <tt>hyperSpec</tt> installation, .pdf files and source are already available in
-		the documentation directory, with the exception of the the chondrocyte and File-IO raw data (see
+		the documentation directory, with the exception of the the chondrocyte and fileio raw data (see
 		above).</p>
 	</li>
 </ul>
