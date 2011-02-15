@@ -19,7 +19,7 @@ zip: $(ZIPS)
 #.SECONDARY: Vignettes/*.zip
 
 # VIGNETTES in subdirs ##############################################################################
-vignettes: $(VIGNETTES) $(ZIPS) pkg/inst/doc/src/vignettes.defs pkg/inst/doc/src/* pkg/inst/doc/pdf/*
+vignettes: $(VIGNETTES) $(ZIPS) pkg/inst/doc/src/vignettes.defs pkg/inst/doc/src/* pkg/inst/doc/*.pdf
 
 Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
@@ -215,25 +215,25 @@ pkg/inst/doc/src/laser.Rnw: Vignettes/laser/laser.Rnw \
 pkg/inst/doc/src/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
 	@cp -av $< $@
 
-pkg/inst/doc/pdf/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
+pkg/inst/doc/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
 	@cp -av $< $@
 
-pkg/inst/doc/pdf/FileIO.pdf: Vignettes/FileIO/FileIO.pdf     
+pkg/inst/doc/FileIO.pdf: Vignettes/FileIO/FileIO.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/pdf/baseline.pdf: Vignettes/baseline/baseline.pdf     
+pkg/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/pdf/flu.pdf: Vignettes/flu/flu.pdf     
+pkg/inst/doc/flu.pdf: Vignettes/flu/flu.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/pdf/introduction.pdf: Vignettes/introduction/introduction.pdf     
+pkg/inst/doc/introduction.pdf: Vignettes/introduction/introduction.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/pdf/laser.pdf: Vignettes/laser/laser.pdf     
+pkg/inst/doc/laser.pdf: Vignettes/laser/laser.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/pdf/plotting.pdf: Vignettes/plotting/plotting.pdf     
+pkg/inst/doc/plotting.pdf: Vignettes/plotting/plotting.pdf     
 	@cp -av $< $@
 
 # www ###############################################################################################
