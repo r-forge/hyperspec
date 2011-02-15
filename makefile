@@ -1,13 +1,13 @@
-VIGNETTES := baseline chondrocytes FileIO flu introduction laser plotting
+VIGNETTES := baseline chondro fileio flu introduction laser plotting
 
 ZIPS := Vignettes/*.zip
 
 SRC := pkg/R/*.R pkg/NAMESPACE 
-DOC := pkg/man/*.Rd
-RNW := pkg/inst/doc/src/*.Rnw
+MAN := pkg/man/*.Rd
+RNW := pkg/inst/doc/*.Rnw
 
 
-all: vignettes data www DESCRIPTION build check
+all: vignettes doc data www DESCRIPTION build check
 		@echo all vignettes: $(VIGNETTES)
 
 zip: $(ZIPS)
@@ -19,7 +19,7 @@ zip: $(ZIPS)
 #.SECONDARY: Vignettes/*.zip
 
 # VIGNETTES in subdirs ##############################################################################
-vignettes: $(VIGNETTES) $(ZIPS) pkg/inst/doc/src/vignettes.defs pkg/inst/doc/src/* pkg/inst/doc/*.pdf
+vignettes: $(VIGNETTES) $(ZIPS) pkg/inst/doc/vignettes.defs pkg/inst/doc/* pkg/inst/doc/*.pdf
 
 Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
@@ -28,44 +28,45 @@ Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 baseline:                                         Vignettes/baseline/baseline.pdf
 
 Vignettes/baseline/baseline.pdf:                  Vignettes/baseline/baseline.tex 
+	echo $(<F)
 
 Vignettes/baseline/baseline.tex:                  Vignettes/baseline/baseline.Rnw 
 
 Vignettes/baseline/baseline.Rnw:                  Vignettes/baseline/vignettes.defs $(SRC)
 	touch $@
 
-# chondrocytes ......................................................................................
-chondrocytes:                                     Vignettes/chondrocytes/chondrocytes.pdf Vignettes/chondrocytes.zip
+# chondro ......................................................................................
+chondro:                                     Vignettes/chondro/chondro.pdf Vignettes/chondro.zip
 
-Vignettes/chondrocytes/chondrocytes.pdf:          Vignettes/chondrocytes/chondrocytes.tex 	 \
-                                                  Vignettes/chondrocytes/080606d-flip-ausw.jpg
+Vignettes/chondro/chondro.pdf:          Vignettes/chondro/chondro.tex 	 \
+                                                  Vignettes/chondro/080606d-flip-ausw.jpg
 
-Vignettes/chondrocytes/chondrocytes.tex:          Vignettes/chondrocytes/chondrocytes.Rnw
+Vignettes/chondro/chondro.tex:          Vignettes/chondro/chondro.Rnw
 
-Vignettes/chondrocytes/chondrocytes.Rnw:          Vignettes/chondrocytes/vignettes.defs $(SRC)    \
-                                                  Vignettes/chondrocytes/rawdata/* 
+Vignettes/chondro/chondro.Rnw:          Vignettes/chondro/vignettes.defs $(SRC)    \
+                                                  Vignettes/chondro/rawdata/* 
 	touch $@
 
-Vignettes/chondrocytes/*.rda:	                    Vignettes/chondrocytes/chondrocytes.Rnw
+Vignettes/chondro/*.rda:	                    Vignettes/chondro/chondro.Rnw
 	cd $(dir $<) && R CMD Sweave $(notdir $<) && \
 
 
-# FileIO ............................................................................................
-FileIO:                                           Vignettes/FileIO/FileIO.pdf Vignettes/FileIO.zip
+# fileio ............................................................................................
+fileio:                                           Vignettes/fileio/fileio.pdf Vignettes/fileio.zip
 
-Vignettes/FileIO/FileIO.pdf:                      Vignettes/FileIO/FileIO.tex 			 
-Vignettes/FileIO/FileIO.tex:                      Vignettes/FileIO/FileIO.Rnw
+Vignettes/fileio/fileio.pdf:                      Vignettes/fileio/fileio.tex 			 
+Vignettes/fileio/fileio.tex:                      Vignettes/fileio/fileio.Rnw
 
-Vignettes/FileIO/FileIO.Rnw:                      Vignettes/FileIO/vignettes.defs $(SRC)    \
-                                                  Vignettes/FileIO/scan.txt.PerkinElmer.R   \
-                                                  Vignettes/FileIO/txt.t/Triazine\ 5_31.txt \
-                                                  Vignettes/FileIO/ENVI/example2.img 		 \
-                                                  Vignettes/FileIO/spc/*.SPC 					 \
-                                                  Vignettes/FileIO/spc.Kaisermap/*.spc 		 \
-                                                  Vignettes/FileIO/txt.Renishaw/* 
+Vignettes/fileio/fileio.Rnw:                      Vignettes/fileio/vignettes.defs $(SRC)    \
+                                                  Vignettes/fileio/scan.txt.PerkinElmer.R   \
+                                                  Vignettes/fileio/txt.t/Triazine\ 5_31.txt \
+                                                  Vignettes/fileio/ENVI/example2.img 		 \
+                                                  Vignettes/fileio/spc/*.SPC 					 \
+                                                  Vignettes/fileio/spc.Kaisermap/*.spc 		 \
+                                                  Vignettes/fileio/txt.Renishaw/* 
 	touch $@
 
-Vignettes/FileIO/*.rda:                           Vignettes/FileIO/FileIO.Rnw
+Vignettes/fileio/*.rda:                           Vignettes/fileio/fileio.Rnw
 	cd $(dir $<) && R CMD Sweave $(notdir $<)
 
 # flu ...............................................................................................
@@ -80,7 +81,7 @@ Vignettes/flu/flu:          						  Vignettes/flu/vignettes.defs $(SRC)    \
                                                   Vignettes/flu/scan.txt.PerkinElmer.R
 	touch $@
 
-Vignettes/flu/scan.txt.PerkinElmer.R:             Vignettes/FileIO/scan.txt.PerkinElmer.R
+Vignettes/flu/scan.txt.PerkinElmer.R:             Vignettes/fileio/scan.txt.PerkinElmer.R
 	cp -av $< $@
 
 Vignettes/flu/*.rda:  	                          Vignettes/flu/flu.Rnw
@@ -103,7 +104,7 @@ Vignettes/introduction/introduction.Rnw:          Vignettes/introduction/vignett
 #                                                  Vignettes/introduction/rawdata/paracetamol.txt.gz 
 	touch $@
 
-#Vignettes/introduction/rawdata/paracetamol.txt.gz: Vignettes/FileIO/txt.Renishaw/paracetamol.txt.gz
+#Vignettes/introduction/rawdata/paracetamol.txt.gz: Vignettes/fileio/txt.Renishaw/paracetamol.txt.gz
 #	@cp -av $< $@ 
 
 Vignettes/introduction/*.rda:	                    Vignettes/introduction/introduction.Rnw
@@ -119,7 +120,7 @@ Vignettes/laser/laser.tex:          				  Vignettes/laser/laser.Rnw
 Vignettes/laser/laser.Rnw:          				  Vignettes/laser/vignettes.defs $(SRC)    \
                                                   Vignettes/laser/rawdata/laser.txt.gz
 
-Vignettes/laser/rawdata/laser.txt.gz:             Vignettes/FileIO/txt.Renishaw/laser.txt.gz
+Vignettes/laser/rawdata/laser.txt.gz:             Vignettes/fileio/txt.Renishaw/laser.txt.gz
 	cp -av $< $@
 
 Vignettes/laser/*.rda:	                          Vignettes/laser/laser.Rnw
@@ -151,17 +152,15 @@ Vignettes/%.zip: .FORCE
 %.pdf: %.tex
 #	cd $(dir $<) && rubber --pdf -s $(basename $(notdir $<)).tex
 	cd $(dir $<) && latexmk -pdf $(basename $(notdir $<)).tex 
-	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH \
-	-sOutputFile=tmp.pdf $@ && mv tmp.pdf $@
+	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dAutoRotatePages=/None \
+	-dDownsampleColorImages=false -dNOPAUSE -dQUIET -dBATCH -sOutputFile=tmp.pdf $@ && mv tmp.pdf $@
 
 %.dvi: # should not happen!
 	rm $@
 # data ##############################################################################################
-data: pkg/data/*.rda
+data: pkg/data/*.rda pkg/R/sysdata.rda
 
-pkg/data/chondro-internal.rda:     Vignettes/chondrocytes/chondro-internal.rda 
-	@cp -av $< $@
-pkg/data/barbituates.rda: Vignettes/FileIO/barbituates.rda 
+pkg/data/barbituates.rda: Vignettes/fileio/barbituates.rda 
 	@cp -av $< $@
 pkg/data/flu.rda:         Vignettes/flu/flu.rda 
 	@cp -av $< $@
@@ -170,80 +169,100 @@ pkg/data/paracetamol.rda: Vignettes/introduction/paracetamol.rda
 pkg/data/laser.rda:       Vignettes/laser/laser.rda
 	@cp -av $< $@
 
+pkg/R/sysdata.rda:	Vignettes/chondro/chondro-internal.rda	
+	@cp -av $< $@
+
 # instdoc ###########################################################################################
-pkg/inst/doc/src/vignettes.defs: Vignettes/vignettes.defs
+doc: $(foreach V,$(VIGNETTES), pkg/inst/doc/$(V).Rnw)
+
+pkg/inst/doc/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
-	@touch pkg/inst/doc/src/*.Rnw
+	@touch pkg/inst/doc/*.Rnw
 
-pkg/inst/doc/src/baseline.Rnw: Vignettes/baseline/baseline.Rnw 
+pkg/inst/doc/baseline.Rnw: Vignettes/baseline/baseline.Rnw 
 	@cp -av $< $@
 
-pkg/inst/doc/src/flu.Rnw: Vignettes/flu/flu.Rnw \
-                      pkg/inst/doc/src/rawdata/flu?.txt \
-                      pkg/inst/doc/src/scan.txt.PerkinElmer.R 
+pkg/inst/doc/flu.Rnw: Vignettes/flu/flu.Rnw \
+                      pkg/inst/doc/rawdata/flu1.txt \
+                      pkg/inst/doc/rawdata/flu2.txt \
+                      pkg/inst/doc/rawdata/flu3.txt \
+                      pkg/inst/doc/rawdata/flu4.txt \
+                      pkg/inst/doc/rawdata/flu5.txt \
+                      pkg/inst/doc/rawdata/flu6.txt \
+                      pkg/inst/doc/scan.txt.PerkinElmer.R 
 	@cp -av $< $@
 
-pkg/inst/doc/src/rawdata/flu%.txt: Vignettes/flu/rawdata/flu%.txt
+pkg/inst/doc/rawdata/flu%.txt: Vignettes/flu/rawdata/flu%.txt
 	@cp -av $< $@
 
-pkg/inst/doc/src/scan.txt.PerkinElmer.R: Vignettes/flu/scan.txt.PerkinElmer.R 
+pkg/inst/doc/scan.txt.PerkinElmer.R: Vignettes/flu/scan.txt.PerkinElmer.R 
 	@cp -av $< $@
 
-pkg/inst/doc/src/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
-                               pkg/inst/doc/src/functions.RData \
-                               pkg/inst/doc/src/introduction.bib \
-                               pkg/inst/doc/src/strukturhyperspec.pdf
-#                               pkg/inst/doc/src/rawdata/paracetamol.txt.gz
+pkg/inst/doc/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
+                               pkg/inst/doc/functions.RData \
+                               pkg/inst/doc/introduction.bib \
+                               pkg/inst/doc/strukturhyperspec.pdf
+#                               pkg/inst/doc/rawdata/paracetamol.txt.gz
 	@cp -av $< $@
 
-#pkg/inst/doc/src/rawdata/paracetamol.txt.gz: Vignettes/introduction/rawdata/paracetamol.txt.gz
+#pkg/inst/doc/rawdata/paracetamol.txt.gz: Vignettes/introduction/rawdata/paracetamol.txt.gz
 #	@cp -av $< $@
 
-pkg/inst/doc/src/functions.RData: Vignettes/introduction/functions.RData
+pkg/inst/doc/functions.RData: Vignettes/introduction/functions.RData
 	@cp -av $< $@
 
-pkg/inst/doc/src/introduction.bib: Vignettes/introduction/introduction.bib 
+pkg/inst/doc/introduction.bib: Vignettes/introduction/introduction.bib 
 	@cp -av $< $@
 
-pkg/inst/doc/src/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
+pkg/inst/doc/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
 	@cp -av $< $@
 
 
-pkg/inst/doc/src/laser.Rnw: Vignettes/laser/laser.Rnw \
-                        pkg/inst/doc/src/rawdata/laser.txt.gz
-
-pkg/inst/doc/src/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
+pkg/inst/doc/laser.Rnw: Vignettes/laser/laser.Rnw \
+                        pkg/inst/doc/rawdata/laser.txt.gz
 	@cp -av $< $@
 
-pkg/inst/doc/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
+pkg/inst/doc/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
 	@cp -av $< $@
 
-pkg/inst/doc/FileIO.pdf: Vignettes/FileIO/FileIO.pdf     
+pkg/inst/doc/chondro.Rnw: pkg/inst/doc/chondro.pdf # no mistake: this is a dummy .Rnw
+	touch $@
+
+pkg/inst/doc/chondro.pdf: Vignettes/chondro/chondro.pdf
 	@cp -av $< $@
 
-pkg/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
+pkg/inst/doc/fileio.Rnw: pkg/inst/doc/fileio.pdf # no mistake: this is a dummy .Rnw
+	touch $@
+
+pkg/inst/doc/fileio.pdf: Vignettes/fileio/fileio.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/flu.pdf: Vignettes/flu/flu.pdf     
+pkg/inst/doc/plotting.Rnw: Vignettes/plotting/plotting.Rnw     
 	@cp -av $< $@
 
-pkg/inst/doc/introduction.pdf: Vignettes/introduction/introduction.pdf     
-	@cp -av $< $@
+#pkg/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
+#	@cp -av $< $@
 
-pkg/inst/doc/laser.pdf: Vignettes/laser/laser.pdf     
-	@cp -av $< $@
+#pkg/inst/doc/flu.pdf: Vignettes/flu/flu.pdf     
+#	@cp -av $< $@
 
-pkg/inst/doc/plotting.pdf: Vignettes/plotting/plotting.pdf     
-	@cp -av $< $@
+#pkg/inst/doc/introduction.pdf: Vignettes/introduction/introduction.pdf     
+#	@cp -av $< $@
+
+#pkg/inst/doc/laser.pdf: Vignettes/laser/laser.pdf     
+#	@cp -av $< $@
+
+#pkg/inst/doc/plotting.pdf: Vignettes/plotting/plotting.pdf     
+#	@cp -av $< $@
 
 # www ###############################################################################################
 www: www/*.zip www/*.pdf
 
 www/baseline.pdf: Vignettes/baseline/baseline.pdf
 	@cp -av $< $@
-www/chondrocytes.pdf: Vignettes/chondrocytes/chondrocytes.pdf
+www/chondro.pdf: Vignettes/chondro/chondro.pdf
 	@cp -av $< $@
-www/FileIO.pdf: Vignettes/FileIO/FileIO.pdf
+www/fileio.pdf: Vignettes/fileio/fileio.pdf
 	@cp -av $< $@
 www/flu.pdf: Vignettes/flu/flu.pdf
 	@cp -av $< $@
@@ -257,10 +276,10 @@ www/plotting.pdf: Vignettes/plotting/plotting.pdf
 www/hyperSpec-prebuilt.zip: # built manually 
 	touch $@
 
-www/chondrocytes.zip: Vignettes/chondrocytes.zip
+www/chondro.zip: Vignettes/chondro.zip
 	@cp -av $< $@
 
-www/FileIO.zip: Vignettes/FileIO.zip
+www/fileio.zip: Vignettes/fileio.zip
 	@cp -av $< $@
 
 
@@ -275,11 +294,11 @@ DESCRIPTION: $(shell find pkg -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIP
 	sed "s/\(^Date: .*\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$$/\1`date +%F`\2/" .DESCRIPTION > pkg/DESCRIPTION 
 	rm .DESCRIPTION
 
-build: DESCRIPTION $(SRC) $(RNW) $(DOC) vignettes
+build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data
 	rm -f hyperSpec_*.tar.gz
-	R CMD build pkg  && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
+	R CMD build pkg  && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
 
-devbuild: DESCRIPTION $(SRC) $(RNW) $(DOC) vignettes
+devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data
 	rm -f hyperSpec_*.tar.gz
 	~/r-devel/bin/R CMD build pkg && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
 
@@ -299,10 +318,10 @@ devbuild: DESCRIPTION $(SRC) $(RNW) $(DOC) vignettes
 #bye
 #EOT
 
-check: $(SRC) $(RNW) $(DOC) 
+check: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data
 	R CMD check pkg
 
-devcheck: $(SRC) $(RNW) $(DOC) 
+devcheck: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data
 	~/r-devel/bin/R CMD check pkg
 
 checkfast: $(SRC)
