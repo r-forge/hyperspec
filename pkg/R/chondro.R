@@ -1,5 +1,5 @@
 .make.chondro <- function (){
-  load (system.file ("extdata/chondro-internal.rda", package = "hyperSpec"))
+#  load (system.file ("extdata/chondro-internal.rda", package = "hyperSpec"))
   
   new ("hyperSpec",
        spc =  (tcrossprod (.chondro.scores, .chondro.loadings) +
