@@ -237,26 +237,6 @@ count.rows <- function(x) {
 ##   n
 ## }
 
-ls.cb <- function (nice = TRUE, order.size = TRUE){
-  vars <- ls (parent.frame()) 
-  vars <- data.frame (name = vars [! sapply (vars, function (v) is.function (get (v)))])
-
-  vars$size <- sapply (vars$name, function (v) object.size (get (as.character(v) )))
-
-  if (order.size)
-    vars <- vars[order (vars$size),] 
-
-  if (nice){
-    vars$unit <- "B"
-    vars$unit[vars$size > 1048576] <- "MB"
-    vars$size[vars$size > 1048576] <- vars$size[vars$size >  1048576] /  1048576
-    vars$unit[vars$size > 1024] <- "kB"
-    vars$size[vars$size > 1024] <- vars$size[vars$size > 1024] / 1024
-
-    vars$size <- round (vars$size, digits = 1) 
-  }  
-  vars
-} 
 
 
 my.extract <- function (x, head, tail, ...){
@@ -379,7 +359,7 @@ str.matrix <- function (x) {
 ##' stopifnot (all (t (t (a)) == a))
 ##' @log C. Beleites 2010-06-15
 
-t.array <- function (x){
+t2.array <- function (x){
   dims <- seq_along (dim (x))
   aperm (x, c (2, 1, dims [- (1 : 2)]))
 }
@@ -412,3 +392,5 @@ sel.poly <- function (pch = 19, size = 0.3, ...){
   
   pts [seq_len (pos - 1),]
 }
+
+
