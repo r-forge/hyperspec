@@ -112,11 +112,7 @@ exportMethods ("initialize",
                "plot",
                "levelplot",
                "sample",
-               "is.na",
-               "rowSums", 
-               "rowMeans",
-               "colSums",
-               "colMeans"
+               "is.na"
                ) 
 
 
