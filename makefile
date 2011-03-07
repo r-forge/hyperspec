@@ -160,7 +160,7 @@ Vignettes/%.zip: .FORCE
 # data ##############################################################################################
 data: pkg/data/*.rda pkg/R/sysdata.rda
 
-pkg/data/barbituates.rda: Vignettes/fileio/barbituates.rda 
+pkg/data/barbiturates.rda: Vignettes/fileio/barbiturates.rda 
 	@cp -av $< $@
 pkg/data/flu.rda:         Vignettes/flu/flu.rda 
 	@cp -av $< $@

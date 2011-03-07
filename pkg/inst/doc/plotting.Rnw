@@ -47,6 +47,8 @@ beginning of the file in order to have the code as similar as possible to intera
 \warnbox[blue!50!black]{Suggested Packages}{
 \begin{labeling}{latticeExtra}
 <<check-required, echo = FALSE, results = tex>>=
+msg <- function (...) system (sprintf ("echo '%s'", paste (...)))
+
 required.pkgs <- c("latticeExtra", "deldir", "rgl", "ggplot2")
 
 dummies <- check.req.pkg ("latticeExtra", griderrors = "panel.levelplot.points",
@@ -644,27 +646,28 @@ laser$t <- laser$t / 3600
 cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
 surface3d (y = wl (laser), x = laser$t, 
            z = laser$spc, col =  cols)
-warning ("surface3d done")
+msg ("surface3d done")
 aspect3d (c (1, 1, 0.25))
-warning ("aspect3d done")
+msg ("aspect3d done")
 axes3d (c ('x+-', 'y--', 'z--'))
-warning ("axes3d x done")
+msg ("axes3d x done")
 axes3d ('y--', nticks = 25, labels= FALSE)
-warning ("axes3d y done")
+msg ("axes3d y done")
 mtext3d ("t / h", 'x+-', line = 2.5)
-warning ("mtext3d y done")
+msg ("mtext3d y done")
 mtext3d ("λ / nm", 'y--', line = 2.5)
-warning ("axes3d lambda done")
+msg ("axes3d lambda done")
 mtext3d ("I / a.u.", edge = 'z--', line = 2.5)
-warning ("axes3d I done")
+msg ("axes3d I done")
 @
 \end{longtable}
 <<rgl-do, echo = FALSE, results = hide>>=
+msg ("before require rgl")
 if (require (rgl)){
-warning ("require rgl ok")
+msg ("require rgl ok")
   open3d (windowRect=c(20,20,600, 350))  # this is needed only for automatically 
                                         # producing the snapshot
-warning ("open3d x done")
+msg ("open3d x done")
 
 <<rgl-plot>>
   par3d (userMatrix = matrix (c (-0.52,  0.4, -0.75, 0, 
@@ -675,13 +678,13 @@ warning ("open3d x done")
          windowRect = c(20L, 50L, 520L, 330L),
          zoom = 0.75)
                                         # producing the snapshot
-warning ("par3d x done")
+msg ("par3d x done")
 rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
                                         # producing the snapshot
-warning ("snapshot x done")
+msg ("snapshot x done")
 rgl.quit() 
                                         # producing the snapshot
-warning ("rgl.quit done")
+msg ("rgl.quit done")
 } else {
   png ("fig/fig-3D.png")
   ploterrormsg ("", "rgl")

@@ -313,14 +313,14 @@ case sensitive.
 case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum
 each. \Rfunction{collapse} may be used to combine this list into one \chy object:
 <<read.spc.list>>=
-barbituates <- read.spc ("spc/BARBITUATES.SPC")
-save (barbituates, file = "barbituates.rda")
-class (barbituates)
-length (barbituates)
-barbituates <- do.call (collapse, barbituates)
-barbituates <- orderwl (barbituates)
-barbituates
-barbituates [[1:10, , 25 ~ 30]]
+barbiturates <- read.spc ("spc/BARBITUATES.SPC")
+save (barbiturates, file = "barbiturates.rda")
+class (barbiturates)
+length (barbiturates)
+barbiturates <- do.call (collapse, barbiturates)
+barbiturates <- orderwl (barbiturates)
+barbiturates
+barbiturates [[1:10, , 25 ~ 30]]
 @
 
 
