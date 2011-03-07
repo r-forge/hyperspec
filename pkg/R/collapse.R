@@ -22,13 +22,13 @@
 ##' @return a hyperSpec object
 ##' @keywords manip
 ##' @examples
-##' barbituates [1:3]
-##' barb <- collapse (barbituates [1:3])
+##' barbiturates [1:3]
+##' barb <- collapse (barbiturates [1:3])
 ##' barb
 ##' 
-##' a <- barbituates [[1]]
-##' b <- barbituates [[2]]
-##' c <- barbituates [[3]]
+##' a <- barbiturates [[1]]
+##' b <- barbiturates [[2]]
+##' c <- barbiturates [[3]]
 ##' 
 ##' a
 ##' b

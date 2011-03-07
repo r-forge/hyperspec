@@ -1,7 +1,7 @@
 context ("stacked.offsets")
 
-test_that("BARBITUATES", {
-  spc <- do.call (collapse, barbituates [1:4])
+test_that("BARBITURATES", {
+  spc <- do.call (collapse, barbiturates [1:4])
   stacked.offsets (spc)
 }) 
 

@@ -59,8 +59,8 @@ This vignette gives an introduction on basic working techniques using the R pack
 \item [\Robject{laser}] a time series of an unstable laser emission
 \item [\Robject{paracetamol}] a Raman spectrum of paracetamol (acetaminophene) ranging from 100 to
   \rcm{3200} with overlapping wavelength ranges.
-\item [\Robject{barbituates}] GC-MS spectra with differing wavelength axes as a list of
-  \Sexpr{length (barbituates)} \chy objects.
+\item [\Robject{barbiturates}] GC-MS spectra with differing wavelength axes as a list of
+  \Sexpr{length (barbiturates)} \chy objects.
 \end{labeling}
 In this vignette, the data sets are used to illustrate appropriate procedures for different tasks and
 different spectra.  In addition, the first three data sets are accompanied by their own vignettes
@@ -232,7 +232,7 @@ summary (chondro)
 The\mFun{nrow, ncol, nwl, dim} data set \Robject{chondro} consists of \Sexpr{nrow (chondro)} spectra
 with \Sexpr{nwl (chondro)} data points each, and \Sexpr{ncol (chondro)} data columns: two for the
 spatial information, one factor with the results of a cluster analysis plus \Robject{\$spc}.  These
-informations can be directly obtained by
+information can be directly obtained by
 <<nwl>>=
 nrow (chondro)
 nwl (chondro)
@@ -337,11 +337,11 @@ row, but they do not share the columns and/or spectral range.  The resulting obj
 from all input objects, and all wavelengths from the input objects. If an input object does not have
 a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
 
-The \Robject{barbituates} data is a list of \Sexpr{length (barbituates)} \chy objects, each
-containing one mass spectrum. The spectra have between \Sexpr{(min (sapply (barbituates, nwl)))} and
-\Sexpr{(max (sapply (barbituates, nwl)))} data points each. 
+The \Robject{barbiturates} data is a list of \Sexpr{length (barbiturates)} \chy objects, each
+containing one mass spectrum. The spectra have between \Sexpr{(min (sapply (barbiturates, nwl)))} and
+\Sexpr{(max (sapply (barbiturates, nwl)))} data points each. 
 <<collapse>>=
-barb <- collapse (barbituates)
+barb <- collapse (barbiturates)
 wl (barb) [1 : 25]
 @ 
 The resulting object does not have an ordered wavelength axis. This can be obtained in a second step:
@@ -681,7 +681,7 @@ see \verb+?`wl<-`+ for more information.
 \label{sec:orderwl}
 If the wavelength axis of an object needs reordering (\eg after \Rfunction{collapse}), \Rfunction{orderwl}\mFun{\Rfunction{orderwl}} can be used:
 <<orderwl>>=
-barb <- collapse (barbituates [1 : 3])
+barb <- collapse (barbiturates [1 : 3])
 wl (barb)
 barb <- orderwl (barb)
 wl (barb)
@@ -761,7 +761,7 @@ In general, two options are available for shifting spectra along the wavelength 
 \item the spectra are interpolated onto a new wavelength axis, while the nominal wavelengths stay.
 \end{enumerate}
 
-The first method is very straightforward:
+The first method is very straightforward (see fig~\ref{fig:shift:wl}):
 <<>>=
 tmp <- chondro
 wl (tmp) <- wl (tmp) - 10
@@ -786,7 +786,7 @@ interpolate <- function (spc, shift, wl){
 }
 @
 
-This function can now be applied to a set of spectra:
+This function can now be applied to a set of spectra (see fig~\ref{fig:shift:interp}):
 <<>>=
 tmp <- apply (chondro, 1, interpolate, shift = -10, wl = wl (chondro))
 @
@@ -834,7 +834,7 @@ chondro [[]] <- tmp
 \subsubsection{Calculating the Shift}
 \label{sec:calculating-shift}
 Often, the shift in the spectra is determined by aligning a particular signal. This strategy works
-best with spectrally oversampled data that allows accurate deterimnation of the signal position.
+best with spectrally oversampled data that allows accurate determination of the signal position.
 
 For the \Robject{chondro} data, let's use the maximum of the phenylalanine band between 990 and
 \rcm{1020}. As just the very maximum is too coarse, we'll use the maximum of a square polynomial
@@ -1240,7 +1240,7 @@ plot (dendrogram)
 In order to plot a cluster map, the cluster membership needs to be
 calculated from the dendrogram.
 
-First, cut the dendrogam so that three clusters result:
+First, cut the dendrogram so that three clusters result:
 <<dendcut>>=
 chondro$clusters <- as.factor (cutree (dendrogram, k = 3))
 @

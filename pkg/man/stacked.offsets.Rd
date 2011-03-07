@@ -48,7 +48,7 @@ plot (mean.pm.sd, fill.col = matlab.palette (3), fill = ".aggregate",
 plot (aggregate (chondro, chondro$clusters, mean), yoffset = offset$offsets,
       lines.args = list (lty = 2, lwd = 2), add = TRUE)
 
-barb <- do.call (collapse, barbituates [1:3])
+barb <- do.call (collapse, barbiturates [1:3])
 plot (barb, lines.args = list (type = "h"), stacked = TRUE,
       stacked.args = list (add.factor = .2))
 

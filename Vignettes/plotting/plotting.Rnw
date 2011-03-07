@@ -275,10 +275,10 @@ plotspc (paracetamol [,, 2800 ~ 3200],
 \plottab{mass spectra }{mass}
 use \Rcode{lines.args = list (type = \textquotedbl{}h\textquotedbl{})}
 <<mass, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plot (barbituates [[1]], lines.args = list (type = "h"))
+plot (barbiturates [[1]], lines.args = list (type = "h"))
 @
 \\
-\plottab{more spectra into an exsisting plot}{add}
+\plottab{more spectra into an existing plot}{add}
 use \Rfunarg{add = TRUE}
 <<add, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (chondro [ 30,,])
@@ -388,7 +388,7 @@ plotc (flu, func = range, groups = .wavelength)
 If \Rfunction{func} returns more than one value, the different results are accessible by
 \verb+.wavelength+.
 \\
-\plottab{Condidioning: plotting more traces separately}{plotc2}
+\plottab{Conditioning: plotting more traces separately}{plotc2}
 <<plotc2, fig = TRUE, width = 4, height = 2.6,include = FALSE>>=
 plotc (flu [,, c (405, 445)], spc ~ c | .wavelength, 
        cex = .3, scales = list (alternating = c(1, 1)))
@@ -499,7 +499,7 @@ levelplot (spc ~ .wavelength * t, laser)
 \\
 \plottab{colour-coded points: different panel function}{plotmap-barb}
 <<plotmap-barb, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-barb <- do.call (collapse, barbituates[1:50])
+barb <- do.call (collapse, barbiturates[1:50])
 barb <- orderwl (barb)
 levelplot (spc ~ .wavelength * z, barb, 
            panel = panel.levelplot.points,
@@ -663,6 +663,7 @@ msg ("axes3d I done")
 \end{longtable}
 <<rgl-do, echo = FALSE, results = hide>>=
 msg ("before require rgl")
+try (
 if (require (rgl)){
 msg ("require rgl ok")
   open3d (windowRect=c(20,20,600, 350))  # this is needed only for automatically 
@@ -690,6 +691,7 @@ msg ("rgl.quit done")
   ploterrormsg ("", "rgl")
   dev.off ()
 }
+     ) ## try
 @
 
 
@@ -747,7 +749,7 @@ ggplot (df, aes (x = .wavelength)) +
   ylab (labels (chondro)$spc) 
 @
 \\\plottab{Cut spectra with \Rpackage{ggplot2}}{ggplotspccut} %
-Cut axes can be simulated by factetting. A factor is needed that indicates the respective ranges:
+Cut axes can be simulated by faceting. A factor is needed that indicates the respective ranges:
 <<ggplotspccut, eval = FALSE>>=
 df <- paracetamol [,, c( min ~ 1800, 2800 ~ max)] / 1e4
 df <- as.long.df (df)
@@ -827,7 +829,7 @@ returns the clicked coordinates. Note that these are \emph{not} transformed acco
 Co.
 
 For lattice graphics, \Rfunction{grid.locator} may be used instead. If it is not called in the panel
-function, a preceeding call to \Rfunction{trellis.focus} is needed:
+function, a preceding call to \Rfunction{trellis.focus} is needed:
 <<eval = FALSE>>=
 plot (laser, "mat")
 trellis.focus ()
@@ -852,6 +854,7 @@ plots and also identification of points.
 <<bib, echo = FALSE>>=
 make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith", "latticist", "plotrix", "deldir", "tripack"), 
           file = "plotting-pkg.bib")
+print (as.matrix(Sys.info()))
 <<cleanup>>
 @
 \end{footnotesize}

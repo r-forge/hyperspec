@@ -28,7 +28,7 @@ needed.
 
 The main difference between the two functions is that \Rfunction{spc.fit.poly} returns a least
 squares fit through the complete spectrum that is given in \Rfunarg{fit.to} whereas
-\Rfunction{spc.fit.poly.below} tries to find appropriate spectal regions to fit the baseline to.
+\Rfunction{spc.fit.poly.below} tries to find appropriate spectral regions to fit the baseline to.
 
 \newlength{\tmplength}
 \section{Syntax \& parameters}
@@ -55,15 +55,13 @@ squares fit through the complete spectrum that is given in \Rfunarg{fit.to} wher
  \item[\Rcode{short}, \Rcode{user}, \Rcode{date}:] are handed to \Rcode{logentry}
  \end{labeling}
 
-<<init, echo = FALSE, results = hide>>=
-#library (colorspace)
-@
+
 \section{General Use}
 Both functions fit the polynomial to the spectral range given in \chy object \Rfunarg{fit.to}. If
 \Rfunarg{apply.to} is not \Rcode{NULL}, the polynomials are evaluated on the spectral range of
 \Rfunarg{apply.to}. Otherwise, the polynomial coefficients are returned.
 
-Substracting the baseline is up to the user, it is easily done as \chy provides the \Rcode{-} (minus)
+Subtracting the baseline is up to the user, it is easily done as \chy provides the \Rcode{-} (minus)
 operator.
 
 \section{Fitting polynomial baselines using least squares }

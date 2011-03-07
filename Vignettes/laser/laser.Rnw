@@ -36,7 +36,7 @@ unstable laser emission at 405 nm recorded during ca. 1.5 h.
 
 The spectra were recorded  during the installation of the 405~nm laser at a Raman spectrometer.
 There is no Raman scattering involved in this data, but the Raman software recorded the
-abscissa of the spectra as Raman shift in wavenumbes.
+abscissa of the spectra as Raman shift in wavenumbers.
 
 This document shows
 \begin{itemize}
@@ -110,7 +110,7 @@ laser
 The maxima of the different emission lines encountered during this
 measurement are at 405.0, 405.1, 405.3, and 405.4\,nm (fig. \ref{fig:markedspc}).
 
-Alternateively they can be extracted from the graph using \Rfunction{locator} which reads out the coordinates of the points the user clicks with the mouse (use middle or right click to end the input):
+Alternatively they can be extracted from the graph using \Rfunction{locator} which reads out the coordinates of the points the user clicks with the mouse (use middle or right click to end the input):
 <<locator, eval=FALSE>>=
 wls <- locator()$x
 @ 

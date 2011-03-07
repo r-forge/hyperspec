@@ -1,21 +1,21 @@
-\name{barbituates}
-\alias{barbituates}
+\name{barbiturates}
+\alias{barbiturates}
 \docType{data}
 \title{Barbituates Spectra from .spc example files}
 \description{
 A time series of mass spectra in a list of hyperSpec objects.
 }
-\usage{data(barbituates)}
+\usage{data(barbiturates)}
 \format{
   The data sets consists of 286 spectra. They the BARBITUATES.SPC
   example data from Thermo Galactic's 
 }
 \author{C. Beleites}
 \examples{
-barbituates [1:3]
-length (barbituates)
+barbiturates [1:3]
+length (barbiturates)
 
-barb <- collapse (barbituates)
+barb <- collapse (barbiturates)
 barb <- orderwl (barb)
 
 plot (barb [1:3], lines.args = list (type = "h"),
