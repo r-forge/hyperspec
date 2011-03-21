@@ -1,3 +1,15 @@
+##' Interactively select a polygon (grid graphics)
+##'
+##' Click the points that should be connected as polygon. Input ends with right click (see
+##' \code{\link[grid]{grid.locator}}).
+##' @param pch symbol to display the points of the polygon
+##' @param size size for polygon point symbol
+##' @param ... further arguments for \code{\link[grid]{grid.points}} and
+##' \code{\link[grid]{grid.lines}}
+##' @return n x 2 matrix with the points of the polygon
+##' @author Claudia Beleites
+##' @seealso \code{\link[grid]{grid.locator}}
+##' @export 
 sel.poly <- function (pch = 19, size = 0.3, ...){
   trellis.focus ()
 
