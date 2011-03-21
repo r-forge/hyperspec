@@ -6,10 +6,10 @@ sel.poly <- function (pch = 19, size = 0.3, ...){
   repeat {
     pt <- grid.locator (unit="native")
     if (!is.null (pt)){
-      pts <- rbind (as.numeric (pt))
+      pts <- rbind (pts, as.numeric (pt))
       
-      grid.points (unit (pts [pos, 1], "native"),
-                   unit (pts [pos, 2], "native"), pch = pch,
+      grid.points (unit (tail (pts [, 1], 1), "native"),
+                   unit (tail (pts [, 2], 1), "native"), pch = pch,
                    size = unit (size, "char"), gp = gpar (...))
       
       if (nrow (pts) > 1L)
