@@ -3,3 +3,7 @@
 ** merge wavelengths
 ** TODO: merge in introduction
 
+* related packages
+  - baseline
+  - msProcess
+
