@@ -6,7 +6,7 @@
 ##' @param size size for polygon point symbol
 ##' @param ... further arguments for \code{\link[grid]{grid.points}} and
 ##' \code{\link[grid]{grid.lines}}
-##' @return n x 2 matrix with the points of the polygon
+##' @return n x 2 matrix with the points of the open polygon
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[grid]{grid.locator}}
 ##' @export
@@ -31,6 +31,10 @@ sel.poly <- function (pch = 19, size = 0.3, ...){
         grid.lines (unit (tail (pts [, 1L], 2L) , "native"),
                     unit (tail (pts [, 2L], 2L) , "native"), gp = gpar (...))
     } else {
+      ## visually close polygon (if at least 3 pts)
+      if (nrow (pts) > 2L)
+        grid.lines (unit (c (tail (pts [, 1L], 1L), pts [1L, 1L]), "native"),
+                    unit (c (tail (pts [, 2L], 1L), pts [1L, 2L]), "native"), gp = gpar (...))
       break                            
     }
   }
