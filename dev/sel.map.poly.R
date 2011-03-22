@@ -19,7 +19,7 @@ sel.map.poly <- function (data, pch = 19, size = 0.3, ...){
 
   plot (data, "map")
   #poly <- sel.poly(pch=pch, size=size, ...)
-  #library(sp)
+  #require("sp")
   #pts <- point.in.polygon (chondro$x, chondro$y, poly [, 1], poly [, 2]) #mode.checked=F
   #ind <- which ((pts>0), arr.ind=TRUE)
   

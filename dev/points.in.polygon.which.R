@@ -2,7 +2,7 @@
 
 points.in.polygon.which <- function (hyperspec, polygon.matrix){
   
-  library(sp) # check for package first
+  require("sp") # should check for package first
   pts <- point.in.polygon (hyperspec$x, hyperspec$y, 
                            polygon.matrix [, 1], polygon.matrix [, 2]) # mode.checked=F
   ind <- which ((pts>0), arr.ind=TRUE)
