@@ -115,7 +115,11 @@ laser:                                     	  	  Vignettes/laser/laser.pdf
 
 Vignettes/laser/laser.pdf:          				  Vignettes/laser/laser.tex 	 
 
-Vignettes/laser/laser.tex:          				  Vignettes/laser/laser.Rnw
+Vignettes/laser/laser.tex:          				  Vignettes/laser/laser.Rnw 
+	cd $(dir $<) && echo '.rgl = TRUE; Sweave ("'$(notdir $<'"))' | R --no-save # warum ))?
+#	cd $(dir $<) && R --rgl CMD Sweave $(notdir $<) 
+
+Vignettes/laser/fig/fig-3D.png:						  Vignettes/laser/laser.tex
 
 Vignettes/laser/laser.Rnw:          				  Vignettes/laser/vignettes.defs $(SRC)    \
                                                   Vignettes/laser/rawdata/laser.txt.gz
@@ -124,14 +128,18 @@ Vignettes/laser/rawdata/laser.txt.gz:             Vignettes/fileio/txt.Renishaw/
 	cp -av $< $@
 
 Vignettes/laser/*.rda:	                          Vignettes/laser/laser.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<)
+	cd $(dir $<) && echo '.rgl = TRUE; Sweave ("'$(notdir $<'"))' | R --no-save # warum ))?
 
 # plotting ..........................................................................................
 plotting:                                     	  Vignettes/plotting/plotting.pdf 
+	cd $(dir $<) && echo '.rgl = TRUE; Sweave ("'$(notdir $<'"))' | R --no-save # warum ))?
 
 Vignettes/plotting/plotting.pdf:          		  Vignettes/plotting/plotting.tex 	 
 
 Vignettes/plotting/plotting.tex:          		  Vignettes/plotting/plotting.Rnw
+
+
+Vignettes/plotting/fig/fig-3D.png:					  Vignettes/plotting/plotting.tex
 
 Vignettes/plotting/plotting.Rnw:          		  Vignettes/plotting/vignettes.defs $(SRC)    
 #                                                  Vignettes/plotting/par3d.Rdata 
@@ -219,10 +227,14 @@ pkg/inst/doc/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
 
 
 pkg/inst/doc/laser.Rnw: Vignettes/laser/laser.Rnw \
-                        pkg/inst/doc/rawdata/laser.txt.gz
+                        pkg/inst/doc/rawdata/laser.txt.gz \
+								pkg/inst/doc/fig/fig-3D.png
 	@cp -av $< $@
 
 pkg/inst/doc/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
+	@cp -av $< $@
+
+pkg/inst/doc/fig/fig-3D.png: Vignettes/laser/fig/fig-3D.png
 	@cp -av $< $@
 
 pkg/inst/doc/chondro.Rnw: pkg/inst/doc/chondro.pdf # no mistake: this is a dummy .Rnw
@@ -237,7 +249,8 @@ pkg/inst/doc/fileio.Rnw: pkg/inst/doc/fileio.pdf # no mistake: this is a dummy .
 pkg/inst/doc/fileio.pdf: Vignettes/fileio/fileio.pdf     
 	@cp -av $< $@
 
-pkg/inst/doc/plotting.Rnw: Vignettes/plotting/plotting.Rnw     
+pkg/inst/doc/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
+									pkg/inst/doc/fig/fig-3D.png 
 	@cp -av $< $@
 
 #pkg/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
