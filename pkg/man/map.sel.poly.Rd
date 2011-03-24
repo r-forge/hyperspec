@@ -15,3 +15,8 @@
 \item{size}{size for polygon point symbol for \code{\link{sel.poly}}}
 \item{...}{further arguments for \code{\link[grid]{grid.points}} and
 \code{\link[grid]{grid.lines}}}}
+\examples{
+\donttest{
+map.sel.poly (chondro)
+}
+}
