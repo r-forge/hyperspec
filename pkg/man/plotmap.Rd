@@ -106,6 +106,9 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots,
   tolerance window if no data point was inside (and additionally labels
   the point) while \code{debuglevel == 2} will always plot the tolerance
   window.
+
+  The \code{map.sel.*} functions offer further interactive selection,
+  see \code{\link{map.sel.poly}}.
 }
 \value{\code{map.identify} returns a vector of row indices into \code{object}
   of the clicked points.
@@ -123,6 +126,7 @@ map.identify (object,  model = spc ~ x * y, voronoi = FALSE, \dots,
 
   \code{\link{hyperSpec options}}
   \code{\link{spc.identify}}
+  \code{\link{map.sel.poly}}
 }
 \examples{
 \dontrun{

@@ -13,6 +13,10 @@
 ##' @seealso \code{\link[grid]{grid.locator}},  \code{\link{sel.poly}}, \code{\link{map.identify}}
 ##' @export
 ##' @keywords iplot
+##' @examples
+##' \donttest{
+##' map.sel.poly (chondro)
+##' }
 map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
   print (plotmap (data))
   

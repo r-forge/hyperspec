@@ -76,7 +76,7 @@ Vignettes/flu/flu.pdf:          						  Vignettes/flu/flu.tex
 
 Vignettes/flu/flu.tex:          						  Vignettes/flu/flu.Rnw
 
-Vignettes/flu/flu:          						  Vignettes/flu/vignettes.defs $(SRC)    \
+Vignettes/flu/flu:          						  	  Vignettes/flu/vignettes.defs $(SRC)    \
                                                   Vignettes/flu/rawdata/* \
                                                   Vignettes/flu/scan.txt.PerkinElmer.R
 	touch $@
@@ -107,7 +107,7 @@ Vignettes/introduction/introduction.Rnw:          Vignettes/introduction/vignett
 #Vignettes/introduction/rawdata/paracetamol.txt.gz: Vignettes/fileio/txt.Renishaw/paracetamol.txt.gz
 #	@cp -av $< $@ 
 
-Vignettes/introduction/*.rda:	                    Vignettes/introduction/introduction.Rnw
+Vignettes/introduction/paracetamol.rda:	        Vignettes/introduction/introduction.Rnw
 	cd $(dir $<) && R CMD Sweave $(notdir $<)
 
 # laser .............................................................................................

@@ -142,6 +142,7 @@ are not clipped. As a dirty shortcut, \code{xpd = NA} may help.
   \code{\link{hyperSpec options}}
 
   \code{\link{map.identify}}
+  \code{\link{map.sel.poly}}
 }
 \examples{
 \donttest{
