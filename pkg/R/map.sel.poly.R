@@ -12,30 +12,22 @@
 ##' @author Claudia Beleites, Sebastian Mellor
 ##' @seealso \code{\link[grid]{grid.locator}},  \code{\link{sel.poly}}, \code{\link{map.identify}}
 ##' @export
-##' @keywords iplot, hyperspec
-
-sel.map.poly <- function (data, pch = 19, size = 0.3, ...){
+##' @keywords iplot
+map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
   print (plotmap (data))
-  poly <- sel.poly(pch=pch, size=size, ...)
   
-  debuglevel <- hy.getOption ("debuglevel")
+  poly <- sel.poly (pch = pch, size = size, ...)
   
-  if (!require("sp")){
-    cat("Error: SP package required for point.in.polygon ()\n")
-    stop() ## SM: What other error handling solutions are you currently using?
-           ##     Or should I just use library ()?
-  }
+  if (! require ("sp"))  stop ("Error: sp package required for point.in.polygon ()")
+
 
   pts <- point.in.polygon (data$x, data$y, poly [, 1], poly [, 2]) #mode.checked=F
 
-  ind <- which ((pts>0), arr.ind=TRUE)
-  ## CB: why do you use arr.ind?
-  ## SM: some data types need it, i.e. matrices, I kept it in incase the structure ever changed
-  ## CB: why do you use which?
-  ## CB: In other words: what is the advantage over just returning pts > 0 ?
-  ## SM: with the polygon being drawn by hand I didn't think it important to differ points on the 
-  ##     edges or vertices from those within. Your thoughts?
-  
+  ind <- pts > 0
+
+  if (! any (ind))
+    warning ("Empty selection: no point in polygon.")
+
   ind
 }
 
