@@ -212,10 +212,10 @@ if (exists (".rgl") && .rgl){        # use extra argument to turn on rgl only on
             scale = c (2.75, 5, 0.175),
             windowRect = c(20L, 50L, 520L, 330L),
             zoom = 0.75)
-    rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
+    rgl.snapshot ("fig-3D.png", fmt="png", top=TRUE )
     rgl.quit ()
   } else {
-    png ("fig/fig-3D.png")
+    png ("fig-3D.png")
     ploterrormsg ("", "rgl")
     dev.off ()
   }
@@ -223,7 +223,7 @@ if (exists (".rgl") && .rgl){        # use extra argument to turn on rgl only on
 @
 \begin{figure}[t]
   \centering
-  \includegraphics[width = .5\textwidth]{fig/fig-3D}  
+  \includegraphics[width = .5\textwidth]{fig-3D}  
   \caption{The 3d plot of the laser data}
   \label{fig:laser3d}
 \end{figure}

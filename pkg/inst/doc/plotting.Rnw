@@ -636,8 +636,16 @@ plotmap (sample (chondro, 865),
 \section{3 D (with \Rpackage{rgl})}
 \label{sec:3-d}
 
-\begin{longtable}{@{}p{\plotcol} p{\textcol}}
-  \plottab{3D plots with \Rpackage{rgl}}{3D} \Rpackage{rgl}\Sexpr{cite.pkg("rgl")} offers fast 3d
+\begin{longtable}{@{3D plots with \Rpackage{rgl}}p{\plotcol} p{\textcol}}
+  \vspace{1ex}\tabularnewline
+  \multicolumn{2}{l}{\}}\tabularnewline\nopagebreak
+\vtop{%
+  \vskip-0.9\baselineskip
+  \hbox{%
+    \includegraphics[width = .40\textwidth]{fig-3D}%
+  }%
+} &
+\Rpackage{rgl}\Sexpr{cite.pkg("rgl")} offers fast 3d
   plotting in R. As \Rpackage{rgl}'s axis annotations are sometimes awkward, they may better be set
   manually:
 <<rgl-plot, eval = FALSE>>=  evaluation in rgl-do
@@ -674,10 +682,10 @@ if (exists (".rgl") && .rgl){        # use extra argument to turn on rgl only on
             scale = c (2.75, 5, 0.175),
             windowRect = c(20L, 50L, 520L, 330L),
             zoom = 0.75)
-    rgl.snapshot ("fig/fig-3D.png", fmt="png", top=TRUE )
+    rgl.snapshot ("fig-3D.png", fmt="png", top=TRUE )
     rgl.quit ()
   } else {
-    png ("fig/fig-3D.png")
+    png ("fig-3D.png")
     ploterrormsg ("", "rgl")
     dev.off ()
   }

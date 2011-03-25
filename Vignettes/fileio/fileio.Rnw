@@ -522,7 +522,9 @@ coordinates (default)
 Instead of a file name, \Rfunction{scan.txt.Renishaw} accepts also a connection.
 
 <<scan.txt.Renishaw>>=
-scan.txt.Renishaw ("txt.Renishaw/paracetamol.txt", "spc")
+paracetamol <- scan.txt.Renishaw ("txt.Renishaw/paracetamol.txt", "spc")
+paracetamol
+save (paracetamol, file = "paracetamol.rda")
 scan.txt.Renishaw ("txt.Renishaw/laser.txt.gz", "ts")
 @ 
 

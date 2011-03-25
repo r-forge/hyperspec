@@ -63,7 +63,8 @@ Vignettes/fileio/fileio.Rnw:                      Vignettes/fileio/vignettes.def
                                                   Vignettes/fileio/ENVI/example2.img 		 \
                                                   Vignettes/fileio/spc/*.SPC 					 \
                                                   Vignettes/fileio/spc.Kaisermap/*.spc 		 \
-                                                  Vignettes/fileio/txt.Renishaw/* 
+                                                  Vignettes/fileio/txt.Renishaw/* \
+	                               					  Vignettes/fileio/txt.Renishaw/paracetamol.txt
 	touch $@
 
 Vignettes/fileio/*.rda:                           Vignettes/fileio/fileio.Rnw
@@ -107,8 +108,8 @@ Vignettes/introduction/introduction.Rnw:          Vignettes/introduction/vignett
 #Vignettes/introduction/rawdata/paracetamol.txt.gz: Vignettes/fileio/txt.Renishaw/paracetamol.txt.gz
 #	@cp -av $< $@ 
 
-Vignettes/introduction/paracetamol.rda:	        Vignettes/introduction/introduction.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<)
+Vignettes/fileio/paracetamol.rda:	        Vignettes/fileio/fileio.Rnw
+	cd $(dir $<) && R CMD Sweave $(notdir $<) 
 
 # laser .............................................................................................
 laser:                                     	  	  Vignettes/laser/laser.pdf 
@@ -119,7 +120,7 @@ Vignettes/laser/laser.tex:          				  Vignettes/laser/laser.Rnw
 	cd $(dir $<) && echo '.rgl = TRUE; Sweave ("'$(notdir $<'"))' | R --no-save # warum ))?
 #	cd $(dir $<) && R --rgl CMD Sweave $(notdir $<) 
 
-Vignettes/laser/fig/fig-3D.png:						  Vignettes/laser/laser.tex
+Vignettes/laser/fig-3D.png:						  Vignettes/laser/laser.tex
 
 Vignettes/laser/laser.Rnw:          				  Vignettes/laser/vignettes.defs $(SRC)    \
                                                   Vignettes/laser/rawdata/laser.txt.gz
@@ -139,7 +140,7 @@ Vignettes/plotting/plotting.pdf:          		  Vignettes/plotting/plotting.tex
 Vignettes/plotting/plotting.tex:          		  Vignettes/plotting/plotting.Rnw
 
 
-Vignettes/plotting/fig/fig-3D.png:					  Vignettes/plotting/plotting.tex
+Vignettes/plotting/fig-3D.png:					  Vignettes/plotting/plotting.tex
 
 Vignettes/plotting/plotting.Rnw:          		  Vignettes/plotting/vignettes.defs $(SRC)    
 #                                                  Vignettes/plotting/par3d.Rdata 
@@ -172,7 +173,7 @@ pkg/data/barbiturates.rda: Vignettes/fileio/barbiturates.rda
 	@cp -av $< $@
 pkg/data/flu.rda:         Vignettes/flu/flu.rda 
 	@cp -av $< $@
-pkg/data/paracetamol.rda: Vignettes/introduction/paracetamol.rda 
+pkg/data/paracetamol.rda: Vignettes/fileio/paracetamol.rda 
 	@cp -av $< $@
 pkg/data/laser.rda:       Vignettes/laser/laser.rda
 	@cp -av $< $@
@@ -210,7 +211,6 @@ pkg/inst/doc/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
                                pkg/inst/doc/functions.RData \
                                pkg/inst/doc/introduction.bib \
                                pkg/inst/doc/strukturhyperspec.pdf
-#                               pkg/inst/doc/rawdata/paracetamol.txt.gz
 	@cp -av $< $@
 
 #pkg/inst/doc/rawdata/paracetamol.txt.gz: Vignettes/introduction/rawdata/paracetamol.txt.gz
@@ -228,13 +228,13 @@ pkg/inst/doc/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
 
 pkg/inst/doc/laser.Rnw: Vignettes/laser/laser.Rnw \
                         pkg/inst/doc/rawdata/laser.txt.gz \
-								pkg/inst/doc/fig/fig-3D.png
+								pkg/inst/doc/fig-3D.png
 	@cp -av $< $@
 
 pkg/inst/doc/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
 	@cp -av $< $@
 
-pkg/inst/doc/fig/fig-3D.png: Vignettes/laser/fig/fig-3D.png
+pkg/inst/doc/fig-3D.png: Vignettes/laser/fig-3D.png
 	@cp -av $< $@
 
 pkg/inst/doc/chondro.Rnw: pkg/inst/doc/chondro.pdf # no mistake: this is a dummy .Rnw
@@ -250,7 +250,7 @@ pkg/inst/doc/fileio.pdf: Vignettes/fileio/fileio.pdf
 	@cp -av $< $@
 
 pkg/inst/doc/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
-									pkg/inst/doc/fig/fig-3D.png 
+									pkg/inst/doc/fig-3D.png 
 	@cp -av $< $@
 
 #pkg/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
