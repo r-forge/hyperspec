@@ -62,11 +62,12 @@ for (p in required.pkgs [! required.pkgs %in% c("latticeExtra", "deldir")])
   check.req.pkg (p, donothing = "")
 @
 \end{labeling}
-In addition \Rpackage{tripack}, \Rpackage{playwith}, and \Rpackage{latticist} are discussed, but not
-needed for calculations.
+In addition \Rpackage{tripack}, \Rpackage{playwith}, and \Rpackage{latticist} are mentioned, but not
+used in this vignette.
 }
 \section*{Preliminary Calculations}
-For some plots of the \Robject{chondro} dataset, the pre-processed spectra are preferred, and their cluster averages $\pm$ one standard deviation:
+For some plots of the \Robject{chondro} dataset, the pre-processed spectra and their cluster
+averages $\pm$ one standard deviation are more suitable:
 <<preproc-chondro>>=
 chondro.preproc <- chondro - spc.fit.poly.below (chondro)
 chondro.preproc <- sweep (chondro.preproc, 1, mean, "/")
@@ -76,23 +77,30 @@ cluster.cols <- c ("dark blue", "orange", "#C02020")
 cluster.meansd <- aggregate (chondro.preproc, chondro$clusters, mean_pm_sd)
 cluster.means  <- aggregate (chondro.preproc, chondro$clusters, mean)
 @
-For details about the pre-processing, please refer to the vignette \verb+vignette ("chondro")+, or the help \verb+? chondro+.
+For details about the pre-processing, please refer to the example work flow in \verb+vignette ("chondro")+, or the help \verb+? chondro+.
 
 \section{Predefined functions}
-\Rpackage{hyperSpec} comes with 5 major predefined plotting functions.
+\Rpackage{hyperSpec} comes with 6 major predefined plotting functions.
 
 \begin{labeling}{\Rfunction{levelplot}}
 \item[\Rfunction{plot}] main switchyard for most plotting tasks
-\item[\Rfunction{levelplot}] \chy has a levelplot method
-\vspace*{1ex}
+\item[\Rfunction{levelplot}] \chy has a method for \Rpackage{lattice}\Sexpr{cite.pkg ("lattice")} function \Rfunction{levelplot}
+\vspace*{1em}
 \item[\Rfunction{plotspc}] plots spectra
-\item[\Rfunction{plotc}] calibration plot,time series, depth profile\\
+\item[\Rfunction{plotc}] calibration plot, time series, depth profile\\
   \Rfunction{plotc} is a \Rpackage{lattice} function
-\item[\Rfunction{plotmap}] more specialized version of levelplot for map or image plots.\\
-    \Rfunction{plotmap} is a \Rpackage{lattice} function
-\item[\Rfunction{plotvoronoi}] more specialized version of plotmap that produces Voronoi tesselations.\\
-    \Rfunction{plotvoronoi} is a \Rpackage{lattice} function
+\item[\Rfunction{plotmap}] more specialized version of \Rfunction{levelplot} for map or image plots.\\
+  \Rfunction{plotmap} is a \Rpackage{lattice} function
+\item[\Rfunction{plotvoronoi}] more specialized version of \Rfunction{plotmap} that produces Voronoi tesselations.\\
+  \Rfunction{plotvoronoi} is a \Rpackage{lattice} function 
 \end{labeling}
+
+\Rcode{plotmap}, \Rfunction{plotvoronoi}, and \Rcode{levelplot} are \Rpackage{lattice} functions.
+Therefore, in loops, functions, Sweave chunks, etc. the lattice object needs to be printed explicitly
+by e.\,g. \Rcode{print (plotmap (object))}
+(\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R
+  FAQ: Why do lattice/trellis graphics not work?}).
+
 
 \setkeys{Gin}{width = \textwidth}
 
@@ -117,7 +125,7 @@ plotc (flu)
 \plottab{levelplot}{levelplot}
   plots a false colour map, defined by a formula.
 <<levelplot, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-levelplot ( spc ~ x * y, chondro, aspect = "iso")
+levelplot (spc ~ x * y, chondro, aspect = "iso")
 @
 Warning: \verb+Only first wavelength is used for plotting+
 \\
@@ -234,17 +242,16 @@ See \Rfunction{plotvoronoi}
 \Rfunction{plotspc} offers a variety of parameters for customized
 plots. To plot ... 
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
-\plottab{particular wavelength range}{wavelength}
-if only one wavelength range is needed, the extract command is handiest: 
+  \plottab{particular wavelength range}{wavelength} if only one wavelength range is needed, the
+  extract command (see \verb+vignette ("introduction")+) is handiest:
 <<wavelength, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (paracetamol [,, 700 ~ 1200])
-@
-If \Rcode{wl.range} already contains indices: use \Rcode{wl.index = TRUE}.
+@ Numbers connected with the tilde (\verb+~+) are interpreted as having the same units as the
+wavelengths. If \Rcode{wl.range} already contains indices use \Rcode{wl.index = TRUE}.
 \\
-\plottab{more wavelength ranges}{wavelength-2}
-use \Rcode{wl.range = list (600 \textasciitilde{} 1800, 2800 \textasciitilde{}
-3100)}.
-Cut the wavelength axis appropriately with \Rcode{xoffset = 750}
+\plottab{more wavelength ranges}{wavelength-2} use \Rcode{wl.range = list (600 \textasciitilde{}
+  1800, 2800 \textasciitilde{} 3100)}.  Cut the wavelength axis appropriately with \Rcode{xoffset =
+  750}
 <<wavelength-2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (paracetamol, 
          wl.range = c (300 ~ 1800, 2800 ~ max), 
@@ -279,7 +286,7 @@ plot (barbiturates [[1]], lines.args = list (type = "h"))
 @
 \\
 \plottab{more spectra into an existing plot}{add}
-use \Rfunarg{add = TRUE}
+use \Rcode{add = TRUE}
 <<add, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (chondro [ 30,,])
 plotspc (chondro [300,,], add = TRUE, col = "blue")
@@ -288,12 +295,12 @@ plotspc (chondro [300,,], add = TRUE, col = "blue")
 \plottab{Summary characteristics}{sd} \Rfunarg{func} may be used to calculate summary
 characteristics prior to plotting. To plot \eg the standard deviation of the spectra, use:
 <<sd, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plotspc (chondro, func = sd)
+plotspc (chondro.preproc, func = sd)
 @
 \\
 \plottab{with different line at $I =0$}{diffline}
 \Rfunarg{zeroline} takes a list with parameters to \Rfunction{abline},
-\Rcode{NULL} suppresses the line.
+\Rcode{NA} suppresses the line.
 <<diffline, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (paracetamol, 
          zeroline = list (col = "red"))
@@ -313,7 +320,7 @@ abline (v = c(405.0063, 405.1121, 405.2885, 405.3591),
 
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \plottab{stacked}{stacked1}
-use \Rfunarg{stacked = TRUE}
+use \Rcode{stacked = TRUE}
 <<stacked1, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotspc (cluster.means, 
          col = cluster.cols,
@@ -321,7 +328,7 @@ plotspc (cluster.means,
 @
 \\
 \plottab{Stacking groups of spectra}{stacked2} The spectra to be stacked can be grouped:
-\Rfunarg{stacked = \emph{factor}}. Alternatively, the name of the grouping extra data column can be
+\Rcode{stacked = \emph{factor}}. Alternatively, the name of the grouping extra data column can be
 used:
 <<stacked2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plot (cluster.meansd, 
@@ -521,12 +528,6 @@ plot (flu, "mat",
 
 \section{False-Colour Maps: \Rfunction{plotmap}}
 
-\Rcode{plotmap} uses \Rcode{levelplot}, a \Rpackage{lattice} function.  Therefore, in loops,
-functions, Sweave chunks, etc. the lattice object needs to be printed explicitly by \Rcode{print
-  (plotmap (object))}
-(\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R
-  FAQ: Why do lattice/trellis graphics not work?}).
-
 \Rfunction{plotmap} is a specialized version of \Rfunction{levelplot}. The spectral intensities may
 be summarized by a function before plotting (default: \Rfunction{mean}). The same scale is
 used for x and y axes (\Rfunarg{aspect = "iso"}).
@@ -551,14 +552,14 @@ If the colour-coded variable is a factor, each level gets its own colour, and th
 accordingly.
 \\
 \plottab{different palette}{plotmap-col} 
-To plot with a different palette, use \Rfunarg{trellis.args}\Rcode{= list (col.regions = palette)}.
+To plot with a different palette, use \Rcode{trellis.args = list (col.regions = palette)}.
 <<plotmap-col, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 print (plotmap (chondro, clusters ~ x * y,
                 col.regions = cluster.cols))
 @
 \\
 \plottab{defined wavelengths}{plotmap-wave}
-To plot a map with particular wavelengths use this:  
+To plot a map of the average intensity at particular wavelengths use extraction:  
 <<plotmap-wave, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 plotmap (chondro.preproc [, , c(728, 782, 1098, 
                                 1240, 1482, 1577)],
@@ -636,7 +637,8 @@ plotmap (sample (chondro, 865),
 \section{3 D (with \Rpackage{rgl})}
 \label{sec:3-d}
 
-\begin{longtable}{@{3D plots with \Rpackage{rgl}}p{\plotcol} p{\textcol}}
+3D plots with \Rpackage{rgl}
+\begin{longtable}{@{}p{\plotcol} p{\textcol}}
   \vspace{1ex}\tabularnewline
   \multicolumn{2}{l}{\}}\tabularnewline\nopagebreak
 \vtop{%
@@ -654,19 +656,12 @@ laser$t <- laser$t / 3600
 cols <- rep (matlab.palette (nrow (laser)), nwl (laser))
 surface3d (y = wl (laser), x = laser$t, 
            z = laser$spc, col =  cols)
-msg ("surface3d done")
 aspect3d (c (1, 1, 0.25))
-msg ("aspect3d done")
 axes3d (c ('x+-', 'y--', 'z--'))
-msg ("axes3d x done")
 axes3d ('y--', nticks = 25, labels= FALSE)
-msg ("axes3d y done")
 mtext3d ("t / h", 'x+-', line = 2.5)
-msg ("mtext3d y done")
 mtext3d ("λ / nm", 'y--', line = 2.5)
-msg ("axes3d lambda done")
 mtext3d ("I / a.u.", edge = 'z--', line = 2.5)
-msg ("axes3d I done")
 @
 \end{longtable}
 <<rgl-do, echo = FALSE, results = hide>>=
@@ -784,20 +779,22 @@ if (require (ggplot2)){
 \subsection{No output is produced}
 \label{sec:no-output-produced}
 
-\Rcode{plotmap} and \Rcode{plotc} use \Rcode{levelplot}, a \Rpackage{lattice} function.  Therefore,
-in loops, functions, Sweave chunks, etc. the lattice object needs to be printed explicitly by
-\Rcode{print (plotmap (object))}
+\Rcode{plotmap}, \Rcode{plotvoronoi}, \Rcode{levelplot}, and \Rcode{plotc} use \Rpackage{lattice}
+functions.  Therefore, in loops, functions, Sweave chunks, etc. the lattice object needs to be
+printed explicitly by \Rcode{print (plotmap (object))}
 (\href{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-do-lattice_002ftrellis-graphics-not-work_003f}{R
   FAQ: Why do lattice/trellis graphics not work?}). The same holds for \Rpackage{ggplot2} graphics.
 
 For suggestions how the lattice functions can be redefined so that the result is printed without
-external print command, see \Rcode{vignettes.defs}.
+external print command, see the file \texttt{vignettes.defs}.
 
 \section{Interactive Graphics}
 \label{sec:interactive-graphics}
 
-\phy offers two basic interaction functions, \Rfunction{spc.identify}, and
-\Rfunction{map.identify}. They identify points in spectra plots and map plots, respectively.
+\phy offers basic interaction, \Rfunction{spc.identify} for spectra plots, and
+\Rfunction{map.identify} and \Rfunction{map.sel.poly} for maps. The first two identify points in
+spectra plots and map plots, respectively. \Rfunction{map.sel.poly} selects the part of a \chy object
+that lies inside the user defined polygon.
 
 \subsection{\Rfunction[]{spc.identify}: finding out wavelength, intensity and spectrum}
 \label{sec:spc.identify}
@@ -816,6 +813,14 @@ The result is a data.frame with the indices of the spectra, the wavelength, and 
 \Rfunction{map.identify} returns the spectra indices of the clicked points.
 <<eval = FALSE>>=
 map.identify (chondro)
+@
+
+\subsection{\Rfunction{map.sel.poly}: selecting spectra inside a polygon in a map plot}
+\label{sec:map.sel.poly}
+
+\Rfunction{map.sel.poly} returns a logical indicating which spectra are inside the polygon drawn by the user:
+<<eval = FALSE>>=
+map.sel.poly (chondro)
 @
 
 

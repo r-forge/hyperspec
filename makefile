@@ -132,12 +132,11 @@ Vignettes/laser/*.rda:	                          Vignettes/laser/laser.Rnw
 
 # plotting ..........................................................................................
 plotting:                                     	  Vignettes/plotting/plotting.pdf 
-	cd $(dir $<) && echo '.rgl = TRUE; Sweave ("'$(notdir $<'"))' | R --no-save # warum ))?
 
 Vignettes/plotting/plotting.pdf:          		  Vignettes/plotting/plotting.tex 	 
 
 Vignettes/plotting/plotting.tex:          		  Vignettes/plotting/plotting.Rnw
-
+	cd $(dir $<) && echo '.rgl = TRUE; Sweave ("'$(notdir $<'"))' | R --no-save # warum ))?	
 
 Vignettes/plotting/fig-3D.png:					  Vignettes/plotting/plotting.tex
 
