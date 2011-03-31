@@ -3,7 +3,8 @@ import(stats)
 importFrom (graphics, plot)
 #importFrom (lattice, trellis.focus)
 importFrom (lattice, levelplot)
-importFrom (grDevices, rainbow) 
+importFrom (grDevices, rainbow)
+#importFrom (sp, point.in.polygon) 
 
 exportClass (hyperSpec)
 

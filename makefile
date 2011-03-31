@@ -28,7 +28,6 @@ Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 baseline:                                         Vignettes/baseline/baseline.pdf
 
 Vignettes/baseline/baseline.pdf:                  Vignettes/baseline/baseline.tex 
-	echo $(<F)
 
 Vignettes/baseline/baseline.tex:                  Vignettes/baseline/baseline.Rnw 
 
@@ -108,8 +107,8 @@ Vignettes/introduction/introduction.Rnw:          Vignettes/introduction/vignett
 #Vignettes/introduction/rawdata/paracetamol.txt.gz: Vignettes/fileio/txt.Renishaw/paracetamol.txt.gz
 #	@cp -av $< $@ 
 
-Vignettes/fileio/paracetamol.rda:	        Vignettes/fileio/fileio.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<) 
+#Vignettes/fileio/paracetamol.rda:	        Vignettes/fileio/fileio.Rnw
+#	cd $(dir $<) && R CMD Sweave $(notdir $<) 
 
 # laser .............................................................................................
 laser:                                     	  	  Vignettes/laser/laser.pdf 
@@ -379,6 +378,9 @@ clean: .FORCE
 	@rm -f pkg/inst/doc/*/*.idx 
 	@rm -f pkg/inst/doc/*/*.ilg 
 	@rm -f pkg/inst/doc/*/*.ind
+	@rm -f pkg/inst/doc/*/*.bak
+	@rm -f pkg/inst/doc/*/*~
+	@rm -f pkg/inst/doc/fig/*	
 	@rm -f pkg/inst/doc/*/Rplots.pdf
 	@rm -f pkg/inst/doc/*/*.fdb_latexmk#	
 	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard pkg/inst/doc/*/*.Rnw)) #should not be necessary

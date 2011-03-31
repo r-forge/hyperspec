@@ -11,6 +11,7 @@
 ##' @seealso \code{\link[grid]{grid.locator}}
 ##' @export
 ##' @keywords iplot
+##' @rdname map.sel.poly
 sel.poly <- function (pch = 19, size = 0.3, ...){
   trellis.focus ()
 

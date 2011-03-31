@@ -13,6 +13,7 @@
 ##' @seealso \code{\link[grid]{grid.locator}},  \code{\link{sel.poly}}, \code{\link{map.identify}}
 ##' @export
 ##' @keywords iplot
+##' @import sp::point.in.polygon
 ##' @examples
 ##' \donttest{
 ##' map.sel.poly (chondro)
@@ -23,7 +24,6 @@ map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
   poly <- sel.poly (pch = pch, size = size, ...)
   
   if (! require ("sp"))  stop ("Error: sp package required for point.in.polygon ()")
-
 
   pts <- point.in.polygon (data$x, data$y, poly [, 1], poly [, 2]) #mode.checked=F
 
