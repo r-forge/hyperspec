@@ -94,7 +94,7 @@
 \newcommand{\R}{\texorpdfstring{\texttt{R}}{R}\xspace}
 
 \author{Claudia Beleites \url{<cbeleites@units.it>}\\
-CENMAT, DMRN, University of Trieste}
+CENMAT \& DI3, University of Trieste}
 
 \SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, ps = FALSE}
 \SweaveOpts{width=6,height=3}

@@ -366,22 +366,22 @@ clean: .FORCE
 	@rm -f pkg/inst/doc/*.ilg 
 	@rm -f pkg/inst/doc/*.ind
 	@rm -f pkg/inst/doc/Rplots.pdf
-	@rm -f pkg/inst/doc/*/*.fdb_latexmk
-	@rm -f pkg/inst/doc/*/*.aux
-	@rm -f pkg/inst/doc/*/*.dvi
-	@rm -f pkg/inst/doc/*/*.log
-	@rm -f pkg/inst/doc/*/*.toc
-	@rm -f pkg/inst/doc/*/*.out
-	@rm -f pkg/inst/doc/*/*.bbl
-	@rm -f pkg/inst/doc/*/*.blg
-	@rm -f pkg/inst/doc/*/*.idx 
-	@rm -f pkg/inst/doc/*/*.ilg 
-	@rm -f pkg/inst/doc/*/*.ind
-	@rm -f pkg/inst/doc/*/*.bak
-	@rm -f pkg/inst/doc/*/*~
+	@rm -f pkg/inst/doc/*.fdb_latexmk
+#	@rm -f pkg/inst/doc/*/*.aux
+#	@rm -f pkg/inst/doc/*/*.dvi
+#	@rm -f pkg/inst/doc/*/*.log
+#	@rm -f pkg/inst/doc/*/*.toc
+#	@rm -f pkg/inst/doc/*/*.out
+#	@rm -f pkg/inst/doc/*/*.bbl
+#	@rm -f pkg/inst/doc/*/*.blg
+#	@rm -f pkg/inst/doc/*/*.idx 
+#	@rm -f pkg/inst/doc/*/*.ilg 
+#	@rm -f pkg/inst/doc/*/*.ind
+	@rm -f pkg/inst/doc/*.bak
+	@rm -f pkg/inst/doc/*~
 	@rm -f pkg/inst/doc/fig/*	
 	@rm -f pkg/inst/doc/*/Rplots.pdf
-	@rm -f pkg/inst/doc/*/*.fdb_latexmk#	
+#	@rm -f pkg/inst/doc/*/*.fdb_latexmk#	
 	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard pkg/inst/doc/*/*.Rnw)) #should not be necessary
 	@rm -rf pkg/inst/doc/auto
 	@rm -rf pkg/inst/doc/*/auto
