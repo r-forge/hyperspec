@@ -27,8 +27,14 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 \begin{labeling}{latticeExtra}
 <<check-required, echo = FALSE, results = tex>>=
 check.req.pkg ("pls", special = list (msc = function (x) {texterrormsg ("msc", "pls"); x}))
+check.req.pkg ("baseline", 
+               special = list (
+                 baseline = function (x) {texterrormsg ("baseline", "baseline"); x},
+                 getCorrected = function (x) {texterrormsg ("getCorrected", "baseline"); x}
+                 ))
 check.req.pkg ("ggplot2", donothing = "")
-@
+@ 
+%
 \end{labeling}
 }
 
@@ -44,7 +50,7 @@ for:
 \item [wavelength:] frequency, wavenumbers, chemical shift, Raman shift, $\frac{m}{z}$, etc.
 \item [intensity:] transmission, absorbance, $\frac{e^{-}}{s}$, \textellipsis
 \item [extra data:] spatial information (spectral images, maps, or profiles), temporal information
-  (kinetics, time series), concentrations (calibration  series), class membership information, etc. \\
+  (kinetics, time series), concentrations (calibration  series), class membership information, etc.\\
   Note that there is no restriction on the number of extra data columns.
 \end{labeling}
 Throughout the documentation of the package, the terms intensity and wavelength axes refer to the
@@ -125,6 +131,7 @@ chk.hy (object)
 validObject (object)                    
 @ 
 %
+%
 The first line checks whether \Robject{object} is a \chy object, the second checks its validity.
 Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise an error and stop.
 
@@ -138,12 +145,14 @@ handed over as arguments to other functions (particularly to the vectorization f
 \verb+`*`+ is the recommended style (although \verb+"*"+ will often work as well), \eg:
 <<eval = FALSE>>=
 sweep (flu, 2, mean, `-`)
-@
+@ 
+%
 
 These functions can also be called in a more function-like style (prefix notation):
 <<>>=
 `+` (3, 5)
-@
+@ 
+%
 
 \subsubsection{Assignment Functions}
 \label{sec:assignment-functions}
@@ -158,7 +167,8 @@ an assignment to variable \verb+wl+: \verb+`wl<-`+.
 To load \phy, use\nopagebreak
 <<init>>=
 library (hyperSpec)
-@
+@ 
+%
 
 The global behaviour of \phy can be configured via options. The values of the options are
 retrieved with \Rfunction{hy.getOptions} and \Rfunction{hy.getOption}, and changed with
@@ -180,7 +190,9 @@ p.~\pageref{sec:logbook}).
 \end{labeling}
 While the parts of the \chy object can be accessed directly, it is good practice to use the functions
 provided by \phy to handle the objects rather than accessing the slots directly
-(tab.~\ref{tab:getset}). This also ensures that proper (\emph{valid}) objects are retained.
+(tab.~\ref{tab:getset}). This also ensures that proper (\emph{valid}) objects are returned. In some
+cases, direct access to the slots can considerably speed up calculations, see section
+\ref{sec:speed-considerations} (p.~\pageref{sec:speed-considerations}).
 \begin{table}[t]
   \centering
   \begin{tabular}{>{\Robject}lll}
@@ -188,7 +200,7 @@ provided by \phy to handle the objects rather than accessing the slots directly
     \textbf{slot} & \textbf{get}                                                                   & \textbf{set}                        \\
     \cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-3}
     @wavelength   & \verb+wl+                                                                      & wl<-                                \\ 
-    @data         & \verb+[+, \verb+[[+, \verb+$+, \verb+as.data.frame+, \verb+as.long.df+, \ldots & \verb+[<-+, \verb+[[<-+, \verb+$<-+ \\ %] needed or emacs font lock is confused
+    @data         & \verb+[+, \verb+[[+, \verb+$+, \verb+as.data.frame+, \verb+as.long.df+, \ldots & \verb+[<-+, \verb+[[<-+, \verb+$<-+ \\ %] emacs font lock gets confused otherwise
     @label        & \verb+labels+                                                                  & \verb+labels<-+                     \\
     @log          & \verb+logbook+                                                                 & \verb+logentry+                     \\
     \bottomrule
@@ -308,156 +320,6 @@ logbook (tmp)
 <<echo=FALSE, results=hide>>=
 rm (tmp)
 @
-
-\section{Combining and Decomposing \Rclass{hyperspec} Objects} 
-\label{sec:combine}
-
-\subsection{Binding Objects together}
-\label{sec:bind}
-\Rclass{hyperspec} \mFun{\Rfunction{cbind} \Rfunction{rbind}} Objects can be bound together, either
-by columns (\Rfunction{cbind}) to append a new spectral range or by row (\Rfunction{rbind}) to append new spectra:
-<<cbind>>=
-dim (flu)
-dim (cbind (flu, flu))
-dim (rbind (flu, flu))
-@ 
-
-There is also a more general function, \Rfunction{bind}, taking the direction
-(\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}}) as first
-argument followed by the objects to bind either in separate arguments or in a list.
-
-As usual for \Rfunction{rbind} and \Rfunction{cbind}, the objects that should be bound together must
-have the same rows and columns, respectively.
-
-\subsection{Binding Objects that do not Share the Same Extra Data and/or Wavelength Axis}
-\label{sec:collapse}
-
-\Rfunction{collapse} \mFun{\Rfunction{collapse}} combines objects that should be bound together by
-row, but they do not share the columns and/or spectral range.  The resulting object has all columns
-from all input objects, and all wavelengths from the input objects. If an input object does not have
-a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
-
-The \Robject{barbiturates} data is a list of \Sexpr{length (barbiturates)} \chy objects, each
-containing one mass spectrum. The spectra have between \Sexpr{(min (sapply (barbiturates, nwl)))} and
-\Sexpr{(max (sapply (barbiturates, nwl)))} data points each. 
-<<collapse>>=
-barb <- collapse (barbiturates)
-wl (barb) [1 : 25]
-@ 
-The resulting object does not have an ordered wavelength axis. This can be obtained in a second step:
-<<collapse-orderwl>>=
-barb <- orderwl (barb)
-barb [[1:3, , min ~ min + 10i]]
-@
-
-\subsection{Binding Objects that do not Share the Same Spectra}
-\label{sec:merge}
-
-\Rfunction{merge} \mFun{\Rfunction{merge}} adds a new spectral range (like \Rfunction{cbind}), but
-works also if spectra are missing in one of the objects. The arguments \Rfunarg{by}, \Rfunarg{by.x},
-and \Rfunarg{by.y} specify which columns should be used to decide which spectra are the same.  The
-arguments \Rfunarg{all}, \Rfunarg{all.x}, and \Rfunarg{all.y} determine whether spectra should be
-kept for the result set if they appear in only one of the objects.  For details, see also the help on
-the base function \Rpackage{merge}.
-
-As an example, let's construct a version of the \Robject{chondro} data like being taken as two maps with
-different spectral ranges. In each data set, some spectra are missing.
-<<merge-sample>>=
-chondro.low <- sample (chondro [,, 600 ~ 1200], 700)
-nrow (chondro.low)
-chondro.high <- sample (chondro [,, 1400 ~ 1800], 700)
-nrow (chondro.high)
-@ 
-
-As all extra data columns are the same, no special declarations are needed for merging the data:
-<<merge>>=
-chondro.merged <- merge (chondro.low, chondro.high)
-nrow (chondro.merged)
-@
-By default, the result consists of only those spectra, where \emph{both} spectral ranges were available.
-To keep all spectra replacing missing parts by \Rcode{NA}:
-<<>>=
-chondro.merged <- merge (chondro.low, chondro.high, all = TRUE)
-nrow (chondro.merged)
-@
-\begin{figure}
-\setkeys{Gin}{width = .66\textwidth}
-\subfloat[\label{fig-merge-map}]{
-<<missing, fig = TRUE, width = 10, height = 4.25, echo = FALSE>>=
-print (levelplot (spc ~ x * y | as.factor (paste (.wavelength, "  1/cm")), 
-                  chondro.merged [,,c(1000, 1650)], 
-                  aspect = "iso", col.regions = matlab.palette ()))
-@ 
-}
-\setkeys{Gin}{width = .33\textwidth}
-\subfloat[\label{fig-merge-mat}]{
-<<echo = FALSE, results = hide>>=
-png ("fig/fig-merged.png", width = 500, height = 425, res=100)
-print (plot (chondro.merged [1 : 100], "mat", col.regions = matlab.dark.palette ()))
-dev.off()
-rm (chondro)
-@ 
-\includegraphics[width = .33\textwidth]{fig/fig-merged}
-}
-\caption{\label{fig:merge}
-  \subref{fig-merge-map} For both spectral ranges some spectra are missing.  
-  \subref{fig-merge-mat} The missing parts of the spectra are filled with \Rcode{NA}.}
-\end{figure}
-
-<<>>=
-merged <- merge (chondro [1:7,, 610 ~ 620], chondro [5:10,, 615 ~ 625], all = TRUE)
-merged$.
-@
-%
-If the spectra overlap, the result will have both data points.  In the example here one could easily
-delete duplicate wavelengths. For real data, however, the duplicated wavelength will hardly ever
-contain the same values. The appropriate method to deal with this situation depends on the data at
-hand, but it will usually be some kind of spectral interpolation.
-
-One possibility is removing duplicated wavelengths by using the mean intensity. This can conveniently
-be done by using \Rfunction{approx} using \Rcode{method = "constant"}.  For duplicated wavelengths,
-the intensities will be combined by the tie function. This already defaults to the mean, but we need
-\Rcode{na.rm = TRUE}.
-
-Thus, the function to calculate the new spectral intensities is
-<<approxfun>>=
-approxfun <- function (y, wl, new.wl){
-  approx (wl, y, new.wl, method = "constant",
-          ties = function (x) mean (x, na.rm = TRUE)
-          )$y
-}
-@
-%
-which can be applied to the spectra:
-<<>>=
-merged <- apply (merged, 1, approxfun, 
-                 wl = wl (merged), new.wl = unique (wl (merged)), 
-                 new.wavelength = "new.wl")
-merged$.
-@
-
-\subsection{Matrix Multiplication}
-\label{sec:matmult}
-
-Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}\mFun{\Rfunction{\%*\%}}. For an
-example, see the principal component analysis below (section~\ref{sec:pca} on page
-\pageref{sec:pca}).
-
-\subsection{Decomposition}
-\label{sec:decomposition}
-Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a
-principal component analysis are two matrices, the so-called scores and loadings.  The results can
-have either the same number of rows as the spectra matrix they were calculated from (scores-like), or
-they have as many wavelengths as the spectra (loadings-like).
-
-Both types of result objects can be ``re-imported'' into \chy objects with function
-\Rfunction{decomposition}\mFun{\Rfunction{decomposition}}. A scores-like object retains all
-per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are
-replaced.  A loadings-like object retains the wavelength information, while extra data is deleted
-(set to \Rcode{NA}) unless the value is constant for all spectra.
-
-A demonstration can be found in the principal component analysis example (section~\ref{sec:pca}) on
-page \pageref{sec:pca}.
 
 \section{Access to the data}
 \label{sec:access-parts}
@@ -706,7 +568,7 @@ chondro [[indexmatrix, wl.index = TRUE]]
 diag (chondro [[1 : 3, , min ~ min + 2i]])
 @
 
-\subsection{Fast Access to Parts of the \Rclass{hyperSpec} Object}
+\subsection{Abbreviations for Parts of the \Rclass{hyperSpec} Object}
 \label{sec:fast-access-parts}
 \mFun{\Rfunction{[[]] \$. \$..}}
 
@@ -724,14 +586,220 @@ diag (chondro [[1 : 3, , min ~ min + 2i]])
   spectra in column \Rcode{\$spc}.
 \item [\Robject{x} \Rfunction{\$..}] returns the extra data (\Rcode{x@data} without \Rcode{x\$spc}).
 \item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without
-  \Rcode{x\$spc}). However, the columns must match exactly in this case.
+  \Rcode{x\$spc}). The columns must match exactly in this case.
 \end{description}
 
-\subsection{Conversion to Long-Format \df}
+\subsection{Conversion to Long- and Wide-Format \df{}s}
 \label{sec:conv-long-form}
+\mFun{\Rfunction{as.data.frame}}\Rfunction{as.data.frame} extracts the \Rcode{@data} slot as a \df:
+<<>>=
+flu <- flu [,,400 ~ 407] # make a small and handy version of the flu data set
+as.data.frame (flu)
+colnames (as.data.frame (flu))
+as.data.frame (flu) $ spc
+@ 
+Note that the spectra matrix is still a matrix inside column \Rcode{\$spc}.
+
+\Rfunction{as.data.frame} and the abbreviations \mFun{\Rfunction{\$.},
+  \Rfunction{\$..}}\Rfunction{\$.} and \Rfunction{\$..} retrieve the usual wide format \df{}s:
+<<>>=
+flu$.
+flu$..
+@
+If another subset of colums needs to be extracted, use \mFun{\Rfunction{[[]]}}\Rfunction{[[]]}:
+<<>>=
+flu [[, c ("c", "spc")]]
+@ 
+%
+This can be combined with extracting certain spectra and wavelengths, see below in subsection
+``\nameref{sec:conv-matrix}'' on page \pageref{sec:conv-matrix}.
+
+The transpose of a wide format \df can be obtained by
+\mFun{\Rfunction{as.t.df}}\Rfunction{as.t.df}. For further examples, see the discussion of
+\Rpackage{ggplot2} in \Rcode{vignette ("plotting")}.
+<<>>=
+as.t.df (apply (flu, 2, mean_pm_sd))
+@
+
 Some functions need the data being an \emph{unstacked} or \emph{long-format}
-\df. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion
-function.
+\df. \mFun{\Rfunction{as.long.df}}\Rfunction{as.long.df} is the appropriate conversion function.
+<<>>=
+head (as.long.df (flu), 20)
+@
+
+\subsection{Conversion to Matrix}
+\label{sec:conv-matrix}
+\mFun{\Rfunction{as.matrix}, \Rfunction{[[]]}} The spectra matrix is extracted by
+\Rfunction{as.matrix}, the convenient abbreviation is \Rfunction{[[]]}:
+<<>>=
+flu [[]]
+class (flu [[]])
+@ \Rfunction{[[]]} takes the same arguments as \Rfunction{[]}, and can be used to extract a matrix
+containing parts of the spectra matrix:
+<<>>=
+flu [[1:3,, 406 ~ 407]]
+@
+If indices for the columns to extract are given, a \df is returned instead of a matrix:
+<<>>=
+flu [[1:3, c ("file", "spc"), 406 ~ 407]]
+@
+
+<<>>=
+rm (flu)
+@
+
+
+\section{Combining and Decomposing \chy Objects} 
+\label{sec:combine}
+
+\subsection{Binding Objects together}
+\label{sec:bind}
+\Rclass{hyperspec} \mFun{\Rfunction{cbind} \Rfunction{rbind}} Objects can be bound together, either
+by columns (\Rfunction{cbind}) to append a new spectral range or by row (\Rfunction{rbind}) to append
+new spectra:
+<<cbind>>=
+dim (flu)
+dim (cbind (flu, flu))
+dim (rbind (flu, flu))
+@ 
+
+There is also a more general function, \Rfunction{bind}, taking the direction
+(\Rcode{\textquotedbl{}r\textquotedbl{}} or \Rcode{\textquotedbl{}c\textquotedbl{}}) as first
+argument followed by the objects to bind either in separate arguments or in a list.
+
+As usual for \Rfunction{rbind} and \Rfunction{cbind}, the objects that should be bound together must
+have the same rows and columns, respectively.
+
+\subsection{Binding Objects that do not Share the Same Extra Data and/or Wavelength Axis}
+\label{sec:collapse}
+
+\Rfunction{collapse} \mFun{\Rfunction{collapse}} combines objects that should be bound together by
+row, but they do not share the columns and/or spectral range.  The resulting object has all columns
+from all input objects, and all wavelengths from the input objects. If an input object does not have
+a particular column or wavelength, its value in the resulting object is \Rcode{NA}.
+
+The \Robject{barbiturates} data is a list of \Sexpr{length (barbiturates)} \chy objects, each
+containing one mass spectrum. The spectra have between \Sexpr{(min (sapply (barbiturates, nwl)))} and
+\Sexpr{(max (sapply (barbiturates, nwl)))} data points each. 
+<<collapse>>=
+barb <- collapse (barbiturates)
+wl (barb) [1 : 25]
+@ 
+The resulting object does not have an ordered wavelength axis. This can be obtained in a second step:
+<<collapse-orderwl>>=
+barb <- orderwl (barb)
+barb [[1:3, , min ~ min + 10i]]
+@
+
+\subsection{Binding Objects that do not Share the Same Spectra}
+\label{sec:merge}
+
+\Rfunction{merge} \mFun{\Rfunction{merge}} adds a new spectral range (like \Rfunction{cbind}), but
+works also if spectra are missing in one of the objects. The arguments \Rfunarg{by}, \Rfunarg{by.x},
+and \Rfunarg{by.y} specify which columns should be used to decide which spectra are the same.  The
+arguments \Rfunarg{all}, \Rfunarg{all.x}, and \Rfunarg{all.y} determine whether spectra should be
+kept for the result set if they appear in only one of the objects.  For details, see also the help on
+the base function \Rpackage{merge}.
+
+As an example, let's construct a version of the \Robject{chondro} data like being taken as two maps
+with different spectral ranges. In each data set, some spectra are missing.
+<<merge-sample>>=
+chondro.low <- sample (chondro [,, 600 ~ 1200], 700)
+nrow (chondro.low)
+chondro.high <- sample (chondro [,, 1400 ~ 1800], 700)
+nrow (chondro.high)
+@ 
+
+As all extra data columns are the same, no special declarations are needed for merging the data:
+<<merge>>=
+chondro.merged <- merge (chondro.low, chondro.high)
+nrow (chondro.merged)
+@
+%
+By default, the result consists of only those spectra, where \emph{both} spectral ranges were
+available.  To keep all spectra replacing missing parts by \Rcode{NA}:
+<<>>=
+chondro.merged <- merge (chondro.low, chondro.high, all = TRUE)
+nrow (chondro.merged)
+@
+\begin{figure}
+\setkeys{Gin}{width = .66\textwidth}
+\subfloat[\label{fig-merge-map}]{
+<<missing, fig = TRUE, width = 10, height = 4.25, echo = FALSE>>=
+print (levelplot (spc ~ x * y | as.factor (paste (.wavelength, "  1/cm")), 
+                  chondro.merged [,,c(1000, 1650)], 
+                  aspect = "iso", col.regions = matlab.palette ()))
+@ 
+}
+\setkeys{Gin}{width = .33\textwidth}
+\subfloat[\label{fig-merge-mat}]{
+<<echo = FALSE, results = hide>>=
+png ("fig/fig-merged.png", width = 500, height = 425, res=100)
+print (plot (chondro.merged [1 : 100], "mat", col.regions = matlab.dark.palette ()))
+dev.off()
+rm (chondro)
+@ 
+\includegraphics[width = .33\textwidth]{fig/fig-merged}
+}
+\caption{\label{fig:merge}
+  \subref{fig-merge-map} For both spectral ranges some spectra are missing.  
+  \subref{fig-merge-mat} The missing parts of the spectra are filled with \Rcode{NA}.}
+\end{figure}
+
+<<>>=
+merged <- merge (chondro [1:7,, 610 ~ 620], chondro [5:10,, 615 ~ 625], all = TRUE)
+merged$.
+@
+%
+If the spectra overlap, the result will have both data points.  In the example here one could easily
+delete duplicate wavelengths. For real data, however, the duplicated wavelength will hardly ever
+contain the same values. The appropriate method to deal with this situation depends on the data at
+hand, but it will usually be some kind of spectral interpolation.
+
+One possibility is removing duplicated wavelengths by using the mean intensity. This can conveniently
+be done by using \Rfunction{approx} using \Rcode{method = "constant"}.  For duplicated wavelengths,
+the intensities will be combined by the tie function. This already defaults to the mean, but we need
+\Rcode{na.rm = TRUE}.
+
+Thus, the function to calculate the new spectral intensities is
+<<approxfun>>=
+approxfun <- function (y, wl, new.wl){
+  approx (wl, y, new.wl, method = "constant",
+          ties = function (x) mean (x, na.rm = TRUE)
+          )$y
+}
+@
+%
+which can be applied to the spectra:
+<<>>=
+merged <- apply (merged, 1, approxfun, 
+                 wl = wl (merged), new.wl = unique (wl (merged)), 
+                 new.wavelength = "new.wl")
+merged$.
+@
+
+\subsection{Matrix Multiplication}
+\label{sec:matmult}
+
+Two \chy objects can be matrix multiplied by \Rfunction{\%*\%}\mFun{\Rfunction{\%*\%}}. For an
+example, see the principal component analysis below (section~\ref{sec:pca} on page
+\pageref{sec:pca}).
+
+\subsection{Decomposition}
+\label{sec:decomposition}
+Matrix decompositions are common operations during chemometric data analysis. The results, \eg of a
+principal component analysis are two matrices, the so-called scores and loadings.  The results can
+have either the same number of rows as the spectra matrix they were calculated from (scores-like), or
+they have as many wavelengths as the spectra (loadings-like).
+
+Both types of result objects can be ``re-imported'' into \chy objects with function
+\Rfunction{decomposition}\mFun{\Rfunction{decomposition}}. A scores-like object retains all
+per-spectrum information (\ie the extra data) while the spectra matrix and wavelength vector are
+replaced.  A loadings-like object retains the wavelength information, while extra data is deleted
+(set to \Rcode{NA}) unless the value is constant for all spectra.
+
+A demonstration can be found in the principal component analysis example (section~\ref{sec:pca}) on
+page \pageref{sec:pca}.
 
 \section{Plotting}
 \phy offers a variety of possibilities to plot spectra, spectral maps, the spectra matrix, time
@@ -987,10 +1055,42 @@ chondro <- chondro - bl
 
 For details, see \Rcode{vignette (baselinebelow)}.
 
+Package \Rpackage{baseline} \Sexpr{cite.pkg("baseline")} offers many more functions for baseline
+correction. The \Rfunction{baseline} function works on the spectra matrix, which is extracted by
+\Rfunction{[[]]}. The result is a \Rclass{baseline} object, but can easily be re-imported into the
+\chy object:
+<<do-bl>>=
+corrected <- hyperSpec::chondro [1] # start with the unchanged data set
+
+require ("baseline")
+bl <- baseline (corrected [[]], method = "modpolyfit", degree = 4)
+corrected [[]] <- getCorrected (bl)
+@ 
+Fig.~\ref{fig:bl-baseline} shows the result for the first spectrum of \Robject{chondro}.
+\begin{figure}[tb]
+\subfloat[Raw data with baseline]{
+<<fig = TRUE, include = TRUE, width = 10, height = 5, echo = FALSE, results = hide>>=
+baseline <- corrected 
+baseline [[]] <- getBaseline (bl)
+plot (hyperSpec::chondro [1], plot.args = list (ylim = range (hyperSpec::chondro [1], 0)))
+plot (baseline, add = TRUE, col = "red")
+@
+}\hfill%
+\subfloat[Baseline corrected spectrum]{
+<<fig = TRUE, include = TRUE, width = 10, height = 5, echo = FALSE, results = hide>>=
+plot (corrected, plot.args = list (ylim = range (hyperSpec::chondro [1], 0)))
+@
+}
+\caption{Baseline correction using the \Rpackage{baseline} package: the first spectrum of
+  \Robject{chondro} with baseline (left) and after baseline correction (right) with method
+  ``modpolyfit''.}
+\label{fig:bl-baseline}
+\end{figure}
+<<>>=
+rm (bl, chondro)
+@
 
 \subsection{Intensity Calibration}
-
-
 \subsubsection{Correcting by a constant, e.\,g. Readout Bias}
 
 CCD cameras often operate with a bias, causing a constant value for each pixel. Such a constant can
@@ -1093,8 +1193,8 @@ scaled.chondro [[]] <- scale (scaled.chondro [[]])
 @
 
 \subsection{Multiplicative Scatter Correction (MSC)}
-\mFun{\Rfunction{pls::msc}}MSC can be done using \Rfunction{msc} from package \Rpackage{pls}\citep{Wehrens2007}.
-It operates on the spectra matrix:
+\mFun{\Rfunction{pls::msc}}MSC can be done using \Rfunction{msc} from package
+\Rpackage{pls}\citep{Wehrens2007}.  It operates on the spectra matrix:
 <<msc, eval = FALSE>>=
 require (pls)
 chondro.msc <- chondro
@@ -1335,11 +1435,10 @@ system.time ({
   tmp [[]] <- tmp.matrix
 })
 @
-
-
+%
 
 \bibliographystyle{unsrtnat}
-\bibliography{introduction}
+\bibliography{introduction-pkg,introduction}
 
 \appendix
 \section{Overview of the functions provided by \phy}
@@ -1375,6 +1474,7 @@ for (g in levels (functions$group)){
 }
 make.fn.table()
 @
+%
 \bottomrule
 \end{longtable}
 \end{small}
@@ -1382,7 +1482,10 @@ make.fn.table()
 \section*{Session Info}
 \begin{footnotesize}
 <<echo = FALSE>>=
+make.bib (c ("baseline"), file = "introduction-pkg.bib")
+print (as.matrix(Sys.info()))
 <<cleanup>>
 @
+%
 \end{footnotesize}
 \end{document}

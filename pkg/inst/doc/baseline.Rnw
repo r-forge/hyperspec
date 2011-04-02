@@ -20,7 +20,10 @@
 
 This document discusses baseline correction methods that can be used with \phy. \phy provides two
 fitting functions for polynomial baselines, \Rfunction{spc.fit.poly} and
-\Rfunction{spc.fit.poly.below}.
+\Rfunction{spc.fit.poly.below}. Please note that a specialized package for baseline fittingm,
+\Rpackage{baseline}\Sexpr{cite.pkg("baseline")}, exists that provides many more methods to fit
+baselines to spectroscopic data. Using \Rpackage{baseline} with \chy objects is demonstrated in
+\Rcode{vignette ("introduction")}.
 
 In contrast to many other programs that provide baseline correction methods, these functions do least
 squares fits. However, the baselines can be forced through particular points, if this behaviour is
@@ -74,9 +77,10 @@ for spectra with high signal to noise ratio.
 Such a baseline can be obtained by restricting the spectra in \Rfunarg{fit.to} to the respective
 points (see figure~\ref{fig:classical}):
 <<classical-bl, fig = TRUE, width = 8, height = 4, include = FALSE>>=
-bl <- spc.fit.poly (chondro [c (1,3),, c(630, 1750)], chondro [c (1,3)])
-plot (chondro [c (1,3)], plot.args = list (ylim = c(200, 600)), col = 1 : 2)
-plot (chondro [c (1,3),, c(630, 1750)], add = TRUE, lines.args = list (type = "p", pch = 20), col = 1:2)
+bl <- spc.fit.poly (chondro [c (1, 101),, c (633, 1788)], chondro [c (1, 101)])
+plot (chondro [c (1, 101)], plot.args = list (ylim = c(200, 600)), col = 1 : 2)
+plot (chondro [c (1, 101),, c(633, 1788)], add = TRUE, col = 1:2, 
+      lines.args = list (type = "p", pch = 20))
 plot (bl, add = TRUE, col = 1 : 2)
 @
 \begin{figure}[tbh]
@@ -96,8 +100,8 @@ can be reduced by a least squares fit.
 Both \Rfunction{spc.fit.poly} and \Rfunction{spc.fit.poly.below} therefore provide least squares
 fitting for the polynomial.
 
-As \Rfunction{spc.fit.poly} fits to the whole spectral region of \Rfunarg{fit.to}.  Thus, the spectra
-need to be cut to appropriate wavelength ranges that do not contain any signal.
+\Rfunction{spc.fit.poly} fits to the whole spectral region of \Rfunarg{fit.to}.  Thus, for baseline
+fitting the spectra need to be cut to appropriate wavelength ranges that do not contain any signal.
 
 In order to speed up calculations, the least squares fit is done by using the Vandermonde matrix and
 solving the equation system by \Rfunction{qr.solve}.
@@ -341,8 +345,13 @@ figure~\ref{fig:noise}
 \Rcode{noise} may be a single value for all spectra, or a vector with the noise level for each of the
 spectra separately.
 
+\bibliographystyle{unsrtnat}
+\bibliography{baseline-pkg}
+
 \section*{Session Info}
 <<echo = FALSE>>=
+make.bib ("baseline", file = "baseline-pkg.bib")
+print (as.matrix(Sys.info()))
 <<cleanup>>
 @ 
 \end{document}
