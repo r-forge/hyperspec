@@ -1,4 +1,5 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\usepackage[utf8]{inputenc} % Sweave doesn't find the encoding definition in vignettes.defs
 \SweaveInput{vignettes.defs}
 \hypersetup{pdftitle={Laser Vignette for hyperSpec},
  pdfauthor={C. Beleites},
