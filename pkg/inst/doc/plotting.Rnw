@@ -507,6 +507,7 @@ levelplot (spc ~ .wavelength * t, laser)
 \\
 \plottab{colour-coded points: different panel function}{plotmap-barb}
 <<plotmap-barb, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+require ("latticeExtra")
 barb <- do.call (collapse, barbiturates[1:50])
 barb <- orderwl (barb)
 levelplot (spc ~ .wavelength * z, barb, 
