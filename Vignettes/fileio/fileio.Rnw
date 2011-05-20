@@ -218,29 +218,28 @@ data.
 
 \subsection{ENVI Files}
 \label{sec:read.ENVI}
-\index{ENVI!Map}
-\index{ENVI!Infrared}
-\index{ENVI!Bruker}
-\index{Map!ENVI}
-\index{Infrared!ENVI}
-\index{Bruker!ENVI}
-\index{FT-IR|see{Infrared}}
-\index{Image|see{Map}}
- ENVI files are binary data accompanied by an ASCII header file. \phy's function
-\Rfunction{read.ENVI} can be used to import them.
+\index{ENVI!Map} \index{ENVI!Infrared} \index{ENVI!Bruker} \index{ENVI!Varian} \index{Map!ENVI}
+\index{Infrared!ENVI} \index{Bruker!ENVI} \index{Varian!ENVI} \index{FT-IR|see{Infrared}}
+\index{Image|see{Map}} ENVI files are binary data accompanied by an ASCII header file. \phy's
+function \Rfunction{read.ENVI} can be used to import them. Usually, the header file name is the same
+as the binary data file name with the suffix replaced by {.}hdr. Otherwise, the header file name can
+be given via parameter \textbf{\Rfunarg{headerfile}}.
 
 As we experienced missing header files (Bruker's Opus software frequently produced header files
 without any content), the data that would usually be read from the header file can also be handed to
-\Rfunction{read.ENVI} as a list. The help page gives details on what elements the list should
-contain, see also the discussion of ENVI files written by Bruker's OPUS software
-(section~\ref{sec:read.ENVI.Bruker}, p.~\pageref{sec:read.ENVI.Bruker}).
+\Rfunction{read.ENVI} as a list in parameter \textbf{\Rfunarg{header}}.  Arguments given in
+\Rfunarg{header} replace corresponding entries of the header file. The help page gives details on
+what elements the list should contain, see also the discussion of ENVI files written by Bruker's OPUS
+software (section~\ref{sec:read.ENVI.Bruker}, p.~\pageref{sec:read.ENVI.Bruker}).
 
-Here is a demonstration of the use of \Rfunction{read.ENVI}:
+Here is how to use \Rfunction{read.ENVI}:
 <<read.ENVI>>=
 spc <- read.ENVI ("ENVI/example2.img")
 spc
 @
 
+Please see also the manufacturer specific notes in section~\ref{sec:manuf-spec-import},
+p.~\pageref{ec:manuf-spec-import}.
 
 \subsubsection{ENVI Export}
 \label{sec:envi-export}
@@ -330,7 +329,7 @@ just post-process the \chy object returned by \Rfunction{read.spc}, you should b
 
 \section{Manufacturer-Specific Discussion of File Import}
 \subsection{Manufacturer Specific Import Functions}
-
+\label{sec:manuf-spec-import}
 Many spectrometer manufacturers provide a function to export their spectra into ASCII files. The
 functions discussed above are written in a very general way, and are highly customizable.  I
 recommend wrapping these calls with the appropriate settings for your spectra format in an import
@@ -385,6 +384,19 @@ Alternatively, the correct offset and pixel size values may be given as function
 spc <- read.ENVI.Nicolet ("ENVI/example2.img", nicolet.correction = TRUE) 
 spc ## dummy sample with all intensities zero
 @
+
+\subsection{Varian/Agilent FT-IR Imaging}
+\label{sec:varianagilent-ft-ir}
+\index{ENVI!Map}
+\index{ENVI!Infrared}
+\index{ENVI!Agilent}
+\index{Map!ENVI}
+\index{Infrared!ENVI}
+\index{Agilent!ENVI}
+\index{Varian|see{Agilent}}
+
+Agilent (Varian) uses a variant of ENVI (with binary header). A specialized form of read.ENVI will be
+coming soon.
 
 \subsection{Kaiser Optical Systems Raman}
 \label{sec:Kaiser}
