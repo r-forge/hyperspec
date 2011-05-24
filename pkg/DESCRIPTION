@@ -1,8 +1,8 @@
 Package: hyperSpec
 Type: Package
 Title: Interface for hyperspectral data, i.e. spectra + meta info (spatial, time, concentration, ...)
-Version: 0.96-20110520
-Date: 2011-05-20
+Version: 0.96-20110524
+Date: 2011-05-24
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <cbeleites@units.it>
 Description: This package is an interface to handle hyperspectral data sets in R.  I.e. spatially or
@@ -15,6 +15,6 @@ License: GPL (>= 3)
 LazyLoad: yes
 LazyData: yes
 Depends: R (>= 2.11), methods, utils, lattice, grid
-Suggests: R.matlab, latticeExtra, tripack, deldir, rgl, plotrix, testthat, ggplot2, pls, playwith, latticist, svUnit, sp, baseline
+Suggests: R.matlab, latticeExtra, tripack, deldir, rgl, plotrix, testthat, ggplot2, pls, playwith, latticist, svUnit, sp, baseline, compiler, inline, Rcpp
 URL: http://hyperSpec.r-forge.r-project.org/
 

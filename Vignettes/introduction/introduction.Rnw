@@ -243,10 +243,11 @@ be present. It is then a matrix with zero columns.
 \end{figure}
 
 Slot \Rcode{@label} contains an element for each of the columns in \Rcode{@data} plus one holding the
-label for the wavelength axis, \Rcode{.wavelength}. The elements of the list may be anything suitable
-for axis annotations, \ie they should be either character strings or expressions for ``pretty'' axis
-annotations (see \eg figure~\ref{fig-spcloess} on page~\pageref{fig-spcloess}).  To get familiar with
-expressions for axis annotation, see \verb+? plotmath+ and \verb+demo (plotmath)+.
+label for the wavelength axis, \Rcode{.wavelength}. They are accessed by their names which must be
+the same for columns of \Rcode{@data} and the list elements. The elements of the list may be anything
+suitable for axis annotations, \ie they should be either character strings or expressions for
+``pretty'' axis annotations (see \eg figure~\ref{fig-spcloess} on page~\pageref{fig-spcloess}).  To
+get familiar with expressions for axis annotation, see \verb+? plotmath+ and \verb+demo (plotmath)+.
 
 \section{Functions provided by \phy}
 \label{sec:funct-prov-phy}
@@ -282,8 +283,9 @@ colnames (chondro)
 
 Likewise, \Rmethod{rownames} returns the names assigned to the spectra, and \Rmethod{dimnames} yields
 a list of these three vectors (including also the column names of \Robject{\$spc}). The column names
-of the spectra matrix are the wavelengths. They are accessed by \Rfunction{wl}, see
-section~\ref{sec:wavel-axis-conv}.
+of the spectra matrix contain the wavelengths as character, while \Rfunction{wl} (see
+section~\ref{sec:wavel-axis-conv}, p.~\pageref{sec:wavel-axis-conv}) yields the numeric vector of
+wavelengths.
 
 Extra\mFun{colnames<-, rownames<-} data column names and rownames of the object may be set by
 \Rfunction{colnames<-} and \Rfunction{rownames<-}, respectively. \Rfunction{colnames<-} renames the
@@ -292,7 +294,7 @@ labels as well.
 \section{Creating a \Rclass{hyperSpec} Object, Data Import and Export}
 \label{sec:create}
 \phy comes with filters for a variety of file formats. These are discussed in detail in a separate
-vignette accessible via \verb+vignette ("file-io")+.
+vignette accessible via \verb+vignette ("fileio")+.
 
 \subsection{Creating a \Rclass{hyperSpec} Object from Spectra Matrix
 and Wavelength Vector}
@@ -361,7 +363,29 @@ result of \Rfunction{[[]]} is a \df if extra data columns were selected or other
 spectra matrix. Single extra data columns may be retrieved by \Rfunction{\$}\mFun{\Rfunction{\$}}.
 
 In order to change data, use \Rfunction{[]<-}, \Rfunction{[[]]<-}, and
-\Rfunction{\$<-}\mFun{\Rfunction{[]<-}, \Rfunction{[[]]<-}, \Rfunction{\$<-}} (see~).
+\Rfunction{\$<-}\mFun{\Rfunction{[]<-}, \Rfunction{[[]]<-}, \Rfunction{\$<-}}
+(see~\ref{sec:square-brack-replace} and \ref{sec:accessing-extra-data}).
+
+\subsection{Access Functions and Abbreviations for Parts of the \chy Object's Data}
+\label{sec:fast-access-parts}
+\mFun{\Rfunction{[] [[]] \$. \$.. []<- [[]]<- \$<-}}
+
+\Rclass{hyperSpec} comes with three abbreviation functions for easy access to the data:
+\begin{labeling}{\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]] <-} }
+\item [\Robject{x} \Rfunction{[[]]}] returns the spectra matrix (\Rcode{x\$spc}).
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]}] the cut spectra matrix is returned if
+  wavelengths are specified in \Rfunarg{l}.
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, \Rfunarg{j}, \Rfunarg{l}]]}] If data columns are
+  selected (second index), the result is a \df.
+\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]] <-}] Also, parts of the spectra matrix
+  can be set (only indices for spectra and wavelength are allowed for this function).
+\item [\Robject{x} \Rfunction{[\Rfunarg{i}, \Rfunarg{j}] <-}] sets parts of \Rcode{x@data}.
+\item [\Robject{x} \Rfunction{\$.}] returns the complete \df \Rcode{x@data}, with the
+  spectra in column \Rcode{\$spc}.
+\item [\Robject{x} \Rfunction{\$..}] returns the extra data (\Rcode{x@data} without \Rcode{x\$spc}).
+\item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without
+  \Rcode{x\$spc}). The columns must match exactly in this case.
+\end{labeling}
 
 \subsection{Selecting and Deleting Spectra}
 \label{sec:select-delete-spectra}
@@ -411,9 +435,6 @@ The second argument of the extraction functions \Rfunction{[]} and \Rfunction{[[
 (extra) data columns. They can be given like any column specification for a \df, \ie
 numeric, logical, or by a vector of the column names:
 
-They can be given like any column specification for a \df,
-\ie numeric, logical, or by a vector of the column names:
-
 <<data>>=
 colnames (chondro)
 chondro [[1 : 3, 1]]
@@ -434,15 +455,98 @@ flu$n <- list (1 : 6, label = "sample no.")
 @
 This function will append new columns, if necessary.
 
+\subsection{More on the \Rfunction{[[]]} and \Rfunction{[[]]<-} Operators: Accessing Single Elements of the Spectra Matrix}
+\label{sec:square-brack-replace}
+\Rfunction{[[]]} works mostly analogous to []. In addition, however, these two functions also accept
+index matrices of size $n \times 2$. In this case, a vector of values from the spectra matrix is
+returned.
+<<data2>>=
+indexmatrix <- matrix (c (1 : 3, 1 : 3), ncol = 2)
+indexmatrix
+chondro [[indexmatrix, wl.index = TRUE]]
+diag (chondro [[1 : 3, , min ~ min + 2i]])
+@
 
-\subsection{Selecting Wavelength Ranges}
+\Rfunction{[[]]<-} also accepts index matrices of size $n \times 2$.
+<<data2>>=
+indexmatrix <- matrix (c (1 : 3, 1 : 3), ncol = 2)
+indexmatrix
+chondro [[indexmatrix, wl.index = TRUE]]
+diag (chondro [[1 : 3, , min ~ min + 2i]])
+@
+
+\subsection{Wavelengths}
 \label{sec:wavelength-axis}
+\index{wavelength!formula notation}
+\index{wavelength!conversion to index}
+\index{wavelength indices!conversion to wavelength}
+\subsubsection{Converting Wavelengths to Indices and vice versa}
+\label{sec:wavelength-indices}
+Spectra\mFun{\Rfunction{wl2i} \Rfunction{i2wl}} in \phy have always discretized wavelength axes, they
+are stored in a matrix with each column corresponding to one wavelength. \phy provides two functions
+to convert the respective column indices into wavelengths and vice versa: \Rfunction{i2wl} and
+\Rfunction{wl2i}.
+
+If the wavelengths are given as a numeric vector, they are each converted to the corresponding
+wavelength. In addition there is a more sophisticated possibility of specifying wavelength ranges
+using a \emph{formula}.  The basic syntax is \emph{start~}$\sim$~\emph{end.} This yields a vector
+\emph{index of start }\Rcode{:}\emph{ index of end.}
+
+The result of the formula conversion differs from the numeric vector conversion in three ways:
+\begin{itemize}
+\item The colon operator for constructing vectors accepts only integer numbers, the tilde (for
+  formulas) does not have this restriction.
+\item If the vector does not take into account the spectral resolution, one may get only every
+  $n$\textsuperscript{th} point or repetitions of the same index:\\
+<<wl2ivec>>=
+wl2i (flu, 405 : 410)
+@
+<<wl2ivec2>>=
+wl2i (flu, 405 ~ 410)
+@
+<<wl2ivec3>>=
+wl2i (chondro, 1000 : 1010)
+@
+<<wl2ivec4>>=
+wl2i (chondro, 1000 ~ 1010)
+@
+\item If the object's wavelength axis is not ordered, the formula approach will give weird
+  results. In that (probably rare) case, use \Rfunction{orderwl} first to obtain an object with
+  ordered wavelength axis.
+\end{itemize}
+\emph{start} and \emph{end} may contain the special variables \Robject{min} and \Robject{max} that
+correspond to the lowest and highest wavelengths of the object:
+
+<<wl2i.minmax>>=
+wl2i (flu, min ~ 410)
+@
+
+Often, specifications like \emph{wavelength \textpm $n$\ data points} are needed. They can be given
+using complex numbers in the formula.  The imaginary part is added to the index calculated from the
+wavelength in the real part:
+
+<<wl2i.im>>=
+wl2i (flu, 450 - 2i ~ 450 + 2i)
+wl2i (flu, max - 2i ~ max)
+@
+
+To specify several wavelength ranges, use a list containing the formulas
+and vectors\footnote{Formulas are combined to a list by \Rfunction{c}.}:
+
+<<wl2i.list>>=
+wl2i (flu, c (min ~ 406.5, max - 2i ~ max))
+@
+
+This mechanism also works for the wavelength arguments of \Rfunction{[]}, \Rfunction{[[]]}, and
+\Rfunction{plotspc}.
+
+\subsubsection{Selecting Wavelength Ranges}
 Wavelength ranges can easily be selected using \Rfunction{[]}'s third argument:
 <<fig = TRUE>>=
 plot (paracetamol [,, 2800 ~ 3200])
 @
 \\
-By default, the values given are treated as wavelengths, if they are indices into the columns of the
+By default, the values given are treated as wavelengths. If they are indices into the columns of the
 spectra matrix, use \Rcode{wl.index = TRUE}:
 <<fig = TRUE>>=
 plot (paracetamol [,, 2800 : 3200, wl.index = TRUE])
@@ -451,7 +555,7 @@ plot (paracetamol [,, 2800 : 3200, wl.index = TRUE])
 Section~\ref{sec:wavelength-indices}~(p.~\pageref{sec:wavelength-indices}) details into the different
 possibilities of specifying wavelengths.
 
-\subsection{Deleting Wavelength Ranges}
+\subsubsection{Deleting Wavelength Ranges}
 \label{sec:del-wavelengths}
 Deleting wavelength ranges may be accomplished using negative index vectors together with \Rcode{wl.index = TRUE}. 
 <<fig = TRUE>>=
@@ -467,84 +571,18 @@ select the remainder of the spectrum instead. To delete the spectral range from 
 plot (paracetamol [,, c (min ~ 1750, 2800 ~ max)])
 @
 \\
-(It is possible to produce a plot of this data where the cut range is not bridged by a line and the
-wavelength axis is cut in order to save space. For details see the ``plotting'' vignette).
+(It is possible to produce a plot of this data where the cut range is actually omitted and the
+wavelength axis is optionally cut in order to save space. For details see the ``plotting'' vignette).
 
-\subsubsection{Converting Wavelengths to Indices and vice versa}
-\label{sec:wavelength-indices}
-Spectra\mFun{\Rfunction{wl2i} \Rfunction{i2wl}}
-in \phy have always discretized wavelength
-axes, they are stored in a matrix with column corresponding to one
-wavelength. \phy provides two conversion functions:
-\Rfunction{i2wl} returns the wavelength corresponding to the given
-indices and \Rfunction{wl2i} calculates index vectors from wavelengths.
 
-If the wavelengths are given as a numeric vector, they are each converted
-to the corresponding wavelength. In addition there is a more sophisticated
-possibility of specifying wavelength ranges using a \emph{formula}.
-The basic syntax is \emph{start~}$\sim$~\emph{end.} This yields
-a vector \emph{index of start }\Rcode{:}\emph{ index of end.}
-
-The result of the formula conversion differs from the numeric vector
-conversion in three ways:
-\begin{itemize}
-\item The colon operator for constructing vectors accepts only integer numbers,
-the tilde (for formulas) does not have this restriction.
-\item If the vector does not take into account the spectral resolution,
-one may get only every $n$\textsuperscript{th} point or repetitions of the same
-index:\\
-<<wl2ivec>>=
-wl2i (flu, 405 : 410)
-@
-<<wl2ivec2>>=
-wl2i (flu, 405 ~ 410)
-@
-<<wl2ivec3>>=
-wl2i (chondro, 1000 : 1010)
-@
-<<wl2ivec4>>=
-wl2i (chondro, 1000 ~ 1010)
-@
-\item If the object's wavelength axis is not ordered, the formula approach
-will give weird results. In that (probably rare) case, use \Rfunction{orderwl} first
-to obtain an object with ordered wavelength axis.
-\end{itemize}
-\emph{start} and \emph{end} may contain the special variables \Robject{min}
-and \Robject{max} that correspond to the lowest and highest wavelengths
-of the object:
-
-<<wl2i.minmax>>=
-wl2i (flu, min ~ 410)
-@
-
-Often, specifications like \emph{wavelength \textpm $n$ data points}
-are needed. They can be given using complex numbers in the formula.
-The imaginary part is added to the index calculated from the wavelength
-in the real part:
-
-<<wl2i.im>>=
-wl2i (flu, 450 - 2i ~ 450 + 2i)
-wl2i (flu, max - 2i ~ max)
-@
-
-To specify several wavelength ranges, use a list containing the formulas
-and vectors\footnote{Formulas are combined to a list by \Rfunction{c}.}:
-
-<<wl2i.list>>=
-wl2i (flu, 450 - 2i ~ 450 + 2i)
-wl2i (flu, c (min ~ 406.5, max - 2i ~ max))
-@
-
-This mechanism also works for the wavelength arguments of \Rfunction{[]},
-\Rfunction{[[]]}, and \Rfunction{plotspc}.
 
 \subsubsection{Changing the Wavelength Axis}
 \label{sec:wavel-axis-conv}
-
-Sometimes wavelength axes need to be transformed, \eg converting from wavelengths to frequencies. In
-this case, retrieve the wavelength axis vector with \Rfunction{wl}\mFun{\Rfunction{wl},
-  \Rfunction{wl<-}}, convert each value of the resulting vector and assign the result with
-\Rfunction{wl<-}. Also the label of the wavelength axis may need to be adjusted.
+\index{wavelength!conversion} Sometimes wavelength axes need to be transformed, \eg converting from
+wavelengths to frequencies. In this case, retrieve the wavelength axis vector with
+\Rfunction{wl}\mFun{\Rfunction{wl}, \Rfunction{wl<-}}, convert each value of the resulting vector and
+assign the result with \Rfunction{wl<-}. Also the label of the wavelength axis may need to be
+adjusted.
 
 As an example, convert the wavelength axis of \Robject{laser} to frequencies. As the wavelengths are
 in nanometers, and the frequencies are easiest expressed in terahertz, an additional conversion
@@ -578,46 +616,6 @@ wl (barb)
 barb <- orderwl (barb)
 wl (barb)
 @
-
-
-\subsection{More on the Square-Bracket Operators for  Replacing Values}
-\label{sec:square-brack-replace}
-\Rfunction{[[]]} also accepts index matrices of size $n \times 2$. In this case, a vector of values from the spectra matrix is returned.
-<<data2>>=
-indexmatrix <- matrix (c (1 : 3, 1 : 3), ncol = 2)
-indexmatrix
-chondro [[indexmatrix, wl.index = TRUE]]
-diag (chondro [[1 : 3, , min ~ min + 2i]])
-@
-
-\Rfunction{[[]]<-} also accepts index matrices of size $n \times 2$.
-<<data2>>=
-indexmatrix <- matrix (c (1 : 3, 1 : 3), ncol = 2)
-indexmatrix
-chondro [[indexmatrix, wl.index = TRUE]]
-diag (chondro [[1 : 3, , min ~ min + 2i]])
-@
-
-\subsection{Abbreviations for Parts of the \Rclass{hyperSpec} Object}
-\label{sec:fast-access-parts}
-\mFun{\Rfunction{[[]] \$. \$..}}
-
-\Rclass{hyperSpec} comes with three abbreviation functions for easy access to the data:
-\begin{description}
-\item [\Robject{x} \Rfunction{[[]]}] returns the spectra matrix (\Rcode{x\$spc}).
-\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]]}] the cut spectra matrix is returned if
-  wavelengths are specified in \Rfunarg{l}.
-\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, \Rfunarg{j}, \Rfunarg{l}]]}] If data columns are
-  selected (second index), the result is a \df.
-\item [\Robject{x} \Rfunction{[[\Rfunarg{i}, , \Rfunarg{l}]] <-}] Also, parts of the spectra matrix
-  can be set (only indices for spectra and wavelength are allowed for this function).
-\item [\Robject{x} \Rfunction{[\Rfunarg{i}, \Rfunarg{j}] <-}] sets parts of \Rcode{x@data}.
-\item [\Robject{x} \Rfunction{\$.}] returns the complete \df \Rcode{x@data}, with the
-  spectra in column \Rcode{\$spc}.
-\item [\Robject{x} \Rfunction{\$..}] returns the extra data (\Rcode{x@data} without \Rcode{x\$spc}).
-\item [\Robject{x} \Rfunction{\$.. <-}] sets the extra data (\Rcode{x@data} without
-  \Rcode{x\$spc}). The columns must match exactly in this case.
-\end{description}
 
 \subsection{Conversion to Long- and Wide-Format \df{}s}
 \label{sec:conv-long-form}
@@ -747,7 +745,7 @@ nrow (chondro.merged)
 @
 %
 By default, the result consists of only those spectra, where \emph{both} spectral ranges were
-available.  To keep all spectra replacing missing parts by \Rcode{NA}:
+available.  To keep all spectra replacing missing parts by \Rcode{NA} (see fig.~\ref{fig:merge}):
 <<>>=
 chondro.merged <- merge (chondro.low, chondro.high, all = TRUE)
 nrow (chondro.merged)
@@ -878,7 +876,7 @@ interpolation function.
 
 As an example, we will use natural splines to do the interpolation. It is convenient to set it up as
 a function:
-<<>>=
+<<fun-interpolate>>=
 interpolate <- function (spc, shift, wl){
   spline (wl + shift, spc, xout = wl, method = "natural")$y
 }
@@ -1466,12 +1464,19 @@ system.time ({
   tmp [[]] <- tmp.matrix
 })
 @
-%
 
-In general, it is recommended not to work with variables that are more than approximately a third of
-the available RAM in size. Particularly the import of raw spectroscopic data can consume large
-amounts of memory. At certain points, \phy provides switches that allow working with data sets that
-are actually close to this memory limit.
+\paragraph{Compiled code.} R provides interfaces to Fortran and C code,
+see the manual ``Writing R Extensions''. \Rpackage{Rcpp}\Sexpr{cite.pkg("Rcpp")} allows to
+conveniently integrate C++ code. \Rpackage{inline}\Sexpr{cite.pkg("inline")} adds another layer of
+convenience: inline definition of functions in C, C++, or Fortran.
+
+An intermediate level is byte compilation of R code, which is done by
+\Rpackage{compiler}\Sexpr{cite.pkg("compiler")}.
+
+\paragraph{Memory use.} In general, it is recommended not to work with variables that are more than
+approximately a third of the available RAM in size. Particularly the import of raw spectroscopic data
+can consume large amounts of memory. At certain points, \phy provides switches that allow working
+with data sets that are actually close to this memory limit.
 
 \mFun{\Rcode{new ("hyperSpec")}, \Rfunction{read.ENVI*},
 \Rfunction{scan.txt.Renishaw}}\index{options!gc} 
@@ -1528,7 +1533,7 @@ make.fn.table()
 \section*{Session Info}
 \begin{footnotesize}
 <<echo = FALSE>>=
-make.bib (c ("baseline"), file = "introduction-pkg.bib")
+make.bib (c ("baseline", "compiler", "Rcpp", "inline"), file = "introduction-pkg.bib")
 print (as.matrix(Sys.info()))
 <<cleanup>>
 @
