@@ -1,5 +1,4 @@
-read.ENVI.Nicolet <- function (..., # goes to read.ENVI
-		# file headerfile, header
+read.ENVI.Nicolet <- function (..., # goes to read.ENVI: file headerfile, header
 		x = NA, y = NA, # NA means: use the specifications from the header file if possible
 		log = list (),
 		keys.hdr2log = TRUE,
