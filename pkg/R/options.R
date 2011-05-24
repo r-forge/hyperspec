@@ -1,10 +1,14 @@
 .options <- list (log = TRUE,           # for .logentry
-                  debuglevel = 0L,      # for spc.identify
+                  debuglevel = 0L,      # for spc.identify, map.identify
                   gc = FALSE            # frequent calling of gc in read.ENVI & initialize
                   )
 
 hy.getOptions <- function (...){
-  .options [c (...)]
+  dots <- c (...)
+  if (length (dots) == 0L)
+    .options
+  else
+  .options [dots]
 }
 
 hy.getOption <- function (name){
