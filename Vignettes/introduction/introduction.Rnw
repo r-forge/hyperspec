@@ -11,6 +11,8 @@
 % \VignetteIndexEntry{hyperSpec Introduction}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
+\usepackage{makeidx} 
+\makeindex
 
 \begin{document}
 \title{\phy Introduction }
@@ -24,6 +26,7 @@ Note that some definitions are executed in \texttt{vignette.defs}.
 \tableofcontents
 
 \warnbox[blue!50!black]{Suggested Packages}{
+  To build this vignette, some packages are suggested but not strictly needed:
 \begin{labeling}{latticeExtra}
 <<check-required, echo = FALSE, results = tex>>=
 check.req.pkg ("pls", special = list (msc = function (x) {texterrormsg ("msc", "pls"); x}))
@@ -40,23 +43,14 @@ check.req.pkg ("ggplot2", donothing = "")
 
 \section{Introduction}
 
-\phy is a R package that allows convenient handling of (hyper)spectral data sets, \ie data sets
-comprising spectra together with further data on a per-spectrum basis. The spectra can be anything
+\phy is a R package that allows convenient handling of hyperspectral data sets, \ie data sets
+combining spectra with further data on a per-spectrum basis. The spectra can be anything
 that is recorded over a common discretized axis. 
 
-\phy works with any data that fits in this general scheme, so that the three terms may also be used
-for:
-\begin{labeling}{wavelength: }
-\item [wavelength:] frequency, wavenumbers, chemical shift, Raman shift, $\frac{m}{z}$, etc.
-\item [intensity:] transmission, absorbance, $\frac{e^{-}}{s}$, \textellipsis
-\item [extra data:] spatial information (spectral images, maps, or profiles), temporal information
-  (kinetics, time series), concentrations (calibration  series), class membership information, etc.\\
-  Note that there is no restriction on the number of extra data columns.
-\end{labeling}
-Throughout the documentation of the package, the terms intensity and wavelength axes refer to the
-spectral ordinate and abscissa, respectively.
-
-This vignette gives an introduction on basic working techniques using the R package \phy. 
+This vignette gives an introduction on basic working techniques using the R package \phy.  This is
+done mostly from a spectroscopic point of view: rather than going through the functions provided by
+\phy, it is organized in spectroscopic tasks. However, the functions discussed are printed on the
+margin for a quick overview.
 
 \phy comes with five data sets,
 \begin{labeling}{wavelength: }
@@ -74,23 +68,32 @@ showing exemplary work flows for the respective data type.
 
 This document describes how to accomplish typical tasks in the analysis of spectra. It does not give
 a complete reference on particular functions. It is therefore recommended to look up the methods in
-R's help system using \Rcode{?{} command}.
+R's help system using \Rcode{?~command}.
 
-A list of all functions available in \phy is given in
+A complete list of the functions available in \phy is given in
 appendix~\ref{tab:functions}~(p.~\pageref{tab:functions}).
 
 
-\subsection{Notation}
+\subsection{Notation and Terms}
+Throughout the documentation of the package, the following terms are used:
+\begin{labeling}{wavelength: }
+\item [wavelength:] spectral abscissa\\
+  frequency, wavenumbers, chemical shift, Raman shift,
+  $\frac{m}{z}$, etc.
+\item [intensity:] spectral ordinate\\
+  transmission, absorbance, $\frac{e^{-}}{s}$, intensity, \textellipsis
+\item [extra data:] further information/data belonging to each spectrum\\
+  spatial information (spectral images, maps, or profiles), temporal information
+  (kinetics, time series), concentrations (calibration  series), class membership information, etc.\\
+  \chy object may contain arbitrary numbers of extra data columns.
+\end{labeling}
 
-This vignette demonstrates working techniques mostly from a spectroscopic point of view: rather than
-going through the functions provided by \phy, it is organized more closely on spectroscopic
-tasks. However, the functions discussed are printed on the margin for a fast overview.
-
-In R, slots of a S4 class can be accessed directly by the \Rcommand{@} operator. In this vignette,
-the notation \Rcode{@xxx} will thus mean \emph{``slot xxx of an object''}.  Likewise, named elements
-of a \Rclass{list}, like the columns of a \df, are accessed by the \Rcode{\$}
-operator, and \Rcode{\$xxx} will be used for \emph{``column xxx''}, and as an abbreviation for
-\emph{``column xxx of the \df in slot data of the object''}.
+In R, slots of a S4 class are accessed by the \Rcommand{@} operator. In this vignette, the notation
+\Rcode{@xxx} will thus mean \emph{``slot xxx of an object''}.  Likewise, named elements of a
+\Rclass{list} and columns of a \df are accessed by the \Rcode{\$} operator, and \Rcode{\$xxx} will be
+used for \emph{``column xxx''}, and as an abbreviation for \emph{``column xxx of the \df in slot data
+  of the object''} (the structure of \chy objects is discussed in section~\ref{sec:structure-chy},
+p.~\pageref{sec:structure-chy}).
 
 \section{Remarks on R}
 \subsection{Generic Functions}
@@ -98,7 +101,7 @@ operator, and \Rcode{\$xxx} will be used for \emph{``column xxx''}, and as an ab
 \emph{Generic Functions} are functions that apply to a wide range of data types or classes, \eg
 \Rmethod{plot}, \Rmethod{print}, mathematical operators, etc. These functions can be implemented in a
 specialized way by each class.  \Rclass{hyperSpec} implements with a variety of such functions, see
-the table in appendix~\ref{tab:functions} on page~\pageref{tab:functions}.
+appendix~\ref{tab:functions} (p.~\pageref{tab:functions}).
 
 \subsection{Functionality Can be Extended at Runtime}
 \R's concept of functions offers much flexibility. Functions may be added or changed by the user in
@@ -107,6 +110,10 @@ Neither restart of R nor reloading of the package or anything the like is needed
 function resides in a namespace (as it is the case for all functions in \phy), the original function
 is not deleted. It is just masked by the user's new function but stays accessible via the \Rcode{::}
 operator.
+
+The same is true for ``normal'' variables: You may create changed copies of the example data sets,
+work with these and then ``reset'' to \phy's version of the data set by removing the object in your
+workspace.
 
 This offers the opportunity of easily writing specialized functions that are adapted to specific
 tasks. \phy's vignettes use this to set up special versions of the lattice graphics functions that
@@ -131,7 +138,6 @@ chk.hy (object)
 validObject (object)                    
 @ 
 %
-%
 The first line checks whether \Robject{object} is a \chy object, the second checks its validity.
 Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise an error and stop.
 
@@ -139,10 +145,10 @@ Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise a
 \label{sec:spec-funct-names}
 \subsubsection{The Names of Operators}
 \label{sec:names-operators}
-Operators such as \verb/+/, \verb+*+, \verb+%%+, etc. are in fact functions in R. Thus they can be
-handed over as arguments to other functions (particularly to the vectorization functions
+Operators such as \verb/+/, \verb+-+,\verb+*+, \verb+%%+, etc. are in fact functions in R. Thus they
+can be handed over as arguments to other functions (particularly to the vectorization functions
 \Rfunction{*apply}, \Rfunction{sweep}, etc.). In this case the name of the function must be quoted:
-\verb+`*`+ is the recommended style (although \verb+"*"+ will often work as well), \eg:
+\verb+`-`+ is the recommended style (although \verb+"-"+ will often work as well), \eg:
 <<eval = FALSE>>=
 sweep (flu, 2, mean, `-`)
 @ 
@@ -166,18 +172,35 @@ an assignment to variable \verb+wl+: \verb+`wl<-`+.
 \label{sec:loading-package}
 To load \phy, use\nopagebreak
 <<init>>=
-library (hyperSpec)
+library ("hyperSpec")
 @ 
 %
-
+\index{options|textbf}
+\index{options!debuglevel}
+\index{options!gc}
+\index{options!log}
 The global behaviour of \phy can be configured via options. The values of the options are
 retrieved with \Rfunction{hy.getOptions} and \Rfunction{hy.getOption}, and changed with
-\Rfunction{hy.setOptions}.
-
-Currently, the only option provided is \Robject{log}, a logical specifying whether assignment
-functions should automatically add entries to the logbook (see section \ref{sec:logbook},
-p.~\pageref{sec:logbook}).
-
+\Rfunction{hy.setOptions}. Table~\ref{tab:options} gives an overview.
+\begin{table}[tb]
+  \begin{small}
+  \begin{tabular}{p{.1\textwidth}p{.15\textwidth}p{.45\textwidth}p{.2\textwidth}}
+    \hline
+    \textbf{name} & \textbf{default value} (range) & \textbf{description}                       & \textbf{used by}                                        \\
+    \cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-3} \cmidrule(lr){4-4}
+    debuglevel    & 0 (1L 2L)                      & amount of debugging information produced   & \Rfunction{spc.identify}, \Rfunction{map.identify}      \\
+    gc            & FALSE                          & triggers frequent calling of \Rcode{gc ()} & \Rfunction{read.ENVI},\newline\Rcode{new ("hyperSpec")} \\
+    log           & TRUE                           & automatically create logbook entries       & \Rfunction{logbook}                                     \\
+    \hline
+    % 
+  \end{tabular}
+  \end{small}
+  \caption{\phy options. Please refer to the documentation of the respective functions for details about the effect of the options.}
+  \label{tab:options}
+\end{table}
+<<checkCompleteOptionTable, echo = FALSE, results = hide>>=
+stopifnot (all (names (hy.getOptions(TRUE)) %in% c ("log", "debuglevel", "gc")))
+@
 \section{The structure of \Rclass{hyperSpec} objects}
 \label{sec:structure-chy}
 
@@ -191,7 +214,7 @@ p.~\pageref{sec:logbook}).
 While the parts of the \chy object can be accessed directly, it is good practice to use the functions
 provided by \phy to handle the objects rather than accessing the slots directly
 (tab.~\ref{tab:getset}). This also ensures that proper (\emph{valid}) objects are returned. In some
-cases, direct access to the slots can considerably speed up calculations, see section
+cases, however, direct access to the slots can considerably speed up calculations, see section
 \ref{sec:speed-considerations} (p.~\pageref{sec:speed-considerations}).
 \begin{table}[t]
   \centering
@@ -317,6 +340,13 @@ meaningful short descriptions: they are assigned via the argument \Rfunarg{short
 tmp <- sweep (tmp, 2, mean, short = "centering")
 logbook (tmp)
 @ 
+\index{options!log} Automatic logging may be turned off by
+<<logoff>>=
+hy.setOptions (log = FALSE)
+@ 
+%
+This can help optimizing program execution speed, see section~\ref{sec:speed-considerations}
+(p.~\ref{sec:speed-considerations}).
 <<echo=FALSE, results=hide>>=
 rm (tmp)
 @
@@ -1391,7 +1421,7 @@ page~\pageref{sec:bind}).  Another, similar way to combine a number of \chy obje
 wavelength axes or extra data columns is \Rfunction{collapse}\mFun{\Rfunction{collapse}} (see
 section~\ref{sec:collapse}, page~\pageref{sec:collapse}).
 
-\section{Speed Considerations}
+\section{Speed and Memory Considerations}
 \label{sec:speed-considerations}
 While most of \phy's functions work at a decent speed for interactive sessions (of course depending
 on the size of the object), iterated (repeated) calculations as for bootstrapping or iterated cross
@@ -1407,10 +1437,10 @@ system.time ({
 })
 @ 
 
-A first possibility to speed up is switching of the automatic logging of how the objects are
-transformed. Logging involves appending rows to the \df in slot \Rcode{@log}.  While the
+\index{options!log} A first possibility to speed up is switching of the automatic logging of how the
+objects are transformed. Logging involves appending rows to the \df in slot \Rcode{@log}.  While the
 absolute amount of time needed to add a logbook entry is small, it may be executed very often
-(e.g. during each call of \Rfunction{[}). 
+(e.g. during each call of \Rfunction{[}).
 <<speed2>>=
 hy.setOptions (log = FALSE)
 tmp <- chondro [1 : 50]
@@ -1423,8 +1453,9 @@ hy.setOptions (log = TRUE)
 
 Calculations that involve a lot of subsetting (\ie extracting or changing the spectra matrix or extra
 data) can be sped up considerably if the required parts of the \chy object are extracted
-beforehand. A related tip is that that many model fitting functions in \R are much faster if the
-formula interface is avoided and the appropriate \df{}s or matrices are handed over directly. 
+beforehand. This is somewhat similar to model fitting in R in general: many model fitting functions
+in \R are much faster if the formula interface is avoided and the appropriate \df{}s or matrices are
+handed over directly.
 <<speed3>>=
 tmp <- chondro [1 : 50]
 system.time ({
@@ -1436,6 +1467,22 @@ system.time ({
 })
 @
 %
+
+In general, it is recommended not to work with variables that are more than approximately a third of
+the available RAM in size. Particularly the import of raw spectroscopic data can consume large
+amounts of memory. At certain points, \phy provides switches that allow working with data sets that
+are actually close to this memory limit.
+
+\mFun{\Rcode{new ("hyperSpec")}, \Rfunction{read.ENVI*},
+\Rfunction{scan.txt.Renishaw}}\index{options!gc} 
+The initialization method \Rcode{new ("hyperSpec", \ldots)} takes particular care to avoid
+unneccessary copies of the spectra matrix. In addition, frequent calls to \Rcode{gc ()} can be
+requested by \Rcode{hy.setOption (gc = TRUE)}. The same behaviour is triggered in
+\Rfunction{read.ENVI} and its derivatives (\Sexpr{texListFun("read.ENVI")}). The memory consumption
+of \Rfunction{scan.txt.Renishaw} can be lowered by importing the data in chunks (argument
+\Rfunarg{nlines}).
+
+\printindex
 
 \bibliographystyle{unsrtnat}
 \bibliography{introduction-pkg,introduction}
@@ -1478,7 +1525,6 @@ make.fn.table()
 \bottomrule
 \end{longtable}
 \end{small}
- 
 \section*{Session Info}
 \begin{footnotesize}
 <<echo = FALSE>>=
