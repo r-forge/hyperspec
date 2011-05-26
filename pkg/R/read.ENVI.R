@@ -174,9 +174,9 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
 
   if (! is.list (header)) # catch a common pitfall
     if (is.character (header))
-      error ("header must be a list of parameters. Did you mean headerfile instead?")
+      stop ("header must be a list of parameters. Did you mean headerfile instead?")
     else
-      error ("header must be a list of parameters.")
+      stop ("header must be a list of parameters.")
 						  
   tmp <- .read.ENVI.header (file, headerfile)
   tmp <- .read.ENVI.split.header (tmp)
