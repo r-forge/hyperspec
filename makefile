@@ -330,10 +330,10 @@ devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data
 #EOT
 
 check: build
-	R CMD check www/hyperSpec-prebuilt.tar.gz
+	R CMD check hyperSpec_*.tar.gz
 
 devcheck: devbuild
-	~/r-devel/bin/R CMD check www/hyperSpec-prebuilt-devel.tar.gz
+	~/r-devel/bin/R CMD check hyperSpec_*.tar.gz
 
 checkfast: $(SRC)
 	R CMD check --no-examples --no-tests --no-manual --no-vignettes pkg/hyperSpec
