@@ -76,7 +76,7 @@ Vignettes/flu/flu.pdf:          						  Vignettes/flu/flu.tex
 
 Vignettes/flu/flu.tex:          						  Vignettes/flu/flu.Rnw
 
-Vignettes/flu/flu:          						  	  Vignettes/flu/vignettes.defs $(SRC)    \
+Vignettes/flu/flu.Rnw:       						  	  Vignettes/flu/vignettes.defs $(SRC)    \
                                                   Vignettes/flu/rawdata/* \
                                                   Vignettes/flu/scan.txt.PerkinElmer.R
 	touch $@
