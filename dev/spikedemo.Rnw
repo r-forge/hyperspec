@@ -1,0 +1,102 @@
+\documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
+\SweaveInput{../Vignettes/vignettes.defs}
+\setkeys{Gin}{width=\linewidth}
+\hypersetup{pdftitle={Spikefilter},
+ pdfauthor={C. Beleites},
+ pdfsubject={Vignette on (interactive) spike correction},
+ pdfkeywords={hyperSpec, Raman, spike correction}}
+\title{(Interactive) Spike Correction of Raman Spectra}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+\label{sec:introduction}
+
+Raman spectra are often affected by cosmic rays hitting the CCD camera. These and similar sharp high
+intensity artifacts are called \emph{spikes}.
+
+\begin{itemize}
+\item Spikes are often assumed to affect only one pixel
+\item this is not always the case: the camera at Uni. Trieste frequently produces wider spikes.
+  (Possibly due to orientation in space?) 
+\end{itemize}
+
+<<load>>=
+library (hyperSpec)
+load ("cartilage-raw.RData")
+@
+
+
+\begin{figure}[t]
+  \centering
+<<spike, fig = TRUE, width = 8, height = 3, echo = FALSE, results = hide>>=
+layout (matrix (1:2, nrow = 1))
+#close.screen(all = TRUE) 
+#split.screen (figs = c(1, 2))
+#screen (1)
+plot (cartilage [3520:3525], col = matlab.dark.palette (6))
+#screen (2)
+plot (cartilage [3520:3525,,1200 ~ 1275], col = matlab.dark.palette (6))
+@
+  \caption{Spike in Raman spectrum: the green spectrum is affected by a spike. right: detail}
+  \label{fig:spike}
+\end{figure}
+
+\section{Typical strategy for semi-automatic spike correction}
+\label{sec:strategy}
+
+spikefilter.R defines a semi-automatic spike finder:
+<<source>>=
+source ("spikefilter.R")
+@
+
+Function \Rfun{spikefilter} filters each spectrum with c(-1, 2, -1), spikefilter2d applies the same
+filter also among spectra. This is useful if the spectra are rather similar: in that case, sharp
+bands are better distinguished from spikes that occur only in one spectrum.
+
+A pre-processing that removes typical spectroscopic information may help. Particularly spikefilter2d
+benefits from making the spectra as similar as possible.
+
+So I normalize the spectra to their median and then subtract the median spectrum:
+<<>>=
+tmp <- sweep (cartilage, 1, median, `/`) # special abbreviation for hyperSpec's sweep: 
+                                        # instead of a vector, we can give a function
+tmp <- sweep (tmp, 2, median , `-`)
+@
+
+Now the SNR with respect to the spikes is already greatly enhanced (~\ref{fig:spike-enh}).
+\begin{figure}[t]
+  \centering
+<<spike-preproc, fig = TRUE, width = 8, height = 3, echo = FALSE, results = hide>>=
+#close.screen(all = TRUE) 
+#split.screen (figs = c(1, 2))
+#screen (1)
+layout (matrix (1:2, nrow = 1))
+plot (tmp [3520:3525], col = matlab.dark.palette (6))
+#screen (2)
+plot (tmp [3520:3525,,1200 ~ 1275], col = matlab.dark.palette (6))
+@
+  \caption{Pre-processing to enhance the spikes}
+  \label{fig:spike-enh}
+\end{figure}
+
+now generate spikiness scores:
+<<>>=
+system.time (
+             scores <- spikefilter2d (spcmatrix= tmp [[]])
+             )
+@
+
+now the interactive filtering, I take just the 1st 100 spectra to see the principle:
+<<eval = FALSE>>=
+spikes <- spikes.interactive (cartilage [1:100], scores [1:100, ]) 
+@
+
+Note that suspicion no. 17 (spectrum 1) is a real sharp signal of an inorganic salt (carbonate), no
+spike.
+
+After about 25 suspicions, the procedure can be ended: no more spikes but only real signals are
+found.
+
+\end{document}

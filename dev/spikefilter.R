@@ -38,6 +38,7 @@ spikefilter <- function (spcmatrix) {
 spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
                                 save.tmp = 20, use.tmp = FALSE, ispikes = NULL, iispikes = NULL) {
 
+  ## TODO: better move the first part to spike suspicio
   wavelength <- spc@wavelength
   spc <- spc@data$spc
   gc ()
@@ -59,8 +60,11 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     start.i <- i
   }
 
-  X11 (width = 7, height = 4); wspc <- dev.cur ()
-  X11 (width = 7, height = 4); wdetail <- dev.cur () 
+##  close.screen(all = TRUE) 
+##  split.screen (figs = c(1, 2))
+  layout (matrix (c (1, 0, 3, 2), nrow = 2))
+ # X11 (width = 7, height = 4); wspc <- dev.cur ()
+ # X11 (width = 7, height = 4); wdetail <- dev.cur () 
 
   save.i <- 1
   if (save.tmp > 0)
@@ -79,8 +83,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     save.i <- save.i + 1
 
     ind <- vec2array (ispikes [i], dim = dim)
-    cat ("   Spectrum: ", ind[1], "\n") 
-    dev.set (wspc)
+    cat ("   Spectrum: ", ind[1], "\n")
+ ##   screen (1)
+##    erase.screen()    
+#    dev.set (wspc)
     k <- ind[1] + (-nspc : nspc) # suspicious spectrum plus the spectra around
     k <- k [k > 0]
     k <- k [k <= nrow (spc)]
@@ -97,15 +103,21 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
       
     points (wavelength[ind[2]], spc[ind[1], ind[2]], col = "red", pch = 20)
    
-    dev.set (wdetail)
+##    dev.set (wdetail)
+##    screen (2)
+##    erase.screen()    
     j <- ind[2] + (-npts : npts) # suspicious data points plus points around
     j <- j[j > 0]
     j <- j[j <= ncol (spc)]
 
     x <- range (wavelength[j], na.rm = TRUE)
     x <- c(x[1], (x[2] - x[1]) * 1.1 + x[1])
-    
-    y <- range (spc[k,j,drop = FALSE], na.rm = TRUE)
+
+    yl <- min (spc[k,j,drop = FALSE], na.rm = TRUE)
+    print (yl)
+    yu <- median (spc[k,j,drop = FALSE], na.rm = TRUE)
+    yu <- (yu - yl) * 3 + yl
+    print (yu)
 
 ##     plot (spc[k, , j, index = TRUE], "spc", 
 ##           col = c("black", "blue", "black"), pch = 20, type = "p",
@@ -115,7 +127,18 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
 ##     plot (spc[ind[1], , j, index = TRUE], "spc", 
 ##           col = "blue", pch = 20, type = "p",
 ##           add = TRUE)
-    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = y, type = "n")
+   plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n")
+    for (l in k)
+      lines (wavelength[j], spc[l,j], pch = 20, type = "p", cex = 0.5,
+          col = if (l == ind[1]) "blue" else "black")
+          
+    points (wavelength[j], spc[ind[1], j], 
+          col = "blue", pch = 20, type = "p"
+          )
+
+   y <- range (spc[k,j,drop = FALSE], na.rm = TRUE)
+  
+   plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = y, type = "n")
 
     for (l in k)
       lines (wavelength[j], spc[l,j], pch = 20, type = "p", cex = 0.5,
@@ -170,8 +193,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     ispikes [iispikes[pts]] <- NA     # do not look at this spike again
 
   }
-  dev.off (wdetail)
-  dev.off (wspc)  
+
+##  close.screen(all = TRUE) 
+  ##  dev.off (wdetail)
+  ##  dev.off (wspc)  
 
 
 #  i <- apply (spc$spc, 1, function (x) all (is.na (x)))
