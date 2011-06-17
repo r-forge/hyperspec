@@ -91,6 +91,8 @@ system.time (
 now the interactive filtering, I take just the 1st 100 spectra to see the principle:
 <<eval = FALSE>>=
 spikes <- spikes.interactive (cartilage [1:100], scores [1:100, ]) 
+
+spikes <- which (is.na (spikes), arr.ind = TRUE) # spike points are set to NA
 @
 
 Note that suspicion no. 17 (spectrum 1) is a real sharp signal of an inorganic salt (carbonate), no
@@ -98,5 +100,33 @@ spike.
 
 After about 25 suspicions, the procedure can be ended: no more spikes but only real signals are
 found.
+
+These are the points I considered spikes:
+<<>>=
+spikes <- structure(c(67L, 67L, 67L, 67L, 67L, 67L, 67L, 67L, 67L, 67L, 
+67L, 36L, 36L, 36L, 13L, 13L, 13L, 13L, 13L, 75L, 62L, 62L, 62L, 
+62L, 12L, 12L, 86L, 86L, 86L, 86L, 86L, 86L, 43L, 43L, 43L, 43L, 
+7L, 8L, 9L, 10L, 11L, 12L, 13L, 14L, 22L, 23L, 24L, 99L, 100L, 
+101L, 281L, 282L, 283L, 284L, 285L, 350L, 421L, 422L, 423L, 424L, 
+482L, 483L, 532L, 533L, 534L, 535L, 536L, 537L, 692L, 693L, 694L, 
+695L), .Dim = c(36L, 2L), .Dimnames = list(NULL, c("row", "col"
+)))
+@
+
+The results can be transferred to \emph{cartilage} by 
+<<>>=
+tmp <- cartilage
+cartilage [[spikes, wl.index = TRUE]] <- NA
+@ 
+(the spikes matrix handed back by spikes.interactive could be assigned directly: cartilage [[1 :
+100]] <- spikes, but that would produce an extremely large dput chunk here.)
+
+<<result, fig = TRUE, width = 8, height = 8, echo = FALSE, results = hide>>=
+layout (1)
+plot (tmp [10:15], yoffset = (0:5) * 4000, col = "red")
+cartilage [[spikes, wl.index = TRUE]] <- NA
+plot (cartilage [10:15], yoffset = (0:5) * 4000, add = TRUE)
+@
+
 
 \end{document}
