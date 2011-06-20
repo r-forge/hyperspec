@@ -116,7 +116,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     yl <- min (spc[k,j,drop = FALSE], na.rm = TRUE)
     print (yl)
     yu <- median (spc[k,j,drop = FALSE], na.rm = TRUE)
-    yu <- (yu - yl) * 3 + yl
+    yu <- (yu - yl) * 4 + yl
     print (yu)
 
 ##     plot (spc[k, , j, index = TRUE], "spc", 
@@ -129,9 +129,11 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
 ##           add = TRUE)
    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n")
     for (l in k)
-      lines (wavelength[j], spc[l,j], pch = 20, type = "p", cex = 0.5,
-          col = if (l == ind[1]) "blue" else "black")
-          
+      lines (wavelength[j], spc[l,j], pch = 20,
+             type = "p",
+             cex = 0.5,
+             col = if (l == ind[1]) "blue" else "black")
+    lines (wavelength[j], spc[ind [1],j], col = "blue")        
     points (wavelength[j], spc[ind[1], j], 
           col = "blue", pch = 20, type = "p"
           )
