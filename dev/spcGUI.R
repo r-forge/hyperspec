@@ -1,6 +1,9 @@
 library(gWidgets)
 library(hyperSpec)
 options("guiToolkit"="RGtk2")
+
+### Notes
+###  * plot.new() fails for new gui after axis cut in previous and not cleared
  
 plotspc.gui <- function(data) {
  
@@ -53,8 +56,13 @@ plotspc.gui <- function(data) {
         ##   }
         ##   offset <- c(offset,clips[2*i]-clips[2*i-1]+5)
         ## }
+        
+        if(offset != 0){
+          #cutRedraw <<- T
+          enabled(cutPlotBtn1) <- F
+        }
 
-        plotspc(tmpdata, wl.range = range, xoffset = offset, wl.index = TRUE)
+        plotspc(tmpdata, wl.reverse=svalue(reverseWL), wl.range = range, xoffset = offset, wl.index = TRUE)
         ### If I have ", ...)" above then 'bandwidthAdjust' fails
     }
  
@@ -65,6 +73,12 @@ plotspc.gui <- function(data) {
     }
  
     updateCutPlot <- function(h, ...) {
+
+      #if(cutRedraw){
+      #  cat("Notice: Cannot cut after redraw, select clear and try again.\n")
+      #  return (F)
+      #}
+      
         pos <- locator(1)
         clips <- pos$x
         abline(v=pos$x,col=2)
@@ -80,9 +94,13 @@ plotspc.gui <- function(data) {
         ## has also the advantage that the global variables then correspond better to plotspc's
         ## arguments (which I take to be a sign of good programming)
         
-        updatePlot()
+        #updatePlot()
     }
     updateCutPlotClear <- function(h, ...) {
+      
+      #cutRedraw <<- F
+          enabled(cutPlotBtn1) <- T
+      
       starts <<- 1
       ends <<- nwl (data)
                                         # clips <<- array()
@@ -90,10 +108,13 @@ plotspc.gui <- function(data) {
     }
  
     ## gWidgets for Data
-    sampleSize <- gradio(c(10,20,30,50), handler = updateData)
+    sampleSize <- gradio(c(1,5,10,20,50), handler = updateData)
+    reSample <- gbutton("Resample", handler = updateData)
     cutPlotBtn1 <- gbutton("Cut Axis", handler = updateCutPlot)
-    cutPlotBtn2 <- gbutton("Clear", handler = updateCutPlotClear)
+    cutPlotBtn2 <- gbutton("Redraw", handler = updatePlot)
+    cutPlotBtn3 <- gbutton("Clear", handler = updateCutPlotClear)
     ## gWidgets for Plot
+    reverseWL <- gcheckbox("Reverse Wavelength", handler = updatePlot)
     bandwidthAdjust <- gslider(from=0,to=2,by=.01,
                                value=1,handler=updatePlot)
  
@@ -109,12 +130,19 @@ plotspc.gui <- function(data) {
     window <- gwindow("plotspc - hyperSpec GUI")
     BigGroup <- ggroup(cont=window)
     group <- ggroup(horizontal=FALSE, container=BigGroup)
-    add(gframe("Sample size", container=group),sampleSize)
-    add(gframe("Bandwidth adjust", container=group),bandwidthAdjust,
+                               
+    tmp <- gframe("Sample size", container=group)
+    add(tmp,sampleSize)
+    add(tmp,reSample)
+                               
+    add(gframe("Some slider", container=group),bandwidthAdjust,
         expand=T)
+
+    add(gframe("Plotting options", container=group),reverseWL)
     tmp <- gframe("Plotting", container=group)
     add(tmp, cutPlotBtn1)
     add(tmp, cutPlotBtn2)
+    add(tmp, cutPlotBtn3)
     add(BigGroup, ggraphics(), handler=updateZoom)
  
  
@@ -122,6 +150,7 @@ plotspc.gui <- function(data) {
     tmpdata <- data; #initialize to data, so everything works from the beginning
     starts <- 1
     ends <- nwl (data)
+    #cutRedraw <- F
     updateData(0); ### what is h here?
     updatePlot(0);
 }
