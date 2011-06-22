@@ -83,8 +83,8 @@ plotspc.gui <- function(data) {
         updatePlot()
     }
     updateCutPlotClear <- function(h, ...) {
-      starts <- 1
-      ends <- nwl (data)
+      starts <<- 1
+      ends <<- nwl (data)
                                         # clips <<- array()
       updatePlot()
     }
