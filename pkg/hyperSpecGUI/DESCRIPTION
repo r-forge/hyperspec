@@ -1,0 +1,11 @@
+Package: hyperSpecGUI
+Type: Package
+Title: hyperSpec GUI
+Version: 0.0.1
+Date: 2011-06-28
+Author: Claudia Beleites, Sebastian Mellor
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: A Graphical Interface for the hyperSpec package.
+License: What license is it under?
+LazyLoad: yes
+Depends: hyperSpec, cranvas
