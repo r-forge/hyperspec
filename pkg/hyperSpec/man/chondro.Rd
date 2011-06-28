@@ -1,22 +1,16 @@
 \name{chondro}
 \alias{chondro}
+\alias{chondro}
+\title{Raman spectra of 2 Chondrocytes in Cartilage...}
+\description{Raman spectra of 2 Chondrocytes in Cartilage
+A Raman-map (laterally resolved Raman spectra) of chondrocytes in
+cartilage.}
+\details{See the vignette.}
 \docType{data}
-\title{Raman spectra of 2 Chondrocytes in Cartilage}
-\description{
-A Raman-map (laterally resolved Raman spectra) of chondrocytes in cartilage. 
-}
-\usage{chondro}
-\format{
-The data set has 796 Raman spectra measured on a 23 \eqn{\times}{x} 35 grid with 1
-micron step size. Spatial information is in \code{chondro$x} and \code{chondro$y}.
-Each spectrum has 300 data points in the range of ca. 600 - 1800 cm\eqn{^{-1}}{^-1}. 
-}
-\details{
-See the vignette.
-}
 \author{A. Bonifacio and C. Beleites}
+\keyword{datasets}
+\references{The raw data is available at \url{http://hyperspec.r-forge.r-project.org/chondro.zip}}
 \examples{
-
 chondro
 
 ## do baseline correction
@@ -53,8 +47,8 @@ plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", col = cols)
 
 ## plot nucleic acids
 plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)],
-       col.regions = colorRampPalette (c("white", "gold", "dark green"), space = "Lab") (20))
+col.regions = colorRampPalette (c("white", "gold", "dark green"), space = "Lab") (20))
 
 \dontrun{vignette ("chondro", package = "hyperSpec")}
 }
-\keyword{datasets}
+

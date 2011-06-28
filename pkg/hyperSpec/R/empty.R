@@ -6,12 +6,10 @@
 ##' 
 ##' @aliases empty
 ##' @author C. Beleites
-##' @export 
-##' @callGraph
 ##' @keywords manip
+##' @export
 ##' @examples 
 ##' empty (chondro, nrow = 2, spc = 0)
-##' @log C. Beleites 2010-07-03: 
 ##' @param x hyperSpec object
 ##' @param nrow number of rows the new object should have
 ##' @param spc value to initialize the new spectra matrix with

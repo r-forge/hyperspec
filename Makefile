@@ -2,12 +2,12 @@ VIGNETTES := baseline chondro fileio flu introduction laser plotting
 
 ZIPS := Vignettes/*.zip
 
-SRC := pkg/hyperSpec/R/*.R pkg/hyperSpec/NAMESPACE 
-MAN := pkg/hyperSpec/man/*.Rd
-RNW := pkg/hyperSpec/inst/doc/*.Rnw
+SRC := src/hyperSpec/R/*.R #src/hyperSpec/NAMESPACE 
+MAN := src/hyperSpec/man/*.Rd
+RNW := src/hyperSpec/inst/doc/*.Rnw
 
 
-all: vignettes doc data www DESCRIPTION build check
+all: vignettes doc data www DESCRIPTION roxy build check
 		@echo all vignettes: $(VIGNETTES)
 
 zip: $(ZIPS)
@@ -19,7 +19,7 @@ zip: $(ZIPS)
 #.SECONDARY: Vignettes/*.zip
 
 # VIGNETTES in subdirs ##############################################################################
-vignettes: $(VIGNETTES) $(ZIPS) pkg/hyperSpec/inst/doc/vignettes.defs pkg/hyperSpec/inst/doc/* pkg/hyperSpec/inst/doc/*.pdf
+vignettes: $(VIGNETTES) $(ZIPS) src/hyperSpec/inst/doc/vignettes.defs src/hyperSpec/inst/doc/* src/hyperSpec/inst/doc/*.pdf
 
 Vignettes/%/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
@@ -165,105 +165,105 @@ Vignettes/%.zip: .FORCE
 %.dvi: # should not happen!
 	rm $@
 # data ##############################################################################################
-data: pkg/hyperSpec/data/*.rda pkg/hyperSpec/R/sysdata.rda
+data: src/hyperSpec/data/*.rda src/hyperSpec/R/sysdata.rda
 
-pkg/hyperSpec/data/barbiturates.rda: Vignettes/fileio/barbiturates.rda 
+src/hyperSpec/data/barbiturates.rda: Vignettes/fileio/barbiturates.rda 
 	@cp -av $< $@
-pkg/hyperSpec/data/flu.rda:         Vignettes/flu/flu.rda 
+src/hyperSpec/data/flu.rda:         Vignettes/flu/flu.rda 
 	@cp -av $< $@
-pkg/hyperSpec/data/paracetamol.rda: Vignettes/fileio/paracetamol.rda 
+src/hyperSpec/data/paracetamol.rda: Vignettes/fileio/paracetamol.rda 
 	@cp -av $< $@
-pkg/hyperSpec/data/laser.rda:       Vignettes/laser/laser.rda
+src/hyperSpec/data/laser.rda:       Vignettes/laser/laser.rda
 	@cp -av $< $@
 
-pkg/hyperSpec/R/sysdata.rda:	Vignettes/chondro/chondro-internal.rda	
+src/hyperSpec/R/sysdata.rda:	Vignettes/chondro/chondro-internal.rda	
 	@cp -av $< $@
 
 # instdoc ###########################################################################################
-doc: $(foreach V,$(VIGNETTES), pkg/hyperSpec/inst/doc/$(V).Rnw)
+doc: $(foreach V,$(VIGNETTES), src/hyperSpec/inst/doc/$(V).Rnw)
 
-pkg/hyperSpec/inst/doc/vignettes.defs: Vignettes/vignettes.defs
+src/hyperSpec/inst/doc/vignettes.defs: Vignettes/vignettes.defs
 	@cp -av $< $@ 
-	@touch pkg/hyperSpec/inst/doc/*.Rnw
+	@touch src/hyperSpec/inst/doc/*.Rnw
 
-pkg/hyperSpec/inst/doc/baseline.Rnw: Vignettes/baseline/baseline.Rnw 
+src/hyperSpec/inst/doc/baseline.Rnw: Vignettes/baseline/baseline.Rnw 
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/flu.Rnw: Vignettes/flu/flu.Rnw \
-                      pkg/hyperSpec/inst/doc/rawdata/flu1.txt \
-                      pkg/hyperSpec/inst/doc/rawdata/flu2.txt \
-                      pkg/hyperSpec/inst/doc/rawdata/flu3.txt \
-                      pkg/hyperSpec/inst/doc/rawdata/flu4.txt \
-                      pkg/hyperSpec/inst/doc/rawdata/flu5.txt \
-                      pkg/hyperSpec/inst/doc/rawdata/flu6.txt \
-                      pkg/hyperSpec/inst/doc/scan.txt.PerkinElmer.R 
+src/hyperSpec/inst/doc/flu.Rnw: Vignettes/flu/flu.Rnw \
+                      src/hyperSpec/inst/doc/rawdata/flu1.txt \
+                      src/hyperSpec/inst/doc/rawdata/flu2.txt \
+                      src/hyperSpec/inst/doc/rawdata/flu3.txt \
+                      src/hyperSpec/inst/doc/rawdata/flu4.txt \
+                      src/hyperSpec/inst/doc/rawdata/flu5.txt \
+                      src/hyperSpec/inst/doc/rawdata/flu6.txt \
+                      src/hyperSpec/inst/doc/scan.txt.PerkinElmer.R 
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/rawdata/flu%.txt: Vignettes/flu/rawdata/flu%.txt
+src/hyperSpec/inst/doc/rawdata/flu%.txt: Vignettes/flu/rawdata/flu%.txt
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/scan.txt.PerkinElmer.R: Vignettes/flu/scan.txt.PerkinElmer.R 
+src/hyperSpec/inst/doc/scan.txt.PerkinElmer.R: Vignettes/flu/scan.txt.PerkinElmer.R 
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
-                               pkg/hyperSpec/inst/doc/functions.RData \
-                               pkg/hyperSpec/inst/doc/introduction.bib \
-                               pkg/hyperSpec/inst/doc/strukturhyperspec.pdf
+src/hyperSpec/inst/doc/introduction.Rnw: Vignettes/introduction/introduction.Rnw \
+                               src/hyperSpec/inst/doc/functions.RData \
+                               src/hyperSpec/inst/doc/introduction.bib \
+                               src/hyperSpec/inst/doc/strukturhyperspec.pdf
 	@cp -av $< $@
 
-#pkg/hyperSpec/inst/doc/rawdata/paracetamol.txt.gz: Vignettes/introduction/rawdata/paracetamol.txt.gz
+#src/hyperSpec/inst/doc/rawdata/paracetamol.txt.gz: Vignettes/introduction/rawdata/paracetamol.txt.gz
 #	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/functions.RData: Vignettes/introduction/functions.RData
+src/hyperSpec/inst/doc/functions.RData: Vignettes/introduction/functions.RData
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/introduction.bib: Vignettes/introduction/introduction.bib 
+src/hyperSpec/inst/doc/introduction.bib: Vignettes/introduction/introduction.bib 
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
+src/hyperSpec/inst/doc/strukturhyperspec.pdf: Vignettes/introduction/strukturhyperspec.pdf
 	@cp -av $< $@
 
 
-pkg/hyperSpec/inst/doc/laser.Rnw: Vignettes/laser/laser.Rnw \
-                        pkg/hyperSpec/inst/doc/rawdata/laser.txt.gz \
-								pkg/hyperSpec/inst/doc/fig-3D.png
+src/hyperSpec/inst/doc/laser.Rnw: Vignettes/laser/laser.Rnw \
+                        src/hyperSpec/inst/doc/rawdata/laser.txt.gz \
+								src/hyperSpec/inst/doc/fig-3D.png
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
+src/hyperSpec/inst/doc/rawdata/laser.txt.gz: Vignettes/laser/rawdata/laser.txt.gz
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/fig-3D.png: Vignettes/laser/fig-3D.png
+src/hyperSpec/inst/doc/fig-3D.png: Vignettes/laser/fig-3D.png
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/chondro.Rnw: pkg/hyperSpec/inst/doc/chondro.pdf # no mistake: this is a dummy .Rnw
+src/hyperSpec/inst/doc/chondro.Rnw: src/hyperSpec/inst/doc/chondro.pdf # no mistake: this is a dummy .Rnw
 	touch $@
 
-pkg/hyperSpec/inst/doc/chondro.pdf: Vignettes/chondro/chondro.pdf
+src/hyperSpec/inst/doc/chondro.pdf: Vignettes/chondro/chondro.pdf
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/fileio.Rnw: pkg/hyperSpec/inst/doc/fileio.pdf # no mistake: this is a dummy .Rnw
+src/hyperSpec/inst/doc/fileio.Rnw: src/hyperSpec/inst/doc/fileio.pdf # no mistake: this is a dummy .Rnw
 	touch $@
 
-pkg/hyperSpec/inst/doc/fileio.pdf: Vignettes/fileio/fileio.pdf     
+src/hyperSpec/inst/doc/fileio.pdf: Vignettes/fileio/fileio.pdf     
 	@cp -av $< $@
 
-pkg/hyperSpec/inst/doc/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
-									pkg/hyperSpec/inst/doc/fig-3D.png 
+src/hyperSpec/inst/doc/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
+									src/hyperSpec/inst/doc/fig-3D.png 
 	@cp -av $< $@
 
-#pkg/hyperSpec/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
+#src/hyperSpec/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
 #	@cp -av $< $@
 
-#pkg/hyperSpec/inst/doc/flu.pdf: Vignettes/flu/flu.pdf     
+#src/hyperSpec/inst/doc/flu.pdf: Vignettes/flu/flu.pdf     
 #	@cp -av $< $@
 
-#pkg/hyperSpec/inst/doc/introduction.pdf: Vignettes/introduction/introduction.pdf     
+#src/hyperSpec/inst/doc/introduction.pdf: Vignettes/introduction/introduction.pdf     
 #	@cp -av $< $@
 
-#pkg/hyperSpec/inst/doc/laser.pdf: Vignettes/laser/laser.pdf     
+#src/hyperSpec/inst/doc/laser.pdf: Vignettes/laser/laser.pdf     
 #	@cp -av $< $@
 
-#pkg/hyperSpec/inst/doc/plotting.pdf: Vignettes/plotting/plotting.pdf     
+#src/hyperSpec/inst/doc/plotting.pdf: Vignettes/plotting/plotting.pdf     
 #	@cp -av $< $@
 
 # www ###############################################################################################
@@ -299,17 +299,21 @@ www/fileio.zip: Vignettes/fileio.zip
 
 
 
-DESCRIPTION: $(shell find pkg/hyperSpec -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIPTION") #only if not modified today
+DESCRIPTION: $(shell find src/hyperSpec -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIPTION") #only if not modified today
 	@echo update DESCRIPTION
-	sed "s/\(^Version: .*-\)20[0-9][0-9][0-1][0-9][0-3][0-9]\(.*\)$$/\1`date +%Y%m%d`\2/" pkg/hyperSpec/DESCRIPTION > .DESCRIPTION
-	sed "s/\(^Date: .*\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$$/\1`date +%F`\2/" .DESCRIPTION > pkg/hyperSpec/DESCRIPTION 
+	sed "s/\(^Version: .*-\)20[0-9][0-9][0-1][0-9][0-3][0-9]\(.*\)$$/\1`date +%Y%m%d`\2/" src/hyperSpec/DESCRIPTION > .DESCRIPTION
+	sed "s/\(^Date: .*\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$$/\1`date +%F`\2/" .DESCRIPTION > src/hyperSpec/DESCRIPTION 
 	rm .DESCRIPTION
 
-build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data
+roxy: clean DESCRIPTION src/hyperSpec/R/*.R 
+	rsync -av --delete src/hyperSpec/ pkg/hyperSpec/
+	Rscript --vanilla -e "library (roxygen); roxygenize (\"src/hyperSpec\", \"pkg/hyperSpec\", use.Rd2 = TRUE)" 
+
+build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy
 	rm -f hyperSpec_*.tar.gz
 	R CMD build pkg/hyperSpec  && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
 
-devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data
+devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy
 	rm -f hyperSpec_*.tar.gz
 	~/r-devel/bin/R CMD build pkg/hyperSpec && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
 
@@ -355,35 +359,35 @@ clean: .FORCE
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.ind) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.fdb_latexmk) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/Rplots.pdf) 
-	@rm -f pkg/hyperSpec/inst/doc/*.aux
-	@rm -f pkg/hyperSpec/inst/doc/*.dvi
-	@rm -f pkg/hyperSpec/inst/doc/*.log
-	@rm -f pkg/hyperSpec/inst/doc/*.toc
-	@rm -f pkg/hyperSpec/inst/doc/*.out
-	@rm -f pkg/hyperSpec/inst/doc/*.bbl
-	@rm -f pkg/hyperSpec/inst/doc/*.blg
-	@rm -f pkg/hyperSpec/inst/doc/*.idx 
-	@rm -f pkg/hyperSpec/inst/doc/*.ilg 
-	@rm -f pkg/hyperSpec/inst/doc/*.ind
-	@rm -f pkg/hyperSpec/inst/doc/Rplots.pdf
-	@rm -f pkg/hyperSpec/inst/doc/*.fdb_latexmk
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.aux
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.dvi
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.log
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.toc
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.out
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.bbl
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.blg
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.idx 
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.ilg 
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.ind
-	@rm -f pkg/hyperSpec/inst/doc/*.bak
-	@rm -f pkg/hyperSpec/inst/doc/*~
-	@rm -f pkg/hyperSpec/inst/doc/fig/*	
-	@rm -f pkg/hyperSpec/inst/doc/*/Rplots.pdf
-#	@rm -f pkg/hyperSpec/inst/doc/*/*.fdb_latexmk#	
-	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard pkg/hyperSpec/inst/doc/*/*.Rnw)) #should not be necessary
-	@rm -rf pkg/hyperSpec/inst/doc/auto
-	@rm -rf pkg/hyperSpec/inst/doc/*/auto
+	@rm -f src/hyperSpec/inst/doc/*.aux
+	@rm -f src/hyperSpec/inst/doc/*.dvi
+	@rm -f src/hyperSpec/inst/doc/*.log
+	@rm -f src/hyperSpec/inst/doc/*.toc
+	@rm -f src/hyperSpec/inst/doc/*.out
+	@rm -f src/hyperSpec/inst/doc/*.bbl
+	@rm -f src/hyperSpec/inst/doc/*.blg
+	@rm -f src/hyperSpec/inst/doc/*.idx 
+	@rm -f src/hyperSpec/inst/doc/*.ilg 
+	@rm -f src/hyperSpec/inst/doc/*.ind
+	@rm -f src/hyperSpec/inst/doc/Rplots.pdf
+	@rm -f src/hyperSpec/inst/doc/*.fdb_latexmk
+#	@rm -f src/hyperSpec/inst/doc/*/*.aux
+#	@rm -f src/hyperSpec/inst/doc/*/*.dvi
+#	@rm -f src/hyperSpec/inst/doc/*/*.log
+#	@rm -f src/hyperSpec/inst/doc/*/*.toc
+#	@rm -f src/hyperSpec/inst/doc/*/*.out
+#	@rm -f src/hyperSpec/inst/doc/*/*.bbl
+#	@rm -f src/hyperSpec/inst/doc/*/*.blg
+#	@rm -f src/hyperSpec/inst/doc/*/*.idx 
+#	@rm -f src/hyperSpec/inst/doc/*/*.ilg 
+#	@rm -f src/hyperSpec/inst/doc/*/*.ind
+	@rm -f src/hyperSpec/inst/doc/*.bak
+	@rm -f src/hyperSpec/inst/doc/*~
+	@rm -f src/hyperSpec/inst/doc/fig/*	
+	@rm -f src/hyperSpec/inst/doc/*/Rplots.pdf
+#	@rm -f src/hyperSpec/inst/doc/*/*.fdb_latexmk#	
+	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard src/hyperSpec/inst/doc/*/*.Rnw)) #should not be necessary
+	@rm -rf src/hyperSpec/inst/doc/auto
+	@rm -rf src/hyperSpec/inst/doc/*/auto
 
 

@@ -4,6 +4,18 @@
 ###
 ###
 
+##' 
+##' \code{read.spc.KaiserMap} imports sets of .spc files of Raman maps written
+##' by Kaiser Optical Systems' Hologram software.  It may also serve as an
+##' example how to write wrapper functions for \code{read.spc} to conveniently
+##' import specialized sets of .spc files.
+##' 
+##' @export
+##' @rdname read-spc
+##' @param glob If \code{TRUE} the filename is interpreted as a wildcard
+##'   containing file name pattern and expanded to all matching file names.
+##' @param \dots All further arguments to \code{read.spc.KaiserMap} are handed
+##'   over directly to \code{read.spc}.
 read.spc.KaiserMap <- function (files, 
 		keys.hdr2data = FALSE, keys.hdr2log = TRUE,
 		keys.log2data = NULL, keys.log2log = TRUE, 

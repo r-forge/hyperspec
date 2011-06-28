@@ -1,9 +1,3 @@
-###-----------------------------------------------------------------------------
-###
-###  labels
-###
-###
-
 .labels <- function (object, which = bquote(), drop = TRUE, ..., use.colnames = TRUE){
   validObject (object)                  
 
@@ -47,15 +41,19 @@ test (.labels) <- function (){
                          .Names = c("c", "file", NA)))
 }
 
-setMethod ("labels", "hyperSpec", .labels)
-
-###-----------------------------------------------------------------------------
-###
-###  labels<-
-###
-###
-
-"labels<-" <- function (object, which = NULL, ...,
+##' @rdname labels
+##' @usage
+##' labels (object, which = NULL, ..., short = "labels<-", user = NULL, date = NULL) <- value
+##' 
+##' @export "labels<-"
+##' @param value the new label(s)
+##' @param short,user,date handed to \code{\link[hyperSpec]{logentry}}
+##' @return  \code{labels<-} returns a \code{hyperSpec} object.
+##' @examples
+##' 
+##' labels (flu, "c") <- expression ("/" ("c", "mg / l"))
+##' 
+`labels<-` <- function (object, which = NULL, ...,
                         short = "labels<-", user = NULL, date = NULL,
                         value){
   chk.hy (object)
@@ -80,4 +78,44 @@ setMethod ("labels", "hyperSpec", .labels)
   .logentry (object, short = short, long = list (which = which, value = value),
              user = user, date = date)
 }
+
+
+##' Get and Set Labels of a hyperSpec Object
+##' \code{value} may be a list or vector of labels giving the new label for
+##' each of the entries specified by \code{which}.
+##' 
+##' The names of the labels are the same as the colnames of the
+##' \code{data.frame}.  The label for the wavelength axis has the name
+##' \code{.wavelength}.
+##' 
+##' The labels should be given in a form ready for the text-drawing functions
+##' (see \code{\link[grDevices]{plotmath}}), e.g. as \code{expression} or a
+##' \code{character}.
+##' 
+##' @usage
+##'
+##' \S4method{labels}{hyperSpec}(object, which = bquote (), drop = TRUE, \dots,
+##'    use.colnames = TRUE)
+##' 
+##' @param object a hyperSpec object
+##' @param which numeric or character to specify the label(s)
+##' @param \dots ignored
+##' @param drop if the result would be a list with only one element, should the
+##'   element be returned instead?
+##' @param use.colnames should missing labels be replaced by column names of
+##'   the extra data?
+##' @return \code{labels} returns a list of labels.  If \code{drop} is
+##'   \code{TRUE} and the list contains only one element, the element is
+##'   returned instead.
+##' @docType methods
+##' @rdname labels
+##' @author C. Beleites
+##' @seealso \code{\link[base]{labels}}
+##' @export
+##' @examples
+##' 
+##' labels (chondro)
+##' 
+setMethod ("labels", signature = signature (object = "hyperSpec"), .labels)
+
 

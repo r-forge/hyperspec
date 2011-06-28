@@ -982,9 +982,9 @@ other.
 \begin{figure}[t]
   \centering
 <<shift-fit, fig = TRUE, echo = FALSE>>=
-df <- array2df (cbind (shifts, shifts + shift1, shifts + shift2), 
-                levels= list (NULL, method = c ("original", "find maximum", "interpolation")),
-                label.x = "shift")
+df <- data.frame (shift = c (shifts, shifts + shift1, shifts + shift2), 
+                method = rep (c ("original", "find maximum", "interpolation"), 
+                  each = nrow (chondro)))
 plot (histogram (~ shift | method, data = df, breaks = do.breaks(range (df$shift), 25),
            layout = c (3,1)))
 @

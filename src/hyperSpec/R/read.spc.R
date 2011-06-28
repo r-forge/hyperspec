@@ -1,5 +1,3 @@
-#####################################################################################################
-###
 ### read.spc - Import Thermo Galactic's .spc file format into an hyperSpec Object
 ###
 ### C. Beleites 2009/11/29
@@ -8,7 +6,7 @@
 
 ## Define constants ---------------------------------------------------------------------------------
 
-.nul = as.raw (0)
+.nul <- as.raw (0)
 
 ## header sizes 
 .spc.size <- c (hdr = 512, subhdr = 32, subfiledir = 12, loghdr = 64)
@@ -104,6 +102,33 @@
 		.spc.FYTYPE [x - 99]
 	else
 		NA
+}
+
+## helper functions ---------------------------------------------------------------------------------
+### raw.split.nul - rawToChar conversion, splitting at \0
+raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
+	# todo make better truncation
+	trunc <- rep (trunc, length.out = 2)
+	
+	if (trunc [1] && raw [1] == .nul)
+		raw <- raw [-1]
+	if (trunc [2]) {
+		tmp <- which (raw > .nul)
+		if (length (tmp) == 0) 
+			return ("")
+		raw <- raw [1 : tail (tmp, 1)]	
+	} 
+	if (raw [length (raw)] != .nul)
+		raw <- c (raw , .nul)
+	
+	tmp <- c (0, which (raw == .nul))
+	
+	out <- character (length (tmp) - 1)
+	for (i in 1 : (length (tmp) - 1))
+		if (tmp [i] + 1 < tmp [i + 1] - 1)
+			out [i] <- rawToChar (raw [(tmp [i] + 1)  : (tmp [i + 1] - 1)])
+	
+	out
 }
 
 ## file part reading functions ----------------------------------------------------------------------
@@ -464,83 +489,74 @@
 #####################################################################################################
 
 
-##’ Import for Thermo Galactic's spc file format
-##’ These functions allow to import .spc files.
-##’ 
-##’ \code{read.spc.KaiserMap} imports sets of .spc files of Raman maps written
-##’ by Kaiser Optical Systems' Hologram software.  It may also serve as an
-##’ example how to write wrapper functions for \code{read.spc} to conveniently
-##’ import specialized sets of .spc files.
-##’ 
-##’ A detailed description of the .spc file format is available at
-##’ \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
-##’ 
-##’ @aliases read.spc read.spc.KaiserMap
-##’ @param filename The complete file name of the .spc file.
-##’ @param files If \code{glob = TRUE}, \code{filename} can contain wildcards.
-##’   Thus all files matching the name pattern in \code{filename} can be
-##’   specified.
-##’ @param keys.hdr2data,keys.hdr2log,keys.log2data,keys.log2log character
-##’   vectors with the names of parameters in the .spc file's log block
-##’   (log2xxx) or header (hdr2xxx) that should go into the extra data
-##’   (yyy2data) or into the \code{long.description} field of the returned
-##’   hyperSpec object's log (yyy2log).
-##’ 
-##’ All header fields specified in the .spc file format specification (see
-##’   below) are imported and can be referred to by their de-capitalized names.
-##’ @param log.txt Should the text part of the .spc file's log block be read?
-##’ @param log.bin,log.disk Should the normal and on-disk binary parts of the
-##’   .spc file's log block be read?  If so, they will be put as raw vectors
-##’   into the hyperSpec object's log.
-##’ @param hdr A list with fileheader fields that overwrite the settings of
-##’   actual file's header.
-##’ 
-##’ Use with care, and look into the source code for detailed insight on the
-##’   elements of this list.
-##’ @param no.object If \code{TRUE}, a list with wavelengths, spectra, labels,
-##’   log and data are returned instead of a hyperSpec object.
-##’ 
-##’ This parameter will likely be subject to change in future - use with care.
-##’ @param glob If \code{TRUE} the filename is interpreted as a wildcard
-##’   containing file name pattern and expanded to all matching file names.
-##’ @param \dots All further arguments to \code{read.spc.KaiserMap} are handed
-##’   over directly to \code{read.spc}.
-##’ @return If the file contains multiple spectra with individual wavelength
-##’   axes, \code{read.spc} returns a list of hyperSpec objects.  Otherwise the
-##’   result is a hyperSpec object.
-##’ 
-##’ \code{read.spc.KaiserMap} returns a hyperSpec object with data columns x,
-##’   y, and z containing the stage position as recorded in the .spc files'
-##’   log.
-##’ @note Only a restricted set of test files was available for development.
-##’   Particularly, the w-planes feature could not be tested.
-##’ 
-##’ If you have .spc files that cannot be read with these function, don't
-##’   hesitate to contact the package maintainer with your code patch or asking
-##’   advice.
-##’ @author C. Beleites
-##’ @seealso \code{\link[hyperSpec]{io-functions}}
-##’ @references Source development kit and file format specification of .spc
-##’   files:
-##’   \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
-##’ @keywords IO file
-##’ @examples
-##’ 
-##’ ## get the sample .spc files from ftirsearch.com (see above)
-##’ \dontrun{
-##’ # single spectrum
-##’ spc <- read.spc ("BENZENE.SPC")
-##’ plot (spc)
-##’ 
-##’ # multi-spectra .spc file with common wavelength axis
-##’ spc <- read.spc ('IG_MULTI.SPC')
-##’ spc
-##’ 
-##’ # multi-spectra .spc file with individual wavelength axes
-##’ spc <- read.spc ("BARBITUATES.SPC")
-##’ plot (spc [[1]], lines.args = list (type = "h"))
-##’ }
-##’ 
+##' Import for Thermo Galactic's spc file format
+##' These functions allow to import .spc files.
+##' A detailed description of the .spc file format is available at
+##' \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+##' 
+##' @param filename The complete file name of the .spc file.
+##' @param files If \code{glob = TRUE}, \code{filename} can contain wildcards.
+##'   Thus all files matching the name pattern in \code{filename} can be
+##'   specified.
+##' @param keys.hdr2data,keys.hdr2log,keys.log2data,keys.log2log character
+##'   vectors with the names of parameters in the .spc file's log block
+##'   (log2xxx) or header (hdr2xxx) that should go into the extra data
+##'   (yyy2data) or into the \code{long.description} field of the returned
+##'   hyperSpec object's log (yyy2log).
+##' 
+##' All header fields specified in the .spc file format specification (see
+##'   below) are imported and can be referred to by their de-capitalized names.
+##' @param log.txt Should the text part of the .spc file's log block be read?
+##' @param log.bin,log.disk Should the normal and on-disk binary parts of the
+##'   .spc file's log block be read?  If so, they will be put as raw vectors
+##'   into the hyperSpec object's log.
+##' @param hdr A list with fileheader fields that overwrite the settings of
+##'   actual file's header.
+##' 
+##' Use with care, and look into the source code for detailed insight on the
+##'   elements of this list.
+##' @param no.object If \code{TRUE}, a list with wavelengths, spectra, labels,
+##'   log and data are returned instead of a hyperSpec object.
+##' 
+##' This parameter will likely be subject to change in future - use with care.
+##' @return If the file contains multiple spectra with individual wavelength
+##'   axes, \code{read.spc} returns a list of hyperSpec objects.  Otherwise the
+##'   result is a hyperSpec object.
+##' 
+##' \code{read.spc.KaiserMap} returns a hyperSpec object with data columns x,
+##'   y, and z containing the stage position as recorded in the .spc files'
+##'   log.
+##' @note Only a restricted set of test files was available for development.
+##'   Particularly, the w-planes feature could not be tested.
+##' 
+##' If you have .spc files that cannot be read with these function, don't
+##'   hesitate to contact the package maintainer with your code patch or asking
+##'   advice.
+##' @author C. Beleites
+##' @rdname read-spc
+##' @seealso \code{\link[hyperSpec]{textio}}
+##' @references Source development kit and file format specification of .spc
+##'   files:
+##'   \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+##' @export
+##' @keywords IO file
+##' @examples
+##' 
+##' ## get the sample .spc files from ftirsearch.com (see above)
+##' \dontrun{
+##' # single spectrum
+##' spc <- read.spc ("BENZENE.SPC")
+##' plot (spc)
+##' 
+##' # multi-spectra .spc file with common wavelength axis
+##' spc <- read.spc ('IG_MULTI.SPC')
+##' spc
+##' 
+##' # multi-spectra .spc file with individual wavelength axes
+##' spc <- read.spc ("BARBITUATES.SPC")
+##' plot (spc [[1]], lines.args = list (type = "h"))
+##' }
+##' 
 read.spc <- function (filename,
 		keys.hdr2data = c('fexper', 'fres', 'fsource'), keys.hdr2log = c('fdate', 'fpeakpt'),
 		keys.log2data = FALSE, keys.log2log = TRUE,

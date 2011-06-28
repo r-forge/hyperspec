@@ -1,9 +1,6 @@
-###-----------------------------------------------------------------------------
-###
-###  log
-###
-###
-
+##' @rdname math
+##' @aliases log log,hyperSpec-method
+##' @export
 setMethod ("log", signature (x = "hyperSpec"),
            function (x, base = exp (1), ...,
                      short = "log", user = NULL, date = NULL){

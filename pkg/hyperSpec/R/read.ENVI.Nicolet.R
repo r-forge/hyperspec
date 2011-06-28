@@ -1,3 +1,23 @@
+##' 
+##' Nicolet uses some more keywords in their header file.
+##' \code{read.ENVI.Nicolet} therefore appends "description", "z plot titles",
+##' and "pixel size" to \code{keys.hdr2log} before calling \code{read.ENVI}.
+##' They are then interpreted as follows:
+##' \tabular{ll}{
+##' description   \tab giving the position of the first spectrum \cr
+##' z plot titles \tab wavelength and intensity axis units, comma separated \cr
+##' pixel size    \tab interpreted as x and y step size
+##' }
+##' 
+##' The values in header line description seem to be microns while the pixel
+##' size seems to be in microns. If \code{nicolet.correction} is true, the
+##' pixel size values (i.e. the step sizes) are multiplied by 1000.
+##' 
+##' @param nicolet.correction see details
+##' @param \dots handed to \code{read.ENVI}
+##' @rdname readENVI
+##' @export
+
 read.ENVI.Nicolet <- function (..., # goes to read.ENVI: file headerfile, header
 		x = NA, y = NA, # NA means: use the specifications from the header file if possible
 		log = list (),

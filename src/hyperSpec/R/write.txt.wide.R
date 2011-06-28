@@ -3,6 +3,11 @@
 ### write.txt.wide
 ###
 ###
+##' @param header.lines Toggle one or two line header (wavelengths in the
+##'   second header line) for \code{write.txt.wide}
+##' @aliases write.txt.wide
+##' @rdname textio
+##' @export
 
 write.txt.wide <- function (object,
                             file = stop ("file is required"),

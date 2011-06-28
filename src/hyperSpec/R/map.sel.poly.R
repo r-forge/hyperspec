@@ -12,41 +12,12 @@
 ##' @author Claudia Beleites, Sebastian Mellor
 ##' @seealso \code{\link[grid]{grid.locator}},  \code{\link{sel.poly}}, \code{\link{map.identify}}
 ##' @export
+##' @rdname map-sel-poly
 ##' @keywords iplot
-##' @import sp::point.in.polygon
 ##' @examples
 ##' \donttest{
 ##' map.sel.poly (chondro)
 ##' }
-
-
-##’ Interactively select a polygon (grid graphics) and highlight points...
-##’ Interactively select a polygon (grid graphics) and highlight points
-##’ 
-##’ Click the points that should be connected as polygon. Input ends with right
-##’ click (see \code{\link[grid]{grid.locator}}). Polygon will be drawn closed.
-##’ Wrapper for \code{\link{plotmap}}, \code{\link{sel.poly}}, and
-##’ \code{\link[sp]{point.in.polygon}}.\code{sel.poly}: Click the points that
-##’ should be connected as polygon. Input ends with right click (see
-##’ \code{\link[grid]{grid.locator}}).
-##’ 
-##’ @aliases map.sel.poly sel.poly
-##’ @param data hyperSpec object for plotting map
-##’ @param pch symbol to display the points of the polygon for
-##’   \code{\link{sel.poly}}
-##’ @param size size for polygon point symbol for \code{\link{sel.poly}}
-##’ @param ... further arguments for \code{\link[grid]{grid.points}} and
-##’   \code{\link[grid]{grid.lines}}
-##’ @return array of indices for points within selected polygon\code{sel.poly}:
-##’   n x 2 matrix with the points of the open polygon
-##’ @author Claudia Beleites, Sebastian Mellor
-##’ @seealso \code{\link[grid]{grid.locator}}, \code{\link{sel.poly}},
-##’   \code{\link{map.identify}}\code{\link[grid]{grid.locator}}
-##’ @keywords iplot iplot
-##’ @examples
-##’ \donttest{
-##’ map.sel.poly (chondro)
-##’ }
 map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
   print (plotmap (data))
   

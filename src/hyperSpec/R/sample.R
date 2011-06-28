@@ -3,19 +3,22 @@
 ##' replacement.
 ##' 
 ##' @rdname sample
-##' @aliases sample-methods sample isample sample,hyperSpec-method
+##' @aliases sample,hyperSpec-method sample
 ##' @docType methods
 ##' @param x The hyperSpec object to sample from
 ##' @param size positive integer giving the number of spectra to choose.
 ##' @param replace Should sampling be with replacement?
 ##' @param prob A vector of probability weights for obtaining the elements of
 ##'   the vector being sampled.
-##' @param short,user,date are handed to \code{\link{logentry}}
+##' @param short date are handed to \code{\link{logentry}}
+##' @param user date are handed to \code{\link{logentry}}
+##' @param date are handed to \code{\link{logentry}}
 ##' @return a hyperSpec object for \code{sample}, and an integer vector for
 ##'   \code{isample} that is suitable for indexing (into the spectra) of x.
 ##' @author C. Beleites
 ##' @seealso \code{\link[base]{sample}}
 ##' @keywords methods distribution
+##' @export
 ##' @examples
 ##' 
 ##' sample (flu, 3)
@@ -27,7 +30,7 @@
 ##' plot (sample (flu, 3, replace = TRUE), col = "#0000FF80", add = TRUE,
 ##'       lines.args = list (lwd = 2));
 ##' 
-setMethod ("sample", signature = "hyperSpec",
+setMethod ("sample", signature = signature (x = "hyperSpec"),
            function (x, size = nrow (x), replace = FALSE, prob = NULL,
                      short = "sample", user = NULL, date = NULL
                      ) {
@@ -41,13 +44,12 @@ setMethod ("sample", signature = "hyperSpec",
            }
            )
 
-##' 
 ##' \code{isample} returns an vector of indices, \code{sample} returns the
 ##' corresponding hyperSpec object.
 ##'
 ##' @rdname sample
-##' @export
 ##' @return vector with indices suitable for row-indexing x
+##' @export
 ##' @examples
 ##' isample (flu, 3)
 ##' isample (flu, 3, replace = TRUE)

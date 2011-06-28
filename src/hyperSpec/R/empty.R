@@ -6,9 +6,8 @@
 ##' 
 ##' @aliases empty
 ##' @author C. Beleites
-##' @export 
-##' @callGraph
 ##' @keywords manip
+##' @export
 ##' @examples 
 ##' empty (chondro, nrow = 2, spc = 0)
 ##' @param x hyperSpec object

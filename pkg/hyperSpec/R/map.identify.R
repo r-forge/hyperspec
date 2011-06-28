@@ -1,8 +1,13 @@
-#################################################################################
-###
-###  map.identify - identify spectra in map plot
-###  
-
+##' @aliases levelplot,hyperSpec,missing-method
+##' @include plotmap.R
+##' @rdname levelplot
+##' @export
+##' @seealso  \code{\link[hyperSpec:options]{hyperSpec options}} \code{\link{spc.identify}}
+##' \code{\link{map.sel.poly}}
+##' @param tol tolerance for \code{map.identify} as fraction of the viewport
+##'   (i.e. in "npc" \link[grid]{unit}s)
+##' @param warn should a warning be issued if no point is within the specified
+##'   tolerance? See also details.
 map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...,
                           tol = .02, warn = TRUE){
   require (grid)
@@ -12,9 +17,7 @@ map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...,
   dots <- modifyList (list (object = object, model = model, ...),
                       list (subscripts = TRUE))
   
-  if (voronoi) {
-    dots <- modifyList (list (col = "black", border = "#00000080"),
-                        dots)
+  if (voronoi) { dots <- modifyList (list (col = "black", border = "#00000080"), dots)
     
     ## we need to mix the spectra, otherwise the voronoi plot does not work with 
     ## complete rectangular maps. mix keeps track of the reordering.

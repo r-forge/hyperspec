@@ -1,4 +1,5 @@
 ## ggplot functions
+## TODO: export
 
 qplotspc <- function (x, wl.range, ...,
                       mapping = aes (x = `.wavelength`, y = `spc`, group = `.rownames`),

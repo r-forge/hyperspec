@@ -1,22 +1,15 @@
-###-----------------------------------------------------------------------------
-###
-### wc - word count
-###
-###
-
-
-
-##’ wc
-##’ word count of ASCII files
-##’ 
-##’ wc uses the system command wc
-##’ 
-##’ @param file the file name or pattern
-##’ @param flags the parameters to count, character vector with the long form
-##’   of the parameters
-##’ @return data.frame with the counts and file names, or \code{NULL} if wc is
-##’   not available
-##’ @author C. Beleites
+##' wc
+##' word count of ASCII files
+##' 
+##' wc uses the system command wc
+##' 
+##' @param file the file name or pattern
+##' @param flags the parameters to count, character vector with the long form
+##'   of the parameters
+##' @return data.frame with the counts and file names, or \code{NULL} if wc is
+##'   not available
+##' @export
+##' @author C. Beleites
 wc <- function (file, flags = c("lines", "words", "bytes")){
   if (length (system ("wc --help", intern = TRUE)) == 0)
     return (NULL)
