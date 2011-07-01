@@ -1,12 +1,13 @@
 ## ggplot functions
 ## TODO: export
 
-qplotspc <- function (x, wl.range, ...,
-                      mapping = aes (x = `.wavelength`, y = `spc`, group = `.rownames`),
+qplotspc <- function (x,
+                      wl.range, ...,
+                      mapping = aes_string (x = ".wavelength", y = "spc", group = ".rownames"),
                       spc.nmax = 10){
   chk.hy (x)
   validObject (x)
-
+  
   ## cut away everything that isn't asked for _before_ transforming to data.frame
   if (nrow (x) > spc.nmax) {
     warning ("Number of spectra exceeds spc.nmax. Only the first ", spc.nmax, " are plotted.")

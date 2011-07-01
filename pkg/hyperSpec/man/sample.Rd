@@ -12,8 +12,6 @@ isample(x, size=nrow(x), replace=FALSE, prob=NULL)
 \description{Random Samples and Permutations
 Take a sample of the specified size from the elements of x with or without
 replacement.}
-\alias{sample,hyperSpec-method}
-\alias{sample}
 \docType{methods}
 \value{\code{sample,hyperSpec-method}: a hyperSpec object for \code{sample}, and an integer vector for
 \code{isample} that is suitable for indexing (into the spectra) of x.

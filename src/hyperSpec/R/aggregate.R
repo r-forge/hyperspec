@@ -114,7 +114,6 @@ setMethod ("aggregate", signature = signature (x = "hyperSpec"),
   data <- cbind (data, .aggregate = NA)
   col.aggregate <- ncol (data)
 
-
   r <- 1 # keeping track of the actually filled rows
 
   for (i in seq (along = by)){
@@ -122,7 +121,7 @@ setMethod ("aggregate", signature = signature (x = "hyperSpec"),
 
     prows <- nrow (tmp) - 1
 
-
+    ## TODO: try out whether this really helps
     if (r + prows > out.rows) {
       if (is.null (append.rows))
         append.rows <- max (100, ceiling (1 - (i / length (by)) * out.rows))

@@ -99,7 +99,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 
     .wl (object) <- wavelength
 
-    object@label$.wavelength <- label.wavelength
+    if (!missing (label.wavelength)) object@label$.wavelength <- label.wavelength
 
   } else if (ncol (x) == nwl (object)){
     spc <- match("spc", colnames(object@data))
@@ -120,12 +120,15 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
 
     object@data <- object@data[rep(1, nrow(x)), , drop = FALSE]
     object@data$spc <- I(as.matrix(x))
+
   } else {
     stop ("Either rows (if scores == TRUE) or columns (if scores == FALSE) of",
           " x and object must correspond")
   }
 
-  object@label$spc <- label.spc
+  rownames (object@data) <- rownames (x)
+  
+  if (!missing (label.spc)) object@label$spc <- label.spc
   
   validObject (object)
 

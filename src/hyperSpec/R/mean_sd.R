@@ -98,7 +98,7 @@ setMethod ("mean", signature = signature (x = "hyperSpec"),
 ##' @export
 ##' @examples
 ##' 
-##' plot (quantile (chondro, ))
+##' plot (quantile (chondro))
 setMethod ("quantile", signature = signature (x = "hyperSpec"),
            function (x, probs = seq(0, 1, 0.25), na.rm = TRUE, names = "num", ...,
                      short = "quantile", user = NULL, date = NULL){
