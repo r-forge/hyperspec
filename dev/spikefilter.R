@@ -38,73 +38,74 @@ spikefilter <- function (spcmatrix) {
 spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
                                 save.tmp = 20, use.tmp = FALSE, ispikes = NULL, iispikes = NULL) {
 
-#   ### example -- Ctrl + '/'
-#   library (hyperSpec)
-#   load ("cartilage-raw.RData")
-#   source ("spikefilter.R")
-#   tmp <- sweep (cartilage, 1, median, `/`)
-#   tmp <- sweep (tmp, 2, median , `-`)
-#   scores <- spikefilter2d (spcmatrix= tmp [[]])
+  ## TODO: better move the first part to spike suspicio
+  wavelength <- spc@wavelength
+  spc <- spc@data$spc
+  gc ()
   
-  ### GUI
-  library(gWidgetsQt)
-  ### GUI - functions
-  spcOkay <- function(...){
-    
-    spcNext(...)
+  dim <- dim (spikiness) 
+  dim(spikiness)  <- NULL # make vector
+  
+  if (is.null (ispikes))
+    ispikes <- order (spikiness, na.last = TRUE, decreasing = TRUE)
+
+  if (is.null (iispikes))
+    iispikes <- order (ispikes)
+  
+  start.i = 1
+
+  if (use.tmp & file.exists ("spikefilter.tmp.RData")){
+    cat ("load temporary data\n")
+    load ("spikefilter.tmp.RData")
+    start.i <- i
   }
-  spcBad <- function(...){
-    
-    spcNext(...)
-  }
-  spcNext <- function(...) {
-    
-    
-    ### disable buttons
-    
-    enabled(spcOkayBtn) <- F
-    enabled(spcBadBtn) <- F
-    enabled(spcEndBtn) <- F
-    enabled(spcNextBtn) <- F
-    
-    ###################
-    
-    ### mostly old stuff
-    i <<- i+1
-    if (i > length (ispikes)){
-      ## we are done here
-      spcEnd(0)
-      return ()
-    }
-    insert(idText, paste("\nSpike suspicion: ", i, sep=''))
-    
+
+##  close.screen(all = TRUE) 
+##  split.screen (figs = c(1, 2))
+  layout (matrix (c (1, 0, 3, 2), nrow = 2))
+ # X11 (width = 7, height = 4); wspc <- dev.cur ()
+ # X11 (width = 7, height = 4); wdetail <- dev.cur () 
+
+  save.i <- 1
+  if (save.tmp > 0)
+    save.tmp = save.tmp + 1
+  for (i in start.i : length (ispikes)){
+    cat ("Spike suspicion: ", i, "\n" )
+
     if ((save.tmp > 0) & (save.i %% save.tmp == 0)) {
       save (spc, i, ispikes, iispikes, spikiness, file = "spikefilter.tmp.RData", compress = FALSE)
       save.i <- 1
-    }
+    } 
     
-    if (is.na (ispikes[i])){
-      spcNext()
-      return ()
-    }
-    
+    if (is.na (ispikes[i]))
+      next
+
     save.i <- save.i + 1
-    
+
     ind <- vec2array (ispikes [i], dim = dim)
-    insert(idText, paste("   Spectrum: ", ind[1], sep=''))
-    
+    cat ("   Spectrum: ", ind[1], "\n")
+ ##   screen (1)
+##    erase.screen()    
+#    dev.set (wspc)
     k <- ind[1] + (-nspc : nspc) # suspicious spectrum plus the spectra around
     k <- k [k > 0]
     k <- k [k <= nrow (spc)]
     isna <- apply (spc[k,,drop = FALSE], 1, function (x) all (is.na (x)))
     k <- k[! isna]
-    
+##     plot (spc[k,                  ], "spc", 
+##           col = c("black", "blue", "black"))
+##     plot (spc[ind[1]           , , ind[2]           , index = TRUE], "spc", 
+##           type = "p", col = "red", pch = 20, add = TRUE)
+
     plot (wavelength, spc[ind[1],], ylim = range (spc[k,], na.rm = TRUE), type = "n")
     for (l in k)
       lines (wavelength, spc[l,], col = if (l == ind[1]) "blue" else "black")
       
     points (wavelength[ind[2]], spc[ind[1], ind[2]], col = "red", pch = 20)
-    
+   
+##    dev.set (wdetail)
+##    screen (2)
+##    erase.screen()    
     j <- ind[2] + (-npts : npts) # suspicious data points plus points around
     j <- j[j > 0]
     j <- j[j <= ncol (spc)]
@@ -117,8 +118,16 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     yu <- median (spc[k,j,drop = FALSE], na.rm = TRUE)
     yu <- (yu - yl) * 4 + yl
     print (yu)
-    
-    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n")
+
+##     plot (spc[k, , j, index = TRUE], "spc", 
+##           col = c("black", "blue", "black"), pch = 20, type = "p",
+##           xlim = x,
+##           ylim = y,
+##           cex = 0.5)
+##     plot (spc[ind[1], , j, index = TRUE], "spc", 
+##           col = "blue", pch = 20, type = "p",
+##           add = TRUE)
+   plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n")
     for (l in k)
       lines (wavelength[j], spc[l,j], pch = 20,
              type = "p",
@@ -143,17 +152,17 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
 
     x <- rep (x[2], 3) 
     y <- (10:8)/10 * (y[2] - y [1]) + y[1]
-    
+
+    points (x, y, pch = 20, cex = 1, col = c("black", "#008000", "red"))
+    text (x, y, labels = c("end", "spc OK", "bad spc"), pos = 2,
+          col = c("black", "#008000", "red"))
+
     pts <- identify (c(wavelength[        j], x),
                      c(spc  [ind[1], j], y))
-    
-    ### enable buttons
-    
-    enabled(spcOkayBtn) <- T
-    enabled(spcBadBtn) <- T
-    enabled(spcEndBtn) <- T
-    enabled(spcNextBtn) <- T
-    
+
+    if (length (pts) == 0)
+      next
+
     if (max (pts) > length (j)){
       pts <- max (pts) - length (j)
 
@@ -184,72 +193,18 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     
     cat ("   Spikiness: ", spikiness [pts], "\n")
     ispikes [iispikes[pts]] <- NA     # do not look at this spike again
-    
-    
-  }
-  spcEnd <- function(...){
-    ## (also the save function)
-    
-    ## somehow quit (and return spc)
-  }
-  ### GUI - widgets
-    spcOkayBtn <- gbutton("OK", handler = spcOkay)
-    spcBadBtn <- gbutton("Bad", handler = spcBad)
-    spcEndBtn <- gbutton("Done", handler = spcEnd)
-    spcNextBtn <- gbutton("Next", handler = spcNext)
-    idText <- gtext("Click 'Next' to begin.\n")
-  ### GUI - window/layout
-    window <- gwindow("spikes.interactive - hyperSpec GUI")
-    wgroup <- ggroup(cont=window)
-    group <- ggroup(horizontal=FALSE, cont=wgroup)
-    add(group, idText)
-    tmp <- gframe("Plotting", container=group)
-    add(tmp, spcOkayBtn)
-    add(tmp, spcBadBtn)
-    add(tmp, spcEndBtn)
-    add(group, spcNextBtn)
-    add(wgroup, ggraphics())
-  ### disable buttons
-    enabled(spcOkayBtn) <- F
-    enabled(spcBadBtn) <- F
-    enabled(spcEndBtn) <- F
-  ### GUI - end
-  
-  ### Old Stuff
-  ## TODO: better move the first part to spike suspicio
-  wavelength <- spc@wavelength
-  spc <- spc@data$spc
-  gc ()
-  
-  dim <- dim (spikiness) 
-  dim(spikiness)  <- NULL # make vector
-  
-  if (is.null (ispikes))
-    ispikes <- order (spikiness, na.last = TRUE, decreasing = TRUE)
 
-  if (is.null (iispikes))
-    iispikes <- order (ispikes)
-  
-  start.i = 1
-
-  if (use.tmp & file.exists ("spikefilter.tmp.RData")){
-    cat ("load temporary data\n")
-    load ("spikefilter.tmp.RData")
-    start.i <- i
   }
 
-  layout (matrix (c (1, 0, 3, 2), nrow = 2))
+##  close.screen(all = TRUE) 
+  ##  dev.off (wdetail)
+  ##  dev.off (wspc)  
 
-  save.i <- 1
-  if (save.tmp > 0)
-    save.tmp = save.tmp + 1
 
-  ## prepare for GUI to take over
-  i <- start.i - 1 ### because we start with a 'next' command
-  #spcNext()
+#  i <- apply (spc$spc, 1, function (x) all (is.na (x)))
+#  spc <- spc[!i, , short = "spikefilter: bad spectrum"]
   
-  #return (spc) 
-  return ()
+  return (spc) 
   
 }
 
