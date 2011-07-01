@@ -35,16 +35,17 @@ spikefilter <- function (spcmatrix) {
   d [, -c (1, ncol (d))]
 }
 
-spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
+spikes.interactive.gui <- function (spc, spikiness, npts = 10, nspc = 1,
                                 save.tmp = 20, use.tmp = FALSE, ispikes = NULL, iispikes = NULL) {
 
 #   ### example -- Ctrl + '/'
 #   library (hyperSpec)
 #   load ("cartilage-raw.RData")
-#   source ("spikefilter.R")
+#   source ("spikefilter.gui.R")
 #   tmp <- sweep (cartilage, 1, median, `/`)
 #   tmp <- sweep (tmp, 2, median , `-`)
 #   scores <- spikefilter2d (spcmatrix= tmp [[]])
+#   spikes.interactive.gui(cartilage [1:100], scores [1:100, ])
   
   ### GUI
   library(gWidgetsQt)
