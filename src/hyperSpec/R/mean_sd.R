@@ -60,9 +60,6 @@ mean_pm_sd <- function (x, na.rm = TRUE, ...){
 ##' @rdname mean_sd
 ##' @return For hyperSpec object, \code{mean_pm_sd} returns a hyperSpec object containing mean - sd,
 ##' mean, and mean + sd spectra.
-##' @author C. Beleites
-##' @seealso \code{\link[base]{mean}}, \code{\link[stats]{sd}}
-##' @keywords univar
 ##' @export
 ##' @examples
 ##' 
@@ -74,3 +71,51 @@ setMethod ("mean_pm_sd", signature = signature (x = "hyperSpec"),
              decomposition (x, rbind ("mean - sd" = m - s, mean = m, "mean + sd"= m + s), 
                             short = short, user = user, date = date)
            })
+##' @rdname mean_sd
+##' @return For hyperSpec object, \code{mean} returns a hyperSpec object containing the mean
+##' spectrum.
+##' @export
+##' @examples
+##' 
+##' plot (mean (chondro))
+setMethod ("mean", signature = signature (x = "hyperSpec"),
+           function (x, na.rm = TRUE, ...,  short = "mean", user = NULL, date = NULL){
+             m <- structure (colMeans (x@data$spc), dim = c (1, length (x@wavelength)),
+                             dimnames = list ("mean", NULL))
+             decomposition (x, m, short = short, user = user, date = date)
+            
+           })
+
+
+##' @rdname mean_sd
+##' @return For hyperSpec object, \code{quantile} returns a hyperSpec object containing the
+##' respective quantile spectra.
+##' @param probs the quantiles, see \code{\link[stats]{quantile}}
+##' @param names \code{"pretty"} results in percentages (like \code{\link[stats]{quantile}}'s
+##' \code{names = TRUE}), \code{"num"} results in the row names being \code{as.character (probs)}
+##' (good for ggplot2 getting the order of the quantiles right). Otherwise, no names are assigned.
+##' @seealso  \code{\link[stats]{quantile}}
+##' @export
+##' @examples
+##' 
+##' plot (quantile (chondro, ))
+setMethod ("quantile", signature = signature (x = "hyperSpec"),
+           function (x, probs = seq(0, 1, 0.25), na.rm = TRUE, names = "num", ...,
+                     short = "quantile", user = NULL, date = NULL){
+             
+             x <- apply (x, 2, quantile, probs = probs, na.rm = na.rm, names = FALSE, ...,
+                         short = short, user = user, date = date,
+                         long = list (probs = probs, na.rm = na.rm, names = names, ...))
+
+             if (names == "pretty") 
+               rownames (x@data) <- paste (format (100 * probs, format = "fg", width = 1,
+                                                    justify = "right",
+                                                    digits =  getOption ("digits")),
+                                           "%")
+             else if (names == "num")
+               rownames (x@data) <- probs
+
+             x
+           }
+           )
+
