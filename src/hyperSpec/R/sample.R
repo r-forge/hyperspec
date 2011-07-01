@@ -3,7 +3,6 @@
 ##' replacement.
 ##' 
 ##' @rdname sample
-##' @aliases sample,hyperSpec-method sample
 ##' @docType methods
 ##' @param x The hyperSpec object to sample from
 ##' @param size positive integer giving the number of spectra to choose.
@@ -63,3 +62,31 @@ isample <- function (x, size = nrow (x), replace = FALSE, prob = NULL) {
 }
 
 
+##' Random row-wise sample/permutation of data.frames
+##'
+##' Draws a random row sample of the data.frame
+##' @title Random Samples and Permutations: data.frame
+##' @rdname sample-df
+##' @param x the data.frame or matrix to sample from
+##' @param size,replace,prob handed to \code{\link[base]{sample.int}}
+##' @param drop see \code{\link[base]{drop}}: by default, do not drop dimensions of the result
+##' @return a data.frame or matrix with \code{size} rows
+##' @seealso \code{\link[base]{sample}}
+##' @author Claudia Beleites
+##' @export
+##' @examples
+##' sample (cars, 2)
+setMethod ("sample", signature = signature (x = "data.frame"),
+           function (x, size = nrow (x), replace = FALSE, prob = NULL, drop = FALSE) {
+             x [sample.int (nrow (x), size = size, replace = replace, prob = prob), , drop = drop]
+           }
+           )
+##' @rdname sample-df
+##' @export
+##' @examples
+##' sample (matrix (1:24, 6), 2)
+setMethod ("sample", signature = signature (x = "matrix"),
+           function (x, size = nrow (x), replace = FALSE, prob = NULL, drop = FALSE) {
+             x [sample.int (nrow (x), size = size, replace = replace, prob = prob), , drop = drop]
+           }
+           )
