@@ -1,23 +1,25 @@
 ## new version of plotspc
-
 plotspc2 <- function (object,
                      ## what wavelengths to plot
                
                      spc.nmax = 10,
-                     ## pre-processing of the spectra
-                     
+                     ## stacking
+                     stacked = NULL, # stacked.range or stacked.tight
                      ## plot area
                      add = FALSE,
             
-                     ...
+                     ...,
+                      arglist = plotdefaults
                      ){
-  
-  args <- modifyList (list (wl.range = NULL, wl.index = FALSE, wl.reverse = FALSE, wl.offset = 0,
-                            plot.bty = "l",
-                            zeroline.lty = 2, zeroline.col = col
-                            ),
+  chk.hy (object)
+  validObject (object)
+  if (nrow (object) == 0) stop ("No spectra.")
+
+  ## default values
+  args <- modifyList (arglist,
                       list (...))
 
+  ## new processing of arguments
   args <- split.dots (args, functions = c (
                               wl = "wl",
                               stacked = "stacked",
@@ -28,18 +30,25 @@ plotspc2 <- function (object,
                               polygon = "polygon",
                               zeroline = "zeroline"
                               ))
-
+  
   ## prepare wl-axis
-  wl <- .prep.wl (object, wl.range, wl.index, wl.offset)
+  wl <- do.call (.prep.wl, c (object, args$wl))
 
-  ## summary statistics:
-  ## TODO: aggregate or sample spectra
-  object <- object [seq_len (min (spc.nmax, nrow (spc))),, wl$i, wl.index = TRUE]
+  ## keep the needed wavelengths and the first spc.nmax spectra only,
+  ## all aggregation & Co. should be done outside plotspc
+  if (nrow (spc) > spc.nmax) {
+    warning (paste ("Number of spectra exceeds spc.nmax. Only the first",
+                    spc.nmax, "are plotted."))
+    object <- .extract (object, i = seq_len (spc.nmax), l =  wl$i, wl.index = TRUE)
+  } else {
+    object <- .extract (object,                         l =  wl$i, wl.index = TRUE)
+  }
+    
   wl$i <- NULL # not useful any longer, use indexing by wl$group instead
 
-  ## prepare y: stacking
+  ## prepare y: stacking & yoffset
   ## 
- # y <- .prep.int (object, )
+  if (is.function (stacked))
   
   ## prepare plotting area if necessary
   if (! add) .setup.plot (object, wl.reverse, wl$x)
@@ -74,6 +83,9 @@ plotspc2 <- function (object,
   if (! wl.index)
     wl.range <- lapply (wl.range, function (w) wl2i (object, w))
 
+  if (all (sapply (wl.range, is.null))) 
+    stop ("All wavelength ranges are empty.")
+  
   wl.offset <- wl.offset [! sapply (wl.range, is.null)]
   wl.range  <- wl.range  [! sapply (wl.range, is.null)]
   
@@ -100,3 +112,15 @@ plotspc2 <- function (object,
   else
     do.call (stats, c (spc, list (...)))
 }
+
+plotdefaults <-  list (wl.range = NULL, wl.index = FALSE, wl.reverse = FALSE, wl.offset = 0,
+                       plot.bty = "l",
+                       lines.lty = "l",
+                       zeroline.lty = 2, zeroline.col = col
+                       )
+
+plotMS <- modifyList (plotdefaults,
+                      list (lines.lty = "h",
+                            stacked.min.zero = TRUE))
+
+

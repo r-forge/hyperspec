@@ -173,8 +173,6 @@ plotspc <- function  (object,
                       ## line indicating zero intensity
                       zeroline = list (lty = 2, col = col)){
   force (zeroline) # otherwise stacking messes up colors
-  if (is.null (zeroline))
-    stop ("NULL zeroline")
   
   chk.hy (object)
   validObject (object)
