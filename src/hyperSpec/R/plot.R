@@ -30,31 +30,23 @@
   switch (tolower (y),
           spc = plotspc (x, ...),
           spcmeansd = {
-            dots <- modifyList (list (object = x,
-                                      fill = c (1, NA, 1),
-                                      func = mean_pm_sd,
-                                      func.args = list (na.rm = TRUE)
+            dots <- modifyList (list (object = mean_pm_sd (x),
+                                      fill = c (1, NA, 1)
                                       ),
                                 dots)
             do.call (plotspc, dots)
           },
           spcprctile = {
-            dots <- modifyList (list (object = x,
-                                      fill = c (1, NA, 1),
-                                      func = quantile,
-                                      func.args = list (na.rm = TRUE,
-                                        probs = c (0.16, 0.5, 0.84))
+            dots <- modifyList (list (object = quantile (x, probs = c (0.16, 0.5, 0.84)),
+                                      fill = c (1, NA, 1)
                                       ),
                                 dots)
             do.call (plotspc, dots)
           },
           spcprctl5 = {
-            dots <- modifyList (list (object = x,
+            dots <- modifyList (list (object = quantile (x, probs = c (0.05, 0.16, 0.5, 0.84, 0.95)),
                                       fill = c (1, 2, 3, 2, 1),
-                                      fill.col = c("#00000040"),
-                                      func = quantile,
-                                      func.args = list (na.rm = TRUE,
-                                        probs = c (0.05, 0.16, 0.5, 0.84, 0.95))
+                                      fill.col = c("#00000040")
                                       ),
                                 dots)
             do.call (plotspc, dots)
