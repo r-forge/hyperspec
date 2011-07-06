@@ -302,9 +302,9 @@ print (plotmap (chondro, clusters ~ x * y, col.regions = cols))
 The cluster membership can also be marked in the dendrogram:
 
 <<dend, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-plot (dendrogram, labels = FALSE, hang = 0) 
-points (seq_along (dendrogram$order), rep (-3, length (dendrogram$order)),
-        col = cols [chondro$clusters [dendrogram$order]], pch = "|")
+par (xpd = TRUE)                        # allow plotting the markers into the margin
+plot (dendrogram, labels = FALSE, hang = -1) 
+mark.dendrogram (dendrogram, chondro$clusters, col = cols)
 @     
    
 Figure~\ref{fig:dend} shows the dendrogram and \ref{fig:clustmap}
