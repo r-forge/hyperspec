@@ -12,7 +12,8 @@
 ##' @param text.col color (vector) giving the color for the text markers
 ##' @param ... handed to \code{\link[graphics]{rect}} and \code{\link[graphics]{text}}
 ##' @author Claudia Beleites
-##' @export 
+##' @export
+##' @rdname mark.dendrogram
 ##' @examples
 ##' 
 ##' dend <- hclust (pearson.dist (laser[[]]))
