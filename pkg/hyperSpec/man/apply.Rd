@@ -3,7 +3,6 @@
 \alias{apply}
 \title{apply...}
 \usage{\S4method{apply}{hyperSpec}(X, MARGIN, FUN, ..., label.wl=NULL, label.spc=NULL,
-
     new.wavelength=NULL, short="apply", long=NULL, user=NULL, date=NULL)
 }
 \description{apply

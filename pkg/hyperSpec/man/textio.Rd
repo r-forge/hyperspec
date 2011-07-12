@@ -2,29 +2,21 @@
 \alias{read.txt.long}
 \title{Import and Export of hyperSpec objects...}
 \usage{read.txt.long(file=stop("file is required"), cols=list(.wavelength =
-
     expression(lambda/nm), spc = "I / a.u."), header=TRUE, ...)
 
 read.txt.wide(file=stop("file is required"), cols=list(spc = "I / a.u.", .wavelength
-
     = expression(lambda/nm)), check.names=FALSE, ...)
 
 
 write.txt.long(object, file=stop("file is required"), order=c(".rownames",
-
     ".wavelength"), na.last=TRUE, decreasing=FALSE, quote=FALSE,
-
     sep="\t", row.names=FALSE, cols=NULL, col.names=TRUE,
-
     col.labels=FALSE, append=FALSE, ...)
 
 
 write.txt.wide(object, file=stop("file is required"), cols=NULL, quote=FALSE,
-
     sep="\t", row.names=FALSE, col.names=TRUE, header.lines=1,
-
     col.labels=if (header.lines == 1) FALSE else TRUE, append=FALSE,
-
     ...)
 
 }

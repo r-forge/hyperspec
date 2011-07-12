@@ -2,7 +2,6 @@
 \alias{bind}
 \title{Binding hyperSpec Objects...}
 \usage{bind(direction=stop("direction ('c' or 'r') required"), ..., short="bind",
-
     user=NULL, date=NULL)
 
 cbind.hyperSpec(..., short="cbind", deparse.level)

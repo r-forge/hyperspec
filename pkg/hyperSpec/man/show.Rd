@@ -3,7 +3,6 @@
 \alias{as.character}
 \title{as.character,hyperSpec-method}
 \usage{\S4method{as.character}{hyperSpec}(x, digits=getOption("digits"), range=TRUE, max.print=5, shorten.to=c(2,
-
     1), log=TRUE)
 
 \S4method{show}{hyperSpec}(object)

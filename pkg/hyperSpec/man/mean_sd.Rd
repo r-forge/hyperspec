@@ -16,7 +16,6 @@ mean_pm_sd(x, na.rm=TRUE, ...)
 
 
 \S4method{quantile}{hyperSpec}(x, probs=seq(0, 1, 0.25), na.rm=TRUE, names="num", ...,
-
     short="quantile", user=NULL, date=NULL)
 
 }

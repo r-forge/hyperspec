@@ -2,15 +2,11 @@
 \alias{read.spc.KaiserMap}
 \title{read.spc.KaiserMap}
 \usage{read.spc.KaiserMap(files, keys.hdr2data=FALSE, keys.hdr2log=TRUE, keys.log2data=NULL,
-
     keys.log2log=TRUE, glob=TRUE, ...)
 
 read.spc(filename, keys.hdr2data=c("fexper", "fres", "fsource"),
-
     keys.hdr2log=c("fdate", "fpeakpt"), keys.log2data=FALSE,
-
     keys.log2log=TRUE, log.txt=TRUE, log.bin=FALSE, log.disk=FALSE,
-
     hdr=list(), no.object=FALSE)
 
 }

@@ -106,7 +106,6 @@ quickdf <- function(list) {
 ##' @rdname rbind-fill
 ##' @author C. Beleites
 ##' @seealso   \code{\link[base]{rbind}}, \code{\link[base]{cbind}}, \code{\link[plyr]{rbind.fill}}
-##' @export
 ##' @rdname rbind-fill
 ##' @keywords manip
 ##' @examples 
@@ -178,7 +177,6 @@ rbind.fill.matrix <- function (...){
 ##' @param \dots data frames to row bind together
 ##' @keywords manip
 ##' @rdname rbind-fill
-##' @export
 ##' @examples
 ##' #' rbind.fill(mtcars[c("mpg", "wt")], mtcars[c("wt", "cyl")])
 rbind.fill <- function(...) {

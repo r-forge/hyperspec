@@ -2,17 +2,11 @@
 \alias{plotspc}
 \title{Plotting Spectra...}
 \usage{plotspc(object, wl.range=NULL, wl.index=FALSE, wl.reverse=FALSE, spc.nmax=50,
-
     func=NULL, func.args=list(), stacked=NULL, stacked.args=list(),
-
     add=FALSE, bty="l", plot.args=list(), col="black",
-
     lines.args=list(), xoffset=0, yoffset=0, nxticks=10,
-
     axis.args=list(), break.args=list(), title.args=list(), fill=NULL,
-
     fill.col=NULL, border=NA, polygon.args=list(), zeroline=list(lty =
-
     2, col = col))
 
 stacked.offsets(x, stacked=TRUE, min.zero=FALSE, add.factor=0.05, add.sum=0, .spc=NULL)

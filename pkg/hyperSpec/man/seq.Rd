@@ -2,7 +2,6 @@
 \alias{seq.hyperSpec}
 \title{Sequence generation along spectra or wavelengths...}
 \usage{seq.hyperSpec(x, from=1, to=nrow(x), ..., index=FALSE, short="seq", user=NULL,
-
     date=NULL)
 }
 \description{Sequence generation along spectra or wavelengths

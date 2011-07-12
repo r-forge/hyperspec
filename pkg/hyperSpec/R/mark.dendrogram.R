@@ -10,9 +10,12 @@
 ##' @param pos.text position of the text label
 ##' @param border see \code{\link[graphics]{text}}
 ##' @param text.col color (vector) giving the color for the text markers
+##' @param label side label see example
+##' @param label.right should the side labels be at the right side?
 ##' @param ... handed to \code{\link[graphics]{rect}} and \code{\link[graphics]{text}}
 ##' @author Claudia Beleites
-##' @export 
+##' @export
+##' @rdname mark.dendrogram
 ##' @examples
 ##' 
 ##' dend <- hclust (pearson.dist (laser[[]]))

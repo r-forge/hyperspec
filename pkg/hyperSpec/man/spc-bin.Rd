@@ -2,7 +2,6 @@
 \alias{spc.bin}
 \title{Wavelength Binning...}
 \usage{spc.bin(spc, by=stop("reduction factor needed"), na.rm=TRUE, short="spc.bin",
-
     user=NULL, date=NULL)
 }
 \description{Wavelength Binning

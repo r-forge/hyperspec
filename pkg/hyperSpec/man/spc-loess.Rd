@@ -2,7 +2,6 @@
 \alias{spc.loess}
 \title{loess smoothing interpolation for spectra...}
 \usage{spc.loess(spc, newx, enp.target=nwl(spc)/4, surface="direct", ...,
-
     short="spc.loess", user=NULL, date=NULL)
 }
 \description{loess smoothing interpolation for spectra

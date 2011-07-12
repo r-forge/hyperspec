@@ -2,13 +2,10 @@
 \alias{read.ENVI.Nicolet}
 \title{read.ENVI.Nicolet}
 \usage{read.ENVI.Nicolet(..., x=NA, y=NA, log=list(), keys.hdr2log=TRUE,
-
     nicolet.correction=FALSE)
 
 read.ENVI(file=stop("read.ENVI: file name needed"), headerfile=NULL,
-
     header=list(), keys.hdr2data=FALSE, keys.hdr2log=TRUE, x=0:1, y=x,
-
     wavelength=NULL, label=list(), log=list())
 
 }

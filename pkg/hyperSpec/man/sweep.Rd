@@ -3,7 +3,6 @@
 \alias{sweep}
 \title{Sweep Summary Statistic out of an hyperSpec Object...}
 \usage{\S4method{sweep}{hyperSpec}(x, MARGIN, STATS, FUN="-", check.margin=TRUE, ..., short="sweep",
-
     user=NULL, date=NULL)
 }
 \description{Sweep Summary Statistic out of an hyperSpec Object

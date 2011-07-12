@@ -3,7 +3,6 @@
 \alias{as.data.frame}
 \title{Conversion of a hyperSpec object into a data...}
 \usage{\S4method{as.data.frame}{hyperSpec,missing,missing}(x, row.names=stop("hyperSpec method does not support row.names"),
-
     optional=stop("hyperSpec method does not support row.names"), ...)
 
 \S4method{as.matrix}{hyperSpec}(x, ...)

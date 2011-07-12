@@ -2,9 +2,7 @@
 \alias{scan.txt.Witec}
 \title{File Import Witec Raman}
 \usage{scan.txt.Witec(filex=stop("filename needed"), filey=sub("-x", "-y", filex),
-
     points.per.line=NULL, lines.per.image=NULL, short="scan.txt.Witec",
-
     user=NULL, date=NULL)
 }
 \description{Import Raman Spectra/Maps from Witec Instrument via ASCII files}

@@ -2,7 +2,6 @@
 \alias{orderwl}
 \title{Sorting the Wavelengths of a hyperSpec Object...}
 \usage{orderwl(x, na.last=TRUE, decreasing=FALSE, short="orderwl", date=NULL,
-
     user=NULL)
 }
 \description{Sorting the Wavelengths of a hyperSpec Object

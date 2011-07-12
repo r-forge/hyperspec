@@ -2,11 +2,9 @@
 \alias{spc.fit.poly}
 \title{Polynomial Baseline Fitting...}
 \usage{spc.fit.poly(fit.to, apply.to=NULL, poly.order=1, short="spc.fit.poly", user=NULL,
-
     date=NULL)
 
 spc.fit.poly.below(fit.to, apply.to=fit.to, poly.order=1, npts.min=NULL, noise=0,
-
     short="spc.fit.poly.below", user=NULL, date=NULL)
 
 }

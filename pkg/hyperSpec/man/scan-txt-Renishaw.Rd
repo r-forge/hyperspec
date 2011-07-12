@@ -2,11 +2,9 @@
 \alias{scan.txt.Renishaw}
 \title{import Raman measurements from Renishaw ASCII-files...}
 \usage{scan.txt.Renishaw(file=stop("file is required"), data="xyspc", nlines=0, nspc=NULL,
-
     short="scan.txt.Renishaw", user=NULL, date=NULL)
 
 scan.zip.Renishaw(file=stop("filename is required"), txt.file=sub("[.]zip", ".txt",
-
     basename(file)), ...)
 
 }

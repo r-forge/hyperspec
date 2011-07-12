@@ -2,11 +2,8 @@
 \alias{spc.identify}
 \title{Identifying Spectra and Spectral Data Points...}
 \usage{spc.identify(x, y=NULL, wavelengths=NULL, ispc=NULL, tol.wl=diff(range(x))/200,
-
     tol.spc=diff(range(y))/50, point.fn=spc.point.max,
-
     formatter=spc.label.default, ..., cex=0.7, adj=c(0, 0.5), srt=90,
-
     warn=TRUE)
 
 spc.point.max(wl, spc, wlclick)

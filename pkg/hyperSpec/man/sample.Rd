@@ -3,7 +3,6 @@
 \alias{sample}
 \title{Random Samples and Permutations...}
 \usage{\S4method{sample}{hyperSpec}(x, size=nrow(x), replace=FALSE, prob=NULL, short="sample", user=NULL,
-
     date=NULL)
 
 isample(x, size=nrow(x), replace=FALSE, prob=NULL)
