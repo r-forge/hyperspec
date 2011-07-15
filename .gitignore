@@ -23,3 +23,5 @@ auto
 Vignettes/*/vignettes.defs
 Vignettes/*/*.pdf
 Vignettes/*/*.rda
+Vignettes/fileio/chondro.txt
+Vignettes/laser/rawdata/laser.txt.gz
