@@ -308,6 +308,7 @@ DESCRIPTION: $(shell find src/hyperSpec -maxdepth 1 -daystart -not -ctime 0 -nam
 roxy: clean DESCRIPTION src/hyperSpec/R/*.R 
 	rsync -av --delete src/hyperSpec/ pkg/hyperSpec/
 	Rscript --vanilla -e "library (roxygen); roxygenize (\"src/hyperSpec\", \"pkg/hyperSpec\", use.Rd2 = TRUE)" 
+	rm -rf pkg/hyperSpec/hyperSpec
 
 build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy
 	rm -f hyperSpec_*.tar.gz

@@ -7,18 +7,20 @@
 ##' .. content for \details{} ..
 ##' @title tapply for hyperSpec objects
 ##' @param X hyperSpec object
-##' @param INDEX 
+##' @param INDEX factor giving the groups
 ##' @param FUN aggregation function that works on a matrix
-##' @param ...
+##' @param ... handed to \code{FUN}
+##' @param simplify (doesn't apply to hyperSpec objects)
 ##' @param short,long,user,date handed to \code{\link{logentry}}
 ##' @param levelorder if TRUE, the rows of the result are in the order of the \code{levels
 ##' (INDEX)}. Otherwise,
 ##' @param drop should unused levels of \code{INDEX} be dropped?
-##' @return 
+##' @return hyperSpec object
 ##' @author Claudia Beleites
-##' @seealso 
 setMethod ("tapply", signature = signature (X = "hyperSpec", INDEX = "factor"),
-           function (X, INDEX, FUN = NULL, ..., levelorder = TRUE, drop = TRUE, 
+           function (X, INDEX, FUN = NULL, ...,
+                     simplify = stop ("not supported by hyperSpec objects"),
+                     levelorder = TRUE, drop = TRUE, 
                      short = "tapply", long = NULL, user = NULL, date = NULL){
              validObject (X)
 
