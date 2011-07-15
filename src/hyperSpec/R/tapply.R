@@ -5,7 +5,7 @@
 ##' .. content for \description{} (no empty lines) ..
 ##'
 ##' .. content for \details{} ..
-##' @title 
+##' @title tapply for hyperSpec objects
 ##' @param X hyperSpec object
 ##' @param INDEX 
 ##' @param FUN aggregation function that works on a matrix
@@ -17,8 +17,6 @@
 ##' @return 
 ##' @author Claudia Beleites
 ##' @seealso 
-##' @export 
-##' @callgraph 
 setMethod ("tapply", signature = signature (X = "hyperSpec", INDEX = "factor"),
            function (X, INDEX, FUN = NULL, ..., levelorder = TRUE, drop = TRUE, 
                      short = "tapply", long = NULL, user = NULL, date = NULL){
