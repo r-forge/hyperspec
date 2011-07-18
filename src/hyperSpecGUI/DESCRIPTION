@@ -1,0 +1,12 @@
+Package: hyperSpecGUI
+Type: Package
+Title: Graphical interface for hyperSpec package, includes interactive plots
+Version: 0.02-20110710
+Date: 2011-07-10
+Author: Claudia Beleites, Sebastian Mellor
+Maintainer: Claudia Beleites <cbeleites@units.it>
+Description: A Graphical Interface for the hyperSpec package.
+License: GPL (>= 3)
+LazyLoad: yes
+Depends: R (>= 2.13), hyperSpec, cranvas, gWidgetsRGtk2, gWidgetsQt
+URL: http://hyperSpec.r-forge.r-project.org/
