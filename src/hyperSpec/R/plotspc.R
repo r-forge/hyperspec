@@ -525,7 +525,6 @@ plotspc <- function  (object,
 stacked.offsets <- function (x, stacked = TRUE,
                              min.zero = FALSE, add.factor = 0.05, add.sum = 0,
                              #tight = FALSE, TODO
-                             drop = TRUE,
                              .spc = NULL){
   lvl <- NULL
 
@@ -542,19 +541,19 @@ stacked.offsets <- function (x, stacked = TRUE,
     stacked <- rep (stacked, length.out = nrow (.spc))
     warning ("stacking variable recycled to ", nrow (.spc), " values.")
   }
-  
-  if (is.factor (stacked)) {
-    stacked <- droplevels (stacked)
-    lvl <- levels (stacked)
-    stacked <- as.numeric (stacked)
-  } else if (!is.numeric (stacked))
+  if (is.numeric (stacked))
+    stacked <- as.factor (stacked)
+  else if (!is.factor (stacked)) 
     stop ("stacked must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
-
-  ## using ave would be easier, but it splits the data possibly leading to huge lists.
-  groups <- unique (as.numeric (stacked))
+  
+  stacked <- droplevels (stacked)
+  lvl <- levels (stacked)
+  groups <- seq_along (levels (stacked))
+  stacked <- as.numeric (stacked)
+  
   offset <- matrix (nrow = 2, ncol = length (groups))
   
-  for (i in seq_along (groups))
+  for (i in groups)
     offset[, i] <- range (.spc [stacked == groups [i], ], na.rm = TRUE)
 
   ## should the minimum be at zero (or less)?
