@@ -149,6 +149,7 @@ setMethod ("print", signature = signature (x = "hyperSpec"),
 ##' 
 ##' @aliases summary
 ##' @seealso \code{\link[base]{summary}}
+##' @export
 ##' @rdname show
 setMethod ("summary", signature = signature (object = "hyperSpec"),
            function (object, log = TRUE, ...){
