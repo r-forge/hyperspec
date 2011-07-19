@@ -482,27 +482,26 @@ plotspc <- function  (object,
 
 
 ##' y Offsets for Stacked Plots
-##' Calculate approriate \code{yoffset} values for stacking in
-##' \code{\link[hyperSpec]{plotspc}}.
+##' Calculate approriate \code{yoffset} values for stacking in \code{\link[hyperSpec]{plotspc}}.
 ##' 
-##' Usually, the \code{stacked} argument of \code{\link[hyperSpec]{plotspc}}
-##' will do fine, but if you need fine control over the stacking, you may
-##' calculate the y offsets yourself.
+##' Usually, the \code{stacked} argument of \code{\link[hyperSpec]{plotspc}} will do fine, but if you
+##' need fine control over the stacking, you may calculate the y offsets yourself.
+##'
+##' Empty levels of the stacking factor are dropped (as no stacking offset can be calculated in that
+##' case.)
 ##' 
 ##' @param x a \code{hyperSpec} object
-##' @param stacked \code{TRUE} to stack single spectra.  A numeric or factor is
-##'   interpreted as giving the grouping, a character is interpreted as the
-##'   name of the extra data column of \code{x} that holds the grouping.
-##' @param min.zero if \code{TRUE}, the lesser of zero and the minimum
-##'   intensity of the spectrum is used as minimum.
-##' @param add.factor,add.sum proportion and absolute amount of space that
-##'   should be added.
-##' @param .spc for internal use. If given, the ranges are evaluated on
-##'   \code{.spc}. However, this may change in future.
-##' @return a list containing \item{offsets}{numeric with the yoffset for each
-##'   group in \code{stacked}} \item{groups}{numeric with the group number for
-##'   each spectrum} \item{levels}{if \code{stacked} is a factor, the levels of
-##'   the groups}
+##' @param stacked \code{TRUE} to stack single spectra.  A numeric or factor is interpreted as giving
+##' the grouping, a character is interpreted as the name of the extra data column of \code{x} that
+##' holds the grouping.
+##' @param min.zero if \code{TRUE}, the lesser of zero and the minimum intensity of the spectrum is
+##' used as minimum.
+##' @param add.factor,add.sum proportion and absolute amount of space that should be added.
+##' @param .spc for internal use. If given, the ranges are evaluated on \code{.spc}. However, this
+##' may change in future.
+##' @return a list containing \item{offsets}{numeric with the yoffset for each group in
+##' \code{stacked}} \item{groups}{numeric with the group number for each spectrum} \item{levels}{if
+##' \code{stacked} is a factor, the levels of the groups}
 ##' @author C. Beleites
 ##' @seealso \code{\link[hyperSpec]{plotspc}}
 ##' @rdname plotspc
@@ -529,25 +528,32 @@ stacked.offsets <- function (x, stacked = TRUE,
                              .spc = NULL){
   lvl <- NULL
 
+  if (is.null (.spc))
+    .spc <- x@data$spc
+
   if (is.character (stacked))
     stacked <- unlist (x [[, stacked]])
   else if (isTRUE (stacked))
     stacked <- row.seq (x)
 
-  if (is.factor (stacked)) {
-    lvl <- levels (stacked)
-    stacked <- as.numeric (stacked)
-  } else if (!is.numeric (stacked))
+  ## cut stacked if necessary 
+  if (length (stacked) != nrow (.spc)){
+    stacked <- rep (stacked, length.out = nrow (.spc))
+    warning ("stacking variable recycled to ", nrow (.spc), " values.")
+  }
+  if (is.numeric (stacked))
+    stacked <- as.factor (stacked)
+  else if (!is.factor (stacked)) 
     stop ("stacked must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
-
-  if (is.null (.spc))
-    .spc <- x@data$spc
-
-  ## using ave would be easier, but it splits the data possibly leading to huge lists.
-  groups <- unique (as.numeric (stacked))
+  
+  stacked <- droplevels (stacked)
+  lvl <- levels (stacked)
+  groups <- seq_along (levels (stacked))
+  stacked <- as.numeric (stacked)
+  
   offset <- matrix (nrow = 2, ncol = length (groups))
   
-  for (i in seq_along (groups))
+  for (i in groups)
     offset[, i] <- range (.spc [stacked == groups [i], ], na.rm = TRUE)
 
   ## should the minimum be at zero (or less)?
