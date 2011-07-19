@@ -526,22 +526,30 @@ plotspc <- function  (object,
 stacked.offsets <- function (x, stacked = TRUE,
                              min.zero = FALSE, add.factor = 0.05, add.sum = 0,
                              #tight = FALSE, TODO
+                             drop = TRUE,
                              .spc = NULL){
   lvl <- NULL
+
+  if (is.null (.spc))
+    .spc <- x@data$spc
 
   if (is.character (stacked))
     stacked <- unlist (x [[, stacked]])
   else if (isTRUE (stacked))
     stacked <- row.seq (x)
 
+  ## cut stacked if necessary 
+  if (length (stacked) != nrow (.spc)){
+    stacked <- rep (stacked, length.out = nrow (.spc))
+    warning ("stacking variable recycled to ", nrow (.spc), " values.")
+  }
+  
   if (is.factor (stacked)) {
+    stacked <- droplevels (stacked)
     lvl <- levels (stacked)
     stacked <- as.numeric (stacked)
   } else if (!is.numeric (stacked))
     stop ("stacked must be either TRUE, the name of the extra data column to use for grouping, a factor or a numeric.")
-
-  if (is.null (.spc))
-    .spc <- x@data$spc
 
   ## using ave would be easier, but it splits the data possibly leading to huge lists.
   groups <- unique (as.numeric (stacked))
