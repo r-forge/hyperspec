@@ -42,6 +42,12 @@ hy.getOptions <- function (...){
   else
   .options [dots]
 }
+test (hy.getOptions) <- function (){
+  checkEquals (hy.getOptions (), .options)
+
+  checkEquals (hy.getOptions (tail (names (.options), 1)),
+               tail (.options, 1))
+}
 
 ##' @rdname options
 ##' @export

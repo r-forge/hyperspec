@@ -118,4 +118,3 @@ test (.labels) <- function (){
 ##' 
 setMethod ("labels", signature = signature (object = "hyperSpec"), .labels)
 
-

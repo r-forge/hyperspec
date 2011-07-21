@@ -7,7 +7,7 @@ MAN := src/hyperSpec/man/*.Rd
 RNW := src/hyperSpec/inst/doc/*.Rnw
 
 
-all: vignettes doc data www DESCRIPTION roxy build check
+all: vignettes doc data www DESCRIPTION roxy build check test
 		@echo all vignettes: $(VIGNETTES)
 
 zip: $(ZIPS)
@@ -392,3 +392,8 @@ clean: .FORCE
 	@rm -rf src/hyperSpec/inst/doc/*/auto
 
 
+install:
+		sudo R CMD INSTALL pkg/hyperSpec	
+
+test: install
+	Rscript --vanilla -e "library (hyperSpec); hy.unittest ()"
