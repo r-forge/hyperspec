@@ -76,7 +76,7 @@ plots.gui <- function(toolkit, resize) {
   add(tmp, gbutton("Done", handler=function(...) dispose(window)))
 
   updateData()
-  x<-visible(window, set=TRUE)
+  visible(window, set=TRUE)
   
   return (ind)
 }
