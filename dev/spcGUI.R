@@ -1,5 +1,6 @@
 library(gWidgets)
 library(hyperSpec)
+options("guiToolkit"="Qt")
 options("guiToolkit"="RGtk2")
 
 ### Notes
