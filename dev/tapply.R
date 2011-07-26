@@ -1,4 +1,17 @@
 .tapply <- function (X, INDEX, FUN = NULL, ..., levelorder = TRUE){
+  
+  if (length (X$spc) == 0)
+    stop ("empty spectra matrix.")
+  
+  FUN <- if (!is.null(FUN)) 
+      match.fun(FUN)
+  if (!is.list(INDEX)) 
+      INDEX <- list(INDEX)
+  
+  
+  
+  spc <- tapply (X [, "spc", drop = FALSE], INDEX, FUN, ...)
+  
   X
 }
 
