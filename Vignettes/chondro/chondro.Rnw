@@ -152,12 +152,9 @@ plot (chondro, "spcprctl5")
 @
 
 Note that normalization effectively cancels the information of one variate (wavelength), it
-introduces a collinearity. This can be broken by deleting one wavelength:
-
-<<>>=
-chondro <- chondro [,, min ~ max - 1i]
-@
-
+introduces a collinearity. If needed, this collinearity can be broken by removing one of the variates
+involved in the normalization. Note that the \Robject{chondro} object shipped with \phy set has
+multiple collinearities as only the first 10 principal components are shipped (see below).
 
 For the results of these preprocessing steps, see figure~\ref{fig:bl-bl}.
 
