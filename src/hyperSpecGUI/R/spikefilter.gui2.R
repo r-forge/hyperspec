@@ -190,12 +190,12 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
   x <- NULL
   y <- NULL
   
-  tmp <- ggroup(cont=wgroup)
-  add(tmp, gbutton("New Data", handler=updateData))
-  add(tmp, gbutton("Done", handler=function(...) {
-    dispose(window)
-    dev.off(); dev.off(); dev.off(); ### This isn't' working as hoped, try it to see
-  }))
+  #tmp <- ggroup(cont=wgroup)
+  #add(tmp, gbutton("New Data", handler=updateData))
+  #add(tmp, gbutton("Done", handler=function(...) {
+  #  dispose(window)
+  #  dev.off(); dev.off(); dev.off(); ### This isn't' working as hoped, try it to see
+  #}))
   
   tmp <- gframe("Number of Spectra", cont=wgroup)
   gnspc <- gslider(from=1,to=20,by=1,value=1, cont=tmp, handler=function(...){
