@@ -1,3 +1,7 @@
+## make generic functions without default
+setGeneric ("mean_sd", function (x, na.rm = TRUE, ...) standardGeneric ("mean_sd"))
+setGeneric ("mean_pm_sd", function (x, na.rm = TRUE, ...) standardGeneric ("mean_pm_sd"))
+
 ##' Mean and Standard Deviation
 ##' Calculate mean and standard deviation, and mean, mean \eqn{\pm}{+-} one
 ##' standard deviation, respectively.
@@ -16,11 +20,13 @@
 ##' @examples
 ##' 
 ##' mean_sd (flu [,, 405 ~ 410])
- 
-mean_sd <- function (x, na.rm = TRUE, ...)
-  c (mean = mean (x, na.rm = na.rm),
-     sd   = sd   (x, na.rm = na.rm)
-    )
+setMethod ("mean_sd", signature = signature (x = "numeric"),
+           function (x, na.rm = TRUE, ...) {
+             c (mean = mean (x, na.rm = na.rm),
+                sd   = sd   (x, na.rm = na.rm)
+                )
+           }
+           )
 
 ##' @rdname mean_sd
 ##' @return \code{mean_sd (matrix)} returns a matrix with the mean spectrum in the first row and the standard deviation in the 2nd.
@@ -62,11 +68,12 @@ setMethod ("mean_sd", signature = signature (x = "hyperSpec"),
 ##' @examples
 ##' 
 ##'   mean_pm_sd (flu$c)
-mean_pm_sd <- function (x, na.rm = TRUE, ...){
-  m <- mean (x, na.rm = na.rm)
-  s <- sd (x, na.rm = na.rm)
-  c("mean.minus.sd" = m - s, "mean" = m, "mean.plus.sd" = m + s)
-}
+setMethod ("mean_pm_sd", signature = signature (x = "numeric"),
+           function (x, na.rm = TRUE, ...){
+             m <- mean (x, na.rm = na.rm)
+             s <- sd (x, na.rm = na.rm)
+             c("mean.minus.sd" = m - s, "mean" = m, "mean.plus.sd" = m + s)
+           })
 
 ##' @rdname mean_sd
 ##' @return \code{mean_pm_sd (matrix)} returns a matrix containing mean - sd, mean, and mean + sd
