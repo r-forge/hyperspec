@@ -1,0 +1,190 @@
+\usetikzlibrary{mindmap}
+\usetikzlibrary{backgrounds}
+\setboolean{logo}{false}
+\setboolean{annotations}{false}
+\setboolean{icon}{false}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+\pagestyle{empty}
+
+\ifthenelse{\boolean{logo}}{
+\contourlength{0.33mm}
+\contournumber{32}
+   \colorlet{root}{black!50!white}
+   \colorlet{gruen}{green!50!black!60!white}
+   \colorlet{blassgruen}{green!60!black!30!white}
+   \colorlet{blau}{blue!75!black!60!white}
+   \colorlet{rot}{red!60!white}
+   \colorlet{violett}{violet!60!white}
+   \colorlet{orange}{orange!75!white}
+   \colorlet{rottext}{rot}
+   \colorlet{blautext}{blau}
+   \colorlet{violettext}{violett}
+   \colorlet{gruentext}{gruen}
+   \colorlet{blassgruentext}{blassgruen}
+   \colorlet{orangetext}{orange}
+   \colorlet{blacktext}{root}
+}{
+   \colorlet{root}{black}
+   \colorlet{gruen}{green!50!black}
+   \colorlet{blassgruen}{green!60!black!60!white}
+   \colorlet{blau}{blue!50!black}
+   \colorlet{rot}{red}
+   \colorlet{violett}{violet}
+   \colorlet{orange}{orange}
+   \colorlet{rottext}{white}
+   \colorlet{blautext}{white}
+   \colorlet{violettext}{white}
+   \colorlet{gruentext}{white}
+   \colorlet{blassgruentext}{black}
+   \colorlet{orangetext}{black}
+   \colorlet{blacktext}{white}
+}
+
+% \ifthenelse{\boolean{icon}}{
+%    \colorlet{root}{black}
+%    \colorlet{gruen}{green!50!black}
+%    \colorlet{blau}{blue!50!black}
+%    \colorlet{rot}{red}
+%    \colorlet{violett}{violet}
+%    \colorlet{orange}{orange}
+%    \colorlet{rottext}{rot}
+%    \colorlet{blautext}{blau}
+%    \colorlet{violettext}{violett}
+%    \colorlet{gruentext}{gruen}
+%    \colorlet{orangetext}{orange}
+%    \colorlet{blacktext}{root}
+% }{}
+%\begin{sfseries}
+\begin{tikzpicture}[mindmap, concept color = root, text = white, font=\sf\bfseries, tight background,
+inner sep = 0pt, outer sep = 0pt]%, background rectangle/.style={fill=yellow}, show background rectangle]
+\ifthenelse{\boolean{logo}}{
+\clip (-12.3, -12) rectangle (11, 13.3);
+}{}
+\ifthenelse{\boolean{annotations}}{
+   \tikzstyle{every annotation}+=[text=black,font=\small\tt]
+}{
+   \tikzstyle{every annotation}+=[text=white,font=\small\tt]
+   \tikzstyle{concept connection}+=[white]
+   \tikzstyle{every annotation}+=[text=black,font=\small\tt]
+}
+\begin{scope}[]
+\tikzstyle{level 0 concept}+=[font=\sf\bfseries, text = blacktext, color=root]
+\tikzstyle{level 1 concept}+=[font=\sf\bfseries\large, level distance = 6cm]
+\tikzstyle{level 2 concept}+=[font=\sf\bfseries\large, level distance = 3.5cm]
+\tikzstyle{level 3 concept}+=[font=\sf\bfseries\large, level distance = 3.5cm]
+\node [concept, color=root, text = blacktext,font=\huge\tt] (root) {\texttt{hyperSpec}}
+     child[concept color=gruen, text = gruentext, grow = 35] {
+        node[concept, text width=2.65cm] (plot) {Visualization: plots}%
+           child [grow = 0, level distance=4cm]{node [concept, text width = 3cm] (plotc) {
+               Time Series, \\Calibration,  \\Depth Profile}}
+           child [grow = 310] {node [concept] (plotspc) {Spectra}}
+           child [grow = 160] {node [concept] (plotmat) {Spectra\\Matrix}}
+           child [grow = 45] {node [concept] (plotmap) {Images\\Maps}}
+           child [grow = 85, concept color = blassgruen, text  = blassgruentext] {
+             node [concept] (print) {Print}}
+       }
+     child[concept color=blau, text = blautext, grow = 145] {
+        node[concept] {File Import~\& Export}
+           child [grow =  110] {node [concept] (ascii) {ASCII}}
+           child [grow = 150] {node [concept, text width = 2cm] (IOprop) {Binary Formats}}
+       }
+       child[concept color=rot, text = rottext, level distance=8.5cm, grow=90] {
+         node[concept, text width = 2.75cm] (R) {Statistical Data Analysis\\(Available in R)}
+         child [grow = 150, level distance=4cm] {node [concept, text width = 2cm] {Cluster Analysis}}
+         child [grow = 210] {node [concept] {PLS}}
+         child [grow =  90] {node [concept] {LDA}}
+         child [grow =  30] {node [concept] {PCA}}
+         child [grow = -30] {node [concept] {etc.}}
+       }
+       child[concept color=violett, text = violettext, level distance=7cm, grow = 210] {
+        node[concept] {Processing Spectra}
+   child [grow =  60] {node [concept, text width = 2.00cm] (spcsel)  {Select/ Delete Spectra}}
+	   child [grow =  110] {node [concept, text width = 2.30cm] (spccut)   {Cut/Select  Wavelength Range}} 
+ 	    child [grow =  160] {node [concept, text width = 2.30cm] (spcadd)   {Add new Spectra}}
+	    child [grow =  220] {node [concept, text width = 2.30cm] (wladd)   {Add new Wavelength Ranges}}
+	    child [grow = 285, level distance=4cm] {node [concept, text width = 2.20cm] (spcarith) {Arithmetic}
+		      [clockwise from=0]
+		      child [grow = -10] {node [concept, text width = 2.10cm] (spcbl)    {Offset \& Baseline Correction}}
+		      child [grow = -60] {node [concept, text width = 2.00cm] (spcnorm)  {Normali\-zation}}
+		      child [grow = -110] {node [concept, text width = 2.10cm] (spcical)  {Intensity Calibration}}
+	    }
+             child [grow = 345] {node [concept, text width = 2.50cm] (spcinter) {Spectral\\Interpolation/ Wavelength-Conversion}}
+}
+       child[concept color=orange, text = orangetext, level distance=7cm, grow = -45] {
+        node[concept] {House keeping}
+        [clockwise from=0]
+	      child[grow = 100]{node [concept, text width = 2.00cm](hkcreate){Create Object}}
+	      child[grow = 45]{node [concept, text width = 2.00cm](hkinf){General Information}}
+	      child [grow = 325] {node [concept, text width = 1.50cm] (hkgroup){Split Object}}
+	      child[grow = 275]{node [concept, text width = 2.00cm](hkaccess){Access parts}}
+	      child[grow = 225]{node [concept, text width = 2.00cm](hkcomb){Combine Objects}}
+% 	      child [grow = 186] {node [concept, text width = 1.50cm] (spcsel){Delete Spectra}}
+%            child [grow =  75] {node [concept, text width = 2.00cm] (spcbind) {Add new Spectral Ranges}}
+%            child [grow =  15] {node [concept, text width = 2.00cm] (spcbind) {Add new Spectra}}
+%            child [grow = 255] {node [concept, text width = 1.50cm] (spcsel){Select Spectra}}
+       };
+\ifthenelse{\boolean{annotations}}{
+% \node [annotation, right]                 at (matlab.east)  {{\sf package} R.matlab:
+%                                                              writeMat, readMat};
+%Visualization
+\node [annotation, below, text centered, text width=5mm]  at (plot.south)  {plot};
+\node [annotation, above, text centered, text width=5mm]  at (print.north) {summary\\print};
+\node [annotation, above, text centered, text width=5mm]  at (plotc.north) {plotc};
+\node [annotation, right, text ragged right, text width=5mm]  at (plotspc.east) {plotspc\\spc.identify\\stacked.offsets};
+\node [annotation, above right, text ragged right, text width=5mm]  at (plotmap.120) {plotmap\\map.identify\\index.grid};
+%     \begin{pgfonlayer}{background}
+%House keeping
+\node [annotation, right, text width=5mm]                 at (hkgroup.east)  {aggregate\\split};
+\node [annotation, right, text width=5mm]                 at (hkcreate.east)  {new};
+\node [annotation, below = 8mm, right = -10mm, text width=35mm]                 at (hkinf.south)  {summary, print\\
+  nrow,  ncol,  nwl, dim\\rownames, colnames, dimnames};
+ \node [annotation, below right, ]   at (hkaccess.240)  {[], []<-\\{} [[]], [[]]<-\\ \textdollar,\textdollar <- \\ wl, wl<-\\labels, labels <-\\ logbook, logentry };
+\node [annotation, below right, text width=5mm ]                at (hkcomb.240)  {cbind\\rbind\\ \%*\%};
+%Processing spectra & Arithmetic
+\node [annotation, right, text width=5mm]  at (spcsel.east)  {[]};
+\node [annotation, left, text ragged left, text width=5mm] at (spccut.west)   {[]};
+\node [annotation, below, text ragged left,text width=10mm]  at (spcadd.south)  {rbind};
+\node [annotation, below, text ragged left,text width=10mm]  at (wladd.south)  {cbind};
+\node [annotation, right ]  at (spcinter.east)  {spc.bin\\spc.loess\\wl, wl <-};
+\node [annotation, below left, text ragged left]  at (spcarith.205) {+ - * / \%*\%{\sf, log, etc.}\\x[[]] <- f(x[[]])};
+\node [annotation, left, text width=10mm]                 at (spcical.west)  {sweep};
+\node [annotation, below, text centered]at (spcnorm.south) {apply \& sweep};
+\node [annotation, below right, text ragged right]at (spcbl.250)
+        {apply, sweep\\ spc.fit.poly\\ spc.fit.poly.below};
+
+%File Import&Export
+\node [annotation, above]                 at (ascii.north)   {read.txt.long read.txt.wide
+                                                             write.txt.long write.txt.wide scan.txt.Renishaw};
+\node [annotation, below]                 at (IOprop.south)  {R.matlab::readMat R.matlab::writeMat read.ENVI read.ENVI.Nicolet read.spc read.spc.KaiserMap};
+\draw [concept connection, line width = 1.5mm, ->, shorten <= 6mm, shorten >= 5mm]
+       (R.265) .. controls +(230:2cm) and +(135:2cm) .. (root.95)
+	   node [annotation, pos=0.3, xshift = -15]  {aggregate}
+	   node [annotation, pos=0.4, xshift = -35] {decomposition}
+	   node [annotation, pos=0.5, xshift = 10]  {split}
+	   node [annotation, pos=0.6, xshift = 12]  {{[[}<-}
+	   node [annotation, pos=0.7, xshift = 15]  {\$ <-}
+;
+ \draw [concept connection, line width = 1.5mm, <-, shorten <= 5mm, shorten >= 6mm]
+       (R.275) .. controls +(310:2cm) and +(50:2cm) .. (root.85)
+	   node [annotation, pos=0.3, xshift = 60] {\$}
+	   node [annotation, pos=0.4, xshift = 60] {\$.}
+	   node [annotation, pos=0.5, xshift = 60] {\$..}
+	   node [annotation, pos=0.6, xshift = 60] {[[]]}
+	   node [annotation, pos=0.7, xshift = 60] {as.long.df};
+}{}
+
+\end{scope}
+\ifthenelse{\boolean{logo} \AND \NOT \boolean{annotations}}{
+   \node[scale = 10, transform shape, black, text centered, text width=4.2cm, shape = rectangle, inner sep = 0pt] at (-0.5, 3.5) {\contour{white}{\Huge\texttt{hyper}}};
+   \node[scale = 10, transform shape, black, text centered, text width=3cm] at (-0.5, -4.5) {\contour{white}{\Huge\texttt{Spec}}};
+%\node at (R) {};
+}{}
+\end{tikzpicture}
+
+
+%%% Local Variables:  
+%%% mode: latex 
+%%% TeX-master: "hyperSpec-schema-root" 
+%%% End: 
