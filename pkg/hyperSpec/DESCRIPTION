@@ -15,9 +15,9 @@ Description: This package is an interface to handle hyperspectral data
     any data that is recorded over a discretized variable, e.g.
     absorbance = f (wavelength), stored as a vector of absorbance
     values for discrete wavelengths is suitable.
-Version: 0.98-20110722
+Version: 0.98-20110802
 URL: http://hyperSpec.r-forge.r-project.org/
-Date: 2011-07-22
+Date: 2011-08-02
 Depends: R (>= 2.11), methods, utils, lattice, grid
 Suggests: R.matlab, latticeExtra, tripack, deldir, rgl, plotrix,
     testthat, ggplot2, pls, playwith, latticist, svUnit, sp, baseline,
