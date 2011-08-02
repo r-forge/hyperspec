@@ -198,7 +198,7 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
   #}))
   
   tmp <- gframe("Number of Spectra", cont=wgroup)
-  gnspc <- gslider(from=1,to=20,by=1,value=1, cont=tmp, handler=function(...){
+  gnspc <- gslider(from=0,to=20,by=1,value=1, cont=tmp, handler=function(...){
     svalue(lnspc) <- paste("(",svalue(gnspc),")",sep='');
     updatePlots()
   }, expand=TRUE)
