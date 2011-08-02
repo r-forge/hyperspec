@@ -197,7 +197,7 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
     dev.off(); dev.off(); dev.off(); ### This isn't' working as hoped, try it to see
   }))
   
-  tmp <- gframe("Number of Species", cont=wgroup)
+  tmp <- gframe("Number of Spectra", cont=wgroup)
   gnspc <- gslider(from=1,to=20,by=1,value=1, cont=tmp, handler=function(...){
     svalue(lnspc) <- paste("(",svalue(gnspc),")",sep='');
     updatePlots()
@@ -207,9 +207,9 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
   tmp <- gframe("Spikes", container=wgroup)
   add(tmp, gbutton("Next Suspicion", handler=function(...){i<<-i+1; updatePlots()}))
   add(tmp,gimage('forward'))
-  add(tmp, gbutton("Good Spectrum"))
+  add(tmp, gbutton("Good Spectrum", handler=function(...){i<<-i+1; updatePlots()}))
   add(tmp,gimage('forward'))
-  add(tmp, gbutton("Bad Spectrum"))
+  add(tmp, gbutton("Bad Spectrum", handler=function(...){i<<-i+1; updatePlots()}))
   add(tmp,gimage('dismiss'))
   add(tmp, gbutton("Done", handler=function(...) {
     dispose(window)
