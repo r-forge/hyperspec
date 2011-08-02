@@ -1,0 +1,90 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage{amsfonts, amsmath, hanging, hyperref, natbib, parskip, times}
+\usepackage[pdftex]{graphicx}
+\usepackage[utf8]{inputenx}
+\hypersetup{
+  colorlinks,
+  linkcolor=blue,
+  urlcolor=blue
+}
+
+\let\section=\subsubsection
+\newcommand{\pkg}[1]{{\normalfont\fontseries{b}\selectfont #1}} 
+\let\proglang=\textit
+\let\code=\texttt 
+\renewcommand{\title}[1]{\begin{center}{\bf \LARGE #1}\end{center}}
+\newcommand{\affiliations}{\footnotesize}
+\newcommand{\keywords}{\paragraph{Keywords:}}
+
+\setlength{\topmargin}{-15mm}
+\setlength{\oddsidemargin}{-2mm}
+\setlength{\textwidth}{165mm}
+\setlength{\textheight}{250mm}
+
+\begin{document}
+\pagestyle{empty}
+
+\title{\pkg{hyperSpecGUI}: \\Graphical Interaction in Spectroscopic Data Analysis}
+
+\begin{center}
+  \textbf{Sebastian Mellor$^1$, Claudia Beleites$^{2,^\star}$, Colin Gillespie$^1$, Christoph Krafft$^{2}$,
+    and Jürgen Popp$^{2,3}$}
+\end{center}
+
+\begin{affiliations}
+  1. School of Mathematics \& Statistics, Newcastle University, Newcastle/UK.\\[-2pt]
+  2. Institute of Photonic Technology, Jena/Germany.\\[-2pt]
+  3. Institute of Physical Chemistry and Abbe Center of Photonics, University Jena/Germany.\\[-2pt]
+  $^\star$Corresponding author:
+  \href{mailto:Claudia.Beleites@ipht-jena.de}{Claudia.Beleites@ipht-jena.de}
+\end{affiliations}
+
+\keywords spectroscopy; Google Summer of Code; GUI.
+
+\vskip 0.8cm
+
+Spectroscopic data analysis includes highly visual tasks that need graphical
+user interaction. We present \pkg{hyperSpecGUI}, a companion package enhancing
+\pkg{hyperSpec}. Both packages are hosted at
+\href{http://hyperspec.r-forge.r-project.org/}{hyperspec.r-forge.r-project.org}.
+
+% In contrast to the design of many existing spectroscopic data analysis GUIs, we
+% do not replace the command line interface with a graphical user interface (GUI).
+% Instead we supplement the scripting facility. 
+
+The \pkg{hyperSpecGUI} packages follows the ``specialise on a single thing''
+paradigm, as opposed to implementing an integrated development environment (IDE)
+or all-(spectroscopic)-purpose GUI. Visual interaction is provided by small,
+specialised GUIs (applets, dialogs) that are called as functions. This allows
+full GUI interaction with scripts and easy integration with IDEs. In particular,
+this allows:
+\begin{description}
+\item[Fast work-flow creation:] rather than a single GUI, we use a combination
+  of small, bespoke GUIs. This allows swapping between command line and applets.
+\item[Flexibility:] the package is extensible and easily adapted to new and
+  unforeseen tasks.
+\item[Compatibility with batch processing:] spectroscopic data sets are large
+  with data analysis often including high performance computations on remote
+  servers that do not provide graphical interaction. Switching back and forth
+  between GUI-based and command line based work/batch processing are smooth and
+  easy.
+\item[Reproducibility:] interactive tasks are automatically recorded, allowing
+  literate programming techniques to be used, e.g. Sweave.
+\end{description}
+
+\emph{Interactive spike correction example:} we present a GUI for spike
+filtering of Raman data, demonstrating the wrapping of this GUI with existing
+IDEs/editors.
+
+When cosmic rays hit the detector, spikes are observed in the Raman spectra.
+Several strategies to identify these artifacts exist and work well with high,
+sharp spikes. However, manual control and adjustment of the results is necessary
+as broader artifacts may be confused with sharp Raman bands and vice versa. Also
+the borders of broader artifacts are difficult to detect.
+
+\emph{Acknowledgements.~} SM's work is funded by the Google Summer of Code 2011.
+CB acknowledges funding by the European Union via the Europäischer Fonds für
+Regionale Entwicklung (EFRE) and the ``Thüringer Ministerium für Bildung,
+Wissenschaft und Kultur'' (Project: B714-07037).
+
+\end{document}

@@ -205,17 +205,18 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
   lnspc <- glabel("(1)", cont=tmp)
 
   tmp <- gframe("Spikes", container=wgroup)
-  add(tmp, gbutton("Next Suspicion", handler=function(...){i<<-i+1; updatePlots()}))
-  add(tmp,gimage('forward'))
+  ## clear selection
   add(tmp, gbutton("Good Spectrum", handler=function(...){i<<-i+1; updatePlots()}))
-  add(tmp,gimage('forward'))
+  #add(tmp,gimage('forward'))
   add(tmp, gbutton("Bad Spectrum", handler=function(...){i<<-i+1; updatePlots()}))
-  add(tmp,gimage('dismiss'))
+  #add(tmp,gimage('dismiss'))
+  add(tmp, gbutton("Next Suspicion", handler=function(...){i<<-i+1; updatePlots()}))
+  #add(tmp,gimage('forward'))
   add(tmp, gbutton("Done", handler=function(...) {
     dispose(window)
     dev.off(); dev.off(); dev.off(); ### This isn't' working as hoped, try dev.list() to see
   }))
-  add(tmp,gimage('ok'))
+  #add(tmp,gimage('ok'))
 
   #goutput <- glabel("<b>Spike suspicion</b>: 1<br />
   #                   <b>Spectrum</b>: 67<br />
