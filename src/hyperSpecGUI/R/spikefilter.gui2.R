@@ -29,16 +29,16 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
   
   ### End copy-pasta
   
-  options("guiToolkit"="Qt")
+  options("guiToolkit"="RGtk2")
   
   window <- gbasicdialog("plots.gui - gWidgets (modal)", do.buttons=FALSE)
   wgroup <- ggroup(horizontal=FALSE, cont=window)
   pgroup <- gpanedgroup(container=wgroup)
   ggmain <- ggraphics(width=400, height=400, cont=pgroup)
 
-  rgroup <- ggroup(horizontal=FALSE, cont=pgroup)
-  ggsub1 <- ggraphics(width=200, height=200, cont=rgroup)
+  rgroup <- gpanedgroup(horizontal=FALSE, cont=pgroup)
   ggsub2 <- ggraphics(width=200, height=200, cont=rgroup)
+  ggsub1 <- ggraphics(width=200, height=200, cont=rgroup)
 ## name ggraphics to call visible later
   size(pgroup) <- c(650, 450) ## fix for scrollbars
   
@@ -201,7 +201,7 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
   gnspc <- gslider(from=1,to=20,by=1,value=1, cont=tmp, handler=function(...){
     svalue(lnspc) <- paste("(",svalue(gnspc),")",sep='');
     updatePlots()
-  })
+  }, expand=TRUE)
   lnspc <- glabel("(1)", cont=tmp)
 
   tmp <- gframe("Spikes", container=wgroup)
@@ -217,12 +217,12 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
   }))
   add(tmp,gimage('ok'))
 
-  goutput <- glabel("<b>Spike suspicion</b>: 1<br />
-                     <b>Spectrum</b>: 67<br />
-                     (1560.94, 2219.1)<br />
-                     <b>Spike points</b>:  479 481<br />
-                     <b>Spikiness</b>:  0.06663623 -1.423397",
-                     markup = TRUE, cont=wgroup)
+  #goutput <- glabel("<b>Spike suspicion</b>: 1<br />
+  #                   <b>Spectrum</b>: 67<br />
+  #                   (1560.94, 2219.1)<br />
+  #                   <b>Spike points</b>:  479 481<br />
+  #                   <b>Spikiness</b>:  0.06663623 -1.423397",
+  #                   markup = TRUE, cont=wgroup)
 
 
   updateData()
