@@ -1,3 +1,7 @@
+## make generic functions without default
+setGeneric ("mean_sd", function (x, na.rm = TRUE, ...) standardGeneric ("mean_sd"))
+setGeneric ("mean_pm_sd", function (x, na.rm = TRUE, ...) standardGeneric ("mean_pm_sd"))
+
 ##' Mean and Standard Deviation
 ##' Calculate mean and standard deviation, and mean, mean \eqn{\pm}{+-} one
 ##' standard deviation, respectively.
@@ -16,11 +20,27 @@
 ##' @examples
 ##' 
 ##' mean_sd (flu [,, 405 ~ 410])
- 
-mean_sd <- function (x, na.rm = TRUE, ...)
-  c (mean = mean (x, na.rm = na.rm),
-     sd   = sd   (x, na.rm = na.rm)
-    )
+setMethod ("mean_sd", signature = signature (x = "numeric"),
+           function (x, na.rm = TRUE, ...) {
+             c (mean = mean (x, na.rm = na.rm),
+                sd   = sd   (x, na.rm = na.rm)
+                )
+           }
+           )
+
+##' @rdname mean_sd
+##' @return \code{mean_sd (matrix)} returns a matrix with the mean spectrum in the first row and the standard deviation in the 2nd.
+##' @keywords multivar
+##' @export
+##' @examples
+##' 
+##' mean_sd (flu$spc)
+setMethod ("mean_sd", signature = signature (x = "matrix"),
+           function (x, na.rm = TRUE, ...) {
+             m <- colMeans (x)
+             s <- sd       (x)
+             rbind (mean = m, sd = s)
+           })
 
 ##' @rdname mean_sd
 ##' @param short,user,date handed to \code{\link{logentry}}.
@@ -34,12 +54,9 @@ mean_sd <- function (x, na.rm = TRUE, ...)
 ##' mean_sd (flu)
 setMethod ("mean_sd", signature = signature (x = "hyperSpec"),
            function (x, na.rm = TRUE, ..., short = "mean_sd", user = NULL, date = NULL) {
-             m <- colMeans (x@data$spc)
-             s <- sd       (x@data$spc)
-             decomposition (x, rbind (mean = m, sd = s), scores = FALSE,
+             decomposition (x, mean_sd (x@data$spc), scores = FALSE,
                             short = short, user = user, date = date)
            })
-
 
 
 ##' @aliases mean_pm_sd
@@ -51,14 +68,29 @@ setMethod ("mean_sd", signature = signature (x = "hyperSpec"),
 ##' @examples
 ##' 
 ##'   mean_pm_sd (flu$c)
-mean_pm_sd <- function (x, na.rm = TRUE, ...){
-  m <- mean (x, na.rm = na.rm)
-  s <- sd (x, na.rm = na.rm)
-  c("mean.minus.sd" = m - s, "mean" = m, "mean.plus.sd" = m + s)
-}
+setMethod ("mean_pm_sd", signature = signature (x = "numeric"),
+           function (x, na.rm = TRUE, ...){
+             m <- mean (x, na.rm = na.rm)
+             s <- sd (x, na.rm = na.rm)
+             c("mean.minus.sd" = m - s, "mean" = m, "mean.plus.sd" = m + s)
+           })
 
 ##' @rdname mean_sd
-##' @return For hyperSpec object, \code{mean_pm_sd} returns a hyperSpec object containing mean - sd,
+##' @return \code{mean_pm_sd (matrix)} returns a matrix containing mean - sd, mean, and mean + sd
+##' rows.
+##' @export
+##' @examples
+##' 
+##' mean_pm_sd (flu$spc)
+setMethod ("mean_pm_sd", signature = signature (x = "matrix"),
+           function (x, na.rm = TRUE, ...) {
+             m <- colMeans (x)
+             s <- sd       (x)
+             rbind ("mean - sd" = m - s, mean = m, "mean + sd"= m + s)
+           })
+
+##' @rdname mean_sd
+##' @return For hyperSpec objects, \code{mean_pm_sd} returns a hyperSpec object containing mean - sd,
 ##' mean, and mean + sd spectra.
 ##' @export
 ##' @examples
@@ -66,11 +98,10 @@ mean_pm_sd <- function (x, na.rm = TRUE, ...){
 ##' mean_pm_sd (flu)
 setMethod ("mean_pm_sd", signature = signature (x = "hyperSpec"),
            function (x, na.rm = TRUE, ..., short = "mean_sd", user = NULL, date = NULL) {
-             m <- colMeans (x@data$spc)
-             s <- sd       (x@data$spc)
-             decomposition (x, rbind ("mean - sd" = m - s, mean = m, "mean + sd"= m + s), 
+             decomposition (x, mean_pm_sd (x@data$spc),
                             short = short, user = user, date = date)
            })
+
 ##' @rdname mean_sd
 ##' @return For hyperSpec object, \code{mean} returns a hyperSpec object containing the mean
 ##' spectrum.
