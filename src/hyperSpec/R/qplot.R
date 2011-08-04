@@ -31,6 +31,7 @@ qplotspc <- function (x,
                       spc.nmax = 10){
   chk.hy (x)
   validObject (x)
+  require (ggplot2)
   
   ## cut away everything that isn't asked for _before_ transforming to data.frame
   if (nrow (x) > spc.nmax) {
@@ -90,6 +91,7 @@ qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "sp
                       func = mean, func.args = list ()){
   chk.hy (object)
   validObject (object)
+  require (ggplot2)
 
   if (nwl (object) > 1 & ! is.null (func))
     object <- do.call (apply, c (list (object, 1, func), func.args))
@@ -111,7 +113,7 @@ qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "sp
 ##' @param object hyperSpec object
 ##' @param mapping see  \code{\link[ggplot2]{geom_point}}
 ##' @param ... handed to \code{\link[ggplot2]{geom_point}}
-##' @param func function to summarize the wavelengths
+##' @param func function to summarize the wavelengths, if \code{NULL}, only the first wavelength is used
 ##' @param func.args arguments to \code{func}
 ##' @return a \code{\link[ggplot2]{ggplot}} object
 ##' @author Claudia Beleites
@@ -120,11 +122,13 @@ qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "sp
 ##' \code{\link[ggplot2]{ggplot}}\code{\link[ggplot2]{geom_point}}
 ##' @export 
 ##' @examples
-##' 
+##' qplotc (flu)
+##' qplotc (flu) + geom_smooth (method = "lm")
 qplotc <- function (object, mapping = aes_string(x = "c", y = "spc"), ...,
                      func = NULL, func.args = list ()){
   chk.hy (object)
   validObject (object)
+  require (ggplot2)
 
   dots <- list (...)
 
@@ -149,6 +153,7 @@ qplotc <- function (object, mapping = aes_string(x = "c", y = "spc"), ...,
   ylab <- labels (object, as.character (mapping$y))
   if (! is.null (func)) 
     ylab <- make.fn.expr (substitute (func), c (ylab, func.args))
+  ylab <- as.expression (ylab)
   
   ## expand the data.frame
   df <- as.long.df (object, rownames = TRUE, wl.factor = TRUE)
