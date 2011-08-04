@@ -1,7 +1,7 @@
 \usetikzlibrary{mindmap}
 \usetikzlibrary{backgrounds}
 \setboolean{logo}{false}
-\setboolean{annotations}{false}
+\setboolean{annotations}{true}
 \setboolean{icon}{false}
 
 \pgfdeclarelayer{background}
@@ -75,14 +75,14 @@ inner sep = 0pt, outer sep = 0pt]%, background rectangle/.style={fill=yellow}, s
 \tikzstyle{level 2 concept}+=[font=\sf\bfseries\large, level distance = 3.5cm]
 \tikzstyle{level 3 concept}+=[font=\sf\bfseries\large, level distance = 3.5cm]
 \node [concept, color=root, text = blacktext,font=\huge\tt] (root) {\texttt{hyperSpec}}
-     child[concept color=gruen, text = gruentext, grow = 35] {
+     child[concept color=gruen, text = gruentext, grow = 35, level distance=7cm,] {
         node[concept, text width=2.65cm] (plot) {Visualization: plots}%
-           child [grow = 0, level distance=4cm]{node [concept, text width = 3cm] (plotc) {
+           child [grow = 30, level distance=4cm]{node [concept, text width = 3cm] (plotc) {
                Time Series, \\Calibration,  \\Depth Profile}}
-           child [grow = 310] {node [concept] (plotspc) {Spectra}}
-           child [grow = 160] {node [concept] (plotmat) {Spectra\\Matrix}}
-           child [grow = 45] {node [concept] (plotmap) {Images\\Maps}}
-           child [grow = 85, concept color = blassgruen, text  = blassgruentext] {
+           child [grow = -20] {node [concept] (plotspc) {Spectra}}
+           child [grow = 300] {node [concept] (plotmat) {Spectra\\Matrix}}
+           child [grow = 90] {node [concept] (plotmap) {Images\\Maps}}
+           child [grow = 135, concept color = blassgruen, text  = blassgruentext] {
              node [concept] (print) {Print}}
        }
      child[concept color=blau, text = blautext, grow = 145] {
@@ -93,10 +93,10 @@ inner sep = 0pt, outer sep = 0pt]%, background rectangle/.style={fill=yellow}, s
        child[concept color=rot, text = rottext, level distance=8.5cm, grow=90] {
          node[concept, text width = 2.75cm] (R) {Statistical Data Analysis\\(Available in R)}
          child [grow = 150, level distance=4cm] {node [concept, text width = 2cm] {Cluster Analysis}}
-         child [grow = 210] {node [concept] {PLS}}
-         child [grow =  90] {node [concept] {LDA}}
-         child [grow =  30] {node [concept] {PCA}}
-         child [grow = -30] {node [concept] {etc.}}
+         child [grow = 15] {node [concept] {PLS}}
+         child [grow = 105] {node [concept] {LDA}}
+         child [grow =  60] {node [concept] {PCA}}
+         child [grow = 195] {node [concept] {etc.}}
        }
        child[concept color=violett, text = violettext, level distance=7cm, grow = 210] {
         node[concept] {Processing Spectra}
@@ -132,8 +132,8 @@ inner sep = 0pt, outer sep = 0pt]%, background rectangle/.style={fill=yellow}, s
 \node [annotation, below, text centered, text width=5mm]  at (plot.south)  {plot};
 \node [annotation, above, text centered, text width=5mm]  at (print.north) {summary\\print};
 \node [annotation, above, text centered, text width=5mm]  at (plotc.north) {plotc};
-\node [annotation, right, text ragged right, text width=5mm]  at (plotspc.east) {plotspc\\spc.identify\\stacked.offsets};
-\node [annotation, above right, text ragged right, text width=5mm]  at (plotmap.120) {plotmap\\map.identify\\index.grid};
+\node [annotation, right, text ragged, text width=5mm]  at (plotspc.east) {plotspc\\spc.identify\\stacked.offsets};
+\node [annotation, above right, text ragged, text width=5mm]  at (plotmap.120) {plotmap\\map.identify\\index.grid};
 %     \begin{pgfonlayer}{background}
 %House keeping
 \node [annotation, right, text width=5mm]                 at (hkgroup.east)  {aggregate\\split};
@@ -151,7 +151,7 @@ inner sep = 0pt, outer sep = 0pt]%, background rectangle/.style={fill=yellow}, s
 \node [annotation, below left, text ragged left]  at (spcarith.205) {+ - * / \%*\%{\sf, log, etc.}\\x[[]] <- f(x[[]])};
 \node [annotation, left, text width=10mm]                 at (spcical.west)  {sweep};
 \node [annotation, below, text centered]at (spcnorm.south) {apply \& sweep};
-\node [annotation, below right, text ragged right]at (spcbl.250)
+\node [annotation, below right, text ragged]at (spcbl.250)
         {apply, sweep\\ spc.fit.poly\\ spc.fit.poly.below};
 
 %File Import&Export

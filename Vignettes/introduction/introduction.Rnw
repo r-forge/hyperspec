@@ -36,6 +36,8 @@ check.req.pkg ("baseline",
                  getCorrected = function (x) {texterrormsg ("getCorrected", "baseline"); x}
                  ))
 check.req.pkg ("ggplot2", donothing = "")
+check.req.pkg ("compiler", donothing = "")
+check.req.pkg ("inline", donothing = "")
 @ 
 %
 \end{labeling}
@@ -43,9 +45,9 @@ check.req.pkg ("ggplot2", donothing = "")
 
 \section{Introduction}
 
-\phy is a R package that allows convenient handling of hyperspectral data sets, \ie data sets
-combining spectra with further data on a per-spectrum basis. The spectra can be anything
-that is recorded over a common discretized axis. 
+\phy is a R package that allows convenient handling of \index{hyperspectral data sets}hyperspectral
+data sets, \ie data sets combining spectra with further data on a per-spectrum basis. The spectra can
+be anything that is recorded over a common discretized axis.
 
 This vignette gives an introduction on basic working techniques using the R package \phy.  This is
 done mostly from a spectroscopic point of view: rather than going through the functions provided by
@@ -54,13 +56,13 @@ margin for a quick overview.
 
 \phy comes with five data sets,
 \begin{labeling}{wavelength: }
-\item [\Robject{chondro}] a Raman map of chondrocytes in cartilage,
-\item [\Robject{flu}] a set of fluorescence spectra of a calibration series, and
-\item [\Robject{laser}] a time series of an unstable laser emission
-\item [\Robject{paracetamol}] a Raman spectrum of paracetamol (acetaminophene) ranging from 100 to
-  \rcm{3200} with overlapping wavelength ranges.
-\item [\Robject{barbiturates}] GC-MS spectra with differing wavelength axes as a list of
-  \Sexpr{length (barbiturates)} \chy objects.
+\item [\Robject{chondro}] \index{data sets!chondro}a Raman map of chondrocytes in cartilage,
+\item [\Robject{flu}] \index{data sets!flu}a set of fluorescence spectra of a calibration series, and
+\item [\Robject{laser}] \index{data sets!laser}a time series of an unstable laser emission
+\item [\Robject{paracetamol}] \index{data sets!paracetamol}a Raman spectrum of paracetamol
+  (acetaminophene) ranging from 100 to \rcm{3200} with overlapping wavelength ranges.
+\item [\Robject{barbiturates}] \index{data sets!barbiturates}GC-MS spectra with differing wavelength
+  axes as a list of \Sexpr{length (barbiturates)} \chy objects.
 \end{labeling}
 In this vignette, the data sets are used to illustrate appropriate procedures for different tasks and
 different spectra.  In addition, the first three data sets are accompanied by their own vignettes
@@ -77,31 +79,31 @@ appendix~\ref{tab:functions}~(p.~\pageref{tab:functions}).
 \subsection{Notation and Terms}
 Throughout the documentation of the package, the following terms are used:
 \begin{labeling}{wavelength: }
-\item [wavelength:] spectral abscissa\\
+\item [wavelength:] \index{wavelength}spectral abscissa\\
   frequency, wavenumbers, chemical shift, Raman shift,
   $\frac{m}{z}$, etc.
-\item [intensity:] spectral ordinate\\
+\item [intensity:] \index{intensity}spectral ordinate\\
   transmission, absorbance, $\frac{e^{-}}{s}$, intensity, \textellipsis
-\item [extra data:] further information/data belonging to each spectrum\\
+\item [extra data:] \index{extra data}further information/data belonging to each spectrum\\
   spatial information (spectral images, maps, or profiles), temporal information
   (kinetics, time series), concentrations (calibration  series), class membership information, etc.\\
   \chy object may contain arbitrary numbers of extra data columns.
 \end{labeling}
 
-In R, slots of a S4 class are accessed by the \Rcommand{@} operator. In this vignette, the notation
-\Rcode{@xxx} will thus mean \emph{``slot xxx of an object''}.  Likewise, named elements of a
-\Rclass{list} and columns of a \df are accessed by the \Rcode{\$} operator, and \Rcode{\$xxx} will be
-used for \emph{``column xxx''}, and as an abbreviation for \emph{``column xxx of the \df in slot data
-  of the object''} (the structure of \chy objects is discussed in section~\ref{sec:structure-chy},
-p.~\pageref{sec:structure-chy}).
+In R, slots of a S4 class are accessed by the \index{\Rcommand{"@} operator}\Rcommand{@} operator. In
+this vignette, the notation \Rcode{@xxx} will thus mean \emph{``slot xxx of an object''}.  Likewise,
+named elements of a \Rclass{list} and columns of a \df are accessed by the \index{\Rcommand{\$}
+  operator}\Rcommand{\$} operator, and \Rcode{\$xxx} will be used for \emph{``column xxx''}, and as an
+abbreviation for \emph{``column xxx of the \df in slot data of the object''} (the structure of \chy
+objects is discussed in section~\ref{sec:structure-chy}, p.~\pageref{sec:structure-chy}).
 
 \section{Remarks on R}
 \subsection{Generic Functions}
 
-\emph{Generic Functions} are functions that apply to a wide range of data types or classes, \eg
-\Rmethod{plot}, \Rmethod{print}, mathematical operators, etc. These functions can be implemented in a
-specialized way by each class.  \Rclass{hyperSpec} implements with a variety of such functions, see
-appendix~\ref{tab:functions} (p.~\pageref{tab:functions}).
+\emph{\index{Generic Functions}Generic Functions} are functions that apply to a wide range of data
+types or classes, \eg \Rmethod{plot}, \Rmethod{print}, mathematical operators, etc. These functions
+can be implemented in a specialized way by each class.  \Rclass{hyperSpec} implements with a variety
+of such functions, see appendix~\ref{tab:functions} (p.~\pageref{tab:functions}).
 
 \subsection{Functionality Can be Extended at Runtime}
 \R's concept of functions offers much flexibility. Functions may be added or changed by the user in
@@ -125,10 +127,11 @@ vignettes to be exactly what one would type during an interactive \R session. Fo
 
 \subsection{Validity Checking}
 S4 classes have a mechanism to define and enforce that the data actually stored in the object is
-appropriate for this class. In other words, there is a mechanism of \emph{validity checking}.
+appropriate for this class. In other words, there is a mechanism of \emph{\index{validity checking}validity checking}. 
 
 The functions provided by \phy check the validity of \Rclass{hyperSpec} objects at the beginning, and
--- if the validity could be broken by inappropriate arguments -- also before leaving the function.
+-- if the validity could be broken by inappropriate arguments -- also before leaving the
+function. \index{validObject|texttt}\index{chk.hy|texttt} \mFun{validObject, chk.hy}
  
 It is highly recommended to use validity checking also for user-defined functions. In addition,
 non-generic functions should first ensure that the argument actually is a \chy object. The two tasks
@@ -145,7 +148,8 @@ Both functions return \Rcode{TRUE} if the checks succeed, otherwise they raise a
 \label{sec:spec-funct-names}
 \subsubsection{The Names of Operators}
 \label{sec:names-operators}
-Operators such as \verb/+/, \verb+-+,\verb+*+, \verb+%%+, etc. are in fact functions in R. Thus they
+\index{operators}Operators such as \verb/+/, \verb+-+,\verb+*+, \verb+%%+, etc. are in fact functions
+in R. Thus they
 can be handed over as arguments to other functions (particularly to the vectorization functions
 \Rfunction{*apply}, \Rfunction{sweep}, etc.). In this case the name of the function must be quoted:
 \verb+`-`+ is the recommended style (although \verb+"-"+ will often work as well), \eg:
@@ -162,6 +166,8 @@ These functions can also be called in a more function-like style (prefix notatio
 
 \subsubsection{Assignment Functions}
 \label{sec:assignment-functions}
+\index{assignment functions}
+\index{<-@see assignment functions}
 R allows the definition of functions that do an assignment (set some part of the object), such as:
 <<eval = false>>=
 wl (flu) <- new.wavelength.values
@@ -170,7 +176,7 @@ an assignment to variable \verb+wl+: \verb+`wl<-`+.
 
 \section{Loading and the package and configuration}
 \label{sec:loading-package}
-To load \phy, use\nopagebreak
+To \index{loading}load \phy, use\nopagebreak
 <<init>>=
 library ("hyperSpec")
 @ 

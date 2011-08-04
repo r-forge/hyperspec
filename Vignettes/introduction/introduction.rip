@@ -1,0 +1,14 @@
+% -*- mode: reftex-index-phrases; TeX-master: "introduction.Rnw" -*-
+%                              Key      Macro Format            Repeat
+%---------------------------------------------------------------------
+>>>INDEX_MACRO_DEFINITION:	i	\index{%s}          	t
+>>>INDEX_MACRO_DEFINITION:	g	\glossary{%s}       	t
+%---------------------------------------------------------------------
+
+
+i	barbiturates	data sets!barbiturates
+i	chondro	data sets!chondro
+i	data set	data sets
+i	flu	data sets!flu
+i	laser	data sets!laser
+i	paracetamol	data sets!paracetamol

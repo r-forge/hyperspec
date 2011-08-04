@@ -1,4 +1,4 @@
-load ("~/hyperspec.rforge/Vignettes/introduction/functions.RData")
+load ("Vignettes/introduction/functions.RData")
 
 
 ## find all exported functions
@@ -12,21 +12,33 @@ new.functions <- rbind (new.functions,
                         data.frame (name = tmp, group = NA, method = TRUE, description = "", internal = FALSE))
 
 tmp <- match (functions$name, new.functions$name)
-cat ("vanished functions:\n", paste (functions$name [is.na (tmp)], collapse = "\n"), "\n\n")
+vanished <- functions$name [is.na (tmp)]
+cat ("vanished functions:\n", paste (vanished, collapse = "\n"), "\n\n")
 
 tmp <- match (new.functions$name, functions$name)
-
-
 functions <- rbind (functions, new.functions [is.na (tmp),,drop = FALSE])
 
 
-library ("RGtk2DfEdit")
 
+functions <- functions [! duplicated (functions$name),]
+
+
+functions$internal <- ! functions$name %in% getNamespaceExports ("hyperSpec")
+functions <- functions [sapply (functions$name, function (n) {
+  if (exists (n))
+    is.function (get (n))
+  else
+    TRUE
+}),]
+
+
+library ("gWidgetsRGtk2")
+library ("RGtk2Extras")
 attributes (functions$group)$class <- "factor"
-dfedit(functions)
+gtkWindowNew()$add (gtkDfEdit(functions))
 attributes (functions$group)$class <- c("ordered", "factor")
 
-save (functions, file = "~/hyperspec.rforge/Vignettes/introduction/functions.RData")
+save (functions, file = "Vignettes/introduction/functions.RData")
 
 
 

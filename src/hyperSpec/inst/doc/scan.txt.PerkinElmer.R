@@ -4,7 +4,7 @@ scan.txt.PerkinElmer <- function (files = "*.txt",  ..., label = list (),
   long <- list (files = files, ..., label = label)
 
   label <-  modifyList (list (.wavelength = expression (lambda / nm),
-                              spc = "I[fl] / a.u."),
+                              spc = expression (I[fl] / "a.u.")),
                         label)
   
   ## find the files
