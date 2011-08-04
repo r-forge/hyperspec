@@ -1,6 +1,30 @@
-## ggplot functions
-## TODO: export
-
+##' Spectra plotting with ggplot2
+##'
+##' These functions are still experimental and may change substantially in future.
+##' @title Spectra plotting with ggplot2
+##' @param x hyperSpec object
+##' @param wl.range wavelength ranges to plot
+##' @param ... handed to \code{\link[ggplot2]{geom_line}}
+##' @param mapping see  \code{\link[ggplot2]{geom_line}}
+##' @param spc.nmax maximum number of spectra to plot
+##' @return a \code{\link[ggplot2]{ggplot}} object
+##' @author Claudia Beleites
+##' @seealso \code{\link{plotspc}}
+##'
+##' \code{\link[ggplot2]{ggplot}}\code{\link[ggplot2]{geom_line}}
+##' @export 
+##' @examples
+##' 
+##'   qplotspc (chondro)
+##'   qplotspc (paracetamol, c (2800 ~ max, min ~ 1800)) + scale_x_reverse (breaks = seq (0, 3200, 400))
+##' 
+##'   qplotspc (aggregate (chondro, chondro$clusters, mean),
+##'             mapping = aes (x = .wavelength, y = spc, colour = clusters)) +
+##'     facet_grid (clusters ~ .)
+##' 
+##'   qplotspc (aggregate (chondro, chondro$clusters, mean_pm_sd),
+##'             mapping = aes (x = .wavelength, y = spc, colour = clusters, group = .rownames)) +
+##'     facet_grid (clusters ~ .)
 qplotspc <- function (x,
                       wl.range, ...,
                       mapping = aes_string (x = ".wavelength", y = "spc", group = ".rownames"),
@@ -44,20 +68,25 @@ qplotspc <- function (x,
   p
 }
 
-examples (qplotspc) <- function (){
-  qplotspc (chondro)
-  qplotspc (paracetamol, c (2800 ~ max, min ~ 1800)) + scale_x_reverse (breaks = seq (0, 3200, 400))
 
-  qplotspc (aggregate (chondro, chondro$clusters, mean),
-            mapping = aes (x = .wavelength, y = spc, colour = clusters)) +
-    facet_grid (clusters ~ .)
-
-  qplotspc (aggregate (chondro, chondro$clusters, mean_pm_sd),
-            mapping = aes (x = .wavelength, y = spc, colour = clusters, group = .rownames)) +
-    facet_grid (clusters ~ .)
-}
-
-qplotmap <- function (object, mapping = aes (x = `x`, y = `y`, fill = `spc`), ...,
+##' Spectra plotting with ggplot2
+##'
+##' These functions are still experimental and may change substantially in future.
+##' @title Spectra plotting with ggplot2
+##' @param object  hyperSpec object
+##' @param mapping see  \code{\link[ggplot2]{geom_tile}}
+##' @param ... handed to \code{\link[ggplot2]{geom_tile}}
+##' @param func function to summarize the wavelengths
+##' @param func.args arguments to \code{func}
+##' @return a \code{\link[ggplot2]{ggplot}} object
+##' @author Claudia Beleites
+##' @seealso \code{\link{plotmap}}
+##'
+##' \code{\link[ggplot2]{ggplot}}\code{\link[ggplot2]{geom_tile}}
+##' @export 
+##' @examples
+##' qplotmap (chondro)
+qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "spc"), ...,
                       func = mean, func.args = list ()){
   chk.hy (object)
   validObject (object)
@@ -73,12 +102,26 @@ qplotmap <- function (object, mapping = aes (x = `x`, y = `y`, fill = `spc`), ..
       
   p
 }
-examples (qplotmap) <- function (){
-  qplotmap (chondro)
-}
 
 
-qplotc <- function (object, mapping = aes (x = `c`, y = `spc`), ...,
+##' Spectra plotting with ggplot2
+##'
+##' These functions are still experimental and may change substantially in future.
+##' @title Spectra plotting with ggplot2
+##' @param object hyperSpec object
+##' @param mapping see  \code{\link[ggplot2]{geom_point}}
+##' @param ... handed to \code{\link[ggplot2]{geom_point}}
+##' @param func function to summarize the wavelengths
+##' @param func.args arguments to \code{func}
+##' @return a \code{\link[ggplot2]{ggplot}} object
+##' @author Claudia Beleites
+##' @seealso \code{\link{plotc}}
+##'
+##' \code{\link[ggplot2]{ggplot}}\code{\link[ggplot2]{geom_point}}
+##' @export 
+##' @examples
+##' 
+qplotc <- function (object, mapping = aes_string(x = "c", y = "spc"), ...,
                      func = NULL, func.args = list ()){
   chk.hy (object)
   validObject (object)
