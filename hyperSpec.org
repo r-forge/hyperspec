@@ -3,10 +3,14 @@
 ** merge wavelengths
 ** TODO: merge in introduction
 
+
 * related packages
   - baseline
   - msProcess
-  
+	 
+
 * TODO check plyr: rbind.fill.matrix
 * TODO tapply -> Seb
 * TODO vignetten
+
+* check out mmap for binary file reading
