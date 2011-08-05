@@ -28,6 +28,12 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
     save.tmp = save.tmp + 1
   
   ### End copy-pasta
+  ### some closure vars
+  x <- NULL
+  y <- NULL
+  j <- NULL
+  s <- FALSE
+  
   
   options("guiToolkit"="RGtk2")
   
@@ -49,13 +55,29 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
     hx <- h$x
     hy <- h$y
     
-    selected <<- (x >= hx[1]) & (x <= hx[2]) &
-           (y >= hy[1]) & (y <= hy[2])
+    lx <- wavelength[j]
+    ly <- spc[ind[1], j]
+    
+    ls <- (lx >= hx[1]) & (lx <= hx[2]) &
+           (ly >= hy[1]) & (ly <= hy[2])
+    
+    print(s)
+    print(ls)
+    print(ls[s])
+    print(ls[!s])
+    
+    s <<- as.logical(c(s&!ls | ls&!s))
+    s <<- ls
+    #print(s)
+    #print(lx[s])
+    #print(ly[s])
     
     updatePlots()
   }
   selected <- NULL
   addHandlerChanged(ggmain, handler=selectPts)
+  addHandlerChanged(ggsub1, handler=selectPts)
+  addHandlerChanged(ggsub2, handler=selectPts)
   
   nextSuspicion <- function(...) {
     
@@ -76,12 +98,6 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
     
     visible(ggsub1) <- TRUE
     par(mar=c(3,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
-    j <- ind[2] + (-npts : npts) # suspicious data points plus points around
-    j <- j[j > 0]
-    j <- j[j <= ncol (spc)]
-
-    x <- range (wavelength[j], na.rm = TRUE)
-    x <- c(x[1], (x[2] - x[1]) * 1.1 + x[1])
 
     yl <- min (spc[k,j,drop = FALSE], na.rm = TRUE)
     print (yl)
@@ -107,19 +123,15 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
     points (wavelength[j], spc[ind[1], j], 
           col = "blue", pch = 20, type = "p"
           )
+    points (wavelength[j][s], spc[ind[1], j][s], 
+          col = "red", pch = 20, type = "p"
+          )
 
   }
   plotSub2 <- function(...) {
     
     visible(ggsub2) <- TRUE
     par(mar=c(3,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
-    
-    j <- ind[2] + (-npts : npts) # suspicious data points plus points around
-    j <- j[j > 0]
-    j <- j[j <= ncol (spc)]
-
-    x <- range (wavelength[j], na.rm = TRUE)
-    x <- c(x[1], (x[2] - x[1]) * 1.1 + x[1])
     
    y <- range (spc[k,j,drop = FALSE], na.rm = TRUE)
   
@@ -132,9 +144,12 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
     points (wavelength[j], spc[ind[1], j], 
           col = "blue", pch = 20, type = "p"
           )
+    points (wavelength[j][s], spc[ind[1], j][s], 
+          col = "red", pch = 20, type = "p"
+          )
 
-    x <- rep (x[2], 3) 
-    y <- (10:8)/10 * (y[2] - y [1]) + y[1]
+    #x <- rep (x[2], 3) 
+    #y <- (10:8)/10 * (y[2] - y [1]) + y[1]
 
   }
     
@@ -156,6 +171,12 @@ plots.gui <- function(spc, spikiness, npts = 10, nspc = 1,
     isna <- apply (spc[k,,drop = FALSE], 1, function (x) all (is.na (x)))
     k <<- k[! isna]
     
+    j <<- ind[2] + (-npts : npts) # suspicious data points plus points around
+    j <<- j[j > 0]
+    j <<- j[j <= ncol (spc)]
+
+    x <<- range (wavelength[j], na.rm = TRUE)
+    x <<- c(x[1], (x[2] - x[1]) * 1.1 + x[1])
     
     plotMain()
     plotSub1()
