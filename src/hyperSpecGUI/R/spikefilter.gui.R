@@ -77,13 +77,13 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     lx <- wavelength[j]
     ly <- spc[ind[1], j]
     
-    ls <- (lx >= hx[1]) & (lx <= hx[2]) &
-           (ly >= hy[1]) & (ly <= hy[2])
+    ls <- (lx >= hx[1]) & (lx <= hx[2]) #&
+           #(ly >= hy[1]) & (ly <= hy[2])
     
-    print(s)
-    print(ls)
-    print(ls[s])
-    print(ls[!s])
+#    print(s)
+#    print(ls)
+#    print(ls[s])
+#    print(ls[!s])
     
     s <<- as.logical(c(s&!ls | ls&!s))
     s <<- ls
@@ -142,6 +142,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     points (wavelength[j], spc[ind[1], j], 
           col = "blue", pch = 20, type = "p"
           )
+    lines (wavelength[j][s], spc[ind [1],j][s], col = "red")
     points (wavelength[j][s], spc[ind[1], j][s], 
           col = "red", pch = 20, type = "p"
           )
@@ -237,9 +238,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   #  dev.off(); dev.off(); dev.off(); ### This isn't' working as hoped, try it to see
   #}))
   
-  tmp <- gframe("Number of Spectra to display", cont = wgroup)
+  tmp <- gframe("Surrounding Spectra to display", cont = wgroup)
   gnspc <- gslider(from=0,to=20,by=1,value=nspc, cont=tmp, handler=function(...){
-    svalue(lnspc) <- paste("(",svalue(gnspc),")",sep='');
+    nspc <<- svalue(gnspc)
+    svalue(lnspc) <- paste("(",svalue(gnspc),")",sep='')
     updatePlots()
   }, expand=TRUE)
   lnspc <- glabel("(1)", cont=tmp)
