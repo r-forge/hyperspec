@@ -172,11 +172,11 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   plotSub2 <- function(...) {
     
     visible(ggsub2) <- TRUE
-    par(mar=c(3,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
+    par(mar=c(1,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
     
    y <- range (spc[k,j,drop = FALSE], na.rm = TRUE)
   
-   plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = y, type = "n")
+   plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = y, type = "n", xaxt='n')
 
     for (l in k)
       lines (wavelength[j], spc[l,j], pch = 20, type = "p", cex = 0.5,
