@@ -53,7 +53,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   x <- NULL  # what are these good for?
   y <- NULL
   j <- NULL
-  s <- FALSE
+  selected <- rep(FALSE, times=length(wavelength))
   
 
   window <- gbasicdialog("plots.gui - gWidgets (modal)", do.buttons=FALSE)
@@ -71,29 +71,48 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   
   selectPts <- function(h, ...) {
     
-    hx <- h$x
-    hy <- h$y
+    #hx <- h$x
+    #hy <- h$y
     
-    lx <- wavelength[j]
-    ly <- spc[ind[1], j]
+    #lx <- wavelength[j]
+    #print(j)
     
-    ls <- (lx >= hx[1]) & (lx <= hx[2]) #&
+    
+    w <- wavelength
+    
+    ## min/max select region
+    mn <- w[min(j)]
+    mx <- w[max(j)]
+    
+    
+    #ly <- spc[ind[1], j]
+    
+    #ls <- (lx >= hx[1]) & (lx <= hx[2]) #&
            #(ly >= hy[1]) & (ly <= hy[2])
+    ls <- (w >= h$x[1]) & (w <= h$x[2]) & (w >= mn) & (w <= mx)
+    
+    print(h$x[1])
+    print(h$x[2])
     
 #    print(s)
 #    print(ls)
 #    print(ls[s])
 #    print(ls[!s])
     
-    s <<- as.logical(c(s&!ls | ls&!s))
-    s <<- ls
+    #print(ls)
+    #if (selected==NULL) s<-F
+    #else s<-selected
+    #s <- as.logical(c(s&!ls | ls&!s))
+    #print(selected)
+    s <- (selected|ls)&!(selected&ls)
+    #print(s)
+    selected <<- s
     #print(s)
     #print(lx[s])
     #print(ly[s])
     
     updatePlots()
   }
-  selected <- NULL
   addHandlerChanged(ggmain, handler=selectPts)
   addHandlerChanged(ggsub1, handler=selectPts)
   addHandlerChanged(ggsub2, handler=selectPts)
@@ -119,10 +138,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     par(mar=c(3,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
 
     yl <- min (spc[k,j,drop = FALSE], na.rm = TRUE)
-    print (yl)
+    #print (yl)
     yu <- median (spc[k,j,drop = FALSE], na.rm = TRUE)
     yu <- (yu - yl) * 4 + yl
-    print (yu)
+    #print (yu)
 
 ##     plot (spc[k, , j, index = TRUE], "spc", 
 ##           col = c("black", "blue", "black"), pch = 20, type = "p",
@@ -142,8 +161,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     points (wavelength[j], spc[ind[1], j], 
           col = "blue", pch = 20, type = "p"
           )
-    lines (wavelength[j][s], spc[ind [1],j][s], col = "red")
-    points (wavelength[j][s], spc[ind[1], j][s], 
+    
+    s <- selected
+    lines (wavelength[s], spc[ind [1],s], col = "red")
+    points (wavelength[s], spc[ind[1], s], 
           col = "red", pch = 20, type = "p"
           )
 
@@ -164,7 +185,9 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     points (wavelength[j], spc[ind[1], j], 
           col = "blue", pch = 20, type = "p"
           )
-    points (wavelength[j][s], spc[ind[1], j][s], 
+            
+    s <- selected
+    points (wavelength[selected], spc[ind[1], selected], 
           col = "red", pch = 20, type = "p"
           )
 
@@ -225,7 +248,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     
     y <<- rnorm(100)
     x <<- pnorm(y)
-    selected <<- NULL
+    #selected <<- NULL
     updatePlots()
   }
   x <- NULL
@@ -263,6 +286,15 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   }))
   #add(tmp,gimage('ok'))
 
+  tmp <- gframe("Processing", container=wgroup)
+  add(tmp, gbutton("Load save.tmp", handler=NULL))
+  add(tmp, gbutton("Save save.tmp", handler=NULL))
+  add(tmp, gseparator(horizontal=FALSE))
+  add(tmp, gbutton("Copy to clipboard", handler=function(...){
+    names(selected) <- wavelength
+    dput.to.clipboard(which(selected))
+  }))
+
   #goutput <- glabel("<b>Spike suspicion</b>: 1<br />
   #                   <b>Spectrum</b>: 67<br />
   #                   (1560.94, 2219.1)<br />
@@ -274,5 +306,6 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   updateData()
   visible(window, set=TRUE)
   
-  return (selected)
+  names(selected) <- wavelength
+  return (which(selected))
 }
