@@ -160,23 +160,29 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     pts <- identify (c(wavelength[        j], x),
                      c(spc  [ind[1], j], y))
 
-    if (length (pts) == 0)
-      next
 
+    ## do what needs to be done -> "button handlers"
+    if (length (pts) == 0) ## nothing: go to next suspicion
+      next
+      
+    
+    ## one of the "special" points (end, spc OK, bad spc) was clicked
     if (max (pts) > length (j)){
       pts <- max (pts) - length (j)
 
-      if (pts == 1) break
+    ## end
+      if (pts == 1) break 
 
+    ## good or bad spectrum
       # pts == 2 || pts == 3
       j <- array2vec (matrix (c(rep (ind[1], dim [2]),
                                 1 : dim[2]),
                               ncol = 2),
                       dim)
-      ispikes [iispikes[j]] <- NA
+      ispikes [iispikes[j]] <- NA # delete all further suspicions for this spectrum
 
-      if (pts == 3) # bad spectrum
-        spc[ind[1], ] <- NA
+      if (pts == 3) # bad spectrum: delete all points
+        spc[ind[1], ] <- NA 
 
       next
     }
