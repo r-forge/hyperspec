@@ -40,3 +40,17 @@ spikefilter <- function (spcmatrix) {
   d [, -c (1, ncol (d))]
 }
 
+##' extract suspicions from spikiness matrix
+##'
+##' @param spikiness matrix indicating how suspicious each point is
+##' @param condition filtering condition indication which parts of \code{spikiness} should be
+##' considered.
+##' @return matrix nsuspicions x 3. The colums hold the row (spectra) index, wavelength index, and
+##' the score. Rows are sorted with descending spikiness.
+##' @export
+##' @author Claudia Beleites
+make.suspicions <- function (spikiness, condition = spikiness > quantile (spikiness, .975)){
+  suspicions <- cbind (which (condition, arr.ind = TRUE),
+                       spikiness = spikiness [condition])
+  suspicions [order (suspicions [, "spikiness"], decreasing = TRUE), ]
+}

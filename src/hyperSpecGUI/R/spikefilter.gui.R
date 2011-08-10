@@ -52,9 +52,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   y <- NULL  # --- not sure if need x,y any more
   j <- NULL  ## currently visible points
   selected <- rep (FALSE, times = length(wavelength))
+  pts <- numeric (0)
   
   ## layout for plots
-  window <- gbasicdialog ("plots.gui - gWidgets (modal)", do.buttons = FALSE)
+  window <- gbasicdialog ("plots.gui - gWidgets (modal)", buttons = "OK")
   wgroup <- ggroup (horizontal = FALSE, cont = window)
   pgroup <- gpanedgroup (container = wgroup)
   ggmain <- ggraphics (width = 400, height = 400, cont = pgroup)
@@ -89,32 +90,23 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   
   
   ## main plotting functions, could extract these later
-  plotGG <- function (ggdevice, plotfn) {
-     ### example wrapper
-    visible (ggdevice) <- TRUE
-    plotfn()
-  }
+  ## plotGG <- function (ggdevice, plotfn) {
+  ##    ### example wrapper
+  ##   visible (ggdevice) <- TRUE
+  ##   plotfn()
+  ## }
   plotMain <- function (...) {
     
     visible (ggmain) <- TRUE ### keep this, then call external plot command
-    par (mar = c(3,3,2,1), mgp = c(2,0.7,0), tck =-0.01)
+    par (mar = c(2,2,2,1), mgp = c(2,0.7,0), tck =-0.01)
     
-    s <- system.time ({
-    plot (wavelength, spc[ind[1],], ylim = range (spc[k,], na.rm = TRUE), type = "n")
+    plot (wavelength, spc [ind[1],], ylim = range (spc[k,], na.rm = TRUE), type = "n",
+          xlab = NA, ylab = NA)
     
     for (l in k)
       lines (wavelength, spc[l,], col = if (l == ind[1]) "blue" else "black")
-    })
-    print (s)
-      
     points (wavelength[ind[2]], spc[ind[1], ind[2]], col = "red", pch = 20)
     
-    s <- system.time ({
-    col <- rep (1, length (k))
-    col [k == ind [1]] <- 2
-    plotspc (cartilage [l], col = col)
-    })
-    print (s)
   }
   plotSub1 <- function (...) {
     
@@ -127,8 +119,9 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     yu <- (yu - yl) * 4 + yl
     
     ## plot view
-    par(mar = c(3,3,2,1), mgp = c(2,0.7,0), tck =-0.01)
-    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n", )
+    par(mar = c(0.1,0.1,0.1,0.1), mgp = c(2,0.7,0), tck =-0.01)
+    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n",
+          xlab = NA, ylab = NA)
     for (l in k)
       lines (wavelength[j], spc[l,j], pch = 20,
              type = "p",
@@ -151,7 +144,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     y <- range (spc[k,j,drop = FALSE], na.rm = TRUE)
   
     ## plot view
-    par(mar = c(1,3,2,1), mgp = c(2,0.7,0), tck =-0.01)
+    par(mar = c (0.1,0.1,0.1,0.1), mgp = c(2,0.7,0), tck =-0.01)
     plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = y, type = "n", xaxt ='n')
 
     ## TODO use matlines
@@ -169,7 +162,8 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   }
     
   updatePlots <- function(...) {
-    
+#    browser ()
+
     ## update whole GUI (status bar)
     svalue(status) <- paste("Spike suspicion",cur.i,"of",length(ispikes))
     
@@ -280,10 +274,11 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   #                   <b>Spikiness</b>:  0.06663623 -1.423397",
   #                   markup = TRUE, cont = wgroup)
 
-  
+  updatePlots()
   visible(window, set = TRUE)
   
   
   names(selected) <- wavelength
   return (which(selected))
 }
+#spikes.interactive (cartilage, scores)
