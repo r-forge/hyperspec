@@ -999,6 +999,86 @@ plot (histogram (~ shift | method, data = df, breaks = do.breaks(range (df$shift
 \label{fig:fit-shift}
 \end{figure}
 
+\subsection{Removing Bad Data}
+
+\subsubsection{Bad Spectra}
+\label{sec:bad-spectra}
+Occasionally, one may want to remove spectra because of too low or too high signal. 
+
+E.g. for infrared spectra one may state that the absorbance maximum should be, say, between 0.1 and
+1. \chy's comparison operators return a logical matrix of the size of the spectra that is suitable
+for later indexing:
+<<eval = FALSE>>=
+ir.spc <- chondro / 1500 ## fake IR data
+high.int <- apply (ir.spc > 1, 1, any) # any point above 1 is bad
+low.int <- apply (ir.spc, 1, max) < 0.1 # the maximum should be at least 0.1
+ir.spc <- ir.spc [! high.int & ! low.int] 
+@
+
+\subsubsection{Removing Spectra outside mean $\pm$ $n$ sd}
+<<>>=
+mean_sd_filter <- function (x, n  = 5) {
+  x <- x - mean (x)
+  s <- n * sd (x) 
+  (x <= s) & (x > -s)
+}
+
+OK <- apply (chondro [[]], 2, mean_sd_filter, n = 4) # logical matrix
+
+spc.OK <- chondro [apply (OK, 1, all)] 
+@
+
+<<filter, fig = TRUE, width = 10, height = 5, include = FALSE>>=
+
+plot (chondro [! apply (OK, 1, all)])
+i <- which (! OK, arr.ind = TRUE)
+points (wl (chondro) [i [,2]], chondro[[!OK]], pch = 19, col = "red", cex = 0.5)
+@
+\begin{figure}[tb]
+  \subfloat[mean $\pm$ sd filter]{\includegraphics[width=0.49\textwidth]{fig/fig-filter}}
+  \subfloat[remove bad points]{\includegraphics[width=0.49\textwidth]{fig/fig-bad}}
+  \caption{filtering data}
+  \label{fig:filter}
+\end{figure}
+
+\subsubsection{Bad Data Points}
+\label{sec:bad-data-points}
+Assume the data contains once in a while a detector readout of 0:
+<<>>=
+spc <- chondro [1 : 3,, min ~ min + 15i]
+spc [[cbind (1:3, sample (nwl (spc), 3)), wl.index = TRUE]] <- 0
+spc [[]]
+@
+
+We can set these points to \Rcode{NA}, again using that the comparison returns a suitable logical matrix:
+<<>>=
+spc [[spc < 1e-4]] <- NA
+spc [[]]
+@
+
+Depending on the type of analysis, one may wants to replace the \Rcode{NA}s by interpolating the
+neighbour values. So far, \phy provides three functions that can interpolate the \Rcode{NA}s:
+\mFun{\Rfunction{spc.NA.linapprox}, \Rfunction{spc.loess}, \Rfunction{spc.bin}}:
+\Rfunction{spc.NA.linapprox}, \Rfunction{spc.loess}, and \Rfunction{spc.bin} with \Rcode{na.rm =
+  TRUE} (the latter two are discussed below).
+
+<<>>=
+spc.corrected <- spc.NA.linapprox (spc)
+spc.corrected [[]]
+@
+
+<<bad, fig = TRUE, width = 10, height = 5, include = FALSE, echo = FALSE, results = hide>>=
+spc [[is.na (spc)]] <- 0
+plot (spc)
+spc [[spc < 1e-4]] <- NA
+plot (spc.NA.linapprox (spc), add = TRUE, col = "blue", lines.args = list (type = "b", pch = 19, cex = 0.5))
+@
+
+
+\subsubsection{Spikes in Raman Spectra}
+\label{sec:spikes-raman-spectra}
+
+...coming soon...
 
 \subsection{Smoothing Interpolation}
 \mFun{\Rfunction{spc.bin} \Rfunction{spc.loess}} Spectra acquired by grating instruments are
@@ -1027,7 +1107,7 @@ plot (b [, , 1600 ~ 1670], col = "blue", add = TRUE)
 
 %
 \begin{figure}
-\includegraphics[width=0.66\textwidth]{fig/fig-fig-loess}
+\includegraphics[width=0.33\textwidth]{fig/fig-fig-loess}
 \includegraphics[width=0.33\textwidth]{fig/fig-fig-loess-kl}
 \caption{\label{fig-spcloess}Smoothing interpolation by \Rfunction{spc.loess} with new data point
   spacing of 2 cm\textsuperscript{-1} (red) and \Rfunction{spc.bin} (blue). The magnification on the

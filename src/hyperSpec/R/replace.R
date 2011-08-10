@@ -21,8 +21,9 @@
 ##' 
 setReplaceMethod("[", signature = signature (x = "hyperSpec"),
                  function (x, i, j,
+                           ...,
                            short = "[<-", user = NULL, date = NULL,
-                           ..., value){
+                           value){
   validObject (x)
 
   long <- list (i = if (missing (i)) "" else i ,

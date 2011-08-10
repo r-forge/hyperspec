@@ -9,7 +9,7 @@
 \author{Claudia Beleites}
 \arguments{\item{spc}{hyperSpec object with spectra matrix containing \code{NA}s}
 \item{neighbours}{how many neighbour data points should be used to fit the line}
-\item{...}{}
-\item{handed}{to \code{\link{logentry}}}
+\item{...}{ignored}
+\item{short,user,date}{handed to \code{\link{logentry}}}
 }
 

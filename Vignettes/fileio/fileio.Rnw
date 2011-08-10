@@ -239,7 +239,7 @@ spc
 @
 
 Please see also the manufacturer specific notes in section~\ref{sec:manuf-spec-import},
-p.~\pageref{ec:manuf-spec-import}.
+p.~\pageref{sec:manuf-spec-import}.
 
 \subsubsection{ENVI Export}
 \label{sec:envi-export}

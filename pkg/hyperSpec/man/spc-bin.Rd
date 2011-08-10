@@ -1,8 +1,8 @@
 \name{spc-bin}
 \alias{spc.bin}
 \title{Wavelength Binning...}
-\usage{spc.bin(spc, by=stop("reduction factor needed"), na.rm=TRUE, short="spc.bin",
-    user=NULL, date=NULL)
+\usage{spc.bin(spc, by=stop("reduction factor needed"), na.rm=TRUE, ...,
+    short="spc.bin", user=NULL, date=NULL)
 }
 \description{Wavelength Binning
 In order to reduce the spectral resolution and thus gain signal to noise
@@ -28,6 +28,7 @@ if \code{TRUE} or \code{1}, the binning is done using \code{na.rm = TRUE}
 
 if \code{2}, the binning is done using \code{na.rm = FALSE}, and resulting \code{NA}s are
 corrected with \code{mean(\dots{}, na.rm = TRUE)}.}
+\item{...}{ignored}
 \item{short,user,date}{handed to \code{\link[hyperSpec]{logentry}}.}
 }
 \examples{
