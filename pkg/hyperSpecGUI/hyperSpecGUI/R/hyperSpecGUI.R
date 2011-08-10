@@ -1,0 +1,1 @@
+options("guiToolkit"="RGtk2")

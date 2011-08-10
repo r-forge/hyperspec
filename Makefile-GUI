@@ -1,0 +1,53 @@
+
+SRC := src/hyperSpecGUI/R/*.R #src/hyperSpecGUI/NAMESPACE 
+MAN := src/hyperSpecGUI/man/*.Rd
+RNW := src/hyperSpecGUI/inst/doc/*.Rnw
+
+
+all: roxy build check test
+
+.FORCE: # always done, like .PHONY, but doesn't remove file
+
+
+www/hyperSpecGUI-prebuilt.zip: # built manually 
+	touch $@
+
+#####################################################################################################
+
+
+
+
+DESCRIPTION: $(shell find src/hyperSpecGUI -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIPTION") #only if not modified today
+	@echo update DESCRIPTION
+	sed "s/\(^Version: .*-\)20[0-9][0-9][0-1][0-9][0-3][0-9]\(.*\)$$/\1`date +%Y%m%d`\2/" src/hyperSpecGUI/DESCRIPTION > .DESCRIPTION
+	sed "s/\(^Date: .*\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$$/\1`date +%F`\2/" .DESCRIPTION > src/hyperSpecGUI/DESCRIPTION 
+	rm .DESCRIPTION
+
+roxy: clean DESCRIPTION src/hyperSpecGUI/R/*.R 
+	rsync -av --delete src/hyperSpecGUI/ pkg/hyperSpecGUI/
+	Rscript --vanilla -e "library (roxygen); roxygenize (\"src/hyperSpecGUI\", \"pkg/hyperSpecGUI\", use.Rd2 = TRUE)" 
+
+build: DESCRIPTION $(SRC) roxy
+	rm -f hyperSpecGUI_*.tar.gz
+	R CMD build pkg/hyperSpecGUI  && cp hyperSpecGUI_*.tar.gz www/hyperSpecGUI-prebuilt.tar.gz
+
+devbuild: DESCRIPTION $(SRC) roxy
+	rm -f hyperSpecGUI_*.tar.gz
+	~/r-devel/bin/R CMD build pkg/hyperSpecGUI && mv hyperSpecGUI_*.tar.gz www/hyperSpecGUI-prebuilt-devel.tar.gz
+
+check: build
+	R CMD check hyperSpecGUI_*.tar.gz
+
+devcheck: devbuild
+	~/r-devel/bin/R CMD check hyperSpecGUI_*.tar.gz
+
+checkfast: $(SRC)
+	R CMD check --no-examples --no-tests --no-manual --no-vignettes pkg/hyperSpecGUI
+
+checktest: $(SRC)
+	R CMD check --no-manual --no-vignettes pkg/hyperSpecGUI
+
+clean: .FORCE
+
+install:
+		sudo R CMD INSTALL pkg/hyperSpecGUI	
