@@ -1,13 +1,13 @@
-\documentclass[a4paper, 10pt]{scrartcl}
-\usepackage[utf8x]{inputenc}
-\usepackage{tikz}
-\usepackage{contour}
-\usepackage[active,pdftex,tightpage]{preview}
-\PreviewEnvironment[]{tikzpicture}
-\begin{document}
+% \documentclass[a4paper, 10pt]{scrartcl}
+% \usepackage[utf8x]{inputenc}
+% \usepackage{tikz}
+% \usepackage{contour}
+% \usepackage[active,pdftex,tightpage]{preview}
+% \PreviewEnvironment[]{tikzpicture}
+% \begin{document}
 \usetikzlibrary{decorations}
 \usetikzlibrary{snakes}
-\begin{tikzpicture}[scale=0.5] %Schriftgröße bleibt,
+\begin{tikzpicture}[scale=0.5,line width = 1pt] %Schriftgröße bleibt,
 %\draw[fill=green!50!black] (0,0) circle (.5);
 %\draw[fill=orange] (2,6) circle (.5);
 \usetikzlibrary{decorations}
@@ -40,9 +40,9 @@
 	}
 
 
-\draw [<->, >=|, color=green!50!black] (2,8.5) -- +(8,0) node [fill=white, pos = 0.5] {\texttt{nwl} = 8};
-\draw [<->, >=|, color=blue!50!black] (0,-.5) -- +(10,0) node [fill=white, pos = 0.5] {\texttt{ncol} = 3};
-\draw [<->, >=|] (-.5,0) -- +(0,6) node [fill=white, pos = 0.5, rotate=90] {\texttt{nrow} = 6};
+\draw [<->, >=|, color=green!50!black] (2,8.6) -- +(8,0) node [fill=white, pos = 0.5] {\texttt{nwl} = 8};
+\draw [<->, >=|, color=blue!50!black] (0,-.6) -- +(10,0) node [fill=white, pos = 0.5] {\texttt{ncol} = 3};
+\draw [<->, >=|] (-.6,0) -- +(0,6) node [fill=white, pos = 0.5, rotate=90] {\texttt{nrow} = 6};
 
 
 \draw [snake=brace, segment amplitude=5, mirror snake, raise snake=10, line width=1pt] (10,0) -- (10,6);
