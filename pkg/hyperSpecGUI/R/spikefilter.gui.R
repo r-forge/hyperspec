@@ -23,12 +23,15 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
                                 save.tmp = 20, use.tmp = FALSE, ispikes = NULL,
                                 iispikes = NULL) {
   
+  ## GUI global objects
+
+  
   wavelength <- spc@wavelength
   spc <- spc@data$spc
   gc ()
   
   dim <- dim (spikiness) 
-  dim (spikiness)  <- NULL
+  dim (spikiness) <- NULL
   
   if (is.null (ispikes))
     ispikes <- order (spikiness, na.last = TRUE, decreasing = TRUE)
@@ -48,59 +51,62 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   x <- NULL  # what are these good for?
   y <- NULL  # --- not sure if need x,y any more
   j <- NULL  ## currently visible points
-  selected <- rep (FALSE, times=length(wavelength))
+  selected <- rep (FALSE, times = length(wavelength))
+  pts <- numeric (0)
   
   ## layout for plots
-  window <- gbasicdialog ("plots.gui - gWidgets (modal)", do.buttons=FALSE)
-  wgroup <- ggroup (horizontal=FALSE, cont=window)
-  pgroup <- gpanedgroup (container=wgroup)
-  ggmain <- ggraphics (width=400, height=400, cont=pgroup)
-  rgroup <- gpanedgroup (horizontal=FALSE, cont=pgroup)
-  ggsub2 <- ggraphics (width=200, height=200, cont=rgroup)
-  ggsub1 <- ggraphics (width=200, height=200, cont=rgroup)
+  window <- gbasicdialog ("plots.gui - gWidgets (modal)", buttons = "OK")
+  wgroup <- ggroup (horizontal = FALSE, cont = window)
+  pgroup <- gpanedgroup (container = wgroup)
+  ggmain <- ggraphics (width = 400, height = 400, cont = pgroup)
+  rgroup <- gpanedgroup (horizontal = FALSE, cont = pgroup)
+  ggsub2 <- ggraphics (width = 200, height = 200, cont = rgroup)
+  ggsub1 <- ggraphics (width = 200, height = 200, cont = rgroup)
   ## name ggraphics to call visible later
   size (pgroup) <- c(650, 450) ## fix for scrollbars
   
-  status <- gstatusbar ("Click the main plot to redraw.", cont=window)
+  status <- gstatusbar ("Click the main plot to redraw.", cont = window)
   
   selectPts <- function (h, ...) {
     
     w <- wavelength
-    
+    str (h)
     ## min/max select region
     mn <- w[min(j)]
     mx <- w[max(j)]
     ## locate points within window and selection
-    ls <- (w >= h$x[1]) & (w <= h$x[2]) & (w >= mn) & (w <= mx)
+    ls <- (w >= h$x[1]) & (w <= h$x[2]) & (w >= mn) & (w <= mx) &
+          (spc [ind [1],] >= h$y[1])   
     
     ### toggle selected points (XOR)
-    selected <<- (selected|ls)&!(selected&ls)
+    selected <<- xor (selected, ls)
     
     updatePlots ()
   }
-  #addHandlerChanged (ggmain, handler=selectPts) ### no need for this selection
-  addhandlerclicked (ggmain, handler=updatePlots) # CB: why this?
-  addHandlerChanged (ggsub1, handler=selectPts)
-  addHandlerChanged (ggsub2, handler=selectPts)
+  #addHandlerChanged (ggmain, handler = selectPts) ### no need for this selection
+  addhandlerclicked (ggmain, handler = updatePlots) # CB: why this?
+  addHandlerChanged (ggsub1, handler = selectPts)
+  addHandlerChanged (ggsub2, handler = selectPts)
   
   
   ## main plotting functions, could extract these later
-  plotGG <- function (ggdevice, plotfn) {
-     ### example wrapper
-    visible (ggdevice) <- TRUE
-    plotfn()
-  }
+  ## plotGG <- function (ggdevice, plotfn) {
+  ##    ### example wrapper
+  ##   visible (ggdevice) <- TRUE
+  ##   plotfn()
+  ## }
   plotMain <- function (...) {
     
     visible (ggmain) <- TRUE ### keep this, then call external plot command
-    par (mar=c(3,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
+    par (mar = c(2,2,2,1), mgp = c(2,0.7,0), tck =-0.01)
     
-    plot (wavelength, spc[ind[1],], ylim = range (spc[k,], na.rm = TRUE), type = "n")
+    plot (wavelength, spc [ind[1],], ylim = range (spc[k,], na.rm = TRUE), type = "n",
+          xlab = NA, ylab = NA)
     
     for (l in k)
       lines (wavelength, spc[l,], col = if (l == ind[1]) "blue" else "black")
-      
     points (wavelength[ind[2]], spc[ind[1], ind[2]], col = "red", pch = 20)
+    
   }
   plotSub1 <- function (...) {
     
@@ -113,8 +119,9 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     yu <- (yu - yl) * 4 + yl
     
     ## plot view
-    par(mar=c(3,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
-    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n")
+    par(mar = c(0.1,0.1,0.1,0.1), mgp = c(2,0.7,0), tck =-0.01)
+    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n",
+          xlab = NA, ylab = NA)
     for (l in k)
       lines (wavelength[j], spc[l,j], pch = 20,
              type = "p",
@@ -137,9 +144,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     y <- range (spc[k,j,drop = FALSE], na.rm = TRUE)
   
     ## plot view
-    par(mar=c(1,3,2,1), mgp=c(2,0.7,0), tck=-0.01)
-    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = y, type = "n", xaxt='n')
+    par(mar = c (0.1,0.1,0.1,0.1), mgp = c(2,0.7,0), tck =-0.01)
+    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = y, type = "n", xaxt ='n')
 
+    ## TODO use matlines
     for (l in k)
       lines (wavelength[j], spc[l,j], pch = 20, type = "p", cex = 0.5,
              col = if (l == ind[1]) "blue" else "black")
@@ -154,7 +162,8 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   }
     
   updatePlots <- function(...) {
-    
+#    browser ()
+
     ## update whole GUI (status bar)
     svalue(status) <- paste("Spike suspicion",cur.i,"of",length(ispikes))
     
@@ -195,28 +204,28 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   
   
   tmp <- gframe("Surrounding spectra to display", cont = wgroup)
-  gnspc <- gslider(from=0,to=20,by=1,value=nspc, cont=tmp, handler=function(...){
+  gnspc <- gslider(from = 0,to = 20,by = 1,value = nspc, cont = tmp, handler = function(...){
     nspc <<- svalue(gnspc)
     updatePlots()
-  }, expand=TRUE)
+  }, expand = TRUE)
   tmp <- gframe("Surrounding points to display", cont = wgroup)
-  gnpts <- gslider(from=0,to=20,by=1,value=npts, cont=tmp, handler=function(...){
+  gnpts <- gslider(from = 0,to = 20,by = 1,value = npts, cont = tmp, handler = function(...){
     npts <<- svalue(gnpts)
     updatePlots()
-  }, expand=TRUE)
+  }, expand = TRUE)
 
   ## GUI buttons and functions for spikes.
-  tmp <- gframe("Spikes", container=wgroup)
-  add(tmp, gbutton("Good Spectrum", handler=function(...){
+  tmp <- gframe("Spikes", container = wgroup)
+  add(tmp, gbutton("Good Spectrum", handler = function(...){
     cur.i <<- cur.i + 1
     updatePlots()
   }))
-  add (tmp, gbutton("Bad Spectrum", handler=function(...){
+  add (tmp, gbutton("Bad Spectrum", handler = function(...){
     cur.i <<- cur.i + 1
     spc[ind[1], ] <<- NA
     updatePlots()
   }))
-  add (tmp, gbutton("Next Suspicion", handler=function(...){
+  add (tmp, gbutton("Next Suspicion", handler = function(...){
     cur.i <<- cur.i + 1
     j <<- array2vec (matrix (c(rep (ind[1], dim [2]),
                                1 : dim[2]),
@@ -235,14 +244,14 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     
     updatePlots()
   }))
-  add (tmp, gbutton("Done", handler=function(...) {
+  add (tmp, gbutton("Done", handler = function(...) {
     dispose(window)
     dev.off(); dev.off(); dev.off(); ### This isn't working as hoped, try dev.list() to see
   }))
   
   ## some more buttons and their functions
-  tmp <- gframe("Processing", container=wgroup)
-  add(tmp, gbutton("Load save.tmp", handler=function(...){
+  tmp <- gframe("Processing", container = wgroup)
+  add(tmp, gbutton("Load save.tmp", handler = function(...){
     
     if (file.exists ("spikefilter.tmp.RData")){
       cat ("load temporary data\n")
@@ -250,9 +259,9 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
       cur.i <<- i
     }
   }))
-  add(tmp, gbutton("Save save.tmp", handler=NULL))
-  add(tmp, gseparator(horizontal=FALSE)) ### can you see this?
-  add(tmp, gbutton("Copy to clipboard", handler=function(...){
+  add(tmp, gbutton("Save save.tmp", handler = NULL))
+  add(tmp, gseparator(horizontal = FALSE)) ### can you see this?
+  add(tmp, gbutton("Copy to clipboard", handler = function(...){
     names(selected) <- wavelength
     dput.to.clipboard(which(selected))
   }))
@@ -263,12 +272,13 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   #                   (1560.94, 2219.1)<br />
   #                   <b>Spike points</b>:  479 481<br />
   #                   <b>Spikiness</b>:  0.06663623 -1.423397",
-  #                   markup = TRUE, cont=wgroup)
+  #                   markup = TRUE, cont = wgroup)
 
-  
-  visible(window, set=TRUE)
+  updatePlots()
+  visible(window, set = TRUE)
   
   
   names(selected) <- wavelength
   return (which(selected))
 }
+#spikes.interactive (cartilage, scores)

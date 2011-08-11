@@ -4,6 +4,8 @@ hyperSpec_*.tar.gz
 *.backup
 .project
 .settings
+#*#
+*.bak
 *.log
 *.aux
 *.out

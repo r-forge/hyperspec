@@ -1,3 +1,4 @@
 export(spikes.interactive)
 export(spikefilter2d)
 export(spikefilter)
+export(make.suspicions)

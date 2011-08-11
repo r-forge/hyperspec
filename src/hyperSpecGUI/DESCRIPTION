@@ -1,8 +1,8 @@
 Package: hyperSpecGUI
 Type: Package
 Title: Graphical interface for hyperSpec package, includes interactive plots
-Version: 0.02-20110810
-Date: 2011-08-10
+Version: 0.02-20110811
+Date: 2011-08-11
 Author: Sebastian Mellor, Claudia Beleites
 Maintainer: Claudia Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Graphical Interfaces for the hyperSpec package.

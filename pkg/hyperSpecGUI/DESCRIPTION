@@ -8,9 +8,10 @@ Type: Package
 LazyLoad: yes
 Author: Sebastian Mellor, Claudia Beleites
 Description: Graphical Interfaces for the hyperSpec package.
-Version: 0.02-20110810
+Version: 0.02-20110811
 URL: http://hyperSpec.r-forge.r-project.org/
-Date: 2011-08-10
+Date: 2011-08-11
 Depends: R (>= 2.13), hyperSpec, gWidgets, arrayhelpers
 Collate: 'cartilage.R' 'copytoclipboard.R' 'hyperSpecGUI.R'
-    'spikefilter.gui.R' 'spikefilter.helpers.R'
+    'spike.example.R' 'spikefilter.gui2.R' 'spikefilter.gui.R'
+    'spikefilter.helpers.R'
