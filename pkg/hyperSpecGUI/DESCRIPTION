@@ -13,5 +13,4 @@ URL: http://hyperSpec.r-forge.r-project.org/
 Date: 2011-08-11
 Depends: R (>= 2.13), hyperSpec, gWidgets, arrayhelpers
 Collate: 'cartilage.R' 'copytoclipboard.R' 'hyperSpecGUI.R'
-    'spike.example.R' 'spikefilter.gui2.R' 'spikefilter.gui.R'
-    'spikefilter.helpers.R'
+    'spikefilter.gui.R' 'spikefilter.helpers.R'
