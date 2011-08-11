@@ -14,9 +14,6 @@ spikes <- spikes.interactive (cartilage, scores)
 
 
 suspicions <- make.suspicions (scores)
-plot (suspicions[, "spikiness"])
-## now use the original spectra and the suspicions from the preprocessed
-## spectra for the interactive spike filter
-spikes <- spikes.interactive.cb (cartilage, suspicions)
-spikes
-
+##plot (suspicions[, "spikiness"])
+#spikes.interactive.cb (cartilage, suspicions)
+#spikes
