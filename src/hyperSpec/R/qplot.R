@@ -9,10 +9,10 @@
 ##' @param spc.nmax maximum number of spectra to plot
 ##' @return a \code{\link[ggplot2]{ggplot}} object
 ##' @author Claudia Beleites
+##' @export 
 ##' @seealso \code{\link{plotspc}}
 ##'
 ##' \code{\link[ggplot2]{ggplot}}\code{\link[ggplot2]{geom_line}}
-##' @export 
 ##' @examples
 ##' 
 ##'   qplotspc (chondro)
@@ -80,11 +80,11 @@ qplotspc <- function (x,
 ##' @param func function to summarize the wavelengths
 ##' @param func.args arguments to \code{func}
 ##' @return a \code{\link[ggplot2]{ggplot}} object
+##' @export 
 ##' @author Claudia Beleites
 ##' @seealso \code{\link{plotmap}}
 ##'
 ##' \code{\link[ggplot2]{ggplot}}\code{\link[ggplot2]{geom_tile}}
-##' @export 
 ##' @examples
 ##' qplotmap (chondro)
 qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "spc"), ...,
@@ -113,6 +113,7 @@ qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "sp
 ##' @param object hyperSpec object
 ##' @param mapping see  \code{\link[ggplot2]{geom_point}}
 ##' @param ... handed to \code{\link[ggplot2]{geom_point}}
+##' @export 
 ##' @param func function to summarize the wavelengths, if \code{NULL}, only the first wavelength is used
 ##' @param func.args arguments to \code{func}
 ##' @return a \code{\link[ggplot2]{ggplot}} object
@@ -120,7 +121,6 @@ qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "sp
 ##' @seealso \code{\link{plotc}}
 ##'
 ##' \code{\link[ggplot2]{ggplot}}\code{\link[ggplot2]{geom_point}}
-##' @export 
 ##' @examples
 ##' qplotc (flu)
 ##' qplotc (flu) + geom_smooth (method = "lm")

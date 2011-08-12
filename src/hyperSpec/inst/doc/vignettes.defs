@@ -99,7 +99,7 @@ CENMAT and DI3, University of Trieste}
 \SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, ps = FALSE}
 \SweaveOpts{width=6,height=3}
 \SweaveOpts{prefix.string=fig/fig}
-\SweaveOpts{keep.source = TRUE, strip.white=TRUE}
+\SweaveOpts{keep.source = TRUE, strip.white=true}
 \AtBeginDocument{
 \setkeys{Gin}{width = .5\textwidth}
 }
