@@ -4,16 +4,16 @@
 ##' 
 ##' @rdname sample
 ##' @docType methods
-##' @param x The hyperSpec object to sample from
-##' @param size positive integer giving the number of spectra to choose.
+##' @param x The hyperSpec object, data.frame or matrix to sample fromto sample from
+##' @param size positive integer giving the number of spectra (rows) to choose.
 ##' @param replace Should sampling be with replacement?
 ##' @param prob A vector of probability weights for obtaining the elements of
 ##'   the vector being sampled.
 ##' @param short date are handed to \code{\link{logentry}}
 ##' @param user date are handed to \code{\link{logentry}}
 ##' @param date are handed to \code{\link{logentry}}
-##' @return a hyperSpec object for \code{sample}, and an integer vector for
-##'   \code{isample} that is suitable for indexing (into the spectra) of x.
+##' @return a hyperSpec object, data.frame or matrix with \code{size} rows for \code{sample}, and an
+##' integer vector for \code{isample} that is suitable for indexing (into the spectra) of x.
 ##' @author C. Beleites
 ##' @seealso \code{\link[base]{sample}}
 ##' @keywords methods distribution
@@ -62,17 +62,8 @@ isample <- function (x, size = nrow (x), replace = FALSE, prob = NULL) {
 }
 
 
-##' Random row-wise sample/permutation of data.frames
-##'
-##' Draws a random row sample of the data.frame
-##' @title Random Samples and Permutations: data.frame
-##' @rdname sample-df
-##' @param x the data.frame or matrix to sample from
-##' @param size,replace,prob handed to \code{\link[base]{sample.int}}
+##' @rdname sample
 ##' @param drop see \code{\link[base]{drop}}: by default, do not drop dimensions of the result
-##' @return a data.frame or matrix with \code{size} rows
-##' @seealso \code{\link[base]{sample}}
-##' @author Claudia Beleites
 ##' @export
 ##' @examples
 ##' sample (cars, 2)
@@ -81,7 +72,7 @@ setMethod ("sample", signature = signature (x = "data.frame"),
              x [sample.int (nrow (x), size = size, replace = replace, prob = prob), , drop = drop]
            }
            )
-##' @rdname sample-df
+##' @rdname sample
 ##' @export
 ##' @examples
 ##' sample (matrix (1:24, 6), 2)
