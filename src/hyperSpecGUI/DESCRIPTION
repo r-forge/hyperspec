@@ -9,5 +9,5 @@ Description: Graphical Interfaces for the hyperSpec package.
 License: GPL (>= 3)
 LazyData: yes
 LazyLoad: yes
-Depends: R (>= 2.13), hyperSpec, gWidgets, arrayhelpers
+Depends: R (>= 2.13), hyperSpec, gWidgets, arrayhelpers, gWidgetsRGtk2
 URL: http://hyperSpec.r-forge.r-project.org/
