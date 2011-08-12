@@ -55,7 +55,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   pts <- numeric (0)
   
   ## layout for plots
-  window <- gbasicdialog ("plots.gui - gWidgets (modal)", buttons = "OK")
+  window <- gbasicdialog ("spikefilter", buttons = "Done")
   wgroup <- ggroup (horizontal = FALSE, cont = window)
   pgroup <- gpanedgroup (container = wgroup)
   ggmain <- ggraphics (width = 400, height = 400, cont = pgroup)
@@ -281,4 +281,5 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   names(selected) <- wavelength
   return (which(selected))
 }
-#spikes.interactive (cartilage, scores)
+
+##spikes.interactive (cartilage, scores)

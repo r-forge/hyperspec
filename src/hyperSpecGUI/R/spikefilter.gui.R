@@ -282,4 +282,4 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   return (which(selected))
 }
 
-spikes.interactive (cartilage, scores)
+##spikes.interactive (cartilage, scores)
