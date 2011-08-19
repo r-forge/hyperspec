@@ -151,11 +151,11 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
 
   visible (ggsubzoom) <- TRUE
   addHandlerChanged (ggsubzoom, handler = selectPts)
-  addhandlerclicked (ggsubzoom, handler = togglePts)
+  #addhandlerclicked (ggsubzoom, handler = togglePts)
 
   visible (ggsub) <- TRUE
   addHandlerChanged (ggsub, handler = selectPts)
-  addhandlerclicked (ggsub, handler = togglePts)
+  #addhandlerclicked (ggsub, handler = togglePts)
 
   
   ##  tmp <- gframe("Display settings", cont = wgroup)
