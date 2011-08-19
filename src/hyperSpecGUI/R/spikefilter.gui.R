@@ -61,7 +61,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   
   
   ## layout for plots
-  window <- gbasicdialog ("spikefilter", buttons = "Done")
+  window <- gbasicdialog ("spikefilter", buttons = "Done") ### buttons = FALSE; gWidgets (>= R-Forge)
   wgroup <- ggroup (horizontal = FALSE, cont = window)
   pgroup <- gpanedgroup (container = wgroup)
   ggmain <- ggraphics (width = 400, height = 400, cont = pgroup)
@@ -76,7 +76,6 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   selectPts <- function (h, ...) {
     
     w <- wavelength
-    str (h)
     ## min/max select region
     mn <- w[min(j)]
     mx <- w[max(j)]
@@ -232,43 +231,42 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     updatePlots()
   }))
   add (tmp, gbutton("Next Suspicion", handler = function(...){
-    cur.i <<- cur.i + 1
-    j <<- array2vec (matrix (c(rep (ind[1], dim [2]),
-                               1 : dim[2]),
-                             ncol = 2),
-                     dim)
+    browser()
+    
     ispikes [iispikes[j]] <<- NA
     
     
     ## I'm a little lost here..
-    pts <- j [pts]
+    pts <- j [selected]
     spc[ind[1], pts] <- NA
+    
     pts <- array2vec (matrix (c (rep (ind[1], length (pts)), pts), ncol = 2), 
                       dim = dim)
-    ispikes [iispikes[pts]] <- NA     # do not look at this spike again
+    ispikes [iispikes[pts]] <<- NA     # do not look at this spike again
     ## End lost bit..
     
+    
+    cur.i <<- cur.i + 1
     updatePlots()
   }))
   add (tmp, gbutton("Done", handler = function(...) {
     dispose(window)
-    dev.off(); dev.off(); dev.off(); ### This isn't working as hoped, try dev.list() to see
   }))
   
   ## some more buttons and their functions
   tmp <- gframe("Processing", container = wgroup)
-  add(tmp, gbutton("Load save.tmp", handler = function(...){
-    
-    if (file.exists ("spikefilter.tmp.RData")){
-      cat ("load temporary data\n")
-      load ("spikefilter.tmp.RData")
-    }
-  }))
-  add(tmp, gbutton("Save save.tmp", handler = NULL))
-  add(tmp, gseparator(horizontal = FALSE)) ### can you see this?
+  #add(tmp, gbutton("Load save.tmp", handler = function(...){
+  #  
+  #  if (file.exists ("spikefilter.tmp.RData")){
+  #    cat ("load temporary data\n")
+  #    load ("spikefilter.tmp.RData")
+  #  }
+  #}))
+  #add(tmp, gbutton("Save save.tmp", handler = NULL))
+  #add(tmp, gseparator(horizontal = FALSE)) ### can you see this?
   add(tmp, gbutton("Copy to clipboard", handler = function(...){
     names(selected) <- wavelength
-    dput.to.clipboard(which(selected))
+    dput.to.clipboard(which(is.na(spc), arr.ind=TRUE))
   }))
 
   ### the following only works with Qt
@@ -283,8 +281,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   visible(window, set = TRUE)
   
   
-  names(selected) <- wavelength
-  return (which(selected))
+  return (which(is.na(spc), arr.ind=TRUE))
 }
 
 ##spikes.interactive (cartilage, scores)

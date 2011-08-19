@@ -9,6 +9,12 @@ tmp <- sweep (cartilage, 1, median, `/`)
 tmp <- sweep (tmp, 2, median, `-`)
 plot (tmp, "mat", col.regions = alois.palette ())
 scores <- spikefilter2d (spcmatrix = tmp [[]])
+
+## this lets plotting continue in demo mode
+oldask <- options ()$device.ask.default
+on.exit (options (device.ask.default = oldask), add = TRUE)
+options (device.ask.default = FALSE)
+
 spikes <- spikes.interactive (cartilage, scores)
 
 

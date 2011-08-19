@@ -76,7 +76,6 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   selectPts <- function (h, ...) {
     
     w <- wavelength
-    str (h)
     ## min/max select region
     mn <- w[min(j)]
     mx <- w[max(j)]

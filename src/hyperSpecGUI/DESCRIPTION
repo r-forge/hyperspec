@@ -11,7 +11,7 @@ Description: Graphical Interfaces for the hyperSpec package.
 Version: 0.02-20110819
 URL: http://hyperSpec.r-forge.r-project.org/
 Date: 2011-08-19
-Depends: R (>= 2.13), hyperSpec (>=0.98), gWidgets, arrayhelpers, RGtk2, gwidgetsRGtk2, cairoDevice
+Depends: R (>= 2.13), hyperSpec (>= 0.98), gWidgets, arrayhelpers, RGtk2, gWidgetsRGtk2, cairoDevice
 Suggests: latticeExtra
 Collate: 'cartilage.R' 'copytoclipboard.R' 'hyperSpecGUI.R'
     'spikefilter.gui.R' 'spikefilter.helpers.R'
