@@ -45,6 +45,7 @@ spikefilter <- function (spcmatrix) {
 ##' @param spikiness matrix indicating how suspicious each point is
 ##' @param condition filtering condition indication which parts of \code{spikiness} should be
 ##' considered.
+##' @rdname make.suspicions
 ##' @return matrix nsuspicions x 3. The colums hold the row (spectra) index, wavelength index, and
 ##' the score. Rows are sorted with descending spikiness.
 ##' @export

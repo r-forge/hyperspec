@@ -17,6 +17,7 @@
 ##' @param use.tmp  ignored at the moment
 ##' @param ispikes ignored at the moment
 ##' @param iispikes ignored at the moment
+##' @rdname spikes.interactive
 ##' @return indices of the marked spectra
 ##' @export
 spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
