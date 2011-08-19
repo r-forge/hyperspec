@@ -24,7 +24,7 @@ DESCRIPTION: $(shell find src/hyperSpecGUI -maxdepth 1 -daystart -not -ctime 0 -
 	rm .DESCRIPTION
 
 roxy: clean DESCRIPTION src/hyperSpecGUI/R/*.R 
-	rsync -av --delete src/hyperSpecGUI/ pkg/hyperSpecGUI/
+	rsync -av --delete --exclude=.svn src/hyperSpecGUI/ pkg/hyperSpecGUI/
 	Rscript --vanilla -e "library (roxygen); roxygenize (\"src/hyperSpecGUI\", \"pkg/hyperSpecGUI\", use.Rd2 = TRUE)" 
 
 build: DESCRIPTION $(SRC) roxy
