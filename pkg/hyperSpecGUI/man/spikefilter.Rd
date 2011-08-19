@@ -2,9 +2,7 @@
 \alias{spikefilter2d}
 \title{Calculate spike suspiciousness...}
 \usage{spikefilter2d(spcmatrix)
-
 spikefilter(spcmatrix)
-
 }
 \description{Calculate spike suspiciousness}
 \details{\code{spikefilter2d}: These functions calculate the suspiciousness of data points by a

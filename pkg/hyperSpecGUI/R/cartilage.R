@@ -13,5 +13,7 @@
 ##' 
 ##' cartilage
 ##' plot (sample (cartilage, 10))
-##' plotvoronoi (cartilage, func = max, col.regions = alois.palette)
+##' if (require(latticeExtra))
+##'     plotmap (cartilage, func = max, col.regions = alois.palette, 
+##'              panel = panel.levelplot.points)
 NULL

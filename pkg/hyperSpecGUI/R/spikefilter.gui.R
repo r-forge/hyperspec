@@ -17,6 +17,7 @@
 ##' @param use.tmp  ignored at the moment
 ##' @param ispikes ignored at the moment
 ##' @param iispikes ignored at the moment
+##' @rdname spikes.interactive
 ##' @return indices of the marked spectra
 ##' @export
 spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
@@ -53,6 +54,11 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   j <- NULL  ## currently visible points
   selected <- rep (FALSE, times = length(wavelength))
   pts <- numeric (0)
+  
+  ## define the global variables for plotting
+  ind <- NULL
+  k <- NULL
+  
   
   ## layout for plots
   window <- gbasicdialog ("spikefilter", buttons = "Done")
@@ -256,7 +262,6 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     if (file.exists ("spikefilter.tmp.RData")){
       cat ("load temporary data\n")
       load ("spikefilter.tmp.RData")
-      cur.i <<- i
     }
   }))
   add(tmp, gbutton("Save save.tmp", handler = NULL))
