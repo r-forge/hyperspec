@@ -14,7 +14,7 @@ dput.to.clipboard <- function (x) {
              close (clipboard)
            },
            Windows = { ### Untested
-             writeClipboard(x)
+             dput (x, file = "clipboard")
            }
           )
    
