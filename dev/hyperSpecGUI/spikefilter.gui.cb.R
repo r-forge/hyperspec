@@ -97,7 +97,7 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
     h$x [1] <- max (h$x [1], min (iwlplot))
     h$x [2] <- min (h$x [2], max (iwlplot))
     h$y [1] <- max (h$y [1], min (tspc [iwlplot, ispc]))
-    browser ()
+    #browser ()
     h$y [2] <- min (h$y [2], max (iwlplot))
     
    region <- ceiling (h$x [1]) : floor (h$x [2])
