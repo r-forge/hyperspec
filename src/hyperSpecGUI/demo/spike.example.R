@@ -17,12 +17,12 @@ options (device.ask.default = FALSE)
 
 options("guiToolkit"="RGtk2")
 suspicions <- make.suspicions (scores)
-spikes.interactive (cartilage, suspicions)
+spikes <- spikes.interactive (cartilage, suspicions)
 #spikes <- spikes.interactive (cartilage, scores)
 
 
 
-suspicions <- make.suspicions (scores)
+#suspicions <- make.suspicions (scores)
 ##plot (suspicions[, "spikiness"])
 #spikes.interactive.cb (cartilage, suspicions)
 #spikes
