@@ -16,7 +16,9 @@ on.exit (options (device.ask.default = oldask), add = TRUE)
 options (device.ask.default = FALSE)
 
 options("guiToolkit"="RGtk2")
-spikes <- spikes.interactive (cartilage, scores)
+suspicions <- make.suspicions (scores)
+spikes.interactive (cartilage, suspicions)
+#spikes <- spikes.interactive (cartilage, scores)
 
 
 
