@@ -15,6 +15,7 @@ oldask <- options ()$device.ask.default
 on.exit (options (device.ask.default = oldask), add = TRUE)
 options (device.ask.default = FALSE)
 
+options("guiToolkit"="RGtk2")
 spikes <- spikes.interactive (cartilage, scores)
 
 
