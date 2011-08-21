@@ -224,6 +224,7 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
   })
   gbutton("Bad Spectrum", cont=gbtngrp, handler=function(h,...) {
     #iwlsel <<- everything..
+    iwlsel <<- 1:length(wl)
     nextSuspicion();
   })
   gbutton("Next Suspicion", cont=gbtngrp, handler=function(h,...) {
