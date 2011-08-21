@@ -48,6 +48,8 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
     
     n <<- n + 1
     ispc  <<- spikiness [n, "row"] 
+    
+    svalue(status) <- paste("Spike suspicion",n,"of",length(spikiness))
 
     calcspc (svalue (gnspc))
     calcwl (svalue (gnpts))
