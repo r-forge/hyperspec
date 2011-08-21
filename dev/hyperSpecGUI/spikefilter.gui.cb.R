@@ -49,6 +49,12 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
     n <<- n + 1
     ispc  <<- spikiness [n, "row"] 
     
+    ## implementing whitelist
+    if (spikiness [n, "spikiness"] == 0) {
+      nextSuspicion();
+      return;
+    }
+    
     svalue(status) <- paste("Spike suspicion",n,"of",length(spikiness))
 
     calcspc (svalue (gnspc))
@@ -201,6 +207,7 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
                                    }, expand = TRUE)
   add (nptsgroup, glabel (" points"))
        
+  gseparator (cont = hzoomgroup, horizontal = FALSE)
   gzoom <- gslider (cont = hzoomgroup,
                     horizontal = FALSE,
                     handler = function(...){
@@ -209,11 +216,14 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
 
 #  selmode <- gradio( c("union", "intersect", "diff"), selected = "union")
        
+
   gbutton("Good Spectrum", cont=gbtngrp, handler=function(h,...) {
     iwlsel <<- integer(0) ## clear selected points
+    spikiness[spikiness[,"row"]==ispc,"spikiness"] <<- 0 ## add spectrum to whitelist
     nextSuspicion();
   })
   gbutton("Bad Spectrum", cont=gbtngrp, handler=function(h,...) {
+    #iwlsel <<- everything..
     nextSuspicion();
   })
   gbutton("Next Suspicion", cont=gbtngrp, handler=function(h,...) {
