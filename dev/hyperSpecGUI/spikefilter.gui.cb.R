@@ -43,7 +43,7 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
   }
   
   nextSuspicion <- function (...) {
-    spikes <- rbind (spikes, cbind (rep (n, length (iwlsel)), iwlsel))
+    updateSpikes()
   #  iwlsel <<- integer (0)
     
     n <<- n + 1
@@ -54,6 +54,10 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
     calczoom ()
     
     plotMain ()
+  }
+  
+  updateSpikes <- function (...) {
+    spikes <<- rbind (spikes, cbind (rep (n, length (iwlsel)), iwlsel))
   }
 
   plotMain <- function (...) {
@@ -122,10 +126,27 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
     ## TODO
    plotSubs ()
   }
+  
+  ### Fix for first click ###
+  firstClick <- TRUE
+  selectMainHandler <- function (...) {
+    if (firstClick) {
+      firstClick <<- FALSE;
+      nextSuspicion(...);
+    }
+  }
+  selectSubHandler <- function (...) {
+    if (firstClick) {
+      firstClick <<- FALSE;
+      nextSuspicion(...);
+    } else {
+      selectPts(...);
+    }
+  }
 
 
   ## layout for plots
-  window <- gbasicdialog ("spikefilter", buttons = "")
+  window <- gbasicdialog ("spikefilter", do.buttons=FALSE)
     
   wgroup <- ggroup (horizontal = FALSE, cont = window)
 
@@ -145,16 +166,17 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
   hzoomgroup <- ggroup (cont = vzoomgroup)
   ggsubzoom <- ggraphics (width = 400, height = 200, cont = hzoomgroup)
 
+  gbtngrp <- ggroup (cont = window)
   status <- gstatusbar ("Click the main plot to redraw.", cont = window)
-
-  addhandlerclicked (ggmain, handler = nextSuspicion) # only as workaround for initial display bug
+  
+  addhandlerclicked (ggmain, handler = selectMainHandler)
 
   visible (ggsubzoom) <- TRUE
-  addHandlerChanged (ggsubzoom, handler = selectPts)
+  addHandlerChanged (ggsubzoom, handler = selectSubHandler)
   #addhandlerclicked (ggsubzoom, handler = togglePts)
 
   visible (ggsub) <- TRUE
-  addHandlerChanged (ggsub, handler = selectPts)
+  addHandlerChanged (ggsub, handler = selectSubHandler)
   #addhandlerclicked (ggsub, handler = togglePts)
 
   
@@ -185,9 +207,21 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
 
 #  selmode <- gradio( c("union", "intersect", "diff"), selected = "union")
        
-#  nextSuspicion ()  
-  visible (window, handler = function (...){}) <- TRUE # runs the dialog
+  gbutton("Good Spectrum", cont=gbtngrp, handler=function(h,...) {
+    nextSuspicion();
+  })
+  gbutton("Bad Spectrum", cont=gbtngrp, handler=function(h,...) {
+    nextSuspicion();
+  })
+  gbutton("Next Suspicion", cont=gbtngrp, handler=function(h,...) {
+    nextSuspicion();
+  })
+  gbutton("Done", cont=gbtngrp, handler=function(h,...) dispose(window))
 
+  visible (window, set = TRUE, do.buttons = FALSE)# <- TRUE # runs the dialog
+    
+  updateSpikes ()
+  
   spikes [, "n"] <- spikiness [spikes [, "n"], "row"]
   colnames (spikes) <- c ("ispc", "iwl")
 
