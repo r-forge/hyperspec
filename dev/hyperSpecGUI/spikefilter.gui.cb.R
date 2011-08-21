@@ -210,6 +210,7 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
 #  selmode <- gradio( c("union", "intersect", "diff"), selected = "union")
        
   gbutton("Good Spectrum", cont=gbtngrp, handler=function(h,...) {
+    iwlsel <<- integer(0) ## clear selected points
     nextSuspicion();
   })
   gbutton("Bad Spectrum", cont=gbtngrp, handler=function(h,...) {
