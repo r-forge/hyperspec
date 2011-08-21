@@ -232,7 +232,7 @@ spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor
   })
   gbutton("Done", cont=gbtngrp, handler=function(h,...) dispose(window))
 
-  visible (window, set = TRUE, do.buttons = FALSE)# <- TRUE # runs the dialog
+  visible (window, set = TRUE)# <- TRUE # runs the dialog
     
   updateSpikes ()
   
