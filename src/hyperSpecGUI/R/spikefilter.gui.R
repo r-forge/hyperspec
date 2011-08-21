@@ -1,4 +1,27 @@
-spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 4){
+##' Interactive spike filtering
+##'
+##' These functions calculate the suspiciousness of data points by a
+##' \code{c (-1, 2, -1)} filter. \code{spikefilter} applies this filter along
+##' the spectrtal (wavelength) direction, \code{spikefilter2d} in addition also
+##' to neighbour spectra. \code{make.suspicions} prepares the spikes for use
+##' in this GUI.
+##' 
+##' The recognition of spikes may be greatly improved by preprocesing the
+##' spectra specially for this task, see the demo.
+##' @param spc hyperSpec object holding the spectra.
+##' @param spikiness matrix from make.suspicions
+##' @param npts initial wavelength axis zoom: the suspicious point +/- \code{npts}
+##'        points are displayed
+##' @param nspc initial number of neighbour spectra: the suspicious spectrum +/- 
+##'        \code{nspc} spectra are displayed
+##' @param save.tmp ignored at the moment
+##' @param use.tmp  ignored at the moment
+##' @param ispikes ignored at the moment
+##' @param iispikes ignored at the moment
+##' @rdname spikes.interactive
+##' @return indices of the marked spectra
+##' @export
+spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 4, ...){
   ## GUI global variables
   ## prepare matrices for faster work
   wl <- x@wavelength
