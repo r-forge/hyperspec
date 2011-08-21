@@ -1,4 +1,4 @@
-spikes.interactive.cb <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 4){
+spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 4){
   ## GUI global variables
   ## prepare matrices for faster work
   wl <- x@wavelength
