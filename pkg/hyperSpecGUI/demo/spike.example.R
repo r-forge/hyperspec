@@ -15,11 +15,14 @@ oldask <- options ()$device.ask.default
 on.exit (options (device.ask.default = oldask), add = TRUE)
 options (device.ask.default = FALSE)
 
-spikes <- spikes.interactive (cartilage, scores)
-
-
-
+options("guiToolkit"="RGtk2")
 suspicions <- make.suspicions (scores)
+spikes <- spikes.interactive (cartilage, suspicions)
+#spikes <- spikes.interactive (cartilage, scores)
+
+
+
+#suspicions <- make.suspicions (scores)
 ##plot (suspicions[, "spikiness"])
 #spikes.interactive.cb (cartilage, suspicions)
 #spikes
