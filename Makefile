@@ -306,7 +306,7 @@ DESCRIPTION: $(shell find src/hyperSpec -maxdepth 1 -daystart -not -ctime 0 -nam
 	rm .DESCRIPTION
 
 roxy: clean DESCRIPTION src/hyperSpec/R/*.R 
-	rsync -av --delete src/hyperSpec/ pkg/hyperSpec/
+	rsync -av --delete --exclude=.svn src/hyperSpec/ pkg/hyperSpec/
 	Rscript --vanilla -e "library (roxygen); roxygenize (\"src/hyperSpec\", \"pkg/hyperSpec\", use.Rd2 = TRUE)" 
 	rm -rf pkg/hyperSpec/hyperSpec
 
