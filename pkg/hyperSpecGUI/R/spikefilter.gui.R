@@ -54,7 +54,8 @@ spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 
   }
 
   calcwl <- function (npts = svalue (gnpts)) {
-    iwlsel <<- spikiness [n, "col"]
+    #iwlsel <<- spikiness [n, "col"]
+    iwlsel <<- integer(0)
     iwlplot <<- spikiness [n, "col"] + (-npts : npts)
     calczoom ()
   }
@@ -177,7 +178,8 @@ spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 
 
 
   ## layout for plots
-  window <- gbasicdialog ("spikefilter", do.buttons=FALSE)
+  #window <- gbasicdialog ("spikefilter", do.buttons=FALSE)
+  window <- gbasicdialog ("spikefilter")
     
   wgroup <- ggroup (horizontal = FALSE, cont = window)
 
@@ -253,7 +255,7 @@ spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 
   gbutton("Next Suspicion", cont=gbtngrp, handler=function(h,...) {
     nextSuspicion();
   })
-  gbutton("Done", cont=gbtngrp, handler=function(h,...) dispose(window))
+  #gbutton("Done", cont=gbtngrp, handler=function(h,...) dispose(window))
 
   visible (window, set = TRUE)# <- TRUE # runs the dialog
     
