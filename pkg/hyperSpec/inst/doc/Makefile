@@ -12,8 +12,8 @@ fileio.pdf:
 	-dDownsampleColorImages=false -dNOPAUSE -dQUIET -dBATCH -dDownsampleColorImages=false \
 	-sOutputFile=tmp.pdf $@ && qpdf tmp.pdf $@
 	rm -rf fig 
-	rm $(basename $(<F)).tex
-	rm Rplots.pdf
+	rm -f $(basename $(<F)).tex
+	rm -f Rplots.pdf
 
 clean: 
 	rm -f flu.rda laser.rda

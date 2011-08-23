@@ -195,12 +195,6 @@ cl <- "blue"
 bl <- spc.fit.poly.below (chondro [3,,1720 ~ 1750], NULL, poly.order = 1)
 abline (bl[[]], col = "blue")
 @
-<<trace2, echo = FALSE, results = hide>>=
-	trace (spc.fit.poly.below, quote ({ls ();
-	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NA);
-	lines (fit.to@wavelength, bl, col = cl);
-	}), at = 12, print = FALSE)
-@
 \begin{figure}[b]
 \begin{center}
 \includegraphics[width = .66\textwidth]{fig/fig-figspcrange}
@@ -217,6 +211,9 @@ essential for \Rfunction{spc.fit.poly}. But also \Rfunction{spc.fit.poly.below} 
 narrower spectral ranges: the fitting gains speed. The default value for \Rfunarg{npts.min} depends
 on the number of data points per spectrum. Thus one should consider using more support points than
 the default value suggests.
+<<untrace1, echo = FALSE, results = hide>>=
+untrace (spc.fit.poly.below)
+@ 
 <<fit-apply>>=
 system.time (spc.fit.poly.below (chondro[], NULL, npts.min = 20))
 system.time (spc.fit.poly.below (chondro [,, c (min ~ 700, 1700 ~ max)], NULL, npts.min = 20))
@@ -226,6 +223,12 @@ The choice of the spectral range in \Rcode{fit.to} influences the resulting base
 extent, as becomes clear from figure~\ref{fig:spectralrange}.
 
 \section{Fitting  polynomials of different orders}
+<<trace2, echo = FALSE, results = hide>>=
+	trace (spc.fit.poly.below, quote ({ls ();
+	plot (fit.to[,, use.old], col = cl, add = TRUE, lines.args = list (pch = pch, type = "p"), zeroline = NA);
+	lines (fit.to@wavelength, bl, col = cl);
+	}), at = 12, print = FALSE)
+@
 <<figorder, fig=TRUE, pdf = TRUE, echo = FALSE, results = hide, eps = FALSE, width = 12, height = 4, include = FALSE>>=
 plot (chondro [1], lines.args = list (type = "n"))
 cols <- c ("black", "blue", "#008000", "red")
@@ -235,6 +238,9 @@ for (o in 0 : 3){
 	}
 	plot (chondro [1], add = TRUE)
 @
+<<untrace2, echo = FALSE, results = hide>>=
+untrace (spc.fit.poly.below)
+@ 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[width=\textwidth]{fig/fig-figorder}
