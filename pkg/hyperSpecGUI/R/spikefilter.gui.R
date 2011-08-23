@@ -78,6 +78,15 @@ spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 
       nextSuspicion();
       return;
     }
+    ## implement blacklist
+    tmp <- spikes
+    tmp[,"n"] <- (spikiness [spikes[,"n"],"row"] == ispc) ### is spectrum?
+    tmp[,"iwl"] <- (tmp[,"iwl"] == spikiness [n, "col"])  ### is wavelength?
+    tmp <- tmp[,"n"] + tmp[,"iwl"] == 2                   ### is both?
+    if (sum (tmp) > 0) {
+      nextSuspicion();
+      return;
+    }
     
     svalue(status) <- paste("Spike suspicion",n,"of",length(spikiness))
 
@@ -179,7 +188,14 @@ spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 
 
   ## layout for plots
   #window <- gbasicdialog ("spikefilter", do.buttons=FALSE)
-  window <- gbasicdialog ("spikefilter")
+  window <- gbasicdialog ("spikefilter", handler = function (h, ...){
+    updateSpikes ()
+    
+    spikes [, "n"] <<- spikiness [spikes [, "n"], "row"]
+    colnames (spikes) <<- c ("ispc", "iwl")
+  
+    return (spikes)
+  })
     
   wgroup <- ggroup (horizontal = FALSE, cont = window)
 
@@ -257,14 +273,10 @@ spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 
   })
   #gbutton("Done", cont=gbtngrp, handler=function(h,...) dispose(window))
 
-  visible (window, set = TRUE)# <- TRUE # runs the dialog
+  dreturn <- visible (window, set = TRUE)# <- TRUE # runs the dialog
     
-  updateSpikes ()
-  
-  spikes [, "n"] <- spikiness [spikes [, "n"], "row"]
-  colnames (spikes) <- c ("ispc", "iwl")
-
-  spikes
+  ## only return spikes if 'OK' clicked
+  if (dreturn) spikes
 }
 #debug (spikes.interactive.cb)
 #spikes.interactive.cb (cartilage, suspicions)
