@@ -11,6 +11,7 @@ fileio.pdf:
 	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dAutoRotatePages=/None \
 	-dDownsampleColorImages=false -dNOPAUSE -dQUIET -dBATCH -dDownsampleColorImages=false \
 	-sOutputFile=tmp.pdf $@ && qpdf tmp.pdf $@
+	rm tmp.pdf
 	rm -rf fig 
 	rm -f $(basename $(<F)).tex
 	rm -f Rplots.pdf
