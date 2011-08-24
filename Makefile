@@ -316,7 +316,7 @@ build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy
 
 devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy
 	rm -f hyperSpec_*.tar.gz
-	~/r-devel/bin/R CMD build pkg/hyperSpec && mv hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
+	~/r-devel/bin/R CMD build pkg/hyperSpec && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
 
 #winbuild: .FORCE
 #	cd www && ftp -n -d win-builder.r-project.org << EOT
