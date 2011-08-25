@@ -612,11 +612,11 @@ stacked.offsets <- function (x, stacked = TRUE,
 
   ## make sure that the ticks are not too close
   for (i in seq_along (delta)) {
-    keep         <- labels [[i]] < end.ranges [i] + delta / 4
+    keep         <- at [[i]] < end.ranges [i] + delta / 4
     at [[i]]     <- at     [[i]][keep]
     labels [[i]] <- labels [[i]][keep]
 
-    keep             <- labels [[i + 1]] > start.ranges [i + 1] - delta / 4
+    keep             <- at [[i + 1]] > start.ranges [i + 1] - delta / 4
     at [[i + 1]]     <- at     [[i + 1]][keep]
     labels [[i + 1]] <- labels [[i + 1]][keep]
   }
