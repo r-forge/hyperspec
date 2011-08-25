@@ -612,11 +612,11 @@ stacked.offsets <- function (x, stacked = TRUE,
 
   ## make sure that the ticks are not too close
   for (i in seq_along (delta)) {
-    keep         <- labels [[i]] < end.ranges [i] + delta / 4
+    keep         <- at [[i]] < end.ranges [i] + delta / 4
     at [[i]]     <- at     [[i]][keep]
     labels [[i]] <- labels [[i]][keep]
 
-    keep             <- labels [[i + 1]] > start.ranges [i + 1] - delta / 4
+    keep             <- at [[i + 1]] > start.ranges [i + 1] - delta / 4
     at [[i + 1]]     <- at     [[i + 1]][keep]
     labels [[i + 1]] <- labels [[i + 1]][keep]
   }
@@ -625,4 +625,14 @@ stacked.offsets <- function (x, stacked = TRUE,
         at     = as.numeric (unlist (at)),
         cut    = cutmarks)
 }
-
+test (.cut.ticks) <- function (){
+  ## bugfix:
+  ## plotspc (paracetamol, wl.range = c (min ~ 1800, 2800 ~ max), xoffset = 900)
+  ## had 2600 1/cm label printed in low wavelength range
+  checkEqualsNumeric (.cut.ticks (start.ranges = c (96.7865, 2799.86),
+                                  end.ranges = c(1799.95, 3200.07),
+                                  offsets = c (0, 900),
+                                  nticks = 10)$labels,
+                      c (seq (0, 1800, 200), seq (2800, 3400, 200))
+                      )
+}
