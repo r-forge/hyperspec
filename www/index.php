@@ -182,12 +182,43 @@ These may be a bit outdated (the date is pkg/DESCRIPTION), but they work if the 
   <li><a href="http://r-forge.r-project.org/tracker/?atid=1501&group_id=366&func=browse">bugs</a> are also found on r-forge.</li>
 </ul>
 
+<h1><a name="Presentations about hyperSpec">Presentations about hyperSpec</a></h1>
+<ul>
+<?php include ('about-hyperSpec.html') ?>
+<!--
+  <li> C. Beleites, C. Krafft, J. Popp, and V. Sergo: 
+	 <a href="Beleites-UseR-Flashpresentation.pdf">hyperSpec: working with spectroscopic data</a>
+	 UseR! 2011</a></li>
+  <li> <a href="Mellor-UseR-Poster"></a></li>
+  <li> <a href="">Poster at ECSBM, Euroanalysis and FTIR-Workshop at RKI 2009</a></li>
+-->
+</ul>
+
+<h1><a name="Publications using hyperSpec">Publications using hyperSpec</a></h1>
+<ul> 
+<?php include ('citing-hyperSpec.html') ?>
+<!--
+  <li> A. Bonifacio; C. Beleites; F. Vittur; E. Marsich; S. Semeraro; S. Paoletti & V. Sergo: <br/>
+	<a href="http://dx.doi.org/10.1039/c0an00459f"> Chemical imaging of articular cartilage sections with Raman mapping, employing uni- and multi-variate methods for data analysis.</a>  <br/>
+	 Analyst, 135, 3193-3204 (2010). <br/>
+	 doi: http://dx.doi.org/10.1039/c0an00459f<br/> 
+	 PMID: 20967391
+  </li>
+  <li>C. Beleites, K. Geiger, M. Kirsch, S. B. Sobottka, G. Schackert and R. Salzer: <br/>
+	 <a href="http://www.springerlink.com/content/5020361378260270/">Raman spectroscopic grading of 
+		astrocytoma tissues: using soft reference information.</a> <br/>
+	 Anal Bioanal Chem, 400, 2801-2816 (2011). <br/>
+	 doi: 10.1007/s00216-011-4985-4 <br/>
+	 PMID: 21537917 <br/>
+  </li>
+-->
+</ul>
 <h1><a name="Contact">Contact</a></h1>
 <p>
 Claudia Beleites<br/>
-CENMAT, Materials and Natural Resources Dept.<br/> 
-University of Trieste<br/>
-e-mail: cbeleites at units dot it
+Dept. of Spectroscopy and Microscopy,<br/> 
+IPHT Jena<br/>
+e-mail: claudia dot beleites at ipht minus jena dot de
 </p>
 </body>
 </html>
