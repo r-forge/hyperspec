@@ -19,7 +19,7 @@
 ##' 
 ##'   hyperSpec comes with a number of pre-defined functions to import
 ##'   manufacturer specific file formats. For details, see \code{vignette
-##'   ("file-io")}.
+##'   ("fileio")}.
 ##'   
 ##'   \code{\link[hyperSpec]{read.spc}} imports Thermo Galactic's .spc file
 ##'   format, and ENVI files may be read using
@@ -51,8 +51,6 @@ read.txt.wide <- function (file = stop ("file is required"),
                              .wavelength = expression (lambda / nm)),
                            check.names = FALSE,
                            ...){
-  txtfile <- read.table (file = file, ..., check.names = FALSE)
-
   .wavelength <- match (".wavelength", names (cols))
   if (is.na (.wavelength))
     cols <- as.list (c (cols, .wavelength = expression (lambda / nm)))
@@ -65,12 +63,16 @@ read.txt.wide <- function (file = stop ("file is required"),
   if (is.na (spc))
     stop ("cols$spc must exist.")
 
+  txtfile <- read.table (file = file, ..., check.names = FALSE)
+
   spc <- 0 : (ncol (txtfile) - length (cols) + 1) + spc
 
   spc.data <- as.matrix (txtfile[, spc])
-  txtfile$spc <- I (spc.data)
   txtfile <- txtfile [, -spc, drop = FALSE]
+  txtfile$spc <- I (spc.data)
 
+  ## enforce colnames given by cols
+  colnames (txtfile) <- head (names (cols), -1)
 
   new ("hyperSpec",
        data = txtfile,
