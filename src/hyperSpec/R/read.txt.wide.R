@@ -19,7 +19,7 @@
 ##' 
 ##'   hyperSpec comes with a number of pre-defined functions to import
 ##'   manufacturer specific file formats. For details, see \code{vignette
-##'   ("file-io")}.
+##'   ("fileio")}.
 ##'   
 ##'   \code{\link[hyperSpec]{read.spc}} imports Thermo Galactic's .spc file
 ##'   format, and ENVI files may be read using
