@@ -119,7 +119,7 @@ is faster than \Rfunction{read.table}, but cannot import column names.  If your 
 a header or it is not important and can safely be skipped, you may want to import your data using
 \Rfunction{scan}.
 
-Note that R allows to use a variety of compressed file formats directly as ASCII files (for examples,
+Note that R allows to use a variety of compressed file formats directly as ASCII files (for example,
 see section \ref{sec:scan.txt.Renishaw} on p.~\pageref{sec:scan.txt.Renishaw}). Also, both
 \Rfunction{read.txt.long} and \Rfunction{read.txt.wide} accept connections instead of file names.
 
@@ -557,6 +557,25 @@ scan.txt.Renishaw ("txt.Renishaw/chondro.bz2")
 For .zip packed files, however, a connection must be used:
 <<scan.txt.Renishaw-zip, results = hide>>=
 scan.txt.Renishaw (unzip ("txt.Renishaw/chondro.zip"))
+@
+
+\subsection{Horiba Jobin Yvon}
+\label{sec:read.txt.Horiba}
+\index{Horiba Jobin Yvon!ASCII!wide}
+\index{ASCII!wide!Horiba Jobin Yvon}
+\index{Raman!Horiba Jobin Yvon!ASCII wide}
+
+Horiba Jobin Yvon's Labspec software saves spectra in a wide ASCII format which is read by
+\Rfunction{read.txt.wide}, e.\,g.:
+<<Horiba>>=
+spc <- read.txt.wide ("txt.HoribaJobinYvon/test_file.txt", 
+                      cols = list (
+                        x = expression (`/` (x, mu * m)), 
+                        y = expression (`/` (y, mu * m)), 
+                        spc = "I / a.u.", 
+                        .wavelength = expression (Delta * tilde (nu) / cm^-1)), 
+                      sep = '\t', header = TRUE)
+spc
 @
 
 
