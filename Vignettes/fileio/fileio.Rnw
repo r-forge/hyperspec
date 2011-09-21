@@ -687,7 +687,7 @@ make.bib ("R.matlab", file = "fileio-pkg.bib")
   \textbf{Notes}\tabularnewline
   \multicolumn{4}{@{}l}{\emph{\textbf{ASCII file formats}}}\tabularnewline
 <<results=tex, echo = FALSE>>=
-fileformats <- read.table ("fileformats.org", header = TRUE, sep = "|", strip.white=TRUE)
+fileformats <- read.table ("fileformats.org", header = TRUE, sep = "|", strip.white=true)
 fileformats <- fileformats [, ! apply (is.na (fileformats), 2, all)]
 
 i <- order (fileformats$Name)
