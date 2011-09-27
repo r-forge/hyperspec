@@ -568,13 +568,25 @@ scan.txt.Renishaw (unzip ("txt.Renishaw/chondro.zip"))
 Horiba Jobin Yvon's Labspec software saves spectra in a wide ASCII format which is read by
 \Rfunction{read.txt.wide}, e.\,g.:
 <<Horiba>>=
-spc <- read.txt.wide ("txt.HoribaJobinYvon/test_file.txt", 
+spc <- read.txt.wide ("txt.HoribaJobinYvon/test.txt", 
                       cols = list (
                         x = expression (`/` (x, mu * m)), 
                         y = expression (`/` (y, mu * m)), 
                         spc = "I / a.u.", 
                         .wavelength = expression (Delta * tilde (nu) / cm^-1)), 
                       sep = '\t', header = TRUE)
+spc
+@
+
+Note that this data set contains lots of spectra with zero intensity: Labspec saves a complete
+rectangular grid even if only part of it was measured. These spectra can be removed by
+
+<<>>=
+## a floating point precision tolerant version of ==
+`%~=%` <- function (x, y, tolerance = .Machine$double.eps^0.5)
+  abs (x - y) < tolerance
+
+spc <- spc [rowSums (abs (spc [[]])) %~=% 0]
 spc
 @
 
