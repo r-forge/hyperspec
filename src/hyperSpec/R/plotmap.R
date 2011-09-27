@@ -57,6 +57,9 @@
 ##'   \code{func} with the arguments given in the list \code{func.args} to each
 ##'   of the spectra. Thus a single summary value is displayed for each of the
 ##'   spectra.
+##'
+##' This can be suppressed manually by setting \code{func} to NULL. It is automatically suppressed if
+##' \code{.wavelength} appears in the formula.
 ##' @param voronoi Should the plot for identifying spectra by mouse click be
 ##'   produced by \code{plotmap} (default) or \code{plotvoronoi}?
 ##' @param \dots further arguments are passed down the call chain, and finally
@@ -108,10 +111,7 @@ plotmap <- function (object, model = spc ~ x * y,
   chk.hy (object)
   validObject (object)
 
-  if (nwl (object) > 1 &
-      ! is.null (func) &
-      ! grepl ("[.]wavelength", labels  (terms (model)))
-      )
+  if (! is.null (func) & ! any (grepl ("[.]wavelength", model)))
     object <- do.call (apply, c (list (object, 1, func), func.args))
   
   dots <- modifyList (list (aspect = "iso"),
