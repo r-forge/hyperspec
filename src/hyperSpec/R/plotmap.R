@@ -15,10 +15,10 @@
 ##' The \code{model} can contain the special column name \code{.wavelength} to specify the wavelength
 ##' axis.
 ##' 
-##' \code{plotmap}, \code{plotmap}, \code{map.identify}, and the \code{levelplot} methods internally
-##' use the same gateway function to \code{\link[lattice]{levelplot}}. Thus \code{transform.factor}
-##' can be used with all of them. Two special column names, \code{.rownames} and \code{.wavelength}
-##' may be used.
+##' \code{plotmap}, \code{map.identify}, and the \code{levelplot} methods internally use the same
+##' gateway function to \code{\link[lattice]{levelplot}}. Thus \code{transform.factor} can be used
+##' with all of them and the panel function defaults to \code{\link[lattice]{panel.levelplot.grid}}
+##' for all three. Two special column names, \code{.rownames} and \code{.wavelength} may be used. 
 ##' 
 ##' \code{levelplot} plots the spectra matrix.
 ##' 
@@ -108,7 +108,10 @@ plotmap <- function (object, model = spc ~ x * y,
   chk.hy (object)
   validObject (object)
 
-  if (nwl (object) > 1 & ! is.null (func))
+  if (nwl (object) > 1 &
+      ! is.null (func) &
+      ! grepl ("[.]wavelength", labels  (terms (model)))
+      )
     object <- do.call (apply, c (list (object, 1, func), func.args))
   
   dots <- modifyList (list (aspect = "iso"),
