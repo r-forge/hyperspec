@@ -6,7 +6,8 @@
 ###
 
 ### the workhorse function
-.levelplot <- function (x, data, transform.factor = TRUE, ...) {
+.levelplot <- function (x, data, transform.factor = TRUE, ...,
+                        panel = panel.levelplot.raster) {
   validObject (data)
 
   data$.row <- row.seq (data)
@@ -20,7 +21,7 @@
   use.y <- parsed.formula$right.y.name
   use.z <- parsed.formula$left.name
 
-  dots <- list (...)
+  dots <- list (..., panel = panel)
   
   ## if spc is used as z and the data set has multiple wavelengths cut and warn
   if (use.z == "spc" && nwl (data) > 1 &&
