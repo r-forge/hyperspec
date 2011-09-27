@@ -17,7 +17,7 @@
 ##' 
 ##' \code{plotmap}, \code{map.identify}, and the \code{levelplot} methods internally use the same
 ##' gateway function to \code{\link[lattice]{levelplot}}. Thus \code{transform.factor} can be used
-##' with all of them and the panel function defaults to \code{\link[lattice]{panel.levelplot.grid}}
+##' with all of them and the panel function defaults to \code{\link[lattice]{panel.levelplot.raster}}
 ##' for all three. Two special column names, \code{.rownames} and \code{.wavelength} may be used. 
 ##' 
 ##' \code{levelplot} plots the spectra matrix.
