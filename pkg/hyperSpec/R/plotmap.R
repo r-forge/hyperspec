@@ -15,10 +15,10 @@
 ##' The \code{model} can contain the special column name \code{.wavelength} to specify the wavelength
 ##' axis.
 ##' 
-##' \code{plotmap}, \code{plotmap}, \code{map.identify}, and the \code{levelplot} methods internally
-##' use the same gateway function to \code{\link[lattice]{levelplot}}. Thus \code{transform.factor}
-##' can be used with all of them. Two special column names, \code{.rownames} and \code{.wavelength}
-##' may be used.
+##' \code{plotmap}, \code{map.identify}, and the \code{levelplot} methods internally use the same
+##' gateway function to \code{\link[lattice]{levelplot}}. Thus \code{transform.factor} can be used
+##' with all of them and the panel function defaults to \code{\link[lattice]{panel.levelplot.raster}}
+##' for all three. Two special column names, \code{.rownames} and \code{.wavelength} may be used. 
 ##' 
 ##' \code{levelplot} plots the spectra matrix.
 ##' 
@@ -57,6 +57,9 @@
 ##'   \code{func} with the arguments given in the list \code{func.args} to each
 ##'   of the spectra. Thus a single summary value is displayed for each of the
 ##'   spectra.
+##'
+##' This can be suppressed manually by setting \code{func} to NULL. It is automatically suppressed if
+##' \code{.wavelength} appears in the formula.
 ##' @param voronoi Should the plot for identifying spectra by mouse click be
 ##'   produced by \code{plotmap} (default) or \code{plotvoronoi}?
 ##' @param \dots further arguments are passed down the call chain, and finally
@@ -108,7 +111,7 @@ plotmap <- function (object, model = spc ~ x * y,
   chk.hy (object)
   validObject (object)
 
-  if (nwl (object) > 1 & ! is.null (func))
+  if (! is.null (func) & ! any (grepl ("[.]wavelength", model)))
     object <- do.call (apply, c (list (object, 1, func), func.args))
   
   dots <- modifyList (list (aspect = "iso"),

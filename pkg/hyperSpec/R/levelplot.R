@@ -2,11 +2,12 @@
 ###
 ###  levelplot.R - everything that has to do with levelplot-like plotting:
 ###
-###  levelplot is used by plotmap, plotmat, plotvoronoi
+###  levelplot is used by plotmap, plotvoronoi
 ###
 
 ### the workhorse function
-.levelplot <- function (x, data, transform.factor = TRUE, ...) {
+.levelplot <- function (x, data, transform.factor = TRUE,
+                        panel = panel.levelplot.raster, ...) {
   validObject (data)
 
   data$.row <- row.seq (data)
@@ -20,7 +21,7 @@
   use.y <- parsed.formula$right.y.name
   use.z <- parsed.formula$left.name
 
-  dots <- list (...)
+  dots <- list (..., panel = panel)
   
   ## if spc is used as z and the data set has multiple wavelengths cut and warn
   if (use.z == "spc" && nwl (data) > 1 &&
@@ -58,12 +59,14 @@
 ##' @rdname levelplot
 ##' @usage
 ##'
-##' \S4method{levelplot}{formula,hyperSpec}(x, data, transform.factor = TRUE, \dots)
+##' \S4method{levelplot}{formula,hyperSpec}(x, data, transform.factor = TRUE,
+##' panel = panel.levelplot.raster, \dots)
 ##' 
 ##' @import lattice
 ##' @param transform.factor If the color-coded variable is a factor, should
 ##'   \code{\link{trellis.factor.key}} be used to compute the color coding and
 ##'   legend?
+##' @param panel panel function
 ##' @export
 ##' @seealso  \code{\link[lattice]{levelplot}}
 ##'

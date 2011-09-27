@@ -1,20 +1,10 @@
-.onLoad <- function (libname, pkgname){
-  require (lattice)
-  require (utils)
-
-#  if (! require (latticeExtra))
-#    cat ("package 'latticeExtra' is needed for Voronoi plots.\n\n")
-#  if (! require (plyr))
-#    cat ("package 'plyr' is needed for 'collapse'.\n\n")
-}
-
 .onAttach <- function (libname, pkgname){
   unlockBinding(".options", asNamespace("hyperSpec"))
 
   desc <- utils::packageDescription("hyperSpec")
   vers <- paste("V. ", desc$Version)
 
-  cat ("Package ",  desc$Package, ", version ", desc$Version, "\n\n",
+  packageStartupMessage ("Package ",  desc$Package, ", version ", desc$Version, "\n\n",
        "To get started, try\n",
        '   vignette ("introduction", package = "hyperSpec")\n',
        '   package?hyperSpec \n',

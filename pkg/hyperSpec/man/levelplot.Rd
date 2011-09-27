@@ -2,7 +2,8 @@
 \alias{levelplot,formula,hyperSpec-method}
 \alias{levelplot}
 \title{levelplot,formula,hyperSpec-method}
-\usage{\S4method{levelplot}{formula,hyperSpec}(x, data, transform.factor = TRUE, \dots)
+\usage{\S4method{levelplot}{formula,hyperSpec}(x, data, transform.factor = TRUE,
+panel = panel.levelplot.raster, \dots)
 \S4method{levelplot}{hyperSpec,missing}(x, data, \dots)
 
 map.identify(object, model=spc ~ x * y, voronoi=FALSE, ..., tol=0.02, warn=TRUE)
@@ -23,6 +24,7 @@ plotvoronoi(object, model=spc ~ x * y, use.tripack=FALSE, mix=FALSE, ...)
 \arguments{\item{transform.factor}{If the color-coded variable is a factor, should
 \code{\link{trellis.factor.key}} be used to compute the color coding and
 legend?}
+\item{panel}{panel function}
 \item{tol}{tolerance for \code{map.identify} as fraction of the viewport
 (i.e. in "npc" \link[grid]{unit}s)}
 \item{warn}{should a warning be issued if no point is within the specified
@@ -33,7 +35,10 @@ displayed by \code{\link[lattice]{levelplot}}}
 \item{func,func.args}{Before plotting, \code{plotmap} applies function
 \code{func} with the arguments given in the list \code{func.args} to each
 of the spectra. Thus a single summary value is displayed for each of the
-spectra.}
+spectra.
+
+This can be suppressed manually by setting \code{func} to NULL. It is automatically suppressed if
+\code{.wavelength} appears in the formula.}
 \item{voronoi}{Should the plot for identifying spectra by mouse click be
 produced by \code{plotmap} (default) or \code{plotvoronoi}?}
 \item{\dots}{further arguments are passed down the call chain, and finally
@@ -56,10 +61,10 @@ value of each spectrum is plotted. Spectra may be identified by mouse click.}
 \details{\code{plotmap}: The \code{model} can contain the special column name \code{.wavelength} to specify the wavelength
 axis.
 
-\code{plotmap}, \code{plotmap}, \code{map.identify}, and the \code{levelplot} methods internally
-use the same gateway function to \code{\link[lattice]{levelplot}}. Thus \code{transform.factor}
-can be used with all of them. Two special column names, \code{.rownames} and \code{.wavelength}
-may be used.
+\code{plotmap}, \code{map.identify}, and the \code{levelplot} methods internally use the same
+gateway function to \code{\link[lattice]{levelplot}}. Thus \code{transform.factor} can be used
+with all of them and the panel function defaults to \code{\link[lattice]{panel.levelplot.raster}}
+for all three. Two special column names, \code{.rownames} and \code{.wavelength} may be used. 
 
 \code{levelplot} plots the spectra matrix.
 
