@@ -2,12 +2,12 @@
 ###
 ###  levelplot.R - everything that has to do with levelplot-like plotting:
 ###
-###  levelplot is used by plotmap, plotmat, plotvoronoi
+###  levelplot is used by plotmap, plotvoronoi
 ###
 
 ### the workhorse function
-.levelplot <- function (x, data, transform.factor = TRUE, ...,
-                        panel = panel.levelplot.raster) {
+.levelplot <- function (x, data, transform.factor = TRUE,
+                        panel = panel.levelplot.raster, ...) {
   validObject (data)
 
   data$.row <- row.seq (data)
@@ -59,7 +59,8 @@
 ##' @rdname levelplot
 ##' @usage
 ##'
-##' \S4method{levelplot}{formula,hyperSpec}(x, data, transform.factor = TRUE, \dots)
+##' \S4method{levelplot}{formula,hyperSpec}(x, data, transform.factor = TRUE,
+##' panel = panel.levelplot.raster, \dots)
 ##' 
 ##' @import lattice
 ##' @param transform.factor If the color-coded variable is a factor, should
