@@ -15,9 +15,9 @@ Description: This package is an interface to handle hyperspectral data
     any data that is recorded over a discretized variable, e.g.
     absorbance = f (wavelength), stored as a vector of absorbance
     values for discrete wavelengths is suitable.
-Version: 0.98-20110927
+Version: 0.98-20111025
 URL: http://hyperSpec.r-forge.r-project.org/
-Date: 2011-09-27
+Date: 2011-10-25
 Depends: R (>= 2.11), methods, utils, lattice, grid
 Suggests: R.matlab, latticeExtra, tripack, deldir, rgl, plotrix,
     testthat, ggplot2, pls, playwith, latticist, svUnit, sp, baseline,
@@ -32,8 +32,8 @@ Collate: 'validate.R' 'hyperSpec-class.R' 'aggregate.R' 'all.equal.R'
     'logbook.R' 'logentry.R' 'log.R' 'map.identify.R' 'map.sel.poly.R'
     'mark.dendrogram.R' 'Math.R' 'matlab.palette.R' 'mean_sd.R'
     'merge.R' 'options.R' 'orderwl.R' 'paracetamol.R' 'pearson.dist.R'
-    'plotc.R' 'plot.R' 'plotspc.R' 'plotvoronoi.R' 'qplot.R'
-    'rbind.fill.R' 'read.ENVI.Nicolet.R' 'read.ENVI.R'
+    'plotc.R' 'plot.R' 'plotspc.R' 'plotvoronoi.R' 'qplotmixmap.R'
+    'qplot.R' 'rbind.fill.R' 'read.ENVI.Nicolet.R' 'read.ENVI.R'
     'read.spc.KaiserMap.R' 'read.spc.R' 'read.txt.long.R'
     'read.txt.wide.R' 'replace.R' 'sample.R' 'scan.txt.Renishaw.R'
     'scan.txt.Witec.R' 'sel.poly.R' 'seq.R' 'show.R' 'spc.bin.R'

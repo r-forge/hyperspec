@@ -775,7 +775,7 @@ rm (chondro)
 @ 
 \includegraphics[width = .33\textwidth]{fig/fig-merged}
 }
-\caption{\label{fig:merge}
+\caption[]{\label{fig:merge}
   \subref{fig-merge-map} For both spectral ranges some spectra are missing.  
   \subref{fig-merge-mat} The missing parts of the spectra are filled with \Rcode{NA}.}
 \end{figure}
@@ -926,7 +926,7 @@ chondro [[]] <- tmp
   \subfloat[\label{fig:shift:wl} \Rfunction{wl<-}]{\includegraphics[width=.33\linewidth]{fig/fig-shift-wl}}
   \subfloat[\label{fig:shift:interp} interpolation]{\includegraphics[width=.33\linewidth]{fig/fig-shift-interp}}
   \subfloat[\label{fig:shift:untsch} ]{\includegraphics[width=.33\linewidth]{fig/fig-shift-untsch}}
-  \caption{Shifting the Spectra along the Wavelength Axis. \subref{fig:shift:wl} Changing the
+  \caption[]{Shifting the Spectra along the Wavelength Axis. \subref{fig:shift:wl} Changing the
     wavelength values. \subref{fig:shift:interp} Interpolation. \subref{fig:shift:untsch} Detail view
     of the phenylalanine band: shifting by \Rfunction{wl<-} (red) does not affect the intensities,
     while the spectrum is slightly changed by interpolations (blue).}
@@ -1397,7 +1397,7 @@ plot (loadings [1:3], stacked = TRUE)
 plotmap (scores [,,3], col.regions = div.palette (20))
 @
 }
-\caption{\label{fig:pca}
+\caption[]{\label{fig:pca}
   \subref{fig-pca-load} The first three loadings: \Rcode{plot (loadings [1 : 3], stacked = TRUE)}.  
   \subref{fig-pca-score} The third score map: \Rcode{plotmap (scores [, , 3])}.}
 \end{figure}
@@ -1471,12 +1471,12 @@ plotmap (chondro, clusters ~ x * y, col.regions = cluster.cols)
 \subfloat[\label{fig:clust:dend}]{\includegraphics[width=0.33\textwidth]{fig/fig-dend}}
 \subfloat[\label{fig:clust:map}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmap}}
 \subfloat[\label{fig:clust:spc}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmean}}
-\caption{The results of the cluster analysis: \subref{fig:clust:dend} the
+\caption[]{The results of the cluster analysis: \subref{fig:clust:dend} the
 dendrogram \subref{fig:clust:map} the map of the 3 clusters \subref{fig:clust:spc}
 the mean spectra.}
 \end{figure}
 
-\subsection{Calculating group-wise Sum Characteristics \\
+\subsection[Calculating group-wise Sum Characteristics, e. g. Cluster Mean Spectra]{Calculating group-wise Sum Characteristics, \\
 e.\,g. Cluster Mean Spectra}
 
 \Rfunction{aggregate}\mFun{\Rfunction{aggregate}} applies the function given in \Rfunarg{FUN}

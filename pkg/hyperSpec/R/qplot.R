@@ -100,7 +100,7 @@ qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "sp
   p <- ggplot (as.long.df (object), mapping = mapping) +
     coord_equal () + geom_tile () +
     xlab (labels (object)[[as.character (mapping$x)]]) + 
-    ylab (labels (object)[[as.character (mapping$x)]])   
+    ylab (labels (object)[[as.character (mapping$y)]])   
       
   p
 }

@@ -137,7 +137,7 @@ plotc (laser [,, wls], spc ~ t, groups = .wavelength, type = "b",  cex = 0.3, co
   \centering
   \subfloat[\label{fig:markedspc}]{\includegraphics[width=.33\textwidth]{fig/fig-markspc}}
   \subfloat[\label{fig:ts}]{\includegraphics[width=.66\textwidth]{fig/fig-ts}}  
-  \caption{The laser emission time series. \ref{fig:markedspc} shows
+  \caption[]{The laser emission time series. \ref{fig:markedspc} shows
     the spectral position of the bands. The time series are plotted in
   corresponding colors in \ref{fig:ts}.}
   \label{fig:tsf}
@@ -150,7 +150,7 @@ plotc (laser [,, wls], spc ~ t | .wavelength, type = "b", cex = 0.3, col = "blac
 \begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{fig/fig-tsextra}
-  \caption{The time series plots can also be conditioned on \Rcode{\$.wavelength}.}
+  \caption[]{The time series plots can also be conditioned on \Rcode{\$.wavelength}.}
   \label{fig:tsextra}
 \end{figure}
 
@@ -169,7 +169,7 @@ levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
   \centering
   \subfloat[\label{fig:row}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatr}}
   \subfloat[\label{fig:t}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatt}}  
-  \caption{The spectra matrix of the \Robject{laser} data set. The ordinate of the plot may be the number of the spectrum accessed by \Rcode{\$.row} \subref{fig:row} or any other extra data column, here \Rcode{\$t} \subref{fig:t}.}
+  \caption[]{The spectra matrix of the \Robject{laser} data set. The ordinate of the plot may be the number of the spectrum accessed by \Rcode{\$.row} \subref{fig:row} or any other extra data column, here \Rcode{\$t} \subref{fig:t}.}
   \label{fig:tsmat}
 \end{figure}
 

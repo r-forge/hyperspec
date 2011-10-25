@@ -586,7 +586,7 @@ rectangular grid even if only part of it was measured. These spectra can be remo
 `%~=%` <- function (x, y, tolerance = .Machine$double.eps^0.5)
   abs (x - y) < tolerance
 
-spc <- spc [rowSums (abs (spc [[]])) %~=% 0]
+spc <- spc [! apply (spc [[]] %~=% 0, 1, all)]
 spc
 @
 
