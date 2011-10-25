@@ -7,8 +7,18 @@
 ##' @return invisible list with ggplot2 objects map and legend
 ##' @seealso \code{\link[hyperSpec]{qmixtile}}
 ##' @author Claudia Beleites
-##' @importFrom grid pushViewport, viewport, popViewport
+##' @importFrom grid pushViewport
+##' @importFrom grid viewport
+##' @importFrom grid popViewport
 ##' @export
+##' @examples
+##' chondro <- chondro - spc.fit.poly.below (chondro)
+##' chondro <- sweep (chondro, 1, apply (chondro, 1, mean), "/")
+##' chondro <- sweep (chondro, 2, apply (chondro, 2, quantile, 0.05), "-")
+##' 
+##' qplotmixmap (chondro [,,c (940, 1002, 1440)],
+##'              purecol = c (colg = "red", Phe = "green", Lipid = "blue"))
+##' 
 qplotmixmap <- function (object, ...){
   require (ggplot2)
 
@@ -49,7 +59,7 @@ legendright <- function (p, l, legend.width = 8, legend.unit = "lines") {
   
 ##' plot multivariate data into colour channels using \code{\link[ggplot2]{geom_tile}}
 ##' @rdname qplotmix
-##' @param object 
+##' @param object matrix to be plotted with mixed colour channels
 ##' @param purecol pure component colours, names determine legend labels
 ##' @param mapping see \code{\link[ggplot2]{geom_tile}}
 ##' @param ... handed to \code{colmix.rgb}
@@ -178,8 +188,8 @@ qmixlegend <- function (x, purecol, dx = 0.33, ny = 100, labels = names (purecol
 
   l <- ggplot (df, aes (x = column), col = col) +
     geom_point (aes (x=column, y = 1), col = NA) + ylab ("") + xlab ("")
-  l <- l + geom_rect (aes (xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
-                           fill = col,  colour = col))
+  l <- l + geom_rect (aes_string (xmin = "xmin", xmax = "xmax", ymin = "ymin", ymax = "ymax",
+                           fill = "col",  colour = "col"))
 
   l <- l + opts (plot.margin = unit(c(0.5, 0, 0 ,0), "lines"), legend.position = "none") +
        scale_fill_identity () + scale_colour_identity () 
