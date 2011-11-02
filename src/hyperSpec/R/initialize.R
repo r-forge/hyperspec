@@ -10,7 +10,6 @@
 .initialize <- function (.Object, spc = NULL, data = NULL, wavelength = NULL, labels = NULL, log = NULL,
                          ## ...,
                          short = "initialize", user = NULL, date = NULL){
-
   
   if (is.null (log) && .options$log)    # avoid if no log is needed: involves copy of data
     long <- list (data       = if (missing (data))       "missing" else .paste.row (data, val = TRUE),
@@ -114,7 +113,7 @@
   ## deal with extra data
   if (is.null (data)){
     data <- data.frame (spc = spc)
-  } else {
+  } else if (! is.null (spc)){
     if (nrow (data) == 1 && nrow (spc) > 1)
       data <- data [rep (1, nrow (spc)), , drop = FALSE]
 
@@ -250,4 +249,10 @@ test (.initialize) <- function (){
   checkEqualsNumeric (h@wavelength, c(600, 601, 602, 603))
 
   checkException (new ("hyperSpec", spc = spc, data = data.frame (x = 11:12))) # different number of rows
+
+  h <- new ("hyperSpec", data = data.frame (spc = I (spc)))
+  checkEqualsNumeric (h@data$spc, spc)
+  checkEqualsNumeric (dim (h), c (3L, 1L, 4L))
+  checkEqualsNumeric (h@wavelength, c(600, 601, 602, 603))
+ 
 }
