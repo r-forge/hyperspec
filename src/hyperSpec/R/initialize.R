@@ -6,7 +6,7 @@
 ###
 
 ##' @include paste.row.R
-##' @nord
+##' @noRd
 .initialize <- function (.Object, spc = NULL, data = NULL, wavelength = NULL, labels = NULL, log = NULL,
                          ## ...,
                          short = "initialize", user = NULL, date = NULL){

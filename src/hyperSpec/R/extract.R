@@ -4,7 +4,7 @@
 ###
 
 ##' @include wl2i.R
-##' @nord
+##' @noRd
 .extract <- function (x, i, j, l,
                       ...,
                       wl.index = FALSE

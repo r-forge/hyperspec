@@ -25,6 +25,10 @@
 ##'   package.
 ##' @rdname hyperSpec-package
 ##' @keywords package
-NULL
+if (!require (svUnit))
+  `test<-` <- function (f, value) {
+    attr (f, "test") <- value
+    f
+ }
 
 

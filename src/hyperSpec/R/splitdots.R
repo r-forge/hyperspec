@@ -1,7 +1,8 @@
 ## experimental splitting of dots arguments into arg lists for different functions.
 ##
 
-##' @nord
+##' @noRd
+##' @noexport
 split.dots <- function (dots, functions, drop = TRUE){
   fun.names <- paste ("^", names (functions), "[.]", sep = "")
   dot.names <- names (dots)
