@@ -91,9 +91,7 @@
 ##' \code{$..<-} is again an abbreviation for the data.frame without the
 ##' spectra matrix.
 ##'
-##' @usage \S4method{[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE,
-##'    short = "[]", date = NULL, user = NULL, drop = FALSE)
-##' 
+
 ##' @title Extract and Replace parts of hyperSpec objects
 ##' @rdname extractreplace
 ##' @docType methods
@@ -199,7 +197,7 @@
 setMethod ("[", signature = signature (x = "hyperSpec"),
            function (x, i, j, l, ..., 
                      wl.index = FALSE, 
-                     short = "[]", date = NULL, user = NULL,
+                     short = "[", date = NULL, user = NULL,
                      drop = FALSE  # drop has to be at end
                      ){
   validObject (x)
@@ -220,10 +218,6 @@ setMethod ("[", signature = signature (x = "hyperSpec"),
 })
 
 ##' @rdname extractreplace
-##' @usage
-##'
-##' \S4method{[[}{hyperSpec}(x, i, j, l, \dots, wl.index = FALSE, drop = FALSE)
-##' 
 ##' @export "[["
 ##' @name [[
 setMethod ("[[", signature = signature (x = "hyperSpec"),
@@ -254,10 +248,6 @@ setMethod ("[[", signature = signature (x = "hyperSpec"),
 })
 
 ##' @rdname extractreplace
-##' @usage
-##' 
-##' \S4method{$}{hyperSpec}(x, name)
-##'
 ##' @param name name of the data column to extract. \code{$spc} yields the spectra matrix.
 ##' @export "$"
 setMethod ("$", signature = signature (x = "hyperSpec"),
