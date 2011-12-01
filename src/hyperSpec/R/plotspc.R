@@ -625,7 +625,9 @@ stacked.offsets <- function (x, stacked = TRUE,
         at     = as.numeric (unlist (at)),
         cut    = cutmarks)
 }
-test (.cut.ticks) <- function (){
+
+##' @include hyperspec-package.R
+.test (.cut.ticks) <- function (){
   ## bugfix:
   ## plotspc (paracetamol, wl.range = c (min ~ 1800, 2800 ~ max), xoffset = 900)
   ## had 2600 1/cm label printed in low wavelength range

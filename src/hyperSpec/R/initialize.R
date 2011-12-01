@@ -215,7 +215,8 @@
 ##' 
 setMethod ("initialize", "hyperSpec", .initialize)
 
-test (.initialize) <- function (){
+##' @include hyperspec-package.R
+.test (.initialize) <- function (){
 
   checkEqualsNumeric (dim (new ("hyperSpec")), c (0L, 1L, 0L))
 

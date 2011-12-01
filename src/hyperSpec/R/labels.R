@@ -22,7 +22,8 @@
   label
 }
 
-test (.labels) <- function (){
+##' @include hyperspec-package.R
+.test (.labels) <- function (){
   .sort <- function (x)
     x [order (names (x))]
   

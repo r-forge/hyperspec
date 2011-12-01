@@ -26,9 +26,11 @@
 ##' @rdname hyperSpec-package
 ##' @keywords package
 if (!require (svUnit))
-  `test<-` <- function (f, value) {
+  `.test<-` <- function (f, value) {
     attr (f, "test") <- value
     f
+ } else {
+ `.test<-` <- svUnit::`test<-`
  }
 
 
