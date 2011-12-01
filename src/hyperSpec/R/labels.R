@@ -46,6 +46,7 @@
 ##' @usage
 ##' labels (object, which = NULL, ..., short = "labels<-", user = NULL, date = NULL) <- value
 ##' 
+##' @aliases labels<-,hyperSpec-method
 ##' @export "labels<-"
 ##' @param value the new label(s)
 ##' @param short,user,date handed to \code{\link[hyperSpec]{logentry}}
@@ -92,11 +93,6 @@
 ##' The labels should be given in a form ready for the text-drawing functions
 ##' (see \code{\link[grDevices]{plotmath}}), e.g. as \code{expression} or a
 ##' \code{character}.
-##' 
-##' @usage
-##'
-##' \S4method{labels}{hyperSpec}(object, which = bquote (), drop = TRUE, \dots,
-##'    use.colnames = TRUE)
 ##' 
 ##' @param object a hyperSpec object
 ##' @param which numeric or character to specify the label(s)
