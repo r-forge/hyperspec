@@ -75,7 +75,6 @@ Collate:
     'levelplot.R'
     'logbook.R'
     'logentry.R'
-    'log.R'
     'map.identify.R'
     'map.sel.poly.R'
     'mark.dendrogram.R'

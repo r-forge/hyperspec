@@ -1,4 +1,4 @@
-\name{log}
+\name{Math2}
 \alias{abs,hyperSpec-method}
 \alias{acosh,hyperSpec-method}
 \alias{acos,hyperSpec-method}
@@ -38,9 +38,6 @@
 \alias{trunc,hyperSpec-method}
 \title{Math Functions for hyperSpec Objects}
 \usage{
-  \S4method{log}{hyperSpec}(x, base = exp(1), ...,
-    short = "log", user = NULL, date = NULL)
-
   \S4method{Math2}{hyperSpec}(x, digits)
 
   \S4method{log}{hyperSpec}(x, base = exp(1), ...,
@@ -52,6 +49,13 @@
   \item{x}{the \code{hyperSpec} object}
 
   \item{digits}{integer stating the rounding precision}
+
+  \item{...}{ignored}
+
+  \item{base}{base of logarithm}
+
+  \item{short,user,date}{handed to
+  \code{\link[hyperSpec]{logentry}}}
 }
 \value{
   a \code{hyperSpec} object
