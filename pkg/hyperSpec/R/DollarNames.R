@@ -1,6 +1,6 @@
 ##' command line completion for $
 ##' 
-##' @aliases .DollarNames.hyperSpec
+##' @aliases .DollarNames .DollarNames,hyperSpec-method
 ##' @author C. Beleites
 ##' @seealso \code{\link[utils]{.DollarNames}}
 ##' @export

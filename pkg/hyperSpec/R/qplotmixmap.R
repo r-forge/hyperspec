@@ -84,7 +84,6 @@ qmixtile <- function (object,
 ##' @rdname qplotmix
 ##' @export
 ##' 
-##' @param x numeric matrix
 ##' @param na.rm see \code{link[base]{min}}
 ##' @param legend should a legend be produced instead of normalized values?
 ##' @param n of colours to produce in legend
@@ -200,7 +199,6 @@ qmixlegend <- function (x, purecol, dx = 0.33, ny = 100, labels = names (purecol
 ##' @rdname qplotmix
 ##' @title multi channel colour mixing
 ##' @param x matrix with component intensities in columns
-##' @param purecol pure component colours (character)
 ##' @param against value to mix against (for \code{sub = TRUE} only, 1 = white, 0 = black)
 ##' @param sub subtractive color mixing?
 ##' @param normalize function to normalize the values.

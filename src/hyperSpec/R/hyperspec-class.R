@@ -27,6 +27,7 @@
 ##' @keywords classes
 ##' @export
 ##' @noRd
+##' @include validate.R
 ##' @examples
 ##' 
 ##' showClass("hyperSpec")

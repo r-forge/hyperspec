@@ -6,7 +6,7 @@
 ###
 
 ##' @include paste.row.R
-##' @nord
+##' @noRd
 .initialize <- function (.Object, spc = NULL, data = NULL, wavelength = NULL, labels = NULL, log = NULL,
                          ## ...,
                          short = "initialize", user = NULL, date = NULL){
@@ -163,7 +163,7 @@
 ##'   \code{data}. If no wavelengths are given, an appropriate vector is
 ##'   derived from the column names of \code{data$spc}. If this is not
 ##'   possible, \code{1 : ncol (data$spc)} is used instead.
-##' @param label A \code{list} containing the labels for the columns of the
+##' @param labels A \code{list} containing the labels for the columns of the
 ##'   \code{data} slot of the \code{hyperSpec} object and for the wavelength
 ##'   (in \code{label$.wavelength}). The labels should be given in a form ready
 ##'   for the text-drawing functions (see \code{\link[grDevices]{plotmath}}).
@@ -174,6 +174,7 @@
 ##'   \code{.Object@@log}. The elements \code{log$short}, \code{log$long},
 ##'   \code{log$date}, and \code{log$user} are handed down to
 ##'   \code{\link{logentry}}.
+##' @param short,user,date passed to \code{\link[hyperSpec]{logentry}}
 ##' @author C.Beleites
 ##' @seealso \code{\link[methods]{new}} for more information on creating and
 ##'   initializing S4 objects.
@@ -182,7 +183,6 @@
 ##'   for slot \code{label}.
 ##' 
 ##' \code{\link{hy.setOptions}}
-##' @include utils.R
 ##' @keywords methods datagen
 ##' @examples
 ##' 
@@ -215,7 +215,8 @@
 ##' 
 setMethod ("initialize", "hyperSpec", .initialize)
 
-test (.initialize) <- function (){
+##' @include hyperspec-package.R
+.test (.initialize) <- function (){
 
   checkEqualsNumeric (dim (new ("hyperSpec")), c (0L, 1L, 0L))
 

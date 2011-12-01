@@ -590,6 +590,18 @@ spc <- spc [! apply (spc [[]] %~=% 0, 1, all)]
 spc
 @
 
+\subsection{Witec}
+\label{sec:scan.txt.Witec}
+\index{Witec!ASCII}
+\index{ASCII!Witec}
+\index{Raman!Witec!ASCII}
+
+In the Witec project software, export the spectra as ASCII X and Y files. These can be read by \Rfunction{scan.txt.Witec}:
+
+<<witec>>=
+scan.txt.Witec ("txt.Witec/WitecExample-x.dat", points.per.line = 10, lines.per.image = 10)
+@
+
 
 \section{Writing your own Import Function}
 \label{sec:writing-Import}

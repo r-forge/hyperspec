@@ -8,9 +8,9 @@ Type: Package
 LazyLoad: yes
 Author: Sebastian Mellor, Claudia Beleites
 Description: Graphical Interfaces for the hyperSpec package.
-Version: 0.02-20110823
+Version: 0.02-20111108
 URL: http://hyperSpec.r-forge.r-project.org/
-Date: 2011-08-23
+Date: 2011-11-08
 Depends: R (>= 2.13), hyperSpec (>= 0.98), gWidgets (>= 0.0-45), arrayhelpers, RGtk2, gWidgetsRGtk2, cairoDevice
 Suggests: latticeExtra
 Collate: 'cartilage.R' 'copytoclipboard.R' 'hyperSpecGUI.R'

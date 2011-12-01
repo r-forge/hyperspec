@@ -1,10 +1,10 @@
 ##' command line completion for $
 ##' 
-##' @aliases .DollarNames.hyperSpec
+##' @aliases .DollarNames .DollarNames,hyperSpec-method
 ##' @author C. Beleites
 ##' @seealso \code{\link[utils]{.DollarNames}}
-##' @export 
-##' @callGraph
+##' @export
+##' @rdname dollarnames
 ##' @keywords utilities
 ##' @title command line completion for $
 ##' @param x the hyperSpecobject

@@ -11,7 +11,7 @@
 ##' object. As hyperSpec provides a Method \code{\link{length}}, it can be used. The result is a
 ##' sequence of indices for the spectra.
 ##' 
-##' @aliases seq.hyperSpec seq,hyperSpec-method
+##' @aliases seq seq,hyperSpec-method
 ##' @param x the hyperSpec object
 ##' @param from,to arguments handed to \code{\link[base]{seq.int}}
 ##' @param \dots arguments for \code{\link[base]{seq}}, namely \code{by}, \code{length.out}
