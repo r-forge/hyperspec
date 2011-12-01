@@ -3,8 +3,8 @@
 ##' @aliases .DollarNames.hyperSpec
 ##' @author C. Beleites
 ##' @seealso \code{\link[utils]{.DollarNames}}
-##' @export 
-##' @callGraph
+##' @export
+##' @rdname dollarnames
 ##' @keywords utilities
 ##' @title command line completion for $
 ##' @param x the hyperSpecobject
