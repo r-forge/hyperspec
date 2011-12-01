@@ -352,8 +352,8 @@ plotspc <- function  (object,
           group.mins <- stacked$offsets
         else
           group.mins <- apply (spc[!duplicated (stacked$groups),, drop = FALSE], 1, min, na.rm = TRUE)
-        
-        axis.args$y <- modifyList (list (at = group.mins,
+    
+        axis.args$y <- modifyList (list (at = stacked$offsets,
                                          labels = stacked$levels [!duplicated (stacked$levels)]),
                                    axis.args$y)
       }
