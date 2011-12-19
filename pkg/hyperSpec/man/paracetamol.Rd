@@ -20,6 +20,5 @@ wl.reverse = TRUE)
 \author{
   C. Beleites
 }
-\keyword{dataset}
 \keyword{datasets}
 

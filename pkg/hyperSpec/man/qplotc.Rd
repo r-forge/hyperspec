@@ -10,7 +10,7 @@
 
   \item{mapping}{see \code{\link[ggplot2]{geom_point}}}
 
-  \item{...}{handed to \code{\link[ggplot2]{geom_point}}}
+  \item{\dots}{handed to \code{\link[ggplot2]{geom_point}}}
 
   \item{func}{function to summarize the wavelengths, if
   \code{NULL}, only the first wavelength is used}

@@ -7,7 +7,7 @@
 \arguments{
   \item{object}{hyperSpec object}
 
-  \item{...}{handed over to
+  \item{\dots}{handed over to
   \code{\link[hyperSpec]{qmixtile}} and
   \code{\link[hyperSpec]{qmixlegend}}}
 }

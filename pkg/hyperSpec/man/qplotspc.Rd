@@ -11,7 +11,7 @@
 
   \item{wl.range}{wavelength ranges to plot}
 
-  \item{...}{handed to \code{\link[ggplot2]{geom_line}}}
+  \item{\dots}{handed to \code{\link[ggplot2]{geom_line}}}
 
   \item{mapping}{see \code{\link[ggplot2]{geom_line}}}
 

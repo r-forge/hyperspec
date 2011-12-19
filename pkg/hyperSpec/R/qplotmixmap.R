@@ -3,7 +3,7 @@
 ##' 
 ##' @title qplotmap with colour mixing for multivariate overlay
 ##' @param object hyperSpec object
-##' @param ... handed over to \code{\link[hyperSpec]{qmixtile}} and \code{\link[hyperSpec]{qmixlegend}}
+##' @param \dots handed over to \code{\link[hyperSpec]{qmixtile}} and \code{\link[hyperSpec]{qmixlegend}}
 ##' @return invisible list with ggplot2 objects map and legend
 ##' @seealso \code{\link[hyperSpec]{qmixtile}}
 ##' @author Claudia Beleites
@@ -62,7 +62,7 @@ legendright <- function (p, l, legend.width = 8, legend.unit = "lines") {
 ##' @param object matrix to be plotted with mixed colour channels
 ##' @param purecol pure component colours, names determine legend labels
 ##' @param mapping see \code{\link[ggplot2]{geom_tile}}
-##' @param ... handed to \code{colmix.rgb}
+##' @param \dots \code{qmixtile}: handed to \code{colmix.rgb}
 qmixtile <- function (object,
                       purecol = stop ("pure component colors needed."),
                       mapping = aes_string (x = "x", y = "y", fill = "spc"),
@@ -156,7 +156,7 @@ normalize.minmax <- function (x, min = 0, max = 1, legend = FALSE, n = 100){
 ##' @param dx width of label bar
 ##' @param ny number of colours in legend
 ##' @param labels component names
-##' @param ... handed to \code{normalize}
+##' @param \dots \code{qmixlegend}: handed to \code{normalize}
 ##' @return ggplot object with legend
 ##' @author Claudia Beleites
 ##' @export 
@@ -202,7 +202,7 @@ qmixlegend <- function (x, purecol, dx = 0.33, ny = 100, labels = names (purecol
 ##' @param against value to mix against (for \code{sub = TRUE} only, 1 = white, 0 = black)
 ##' @param sub subtractive color mixing?
 ##' @param normalize function to normalize the values.
-##' @param ... handed to \code{normalize}
+##' @param \dots \code{colmix.rgb}: handed to \code{normalize}
 ##' @return character with colours
 ##' @author Claudia Beleites
 ##' @export

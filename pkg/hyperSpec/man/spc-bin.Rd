@@ -26,7 +26,7 @@ spectral resolution can be reduced.}
   FALSE}, and resulting \code{NA}s are corrected with
   \code{mean(\dots{}, na.rm = TRUE)}.}
 
-  \item{...}{ignored}
+  \item{\dots}{ignored}
 
   \item{short,user,date}{handed to
   \code{\link[hyperSpec]{logentry}}.}

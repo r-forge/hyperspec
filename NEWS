@@ -1,11 +1,18 @@
 User-visible changes 
 
+o hyperSpec gains a subset method
+
 o bugfix for stacked plots: y axis labels were in wrong order in some cases
 
 o recycling in initialize: columns may (again) be initialized with a single value
 
 o levelplot (incl. plotmap) now uses `useRaster`. This allows better control for falling back to
 `panel.levelplot`.
+
+Minor changes
+
+o levelplot uses .wavelength factors for subsetting, grouping, conditioning: thus the strips will
+  display the wavelength value.
 
 Internal changes
 

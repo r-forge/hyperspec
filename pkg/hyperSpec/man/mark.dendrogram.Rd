@@ -31,7 +31,7 @@
   \item{label.right}{should the side labels be at the right
   side?}
 
-  \item{...}{handed to \code{\link[graphics]{rect}} and
+  \item{\dots}{handed to \code{\link[graphics]{rect}} and
   \code{\link[graphics]{text}}}
 }
 \description{

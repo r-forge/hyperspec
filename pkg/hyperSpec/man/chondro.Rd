@@ -59,6 +59,5 @@ plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)],
   The raw data is available at
   \url{http://hyperspec.r-forge.r-project.org/chondro.zip}
 }
-\keyword{dataset}
 \keyword{datasets}
 

@@ -61,6 +61,7 @@ spikes.interactive <- function (x, spikiness, npts = 10, nspc = 1, zoomfactor = 
   }
 
   calczoom  <- function () {
+    browser ()
     f <- fivenum (tspc [iwlplot, ispcplot], na.rm = TRUE)
     gzoom [] <- seq (f [5], f [1], length.out = 100)
     svalue (gzoom, index = TRUE) <-  round ((f [3] - f [1]) * zoomfactor  / (f [5] - f [1]) * 100)

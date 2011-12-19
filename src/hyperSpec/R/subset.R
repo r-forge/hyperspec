@@ -16,7 +16,6 @@
 ##' @param x hyperSpec object
 ##' @param \dots handed to \code{\link[base]{subset}} (data.frame method)
 ##' @param short,user,date passed to \code{\link[hyperSpec]{logentry}}
-##' @param user 
 ##' @docType methods
 ##' @return hyperSpec object containing the respective subset of spectra.
 ##' @author Claudia Beleites

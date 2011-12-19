@@ -22,6 +22,5 @@ plotc (flu)
 \author{
   M. Kammer and C. Beleites
 }
-\keyword{dataset}
 \keyword{datasets}
 

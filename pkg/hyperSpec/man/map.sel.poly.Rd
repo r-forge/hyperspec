@@ -9,7 +9,7 @@
 
   \item{size}{size for polygon point symbol}
 
-  \item{...}{further arguments for
+  \item{\dots}{further arguments for
   \code{\link[grid]{grid.points}} and
   \code{\link[grid]{grid.lines}}}
 }

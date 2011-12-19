@@ -50,7 +50,7 @@
 
   \item{digits}{integer stating the rounding precision}
 
-  \item{...}{ignored}
+  \item{\dots}{ignored}
 
   \item{base}{base of logarithm}
 

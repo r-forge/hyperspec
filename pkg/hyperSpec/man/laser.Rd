@@ -26,6 +26,5 @@ plotc (laser [,, wl], spc ~ t, groups = .wavelength, type = "b",
 \author{
   C. Beleites
 }
-\keyword{dataset}
 \keyword{datasets}
 

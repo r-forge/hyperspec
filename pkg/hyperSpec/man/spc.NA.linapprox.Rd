@@ -12,7 +12,7 @@
   \item{neighbours}{how many neighbour data points should
   be used to fit the line}
 
-  \item{...}{ignored}
+  \item{\dots}{ignored}
 
   \item{short,user,date}{handed to \code{\link{logentry}}}
 }

@@ -13,10 +13,10 @@ value of each spectrum is plotted. Spectra may be identified by mouse click.}
     func.args = list(), ...)
 
   \S4method{levelplot}{formula,hyperSpec}(x, data,
-    transform.factor = TRUE, panel =
-    panel.levelplot.raster, \dots)
+    transform.factor = TRUE, ..., contour = FALSE,
+    useRaster = !contour)
 
-  \S4method{levelplot}{hyperSpec,missing}(x, data, \dots)
+  \S4method{levelplot}{hyperSpec,missing}(x, data, ...)
 
   map.identify(object, model = spc ~ x * y,
     voronoi = FALSE, ..., tol = 0.02, warn = TRUE)
@@ -52,7 +52,8 @@ value of each spectrum is plotted. Spectra may be identified by mouse click.}
   factor, should \code{\link{trellis.factor.key}} be used
   to compute the color coding and legend?}
 
-  \item{panel}{panel function}
+  \item{contour,useRaster}{see
+  \code{\link[lattice]{levelplot}}}
 
   \item{tol}{tolerance for \code{map.identify} as fraction
   of the viewport (i.e. in "npc" \link[grid]{unit}s)}

@@ -11,7 +11,7 @@
 
   \item{mapping}{see \code{\link[ggplot2]{geom_tile}}}
 
-  \item{...}{handed to \code{\link[ggplot2]{geom_tile}}}
+  \item{\dots}{handed to \code{\link[ggplot2]{geom_tile}}}
 
   \item{func}{function to summarize the wavelengths}
 

@@ -35,6 +35,5 @@ plotc (apply (barb [,, 42.9~43.2], 1, sum, na.rm = TRUE), spc ~ z,
   The raw data is available at
   \url{http://hyperspec.r-forge.r-project.org/fileio.zip}
 }
-\keyword{dataset}
 \keyword{datasets}
 

@@ -15,8 +15,6 @@
 
   \item{short,user,date}{passed to
   \code{\link[hyperSpec]{logentry}}}
-
-  \item{user}{}
 }
 \value{
   hyperSpec object containing the respective subset of

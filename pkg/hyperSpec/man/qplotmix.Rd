@@ -46,7 +46,11 @@
 
   \item{mapping}{see \code{\link[ggplot2]{geom_tile}}}
 
-  \item{...}{handed to \code{colmix.rgb}}
+  \item{\dots}{\code{qmixtile}: handed to \code{colmix.rgb}
+
+  \code{qmixlegend}: handed to \code{normalize}
+
+  \code{colmix.rgb}: handed to \code{normalize}}
 
   \item{na.rm}{see \code{link[base]{min}}}
 
@@ -67,8 +71,6 @@
 
   \item{labels}{component names}
 
-  \item{...}{handed to \code{normalize}}
-
   \item{x}{matrix with component intensities in columns}
 
   \item{against}{value to mix against (for \code{sub =
@@ -77,8 +79,6 @@
   \item{sub}{subtractive color mixing?}
 
   \item{normalize}{function to normalize the values.}
-
-  \item{...}{handed to \code{normalize}}
 }
 \value{
   invisible \code{NULL}
