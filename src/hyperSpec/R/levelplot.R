@@ -66,7 +66,7 @@
 ##' @param transform.factor If the color-coded variable is a factor, should
 ##'   \code{\link{trellis.factor.key}} be used to compute the color coding and
 ##'   legend?
-##' @param panel panel function
+##' @param contour,useRaster see  \code{\link[lattice]{levelplot}}
 ##' @export
 ##' @seealso  \code{\link[lattice]{levelplot}}
 ##'
