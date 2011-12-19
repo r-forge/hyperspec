@@ -82,7 +82,7 @@ qmixtile <- function (object,
 
 ##' \code{normalize.colrange} normalizes the range of each column to [0, 1]
 ##' @rdname qplotmix
-##' @exportb
+##' @export
 ##' 
 ##' @param na.rm see \code{link[base]{min}}
 ##' @param legend should a legend be produced instead of normalized values?
