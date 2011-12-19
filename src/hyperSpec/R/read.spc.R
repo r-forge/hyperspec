@@ -391,12 +391,18 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
 			ssftime = rep (NA, nsub))
 	
 	for (s in seq_len (nsub)){
-		dir [s,] <- c (readBin (raw.data [pos + ( 1 :  4)], "integer", 1, 4 , signed = FALSE),
+		dir [s,] <- c (readBin (raw.data [pos + ( 1 :  4)], "integer", 1, 4), # , signed = FALSE),
 				readBin (raw.data [pos + ( 5 :  8)], "integer", 1, 4), # , signed = FALSE),
 				readBin (raw.data [pos + ( 9 : 12)], "numeric", 1, 4))
 		pos <- pos + .spc.size ['subfiledir']
 	}
-	dir$ssfposn <- dir$ssfposn
+
+	## R doesn't have unsigned long int .................................
+   if (any (dir [, 1:2]) < 0))
+     stop ("error reading subfiledir: R does not support unsigned long integers.",
+           "Please contact the maintainer of the package.")
+   
+#	dir$ssfposn <- dir$ssfposn
 	dir
 }
 
@@ -421,7 +427,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
 	
 	## R doesn't have unsigned long int .................................
    if (any (unlist (loghdr) < 0))
-     stop ("error reading header: R does not support unsigned long integers.",
+     stop ("error reading log: R does not support unsigned long integers.",
            "Please contact the maintainer of the package.")
    
 	log <- list ()
