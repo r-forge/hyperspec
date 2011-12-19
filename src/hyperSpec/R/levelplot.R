@@ -70,10 +70,6 @@ setMethod ("levelplot", signature = signature (x = "formula", data = "hyperSpec"
 
 ##' @rdname levelplot
 ##' @export
-##' @usage
-##'
-##' \S4method{levelplot}{hyperSpec,missing}(x, data, \dots)
-##' 
 
 setMethod ("levelplot", signature = signature (x = "hyperSpec", data = "missing"),
            function (x, data, ...) {
