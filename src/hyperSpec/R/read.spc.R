@@ -410,15 +410,20 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
 		return (list (data = list (),
 						log = list ()))
 	
-	loghdr <- list (logsizd = readBin (raw.data [pos + ( 1 :  4)], "integer", 1, 4 , signed = FALSE),
-			logsizm = readBin (raw.data [pos + ( 5 :  8)], "integer", 1, 4 , signed = FALSE),
-			logtxto = readBin (raw.data [pos + ( 9 : 12)], "integer", 1, 4 , signed = FALSE),
-			logbins = readBin (raw.data [pos + (13 : 16)], "integer", 1, 4 , signed = FALSE),
-			logdsks = readBin (raw.data [pos + (17 : 20)], "integer", 1, 4 , signed = FALSE),
+	loghdr <- list (logsizd = readBin (raw.data [pos + ( 1 :  4)], "integer", 1, 4)#  , signed = FALSE),
+			logsizm = readBin (raw.data [pos + ( 5 :  8)], "integer", 1, 4)# , signed = FALSE),
+			logtxto = readBin (raw.data [pos + ( 9 : 12)], "integer", 1, 4)# , signed = FALSE),
+			logbins = readBin (raw.data [pos + (13 : 16)], "integer", 1, 4)# , signed = FALSE),
+			logdsks = readBin (raw.data [pos + (17 : 20)], "integer", 1, 4)# , signed = FALSE),
 			## 44 bytes reserved
 			.last.read = pos + .spc.size ['loghdr']
 	)
 	
+	## R doesn't have unsigned long int .................................
+   if (any (unlist (loghdr) < 0))
+     stop ("error reading header: R does not support unsigned long integers.",
+           "Please contact the maintainer of the package.")
+   
 	log <- list ()
 	data <- list ()
 	
