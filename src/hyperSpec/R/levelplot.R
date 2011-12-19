@@ -57,11 +57,6 @@
 
 ##' @include plotmap.R
 ##' @rdname levelplot
-##' @usage
-##'
-##' \S4method{levelplot}{formula,hyperSpec}(x, data, transform.factor = TRUE,
-##' panel = panel.levelplot.raster, \dots)
-##' 
 ##' @import lattice
 ##' @param transform.factor If the color-coded variable is a factor, should
 ##'   \code{\link{trellis.factor.key}} be used to compute the color coding and
