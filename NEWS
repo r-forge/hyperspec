@@ -1,0 +1,11 @@
+User-visible changes 
+
+o bugfix for stacked plots: y axis labels
+
+o recycling in initialize: columns may (again) be initialized with a single value
+
+Internal changes
+
+o Documentation format is now roxygen2
+ 
+
