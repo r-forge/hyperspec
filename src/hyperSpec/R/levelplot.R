@@ -39,7 +39,11 @@
   if (any (grepl ("spc", c(as.character (x),
                            as.character (dots$groups),
                            as.character (dots$subset))))){
-    data <- as.long.df (data, rownames = TRUE)
+    data <- as.long.df (data, rownames = TRUE,
+                        wl.factor =  ".wavelength" %in% c (as.character (dots$groups),
+                                                           as.character (dots$subset),
+                                                           names (parsed.formula$condition))
+                        )
   } else {
     data <- data$..
     data$.rownames <- as.factor (rownames (data))
