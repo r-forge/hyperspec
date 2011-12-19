@@ -4,7 +4,8 @@ o bugfix for stacked plots: y axis labels were in wrong order in some cases
 
 o recycling in initialize: columns may (again) be initialized with a single value
 
-o 
+o levelplot (incl. plotmap) now uses `useRaster`. This allows better control for falling back to
+`panel.levelplot`.
 
 Internal changes
 
