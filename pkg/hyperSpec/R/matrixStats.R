@@ -677,7 +677,7 @@ if (require (svUnit))
               "new function in matrixStats")
  }
 
-.makeusage <- function (){
+.makeusage <- function (directresult, loadinglike, scoreslike){
   arglist <- character (0)
   for (f in c (directresult, loadinglike, scoreslike)){
     fun <- get (f)
