@@ -601,10 +601,7 @@ setGeneric ('rowWeightedMedians', package = 'matrixStats')
 
 
 ####################################################################################################
-
-.make.matrixStats <- function (){
-
-  funcs <- structure(list(f = structure(c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 13L, 11L, 12L,
+.funcs <- structure(list(f = structure(c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 13L, 11L, 12L,
   14L, 15L, 1L, 2L, 16L, 17L, 18L, 19L, 20L, 21L, 22L, 23L, 24L, 25L, 26L, 27L, 28L, 29L, 10L, 30L,
   31L, 32L, 3L, 4L, 33L, 34L, 35L, 36L, 37L, 38L, 39L, 40L, 41L, 42L, 43L, 44L, 45L, 46L, 47L, 48L,
   49L), .Label = c("colMeans", "colSums", "rowMeans", "rowSums", "anyMissing", "colAlls", "colAnys",
@@ -624,11 +621,12 @@ setGeneric ('rowWeightedMedians', package = 'matrixStats')
   FALSE, FALSE, TRUE, TRUE)), .Names = c("f", "type", "s3"), row.names = c(NA, 54L), class =
   "data.frame")
 
-  for (f in which (funcs$type != "exclude")){
-    def <- switch (as.character (funcs$type [f]),
+.make.matrixStats <- function (){
+  for (f in which (.funcs$type != "exclude")){
+    def <- switch (as.character (.funcs$type [f]),
                    directresult =  sprintf ('function (x, ...){
                  %s (x@data$spc, ...)
-               }', funcs$f [f], funcs$f [f]),
+               }', .funcs$f [f], .funcs$f [f]),
                    loadings =  sprintf ('function (x, ..., label.spc, 
          user = NULL, short = "%s", date = NULL){
    result <- %s (x@data$spc, ...)
@@ -637,7 +635,7 @@ setGeneric ('rowWeightedMedians', package = 'matrixStats')
 
    decomposition (x, result, scores = FALSE, label.spc = label.spc, 
                   user = user, short = short, date = date)
-}', funcs$f [f], funcs$f [f]),
+}', .funcs$f [f], .funcs$f [f]),
 
                    scores = sprintf ('function (x, ..., label.wavelength,
           user = NULL, short = "%s", date = NULL){
@@ -647,19 +645,19 @@ setGeneric ('rowWeightedMedians', package = 'matrixStats')
 
    decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
                   user = user, short = short, date = date)
-}', funcs$f [f], funcs$f [f]),
+}', .funcs$f [f], .funcs$f [f]),
 
-                   stop ("unknown function type: ", funcs$type [f])
+                   stop ("unknown function type: ", .funcs$type [f])
                  )
     
-    if (funcs$s3 [f]) {
-      t <- sprintf ("%s.hyperSpec <- %s", funcs$f [f], def)
+    if (.funcs$s3 [f]) {
+      t <- sprintf ("%s.hyperSpec <- %s", .funcs$f [f], def)
     } else {
-      t <- sprintf ('setMethod ("%s", signature = signature (x = "hyperSpec"), %s)', funcs$f [f], def)
+      t <- sprintf ('setMethod ("%s", signature = signature (x = "hyperSpec"), %s)', .funcs$f [f], def)
     }
 
-    if (! isGeneric (as.character (funcs$f [f])))
-      cat ("##' @noRd\nsetGeneric ('", as.character (funcs$f [f]),
+    if (! isGeneric (as.character (.funcs$f [f])))
+      cat ("##' @noRd\nsetGeneric ('", as.character (.funcs$f [f]),
            "', package = 'matrixStats')\n\n", sep = "")
     cat ("##' @rdname matrixStats\n", t, "\n\n")
   }
@@ -667,14 +665,12 @@ setGeneric ('rowWeightedMedians', package = 'matrixStats')
 
 if (require (svUnit))
   testmatrixStatfun <- function (){
-    checkTrue (require (matrixStats))
     exports <- getNamespaceExports ("matrixStats")
     exports <- gsub ("^[.]__T__([^:]*):.*$", "\\1", exports)
     exports <- gsub ("^(.*)[.][^.]+$", "\\1", exports)
     exports <- unique (exports)
 
-    checkTrue (length (setdiff (exports, c(directresult, exclude, loadinglike, scoreslike))) == 0,
-              "new function in matrixStats")
+    checkTrue (length (setdiff (exports, .funcs$f)) == 0, "new function in matrixStats")
  }
 
 .makeusage <- function (directresult, loadinglike, scoreslike){
