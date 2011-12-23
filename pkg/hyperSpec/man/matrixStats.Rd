@@ -1,4 +1,4 @@
-\name{colMeans}
+\name{matrixStats}
 \alias{anyMissing}
 \alias{anyMissing,hyperSpec-method}
 \alias{colAlls}
@@ -43,6 +43,7 @@
 \alias{colVars,hyperSpec-method}
 \alias{colWeightedMeans.hyperSpec}
 \alias{colWeightedMedians.hyperSpec}
+\alias{matrixStats}
 \alias{rowAlls}
 \alias{rowAlls,hyperSpec-method}
 \alias{rowAnys}
@@ -69,7 +70,8 @@
 \alias{rowOrderStats,hyperSpec-method}
 \alias{rowProds}
 \alias{rowProds,hyperSpec-method}
-\alias{rowQuantiles.hyperSpec}
+\alias{rowQuantiles}
+\alias{rowQuantiles,hyperSpec-method}
 \alias{rowRanges}
 \alias{rowRanges,hyperSpec-method}
 \alias{rowRanks}
@@ -205,9 +207,6 @@
   \S4method{rowProds}{hyperSpec}(x, ..., label.wavelength,
     user = NULL, short = "rowProds", date = NULL)
 
-  rowQuantiles.hyperSpec(x, ..., label.wavelength,
-    user = NULL, short = "rowQuantiles", date = NULL)
-
   \S4method{rowRanges}{hyperSpec}(x, ..., label.wavelength,
     user = NULL, short = "rowRanges", date = NULL)
 
@@ -225,6 +224,10 @@
 
   rowWeightedMedians.hyperSpec(x, ..., label.wavelength,
     user = NULL, short = "rowWeightedMedians", date = NULL)
+
+  \S4method{rowQuantiles}{hyperSpec}(x, ...,
+    label.wavelength, user = NULL, short = "rowQuantiles",
+    date = NULL, drop = FALSE)
 }
 \arguments{
   \item{x}{hyperSpec object}
@@ -238,7 +241,7 @@
   \item{user,short,date}{handed to
   \code{\link[hyperSpec]{logentry}}}
 
-  \item{...}{further parameters to the
+  \item{drop,na.rm,...}{further parameters to the
   \link[matrixStats]{matrixStats-package} function}
 }
 \description{

@@ -251,21 +251,6 @@ src/hyperSpec/inst/doc/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
 									src/hyperSpec/inst/doc/fig-3D.png 
 	@cp -av $< $@
 
-#src/hyperSpec/inst/doc/baseline.pdf: Vignettes/baseline/baseline.pdf     
-#	@cp -av $< $@
-
-#src/hyperSpec/inst/doc/flu.pdf: Vignettes/flu/flu.pdf     
-#	@cp -av $< $@
-
-#src/hyperSpec/inst/doc/introduction.pdf: Vignettes/introduction/introduction.pdf     
-#	@cp -av $< $@
-
-#src/hyperSpec/inst/doc/laser.pdf: Vignettes/laser/laser.pdf     
-#	@cp -av $< $@
-
-#src/hyperSpec/inst/doc/plotting.pdf: Vignettes/plotting/plotting.pdf     
-#	@cp -av $< $@
-
 # www ###############################################################################################
 www: www/*.zip www/*.pdf
 
@@ -306,33 +291,18 @@ DESCRIPTION: $(shell find src/hyperSpec -maxdepth 1 -daystart -not -ctime 0 -nam
 	rm .DESCRIPTION
 
 roxy: clean DESCRIPTION src/hyperSpec/R/*.R 
+	Rscript --vanilla -e "library (matrixStats);setwd ('src/hyperSpec/R/'); source ('make-matrixStats.R');  .make.matrixStats ()" 
 	rsync -av --delete --exclude=.svn --exclude=man src/hyperSpec/ pkg/hyperSpec/
-	Rscript --vanilla -e "library (roxygen2); roxygenize (\"pkg/hyperSpec\")" 
+	Rscript --vanilla -e "library (roxygen2); roxygenize ('pkg/hyperSpec')" 
 #	rm -rf pkg/hyperSpec/hyperSpec
 
-build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy
+build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
 	R CMD build pkg/hyperSpec  && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
 
-devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy
+devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
 	~/r-devel/bin/R CMD build pkg/hyperSpec && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
-
-#winbuild: .FORCE
-#	cd www && ftp -n -d win-builder.r-project.org << EOT
-#user anonymous cbeleites@units.it
-#cd R-release
-#put hyperSpec-prebuilt.tar.gz
-#bye
-#EOT
-
-#windevbuild: .FORCE
-#	cd www && ftp -n -d win-builder.r-project.org << EOT
-#user anonymous cbeleites@units.it
-#cd R-devel
-#put hyperSpec-prebuilt.tar.gz
-#bye
-#EOT
 
 check: build
 	R CMD check hyperSpec_*.tar.gz

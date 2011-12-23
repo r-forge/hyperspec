@@ -37,14 +37,14 @@
             do.call (plotspc, dots)
           },
           spcprctile = {
-            dots <- modifyList (list (object = quantile (x, probs = c (0.16, 0.5, 0.84)),
+            dots <- modifyList (list (object = colQuantiles (x, probs = c (0.16, 0.5, 0.84)),
                                       fill = c (1, NA, 1)
                                       ),
                                 dots)
             do.call (plotspc, dots)
           },
           spcprctl5 = {
-            dots <- modifyList (list (object = quantile (x, probs = c (0.05, 0.16, 0.5, 0.84, 0.95)),
+            dots <- modifyList (list (object = colQuantiles (x, probs = c (0.05, 0.16, 0.5, 0.84, 0.95)),
                                       fill = c (1, 2, 3, 2, 1),
                                       fill.col = c("#00000040")
                                       ),

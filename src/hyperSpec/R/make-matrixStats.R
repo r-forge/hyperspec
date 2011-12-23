@@ -40,8 +40,11 @@
 ##' @param label.spc labels for the intensity axis for loadings-like statistics
 ##' @param label.wavelength labels for the wavelength axis for scores-like statistics
 ##' @param user,short,date handed to \\code{\\link[hyperSpec]{logentry}}
-##' @param ... further parameters to the \\link[matrixStats]{matrixStats-package} function
-##'  
+##' @param drop,na.rm,... further parameters to the \\link[matrixStats]{matrixStats-package} function
+##' @rdname matrixStats
+##' @name matrixStats
+NULL
+ 
 ")
   
   for (f in which (.funcs$type != "exclude")){

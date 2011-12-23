@@ -1,4 +1,3 @@
-
 ##' matrixStats functions for hyperSpec objects
 ##'
 ##' hyperSpec objects can use matrix functions from package \link[matrixStats]{matrixStats-package}
@@ -9,12 +8,16 @@
 ##' @param label.spc labels for the intensity axis for loadings-like statistics
 ##' @param label.wavelength labels for the wavelength axis for scores-like statistics
 ##' @param user,short,date handed to \code{\link[hyperSpec]{logentry}}
-##' @param ... further parameters to the \link[matrixStats]{matrixStats-package} function
-##'  
+##' @param drop,na.rm,... further parameters to the \link[matrixStats]{matrixStats-package} function
 ##' @rdname matrixStats
-setGeneric ('colMeans', package = 'base')
+##' @name matrixStats
+NULL
+ 
+##' @noRd
+setGeneric ('colMeans', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colMeans", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colMeans", date = NULL){
    result <- colMeans (x@data$spc, ...)
@@ -25,10 +28,15 @@ setGeneric ('colMeans', package = 'base')
                   user = user, short = short, date = date)
 }) 
 
+.test (colMeans) <- function (){
+   colMeans (chondro)
+}
+
 ##' @noRd
-setGeneric ('colSums', package = 'base')
+setGeneric ('colSums', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colSums", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colSums", date = NULL){
    result <- colSums (x@data$spc, ...)
@@ -39,10 +47,15 @@ setGeneric ('colSums', package = 'base')
                   user = user, short = short, date = date)
 }) 
 
+.test (colSums) <- function (){
+   colSums (chondro)
+}
+
 ##' @noRd
-setGeneric ('rowMeans', package = 'base')
+setGeneric ('rowMeans', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowMeans", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowMeans", date = NULL){
    result <- rowMeans (x@data$spc, ...)
@@ -53,10 +66,15 @@ setGeneric ('rowMeans', package = 'base')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowMeans) <- function (){
+   rowMeans (chondro)
+}
+
 ##' @noRd
-setGeneric ('rowSums', package = 'base')
+setGeneric ('rowSums', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowSums", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowSums", date = NULL){
    result <- rowSums (x@data$spc, ...)
@@ -67,35 +85,65 @@ setGeneric ('rowSums', package = 'base')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowSums) <- function (){
+   rowSums (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("anyMissing", signature = signature (x = "hyperSpec"), function (x, ...){
                  anyMissing (x@data$spc, ...)
                }) 
 
+.test (anyMissing) <- function (){
+   anyMissing (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colAlls", signature = signature (x = "hyperSpec"), function (x, ...){
                  colAlls (x@data$spc, ...)
                }) 
 
+.test (colAlls) <- function (){
+   colAlls (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colAnys", signature = signature (x = "hyperSpec"), function (x, ...){
                  colAnys (x@data$spc, ...)
                }) 
 
+.test (colAnys) <- function (){
+   colAnys (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowAlls", signature = signature (x = "hyperSpec"), function (x, ...){
                  rowAlls (x@data$spc, ...)
                }) 
 
+.test (rowAlls) <- function (){
+   rowAlls (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowAnys", signature = signature (x = "hyperSpec"), function (x, ...){
                  rowAnys (x@data$spc, ...)
                }) 
+
+.test (rowAnys) <- function (){
+   rowAnys (chondro)
+}
 
 ##' @noRd
 setGeneric ('colMeans', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colMeans", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colMeans", date = NULL){
    result <- colMeans (x@data$spc, ...)
@@ -106,10 +154,15 @@ setGeneric ('colMeans', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colMeans) <- function (){
+   colMeans (chondro)
+}
+
 ##' @noRd
 setGeneric ('colSums', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colSums", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colSums", date = NULL){
    result <- colSums (x@data$spc, ...)
@@ -120,7 +173,12 @@ setGeneric ('colSums', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colSums) <- function (){
+   colSums (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colCollapse", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colCollapse", date = NULL){
    result <- colCollapse (x@data$spc, ...)
@@ -131,7 +189,12 @@ setGeneric ('colSums', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colCollapse) <- function (){
+   colCollapse (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colCounts", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colCounts", date = NULL){
    result <- colCounts (x@data$spc, ...)
@@ -142,10 +205,15 @@ setGeneric ('colSums', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colCounts) <- function (){
+   colCounts (chondro)
+}
+
 ##' @noRd
 setGeneric ('colDiffs', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colDiffs", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colDiffs", date = NULL){
    result <- colDiffs (x@data$spc, ...)
@@ -156,10 +224,15 @@ setGeneric ('colDiffs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colDiffs) <- function (){
+   colDiffs (chondro)
+}
+
 ##' @noRd
 setGeneric ('colIQRs', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colIQRs", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colIQRs", date = NULL){
    result <- colIQRs (x@data$spc, ...)
@@ -170,10 +243,15 @@ setGeneric ('colIQRs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colIQRs) <- function (){
+   colIQRs (chondro)
+}
+
 ##' @noRd
 setGeneric ('colMads', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colMads", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colMads", date = NULL){
    result <- colMads (x@data$spc, ...)
@@ -184,10 +262,15 @@ setGeneric ('colMads', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colMads) <- function (){
+   colMads (chondro)
+}
+
 ##' @noRd
 setGeneric ('colMaxs', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colMaxs", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colMaxs", date = NULL){
    result <- colMaxs (x@data$spc, ...)
@@ -198,7 +281,12 @@ setGeneric ('colMaxs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colMaxs) <- function (){
+   colMaxs (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colMedians", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colMedians", date = NULL){
    result <- colMedians (x@data$spc, ...)
@@ -209,10 +297,15 @@ setGeneric ('colMaxs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colMedians) <- function (){
+   colMedians (chondro)
+}
+
 ##' @noRd
 setGeneric ('colMins', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colMins", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colMins", date = NULL){
    result <- colMins (x@data$spc, ...)
@@ -223,7 +316,12 @@ setGeneric ('colMins', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colMins) <- function (){
+   colMins (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colOrderStats", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colOrderStats", date = NULL){
    result <- colOrderStats (x@data$spc, ...)
@@ -234,10 +332,15 @@ setGeneric ('colMins', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colOrderStats) <- function (){
+   colOrderStats (chondro)
+}
+
 ##' @noRd
 setGeneric ('colProds', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colProds", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colProds", date = NULL){
    result <- colProds (x@data$spc, ...)
@@ -248,10 +351,15 @@ setGeneric ('colProds', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colProds) <- function (){
+   colProds (chondro)
+}
+
 ##' @noRd
 setGeneric ('colQuantiles', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colQuantiles", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colQuantiles", date = NULL){
    result <- colQuantiles (x@data$spc, ...)
@@ -262,7 +370,12 @@ setGeneric ('colQuantiles', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colQuantiles) <- function (){
+   colQuantiles (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colRanges", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colRanges", date = NULL){
    result <- colRanges (x@data$spc, ...)
@@ -273,7 +386,12 @@ setGeneric ('colQuantiles', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colRanges) <- function (){
+   colRanges (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colRanks", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colRanks", date = NULL){
    result <- colRanks (x@data$spc, ...)
@@ -284,10 +402,15 @@ setGeneric ('colQuantiles', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colRanks) <- function (){
+   colRanks (chondro)
+}
+
 ##' @noRd
 setGeneric ('colSds', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colSds", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colSds", date = NULL){
    result <- colSds (x@data$spc, ...)
@@ -298,7 +421,12 @@ setGeneric ('colSds', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colSds) <- function (){
+   colSds (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("colTabulates", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colTabulates", date = NULL){
    result <- colTabulates (x@data$spc, ...)
@@ -309,10 +437,15 @@ setGeneric ('colSds', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (colTabulates) <- function (){
+   colTabulates (chondro)
+}
+
 ##' @noRd
 setGeneric ('colVars', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("colVars", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
          user = NULL, short = "colVars", date = NULL){
    result <- colVars (x@data$spc, ...)
@@ -323,10 +456,12 @@ setGeneric ('colVars', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
-##' @noRd
-setGeneric ('colWeightedMeans', package = 'matrixStats')
+.test (colVars) <- function (){
+   colVars (chondro)
+}
 
 ##' @rdname matrixStats
+##' @export
  colWeightedMeans.hyperSpec <- function (x, ..., label.spc, 
          user = NULL, short = "colWeightedMeans", date = NULL){
    result <- colWeightedMeans (x@data$spc, ...)
@@ -337,10 +472,12 @@ setGeneric ('colWeightedMeans', package = 'matrixStats')
                   user = user, short = short, date = date)
 } 
 
-##' @noRd
-setGeneric ('colWeightedMedians', package = 'matrixStats')
+.test (colWeightedMeans.hyperSpec) <- function (){
+   colWeightedMeans (chondro)
+}
 
 ##' @rdname matrixStats
+##' @export
  colWeightedMedians.hyperSpec <- function (x, ..., label.spc, 
          user = NULL, short = "colWeightedMedians", date = NULL){
    result <- colWeightedMedians (x@data$spc, ...)
@@ -351,10 +488,15 @@ setGeneric ('colWeightedMedians', package = 'matrixStats')
                   user = user, short = short, date = date)
 } 
 
+.test (colWeightedMedians.hyperSpec) <- function (){
+   colWeightedMedians (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowMeans', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowMeans", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowMeans", date = NULL){
    result <- rowMeans (x@data$spc, ...)
@@ -365,10 +507,15 @@ setGeneric ('rowMeans', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowMeans) <- function (){
+   rowMeans (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowSums', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowSums", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowSums", date = NULL){
    result <- rowSums (x@data$spc, ...)
@@ -379,7 +526,12 @@ setGeneric ('rowSums', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowSums) <- function (){
+   rowSums (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowCollapse", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowCollapse", date = NULL){
    result <- rowCollapse (x@data$spc, ...)
@@ -390,7 +542,12 @@ setGeneric ('rowSums', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowCollapse) <- function (){
+   rowCollapse (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowCounts", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowCounts", date = NULL){
    result <- rowCounts (x@data$spc, ...)
@@ -401,10 +558,15 @@ setGeneric ('rowSums', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowCounts) <- function (){
+   rowCounts (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowDiffs', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowDiffs", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowDiffs", date = NULL){
    result <- rowDiffs (x@data$spc, ...)
@@ -415,10 +577,15 @@ setGeneric ('rowDiffs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowDiffs) <- function (){
+   rowDiffs (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowIQRs', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowIQRs", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowIQRs", date = NULL){
    result <- rowIQRs (x@data$spc, ...)
@@ -429,10 +596,15 @@ setGeneric ('rowIQRs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowIQRs) <- function (){
+   rowIQRs (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowMads', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowMads", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowMads", date = NULL){
    result <- rowMads (x@data$spc, ...)
@@ -443,10 +615,15 @@ setGeneric ('rowMads', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowMads) <- function (){
+   rowMads (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowMaxs', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowMaxs", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowMaxs", date = NULL){
    result <- rowMaxs (x@data$spc, ...)
@@ -457,7 +634,12 @@ setGeneric ('rowMaxs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowMaxs) <- function (){
+   rowMaxs (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowMedians", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowMedians", date = NULL){
    result <- rowMedians (x@data$spc, ...)
@@ -468,10 +650,15 @@ setGeneric ('rowMaxs', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowMedians) <- function (){
+   rowMedians (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowMins', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowMins", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowMins", date = NULL){
    result <- rowMins (x@data$spc, ...)
@@ -482,7 +669,12 @@ setGeneric ('rowMins', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowMins) <- function (){
+   rowMins (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowOrderStats", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowOrderStats", date = NULL){
    result <- rowOrderStats (x@data$spc, ...)
@@ -493,10 +685,15 @@ setGeneric ('rowMins', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowOrderStats) <- function (){
+   rowOrderStats (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowProds', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowProds", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowProds", date = NULL){
    result <- rowProds (x@data$spc, ...)
@@ -507,21 +704,12 @@ setGeneric ('rowProds', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
-##' @noRd
-setGeneric ('rowQuantiles', package = 'matrixStats')
+.test (rowProds) <- function (){
+   rowProds (chondro)
+}
 
 ##' @rdname matrixStats
- rowQuantiles.hyperSpec <- function (x, ..., label.wavelength,
-          user = NULL, short = "rowQuantiles", date = NULL){
-   result <- rowQuantiles (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
-} 
-
-##' @rdname matrixStats
+##' @export
  setMethod ("rowRanges", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowRanges", date = NULL){
    result <- rowRanges (x@data$spc, ...)
@@ -532,7 +720,12 @@ setGeneric ('rowQuantiles', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowRanges) <- function (){
+   rowRanges (chondro)
+}
+
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowRanks", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowRanks", date = NULL){
    result <- rowRanks (x@data$spc, ...)
@@ -543,10 +736,15 @@ setGeneric ('rowQuantiles', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowRanks) <- function (){
+   rowRanks (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowSds', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowSds", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowSds", date = NULL){
    result <- rowSds (x@data$spc, ...)
@@ -557,10 +755,15 @@ setGeneric ('rowSds', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
+.test (rowSds) <- function (){
+   rowSds (chondro)
+}
+
 ##' @noRd
 setGeneric ('rowVars', package = 'matrixStats')
 
 ##' @rdname matrixStats
+##' @export
  setMethod ("rowVars", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
           user = NULL, short = "rowVars", date = NULL){
    result <- rowVars (x@data$spc, ...)
@@ -571,10 +774,12 @@ setGeneric ('rowVars', package = 'matrixStats')
                   user = user, short = short, date = date)
 }) 
 
-##' @noRd
-setGeneric ('rowWeightedMeans', package = 'matrixStats')
+.test (rowVars) <- function (){
+   rowVars (chondro)
+}
 
 ##' @rdname matrixStats
+##' @export
  rowWeightedMeans.hyperSpec <- function (x, ..., label.wavelength,
           user = NULL, short = "rowWeightedMeans", date = NULL){
    result <- rowWeightedMeans (x@data$spc, ...)
@@ -585,10 +790,12 @@ setGeneric ('rowWeightedMeans', package = 'matrixStats')
                   user = user, short = short, date = date)
 } 
 
-##' @noRd
-setGeneric ('rowWeightedMedians', package = 'matrixStats')
+.test (rowWeightedMeans.hyperSpec) <- function (){
+   rowWeightedMeans (chondro)
+}
 
 ##' @rdname matrixStats
+##' @export
  rowWeightedMedians.hyperSpec <- function (x, ..., label.wavelength,
           user = NULL, short = "rowWeightedMedians", date = NULL){
    result <- rowWeightedMedians (x@data$spc, ...)
@@ -599,104 +806,7 @@ setGeneric ('rowWeightedMedians', package = 'matrixStats')
                   user = user, short = short, date = date)
 } 
 
-
-####################################################################################################
-
-.make.matrixStats <- function (){
-
-  funcs <- structure(list(f = structure(c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 13L, 11L, 12L,
-  14L, 15L, 1L, 2L, 16L, 17L, 18L, 19L, 20L, 21L, 22L, 23L, 24L, 25L, 26L, 27L, 28L, 29L, 10L, 30L,
-  31L, 32L, 3L, 4L, 33L, 34L, 35L, 36L, 37L, 38L, 39L, 40L, 41L, 42L, 43L, 44L, 45L, 46L, 47L, 48L,
-  49L), .Label = c("colMeans", "colSums", "rowMeans", "rowSums", "anyMissing", "colAlls", "colAnys",
-  "rowAlls", "rowAnys", "colTabulates", "indexByRow", "madDiff", "rowTabulates", "sdDiff", "varDiff",
-  "colCollapse", "colCounts", "colDiffs", "colIQRs", "colMads", "colMaxs", "colMedians", "colMins",
-  "colOrderStats", "colProds", "colQuantiles", "colRanges", "colRanks", "colSds", "colVars",
-  "colWeightedMeans", "colWeightedMedians", "rowCollapse", "rowCounts", "rowDiffs", "rowIQRs",
-  "rowMads", "rowMaxs", "rowMedians", "rowMins", "rowOrderStats", "rowProds", "rowQuantiles",
-  "rowRanges", "rowRanks", "rowSds", "rowVars", "rowWeightedMeans", "rowWeightedMedians" ), class =
-  "factor"), type = structure(c(3L, 3L, 4L, 4L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 3L, 3L,
-  3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 4L, 4L, 4L, 4L, 4L, 4L, 4L,
-  4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L, 4L), .Label = c("directresult", "exclude", "loadings",
-  "scores" ), class = "factor"), s3 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE,
-  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,
-  FALSE, FALSE, TRUE, TRUE)), .Names = c("f", "type", "s3"), row.names = c(NA, 54L), class =
-  "data.frame")
-
-  for (f in which (funcs$type != "exclude")){
-    def <- switch (as.character (funcs$type [f]),
-                   directresult =  sprintf ('function (x, ...){
-                 %s (x@data$spc, ...)
-               }', funcs$f [f], funcs$f [f]),
-                   loadings =  sprintf ('function (x, ..., label.spc, 
-         user = NULL, short = "%s", date = NULL){
-   result <- %s (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
-}', funcs$f [f], funcs$f [f]),
-
-                   scores = sprintf ('function (x, ..., label.wavelength,
-          user = NULL, short = "%s", date = NULL){
-   result <- %s (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
-}', funcs$f [f], funcs$f [f]),
-
-                   stop ("unknown function type: ", funcs$type [f])
-                 )
-    
-    if (funcs$s3 [f]) {
-      t <- sprintf ("%s.hyperSpec <- %s", funcs$f [f], def)
-    } else {
-      t <- sprintf ('setMethod ("%s", signature = signature (x = "hyperSpec"), %s)', funcs$f [f], def)
-    }
-
-    if (! isGeneric (as.character (funcs$f [f])))
-      cat ("##' @noRd\nsetGeneric ('", as.character (funcs$f [f]),
-           "', package = 'matrixStats')\n\n", sep = "")
-    cat ("##' @rdname matrixStats\n", t, "\n\n")
-  }
-}
-
-if (require (svUnit))
-  testmatrixStatfun <- function (){
-    checkTrue (require (matrixStats))
-    exports <- getNamespaceExports ("matrixStats")
-    exports <- gsub ("^[.]__T__([^:]*):.*$", "\\1", exports)
-    exports <- gsub ("^(.*)[.][^.]+$", "\\1", exports)
-    exports <- unique (exports)
-
-    checkTrue (length (setdiff (exports, c(directresult, exclude, loadinglike, scoreslike))) == 0,
-              "new function in matrixStats")
- }
-
-.makeusage <- function (directresult, loadinglike, scoreslike){
-  arglist <- character (0)
-  for (f in c (directresult, loadinglike, scoreslike)){
-    fun <- get (f)
-
-    formals <- formals (fun)
-    arglist <- c (arglist, names (formals))
-    formals <- mapply (names (formals), as.character (formals),
-                       FUN = function (x, y)
-                       if (y == "") x else paste (x, y, sep = " = ")
-                       )
-    formals <- paste (formals, collapse = ", ")
-    
-    cat ("##' \\S4method{", f, "}{hyperSpec}(",
-         formals,
-         ")\n",
-         sep = "")
-  }
-
-  arglist <- unique (arglist)
-  invisible (lapply (arglist, function (x) cat ("##' @param ", x, "\n", sep = "")))
+.test (rowWeightedMedians.hyperSpec) <- function (){
+   rowWeightedMedians (chondro)
 }
 

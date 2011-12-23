@@ -2,8 +2,8 @@ Package: hyperSpec
 Type: Package
 Title: Interface for hyperspectral data, i.e. spectra + meta info (spatial,
     time, concentration, ...)
-Version: 0.98-20111221
-Date: 2011-12-21
+Version: 0.98-20111222
+Date: 2011-12-22
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <cbeleites@units.it>
 Description: This package is an interface to handle hyperspectral data sets in
@@ -126,6 +126,8 @@ Collate:
     'zzz.R'
     'units.R'
     'colMeans.R'
+    'make-matrixStats.R'
     'matrixStats.R'
     'read.jdx.Shimadzu.R'
+    'rowQuantiles.R'
     'subset.R'

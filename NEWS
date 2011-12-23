@@ -2,6 +2,8 @@ User-visible changes
 
 o hyperSpec gains a subset method
 
+o hyperSpec now depends on package matrixStats and supports its faster row/col* functions.
+
 o bugfix for stacked plots: y axis labels were in wrong order in some cases
 
 o recycling in initialize: columns may (again) be initialized with a single value
