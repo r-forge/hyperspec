@@ -10,7 +10,7 @@
 ##' @param x the hyperSpecobject
 ##' @param pattern pattern to look for
 ##' @return the name of the extra data slot
-##' @method .Dollarnames hyperSpec
-##' @S3method .Dollarnames hyperSpec
+##' @method .DollarNames hyperSpec
+##' @S3method .DollarNames hyperSpec
 .DollarNames.hyperSpec <- function (x, pattern)
   grep (pattern, colnames (x@data), value = TRUE)

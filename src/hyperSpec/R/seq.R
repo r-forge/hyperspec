@@ -24,6 +24,8 @@
 ##' \code{\link[base]{seq}}
 ##' @rdname seq
 ##' @export
+##' @method seq hyperSpec
+##' @S3method seq hyperSpec
 ##' @keywords manip
 ##' @examples
 ##' 
@@ -36,8 +38,6 @@
 ##' plot (seq (flu, by = 2), add = TRUE, col= "red")
 ##' plot (seq (flu, length.out = 2), add = TRUE, col= "blue")
 ##' 
-
-
 ### needs to be an S3 function as S4 ... dispatch has to have the same signature for all parameters
 seq.hyperSpec <- function (x, from = 1, to = nrow (x),
                            ..., index = FALSE,

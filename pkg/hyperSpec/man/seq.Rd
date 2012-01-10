@@ -5,7 +5,7 @@
 \title{Sequence generation along spectra or wavelengths
 This function generates sequences along the spectra (rows) or wavelengths of hyperSpec objects.}
 \usage{
-  seq.hyperSpec(x, from = 1, to = nrow(x), ...,
+  \method{seq}{hyperSpec} (x, from = 1, to = nrow(x), ...,
     index = FALSE, short = "seq", user = NULL, date = NULL)
 }
 \arguments{

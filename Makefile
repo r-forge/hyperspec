@@ -360,6 +360,8 @@ clean: .FORCE
 	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard src/hyperSpec/inst/doc/*/*.Rnw)) #should not be necessary
 	@rm -rf src/hyperSpec/inst/doc/auto
 	@rm -rf src/hyperSpec/inst/doc/*/auto
+	@find -name ".Rhistory" -delete
+	@find -name "*~" -delete
 
 
 install:
