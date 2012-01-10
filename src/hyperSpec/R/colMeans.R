@@ -20,7 +20,7 @@ setGeneric ('colMeans')#, package = 'matrixStats')
 ##' @export
  setMethod ("colMeans", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc, 
          user = NULL, short = "colMeans", date = NULL){
-   result <- colMeans (x@data$spc, ...)
+   result <- colMeans (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
       result <- t (result)
 
@@ -39,7 +39,7 @@ setGeneric ('colSums') #, package = 'matrixStats')
 ##' @export
  setMethod ("colSums", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc, 
          user = NULL, short = "colSums", date = NULL){
-   result <- colSums (x@data$spc, ...)
+   result <- colSums (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
       result <- t (result)
 
@@ -58,7 +58,7 @@ setGeneric ('rowMeans') #, package = 'matrixStats')
 ##' @export
  setMethod ("rowMeans", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength,
           user = NULL, short = "rowMeans", date = NULL){
-   result <- rowMeans (x@data$spc, ...)
+   result <- rowMeans (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
       result <- t (result)
 
@@ -77,7 +77,7 @@ setGeneric ('rowSums') #, package = 'matrixStats')
 ##' @export
  setMethod ("rowSums", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength,
           user = NULL, short = "rowSums", date = NULL){
-   result <- rowSums (x@data$spc, ...)
+   result <- rowSums (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
       result <- t (result)
 
