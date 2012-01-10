@@ -205,7 +205,11 @@ setMethod ("[", signature = signature (x = "hyperSpec"),
   if (drop)
     warning ("Ignoring drop = TRUE.")
 
-  x <- .extract (x, i, j, l, ..., wl.index = wl.index)
+  dots <- list (...)
+  if (length (dots) > 0L)
+    warning ("Ignoring additional parameters: ", .pastenames (dots))
+  
+  x <- .extract (x, i, j, l, wl.index = wl.index)
 
   if (is.null (x@data$spc)){
     x@data$spc <- matrix (NA, nrow (x@data), 0)
@@ -226,6 +230,10 @@ setMethod ("[[", signature = signature (x = "hyperSpec"),
                      drop = FALSE){
   validObject (x)
 
+  dots <- list (...)
+  if (length (dots) > 0L)
+    warning ("Ignoring additional parameters: ", .pastenames (dots))
+
   ## check wheter a index matrix is used
   if (! missing (i) && is.matrix (i)){
     if (! is.logical (i) && ! (is.numeric (i) && ncol (i) == 2))
@@ -238,7 +246,7 @@ setMethod ("[[", signature = signature (x = "hyperSpec"),
     x@data$spc [i]                      # return value
     
   } else {                              # index by row and columns
-    x <- .extract (x, i, j, l, ..., wl.index = wl.index)
+    x <- .extract (x, i, j, l, wl.index = wl.index)
     if (missing (j))
       unclass (x@data$spc[,, drop = drop]) # retrun value; removes the "AsIs"
     else {

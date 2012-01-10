@@ -291,7 +291,7 @@ DESCRIPTION: $(shell find src/hyperSpec -maxdepth 1 -daystart -not -ctime 0 -nam
 	rm .DESCRIPTION
 
 roxy: clean DESCRIPTION src/hyperSpec/R/*.R 
-	Rscript --vanilla -e "library (matrixStats);setwd ('src/hyperSpec/R/'); source ('make-matrixStats.R');  .make.matrixStats ()" 
+#	Rscript --vanilla -e "library (matrixStats);setwd ('src/hyperSpec/R/'); source ('make-matrixStats.R');  .make.matrixStats ()" 
 	rsync -av --delete --exclude=.svn --exclude=man src/hyperSpec/ pkg/hyperSpec/
 	Rscript --vanilla -e "library (roxygen2); roxygenize ('pkg/hyperSpec')" 
 #	rm -rf pkg/hyperSpec/hyperSpec
