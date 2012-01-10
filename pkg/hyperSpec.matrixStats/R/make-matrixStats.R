@@ -76,7 +76,7 @@ NULL
                  )
     
     if (.funcs$s3 [f]) {
-      t <- sprintf ("%s.hyperSpec <- %s", .funcs$f [f], def)
+      t <- sprintf ("##' @S3method %s hyperSpec\n\n%s.hyperSpec <- %s", .funcs$f [f], .funcs$f [f], def)
     } else {
       t <- sprintf ('setMethod ("%s", signature = signature (x = "hyperSpec"), %s)', .funcs$f [f], def)
     }

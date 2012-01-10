@@ -6,7 +6,7 @@
 ###-----------------------------------------------------------------------------
 ###
 ### .plot: main switchyard for plotting functions
-###
+
 
 .plot <-  function (x, y, ...){
   ##    'spc'        ... spectra
@@ -53,7 +53,7 @@
           },
           map = plotmap (x, ...),
           voronoi = plotvoronoi (x, ...),
-          mat = .levelplot (spc ~ .wavelength * .row, x, ...),
+          mat = hyperSpec:::.levelplot (spc ~ .wavelength * .row, x, ...), # this is on purpose
           c = plotc (x, ...),
           ts = plotc (x, spc ~ t, ...),
           depth = plotc (x, spc ~ z, ...),
