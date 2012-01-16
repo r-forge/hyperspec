@@ -4,7 +4,7 @@
 \alias{.DollarNames,hyperSpec-method}
 \title{command line completion for $}
 \usage{
-  \method{.DollarNames}{hyperSpec} (x, pattern)
+  .DollarNames.hyperSpec(x, pattern)
 }
 \arguments{
   \item{x}{the hyperSpecobject}
