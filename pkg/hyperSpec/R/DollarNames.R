@@ -4,6 +4,7 @@
 ##' @author C. Beleites
 ##' @seealso \code{\link[utils]{.DollarNames}}
 ##' @export .DollarNames.hyperSpec
+##' @usage   \method{.DollarNames}{hyperSpec} (x, pattern)
 ##' @rdname dollarnames
 ##' @keywords utilities
 ##' @title command line completion for $

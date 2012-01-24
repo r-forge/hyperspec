@@ -1,29 +1,9 @@
 \name{colSums}
 \alias{colMeans}
-\alias{colMeans,hyperSpec-method}
 \alias{colSums}
-\alias{colSums,hyperSpec-method}
 \alias{rowMeans}
-\alias{rowMeans,hyperSpec-method}
 \alias{rowSums}
-\alias{rowSums,hyperSpec-method}
 \title{functions for hyperSpec objects}
-\usage{
-  \S4method{colMeans}{hyperSpec}(x, na.rm = TRUE, ...,
-    label.spc, user = NULL, short = "colMeans",
-    date = NULL)
-
-  \S4method{colSums}{hyperSpec}(x, na.rm = TRUE, ...,
-    label.spc, user = NULL, short = "colSums", date = NULL)
-
-  \S4method{rowMeans}{hyperSpec}(x, na.rm = TRUE, ...,
-    label.wavelength, user = NULL, short = "rowMeans",
-    date = NULL)
-
-  \S4method{rowSums}{hyperSpec}(x, na.rm = TRUE, ...,
-    label.wavelength, user = NULL, short = "rowSums",
-    date = NULL)
-}
 \arguments{
   \item{x}{hyperSpec object}
 

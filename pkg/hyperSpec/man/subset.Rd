@@ -1,12 +1,7 @@
 \docType{methods}
 \name{subset}
 \alias{subset}
-\alias{subset,hyperSpec-method}
 \title{subset}
-\usage{
-  \S4method{subset}{hyperSpec}(x, ..., short = "subset",
-    date = NULL, user = NULL)
-}
 \arguments{
   \item{x}{hyperSpec object}
 
