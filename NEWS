@@ -1,20 +1,38 @@
 User-visible changes 
 
-o hyperSpec gains a subset method
+o new file import functions, (see vignette fileio) 
+  - scan.txt.Witec: Witec ASCII files
+  - read.jdx.Shimadzu: JCAMP-DX as produced by Shimadzu's GCxGC-MS library 
+    (experimental)
+  - read.txt.Shimadzu: ASCII files exported by Shimadzu Chrome Solution 
+    (v. 2.73)
 
-o hyperSpec now depends on package matrixStats and supports its faster row/col* functions.
+o hyperSpec gains a subset method
 
 o bugfix for stacked plots: y axis labels were in wrong order in some cases
 
-o recycling in initialize: columns may (again) be initialized with a single value
+o recycling in initialize: columns may (again) be initialized with a single 
+  value
 
-o levelplot (incl. plotmap) now uses `useRaster`. This allows better control for falling back to
-`panel.levelplot`.
+o levelplot (incl. plotmap) now uses `useRaster`. This allows better control for
+ falling back to `panel.levelplot`.
 
-Minor changes
+Minor changes 
 
-o levelplot uses .wavelength factors for subsetting, grouping, conditioning: thus the strips will
-  display the wavelength value.
+o levelplot uses .wavelength factors for subsetting, grouping, conditioning: 
+  thus the strips will display the wavelength value.
+
+o extraction ([]) now warns if unused arguments are given
+
+Experimental new features
+
+o mixed colour map plots: qplotmixmap (experimental)
+
+Bug fixes
+
+o bugfix for unsigned long int in .spc files 
+
+o stacked spectra plots label positions
 
 Internal changes
 
