@@ -1,0 +1,46 @@
+
+SRC := src/hyperSpec.baseline/R/*.R #src/hyperSpec.baseline/NAMESPACE 
+MAN := src/hyperSpec.baseline/man/*.Rd
+RNW := src/hyperSpec.baseline/inst/doc/*.Rnw
+
+
+all: roxy build check test
+
+.FORCE: # always done, like .PHONY, but doesn't remove file
+
+
+www/hyperSpec.baseline-prebuilt.zip: # built manually 
+	touch $@
+
+#####################################################################################################
+
+DESCRIPTION: $(shell find src/hyperSpec.baseline -maxdepth 1 -daystart -not -ctime 0 -name "DESCRIPTION") #only if not modified today
+	@echo update DESCRIPTION
+	sed "s/\(^Version: .*-\)20[0-9][0-9][0-1][0-9][0-3][0-9]\(.*\)$$/\1`date +%Y%m%d`\2/" src/hyperSpec.baseline/DESCRIPTION > .DESCRIPTION
+	sed "s/\(^Date: .*\)20[0-9][0-9]-[0-1][0-9]-[0-3][0-9]\(.*\)$$/\1`date +%F`\2/" .DESCRIPTION > src/hyperSpec.baseline/DESCRIPTION 
+	rm .DESCRIPTION
+
+roxy: clean DESCRIPTION src/hyperSpec.baseline/R/*.R 
+	rsync -av --delete src/hyperSpec.baseline/ pkg/hyperSpec.baseline/
+	Rscript --vanilla -e "library (roxygen2); roxygenize ('pkg/hyperSpec.baseline')" 
+
+build: roxy
+	rm -f hyperSpec.baseline_*.tar.gz
+	R CMD build pkg/hyperSpec.baseline  && cp hyperSpec.baseline_*.tar.gz www/hyperSpec.baseline-prebuilt.tar.gz
+
+check: build
+	R CMD check hyperSpec.baseline_*.tar.gz
+
+devcheck: devbuild
+	~/r-devel/bin/R CMD check hyperSpec.baseline_*.tar.gz
+
+checkfast: $(SRC)
+	R CMD check --no-examples --no-tests --no-manual --no-vignettes pkg/hyperSpec.baseline
+
+checktest: $(SRC)
+	R CMD check --no-manual --no-vignettes pkg/hyperSpec.baseline
+
+clean: .FORCE
+
+install:
+		sudo R CMD INSTALL pkg/hyperSpec.baseline	
