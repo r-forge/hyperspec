@@ -4,7 +4,7 @@
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's baselinebelow data set},
  pdfkeywords={hyperSpec, baselinebelow}}
-
+\SweaveOpts{prefix.string=baseline-fig-}
 % \VignetteIndexEntry{baselinebelow }
 % \VignetteKeywords{hyperspec, baselinebelow}
 % \VignettePackage{hyperSpec}
