@@ -37,6 +37,14 @@
 \alias{trigamma,hyperSpec-method}
 \alias{trunc,hyperSpec-method}
 \title{Math Functions for hyperSpec Objects}
+\usage{
+  \S4method{Math2}{hyperSpec}(x, digits)
+
+  \S4method{log}{hyperSpec}(x, base = exp(1), ...,
+    short = "log", user = NULL, date = NULL)
+
+  \S4method{Math}{hyperSpec}(x)
+}
 \arguments{
   \item{x}{the \code{hyperSpec} object}
 

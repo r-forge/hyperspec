@@ -2,11 +2,24 @@
 \name{sample}
 \alias{isample}
 \alias{sample}
+\alias{sample,data.frame-method}
+\alias{sample,hyperSpec-method}
+\alias{sample,matrix-method}
 \title{Random Samples and Permutations
 Take a sample of the specified size from the elements of x with or without
 replacement.}
 \usage{
+  \S4method{sample}{hyperSpec}(x, size = nrow(x),
+    replace = FALSE, prob = NULL, short = "sample",
+    user = NULL, date = NULL)
+
   isample(x, size = nrow(x), replace = FALSE, prob = NULL)
+
+  \S4method{sample}{data.frame}(x, size = nrow(x),
+    replace = FALSE, prob = NULL, drop = FALSE)
+
+  \S4method{sample}{matrix}(x, size = nrow(x),
+    replace = FALSE, prob = NULL, drop = FALSE)
 }
 \arguments{
   \item{x}{The hyperSpec object, data.frame or matrix to

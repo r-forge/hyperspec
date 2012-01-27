@@ -12,6 +12,12 @@ value of each spectrum is plotted. Spectra may be identified by mouse click.}
   plotmap(object, model = spc ~ x * y, func = mean,
     func.args = list(), ...)
 
+  \S4method{levelplot}{formula,hyperSpec}(x, data,
+    transform.factor = TRUE, ..., contour = FALSE,
+    useRaster = !contour)
+
+  \S4method{levelplot}{hyperSpec,missing}(x, data, ...)
+
   map.identify(object, model = spc ~ x * y,
     voronoi = FALSE, ..., tol = 0.02, warn = TRUE)
 
