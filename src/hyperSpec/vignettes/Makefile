@@ -1,4 +1,4 @@
-all: baseline.pdf chondro.pdf fileio.pdf flu.pdf introduction.pdf laser.pdf plotting.pdf clean 
+all: baseline.pdf chondro.pdf fileio.pdf flu.pdf introduction.pdf laser.pdf plotting.pdf
 
 chondro.pdf: 
 	rm -f chondro.tex
@@ -12,12 +12,14 @@ fileio.pdf:
 	-dDownsampleColorImages=false -dNOPAUSE -dQUIET -dBATCH -dDownsampleColorImages=false \
 	-sOutputFile=tmp.pdf $@ && qpdf tmp.pdf $@
 	rm tmp.pdf
-	rm -rf fig 
+#	rm -rf fig 
 	rm -f $(basename $(<F)).tex
+	rm -f $(basename $(<F)).rda
+	rm -f $(basename $(<F))-fig-*.*	
 	rm -f Rplots.pdf
 
-clean: 
-	rm -f flu.rda laser.rda
-	rm -rf fig 	
-	rm -f Rplots.pdf
-	rm -f *.tex
+#clean: 
+#	rm -f flu.rda laser.rda
+#	rm -rf fig 	
+#	rm -f Rplots.pdf
+#	rm -f *.tex
