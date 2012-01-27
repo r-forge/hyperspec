@@ -1,6 +1,7 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \usepackage[utf8]{inputenc} % Sweave doesn't find the encoding definition in vignettes.defs
 \SweaveInput{vignettes.defs}
+\SweaveOpts{prefix.string=laser-fig-}
 \hypersetup{pdftitle={Laser Vignette for hyperSpec},
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's laser data set},
@@ -65,9 +66,9 @@ plot (laser, "spcprctl5")
 @
 \begin{figure}[tbh]
   \centering
-  \subfloat[\label{fig:rawspc} The raw spectra.]{\includegraphics[width=.33\textwidth]{fig/fig-rawspc}}
-  \subfloat[\label{fig:cutspc} The cut spectra.]{\includegraphics[width=.33\textwidth]{fig/fig-cut}}  
-  \subfloat[\label{fig:nmspc} The spectra with wavelength axis.]{\includegraphics[width=.33\textwidth]{fig/fig-wlspc}}
+  \subfloat[\label{fig:rawspc} The raw spectra.]{\includegraphics[width=.33\textwidth]{laser-fig--rawspc}}
+  \subfloat[\label{fig:cutspc} The cut spectra.]{\includegraphics[width=.33\textwidth]{laser-fig--cut}}  
+  \subfloat[\label{fig:nmspc} The spectra with wavelength axis.]{\includegraphics[width=.33\textwidth]{laser-fig--wlspc}}
   \caption{The laser emission spectra.}
   \label{fig:raw}
 \end{figure}
@@ -135,8 +136,8 @@ plotc (laser [,, wls], spc ~ t, groups = .wavelength, type = "b",  cex = 0.3, co
 @ 
 \begin{figure}[t]
   \centering
-  \subfloat[\label{fig:markedspc}]{\includegraphics[width=.33\textwidth]{fig/fig-markspc}}
-  \subfloat[\label{fig:ts}]{\includegraphics[width=.66\textwidth]{fig/fig-ts}}  
+  \subfloat[\label{fig:markedspc}]{\includegraphics[width=.33\textwidth]{laser-fig--markspc}}
+  \subfloat[\label{fig:ts}]{\includegraphics[width=.66\textwidth]{laser-fig--ts}}  
   \caption[]{The laser emission time series. \ref{fig:markedspc} shows
     the spectral position of the bands. The time series are plotted in
   corresponding colors in \ref{fig:ts}.}
@@ -149,7 +150,7 @@ plotc (laser [,, wls], spc ~ t | .wavelength, type = "b", cex = 0.3, col = "blac
 @ 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{fig/fig-tsextra}
+  \includegraphics[width=\textwidth]{laser-fig--tsextra}
   \caption[]{The time series plots can also be conditioned on \Rcode{\$.wavelength}.}
   \label{fig:tsextra}
 \end{figure}
@@ -167,8 +168,8 @@ levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col ="#00000080")
 @
 \begin{figure}[tbh]
   \centering
-  \subfloat[\label{fig:row}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatr}}
-  \subfloat[\label{fig:t}]{\includegraphics[width=.5\textwidth]{fig/fig-plotmatt}}  
+  \subfloat[\label{fig:row}]{\includegraphics[width=.5\textwidth]{laser-fig--plotmatr}}
+  \subfloat[\label{fig:t}]{\includegraphics[width=.5\textwidth]{laser-fig--plotmatt}}  
   \caption[]{The spectra matrix of the \Robject{laser} data set. The ordinate of the plot may be the number of the spectrum accessed by \Rcode{\$.row} \subref{fig:row} or any other extra data column, here \Rcode{\$t} \subref{fig:t}.}
   \label{fig:tsmat}
 \end{figure}

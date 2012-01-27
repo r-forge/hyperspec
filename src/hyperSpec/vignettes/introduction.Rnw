@@ -3,6 +3,7 @@
 \usepackage{longtable}
 
 \SweaveInput{vignettes.defs}
+\SweaveOpts{prefix.string=introduction-fig-}
 \hypersetup{pdftitle={hyperSpec Introduction},
  pdfauthor={C. Beleites},
  pdfsubject={Introduction on the R package hyperSpec},
@@ -768,12 +769,12 @@ print (levelplot (spc ~ x * y | as.factor (paste (.wavelength, "  1/cm")),
 \setkeys{Gin}{width = .33\textwidth}
 \subfloat[\label{fig-merge-mat}]{
 <<echo = FALSE, results = hide>>=
-png ("fig/fig-merged.png", width = 500, height = 425, res=100)
+png ("introduction-fig--merged.png", width = 500, height = 425, res=100)
 print (plot (chondro.merged [1 : 100], "mat", col.regions = matlab.dark.palette ()))
 dev.off()
 rm (chondro)
 @ 
-\includegraphics[width = .33\textwidth]{fig/fig-merged}
+\includegraphics[width = .33\textwidth]{introduction-fig--merged}
 }
 \caption[]{\label{fig:merge}
   \subref{fig-merge-map} For both spectral ranges some spectra are missing.  
@@ -923,9 +924,9 @@ chondro [[]] <- tmp
 @
 
 \begin{figure}[t]
-  \subfloat[\label{fig:shift:wl} \Rfunction{wl<-}]{\includegraphics[width=.33\linewidth]{fig/fig-shift-wl}}
-  \subfloat[\label{fig:shift:interp} interpolation]{\includegraphics[width=.33\linewidth]{fig/fig-shift-interp}}
-  \subfloat[\label{fig:shift:untsch} ]{\includegraphics[width=.33\linewidth]{fig/fig-shift-untsch}}
+  \subfloat[\label{fig:shift:wl} \Rfunction{wl<-}]{\includegraphics[width=.33\linewidth]{introduction-fig--shift-wl}}
+  \subfloat[\label{fig:shift:interp} interpolation]{\includegraphics[width=.33\linewidth]{introduction-fig--shift-interp}}
+  \subfloat[\label{fig:shift:untsch} ]{\includegraphics[width=.33\linewidth]{introduction-fig--shift-untsch}}
   \caption[]{Shifting the Spectra along the Wavelength Axis. \subref{fig:shift:wl} Changing the
     wavelength values. \subref{fig:shift:interp} Interpolation. \subref{fig:shift:untsch} Detail view
     of the phenylalanine band: shifting by \Rfunction{wl<-} (red) does not affect the intensities,
@@ -1035,8 +1036,8 @@ i <- which (! OK, arr.ind = TRUE)
 points (wl (chondro) [i [,2]], chondro[[!OK]], pch = 19, col = "red", cex = 0.5)
 @
 \begin{figure}[tb]
-  \subfloat[mean $\pm$ sd filter]{\includegraphics[width=0.49\textwidth]{fig/fig-filter}}
-  \subfloat[remove bad points]{\includegraphics[width=0.49\textwidth]{fig/fig-bad}}
+  \subfloat[mean $\pm$ sd filter]{\includegraphics[width=0.49\textwidth]{introduction-fig--filter}}
+  \subfloat[remove bad points]{\includegraphics[width=0.49\textwidth]{introduction-fig--bad}}
   \caption{filtering data}
   \label{fig:filter}
 \end{figure}
@@ -1107,8 +1108,8 @@ plot (b [, , 1600 ~ 1670], col = "blue", add = TRUE)
 
 %
 \begin{figure}
-\includegraphics[width=0.33\textwidth]{fig/fig-fig-loess}
-\includegraphics[width=0.33\textwidth]{fig/fig-fig-loess-kl}
+\includegraphics[width=0.33\textwidth]{introduction-fig--fig-loess}
+\includegraphics[width=0.33\textwidth]{introduction-fig--fig-loess-kl}
 \caption{\label{fig-spcloess}Smoothing interpolation by \Rfunction{spc.loess} with new data point
   spacing of 2 cm\textsuperscript{-1} (red) and \Rfunction{spc.bin} (blue). The magnification on the
   right shows how interpolation may cause a loss in signal height.}
@@ -1431,14 +1432,14 @@ ggplot (as.long.df (chondro [1]), aes (x = .wavelength, y = spc)) + geom_line ()
 <<ggplot-do, echo = FALSE>>=
 if (require (ggplot2)){
 <<ggplot>>
-  ggsave (file = "fig/fig-ggplot-do.pdf", width = 8, height = 4)
+  ggsave (file = "introduction-fig--ggplot-do.pdf", width = 8, height = 4)
 } else {
-  pdf ("fig/fig-ggplot-do.pdf", width = 8, height = 4)
+  pdf ("introduction-fig--ggplot-do.pdf", width = 8, height = 4)
   ploterrormsg (NULL, "ggplot2")
   dev.off()
 }
 @ 
-\includegraphics[width=.5\linewidth]{fig/fig-ggplot-do.pdf}
+\includegraphics[width=.5\linewidth]{introduction-fig--ggplot-do.pdf}
 
 \subsection{Data Analysis Methods using a matrix \\
 \eg Hierarchical Cluster Analysis}
@@ -1468,9 +1469,9 @@ cluster.cols <- c ("dark blue", "orange", "#C02020")
 plotmap (chondro, clusters ~ x * y, col.regions = cluster.cols)
 @
 \begin{figure}
-\subfloat[\label{fig:clust:dend}]{\includegraphics[width=0.33\textwidth]{fig/fig-dend}}
-\subfloat[\label{fig:clust:map}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmap}}
-\subfloat[\label{fig:clust:spc}]{\includegraphics[width=0.33\textwidth]{fig/fig-clustmean}}
+\subfloat[\label{fig:clust:dend}]{\includegraphics[width=0.33\textwidth]{introduction-fig--dend}}
+\subfloat[\label{fig:clust:map}]{\includegraphics[width=0.33\textwidth]{introduction-fig--clustmap}}
+\subfloat[\label{fig:clust:spc}]{\includegraphics[width=0.33\textwidth]{introduction-fig--clustmean}}
 \caption[]{The results of the cluster analysis: \subref{fig:clust:dend} the
 dendrogram \subref{fig:clust:map} the map of the 3 clusters \subref{fig:clust:spc}
 the mean spectra.}

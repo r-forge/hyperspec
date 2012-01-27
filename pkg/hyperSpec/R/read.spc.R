@@ -106,7 +106,7 @@
 
 ## helper functions ---------------------------------------------------------------------------------
 ### raw.split.nul - rawToChar conversion, splitting at \0
-raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
+raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE) {
 	# todo make better truncation
 	trunc <- rep (trunc, length.out = 2)
 	
@@ -127,6 +127,11 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
 	for (i in 1 : (length (tmp) - 1))
 		if (tmp [i] + 1 < tmp [i + 1] - 1)
 			out [i] <- rawToChar (raw [(tmp [i] + 1)  : (tmp [i + 1] - 1)])
+	
+	if (length (out) > 1L & firstonly){
+		warning ("multiple strings encountered: ", paste (out, collapse = ", "), " but using only the first one.")
+		out <- out [1]
+	}
 	
 	out
 }
@@ -159,11 +164,11 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
 			fztype   = readBin       (raw.data [       31], "integer", 1, 1, signed = FALSE),
 			fpost    = readBin       (raw.data [       32], "integer", 1, 1, signed = TRUE ),
 			fdate    = readBin       (raw.data [ 33 :  36], "integer", 1, 4                ),
-			fres     = raw.split.nul (raw.data [ 37 :  45]),
-			fsource  = raw.split.nul (raw.data [ 46 :  54]),
+			fres     = raw.split.nul (raw.data [ 37 :  45], firstonly = TRUE),
+			fsource  = raw.split.nul (raw.data [ 46 :  54], firstonly = TRUE),
 			fpeakpt  = readBin       (raw.data [ 55 :  56], "integer", 1, 2, signed = FALSE),
 			fspare   = readBin       (raw.data [ 57 :  88], "numeric", 8, 4                ),
-			fcmnt    = raw.split.nul (raw.data [ 89 : 218]),
+			fcmnt    = raw.split.nul (raw.data [ 89 : 218], firstonly = TRUE),
 			fcatxt   = raw.split.nul (raw.data [219 : 248], trunc = c (FALSE, TRUE)        ),                
 			flogoff  = readBin       (raw.data [249 : 252], "integer", 1, 4), #, signed = FALSE),
 			fmods    = readBin       (raw.data [253 : 256], "integer", 1, 4), #, signed = FALSE),
@@ -193,7 +198,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE)) {
 			"NIR Spectrum", "UV-VIS Spectrum", "* reserved *", "X-ray diffraction spectrum",
 			"Mass Spectrum", "NMR Spectrum", "Raman Spectrum", "Fluorescence Spectrum",
 			"Atomic Spectrum", "Chroatography Diode Array Data")
-	hdr$fexper <- factor (hdr$fexper, levels = seq_along (experiments))
+	hdr$fexper <- factor (hdr$fexper + 1, levels = seq_along (experiments))
 	levels (hdr$fexper) <- experiments
 	
 	hdr$ftflgs <- .spc.ftflags (hdr$ftflgs)

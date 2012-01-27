@@ -2,6 +2,7 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \usepackage[utf8]{inputenc} % Sweave doesn't find the encoding definition in vignettes.defs
 \SweaveInput{vignettes.defs}
+\SweaveOpts{prefix.string=plotting-fig-}
 \usepackage{longtable}
 \usepackage{array}
 
@@ -21,7 +22,7 @@
 \vtop{%
   \vskip-0.9\baselineskip
   \hbox{%
-    \includegraphics[width = .40\textwidth]{fig/fig-#2}%
+    \includegraphics[width = .40\textwidth]{plotting-fig--#2}%
   }%
 } &
 }
@@ -703,7 +704,7 @@ In general, \Rfunction{as.long.df} transforms a \chy object into a long-form \df
 <<ggplotspc, eval = FALSE>>=
 df <- as.long.df (flu, rownames = TRUE)
 ggplot (df, aes (x = .wavelength, y = spc, 
-                 colour = c, groups = .rownames)) + 
+                 colour = c, group = .rownames)) + 
   geom_line () +
   xlab (labels (flu)$.wavelength) +
   ylab (labels (flu)$spc) 
@@ -726,7 +727,7 @@ beforehand. Moreover, depending on the particular plot \Rfunction{as.data.frame}
 df <- as.long.df (apply (chondro, 1, mean))
 ggplot (df,aes (x = x, y = y, fill = spc)) +
   geom_tile() + 
-  scale_fill_continuous ("spc", matlab.palette ()) +
+  scale_fill_gradientn ("spc", colours = matlab.palette ()) +
   scale_x_continuous (expand = c (0, 0)) +
   scale_y_continuous (expand = c (0, 0)) +
   coord_equal ()
@@ -735,10 +736,11 @@ ggplot (df,aes (x = x, y = y, fill = spc)) +
   \plottab{Mean $\pm$ standard deviation with \Rpackage{ggplot2}}{ggplotmeansd} 
 <<ggplotmeansd, eval = FALSE>>=
 df <- as.t.df (apply (chondro, 2, mean_pm_sd))
+
 ggplot (df, aes (x = .wavelength)) +
   geom_ribbon (aes (ymin = mean.minus.sd, 
                     ymax = mean.plus.sd), 
-               fill = "#00000040") +
+               alpha = 0.25) +
   geom_line (aes (y = mean)) +
   xlab (labels (chondro)$.wavelength) +
   ylab (labels (chondro)$spc) 
@@ -760,16 +762,16 @@ ggplot (df, aes (x = .wavelength, y = spc)) +
 <<ggplot2-do, echo = FALSE, results = hide>>=
 if (require (ggplot2)){
 <<ggplotspc>>
-  ggsave("fig/fig-ggplotspc.pdf", width = 4, height = 2.6)
+  ggsave("plotting-fig--ggplotspc.pdf", width = 4, height = 2.6)
 <<ggplotmap>>
-  ggsave("fig/fig-ggplotmap.pdf", width = 4, height = 2.6)
+  ggsave("plotting-fig--ggplotmap.pdf", width = 4, height = 2.6)
 <<ggplotmeansd>>
-  ggsave("fig/fig-ggplotmeansd.pdf", width = 4, height = 2.6)
+  ggsave("plotting-fig--ggplotmeansd.pdf", width = 4, height = 2.6)
 <<ggplotspccut>>
-  ggsave("fig/fig-ggplotspccut.pdf", width = 4, height = 2.6)
+  ggsave("plotting-fig--ggplotspccut.pdf", width = 4, height = 2.6)
 } else {
   for (f in c ("ggplotspc", "ggplotmap", "ggplotmeansd", "ggplotspccut")){
-    pdf (sprintf ("fig/fig-%s.pdf", f), width = 4, height = 2.6) 
+    pdf (sprintf ("plotting-fig--%s.pdf", f), width = 4, height = 2.6) 
     ploterrormsg ("", "ggplot2")
     dev.off ()
   }

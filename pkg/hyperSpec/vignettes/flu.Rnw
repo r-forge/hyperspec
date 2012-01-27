@@ -1,5 +1,6 @@
 \documentclass[english, a4paper, 10pt, headings=small, DIV11]{scrartcl}
 \SweaveInput{vignettes.defs}
+\SweaveOpts{prefix.string=flu-fig-}
 \hypersetup{pdftitle={hyperSpec vignette flu},
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's flu data set},

@@ -5,6 +5,7 @@
 \makeindex
 
 \SweaveInput{vignettes.defs}
+\SweaveOpts{prefix.string=fileio-fig-}
 \setkeys{Gin}{width = \textwidth}
 \hypersetup{pdftitle={fileio}, 
  pdfauthor={C. Beleites},

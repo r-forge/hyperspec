@@ -358,7 +358,7 @@ clean: .FORCE
 #	@rm -f src/hyperSpec/vignettes/*/*.ind
 	@rm -f src/hyperSpec/vignettes/*.bak
 	@rm -f src/hyperSpec/vignettes/*~
-	@rm -f src/hyperSpec/vignettes/fig/*	
+#	@rm -f src/hyperSpec/vignettes/fig/*	
 	@rm -f src/hyperSpec/vignettes/*/Rplots.pdf
 #	@rm -f src/hyperSpec/vignettes/*/*.fdb_latexmk#	
 	@rm -f $(patsubst %.Rnw,%.tex,$(wildcard src/hyperSpec/vignettes/*/*.Rnw)) #should not be necessary

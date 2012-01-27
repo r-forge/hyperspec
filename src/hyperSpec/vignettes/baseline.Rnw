@@ -4,7 +4,7 @@
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's baselinebelow data set},
  pdfkeywords={hyperSpec, baselinebelow}}
-
+\SweaveOpts{prefix.string=baseline-fig-}
 % \VignetteIndexEntry{baselinebelow }
 % \VignetteKeywords{hyperspec, baselinebelow}
 % \VignettePackage{hyperSpec}
@@ -85,7 +85,7 @@ plot (bl, add = TRUE, col = 1 : 2)
 @
 \begin{figure}[tbh]
 \begin{center}
-  \includegraphics[width=\textwidth]{fig/fig-classical-bl}
+  \includegraphics[width=\textwidth]{baseline-fig--classical-bl}
   \caption{Fitting a linear baseline through two points. If the signal to noise ratio is not ideal,
     wavelengths that work fine for one spectrum (black) may not be appropriate for another (red).}
   \label{fig:classical}
@@ -168,8 +168,8 @@ plot (chondro [1], add = TRUE)
 @
 \begin{figure}[bh]
 \begin{center}
-  \includegraphics[width=\textwidth]{fig/fig-fig1}
-  \includegraphics[width=\textwidth]{fig/fig-fig2}
+  \includegraphics[width=\textwidth]{baseline-fig--fig1}
+  \includegraphics[width=\textwidth]{baseline-fig--fig2}
   \caption{Iterative fitting of the baseline. The dots give the supporting points for the baselines
     in the same colour.  The lower part is a magnification of the intensity axis.}
   \label{fig:iter}
@@ -197,7 +197,7 @@ abline (bl[[]], col = "blue")
 @
 \begin{figure}[b]
 \begin{center}
-\includegraphics[width = .66\textwidth]{fig/fig-figspcrange}
+\includegraphics[width = .66\textwidth]{baseline-fig--figspcrange}
 \caption{Influence of \Rcode{fit.to} on the baseline polynomial. The black baseline is fit to the
   spectral range \rcm{1700 - 1800}, the blue to \rcm{1715 - 1800} only (dots \& circles: supporting
   points).}
@@ -243,7 +243,7 @@ untrace (spc.fit.poly.below)
 @ 
 \begin{figure}[t]
 \begin{center}
-\includegraphics[width=\textwidth]{fig/fig-figorder}
+\includegraphics[width=\textwidth]{baseline-fig--figorder}
 \caption{Baseline polynomial fit to the first spectrum of the chondro data set of order 0 (black), 1
   (blue), 2 (green), and 3 (red). The dots indicate the points used for the fitting of the
   polynomial.}
@@ -323,9 +323,9 @@ untrace (spc.fit.poly.below)
 @
 \begin{figure}[t]
 \begin{center}
-  \includegraphics[width=.66\textwidth]{fig/fig-fig3}
-  \includegraphics[width=\textwidth]{fig/fig-fig4}
-  \includegraphics[width=\textwidth]{fig/fig-fig5}
+  \includegraphics[width=.66\textwidth]{baseline-fig--fig3}
+  \includegraphics[width=\textwidth]{baseline-fig--fig4}
+  \includegraphics[width=\textwidth]{baseline-fig--fig5}
   \caption{Iterative fitting of the baseline with noise level. Upper part: effects of the noise
     parameter on the baseline of a spectrum consisting only of noise and offset: without giving
     \Rcode{noise} the resulting baseline (black) is clearly too low. A noise level of 10 results in

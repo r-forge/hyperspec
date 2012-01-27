@@ -4,6 +4,7 @@
  pdfauthor={C. Beleites},
  pdfsubject={Vignette on hyperSpec's chondro data set},
  pdfkeywords={chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}}
+\SweaveOpts{prefix.string=chondro-fig-}
 
 \begin{document}
 \title{Raman Spectra of Chondrocytes in Cartilage:\\
@@ -103,8 +104,8 @@ plotmap (chondro, func.args = list (na.rm = TRUE), col.regions = seq.palette (20
 \Rfunction{plotmap} applies a function to squeeze all spectral intensities into a summary characteristic for the whole spectrum. This function defaults to the \Rfunction{mean}. Further arguments that should be handed to this function can be given in list \Rfunarg{func.args}. As the raw data contains \Rcode{NA}s due to deleting cosmic ray spikes, this argument is needed here.
 \begin{figure}[tbh]
 \subfloat[\label{fig:raw:a}The raw spectra: median, 16\textsuperscript{th} and 84\textsuperscript{th}, and 5\textsuperscript{th} and 95\textsuperscript{th} percentile
-spectra.]{\includegraphics[width=0.5\textwidth]{fig/fig-rawspc}}
-\subfloat[\label{fig:raw:b}[The sum intensity of the raw spectra.]{\includegraphics[width=0.5\textwidth]{fig/fig-rawmap}}
+spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig--rawspc}}
+\subfloat[\label{fig:raw:b}[The sum intensity of the raw spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig--rawmap}}
 \caption{\label{fig:raw} The raw data.}
 \end{figure}
 
@@ -135,8 +136,8 @@ chondro <- chondro - baselines
 @
 
 \begin{figure}[tbh]
-\subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{fig/fig-norm}}\quad%
-\subfloat[\label{fig:bl:perc} The spectra after subtracting the 5\textsuperscript{th} percentile spectrum.]{\includegraphics[width=0.4\textwidth]{fig/fig-perc}}
+\subfloat[\label{fig:bl-bl} The spectra after smoothing, baseline correction, and normalization.]{\includegraphics[width=0.4\textwidth]{chondro-fig--norm}}\quad%
+\subfloat[\label{fig:bl:perc} The spectra after subtracting the 5\textsuperscript{th} percentile spectrum.]{\includegraphics[width=0.4\textwidth]{chondro-fig--perc}}
 \caption{\label{fig:bl}The preprocessed spectra.}
 \end{figure}
 
@@ -236,7 +237,7 @@ and also by looking where these spectra appear in the scores \Rfunction{pairs}
 plot (figure~):
 
 <<pca-pairs2, include = FALSE, results = hide>>=
-png ("fig/fig-pca-pairs2.png", width = 500, height = 500)
+png ("chondro-fig--pca-pairs2.png", width = 500, height = 500)
 pch <- rep (46L, nrow (chondro))
 pch [out] <- 19L
 pairs (scores [[,,1:7]], pch = pch, cex = 1, col = cols)
@@ -251,8 +252,8 @@ chondro <- chondro [- out]
 
 %
 \begin{figure}[tbh]
-\subfloat[\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-pairs2}}%
-\subfloat[The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{fig/fig-pca-outspc}}
+\subfloat[\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{chondro-fig--pca-pairs2}}%
+\subfloat[The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{chondro-fig--pca-outspc}}
 \caption{Outlier removal by PCA}
 \end{figure}
 
@@ -329,10 +330,10 @@ plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", col = cols)
 
 %
 \begin{figure}[tbh]
-\subfloat[\label{fig:dend} The dendrogram.]{\includegraphics[width=0.495\textwidth]{fig/fig-dend}}\subfloat[\label{fig:clustmap} The cluster map for $k=3$ clusters.]{\includegraphics[width=0.495\textwidth]{fig/fig-clustmap}}\caption{Hierarchical cluster analysis.}
+\subfloat[\label{fig:dend} The dendrogram.]{\includegraphics[width=0.495\textwidth]{chondro-fig--dend}}\subfloat[\label{fig:clustmap} The cluster map for $k=3$ clusters.]{\includegraphics[width=0.495\textwidth]{chondro-fig--clustmap}}\caption{Hierarchical cluster analysis.}
 \end{figure}
 \begin{figure}[tbh]
-\includegraphics[width=0.495\textwidth]{fig/fig-clustmeans}
+\includegraphics[width=0.495\textwidth]{chondro-fig--clustmeans}
 \caption{\label{fig:clustmeans} The cluster mean $\pm$ 1 standard deviation
 spectra. The blue cluster shows distinct lipid bands, the green cluster
 collagen, and the red cluster proteins and nucleic acids.}
@@ -351,7 +352,7 @@ plotmap (chondro[, , c( 728, 782, 1098, 1240, 1482, 1577)],
        col.regions = colorRampPalette (c("white", "gold", "dark green"), space = "Lab") (20))
 @
 \begin{figure}[tbh]
-\includegraphics[width=0.495\textwidth]{fig/fig-DNA}
+\includegraphics[width=0.495\textwidth]{chondro-fig--DNA}
 \caption{\label{fig:DNA} False colour map of the DNA band intensities.}
 \end{figure}
 

@@ -98,13 +98,13 @@ CENMAT and DI3, University of Trieste}
 
 \SweaveOpts{pgf = FALSE, eps = FALSE, external = FALSE, pdf = TRUE, ps = FALSE}
 \SweaveOpts{width=6,height=3}
-\SweaveOpts{prefix.string=fig/fig}
+%\SweaveOpts{prefix.string=fig/fig}
 \SweaveOpts{keep.source = TRUE, strip.white=true}
 \AtBeginDocument{
 \setkeys{Gin}{width = .5\textwidth}
 }
 <<startup, echo = FALSE, results = hide>>=
-system ("mkdir fig")
+#system ("mkdir fig")
 options(SweaveHooks=list(fig=function() {
   par(mar = c (4.1, 4.1, 1, .6))
 
