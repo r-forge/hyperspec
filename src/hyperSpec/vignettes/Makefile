@@ -7,7 +7,7 @@ fileio.pdf:
 	rm -f fileio.tex
 
 %.pdf: %.Rnw
-	$(R_HOME)/bin/Rscript -e "library (tools); Sweave(\"$(<F)\"); texi2dvi(\"$(basename $(<F)).tex\", pdf = TRUE, clean = TRUE);"  
+	$(R_HOME)/bin/Rscript -e "library (tools); warning (getwd ());  warning (Sys.glob ('*.Rnw')); Sweave(\"$(<F)\"); texi2dvi(\"$(basename $(<F)).tex\", pdf = TRUE, clean = TRUE);"  
 	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dAutoRotatePages=/None \
 	-dDownsampleColorImages=false -dNOPAUSE -dQUIET -dBATCH -dDownsampleColorImages=false \
 	-sOutputFile=tmp.pdf $@ && qpdf tmp.pdf $@
