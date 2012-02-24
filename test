@@ -1,5 +1,0 @@
-#!/usr/bin/r
-
-library (testthat); 
-library (hyperSpec); 
-test_dir ("pkg/tests")

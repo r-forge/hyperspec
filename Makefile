@@ -159,7 +159,7 @@ Vignettes/%.zip: .FORCE
 %.pdf: %.tex
 #	cd $(dir $<) && rubber --pdf -s $(basename $(notdir $<)).tex
 	cd $(dir $<) && latexmk -pdf $(basename $(notdir $<)).tex 
-	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dAutoRotatePages=/None \
+	gs -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dAutoRotatePages=/None \
 	-dDownsampleColorImages=false -dNOPAUSE -dQUIET -dBATCH -sOutputFile=tmp.pdf $@ && qpdf tmp.pdf $@
 
 %.dvi: # should not happen!

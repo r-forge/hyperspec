@@ -1,0 +1,226 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Antagon 1.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-12-22 17:19+0100\n"
+"Last-Translator: F. Gützlaff <pec4561@gmx.de>\n"
+"Language-Team: Florian Gützlaff <info@3fact.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: /opt/lampp/htdocs/wordpress/wp-content/themes/ClearBlue2.0\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: comments.php:3
+msgid "Please do not load this page directly. Thanks!"
+msgstr "Bitte lade diese Seite nicht direkt. Danke!"
+
+#: comments.php:9
+msgid "This post is password protected. Enter the password to view comments."
+msgstr "Dieser Beitrag ist passwortgeschützt. Bitte gib das Passwort ein, um Kommentare zu lesen."
+
+# %1$s = comments
+# %2$s = title
+#: comments.php:23
+#, php-format
+msgid "%1$s to &#8220;%2$s&#8221;"
+msgstr "%1$s zu &#8220;%2$s&#8221;"
+
+#: comments.php:23
+msgid "No Responses"
+msgstr "Keine Antworten"
+
+#: comments.php:23
+msgid "One Response"
+msgstr "Eine Antwort"
+
+# % = # responses
+#: comments.php:23
+msgid "% Responses"
+msgstr "% Antworten"
+
+#: comments.php:30
+msgid "Says:"
+msgstr "Sagt:"
+
+#: comments.php:32
+msgid "Your comment is awaiting moderation."
+msgstr "Dein Kommentar wird überprüft."
+
+# %1$s = date
+# %2$s = time
+#: comments.php:36
+#, php-format
+msgid "%1$s at %2$s"
+msgstr "%1$s um %2$s"
+
+#: comments.php:36
+#: index.php:11
+msgid "F jS, Y"
+msgstr "F jS, Y"
+
+#: comments.php:36
+msgid "e"
+msgstr "e"
+
+#: comments.php:58
+msgid "Comments are closed."
+msgstr "Kommentare sind geschlossen."
+
+#: comments.php:66
+msgid "Leave a Reply"
+msgstr "Hinterlasse eine Antwort"
+
+# %s = login and redirect
+#: comments.php:69
+#, php-format
+msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
+msgstr "du musst<a href=\"%s\">angemeldet sein </a>um einen Kommentar zu schreiben."
+
+# %s = username
+#: comments.php:76
+#, php-format
+msgid "Logged in as %s."
+msgstr "Angemeldet als %s."
+
+#: comments.php:76
+msgid "Log out of this account"
+msgstr "Von diesem Account abmelden"
+
+#: comments.php:76
+msgid "Logout"
+msgstr "Abmelden"
+
+#: comments.php:81
+msgid "Name"
+msgstr "Name"
+
+#: comments.php:81
+#: comments.php:84
+msgid "(required)"
+msgstr "(erforderlich)"
+
+#: comments.php:84
+msgid "Mail (will not be published)"
+msgstr "E-Mail (wird nicht veröffentlicht)"
+
+#: comments.php:87
+msgid "Website"
+msgstr "Webseite"
+
+# %s = XHTML tags
+#: comments.php:91
+#, php-format
+msgid "<strong>XHTML:</strong> You can use these tags: %s"
+msgstr "<strong>XHTML:</strong>Du kannst diese Tags benutzen: %s"
+
+#: comments.php:95
+msgid "Submit Comment"
+msgstr "Kommentar bestätigen"
+
+#: sidebar.php:2
+msgid "Categories"
+msgstr "Kategorien"
+
+#: sidebar.php:6
+msgid "Archives"
+msgstr "Archive"
+
+#: sidebar.php:25
+msgid "Search"
+msgstr "Suche"
+
+# %s = title
+#: index.php:10
+#: page.php:10
+#, php-format
+msgid "Permanent Link to %s"
+msgstr "Permanenter Link zu %s"
+
+#: index.php:14
+#: page.php:13
+msgid "Read the rest of this entry"
+msgstr "Diesen Beitrag weiterlesen..."
+
+# %s = author
+#: index.php:19
+#, php-format
+msgid "Posted by %s"
+msgstr "Geschrieben von %s"
+
+# %s = category
+#: index.php:20
+#: page.php:16
+#, php-format
+msgid "Filed in %s"
+msgstr "Abgelegt unter %s"
+
+#: index.php:20
+#: page.php:16
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: index.php:22
+#: page.php:16
+msgid "No Comments"
+msgstr "Kein Kommentar"
+
+#: index.php:22
+#: page.php:16
+msgid "1 Comment"
+msgstr "1 Kommentar"
+
+# % = # comments
+#: index.php:22
+#: page.php:16
+msgid "% Comments"
+msgstr "% Kommentare"
+
+#: index.php:31
+#: page.php:25
+msgid "Previous Entries"
+msgstr "Vorherige Einträge"
+
+#: index.php:32
+#: page.php:26
+msgid "Next Entries"
+msgstr "Nächste Einträge"
+
+#: index.php:37
+msgid "Not Found"
+msgstr "Nicht gefunden"
+
+#: index.php:38
+#: page.php:32
+msgid "Sorry, but you are looking for something that isn't here."
+msgstr "Sorry, aber du hast nach etwas gesucht, das es hier nicht gibt."
+
+#: header.php:8
+msgid "Blog Archive"
+msgstr "Blog Archive"
+
+#: header.php:13
+msgid "RSS Feed"
+msgstr "RSS Feed"
+
+#: header.php:28
+msgid "Home"
+msgstr "Start"
+
+#: footer.php:26
+#, php-format
+msgid "%s is using the <a href=\"http://3fact.com\">ClearBlue2.0 theme</a> designed by <a href=\"http://3fact.com\">3fact.com</a>. Powered by <a href=\"http://wordpress.org/\">WordPress</a>"
+msgstr "%s benutzt das <a href=\"http://3fact.com\">ClearBlue2.0 theme</a> entwickelt con <a href=\"http://3fact.com\">3fact.com</a>. Powered by <a href=\"http://wordpress.org/\">WordPress</a>"
+
+#: footer.php:27
+msgid "queries."
+msgstr "Abfragen."
+
+#: footer.php:27
+msgid "seconds."
+msgstr "sekunden."
+
