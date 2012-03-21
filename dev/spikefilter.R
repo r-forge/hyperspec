@@ -28,7 +28,7 @@ spikefilter2d <- function (spcmatrix) {
 
 spikefilter <- function (spcmatrix) {
   ## expand matrix 
-  spcmatrix <- spcmatrix [c(1, seq_len (nrow (spcmatrix)), nrow (spcmatrix)), ]
+  spcmatrix <- spcmatrix [,c(1, seq_len (ncol (spcmatrix)), ncol (spcmatrix))]
 
   d <- t (apply (spcmatrix, 1, filter, c(-1, 2, -1)))
 
@@ -38,6 +38,8 @@ spikefilter <- function (spcmatrix) {
 spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
                                 save.tmp = 20, use.tmp = FALSE, ispikes = NULL, iispikes = NULL) {
 
+	require (arrayhelpers)
+	
   ## TODO: better move the first part to spike suspicio
   wavelength <- spc@wavelength
   spc <- spc@data$spc
@@ -84,18 +86,17 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
 
     ind <- vec2array (ispikes [i], dim = dim)
     cat ("   Spectrum: ", ind[1], "\n")
- ##   screen (1)
-##    erase.screen()    
-#    dev.set (wspc)
-    k <- ind[1] + (-nspc : nspc) # suspicious spectrum plus the spectra around
-    k <- k [k > 0]
+    
+    ## suspicious spectrum plus the spectra around
+    k <- ind[1] + (-nspc : nspc)
+     
+    ## make sure spectra exist
+    k <- k [k > 0] 
     k <- k [k <= nrow (spc)]
+    
+    ## and are not marked as "bad"
     isna <- apply (spc[k,,drop = FALSE], 1, function (x) all (is.na (x)))
     k <- k[! isna]
-##     plot (spc[k,                  ], "spc", 
-##           col = c("black", "blue", "black"))
-##     plot (spc[ind[1]           , , ind[2]           , index = TRUE], "spc", 
-##           type = "p", col = "red", pch = 20, add = TRUE)
 
     plot (wavelength, spc[ind[1],], ylim = range (spc[k,], na.rm = TRUE), type = "n")
     for (l in k)
@@ -103,10 +104,10 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
       
     points (wavelength[ind[2]], spc[ind[1], ind[2]], col = "red", pch = 20)
    
-##    dev.set (wdetail)
-##    screen (2)
-##    erase.screen()    
-    j <- ind[2] + (-npts : npts) # suspicious data points plus points around
+    ## suspicious data points plus points around
+    j <- ind[2] + (-npts : npts)
+
+    ## make sure spectra exist
     j <- j[j > 0]
     j <- j[j <= ncol (spc)]
 
@@ -119,15 +120,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
     yu <- (yu - yl) * 4 + yl
     print (yu)
 
-##     plot (spc[k, , j, index = TRUE], "spc", 
-##           col = c("black", "blue", "black"), pch = 20, type = "p",
-##           xlim = x,
-##           ylim = y,
-##           cex = 0.5)
-##     plot (spc[ind[1], , j, index = TRUE], "spc", 
-##           col = "blue", pch = 20, type = "p",
-##           add = TRUE)
-   plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n")
+    plot (wavelength[j], spc[ind[1],j], xlim = x, ylim = c (yl, yu), type = "n")
     for (l in k)
       lines (wavelength[j], spc[l,j], pch = 20,
              type = "p",

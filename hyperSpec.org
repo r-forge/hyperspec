@@ -1,16 +1,26 @@
-* merge
-** test merge  
-** merge wavelengths
-** TODO: merge in introduction
+* BUG FIXES
+** TODO spc.fit.poly & .below:
+	created <2012-03-13 Di>
+	test with NA in spectra	 
 
+* Features
+** %*% von hyperSpec * x -> keep columns
 
-* related packages
-  - baseline
-  - msProcess
+* Test
+** merge
+*** test merge  
+*** merge wavelengths
+*** TODO: merge in introduction
 	 
 
-* TODO check plyr: rbind.fill.matrix
-* TODO tapply -> Seb
-* TODO vignetten
 
-* check out mmap for binary file reading
+* check out
+** TODO check plyr: rbind.fill.matrix
+** TODO tapply -> Seb
+** related packages
+  	- baseline
+  	- msProcess
+
+** check out mmap for binary file reading
+
+* TODO vignetten

@@ -1623,6 +1623,8 @@ make.fn.table()
 make.bib (c ("baseline", "compiler", "Rcpp", "inline"), file = "introduction-pkg.bib")
 print (as.matrix(Sys.info()))
 <<cleanup>>
+#for (f in Sys.glob ("fig/*.pdf")) 
+#  compactPDF ('$@', qpdf = '', gs_quality = 'screen', gs_extras = '-dDownsampleColorImages=false') 
 @
 %
 \end{footnotesize}
