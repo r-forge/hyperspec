@@ -6,11 +6,14 @@ Date: 2012-03-26
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including
-- PCA for background removal
-- PLSLDA
-- ls.cb 
+    * PCA with added reference cases (for background removal)
+    * PLSLDA
+    * ls.cb
 License: GPL-3
 Suggests:
-    hyperSpec, MASS, pls
+    hyperSpec,
+    MASS,
+    pls
 Collate:
     'pcaadd.R'
+    'plslda.R'

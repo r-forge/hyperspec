@@ -12,7 +12,7 @@ vanderMonde <- function (x, order, ...){
   outer (x, 0 : order, `^`)
 }
 
-##' @noRd
+##' @nord
 setGeneric ("vanderMonde")
 
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
