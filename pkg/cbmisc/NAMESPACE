@@ -1,0 +1,3 @@
+exportMethods(pcaadd)
+export(pcaadd)
+export(predict.pcaadd)
