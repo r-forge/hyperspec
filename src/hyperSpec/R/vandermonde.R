@@ -7,16 +7,18 @@
 ##' @rdname vanderMonde
 ##' @return van der Monde matrix
 ##' @author C. Beleites
+##' @export
 vanderMonde <- function (x, order, ...){
   outer (x, 0 : order, `^`)
 }
 
-##' @noRd
+##' @nord
 setGeneric ("vanderMonde")
 
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
 ##' @return hyperSpec method: hyperSpec object containing van der Monde matrix as spectra and an additional column ".vdm.order" giving the order of each spectrum (term).
 ##' @rdname vanderMonde
+##' @export
 setMethod ("vanderMonde", signature = signature (x = "hyperSpec"), function (x, order, ...){
   validObject (x)
   
@@ -31,6 +33,7 @@ setMethod ("vanderMonde", signature = signature (x = "hyperSpec"), function (x, 
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
 ##' @return hyperSpec object containing one spectrum for each expression 
 ##' @rdname vanderMonde
+##' @export
 ##' @examples
 ##' plot (wl.eval (laser, exp = function (x) exp (-x)))
 wl.eval <- function (x, ...){
