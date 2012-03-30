@@ -22,6 +22,10 @@
   better control for falling back to `panel.levelplot`.
   
   \item mixed colour map plots: \code{qplotmixmap} (experimental)
+
+  \item In addition to using \code{levelplot}, spectra matrices may be 
+  plotted with the new base graphics function \code{plotmat}, which
+  becomes the default for \code{plot (x, "mat")}.
 }
 }
 \subsection{Minor changes}{

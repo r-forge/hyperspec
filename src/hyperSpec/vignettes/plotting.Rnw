@@ -490,23 +490,28 @@ This can be done by \Rcode{plot (object, "mat")}. The actual plotting is done by
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \plottab{different palette}{plotmat1}
 <<>>=
-plot (laser, "mat", 
-      col.regions = matlab.palette (20) )
+plot (laser, "mat", col = alois.palette (20) )
 @
 is the same as 
 <<plotmat1, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-levelplot (spc ~ .wavelength * .row, 
-           laser,
-           col.regions = matlab.palette (20))
+plotmat (laser, col = alois.palette (20))
 @
 \\
 \plottab{different y axis}{plotmat1a}
- Changing the y axis is only possible with levelplot:
+ Changing the y axis and label:
 <<plotmat1a, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-levelplot (spc ~ .wavelength * t, laser)
+plotmat (laser, col = alois.palette (20),
+         y = laser$t, ylab = labels (laser, "t"))
 @
 \\
-\plottab{colour-coded points: different panel function}{plotmap-barb}
+\plottab{contour lines}{plotmat2}
+Contour lines may be added:
+<<plotmat2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
+plotmat (flu)
+plotmat (flu, contour = TRUE, add = TRUE)
+@
+\\
+\plottab{colour-coded points: \Rfunction{levelplot} with special panel function}{plotmap-barb}
 <<plotmap-barb, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
 require ("latticeExtra")
 barb <- do.call (collapse, barbiturates[1:50])
@@ -515,16 +520,6 @@ levelplot (spc ~ .wavelength * z, barb,
            panel = panel.levelplot.points,
            cex = .33, col.symbol = NA,
            col.regions = matlab.palette)
-@
-\\
-\plottab{contour lines}{plotmat2}
-Contour lines may be added to all \Rfunction{levelplot} based plots:
-<<plotmat2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plot (flu, "mat", 
-      contour = TRUE, 
-      labels = TRUE, 
-      col = "#00000080",
-      at = seq (0, 700, by = 50))
 @
 \end{longtable}
 

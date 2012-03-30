@@ -125,6 +125,7 @@ Collate:
     'zzz.R'
     'units.R'
     'colMeans.R'
+    'plotmat.R'
     'read.jdx.Shimadzu.R'
     'read.txt.Shimadzu.R'
     'subset.R'
