@@ -17,3 +17,4 @@ Suggests:
 Collate:
     'pcaadd.R'
     'plslda.R'
+    'lscb.R'

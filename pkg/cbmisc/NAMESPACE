@@ -1,3 +1,4 @@
+export(lscb)
 exportMethods(pcaadd)
 export(pcaadd)
 export(plslda)
