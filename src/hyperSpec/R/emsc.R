@@ -36,7 +36,42 @@ emsc <- function( X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ... )
     }
     X
 }
-	
+
+.test(emsc) <- function(){
+  
+  checkTrue( is.test( emsc ))
+  
+  checkTrue( is.matrix( emsc( flu[[]], jitter( flu[[]][1,], 100 ) ) ) )
+  
+  checkEquals( dim( emsc( flu[[]], jitter( flu[[]][1,], 100 ) ) ), dim( flu[[]] ) )
+  
+  checkTrue( chk.hy( emsc( flu, jitter( flu[[]][1,], 100) ) ) )
+  
+  checkEquals( dim( emsc( flu, jitter( flu[[]][1,], 100))[[]]), dim( flu[[]] ) )
+
+  ## calculation checks
+  x <- vanderMonde (1:5, 2) %*% 1 : 3
+
+  ## if no bg.comps and no norm.comps are given, the original should be returned
+  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2))), t (x))
+
+  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 1),
+                      t (x - vanderMonde (1:5, 2) %*% c (1, 0, 0)))
+  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 2),
+                      t (x - vanderMonde (1:5, 2) %*% c (0, 2, 0)))
+  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 3),
+                      t (x - vanderMonde (1:5, 2) %*% c (0, 0, 3)))
+  
+  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 1:2),
+                      t (vanderMonde (1:5, 2) %*% c (0, 0, 3)))
+  
+  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 1:3),
+                      matrix (rep (0, length (x))))
+  
+}
+
+
+
 ##' @noRd
 #setGeneric ("emsc")
 
@@ -66,7 +101,7 @@ setMethod( "emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSp
 ##' @rdname emsc
 ##' @examples
 ##' vmflu <- vanderMonde(flu,2)
-##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize01)[[]][c(2,3),])
+##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl = normalize01)[[]][c(2,3),])
 ##' nuflu <- emsc(flu, Refs, 1, c(2,3))
 
 spc.evalfun <- function(X, f, ... ){
