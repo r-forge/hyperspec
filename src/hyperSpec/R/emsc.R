@@ -57,6 +57,11 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec" ), function ( X, Refe
 ##' @export
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec objects: X and Reference, vectors: bg.comps and norm.comps, indices.
 ##' @rdname emsc 
+##' @examples
+##' vmflu <- vanderMonde(flu,2)
+##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl=normalize01)[[]][c(2,3),])
+##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl = normalize01)[[]][c(2,3),])
+##' nuflu <- emsc(flu, Refs, 1, c(2,3))
 setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ...){
   validObject (X)
   X <- decomposition (X, emsc (X@data$spc, Reference@data$spc, bg.comps, norm.comps), scores = FALSE, ... )
