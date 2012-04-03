@@ -608,12 +608,12 @@ read.spc <- function (filename,
 			wavelength <- seq (hdr$ffirst, hdr$flast, length.out = hdr$fnpts)
 		} else {
 			## spectra with common unevenly spaced wavelength axis
-			if (! hdr$ftflgs ['TMULTI']) {
+		#	if (! hdr$ftflgs ['TMULTI']) { # also for multifile with common wavelength axis
 				tmp <- .spc.read.x (f, fpos, hdr$fnpts)
 				wavelength <- tmp$x
 				fpos <- tmp$.last.read
 			}
-		}
+		#}
 	}
 	
 	## otherwise (TXYXYS set) hdr$fnpts gives offset to subfile directory if that exists
