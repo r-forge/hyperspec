@@ -6,6 +6,11 @@
 \alias{plot,hyperSpec,missing-method}
 \alias{plot-methods}
 \title{Plotting hyperSpec Objects}
+\usage{
+  \S4method{plot}{hyperSpec,missing}(x, y, ...)
+
+  \S4method{plot}{hyperSpec,character}(x, y, ...)
+}
 \arguments{
   \item{x}{the \code{hyperSpec} object}
 

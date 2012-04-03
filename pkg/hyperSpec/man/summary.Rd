@@ -12,6 +12,11 @@
 \alias{Summary}
 \alias{Summary,hyperSpec-method}
 \title{The functions}
+\usage{
+  \S4method{Summary}{hyperSpec}(x, ..., na.rm = FALSE)
+
+  \S4method{is.na}{hyperSpec}(x)
+}
 \arguments{
   \item{x}{hyperSpec object}
 

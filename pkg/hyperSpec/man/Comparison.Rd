@@ -18,6 +18,22 @@
 \alias{!=,hyperSpec,hyperSpec-method}
 \alias{Operators}
 \title{Comparison of hyperSpec objects}
+\usage{
+  \S4method{all.equal}{hyperSpec,hyperSpec}(target,
+    current, check.attributes = FALSE, check.names = FALSE,
+    ..., check.column.order = FALSE, check.label = FALSE,
+    check.log = FALSE)
+
+  \S4method{Compare}{hyperSpec,hyperSpec}(e1, e2)
+
+  \S4method{Compare}{hyperSpec,numeric}(e1, e2)
+
+  \S4method{Compare}{hyperSpec,matrix}(e1, e2)
+
+  \S4method{Compare}{numeric,hyperSpec}(e1, e2)
+
+  \S4method{Compare}{matrix,hyperSpec}(e1, e2)
+}
 \arguments{
   \item{target,current}{two \code{hyperSpec} objects that
   are tested for equality}
