@@ -36,7 +36,23 @@ emsc <- function( X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ... )
     }
     X
 }
-	
+
+.test(emsc) <- function(){
+  
+  checkTrue( is.test( emsc ))
+  
+  checkTrue( is.matrix( emsc( flu[[]], jitter( flu[[]][1,], 100 ) ) ) )
+  
+  checkEquals( dim( emsc( flu[[]], jitter( flu[[]][1,], 100 ) ) ), dim( flu[[]] ) )
+  
+  checkTrue( chk.hy( emsc( flu, jitter( flu[[]][1,], 100) ) ) )
+  
+  checkEquals( dim( emsc( flu, jitter( flu[[]][1,], 100))[[]]), dim( flu[[]] ) )
+  
+}
+
+
+
 ##' @noRd
 #setGeneric ("emsc")
 
@@ -66,7 +82,7 @@ setMethod( "emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSp
 ##' @rdname emsc
 ##' @examples
 ##' vmflu <- vanderMonde(flu,2)
-##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize01)[[]][c(2,3),])
+##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl = normalize01)[[]][c(2,3),])
 ##' nuflu <- emsc(flu, Refs, 1, c(2,3))
 
 spc.evalfun <- function(X, f, ... ){
