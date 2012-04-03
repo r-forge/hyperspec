@@ -106,7 +106,7 @@
 
 ## helper functions ---------------------------------------------------------------------------------
 ### raw.split.nul - rawToChar conversion, splitting at \0
-raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE) {
+raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste.collapse = NULL) {
 	# todo make better truncation
 	trunc <- rep (trunc, length.out = 2)
 	
@@ -128,9 +128,14 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE) {
 		if (tmp [i] + 1 < tmp [i + 1] - 1)
 			out [i] <- rawToChar (raw [(tmp [i] + 1)  : (tmp [i + 1] - 1)])
 	
-	if (length (out) > 1L & firstonly){
-		warning ("multiple strings encountered: ", paste (out, collapse = ", "), " but using only the first one.")
-		out <- out [1]
+	if (length (out) > 1L){
+     if (firstonly){
+       warning ("multiple strings encountered: ", paste (out, collapse = ", "), " but using only the first one.")
+       out <- out [1]
+     } else if (! is.null (paste.collapse)){
+       warning ("multiple strings encountered: ", paste (out, collapse = ", "), " => pasting.")
+       out <- paste (out, collapse = paste.collapse)
+     }
 	}
 	
 	out
@@ -164,11 +169,11 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE) {
 			fztype   = readBin       (raw.data [       31], "integer", 1, 1, signed = FALSE),
 			fpost    = readBin       (raw.data [       32], "integer", 1, 1, signed = TRUE ),
 			fdate    = readBin       (raw.data [ 33 :  36], "integer", 1, 4                ),
-			fres     = raw.split.nul (raw.data [ 37 :  45], firstonly = TRUE),
-			fsource  = raw.split.nul (raw.data [ 46 :  54], firstonly = TRUE),
+			fres     = raw.split.nul (raw.data [ 37 :  45], paste.collapse = "\r\n"),
+			fsource  = raw.split.nul (raw.data [ 46 :  54], paste.collapse = "\r\n"),
 			fpeakpt  = readBin       (raw.data [ 55 :  56], "integer", 1, 2, signed = FALSE),
 			fspare   = readBin       (raw.data [ 57 :  88], "numeric", 8, 4                ),
-			fcmnt    = raw.split.nul (raw.data [ 89 : 218], firstonly = TRUE),
+			fcmnt    = raw.split.nul (raw.data [ 89 : 218], paste.collapse = "\r\n"),
 			fcatxt   = raw.split.nul (raw.data [219 : 248], trunc = c (FALSE, TRUE)        ),                
 			flogoff  = readBin       (raw.data [249 : 252], "integer", 1, 4), #, signed = FALSE),
 			fmods    = readBin       (raw.data [253 : 256], "integer", 1, 4), #, signed = FALSE),
@@ -304,7 +309,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE) {
 
 .spc.subhdr <- function (raw.data, pos, hdr) {
 	subhdr <- list (subflgs   =          raw.data [pos + (      1)],
-			subexp    = readBin (raw.data [pos + (      2)], "integer", 1, 1, signed = FALSE),
+			subexp    = readBin (raw.data [pos + (      2)], "integer", 1, 1, signed = TRUE),
 			subindx   = readBin (raw.data [pos + ( 3 :  4)], "integer", 1, 2, signed = FALSE),
 			subtime   = readBin (raw.data [pos + ( 5 :  8)], "numeric", 1, 4),
 			subnext   = readBin (raw.data [pos + ( 9 : 12)], "numeric", 1, 4),
