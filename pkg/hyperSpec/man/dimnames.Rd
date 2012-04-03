@@ -3,27 +3,11 @@
 \alias{colnames}
 \alias{colnames<-}
 \alias{colnames<-,hyperSpec-method}
-\alias{colnames,hyperSpec-method}
 \alias{dimnames}
-\alias{dimnames,hyperSpec-method}
 \alias{rownames}
 \alias{rownames<-}
 \alias{rownames<-,hyperSpec-method}
-\alias{rownames,hyperSpec-method}
 \title{Dimnames for hyperSpec objects}
-\usage{
-  \S4method{dimnames}{hyperSpec}(x)
-
-  \S4method{rownames}{hyperSpec}(x, do.NULL = TRUE,
-    prefix = "row")
-
-  \S4method{rownames}{hyperSpec} (x) <- value
-
-  \S4method{colnames}{hyperSpec}(x, do.NULL = TRUE,
-    prefix = "col")
-
-  \S4method{colnames}{hyperSpec} (x) <- value
-}
 \arguments{
   \item{x}{the hyperSpec object}
 

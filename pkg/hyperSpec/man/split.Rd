@@ -7,10 +7,6 @@
 \title{Split a hyperSpec object according to groups
 \code{split} divides the \code{hyperSpec} object into a list of
 \code{hyperSpec} objects according to the groups given by \code{f}.}
-\usage{
-  \S4method{split}{hyperSpec}(x, f, drop = TRUE,
-    short = NULL, user = NULL, date = NULL)
-}
 \arguments{
   \item{x}{the \code{hyperSpec} object}
 

@@ -15,13 +15,6 @@
 \code{as.data.frame} returns \code{x@data} (as data.frame) \code{as.matrix}
 returns the spectra matrix \code{x@data$spc} as matrix}
 \usage{
-  \S4method{as.data.frame}{hyperSpec,missing,missing}(x,
-    row.names = stop("hyperSpec method does not support row.names"),
-    optional = stop("hyperSpec method does not support row.names"),
-    ...)
-
-  \S4method{as.matrix}{hyperSpec}(x, ...)
-
   as.wide.df(x)
 
   as.long.df(x, rownames = FALSE, wl.factor = FALSE,

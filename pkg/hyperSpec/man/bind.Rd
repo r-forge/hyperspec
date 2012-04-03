@@ -20,14 +20,6 @@ of \code{cbind} and \code{rbind} do work at the moment.}
   cbind.hyperSpec(..., short = "cbind", deparse.level)
 
   rbind.hyperSpec(..., short = "rbind", deparse.level)
-
-  \S4method{cbind2}{hyperSpec,hyperSpec}(x, y)
-
-  \S4method{cbind2}{hyperSpec,missing}(x, y)
-
-  \S4method{rbind2}{hyperSpec,hyperSpec}(x, y)
-
-  \S4method{rbind2}{hyperSpec,missing}(x, y)
 }
 \arguments{
   \item{\dots}{The \code{hyperSpec} objects to be combined.

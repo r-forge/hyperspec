@@ -9,12 +9,6 @@
 \title{Creating a hyperSpec Object
 Like other S4 objects, a hyperSpec object can be created by \code{new}. The
 hyperSpec object is then \code{initialize}d using the given parameters.}
-\usage{
-  \S4method{initialize}{hyperSpec}(.Object, spc = NULL,
-    data = NULL, wavelength = NULL, labels = NULL,
-    log = NULL, short = "initialize", user = NULL,
-    date = NULL)
-}
 \arguments{
   \item{.Object}{the new \code{hyperSpec} object.}
 

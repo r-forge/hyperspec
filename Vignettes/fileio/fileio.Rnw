@@ -266,10 +266,12 @@ Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI fi
 \index{spc!Raman}
 \index{spc!Renishaw}
 \index{spc!Kaiser}
+\index{spc!TriVista}
 \index{Raman!spc}
 \index{Raman!Kaiser}
 \index{Raman!Renishaw}
 \index{Renishaw!spc}
+\index{TriVista!spc}
 \index{Kaiser!spc}
 
 Thermo Galactic's .spc file format\cite{Galactic1997} can be imported by \Rfunction{read.spc}. 

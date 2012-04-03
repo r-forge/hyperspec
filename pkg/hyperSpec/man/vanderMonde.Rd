@@ -1,34 +1,24 @@
 \name{vanderMonde}
 \alias{normalize01}
 \alias{vanderMonde}
-\alias{vanderMonde,hyperSpec-method}
 \alias{wl.eval}
 \title{Function evaluation on hyperSpec objects}
 \usage{
   vanderMonde(x, order, ...)
-
-  \S4method{vanderMonde}{hyperSpec}(x, order, ...,
-    normalize.wl = I)
 
   wl.eval(x, ..., normalize.wl = I)
 
   normalize01(x)
 }
 \arguments{
-  \item{x}{vector with values to evaluate the polynomial on
-
-  vector with values to transform
-
-  NA}
+  \item{x}{vector with values to evaluate the polynomial
+  on}
 
   \item{order}{of the polynomial}
 
-  \item{\dots}{ignored by the standard generic
+  \item{\dots}{ignored by the standard generic}
 
-  hyperSpec method: further arguments to
-  \code{\link{decomposition}}
-
-  hyperSpec method: further arguments to
+  \item{\dots}{hyperSpec method: further arguments to
   \code{\link{decomposition}}}
 
   \item{normalize.wl}{function to transorm the wavelengths
@@ -37,6 +27,11 @@
   interval [0, 1].}
 
   \item{x}{hyperSpec object}
+
+  \item{\dots}{hyperSpec method: further arguments to
+  \code{\link{decomposition}}}
+
+  \item{x}{vector with values to transform}
 }
 \value{
   van der Monde matrix

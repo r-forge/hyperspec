@@ -7,31 +7,9 @@
 \alias{$}
 \alias{$<-}
 \alias{[<-,hyperSpec-method}
-\alias{[,hyperSpec-method}
 \alias{[[<-,hyperSpec-method}
-\alias{[[,hyperSpec-method}
 \alias{$<-,hyperSpec-method}
-\alias{$,hyperSpec-method}
 \title{Extract and Replace parts of hyperSpec objects}
-\usage{
-  \S4method{[}{hyperSpec}(x, i, j, l, ...,
-    wl.index = FALSE, short = "[", date = NULL,
-    user = NULL, drop = FALSE)
-
-  \S4method{[[}{hyperSpec}(x, i, j, l, ...,
-    wl.index = FALSE, drop = FALSE)
-
-  \S4method{$}{hyperSpec}(x, name)
-
-  \S4method{[}{hyperSpec}(x, i, j, short = "[<-", date =
-    NULL, user = NULL, \dots) <- value
-
-  \S4method{[[}{hyperSpec}(x, i, j, l, wl.index = FALSE,
-    short = "[<-", date = NULL, user = NULL, \dots) <-
-    value
-
-  \S4method{$}{hyperSpec}(x, name) <- value
-}
 \arguments{
   \item{x}{a \code{hyperSpec} Object}
 
