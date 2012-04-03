@@ -2,7 +2,7 @@
 \alias{emsc}
 \alias{emsc,hyperSpec,hyperSpec-method}
 \alias{spc.evalfun}
-\title{Function for evaluation on hyperSpec objects}
+\title{Function for doing EMSC on hyperSpec objects}
 \usage{
   emsc(X, Reference = NULL, bg.comps = NULL,
     norm.comps = NULL, ...)
@@ -15,11 +15,12 @@
 \arguments{
   \item{X}{spectra matrix in rows}
 
-  \item{constituents}{matrix in rows}
+  \item{Reference}{matrix with reference spectra rows}
 
-  \item{background}{components indices}
+  \item{bg.comps}{indices of background components}
 
-  \item{normalization}{components indices}
+  \item{norm.comps}{indices of components to use for
+  normalization}
 
   \item{\dots}{hyperSpec method: further arguments to
   \code{\link{decomposition}}
@@ -38,7 +39,7 @@
   Reference, vectors: bg.comps and norm.comps, indices.
 }
 \description{
-  Function for evaluation on hyperSpec objects
+  Function for doing EMSC on hyperSpec objects
 }
 \examples{
 vmflu <- vanderMonde(flu,2)
@@ -47,5 +48,16 @@ nuflu <- emsc(flu, Refs, 1, c(2,3))
 }
 \author{
   S. Fuller
+}
+\references{
+  Martens, H.; Nielsen, J. P. and Engelsen, S. B.: Light
+  Scattering and Light Absorbance Separated by Extended
+  Multiplicative Signal Correction. Application to
+  Near-Infrared Transmission Analysis of Powder Mixtures,
+  Analytical Chemistry (2003) 75, 394-404.
+}
+\seealso{
+  \code{\link[pls]{msc}} was used as starting point for
+  this function.
 }
 

@@ -1,14 +1,19 @@
 
-##' Function for evaluation on hyperSpec objects
+##' Function for doing EMSC on hyperSpec objects
 ##'
 ##' @param X spectra matrix in rows
-##' @param constituents matrix in rows
-##' @param background components indices
-##' @param normalization components indices
+##' @param Reference matrix with reference spectra rows
+##' @param bg.comps indices of background components
+##' @param norm.comps indices of components to use for normalization
 ##' @rdname emsc
 ##' @return new spectra matrix
 ##' @author S. Fuller
-
+##' @export
+##' @seealso \code{\link[pls]{msc}} was used as starting point for this function.
+##' @references Martens, H.; Nielsen, J. P. and Engelsen, S. B.: Light Scattering and Light
+##' Absorbance Separated by Extended Multiplicative Signal Correction. Application to Near-Infrared
+##' Transmission Analysis of Powder Mixtures, Analytical Chemistry (2003) 75, 394-404.
+##' 
 emsc <- function( X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ... ) {
     if( is.null( Reference ) ){
       Reference <- rbind(1, colMeans( X ) )	#sanity check
@@ -36,6 +41,7 @@ emsc <- function( X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ... )
 #setGeneric ("emsc")
 
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
+##' @export
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec object X, given matrix: Reference, vectors: bg.comps, norm.comps, indices.
 ##' @rdname emsc
 setMethod( "emsc", signature = signature ( X = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ... ){
@@ -45,6 +51,7 @@ setMethod( "emsc", signature = signature ( X = "hyperSpec" ), function ( X, Refe
 } )
 
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
+##' @export
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec objects: X and Reference, vectors: bg.comps and norm.comps, indices.
 ##' @rdname emsc 
 setMethod( "emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ... ){
