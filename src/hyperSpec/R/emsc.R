@@ -60,7 +60,6 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec" ), function ( X, Refe
 ##' @examples
 ##' vmflu <- vanderMonde(flu,2)
 ##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl=normalize01)[[]][c(2,3),])
-##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl = normalize01)[[]][c(2,3),])
 ##' nuflu <- emsc(flu, Refs, 1, c(2,3))
 setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ...){
   validObject (X)
@@ -68,28 +67,7 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSp
   X
 } )
 
-
-##' @param \dots hyperSpec method: further arguments to f
-##' @param f a function to be applied to emsc
-##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec objects: X and Reference, vectors: bg.comps and norm.comps, indices.
-##' @rdname emsc
-##' @examples
-##' vmflu <- vanderMonde(flu,2)
-##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl=normalize01)[[]][c(2,3),])
-##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl = normalize01)[[]][c(2,3),])
-##' nuflu <- emsc(flu, Refs, 1, c(2,3))
-##' nuRflu <- spc.evalfun(flu, emsc, Refs, 1, c(2,3))
-
-
-spc.evalfun <- function (X, f, ... ){
-	chk.hy (X)
-	validObject (X)
-	tailargs <- list (...)
-	pars <- append (list (f$spc), tailargs)
-	X <- decomposition (X, do.call(f, tailargs), scores = FALSE, ...)
-	X
-}
-
+##' @include hyperspec-package.R
 .test (emsc) <- function (){
   
   checkTrue( is.test( emsc ))
