@@ -6,8 +6,6 @@
 ##' @param bg.comps background components indices
 ##' @param norm.comps normalization components indices
 ##' @param Reference matrix with reference spectra rows
-##' @param bg.comps indices of background components
-##' @param norm.comps indices of components to use for normalization
 ##' @rdname emsc
 ##' @return new spectra matrix
 ##' @author C.Beleites & S. Fuller
@@ -48,7 +46,6 @@ emsc <- function (X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ...) 
 ##' @noRd
 setGeneric ("emsc")
 
-##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
 ##' @export
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec object X, given matrix: Reference, vectors: bg.comps, norm.comps, indices.
 ##' @rdname emsc

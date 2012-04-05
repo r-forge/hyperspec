@@ -1,9 +1,12 @@
 ##' Function evaluation on hyperSpec objects
 ##'
-##' vandermonde generates van der Monde matrices for the wavelengths of a hyperSpec object.
+##' vandermonde generates van der Monde matrices, the hyperSpec method generates a hyperSpec object
+##' containing the van der Monde matrix of the wavelengths of a hyperSpec object.
+##'
+##' It is often numerically preferrable to map \code{wl (x)} to [0, 1], see the example.
+##' 
 ##' @param x vector with values to evaluate the polynomial on
 ##' @param order of the polynomial
-##' @param \dots ignored by the standard generic
 ##' @rdname vanderMonde
 ##' @return van der Monde matrix
 ##' @author C. Beleites
@@ -20,9 +23,8 @@ vanderMonde <- function (x, order, ...){
 setGeneric ("vanderMonde")
 
 ##' @param x hyperSpec object
+##' @param normalize.wl function to transorm the wavelengths before evaluating the polynomial (or other function). Use \code{\link[hyperSpec]{normalize01}} to map the wavelength range to the interval [0, 1].
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
-##' @param normalize.wl function to transorm the wavelengths before evaluating the polynomial (or
-##' other function). Use \code{\link[hyperSpec{normalize01}} to map the wavelength range to the interval [0, 1].
 ##' @return hyperSpec method: hyperSpec object containing van der Monde matrix as spectra and an additional column ".vdm.order" giving the order of each spectrum (term).
 ##' @rdname vanderMonde
 ##' @seealso \code{\link[hyperSpec]{wl.eval}} for calculating arbitrary functions of the wavelength,
@@ -32,6 +34,8 @@ setGeneric ("vanderMonde")
 ##' @examples
 ##' plot (vanderMonde (flu, 2))
 ##' plot (vanderMonde (flu, 2, normalize.wl = normalize01))
+##'
+##' 
 setMethod ("vanderMonde", signature = signature (x = "hyperSpec"),
            function (x, order, ..., normalize.wl = I){
   validObject (x)
@@ -60,10 +64,14 @@ setMethod ("vanderMonde", signature = signature (x = "hyperSpec"),
                       t (vanderMonde (normalize01 (wl (paracetamol)), 3)))
 }
 
+##' Evaluate function on wavelengths of hyperSpec object
+##'
+##' This is useful for generating certain types of baseline "reference spectra".
+##'
 ##' @param x hyperSpec object
 ##' @param \dots hyperSpec method: expressions to be evaluated
 ##' @param normalize.wl function to transorm the wavelengths before evaluating the polynomial (or
-##' other function). Use \code{\link[hyperSpec{normalize01}} to map the wavelength range to the interval [0, 1].
+##' other function). Use \code{\link[hyperSpec]{normalize01}} to map the wavelength range to the interval [0, 1].
 ##' @return hyperSpec object containing one spectrum for each expression 
 ##' @export
 ##' @seealso \code{\link[hyperSpec]{vanderMonde}} for  polynomials,
@@ -99,6 +107,11 @@ wl.eval <- function (x, ..., normalize.wl = I){
 
 
 
+##' Normalize numbers -> [0, 1]
+##'
+##' The input \code{x} is mapped to [0, 1] by subtracting the minimum and subsequently dividing by
+##' the maximum.
+##' 
 ##' @param x  vector with values to transform
 ##' @return vector with \code{x} values mapped to the interval [0, 1]: (x - min (x)) / diff (range (x))
 ##' @author C. Beleites
