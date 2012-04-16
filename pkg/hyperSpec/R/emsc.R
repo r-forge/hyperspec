@@ -16,17 +16,22 @@
 ##' Transmission Analysis of Powder Mixtures, Analytical Chemistry (2003) 75, 394-404.
 ##' 
 emsc <- function (X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ...) {
+    
     if (is.null (Reference)){
       Reference <- rbind (1, colMeans (X))	#sanity check
     }
+    
     if (is.vector (Reference)){	#flip to 1-row matrix - bit of a hack - redo solve etc. below with transposes for all cases? 
       Reference <- rbind (1, t (Reference))
     }
+    
     B <- solve (tcrossprod (Reference), t (tcrossprod (X, Reference)))
+    
     if (!is.null (bg.comps)){           
       X <- X - crossprod (B[bg.comps,,drop=FALSE],  
 	                        Reference[bg.comps,,drop=FALSE])	
     }
+    
     if (!is.null (norm.comps)){
       X <- sweep (X,
                   1,
@@ -45,8 +50,12 @@ setGeneric ("emsc")
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec object X, given matrix: Reference, vectors: bg.comps, norm.comps, indices.
 ##' @rdname emsc
 setMethod ("emsc", signature = signature ( X = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ...){
+  
   validObject (X)
+  chk.hy( X )
+  
   X@data$spc <- emsc( X@data$spc, Reference, bg.comps, norm.comps )
+  
   X
 } )
 
@@ -59,8 +68,14 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec" ), function ( X, Refe
 ##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl=normalize01)[[]][c(2,3),])
 ##' nuflu <- emsc(flu, Refs, 1, c(2,3))
 setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ...){
+  
   validObject (X)
-  X <- decomposition (X, emsc (X@data$spc, Reference@data$spc, bg.comps, norm.comps), scores = FALSE, ... )
+  chk.hy (X)
+  validObject (Reference)
+  chk.hy (Reference)
+  
+  X@data$spc <- emsc( X@data$spc, Reference@data$spc, bg.comps, norm.comps )
+  
   X
 } )
 
@@ -99,4 +114,6 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSp
   checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 1:3),
                       matrix (rep (0, length (x))))
   
+  checkEqualsNumeric (emsc (flu, vanderMonde (flu, 2, normalize.wl=normalize01) )[[]], 
+                      emsc (flu, t (vanderMonde ( normalize01 (wl (flu)), 2)))[[]] ) 
 }
