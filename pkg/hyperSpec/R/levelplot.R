@@ -49,7 +49,23 @@
     data$.rownames <- as.factor (rownames (data))
   }
 
+  ## with raster, check for missing rows/columns and append them if possible.
+  if (useRaster){
+    raster.x <- fitraster (data [[use.x]])
+    missing.x <-  setdiff (raster.x$levels, raster.x$x)
 
+    raster.y <- fitraster (data [[use.y]])
+    missing.y <-  setdiff (raster.y$levels, raster.y$x)
+
+    n.missing <- max (length (missing.x), length (missing.y))
+
+    missing <- data [FALSE, ]
+    missing <- missing [seq_len (n.missing), ]
+    missing [[use.x]] <- rep (missing.x, length.out = n.missing)
+    missing [[use.y]] <- rep (missing.y, length.out = n.missing)
+    
+    data <- rbind (data, missing)
+  }
   
   if (is.factor (data [[use.z]]) && transform.factor) {
     dots <- trellis.factor.key (data [[use.z]], dots)
