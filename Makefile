@@ -302,14 +302,14 @@ roxy: clean DESCRIPTION src/hyperSpec/R/*.R
 
 build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
-	R CMD build pkg/hyperSpec  && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
+	R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
 
 devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
-	~/r-devel/bin/R CMD build pkg/hyperSpec && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
+	~/r-devel/bin/R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
 
 check: build
-	R CMD check hyperSpec_*.tar.gz
+	R CMD check hyperSpec_*.tar.gz --no-rebuild-vignettes --timings
 
 devcheck: devbuild
 	~/r-devel/bin/R CMD check hyperSpec_*.tar.gz
