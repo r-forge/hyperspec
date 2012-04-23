@@ -7,7 +7,7 @@
 
 ### the workhorse function
 .levelplot <- function (x, data, transform.factor = TRUE, ...,
-                        contour = FALSE, useRaster = !contour) {
+                        contour = FALSE, useRaster = !contour, findRaster = useRaster) {
   validObject (data)
 
   data$.row <- row.seq (data)
@@ -50,7 +50,7 @@
   }
 
   ## with raster, check for missing rows/columns and append them if possible.
-  if (useRaster){
+  if (useRaster & findRaster){
     raster.x <- fitraster (data [[use.x]])
     missing.x <-  setdiff (raster.x$levels, raster.x$x)
 

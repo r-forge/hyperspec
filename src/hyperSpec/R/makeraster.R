@@ -39,8 +39,8 @@ makeraster <- function (x, startx, d, newlevels, tol = 1e-3){
 
   if (missing (newlevels))
     ## make sure to cover the whole data range + 1 point
-    newlevels <- c (rev (seq (startx, min (x) - d, by = -d) [-1]),
-                         seq (startx, max (x) + d, by =  d)
+    newlevels <- c (rev (seq (startx, min (x, na.rm = TRUE) - d, by = -d) [-1]),
+                         seq (startx, max (x, na.rm = TRUE) + d, by =  d)
                     )
   
   inew <- approx (newlevels, seq_along (newlevels), x)$y
