@@ -3,9 +3,9 @@
 \alias{makeraster}
 \title{makeraster}
 \usage{
-  makeraster(x, startx, d, newlevels, tol = 0.001)
+  makeraster(x, startx, d, newlevels, tol = 0.1)
 
-  fitraster(x, tol = 0.001)
+  fitraster(x, tol = 0.1)
 }
 \arguments{
   \item{x}{}

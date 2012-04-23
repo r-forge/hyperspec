@@ -35,7 +35,7 @@
 ##' onraster <- raster$x %in% raster$levels
 ##' points (which (onraster), raster$x [onraster], col = "blue", pch = 20)
 ##'
-makeraster <- function (x, startx, d, newlevels, tol = 1e-3){
+makeraster <- function (x, startx, d, newlevels, tol = 0.1){
 
   if (missing (newlevels))
     ## make sure to cover the whole data range + 1 point
@@ -92,7 +92,7 @@ makeraster <- function (x, startx, d, newlevels, tol = 1e-3){
 ##' onraster <- raster$x %in% raster$levels
 ##' points (which (onraster), raster$x [onraster], col = "blue", pch = 20)
 ##'
-fitraster <- function (x, tol = 1e-3){
+fitraster <- function (x, tol = 0.1){
   levels <- sort (unique (x))
 
   if (length (levels) == 1L)
@@ -101,7 +101,7 @@ fitraster <- function (x, tol = 1e-3){
   dx <- sort (unique (diff (levels)))
   
   ## reduce by rounding?
-  dx <- c (dx [! diff (dx) < min (abs (dx)) * tol], tail (dx, 1))
+  dx <- c (dx [! diff (dx) < tol], tail (dx, 1))
 
   dx <- rev (dx)
 
@@ -109,7 +109,7 @@ fitraster <- function (x, tol = 1e-3){
     
   for (d in dx){
     totry <- order (x)
-    while (! all (is.na (totry))){
+    while (length (totry) > 0L){
       ## cat ("totry: ", totry, "\n")      
       startx <- x [totry [1]]
       ## cat ("startx: ", startx, "\n")
@@ -122,6 +122,9 @@ fitraster <- function (x, tol = 1e-3){
         max.covered <- tmp
         fit <- raster
       }
+      
+      if (max.covered == length (x))
+        break
 
       totry <- totry [! raster$x [totry] %in% raster$levels]
      }
