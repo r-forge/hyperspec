@@ -14,7 +14,7 @@ value of each spectrum is plotted. Spectra may be identified by mouse click.}
 
   \S4method{levelplot}{formula,hyperSpec}(x, data,
     transform.factor = TRUE, ..., contour = FALSE,
-    useRaster = !contour, findRaster = useRaster)
+    useRaster = !contour)
 
   \S4method{levelplot}{hyperSpec,missing}(x, data, ...)
 

@@ -2,10 +2,13 @@
 \alias{plotmat}
 \title{Plot spectra matrix}
 \usage{
-  plotmat(x, ..., contour = FALSE)
+  plotmat(object, y = ".row", ylab, ..., contour = FALSE)
 }
 \arguments{
-  \item{x}{hyperSpec object}
+  \item{object}{hyperSpec object}
+
+  \item{y}{character giving the name of the extra data
+  column to label the y axis.}
 
   \item{...}{further parameters for
   \code{\link[graphics]{image}}}
@@ -18,9 +21,17 @@
 }
 \examples{
 plotmat (laser, col = alois.palette (100))
+
 plot (laser, "mat")
+
 plotmat (laser)
 plotmat (laser, contour = TRUE, add = TRUE)
+
+## use different y axis labels
+
+plotmat (laser, "t")
+
+plotmat (laser, laser$t / 3600, ylab = "t / h")
 }
 \author{
   Claudia Beleites
