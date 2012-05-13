@@ -89,6 +89,7 @@ For details about the pre-processing, please refer to the example work flow in \
 \item[\Rfunction{levelplot}] \chy has a method for \Rpackage{lattice}\Sexpr{cite.pkg ("lattice")} function \Rfunction{levelplot}
 \vspace*{1em}
 \item[\Rfunction{plotspc}] plots spectra
+\item[\Rfunction{plotmat}] plots the spectra matrix
 \item[\Rfunction{plotc}] calibration plot, time series, depth profile\\
   \Rfunction{plotc} is a \Rpackage{lattice} function
 \item[\Rfunction{plotmap}] more specialized version of \Rfunction{levelplot} for map or image plots.\\
@@ -110,10 +111,15 @@ by e.\,g. \Rcode{print (plotmap (object))}
 \plottab{plotspc}{plotspc}
 plots the spectra, \ie the intensities \Rcode{\$spc} over the wavelengths \Rcode{@wavelength}.
 <<plotspc, fig = TRUE, width = 4, height = 2.6, include = FALSE >>=
-plotspc (paracetamol)
+plotspc (flu)
 @ 
 \\
-\plottab{plotc}{plotflu}
+\plottab{plotmat}{plotmat}
+plots the spectra, \ie the colour coded intensities \Rcode{\$spc} over the wavelengths \Rcode{@wavelength} and the row number.
+<<plotspc, fig = TRUE, width = 4, height = 2.6, include = FALSE >>=
+plotmat (flu)
+@ 
+\\\plottab{plotc}{plotflu}
     plots an intensity over a single other data column, \eg
     \begin{itemize}
     \item calibration
@@ -222,6 +228,10 @@ plots the spectra matrix.
 plot (laser, "mat")
 @
 Equivalent to 
+<<include = FALSE>>=
+plotmat (laser)
+@
+A lattice alternative is:
 <<include = FALSE>>=
 levelplot (spc ~ .wavelength * .row, laser)
 @
@@ -374,6 +384,11 @@ for (i in 1 : 3){
 @
 \end{longtable}
 
+\Rfunction{plotspc} allows fine grained customization of almost all aspects of the plot. This is
+possible by giving arguments to the functions that actually perform the plotting \Rfunction{plot} for
+setting up the plot area, \Rfunction{lines} for the plotting of the lines, \Rfunction{axis} for the
+axes, etc. The arguments for these functions should be given in lists as \Rfunarg{plot.args},
+\Rfunarg{lines.args}, \Rfunarg{axis.args}, etc.
 
 \section{Calibration Plots, (Depth) Profiles, and Time Series Plots}\mFun{\Rfunction{plotc}}
 
@@ -484,31 +499,36 @@ If the colour-coded value is a factor, the display is adjusted to this fact:
 It is often useful to plot the spectra against an additional coordinate, \eg the time for time
 series, the depth for depth profiles, etc.
 
-This can be done by \Rcode{plot (object, "mat")}. The actual plotting is done by
-\Rfunction{levelplot}, so the plots can be grouped or conditioned.
+This can be done by \Rcode{plot (object, "mat")}. The actual plotting is done by \Rfunction{image},
+but \Rfunction{levelplot} can produce spectra matrix plots as well and these plots can be grouped or
+conditioned.
 
 \begin{longtable}{@{}p{\plotcol} p{\textcol}}
 \plottab{different palette}{plotmat1}
 <<>>=
-plot (laser, "mat", col = alois.palette (20) )
+plot (laser, "mat", col = heat.colors (20))
 @
 is the same as 
 <<plotmat1, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plotmat (laser, col = alois.palette (20))
+plotmat (laser, col = heat.colors (20))
 @
 \\
 \plottab{different y axis}{plotmat1a}
- Changing the y axis and label:
+ Using a different extra data column for the y axis:
 <<plotmat1a, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plotmat (laser, col = alois.palette (20),
-         y = laser$t, ylab = labels (laser, "t"))
+plotmat (laser, y = "t")
+@
+alternatively, y values and axis label can be given separately.
+<<>>=
+plotmat (laser, y = laser$t, ylab = labels (laser, "t"))
 @
 \\
 \plottab{contour lines}{plotmat2}
 Contour lines may be added:
 <<plotmat2, fig = TRUE, width = 4, height = 2.6,include = FALSE >>=
-plotmat (flu)
-plotmat (flu, contour = TRUE, add = TRUE)
+plotmat (flu, col = matlab.dark.palette (20))
+plotmat (flu, col = "white", 
+         contour = TRUE, add = TRUE)
 @
 \\
 \plottab{colour-coded points: \Rfunction{levelplot} with special panel function}{plotmap-barb}

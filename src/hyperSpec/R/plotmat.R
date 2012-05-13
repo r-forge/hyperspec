@@ -1,8 +1,12 @@
 ##' Plot spectra matrix
 ##'
-##' plots the spectra matrix
+##' plots the spectra matrix.
+##'
+##' If package plotrix is available, a color legend is plotted to the right. The right margin is set
+##' to at least 4 lines.
 ##' @param object hyperSpec object
 ##' @param y character giving the name of the extra data column to label the y axis.
+##' @param col see  \code{\link[graphics]{image}}
 ##' @param ... further parameters for \code{\link[graphics]{image}}
 ##' @param contour should \code{\link[graphics]{contour}} be called instead of \code{\link[graphics]{image}}?
 ##' @author Claudia Beleites
@@ -21,7 +25,7 @@
 ##' plotmat (laser, "t")
 ##' 
 ##' plotmat (laser, laser$t / 3600, ylab = "t / h")
-plotmat <- function (object, y = ".row", ylab, ..., contour = FALSE){
+plotmat <- function (object, y = ".row", ylab, col = alois.palette (20), ..., contour = FALSE){
 
   chk.hy (object)
   validObject (object)
@@ -41,13 +45,43 @@ plotmat <- function (object, y = ".row", ylab, ..., contour = FALSE){
                             y = y,
                             z = t (object [[]]),
                             xlab = labels (object, ".wavelength"),
-                            ylab = ylab
+                            ylab = ylab,
+                            col = col
                             ),
                       list (...))
+
   
   if (contour)
     do.call ("contour", dots)
-  else
+  else {
+    ## leave at least 4 lines right margin
+    mar <- par()$ mar
+    if (mar [4] < 4)
+      par (mar = c (mar [1 : 3], 4))
+    
     do.call ("image", dots)
+    par (mar = mar)
+
+    ## color legend
+    if (require ("plotrix")){
+    
+      usr <- par()$usr
+
+      dx <- diff (usr [1 : 2])
+    
+      color.legend (usr [2] + 0.05 * dx,
+                    usr [3],
+                    usr [2] + 0.10 * dx,
+                    usr [4],
+                    pretty (range (object)),
+                    col,
+                    align="rb",gradient="y")
+    } else {
+      warning ("package 'plotrix' not available: omitting legend.")
+    }
+
+  }
+
+  
 }
 

@@ -2,13 +2,16 @@
 \alias{plotmat}
 \title{Plot spectra matrix}
 \usage{
-  plotmat(object, y = ".row", ylab, ..., contour = FALSE)
+  plotmat(object, y = ".row", ylab,
+    col = alois.palette(20), ..., contour = FALSE)
 }
 \arguments{
   \item{object}{hyperSpec object}
 
   \item{y}{character giving the name of the extra data
   column to label the y axis.}
+
+  \item{col}{see \code{\link[graphics]{image}}}
 
   \item{...}{further parameters for
   \code{\link[graphics]{image}}}
@@ -17,7 +20,12 @@
   called instead of \code{\link[graphics]{image}}?}
 }
 \description{
-  plots the spectra matrix
+  plots the spectra matrix.
+}
+\details{
+  If package plotrix is available, a color legend is
+  plotted to the right. The right margin is set to at least
+  4 lines.
 }
 \examples{
 plotmat (laser, col = alois.palette (100))
