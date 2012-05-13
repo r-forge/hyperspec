@@ -25,7 +25,8 @@
 ##' plotmat (laser, "t")
 ##' 
 ##' plotmat (laser, laser$t / 3600, ylab = "t / h")
-plotmat <- function (object, y = ".row", ylab, col = alois.palette (20), ..., contour = FALSE){
+plotmat <- function (object, y = ".row", ylab, col = alois.palette (20), ...,
+                     contour = FALSE){
 
   chk.hy (object)
   validObject (object)

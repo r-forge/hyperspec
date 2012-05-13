@@ -7,7 +7,9 @@
 \itemize{
   \item new file import functions, (see vignette fileio)
   \itemize{
-	 \item \code{scan.txt.Witec}: Witec ASCII files
+	 \item \code{scan.txt.Witec}: Witec ASCII files (experimental: use
+	 with care, also as different ways of Witec ASCII export produce
+	 different file formats).
 
 	 \item \code{read.jdx.Shimadzu}: JCAMP-DX as produced by Shimadzu's GCxGC-MS
 	 library (experimental) 
@@ -26,6 +28,10 @@
   \item In addition to using \code{levelplot}, spectra matrices may be 
   plotted with the new base graphics function \code{plotmat}, which
   becomes the default for \code{plot (x, "mat")}.
+
+  \item \code{apply (MARGIN = 2)} and \code{decomposition} work with
+  more column formats now, e.g. \code{POSIXct} and \code{POSIXlt}.
+  
 }
 }
 \subsection{Minor changes}{
@@ -42,9 +48,12 @@
 \subsection{Bug fixes}{
   \itemize{
 
-	 \item bugfix: contour lines do not work with
-	 \code{panel.levelplot.raster}.  hyperSpec now switches back to
-	 \code{useRaster = FALSE}. Thanks to Giovanni Birarda for spotting this.
+	 \item \code (apply (MARGIN = 2)) reported the first row without
+	 setting differing columns to \code{NA}. fixed 2012-05-13.
+
+	 \item contour lines do not work with \code{panel.levelplot.raster}.
+	 hyperSpec now switches back to \code{useRaster = FALSE}. Thanks to
+	 Giovanni Birarda for spotting this.
 	 
 	 \item bugfix for stacked plots: y axis labels were in wrong order in
 	 some cases
