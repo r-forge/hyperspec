@@ -25,7 +25,7 @@
 \details{
   If package plotrix is available, a color legend is
   plotted to the right. The right margin is set to at least
-  4 lines.
+  5 lines.
 }
 \examples{
 plotmat (laser, col = alois.palette (100))

@@ -3,7 +3,7 @@
 ##' plots the spectra matrix.
 ##'
 ##' If package plotrix is available, a color legend is plotted to the right. The right margin is set
-##' to at least 4 lines.
+##' to at least 5 lines.
 ##' @param object hyperSpec object
 ##' @param y character giving the name of the extra data column to label the y axis.
 ##' @param col see  \code{\link[graphics]{image}}
@@ -56,8 +56,8 @@ plotmat <- function (object, y = ".row", ylab, col = alois.palette (20), ..., co
   else {
     ## leave at least 4 lines right margin
     mar <- par()$ mar
-    if (mar [4] < 4)
-      par (mar = c (mar [1 : 3], 4))
+    if (mar [4] < 5)
+      par (mar = c (mar [1 : 3], 5))
     
     do.call ("image", dots)
     par (mar = mar)
@@ -73,7 +73,7 @@ plotmat <- function (object, y = ".row", ylab, col = alois.palette (20), ..., co
                     usr [3],
                     usr [2] + 0.10 * dx,
                     usr [4],
-                    pretty (range (object)),
+                    pretty (range (object, na.rm = TRUE)),
                     col,
                     align="rb",gradient="y")
     } else {
