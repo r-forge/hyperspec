@@ -48,7 +48,7 @@
 \subsection{Bug fixes}{
   \itemize{
 
-	 \item \code (apply (MARGIN = 2)) reported the first row without
+	 \item \code{apply (MARGIN = 2)} reported the first row without
 	 setting differing columns to \code{NA}. fixed 2012-05-13.
 
 	 \item contour lines do not work with \code{panel.levelplot.raster}.

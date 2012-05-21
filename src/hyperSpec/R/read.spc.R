@@ -463,7 +463,8 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 #		log.txt <- paste (rawToChar (log.txt, multiple = TRUE), collapse = "")
 		log.txt <- split.string (log.txt, "\r\n") ## spc file spec says \r\n regardless of OS
 		log.txt <- split.line (log.txt, "=")
-		
+		## lapply (keys, function (x)
+      ##         gsub (sprintf ("^.*\r\n%s\\s*=([^\r\n]+)\r\n.*$", x), "\\1", log.txt))
 		data <- getbynames (log.txt, keys.log2data)
 		log <- c (log, getbynames (log.txt, keys.log2log))
 	}

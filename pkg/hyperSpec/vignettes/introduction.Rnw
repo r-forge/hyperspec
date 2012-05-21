@@ -705,6 +705,9 @@ argument followed by the objects to bind either in separate arguments or in a li
 As usual for \Rfunction{rbind} and \Rfunction{cbind}, the objects that should be bound together must
 have the same rows and columns, respectively.
 
+For binding row-wise (\Rfunction{rbind}), \Rfunction{collapse}\mFun{\Rfunction{collapse}} is 
+more flexible but also faster.
+
 \subsection{Binding Objects that do not Share the Same Extra Data and/or Wavelength Axis}
 \label{sec:collapse}
 
