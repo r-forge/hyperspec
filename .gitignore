@@ -14,11 +14,13 @@ hyperSpec_*.tar.gz
 *.ind
 *.ilg
 *.idx
+*.fls
 *.toc
 *-pkg.bib
 *.lyx.emergency
 *.fdb_latexmk
 Rplots.pdf
+_region_*
 fig*.*
 .Rhistory
 auto
