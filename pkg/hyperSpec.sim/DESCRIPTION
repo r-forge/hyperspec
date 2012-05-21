@@ -2,13 +2,16 @@ Package: hyperSpec.sim
 Type: Package
 Title: Simulation of Spectra with hyperSpec
 Version: 0.5
-Date: 2012-05-15
+Date: 2012-05-21
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection for producing simulated spectroscopic data sets
 License: GPL-3
 Depends:
-    hyperSpec,
+    methods,
+    hyperSpec (>= 0.98-20120521),
     mvtnorm
+Suggests:
+    MASS
 Collate:
-    ''
+    'mvtnorm.R'
