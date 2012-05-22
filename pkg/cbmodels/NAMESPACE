@@ -1,5 +1,5 @@
+export(cbmodels.unittest)
 exportMethods(pcaadd)
-export(pcaadd)
 export(plslda)
 export(predict.pcaadd)
 export(predict.plslda)

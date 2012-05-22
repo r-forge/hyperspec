@@ -1,4 +1,4 @@
-##' LDA models using the first \code{ncomp} PLS latent variable scores as input space.
+##' LDA models using PLS latent variables as input space.
 ##'
 ##' @title PLS-LDA
 ##' @param X input variate matrix
@@ -14,10 +14,6 @@
 ##' @seealso \code{\link[pls]{plsr}}, \code{\link[MASS]{lda}}
 ##' @export 
 plslda <- function (X, Y, grouping, ...){
-  require (softclassval)
-  require (pls)
-  require (MASS)
-
   if (missing (Y))
     Y <- factor2matrix (grouping)
 
@@ -45,10 +41,10 @@ plslda <- function (X, Y, grouping, ...){
 ##' @seealso  \code{link[MASS]{predict.lda}},  \code{link[pls]{predict.mvr}}
 ##' @rdname plslda
 predict.plslda <- function (object, newdata, ...){
-	PLSscores <- predict (object$pls, newdata=newdata, type = "scores", ...)
-	res <- predict (object$lda, newdata = PLSscores, ...)
-	res$scores <- PLSscores
+  PLSscores <- predict (object$pls, newdata=newdata, type = "scores", ...)
+  res <- predict (object$lda, newdata = PLSscores, ...)
+  res$scores <- PLSscores
 	
-	res
+  res
 }
 

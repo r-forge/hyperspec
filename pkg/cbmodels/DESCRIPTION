@@ -1,8 +1,8 @@
 Package: cbmodels
 Type: Package
 Title: Collection of "combined" models: PCA-LDA, PLS-LDA, etc.
-Version: 1.0
-Date: 2012-05-21
+Version: 0.5-20120522
+Date: 2012-05-22
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including
@@ -10,10 +10,19 @@ Description: Function collection including
     * PLS-LDA
     * PCA-LDA
 License: GPL-3
-Suggests:
+Depends:
     hyperSpec,
+    methods,
+    softclassval,
     MASS,
     pls
+Suggests:
+    svUnit
 Collate:
     'pcaadd.R'
     'plslda.R'
+    'cbmodels.R'
+    'kernelpls.fit.R'
+    'scale.R'
+    'validate.R'
+    'onAttach.R'

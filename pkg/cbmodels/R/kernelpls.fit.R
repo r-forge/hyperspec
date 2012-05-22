@@ -16,8 +16,12 @@
 ##'
 ##' PLS fitting functions from pacakge pls, enhanced so that custom centering can be given.
 ##'
-##' @seealso \code{\link[pls]{kernelfit.pls}}
-if (require ("pls")) {
+##' @rdname pls
+##' @seealso \code{\link[pls]{kernelpls.fit}}
+##' @param X,Y,ncomp,stripped,... see \code{\link[pls]{kernelpls.fit}} 
+##' @param center centering as used by \code{\link{scale}} 
+##' @param center.x,center.y like \code{center}, but specify different treatment for \code{X} and
+##' \code{Y}
 kernelpls.fit <- function(X, Y, ncomp, stripped = FALSE, ...,
                           ## scale.x  = scale,  scale.y  = scale,  scale. = FALSE,
                           center.x = center, center.y = center, center = TRUE)
@@ -161,9 +165,8 @@ kernelpls.fit <- function(X, Y, ncomp, stripped = FALSE, ...,
     }
 }
 
-
+##' @ImportFrom kernelpls.fit pls
 kernelpls.fit.original <- pls:::kernelpls.fit
-assignInNamespace ("kernelpls.fit", kernelpls.fit, "pls")
 
 .test (kernelpls.fit) <- function (){
 
@@ -201,4 +204,5 @@ assignInNamespace ("kernelpls.fit", kernelpls.fit, "pls")
 
 }
 
-}
+
+

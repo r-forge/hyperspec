@@ -4,14 +4,23 @@
 ##' 
 ##' @param x data matrix
 ##' @param reference reference data points
-##' @param ref.factor reference is multiplied by \code{ref.factor * max (abs (range (x))) / max (abs
-##' (range (reference))) * nrow (x) / nrow (reference)} before the PCA. This ensures that the first
-##' directions are the ones given by \code{reference}.
-##' @param \dots further arguments are handed to prcomp, but \code{center} is always \code{FALSE}.
-##' @param refcomps the principal components that are attributed to the reference
+##' @param ... further arguments are handed to prcomp, but \code{center} is always \code{FALSE}.
 ##' @return object of class "pcaadd"
+##' @rdname pcaadd
+##' @docType methods
 ##' @export
-pcaadd <- function (x, reference, ref.factor = 10, refcomps = seq_len (nrow (reference)), ...){
+setGeneric ("pcaadd", function (x, reference, ...){stop ("not supported")})
+ 
+
+##' @rdname pcaadd
+##' @param ref.factor reference is multiplied by \code{ref.factor * max (abs (range (x))) / max (abs
+##' (range (reference))) * nrow (x) / nrow (reference)} before the PCA. This forces the first
+##' directions towards \code{reference}.
+##' @param refcomps the principal components that are attributed to the reference
+##' @docType methods
+##' @export
+setMethod ("pcaadd", signature = signature (x = "matrix", reference = "matrix"),
+           function (x, reference, ..., ref.factor = 10, refcomps = seq_len (nrow (reference))){
 
   ref.factor <- max (abs (range (x))) / max (abs (range (reference))) *
     nrow (x) / nrow (reference) * ref.factor
@@ -24,10 +33,11 @@ pcaadd <- function (x, reference, ref.factor = 10, refcomps = seq_len (nrow (ref
   structure (list (pca = pca,
                    refcomps = refcomps),
              class = "pcaadd")
-}
+})
 
 ##' @rdname pcaadd
-##' @param \dots the hyperSpec-method hands further arguments to the generic.
+##' @param ... the hyperSpec-method hands further arguments to the generic.
+##' @docType methods
 ##' @export
 setMethod ("pcaadd", signature = signature (x = "hyperSpec", reference = "hyperSpec"),
            function (x, reference, ...){
@@ -39,10 +49,40 @@ setMethod ("pcaadd", signature = signature (x = "hyperSpec", reference = "hyperS
 
 
 ##' @rdname pcaadd
+##' @param ... the hyperSpec-method hands further arguments to the generic.
+##' @docType methods
+##' @export
+setMethod ("pcaadd", signature = signature (x = "hyperSpec", reference = "matrix"),
+           function (x, reference, ...){
+             validObject (x)
+             pcaadd (x[[]], reference, ...)
+           }
+           )
+
+##' @rdname pcaadd
+##' @param ... the hyperSpec-method hands further arguments to the generic.
+##' @docType methods
+##' @export
+setMethod ("pcaadd", signature = signature (x = "matrix", reference = "hyperSpec"),
+           function (x, reference, ...){
+             validObject (reference)
+             pcaadd (x, reference [[]], ...)
+           }
+           )
+
+##' @rdname pcaadd
 ##' @param object pcaadd model
 ##' @param newdata matrix with new observations.
+##' @docType S3method
 ##' @export
-predict.pcaadd <- function (object, newdata){
+predict.pcaadd <- function (object, newdata, ...){
+  if (is (newdata, "hyperSpec")){
+    chk.hy (newdata)
+    validObject (newdata)
+    newdata <- newdata [[]]
+  }
+
   tmp <- predict (object$pca, newdata)
-  tcrossprod (dummy [, - object$refcomps], object$pca$rotation [, -object$refcomps])
+  tcrossprod (tmp [, - object$refcomps], object$pca$rotation [, -object$refcomps])
 }
+
