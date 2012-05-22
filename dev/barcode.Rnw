@@ -1,0 +1,66 @@
+\documentclass[10pt, DIV14]{scrartcl}
+\usepackage[numbers]{natbib}
+\usepackage[utf8]{inputenx}
+\title{Barcode Pre-Processing}
+\author{C. Beleites, IPHT Jena}
+\begin{document}
+\maketitle
+Definition im Artikel \cite{Patel2008}: 2. Ableitung $>$ 0.1 max (2. Ableitung) 
+<<setup, include=FALSE, cache=FALSE>>=
+options(replace.assign=TRUE,width=90)
+## tune details of base graphics (http://yihui.name/knitr/hooks)
+knit_hooks$set(par=function(before, options, envir){
+if (before && options$fig.show!='none') par(mar=c(3.5,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
+})
+@
+
+<<>>=
+library (hyperSpec)
+@
+
+ungeglättete 2. Ableitung:
+<<>>=
+d2 <- apply (chondro, 1, diff,  differences = 2, new.wavelength = wl (chondro) [2 : (nwl (chondro) - 1)])
+@
+
+Grenzwert:
+<<>>=
+(threshold <- 0.1 * max (d2))
+barcode <- d2
+barcode [[]] <- barcode [[]] > threshold
+@
+
+<<dev='pdf',fig.width=10,fig.height=5,out.width='\\textwidth',cache=TRUE>>=
+plot (d2, "spcprctl5")
+abline (h = threshold)
+@
+\clearpage
+Barcode-Spektrenmatrix:
+<<dev='png',fig.width=10,fig.height=10,out.width='\\textwidth',cache=TRUE, dpi = 240>>=
+plotmat (barcode, col = c ("white", "black"))
+@
+\clearpage
+Rohspektren: 
+<<dev='pdf',fig.width=10,fig.height=5,out.width='\\textwidth',cache=TRUE>>=
+plot (chondro, "spcprctl5")
+@
+
+Häufigkeit, dass Datenpunkt mit 1 codiert ist:
+<<dev='pdf',fig.width=10,fig.height=5,out.width='\\textwidth',cache=TRUE>>=
+f.barcode <- colSums (barcode)
+f.barcode <- f.barcode [,,f.barcode > 0, wl.index = TRUE]
+labels (f.barcode, "spc") <- "Häufigkeit"
+plot (f.barcode, lines.args = list (type = "h", lwd = 4, lend = "butt"))
+@
+
+\clearpage
+Alternative zu \texttt{diff}: geglättete Ableitung  mit Savitzky-Golay-Filter:
+<<eval = FALSE>>=
+library (signal) 
+d2 <- apply (chondro, 1, sgolayfilt, p = 3, m = 2)
+@
+
+\bibliographystyle{unsrtnat}
+\bibliography{/home/cb/Literatur/Literatur}
+
+\end{document}
