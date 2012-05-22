@@ -22,7 +22,7 @@ DESCRIPTION: $(shell find $(DIR) -maxdepth 1 -daystart -not -ctime 0 -name "DESC
 	rm .DESCRIPTION
 
 roxy: clean DESCRIPTION $(SRC)
-	Rscript --vanilla -e "library (roxygen2); roxygenize ('$(DIR)')" 
+	Rscript --vanilla -e "library (roxygen2); roxygenize ('package.dir=$(DIR)')" 
 
 build: roxy
 	rm -f hyperSpec.sim_*.tar.gz
