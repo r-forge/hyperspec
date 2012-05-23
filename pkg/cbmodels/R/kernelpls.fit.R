@@ -27,6 +27,7 @@ kernelpls.fit <- function(X, Y, ncomp, stripped = FALSE, ...,
                           center.x = center, center.y = center, center = TRUE)
 
 {
+    X <- as.matrix(X) # should not be needed
     Y <- as.matrix(Y)
     if(!stripped) {
         ## Save dimnames:

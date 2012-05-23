@@ -3,7 +3,7 @@
 \alias{predict.plslda}
 \title{PLS-LDA}
 \usage{
-  plslda(X, Y, grouping, ...)
+  plslda(X, Y, grouping, ..., subset = TRUE, na.action)
 
   predict.plslda(object, newdata, ...)
 }
@@ -39,8 +39,7 @@
   \code{$scores}
 }
 \description{
-  LDA models using the first \code{ncomp} PLS latent
-  variable scores as input space.
+  LDA models using PLS latent variables as input space.
 }
 \author{
   Claudia Beleites

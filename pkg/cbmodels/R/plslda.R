@@ -13,21 +13,18 @@
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[pls]{plsr}}, \code{\link[MASS]{lda}}
 ##' @export 
-plslda <- function (X, Y, grouping, ...){
-  if (missing (Y))
-    Y <- factor2matrix (grouping)
+plslda <- function (X, Y, grouping, ..., subset = TRUE, na.action){
 
-  if (missing (grouping))
-    grouping <- hardclasses (Y)
+  tmp <- .ldapreproc (X, Y, grouping, subset, na.action)
     
-	## PLS
-	pls <- plsr (formula = Y ~ X, data = data.frame (X = I(X), Y = Y), ...)	
-	scores <- predict (pls, type = "scores")
+  ## PLS
+  pls <- plsr (formula = Y ~ X, data = data.frame (X = I(X), Y = Y), ..., na.action = na.action)	
+  scores <- predict (pls, type = "scores")
 	
-	## LDA
-	lda <- lda (x = scores, grouping = grouping, ...)
+  ## LDA
+  lda <- lda (x = scores, grouping = grouping, ..., na.action = na.action)
 	
-	structure (list (pls = pls, lda = lda), class = "plslda")
+  structure (list (pls = pls, lda = lda), class = "plslda")
 }
 
 ##' 
