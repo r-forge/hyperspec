@@ -1,32 +1,44 @@
 ##' LDA models using PLS latent variables as input space.
 ##'
+##' For the moment only \code{\link{kernelpls.fit}} (see \code{\link[pls]{kernelpls.fit}} for the
+##' original) is supported.
+##' 
 ##' @title PLS-LDA
 ##' @param X input variate matrix
 ##' @param Y matrix with class membership (classes correspond to columns).  If missing,
 ##' \code{\link[softclassval]{factor2matrix} (grouping)} is used.
 ##' @param grouping factor with class membership. If missing, \code{\link[softclassval]{hardclasses}
 ##' (Y)} is used.
+##' @param comps which latent variables should be used?
 ##' @param ... further parameters for \code{\link[pls]{plsr}}, importantly, the number of PLS
 ##' variates to be used can be given via \code{ncomp}.
 ##' @return object of class "plslda", consisting of the mvr object returned by
 ##' \code{\link[pls]{plsr}} and the lda object returned by \code{\link[MASS]{lda}}.
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[pls]{plsr}}, \code{\link[MASS]{lda}}
-##' @export 
-plslda <- function (X, Y, grouping, ...#, subset = TRUE
+##' @export
+##' @include cbmodels.R
+##' @include center.R
+plslda <- function (X, Y, grouping, comps = TRUE, ...#, subset = TRUE
                     #, na.action
                     ){
 
-  tmp <- .ldapreproc (X, Y, grouping, subset)
+  tmp <- .ldapreproc (X = X, Y = Y, grouping = grouping)
     
   ## PLS
-  pls <- plsr (formula = Y ~ X, data = data.frame (X = I(X), Y = Y), ..., na.action = na.action)	
-  scores <- predict (pls, type = "scores")
+  pls <- plsr (formula = Y ~ X, data = data.frame (X = I(tmp$X), Y = I (tmp$Y)),
+               ...,
+               center.x = tmp$center.x, center.y = tmp$center.y, 
+               method = "kernelpls",
+               comps = comps)
+  
+  scores <- as.matrix (predict (pls, type = "scores", comps = comps)) # as matrix needed in case of 1
+                                                                      # lv only
 	
   ## LDA
-  lda <- lda (x = scores, grouping = grouping, ..., na.action = na.action)
+  lda <- lda (x = scores, grouping = tmp$grouping, ...)
 	
-  structure (list (pls = pls, lda = lda), class = "plslda")
+  structure (list (pls = pls, lda = lda, comps = comps), class = "plslda")
 }
 
 ##' 
@@ -39,11 +51,59 @@ plslda <- function (X, Y, grouping, ...#, subset = TRUE
 ##' prediction in element \code{$scores}
 ##' @seealso  \code{link[MASS]{predict.lda}},  \code{link[pls]{predict.mvr}}
 ##' @rdname plslda
+##' @S3method predict plslda
 predict.plslda <- function (object, newdata, ...){
-  PLSscores <- predict (object$pls, newdata=newdata, type = "scores", ...)
+  PLSscores <- predict (object$pls, newdata=newdata, type = "scores", comps = object$comps, ...)
   res <- predict (object$lda, newdata = PLSscores, ...)
   res$scores <- PLSscores
 	
   res
 }
 
+##' @rdname plslda
+##' @export
+##' @S3method coef plslda
+coef.plslda <- function (object, ...){
+  object$pls$projection [, object$comps, drop = FALSE] %*% object$lda$scaling
+}
+
+##' @rdname plslda
+##' @export
+##' @S3method center plslda
+center.plslda <- function (object, ...){
+  object$pls$Xmeans
+}
+
+.test (plslda) <- function (){
+  X <- as.matrix (iris [,c ("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")])
+  grp <- iris$Species
+
+  complist <- list (TRUE, 1:3, 4)
+
+  for (comps in complist) {
+    model <- plslda (X = X, grouping = grp, comps = comps)
+
+    ## x-centering of the model
+    checkEqualsNumeric (colMeans (model$lda$means), rep (0, nrow (model$lda$scaling)),
+                        msg = sprintf ("centering with comps = %s", comps))
+
+    ## center (model)
+    checkEqualsNumeric (model$pls$Xmeans, center (model),
+                        msg = sprintf ("center (model); %s comps", comps))
+    
+   
+    ## correct reconstruction of scores
+    Xz <- scale (X, center = center (model), scale = FALSE)
+    plsproj <- model$pls$projection [, model$comps, drop = FALSE]
+    
+    checkEqualsNumeric (Xz %*% plsproj,
+                        predict (model$pls, type = "scores", comps = comps),
+                        msg = sprintf ("scores with comps = %s", comps))
+
+
+    ## correct total coefficients
+    coef <- model$pls$projection [, comps, drop = FALSE] %*% coef (model$lda)
+    checkEqualsNumeric (coef (model), coef,
+                        msg = sprintf ("coefficients with comps = %s", comps))
+    }
+}

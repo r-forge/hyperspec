@@ -1,5 +1,6 @@
 ## common pretreatment of data for PLS-LDA and PCA-LDA
-.ldapreproc <- function (X, Y, grouping, subset = TRUE#, na.action
+##' @include cbmodels.R
+.ldapreproc <- function (X, Y, grouping#, subset = TRUE#, na.action
                          ){
   ## produce both forms of Y data
   if (missing (Y))

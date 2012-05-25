@@ -1,8 +1,8 @@
 Package: cbmodels
 Type: Package
 Title: Collection of "combined" models: PCA-LDA, PLS-LDA, etc.
-Version: 0.5-20120524
-Date: 2012-05-24
+Version: 0.5-20120525
+Date: 2012-05-25
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including
@@ -19,9 +19,10 @@ Depends:
 Suggests:
     svUnit
 Collate:
-    'pcaadd.R'
-    'plslda.R'
     'cbmodels.R'
+    'pcaadd.R'
+    'center.R'
+    'plslda.R'
     'kernelpls.fit.R'
     'scale.R'
     'validate.R'

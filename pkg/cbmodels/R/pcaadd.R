@@ -8,6 +8,7 @@
 ##' @return object of class "pcaadd"
 ##' @rdname pcaadd
 ##' @docType methods
+##' @include cbmodels.R
 ##' @export
 setGeneric ("pcaadd", function (x, reference, ...){stop ("not supported")})
  

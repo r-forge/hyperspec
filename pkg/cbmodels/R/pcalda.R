@@ -15,6 +15,8 @@
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[stats]{prcomp}}, \code{\link[MASS]{lda}}
 ##' @export
+##' @include cbmodels.R
+##' @include center.R
 ##' @examples
 ##' chondro <- chondro [! is.na (chondro$clusters)]
 ##' model <- pcalda (X = chondro[[]], grouping = chondro$clusters, comps = 1 : 3)
@@ -28,7 +30,7 @@ pcalda <- function (X, Y, grouping, comps = TRUE, ...#,
                     #subset = TRUE, na.action = na.exclude
                     ){
   
-  tmp <- .ldapreproc (X, Y, grouping, subset)
+  tmp <- .ldapreproc (X, Y, grouping)
 
   pca <- prcomp (tmp$X, center = tmp$center.x, scale = FALSE, ...)
   
@@ -36,8 +38,6 @@ pcalda <- function (X, Y, grouping, comps = TRUE, ...#,
 
   structure (list (pca = pca,
                    lda = lda,
-  #                 center.x = tmp$center.x, not needed: is in pca$center
-                   #subset = tmp$subset,
                    comps = comps),
              class = "pcalda")
 }
@@ -72,13 +72,13 @@ coef.pcalda <- function (object, ...){
 
 ##' @rdname pcalda
 ##' @export
-center.pcalda <- function (object){
-  colMeans (object$center.x)
+center.pcalda <- function (object, ...){
+  object$pca$center
 }
 
 
 .test (pcalda) <- function (){
-  X <- iris [,c ("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
+  X <- as.matrix (iris [,c ("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")])
   grp <- iris$Species
 
   complist <- list (TRUE, 1:3, 4)
@@ -86,10 +86,14 @@ center.pcalda <- function (object){
   for (comps in complist) {
     model <- pcalda (X = X, grouping = grp, comps = comps)
 
+    ## x-centering of the model
     checkEqualsNumeric (colMeans (model$lda$means), rep (0, nrow (model$lda$scaling)),
                         msg = sprintf ("centering with comps = %s", comps))
 
-    coef <- model$pca$rotation [, comps] %*% coef (model$lda)
+    ## center (model)
+    checkEqualsNumeric (model$pca$center, center (model),
+                        msg = sprintf ("center (model); %s comps", comps))
+    coef <- model$pca$rotation [, comps, drop = FALSE] %*% coef (model$lda)
     checkEqualsNumeric (coef (model), coef,
                         msg = sprintf ("coefficients with comps = %s", comps))
 

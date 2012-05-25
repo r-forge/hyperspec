@@ -1,11 +1,17 @@
 \name{plslda}
+\alias{center.plslda}
+\alias{coef.plslda}
 \alias{plslda}
 \alias{predict.plslda}
 \title{PLS-LDA}
 \usage{
-  plslda(X, Y, grouping, ...)
+  plslda(X, Y, grouping, comps = TRUE, ...)
 
   predict.plslda(object, newdata, ...)
+
+  coef.plslda(object, ...)
+
+  center.plslda(object, ...)
 }
 \arguments{
   \item{X}{input variate matrix}
@@ -17,6 +23,8 @@
 
   \item{grouping}{factor with class membership. If missing,
   \code{\link[softclassval]{hardclasses} (Y)} is used.}
+
+  \item{comps}{which latent variables should be used?}
 
   \item{...}{further parameters for
   \code{\link[pls]{plsr}}, importantly, the number of PLS
@@ -40,6 +48,11 @@
 }
 \description{
   LDA models using PLS latent variables as input space.
+}
+\details{
+  For the moment only \code{\link{kernelpls.fit}} (see
+  \code{\link[pls]{kernelpls.fit}} for the original) is
+  supported.
 }
 \author{
   Claudia Beleites
