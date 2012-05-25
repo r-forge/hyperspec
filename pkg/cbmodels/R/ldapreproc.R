@@ -1,5 +1,6 @@
 ## common pretreatment of data for PLS-LDA and PCA-LDA
-.ldapreproc <- function (X, Y, grouping, subset = TRUE, na.action){
+.ldapreproc <- function (X, Y, grouping, subset = TRUE#, na.action
+                         ){
   ## produce both forms of Y data
   if (missing (Y))
     Y <- factor2matrix (grouping)
@@ -9,13 +10,17 @@
   if (missing (grouping))
     grouping <- hardclasses (Y)
 
+  ## deal with NAs
+  if (any (is.na (grouping)) || any (is.na (X)) || any (is.na (Y)))
+    stop ("NA in data are not yet supported.")
+  
   ## deal with NAs like lda does
-  if (! missing (na.action)){
-    tmp <- na.action ()
-    X <- df$X
-    Y <- df$Y
-    grouping <- df$grouping
-  }
+  ## if (! missing (na.action)){
+  ##   tmp <- na.action ()
+  ##   X <- df$X
+  ##   Y <- df$Y
+  ##   grouping <- df$grouping
+  ## }
     
 
   ## centering parameters
@@ -67,24 +72,24 @@
   x.na <- sample (prod (dim (X)), 10)
   X [x.na] <- NA
 
-  tmp <- .ldapreproc (X = X, grouping = grp)
-  checkTrue (all (is.na (tmp$center.x)))
-  checkTrue (all (is.na (tmp$center.y)))
-  checkEquals (tmp$X, X)
-  checkEquals (tmp$grouping, grp)
+  ## tmp <- .ldapreproc (X = X, grouping = grp)
+  ## checkTrue (all (is.na (tmp$center.x)))
+  ## checkTrue (all (is.na (tmp$center.y)))
+  ## checkEquals (tmp$X, X)
+  ## checkEquals (tmp$grouping, grp)
 
 
-  tmp <- .ldapreproc (X = X, grouping = grp, na.action = na.pass)
-  checkTrue (all (is.na (tmp$center.x)))
-  checkTrue (all (is.na (tmp$center.y)))
-  checkEquals (tmp$X, X)
-  checkEquals (tmp$grouping, grp)
+  ## tmp <- .ldapreproc (X = X, grouping = grp, na.action = na.pass)
+  ## checkTrue (all (is.na (tmp$center.x)))
+  ## checkTrue (all (is.na (tmp$center.y)))
+  ## checkEquals (tmp$X, X)
+  ## checkEquals (tmp$grouping, grp)
   
 
-  tmp <- .ldapreproc (X = X, grouping = grp, na.action = na.exclude)
+  ## tmp <- .ldapreproc (X = X, grouping = grp, na.action = na.exclude)
 
 
-  tmp <- .ldapreproc (X = X, grouping = grp, na.action = na.omit)
+  ## tmp <- .ldapreproc (X = X, grouping = grp, na.action = na.omit)
 
 
   checkException (.ldapreproc (X = X, grouping = grp, na.action = na.fail))

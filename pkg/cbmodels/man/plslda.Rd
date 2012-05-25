@@ -3,7 +3,7 @@
 \alias{predict.plslda}
 \title{PLS-LDA}
 \usage{
-  plslda(X, Y, grouping, ..., subset = TRUE, na.action)
+  plslda(X, Y, grouping, ...)
 
   predict.plslda(object, newdata, ...)
 }

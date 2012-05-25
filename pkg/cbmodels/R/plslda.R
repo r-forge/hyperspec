@@ -13,9 +13,11 @@
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[pls]{plsr}}, \code{\link[MASS]{lda}}
 ##' @export 
-plslda <- function (X, Y, grouping, ..., subset = TRUE, na.action){
+plslda <- function (X, Y, grouping, ...#, subset = TRUE
+                    #, na.action
+                    ){
 
-  tmp <- .ldapreproc (X, Y, grouping, subset, na.action)
+  tmp <- .ldapreproc (X, Y, grouping, subset)
     
   ## PLS
   pls <- plsr (formula = Y ~ X, data = data.frame (X = I(X), Y = Y), ..., na.action = na.action)	

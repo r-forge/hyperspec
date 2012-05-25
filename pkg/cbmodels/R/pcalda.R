@@ -6,55 +6,74 @@
 ##' \code{\link[softclassval]{factor2matrix} (grouping)} is used.
 ##' @param grouping factor with class membership. If missing, \code{\link[softclassval]{hardclasses}
 ##' (Y)} is used.
-##' @param ... ignored
-##' @param na.action see \code{\link{scale}}, \code{\link[stats]{prcomp}}, and
+##' @param ... handed to \code{\link[stats]{prcomp}} and \code{\link[MASS]{lda}} (e.g. \code{subset})
+## ' @param na.action see \code{\link{scale}}, \code{\link[stats]{prcomp}}, and
 ##' \code{\link[MASS]{lda}}.
 ##' @param comps which principal components should be used?
 ##' @return object of class "pcalda", consisting of the prcomp object returned by
 ##' \code{\link[stats]{prcomp}} and the lda object returned by \code{\link[MASS]{lda}}.
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[stats]{prcomp}}, \code{\link[MASS]{lda}}
-##' @export 
-pcalda <- function (X, Y, grouping, comps = TRUE, ...,
-                    subset = TRUE, na.action = na.exclude){
+##' @export
+##' @examples
+##' chondro <- chondro [! is.na (chondro$clusters)]
+##' model <- pcalda (X = chondro[[]], grouping = chondro$clusters, comps = 1 : 3)
+##' 
+##' names (model)
+##' 
+##' pred <- predict (model)
+##'
+##' plot
+pcalda <- function (X, Y, grouping, comps = TRUE, ...#,
+                    #subset = TRUE, na.action = na.exclude
+                    ){
   
-  tmp <- .ldapreproc (X, Y, grouping, subset, na.action)
+  tmp <- .ldapreproc (X, Y, grouping, subset)
 
-  pca <- prcomp (tmp$X, center = tmp$center.x, scale = FALSE, subset = tmp$subset)
+  pca <- prcomp (tmp$X, center = tmp$center.x, scale = FALSE, ...)
   
-  lda <- lda (x = pca$x [, comps, drop = FALSE], grouping = tmp$grouping, subset = tmp$subset)
+  lda <- lda (x = pca$x [, comps, drop = FALSE], grouping = tmp$grouping, ...)
 
   structure (list (pca = pca,
                    lda = lda,
   #                 center.x = tmp$center.x, not needed: is in pca$center
-                   subset = tmp$subset,
+                   #subset = tmp$subset,
                    comps = comps),
              class = "pcalda")
 }
 
 
-predict.pcalda <- function (model, newdata, ...){
+##' @param object the PCA-LDA model
+##' @param newdata the new data to apply the model to (matrix)
+##' @param ... \code{predict} ignores further arguments
+##' @rdname pcalda
+##' @export
+predict.pcalda <- function (object, newdata, ...){
  
   if (missing (newdata)){
-    pcascores <- model$pca$x [, model$comps, drop = FALSE]
+    pcascores <- object$pca$x [, object$comps, drop = FALSE]
   } else {
-    pcascores <- scale (newdata, center = model$pca$center, scale = FALSE) %*%
-      model$pca$rotation [, model$comps, drop = FALSE]
+    pcascores <- scale (newdata, center = object$pca$center, scale = FALSE) %*%
+      object$pca$rotation [, object$comps, drop = FALSE]
   }
 
-  res <- predict (model$lda, newdata = pcascores)
+  res <- predict (object$lda, newdata = pcascores)
   res$pcascores <- pcascores
-  res$comps = model$comps
+  res$comps = object$comps
 
   res
 }
 
-coef.pcalda <- function (model){
-  model$pca$rotation [, model$comps, drop = FALSE] %*% model$lda$scaling
+##' @rdname pcalda
+##' @export
+coef.pcalda <- function (object, ...){
+  object$pca$rotation [, object$comps, drop = FALSE] %*% object$lda$scaling
 }
 
-center.pcalda <- function (model){
-  colMeans (model$center.x)
+##' @rdname pcalda
+##' @export
+center.pcalda <- function (object){
+  colMeans (object$center.x)
 }
 
 
@@ -82,5 +101,6 @@ center.pcalda <- function (model){
     
   ## test na.action
 
+  ## test center
   
 }
