@@ -233,12 +233,13 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 		if (tmp [2] > 0) hdr$fytype <- hdr$fcatxt[2]
 		if (tmp [3] > 0) hdr$fztype <- hdr$fcatxt[3]
 		if (tmp [4] > 0) hdr$fwtype <- hdr$fcatxt[4]
-	}			
-	hdr$fxtype <- .spc.xlab (hdr$fxtype)
-	hdr$fytype <- .spc.ylab (hdr$fytype)
-	hdr$fztype <- .spc.xlab (hdr$fztype)
-	hdr$fwtype <- .spc.xlab (hdr$fwtype)
-	
+	} else {			
+     hdr$fxtype <- .spc.xlab (hdr$fxtype)
+     hdr$fytype <- .spc.ylab (hdr$fytype)
+     hdr$fztype <- .spc.xlab (hdr$fztype)
+     hdr$fwtype <- .spc.xlab (hdr$fwtype)
+   }
+   
 	## File with subfiles with individual x axes? 
 	## Then there should be a subfile directory:
 	if (hdr$ftflgs ['TXYXYS'] && hdr$ftflgs ['TMULTI']){ 
