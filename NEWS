@@ -34,6 +34,11 @@ o bugfix for unsigned long int in .spc files
 
 o stacked spectra plots label positions
 
+Minor changes
+
+o levelplot uses .wavelength factors for subsetting, grouping, conditioning: thus the strips will
+  display the wavelength value.
+
 Internal changes
 
 o Documentation format is now roxygen2
