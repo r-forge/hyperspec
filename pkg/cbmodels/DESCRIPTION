@@ -22,6 +22,7 @@ Collate:
     'cbmodels.R'
     'pcaadd.R'
     'scale.R'
+    'center.R'
     'plslda.R'
     'kernelpls.fit.R'
     'validate.R'
