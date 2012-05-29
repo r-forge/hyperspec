@@ -2,7 +2,7 @@ Package: hyperSpec.sim
 Type: Package
 Title: Simulation of Spectra with hyperSpec
 Version: 0.5
-Date: 2012-05-24
+Date: 2012-05-29
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection for producing simulated spectroscopic data sets

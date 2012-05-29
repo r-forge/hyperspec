@@ -1,5 +1,4 @@
 export(cbmodels.unittest)
-export(center)
 export(center.pcalda)
 export(center.plslda)
 export(coef.pcalda)

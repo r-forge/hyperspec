@@ -1,4 +1,5 @@
-DIR = pkg/hyperSpec.sim
+NAME = hyperSpec.sim
+DIR = pkg/$(NAME)
 SRC := $(DIR)/R/*.R 
 MAN := $(DIR)/man/*.Rd
 RNW := $(DIR)/inst/doc/*.Rnw
@@ -9,7 +10,7 @@ all: roxy build check install
 .FORCE: # always done, like .PHONY, but doesn't remove file
 
 
-www/hyperSpec.sim-prebuilt.zip: # built manually 
+www/$(NAME)-prebuilt.zip: # built manually 
 	touch $@
 
 #####################################################################################################
@@ -22,17 +23,17 @@ DESCRIPTION: $(shell find $(DIR) -maxdepth 1 -daystart -not -ctime 0 -name "DESC
 	rm .DESCRIPTION
 
 roxy: clean DESCRIPTION $(SRC)
-	Rscript --vanilla -e "library (roxygen2); roxygenize ('package.dir=$(DIR)')" 
+	Rscript -e "library (methods); library (roxygen2); roxygenize (package.dir='$(DIR)')" 
 
 build: roxy
-	rm -f hyperSpec.sim_*.tar.gz
-	R CMD build $(DIR)  && cp hyperSpec.sim_*.tar.gz www/hyperSpec.sim-prebuilt.tar.gz
+	rm -f $(NAME)_*.tar.gz
+	R CMD build $(DIR)  && cp $(NAME)_*.tar.gz www/$(NAME)-prebuilt.tar.gz
 
 check: build
-	R CMD check hyperSpec.sim_*.tar.gz
+	R CMD check $(NAME)_*.tar.gz
 
 devcheck: devbuild
-	~/r-devel/bin/R CMD check hyperSpec.sim_*.tar.gz
+	~/r-devel/bin/R CMD check $(NAME)_*.tar.gz
 
 checkfast: $(SRC)
 	R CMD check --no-examples --no-tests --no-manual --no-vignettes $(DIR)
