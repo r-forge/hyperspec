@@ -11,6 +11,10 @@
   \item{y}{character giving the name of the extra data
   column to label the y axis.}
 
+  \item{ylab}{y axis label, defaults to \code{"row"} and
+  the label of the extra data column used for the y axis,
+  respectively.}
+
   \item{col}{see \code{\link[graphics]{image}}}
 
   \item{...}{further parameters for

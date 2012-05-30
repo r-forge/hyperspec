@@ -8,7 +8,7 @@
   fitraster(x, tol = 0.1)
 }
 \arguments{
-  \item{x}{}
+  \item{x}{numeric to be fitted with a raster}
 
   \item{startx}{starting point ("origin") for calculation
   of the raster}

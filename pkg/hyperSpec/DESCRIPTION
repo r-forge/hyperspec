@@ -126,7 +126,6 @@ Collate:
     'units.R'
     'colMeans.R'
     'cov.R'
-    'emsc.R'
     'makeraster.R'
     'plotmat.R'
     'read.jdx.Shimadzu.R'

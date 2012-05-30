@@ -53,12 +53,14 @@
 )
 
 .spc.xlab <- function (x) {
-	## x = 255 is for double interferogram and supposed not to have a label.
-	## Thus, returning NA is appropriate
-	if (x <= length (.spc.FXTYPE) + 1)
-		.spc.FXTYPE [x + 1]
+   if (is.character (x))
+     x
+   else if (x <= length (.spc.FXTYPE) + 1)
+     .spc.FXTYPE [x + 1]
 	else
-		NA
+     ## x = 255 is for double interferogram and supposed not to have a label.
+     ## Thus, returning NA is appropriate
+     NA
 }
 
 ## y-axis units .....................................................................................
@@ -96,7 +98,9 @@
 		expression (`/` (I[Emission], 'a. u.'))
 )
 .spc.ylab <- function(x){
-	if (x <= 26)
+   if (is.character (x))
+     x
+   else if (x <= 26)
 		.spc.FYTYPE [x + 2]
 	else if (x %in% 128 : 131)
 		.spc.FYTYPE [x - 99]
@@ -233,12 +237,12 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 		if (tmp [2] > 0) hdr$fytype <- hdr$fcatxt[2]
 		if (tmp [3] > 0) hdr$fztype <- hdr$fcatxt[3]
 		if (tmp [4] > 0) hdr$fwtype <- hdr$fcatxt[4]
-	} else {			
-     hdr$fxtype <- .spc.xlab (hdr$fxtype)
-     hdr$fytype <- .spc.ylab (hdr$fytype)
-     hdr$fztype <- .spc.xlab (hdr$fztype)
-     hdr$fwtype <- .spc.xlab (hdr$fwtype)
-   }
+	} 
+   hdr$fxtype <- .spc.xlab (hdr$fxtype)
+   hdr$fytype <- .spc.ylab (hdr$fytype)
+   hdr$fztype <- .spc.xlab (hdr$fztype)
+   hdr$fwtype <- .spc.xlab (hdr$fwtype)
+ 
    
 	## File with subfiles with individual x axes? 
 	## Then there should be a subfile directory:

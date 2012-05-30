@@ -29,3 +29,4 @@ Collate:
     'onAttach.R'
     'ldapreproc.R'
     'pcalda.R'
+    'emsc.R'
