@@ -10,7 +10,7 @@
 ##'
 ##' Note that only differences between the sorted values of x are considered as step size.
 ##' @title makeraster
-##' @param x
+##' @param x numeric to be fitted with a raster
 ##' @param startx starting point ("origin") for calculation of the raster
 ##' @param d step size of the raster
 ##' @param tol tolerance for rounding to new levels: elements of x within \code{tol} of the distance between the levels of the new grid are rounded to the new grid point.
