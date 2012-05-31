@@ -8,7 +8,7 @@ setGeneric ("rmvnorm", package = "mvtnorm")
 
   ## make indices so that pooled or individual covariance matrices can be used.
   if (length (dim (sigma)) == 3L)
-    isigma <- seq_len (dim (sigma [3]))
+    isigma <- seq_len (dim (sigma) [3])
   else {
     isigma <- rep (1L, nrow (mean))
     dim (sigma) <- c (dim (sigma), 1L)
