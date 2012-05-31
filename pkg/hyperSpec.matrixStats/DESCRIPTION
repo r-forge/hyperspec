@@ -1,8 +1,8 @@
 Package: hyperSpec.matrixStats
 Type: Package
 Title: matrixStats interface for hyperSpec
-Version: 0.1-20120110
-Date: 2012-01-10
+Version: 0.1-20120531
+Date: 2012-05-31
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <Claudia.Beleites@ipht-jena.de>
 Description: This package allows to use the functions defined in package
@@ -12,6 +12,7 @@ LazyLoad: yes
 LazyData: yes
 Depends:
     R (>= 2.11),
+    stats4,
     hyperSpec,
     methods,
     matrixStats

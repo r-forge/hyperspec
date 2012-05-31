@@ -385,10 +385,10 @@ setGeneric ('colVars', package = 'matrixStats')
 }
 
 ##' @rdname matrixStats
-##' @S3method colWeightedMeans hyperSpec
+## ' @S3method colWeightedMeans hyperSpec
 ##' @method colWeightedMeans hyperSpec
-##' @export
- colWeightedMeans.hyperSpec <- function (x, ..., label.spc, 
+##' @export colWeightedMeans.hyperSpec
+colWeightedMeans.hyperSpec <- function (x, ..., label.spc, 
          user = NULL, short = "colWeightedMeans", date = NULL){
    result <- colWeightedMeans (x@data$spc, ...)
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
@@ -403,9 +403,9 @@ setGeneric ('colVars', package = 'matrixStats')
 }
 
 ##' @rdname matrixStats
-##' @S3method colWeightedMedians hyperSpec
+## ' @S3method colWeightedMedians hyperSpec
 ##' @method colWeightedMedians hyperSpec
-##' @export
+##' @export colWeightedMedians.hyperSpec
  colWeightedMedians.hyperSpec <- function (x, ..., label.spc, 
          user = NULL, short = "colWeightedMedians", date = NULL){
    result <- colWeightedMedians (x@data$spc, ...)
@@ -732,9 +732,9 @@ setGeneric ('rowVars', package = 'matrixStats')
 }
 
 ##' @rdname matrixStats
-##' @S3method rowWeightedMeans hyperSpec
+## ' @S3method rowWeightedMeans hyperSpec
 ##' @method rowWeightedMeans hyperSpec
-##' @export
+##' @export rowWeightedMeans.hyperSpec
  rowWeightedMeans.hyperSpec <- function (x, ..., label.wavelength,
           user = NULL, short = "rowWeightedMeans", date = NULL){
    result <- rowWeightedMeans (x@data$spc, ...)
@@ -750,9 +750,9 @@ setGeneric ('rowVars', package = 'matrixStats')
 }
 
 ##' @rdname matrixStats
-##' @S3method  rowWeightedMedians hyperSpec
+## ' @S3method  rowWeightedMedians hyperSpec
 ##' @method  rowWeightedMedians hyperSpec
-##' @export
+##' @export rowWeightedMedians.hyperSpec
  rowWeightedMedians.hyperSpec <- function (x, ..., label.wavelength,
           user = NULL, short = "rowWeightedMedians", date = NULL){
    result <- rowWeightedMedians (x@data$spc, ...)

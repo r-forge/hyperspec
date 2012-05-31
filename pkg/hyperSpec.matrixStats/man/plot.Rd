@@ -41,7 +41,7 @@
   deviation}
 
   \item{"spcprctile"}{plots 16th, 50th, and 84th percentile
-  spectre. If the distributions of the intensities at all
+  spectra. If the distributions of the intensities at all
   wavelengths were normal, this would correspond to
   \code{"spcmeansd"}. However, this is frequently not the
   case. Then \code{"spcprctile"} gives a better impression

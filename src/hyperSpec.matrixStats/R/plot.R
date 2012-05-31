@@ -61,6 +61,8 @@
           )
 }
 
+setGeneric ("plot", package = 'stats4')
+
 ##' Plotting hyperSpec Objects
 ##' 
 ##' Plotting \code{hyperSpec} objects. The \code{plot} method for
@@ -79,7 +81,7 @@
 ##' 
 ##' \item{"spcmeansd"}{plots mean spectrum +/- one standard deviation}
 ##' 
-##' \item{"spcprctile"}{plots 16th, 50th, and 84th percentile spectre. If the
+##' \item{"spcprctile"}{plots 16th, 50th, and 84th percentile spectra. If the
 ##' distributions of the intensities at all wavelengths were normal, this would
 ##' correspond to \code{"spcmeansd"}. However, this is frequently not the case.
 ##' Then \code{"spcprctile"} gives a better impression of the spectral data
