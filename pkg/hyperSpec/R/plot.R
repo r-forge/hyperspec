@@ -61,6 +61,10 @@
           )
 }
 
+##' @noRd
+##' @export
+setGeneric ('plot')
+
 ##' Plotting hyperSpec Objects
 ##' 
 ##' Plotting \code{hyperSpec} objects. The \code{plot} method for
@@ -101,6 +105,7 @@
 ##' 
 ##' @name plot-methods
 ##' @rdname plot
+##' @S4method
 ##' @aliases plot plot,ANY,ANY-method plot,hyperSpec,character-method
 ##'   plot,hyperSpec,missing-method
 ##' @docType methods
@@ -141,5 +146,6 @@ setMethod ("plot",
 
 ### allow choice of spectral or map plot by second argument
 ##' @rdname plot
+##' @export
 setMethod ("plot",
            signature (x = "hyperSpec", y = "character"), .plot)
