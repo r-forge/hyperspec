@@ -5,9 +5,17 @@ setGeneric ("rmvnorm", package = "mvtnorm")
   .group <- rep.int (seq_along (n), n)
 
   data <- mean [.group]
- 
+
+  ## make indices so that pooled or individual covariance matrices can be used.
+  if (length (dim (sigma)) == 3L)
+    isigma <- seq_len (dim (sigma [3]))
+  else {
+    isigma <- rep (1L, nrow (mean))
+    dim (sigma) <- c (dim (sigma), 1L)
+  }
+    
   for (i in seq_along (n))
-    data@data$spc [.group == i,] <- mvtnorm::rmvnorm (n [i], mean@data$spc [i, ], sigma)
+    data@data$spc [.group == i,] <- mvtnorm::rmvnorm (n [i], mean@data$spc [i, ], sigma [,, isigma [i]])
 
   data$.group <- .group
 
@@ -24,7 +32,7 @@ setGeneric ("rmvnorm", package = "mvtnorm")
 ##'
 ##' @param n vector giving the numer of cases to generate for each group
 ##' @param mean matrix with mean cases in rows
-##' @param sigma common covariance matrix
+##' @param sigma common covariance matrix or array (\code{ncol (mean)} x \code{ncol (mean)} x \code{nrow (mean)}) with individual covariance matrices for the groups.
 ##' @export
 ##' @seealso \code{\link[mvtnorm]{rmvnorm}}
 ##'
@@ -54,6 +62,10 @@ setGeneric ("rmvnorm", package = "mvtnorm")
 setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "matrix"),
            .rmvnorm)
 
+##' @rdname rmvnorm
+##' @export
+setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "array"),
+           .rmvnorm)
 
 
 ## produces matrices instead of hyperSpec objects. 

@@ -1,9 +1,13 @@
 \name{rmvnorm}
 \alias{rmvnorm}
+\alias{rmvnorm,numeric,hyperSpec,array-method}
 \alias{rmvnorm,numeric,hyperSpec,matrix-method}
 \title{Multivariate normal random numbers}
 \usage{
   \S4method{rmvnorm}{numeric,hyperSpec,matrix}(n, mean,
+    sigma = cov(mean))
+
+  \S4method{rmvnorm}{numeric,hyperSpec,array}(n, mean,
     sigma = cov(mean))
 }
 \arguments{
@@ -12,7 +16,10 @@
 
   \item{mean}{matrix with mean cases in rows}
 
-  \item{sigma}{common covariance matrix}
+  \item{sigma}{common covariance matrix or array
+  (\code{ncol (mean)} x \code{ncol (mean)} x \code{nrow
+  (mean)}) with individual covariance matrices for the
+  groups.}
 }
 \description{
   Interface functions to use \code{\link[mvtnorm]{rmvnorm}}
