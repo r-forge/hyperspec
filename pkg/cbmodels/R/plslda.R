@@ -10,6 +10,8 @@
 ##' @param grouping factor with class membership. If missing, \code{\link[softclassval]{hardclasses}
 ##' (Y)} is used.
 ##' @param comps which latent variables should be used?
+##' @param ncomp how many latent variables should be calculated?
+##' @param stripped should the model be stripped to save memory? (Stripping is different from \code{\link[pls]{plsr}}'s stripping.)
 ##' @param ... further parameters for \code{\link[pls]{plsr}}, importantly, the number of PLS
 ##' variates to be used can be given via \code{ncomp}.
 ##' @return object of class "plslda", consisting of the mvr object returned by
@@ -19,7 +21,10 @@
 ##' @export
 ##' @include cbmodels.R
 ##' @include center.R
-plslda <- function (X, Y, grouping, comps = TRUE, ...#, subset = TRUE
+plslda <- function (X, Y, grouping, comps = TRUE, ncomp = min (dim (X)), 
+                    stripped = TRUE,
+                    ...
+                    #, subset = TRUE
                     #, na.action
                     ){
 
@@ -29,8 +34,17 @@ plslda <- function (X, Y, grouping, comps = TRUE, ...#, subset = TRUE
   pls <- plsr (formula = Y ~ X, data = data.frame (X = I(tmp$X), Y = I (tmp$Y)),
                ...,
                center.x = tmp$center.x, center.y = tmp$center.y, 
-               method = "kernelpls",
-               comps = comps)
+               method = "kernelpls", 
+               stripped = FALSE,
+               ncomp = ncomp
+               )
+  if (stripped) {
+    pls$model <- NULL
+    gc ()
+    pls$fitted.values <- NULL
+    pls$residuals <- NULL
+    gc ()
+  }
   
   scores <- as.matrix (predict (pls, type = "scores", comps = comps)) # as matrix needed in case of 1
                                                                       # lv only
