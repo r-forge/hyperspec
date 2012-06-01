@@ -63,8 +63,32 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "numeric
   
   validObject (X)
   chk.hy( X )
-  
+  print ("here")
   X@data$spc <- emsc( X@data$spc, Reference, bg.comps, norm.comps )
+  
+  X
+} )
+
+##' @export
+##' @rdname emsc
+setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "matrix" ),
+           function ( X, Reference, bg.comps, norm.comps, ...){
+  
+  validObject (X)
+  chk.hy( X )
+  X@data$spc <- emsc( X@data$spc, Reference, bg.comps, norm.comps )
+  
+  X
+} )
+
+##' @export
+##' @rdname emsc
+setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "missing" ),
+           function ( X, Reference, bg.comps, norm.comps, ...){
+  
+  validObject (X)
+  chk.hy( X )
+  X@data$spc <- emsc( X@data$spc,, bg.comps, norm.comps )
   
   X
 } )
@@ -75,7 +99,7 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "numeric
 ##' @rdname emsc 
 ##' @examples
 ##' vmflu <- vanderMonde(flu,2)
-##' Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl=normalize01)[[]][c(2,3),])
+##' Refs <- rbind(flu[[1,]] / max (flu [[1]]), vanderMonde(flu,2,normalize.wl=normalize01)[[]])
 ##' nuflu <- emsc(flu, Refs, 1, c(2,3))
 setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ...){
   

@@ -1,6 +1,8 @@
 \name{emsc}
 \alias{emsc}
 \alias{emsc,hyperSpec,hyperSpec-method}
+\alias{emsc,hyperSpec,matrix-method}
+\alias{emsc,hyperSpec,missing-method}
 \alias{emsc,hyperSpec,numeric-method}
 \title{Extended Multiplicative Scatter Correction (EMSC)}
 \usage{
@@ -8,6 +10,12 @@
     norm.comps = NULL, ...)
 
   \S4method{emsc}{hyperSpec,numeric}(X, Reference,
+    bg.comps, norm.comps, ...)
+
+  \S4method{emsc}{hyperSpec,matrix}(X, Reference, bg.comps,
+    norm.comps, ...)
+
+  \S4method{emsc}{hyperSpec,missing}(X, Reference,
     bg.comps, norm.comps, ...)
 
   \S4method{emsc}{hyperSpec,hyperSpec}(X, Reference,
@@ -54,7 +62,7 @@
 }
 \examples{
 vmflu <- vanderMonde(flu,2)
-Refs <- rbind(1, jitter(flu[[]][1,], 100), vanderMonde(flu,2,normalize.wl=normalize01)[[]][c(2,3),])
+Refs <- rbind(flu[[1,]] / max (flu [[1]]), vanderMonde(flu,2,normalize.wl=normalize01)[[]])
 nuflu <- emsc(flu, Refs, 1, c(2,3))
 }
 \author{
