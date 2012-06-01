@@ -63,7 +63,7 @@ setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "numeric
   
   validObject (X)
   chk.hy( X )
-  print ("here")
+
   X@data$spc <- emsc( X@data$spc, Reference, bg.comps, norm.comps )
   
   X
