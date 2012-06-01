@@ -4,22 +4,21 @@ setGeneric ("rmvnorm", package = "mvtnorm")
 .rmvnorm <- function (n, mean, sigma = cov (mean)) {
   .group <- rep.int (seq_along (n), n)
 
-  data <- mean [.group]
-
-  ## make indices so that pooled or individual covariance matrices can be used.
+   ## make indices so that pooled or individual covariance matrices can be used.
   if (length (dim (sigma)) == 3L)
     isigma <- seq_len (dim (sigma) [3])
   else {
     isigma <- rep (1L, nrow (mean))
     dim (sigma) <- c (dim (sigma), 1L)
   }
-    
+
+  tmp <- matrix (NA_real_, sum (n), ncol (mean))
   for (i in seq_along (n))
-    data@data$spc [.group == i,] <- mvtnorm::rmvnorm (n [i], mean@data$spc [i, ], sigma [,, isigma [i]])
+    tmp [.group == i,] <- mvtnorm::rmvnorm (n [i], mean [i,], sigma [,, isigma [i]])
 
-  data$.group <- .group
+  attr (tmp, "group") <- .group
 
-  data
+  tmp
 }
 
 ##' Multivariate normal random numbers
@@ -60,12 +59,44 @@ setGeneric ("rmvnorm", package = "mvtnorm")
 ##' points (pc$x, col = colors [pc$class], pch = 20, cex = 0.5)
 
 setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "matrix"),
-           .rmvnorm)
+           function (n, mean, sigma){
+             tmp <- .rmvnorm (n, mean@data$spc, sigma)
+
+           data <- mean [attr (tmp, "group"),, drop = FALSE]
+           if (hy.getOption ("gc")) gc ()
+           data@data$spc <- tmp
+           if (hy.getOption ("gc")) gc ()
+           data$.group <- attr (tmp, "group")
+           if (hy.getOption ("gc")) gc ()
+           data
+           })
 
 ##' @rdname rmvnorm
 ##' @export
 setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "array"),
+           function (n, mean, sigma){
+             tmp <- .rmvnorm (n, mean@data$spc, sigma)
+
+           data <- mean [attr (tmp, "group"),, drop = FALSE]
+           if (hy.getOption ("gc")) gc ()
+           data@data$spc <- tmp
+           if (hy.getOption ("gc")) gc ()
+           data$.group <- attr (tmp, "group")
+           if (hy.getOption ("gc")) gc ()
+           data
+           })
+
+##' @rdname rmvnorm
+##' @export
+setMethod ("rmvnorm", signature (n = "numeric", mean = "matrix", sigma = "matrix"),
            .rmvnorm)
+
+##' @rdname rmvnorm
+##' @export
+setMethod ("rmvnorm", signature (n = "numeric", mean = "matrix", sigma = "array"),
+           .rmvnorm)
+
+
 
 
 ## produces matrices instead of hyperSpec objects. 

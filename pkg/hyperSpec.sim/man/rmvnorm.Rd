@@ -2,12 +2,20 @@
 \alias{rmvnorm}
 \alias{rmvnorm,numeric,hyperSpec,array-method}
 \alias{rmvnorm,numeric,hyperSpec,matrix-method}
+\alias{rmvnorm,numeric,matrix,array-method}
+\alias{rmvnorm,numeric,matrix,matrix-method}
 \title{Multivariate normal random numbers}
 \usage{
   \S4method{rmvnorm}{numeric,hyperSpec,matrix}(n, mean,
-    sigma = cov(mean))
+    sigma)
 
   \S4method{rmvnorm}{numeric,hyperSpec,array}(n, mean,
+    sigma)
+
+  \S4method{rmvnorm}{numeric,matrix,matrix}(n, mean,
+    sigma = cov(mean))
+
+  \S4method{rmvnorm}{numeric,matrix,array}(n, mean,
     sigma = cov(mean))
 }
 \arguments{
