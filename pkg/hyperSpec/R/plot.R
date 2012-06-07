@@ -105,7 +105,6 @@ setGeneric ('plot')
 ##' 
 ##' @name plot-methods
 ##' @rdname plot
-##' @S4method
 ##' @aliases plot plot,ANY,ANY-method plot,hyperSpec,character-method
 ##'   plot,hyperSpec,missing-method
 ##' @docType methods

@@ -2,18 +2,18 @@
 \alias{normalize01}
 \title{Normalize numbers -> [0, 1]}
 \usage{
-  normalize01(x)
+  normalize01(x, eps = .Machine$double.eps)
 }
 \arguments{
   \item{x}{vector with values to transform}
 }
 \value{
-  vector with \code{x} values mapped to the interval [0,
-  1]: (x - min (x)) / diff (range (x))
+  vector with \code{x} values mapped to the interval [0, 1]
 }
 \description{
   The input \code{x} is mapped to [0, 1] by subtracting the
-  minimum and subsequently dividing by the maximum.
+  minimum and subsequently dividing by the maximum. If all
+  elements of \code{x} are equal, 1 is returned.
 }
 \author{
   C. Beleites

@@ -110,16 +110,21 @@ wl.eval <- function (x, ..., normalize.wl = I){
 ##' Normalize numbers -> [0, 1]
 ##'
 ##' The input \code{x} is mapped to [0, 1] by subtracting the minimum and subsequently dividing by
-##' the maximum.
+##' the maximum. If all elements of \code{x} are equal, 1 is returned.
 ##' 
 ##' @param x  vector with values to transform
-##' @return vector with \code{x} values mapped to the interval [0, 1]: (x - min (x)) / diff (range (x))
+##' @return vector with \code{x} values mapped to the interval [0, 1]
 ##' @author C. Beleites
 ##' @seealso \code{\link[hyperSpec]{wl.eval}}, \code{\link[hyperSpec]{vanderMonde}}
 ##' @export 
-normalize01 <- function (x){
+normalize01 <- function (x, eps = .Machine$double.eps){
   x <- x - min (x)
-  x / max (x)
+
+  m <- max (x)
+  if (m < eps)
+    rep (1, length (x))
+  else
+    x / m
 }
 
 .test (normalize01) <- function (){
@@ -129,4 +134,7 @@ normalize01 <- function (x){
   checkEqualsNumeric (max (normalize01 (x)), 1)
 
   checkEqualsNumeric (normalize01 (x), (x - min (x)) / diff (range (x)))
+
+  ## constant => 1
+  checkEqualsNumeric (normalize01 (rep (1, 3)), rep (1, 3))
 }

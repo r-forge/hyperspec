@@ -5,7 +5,8 @@
 \alias{predict.plslda}
 \title{PLS-LDA}
 \usage{
-  plslda(X, Y, grouping, comps = TRUE, ...)
+  plslda(X, Y, grouping, comps = TRUE, ncomp = min(dim(X)),
+    stripped = TRUE, ...)
 
   predict.plslda(object, newdata, ...)
 
@@ -25,6 +26,13 @@
   \code{\link[softclassval]{hardclasses} (Y)} is used.}
 
   \item{comps}{which latent variables should be used?}
+
+  \item{ncomp}{how many latent variables should be
+  calculated?}
+
+  \item{stripped}{should the model be stripped to save
+  memory? (Stripping is different from
+  \code{\link[pls]{plsr}}'s stripping.)}
 
   \item{...}{further parameters for
   \code{\link[pls]{plsr}}, importantly, the number of PLS
