@@ -1,7 +1,6 @@
 ##' indices of quantiles
 ##'
 ##' Similar to \code{\link[stats]{which.min}} and  \code{\link[stats]{which.max}}. The indices correspond to \code{\link[stats]{quantile}} type 3.
-##' @Title which.quantile
 ##' @param x data
 ##' @param probs which quantiles to return
 ##' @param na.rm should \code{NA}s be removed before?

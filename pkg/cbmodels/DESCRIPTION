@@ -1,8 +1,8 @@
 Package: cbmodels
 Type: Package
 Title: Collection of "combined" models: PCA-LDA, PLS-LDA, etc.
-Version: 0.5-20120606
-Date: 2012-06-06
+Version: 0.5-20120607
+Date: 2012-06-07
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including

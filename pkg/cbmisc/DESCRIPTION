@@ -2,7 +2,7 @@ Package: cbmisc
 Type: Package
 Title: Claudia's collection of miscellaneous functions
 Version: 1.0
-Date: 2012-03-26
+Date: 2012-06-07
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including
@@ -15,6 +15,6 @@ Suggests:
     MASS,
     pls
 Collate:
-    'pcaadd.R'
-    'plslda.R'
     'lscb.R'
+    'bibliography.R'
+    'which.quantile.R'
