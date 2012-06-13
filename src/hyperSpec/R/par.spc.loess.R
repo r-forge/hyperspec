@@ -60,13 +60,13 @@ par.spc.loess <- function (spc, newx, enp.target = nwl (spc) / 4,
 	len <- nrow (spc[[]]) 
 	
 	loess.ob <- foreach (i=1:len) %dopar% {
-		.loess (spc@data$spc[i,], spc@wavelength)
+		.predict(.loess (spc@data$spc[i,], spc@wavelength),newx)
 	}
 	#spc@data$spc <- t (sapply (loess.ob, .predict, newx))
 
-	spc@data$spc <- foreach (i=1:len, .combine=rbind) %dopar% {
-		.predict( loess.ob[[i]], newx )
-	}
+	#spc@data$spc <- foreach (i=1:len, .combine=rbind) %dopar% {
+	#	.predict( loess.ob[[i]], newx )
+	#}
   
    .wl(spc) <- newx
 
