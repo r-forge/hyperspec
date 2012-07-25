@@ -113,6 +113,7 @@ wl.eval <- function (x, ..., normalize.wl = I){
 ##' the maximum. If all elements of \code{x} are equal, 1 is returned.
 ##' 
 ##' @param x  vector with values to transform
+##' @param eps tolerance level for determining what is 0 and 1
 ##' @return vector with \code{x} values mapped to the interval [0, 1]
 ##' @author C. Beleites
 ##' @seealso \code{\link[hyperSpec]{wl.eval}}, \code{\link[hyperSpec]{vanderMonde}}

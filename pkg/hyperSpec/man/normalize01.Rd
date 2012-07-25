@@ -6,6 +6,9 @@
 }
 \arguments{
   \item{x}{vector with values to transform}
+
+  \item{eps}{tolerance level for determining what is 0 and
+  1}
 }
 \value{
   vector with \code{x} values mapped to the interval [0, 1]
