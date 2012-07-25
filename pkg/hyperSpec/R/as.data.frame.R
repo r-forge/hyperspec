@@ -4,8 +4,7 @@
 ##'
 ##' @rdname asdataframe
 ##' @name as.data.frame
-##' @aliases as.data.frame
-##'   as.data.frame,hyperSpec-method 
+##' @aliases as.data.frame as.data.frame,hyperSpec-method as.data.frame.hyperSpec
 ##' @docType methods
 ##' @param x a \code{hyperSpec} object
 ##' @param row.names if \code{TRUE}, a column \code{.row} is created containing row names or row

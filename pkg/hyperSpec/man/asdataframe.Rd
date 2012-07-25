@@ -1,6 +1,7 @@
 \docType{methods}
 \name{as.data.frame}
 \alias{as.data.frame}
+\alias{as.data.frame.hyperSpec}
 \alias{as.data.frame,hyperSpec-method}
 \alias{as.long.df}
 \alias{as.matrix}
