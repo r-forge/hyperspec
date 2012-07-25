@@ -1353,6 +1353,13 @@ a \df. The column names can then be used in the formula:
 pca <- prcomp (~ spc, data = chondro$., center = FALSE)
 @
 
+Many modeling functions call \Rcode{as.data.frame} on their \Rfunarg{data} argument. In that case, the conversion is done automatically:
+
+<<pca-auto>>=
+pca <- prcomp (~ spc, data = chondro, center = FALSE)
+@
+
+
 Results of such a \mFun{\Rfunction{decomposition}} decomposition can be put again into
 \Rclass{hyperSpec} objects. This allows to plot \eg the loading like spectra, or score maps, see
 figure~\ref{fig:pca}.
@@ -1447,8 +1454,16 @@ if (require (ggplot2)){
 \subsection{Data Analysis Methods using a matrix \\
 \eg Hierarchical Cluster Analysis}
 \label{HCA}\mFun{\Rfunction{[{}[{}]{}]}}
+Some functions expect their input data in a matrix, so either \Rcode{as.matrix (object)} or the
+abbreviation \Rcode{object [[]]} can be used:
 <<hca>>=
 dist <- pearson.dist (chondro [[]])
+@ 
+
+Again, many such functions coerce the data to a matrix automatically, so the \chy object can be
+handed over: 
+<<hca-asmatrix>>= 
+dist <- pearson.dist (chondro) 
 dendrogram <- hclust (dist, method = "ward")
 @
 <<dend, fig = TRUE, width = 5, height = 5, include = FALSE>>=
@@ -1525,10 +1540,12 @@ system.time ({
 })
 @ 
 
-\index{options!log} A first possibility to speed up is switching of the automatic logging of how the
-objects are transformed. Logging involves appending rows to the \df in slot \Rcode{@log}.  While the
-absolute amount of time needed to add a logbook entry is small, it may be executed very often
-(e.g. during each call of \Rfunction{[}).
+\index{options!log} A first possibility is switching of the automatic logging of how the objects are
+transformed. This is now the default setting of the option as the logbook will 
+
+Logging involves appending rows to the \df in slot \Rcode{@log}.  While the absolute
+amount of time needed to add a logbook entry is small, it may be executed very often (e.g. during
+each call of \Rfunction{[}). 
 <<speed2>>=
 hy.setOptions (log = FALSE)
 tmp <- chondro [1 : 50]
