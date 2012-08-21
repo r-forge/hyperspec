@@ -30,7 +30,8 @@ emsc <- function (X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ...) 
       Reference <- rbind (1, colMeans (X))	#sanity check
     }
     
-    if (is.vector (Reference)){	#flip to 1-row matrix - bit of a hack - redo solve etc. below with transposes for all cases? 
+    if (is.vector (Reference)){	       # flip to 1-row matrix - bit of a hack -
+                                        # redo solve etc. below with transposes for all cases? 
       Reference <- rbind (1, t (Reference))
     }
     
@@ -44,7 +45,7 @@ emsc <- function (X, Reference = NULL, bg.comps = NULL, norm.comps = NULL, ...) 
     if (!is.null (norm.comps)){
       X <- sweep (X,
                   1,
-                  rowMeans ( Reference[norm.comps,,drop=FALSE]) 
+                  rowMeans (Reference[norm.comps,,drop=FALSE]) 
 			    	          %*% 
 			            B[norm.comps,,drop=FALSE],
                   '/')
@@ -58,96 +59,100 @@ setGeneric ("emsc")
 ##' @export
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec object X, given matrix: Reference, vectors: bg.comps, norm.comps, indices.
 ##' @rdname emsc
-setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "numeric" ),
-           function ( X, Reference, bg.comps, norm.comps, ...){
+setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "numeric"),
+           function (X, Reference, bg.comps, norm.comps, ...){
   
   validObject (X)
-  chk.hy( X )
+  chk.hy (X)
 
-  X@data$spc <- emsc( X@data$spc, Reference, bg.comps, norm.comps )
+  X@data$spc <- emsc (X@data$spc, Reference, bg.comps, norm.comps)
   
   X
-} )
-
-##' @export
-##' @rdname emsc
-setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "matrix" ),
-           function ( X, Reference, bg.comps, norm.comps, ...){
-  
-  validObject (X)
-  chk.hy( X )
-  X@data$spc <- emsc( X@data$spc, Reference, bg.comps, norm.comps )
-  
-  X
-} )
+})
 
 ##' @export
 ##' @rdname emsc
-setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "missing" ),
-           function ( X, Reference, bg.comps, norm.comps, ...){
+setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "matrix"),
+           function (X, Reference, bg.comps, norm.comps, ...){
   
   validObject (X)
-  chk.hy( X )
-  X@data$spc <- emsc( X@data$spc,, bg.comps, norm.comps )
+  chk.hy (X)
+  X@data$spc <- emsc (X@data$spc, Reference, bg.comps, norm.comps)
   
   X
-} )
+})
+
+##' @export
+##' @rdname emsc
+setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "missing"),
+           function (X, Reference, bg.comps, norm.comps, ...){
+  
+  validObject (X)
+  chk.hy (X)
+  X@data$spc <- emsc (X@data$spc,, bg.comps, norm.comps)
+  
+  X
+})
 
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
 ##' @export
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec objects: X and Reference, vectors: bg.comps and norm.comps, indices.
 ##' @rdname emsc 
 ##' @examples
-##' vmflu <- vanderMonde(flu,2)
-##' Refs <- rbind(flu[[1,]] / max (flu [[1]]), vanderMonde(flu,2,normalize.wl=normalize01)[[]])
-##' nuflu <- emsc(flu, Refs, 1, c(2,3))
-setMethod ("emsc", signature = signature ( X = "hyperSpec", Reference = "hyperSpec" ), function ( X, Reference, bg.comps, norm.comps, ...){
+##' if (require ("hyperSpec")){
+##'   vmflu <- vanderMonde (flu, 2)
+##'   Refs <- collapse (normalize01 (flu[6,]), vmflu)
+##'   plot (Refs)
+##'   plot (emsc (flu, Refs, bg.comps = 2 : 4, norm.comps = 1))
+##' }
+setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "hyperSpec"), function (X, Reference, bg.comps, norm.comps, ...){
   
   validObject (X)
   chk.hy (X)
   validObject (Reference)
   chk.hy (Reference)
   
-  X@data$spc <- emsc( X@data$spc, Reference@data$spc, bg.comps, norm.comps )
+  X@data$spc <- emsc (X@data$spc, Reference@data$spc, bg.comps, norm.comps)
   
   X
-} )
+})
 
 ##' @include cbmodels.R
 .test (emsc) <- function (){
-  
-  checkTrue( is.test( emsc ))
-  
-  checkTrue( is.matrix( emsc( flu[[]], jitter( flu[[]][1,], 100 ) ) ) )
-  
-  checkEquals( dim( emsc( flu[[]], jitter( flu[[]][1,], 100 ) ) ), dim( flu[[]] ) )
-  
-  checkTrue( chk.hy( emsc( flu, jitter( flu[[]][1,], 100) ) ) )
-  
-  checkEquals( dim( emsc( flu, jitter( flu[[]][1,], 100))[[]]), dim( flu[[]] ) )
+  m <- vanderMonde (1:5, 2)
+  v <- 1 : 3
 
-  ##the hyperSpec object should be otherwise unchanged
-  checkEquals (emsc(flu), flu)
+  tmp <- emsc (m, v)
+  checkEquals (tmp, m)
   
   ## calculation checks
   x <- vanderMonde (1:5, 2) %*% 1 : 3
 
   ## if no bg.comps and no norm.comps are given, the original should be returned
-  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2))), t (x))
+  checkEqualsNumeric (emsc (t (x), t (vanderMonde (1:5, 2))), t (x))
 
-  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 1),
+  checkEqualsNumeric (emsc (t (x), t (vanderMonde (1:5, 2)), bg.comps = 1),
                       t (x - vanderMonde (1:5, 2) %*% c (1, 0, 0)))
-  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 2),
+  checkEqualsNumeric (emsc (t (x), t (vanderMonde (1:5, 2)), bg.comps = 2),
                       t (x - vanderMonde (1:5, 2) %*% c (0, 2, 0)))
-  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 3),
+  checkEqualsNumeric (emsc (t (x), t (vanderMonde (1:5, 2)), bg.comps = 3),
                       t (x - vanderMonde (1:5, 2) %*% c (0, 0, 3)))
   
-  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 1:2),
+  checkEqualsNumeric (emsc (t (x), t (vanderMonde (1:5, 2)), bg.comps = 1:2),
                       t (vanderMonde (1:5, 2) %*% c (0, 0, 3)))
   
-  checkEqualsNumeric (emsc (t(x), t (vanderMonde (1:5, 2)), bg.comps = 1:3),
+  checkEqualsNumeric (emsc (t (x), t (vanderMonde (1:5, 2)), bg.comps = 1:3),
                       matrix (rep (0, length (x))))
-  
-  checkEqualsNumeric (emsc (flu, vanderMonde (flu, 2, normalize.wl=normalize01) )[[]], 
-                      emsc (flu, t (vanderMonde ( normalize01 (wl (flu)), 2)))[[]] ) 
+
+  if (require ("hyperSpec")){
+
+    ##the hyperSpec object should be otherwise unchanged
+    checkEquals (emsc (flu), flu)
+    checkEquals (emsc (flu, wl (flu)), flu)
+    checkEquals (emsc (flu, flu [[]]), flu)
+    checkEquals (emsc (flu, flu), flu)
+
+    checkEqualsNumeric (emsc (flu, vanderMonde (flu, 2, normalize.wl=normalize01))[[]], 
+                        emsc (flu, t (vanderMonde (normalize01 (wl (flu)), 2)))[[]])
+  }
 }
