@@ -15,8 +15,8 @@
   vector of indices corresponding to the quantiles
 }
 \description{
-  Similar to \code{\link[stats]{which.min}} and
-  \code{\link[stats]{which.max}}. The indices correspond to
+  Similar to \code{\link[base]{which.min}} and
+  \code{\link[base]{which.max}}. The indices correspond to
   \code{\link[stats]{quantile}} type 3.
 }
 \examples{

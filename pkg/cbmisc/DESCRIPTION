@@ -2,13 +2,10 @@ Package: cbmisc
 Type: Package
 Title: Claudia's collection of miscellaneous functions
 Version: 1.0
-Date: 2012-06-24
+Date: 2012-08-21
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
-Description: Function collection including
-    * PCA with added reference cases (for background removal)
-    * PLSLDA
-    * ls.cb
+Description: Function collection
 License: GPL-3
 Suggests:
     hyperSpec,

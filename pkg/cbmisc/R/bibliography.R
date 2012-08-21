@@ -17,6 +17,7 @@ pkg.or.base <- function (pkg){
 ##'
 ##' retrieves \code{citation (pkg)} if package pkg is available. Alternatively, a CITATION file can
 ##' be read.
+##' @rdname bibliography
 ##' @param pkg 
 ##' @param saved.cit CITATION file on harddisk
 ##' @return citation
@@ -58,10 +59,11 @@ make.cite.keys <- function (pkg, entries){
   
 ##' citations with automatic BibTeX keys 
 ##'
+##' @rdname bibliography
 ##' @param pkg package
 ##' @return citation
 ##' @author Claudia Beleites
-##' @export 
+##' @export
 citation.with.key <- function (pkg = "base"){
   pkg <- pkg.or.base (pkg)
 
@@ -77,12 +79,15 @@ citation.with.key <- function (pkg = "base"){
 
 ##' cite a package
 ##'
+##' @rdname bibliography
 ##' @param pkg package
 ##' @param entries which \code{citation ()} entries to cite?
 ##' @param citefun which LaTeX command to use for the citiation.
 ##' @return character with \code{\\cite{pkg.1, pkg.2}} 
 ##' @author Claudia Beleites
-##' @export 
+##' @export
+##' @examples
+##' cite.pkg ("cbmisc")
 cite.pkg <- function (pkg, entries, citefun = "cite"){
   paste ("\\\\", citefun, "{", paste (make.cite.keys (pkg, entries), collapse = ", "), "}", sep = "")
 }
@@ -91,9 +96,12 @@ cite.pkg <- function (pkg, entries, citefun = "cite"){
 ##' @param ... packages
 ##' @param file name of .bib file \code{NULL} suppresses writing of the file. \code{""} will output
 ##' to stdout.
-##' @return invisible bibentry list.
+##' @rdname bibliography
+##' @return invisible bibentry list.stats
 ##' @author Claudia Beleites
-##' @export 
+##' @export
+##' @examples
+##' make.bib (file = "")
 make.bib <- function (..., file = NULL) {
   pkg <- c (...)
 
