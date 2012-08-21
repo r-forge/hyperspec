@@ -23,21 +23,23 @@ vanderMonde <- function (x, order, ...){
 setGeneric ("vanderMonde")
 
 ##' @param x hyperSpec object
-##' @param normalize.wl function to transorm the wavelengths before evaluating the polynomial (or other function). Use \code{\link[hyperSpec]{normalize01}} to map the wavelength range to the interval [0, 1].
+##' @param normalize.wl function to transorm the wavelengths before evaluating the polynomial (or
+##' other function). \code{\link[hyperSpec]{normalize01}} maps the wavelength range to the interval
+##' [0, 1]. Use \code{\link[base]{I}} to turn off. 
 ##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
 ##' @return hyperSpec method: hyperSpec object containing van der Monde matrix as spectra and an additional column ".vdm.order" giving the order of each spectrum (term).
 ##' @rdname vanderMonde
 ##' @seealso \code{\link[hyperSpec]{wl.eval}} for calculating arbitrary functions of the wavelength,
 ##'
-##' \code{\link[hyperSpec]{normalize01}} to normalize the wavnumbers before evaluating the function
+##' \code{\link[hyperSpec]{normalize01}} 
 ##' @export
 ##' @examples
 ##' plot (vanderMonde (flu, 2))
-##' plot (vanderMonde (flu, 2, normalize.wl = normalize01))
+##' plot (vanderMonde (flu, 2, normalize.wl = I))
 ##'
 ##' 
 setMethod ("vanderMonde", signature = signature (x = "hyperSpec"),
-           function (x, order, ..., normalize.wl = I){
+           function (x, order, ..., normalize.wl = normalize01){
   validObject (x)
 
   wl <- normalize.wl (x@wavelength)
