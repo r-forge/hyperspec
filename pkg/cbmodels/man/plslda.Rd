@@ -8,11 +8,11 @@
   plslda(X, Y, grouping, comps = TRUE, ncomp = min(dim(X)),
     stripped = TRUE, ...)
 
-  predict.plslda(object, newdata, ...)
+  \method{predict}{plslda} (object, newdata, ...)
 
-  coef.plslda(object, ...)
+  \method{coef}{plslda} (object, ...)
 
-  center.plslda(object, ...)
+  \method{center}{plslda} (object, ...)
 }
 \arguments{
   \item{X}{input variate matrix}

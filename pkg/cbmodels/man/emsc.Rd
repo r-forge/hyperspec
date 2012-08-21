@@ -61,9 +61,10 @@
   \code{\link[hyperSpec]{vanderMonde}}.
 }
 \examples{
-vmflu <- vanderMonde(flu,2)
-Refs <- rbind(flu[[1,]] / max (flu [[1]]), vanderMonde(flu,2,normalize.wl=normalize01)[[]])
-nuflu <- emsc(flu, Refs, 1, c(2,3))
+vmflu <- vanderMonde (flu, 2)
+Refs <- collapse (normalize01 (flu[6,]), vmflu)
+plot (Refs)
+plot (emsc (flu, Refs, bg.comps = 2 : 4, norm.comps = 1))
 }
 \author{
   C.Beleites & S. Fuller

@@ -99,12 +99,10 @@ setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "missing"
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec objects: X and Reference, vectors: bg.comps and norm.comps, indices.
 ##' @rdname emsc 
 ##' @examples
-##' if (require ("hyperSpec")){
-##'   vmflu <- vanderMonde (flu, 2)
-##'   Refs <- collapse (normalize01 (flu[6,]), vmflu)
-##'   plot (Refs)
-##'   plot (emsc (flu, Refs, bg.comps = 2 : 4, norm.comps = 1))
-##' }
+##' vmflu <- vanderMonde (flu, 2)
+##' Refs <- collapse (normalize01 (flu[6,]), vmflu)
+##' plot (Refs)
+##' plot (emsc (flu, Refs, bg.comps = 2 : 4, norm.comps = 1))
 setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "hyperSpec"), function (X, Reference, bg.comps, norm.comps, ...){
   
   validObject (X)
@@ -144,7 +142,7 @@ setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "hyperSpe
   checkEqualsNumeric (emsc (t (x), t (vanderMonde (1:5, 2)), bg.comps = 1:3),
                       matrix (rep (0, length (x))))
 
-  if (require ("hyperSpec")){
+  if (require ("hyperSpec", quietly = TRUE)){
 
     ##the hyperSpec object should be otherwise unchanged
     checkEquals (emsc (flu), flu)

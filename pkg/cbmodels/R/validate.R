@@ -16,6 +16,7 @@ cbmodels.unittest <- function (){
   tests <- names (tests [tests])
 
   tests <- sapply (tests, get, envir = getNamespace ("cbmodels"))
+  tests <- sapply (tests, attr, "test")
 
   clearLog ()
   

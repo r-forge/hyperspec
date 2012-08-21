@@ -47,6 +47,8 @@ pcalda <- function (X, Y, grouping, comps = TRUE, ...#,
 ##' @param newdata the new data to apply the model to (matrix)
 ##' @param ... \code{predict} ignores further arguments
 ##' @rdname pcalda
+##' @method predict pcalda
+##' @S3method predict pcalda
 ##' @export
 predict.pcalda <- function (object, newdata, ...){
  
@@ -66,11 +68,15 @@ predict.pcalda <- function (object, newdata, ...){
 
 ##' @rdname pcalda
 ##' @export
+##' @method coef pcalda
+##' @S3method coef pcalda
 coef.pcalda <- function (object, ...){
   object$pca$rotation [, object$comps, drop = FALSE] %*% object$lda$scaling
 }
 
 ##' @rdname pcalda
+##' @method center pcalda
+##' @S3method center pcalda
 ##' @export
 center.pcalda <- function (object, ...){
   object$pca$center

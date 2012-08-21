@@ -65,9 +65,11 @@ plslda <- function (X, Y, grouping, comps = TRUE, ncomp = min (dim (X)),
 ##' prediction in element \code{$scores}
 ##' @seealso  \code{link[MASS]{predict.lda}},  \code{link[pls]{predict.mvr}}
 ##' @rdname plslda
+##' @method predict plslda
 ##' @S3method predict plslda
 predict.plslda <- function (object, newdata, ...){
   PLSscores <- predict (object$pls, newdata=newdata, type = "scores", comps = object$comps, ...)
+
   res <- predict (object$lda, newdata = PLSscores, ...)
   res$scores <- PLSscores
 	
@@ -76,6 +78,7 @@ predict.plslda <- function (object, newdata, ...){
 
 ##' @rdname plslda
 ##' @export
+##' @method coef plslda
 ##' @S3method coef plslda
 coef.plslda <- function (object, ...){
   object$pls$projection [, object$comps, drop = FALSE] %*% object$lda$scaling
@@ -83,6 +86,7 @@ coef.plslda <- function (object, ...){
 
 ##' @rdname plslda
 ##' @export
+##' @method center plslda
 ##' @S3method center plslda
 center.plslda <- function (object, ...){
   object$pls$Xmeans

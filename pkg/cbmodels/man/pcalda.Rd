@@ -7,11 +7,11 @@
 \usage{
   pcalda(X, Y, grouping, comps = TRUE, ...)
 
-  predict.pcalda(object, newdata, ...)
+  \method{predict}{pcalda} (object, newdata, ...)
 
-  coef.pcalda(object, ...)
+  \method{coef}{pcalda} (object, ...)
 
-  center.pcalda(object, ...)
+  \method{center}{pcalda} (object, ...)
 }
 \arguments{
   \item{X}{input variate matrix}

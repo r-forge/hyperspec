@@ -1,4 +1,3 @@
-\docType{methods}
 \name{pcaadd}
 \alias{pcaadd}
 \alias{pcaadd,hyperSpec,hyperSpec-method}
@@ -17,7 +16,7 @@
 
   \S4method{pcaadd}{matrix,hyperSpec}(x, reference, ...)
 
-  predict.pcaadd(object, newdata, ...)
+  \method{predict}{pcaadd} (object, newdata, ...)
 }
 \arguments{
   \item{x}{data matrix}
@@ -25,16 +24,7 @@
   \item{reference}{reference data points}
 
   \item{...}{further arguments are handed to prcomp, but
-  \code{center} is always \code{FALSE}.
-
-  the hyperSpec-method hands further arguments to the
-  generic.
-
-  the hyperSpec-method hands further arguments to the
-  generic.
-
-  the hyperSpec-method hands further arguments to the
-  generic.}
+  \code{center} is always \code{FALSE}.}
 
   \item{ref.factor}{reference is multiplied by
   \code{ref.factor * max (abs (range (x))) / max (abs

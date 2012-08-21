@@ -7,7 +7,6 @@
 ##' @param ... further arguments are handed to prcomp, but \code{center} is always \code{FALSE}.
 ##' @return object of class "pcaadd"
 ##' @rdname pcaadd
-##' @docType methods
 ##' @include cbmodels.R
 ##' @export
 setGeneric ("pcaadd", function (x, reference, ...){stop ("not supported")})
@@ -18,7 +17,6 @@ setGeneric ("pcaadd", function (x, reference, ...){stop ("not supported")})
 ##' (range (reference))) * nrow (x) / nrow (reference)} before the PCA. This forces the first
 ##' directions towards \code{reference}.
 ##' @param refcomps the principal components that are attributed to the reference
-##' @docType methods
 ##' @export
 setMethod ("pcaadd", signature = signature (x = "matrix", reference = "matrix"),
            function (x, reference, ..., ref.factor = 10, refcomps = seq_len (nrow (reference))){
@@ -37,8 +35,6 @@ setMethod ("pcaadd", signature = signature (x = "matrix", reference = "matrix"),
 })
 
 ##' @rdname pcaadd
-##' @param ... the hyperSpec-method hands further arguments to the generic.
-##' @docType methods
 ##' @export
 setMethod ("pcaadd", signature = signature (x = "hyperSpec", reference = "hyperSpec"),
            function (x, reference, ...){
@@ -50,8 +46,6 @@ setMethod ("pcaadd", signature = signature (x = "hyperSpec", reference = "hyperS
 
 
 ##' @rdname pcaadd
-##' @param ... the hyperSpec-method hands further arguments to the generic.
-##' @docType methods
 ##' @export
 setMethod ("pcaadd", signature = signature (x = "hyperSpec", reference = "matrix"),
            function (x, reference, ...){
@@ -61,8 +55,6 @@ setMethod ("pcaadd", signature = signature (x = "hyperSpec", reference = "matrix
            )
 
 ##' @rdname pcaadd
-##' @param ... the hyperSpec-method hands further arguments to the generic.
-##' @docType methods
 ##' @export
 setMethod ("pcaadd", signature = signature (x = "matrix", reference = "hyperSpec"),
            function (x, reference, ...){
@@ -74,7 +66,8 @@ setMethod ("pcaadd", signature = signature (x = "matrix", reference = "hyperSpec
 ##' @rdname pcaadd
 ##' @param object pcaadd model
 ##' @param newdata matrix with new observations.
-##' @docType S3method
+##' @method predict pcaadd
+##' @S3method predict pcaadd
 ##' @export
 predict.pcaadd <- function (object, newdata, ...){
   if (is (newdata, "hyperSpec")){
