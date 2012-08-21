@@ -21,7 +21,8 @@ Depends:
     methods,
     utils,
     lattice,
-    grid
+    grid,
+    mvtnorm
 Suggests:
     R.matlab,
     latticeExtra,
@@ -127,6 +128,7 @@ Collate:
     'colMeans.R'
     'cov.R'
     'makeraster.R'
+    'mvtnorm.R'
     'normalize01.R'
     'plotmat.R'
     'read.jdx.Shimadzu.R'

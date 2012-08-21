@@ -42,23 +42,9 @@
 \examples{
 ## multiple groups, common covariance matrix
 
-
-
 pcov <- pooled.cov (chondro, chondro$clusters)
-rnd <- rmvnorm (rep (1e2, 3), mean = pcov$mean, sigma = pcov$COV)
-
-require ("MASS")
-tmp <- chondro [! is.na (chondro$clusters)]
-lda <- lda (x = tmp [[]], grouping = tmp$clusters)
-
-p <- predict (lda, rnd [[]])
-
-colors <- c("#00008040", "#FF000040", "#00800040")
-
-plot (p$x, col = colors [p$class], pch = 3)
-
-pc <- predict (lda)
-points (pc$x, col = colors [pc$class], pch = 20, cex = 0.5)
+rnd <- rmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
+plot (rnd, col = rnd$.group)
 }
 \seealso{
   \code{\link[mvtnorm]{rmvnorm}}

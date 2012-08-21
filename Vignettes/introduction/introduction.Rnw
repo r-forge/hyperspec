@@ -12,6 +12,7 @@
 % \VignetteIndexEntry{hyperSpec Introduction}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
+% \VignetteDepends{MASS}
 \usepackage{makeidx} 
 \makeindex
 
@@ -320,11 +321,48 @@ The most frequently needed arguments are:
   \Rcode{\$.wavelength} and the spectral intensity axis label in \Rcode{\$spc}.
 \end{labeling}
 
+\subsection{Creating Random Spectra}
+If \Rpackage{mvtnorm} is available, multivariate normally distributed spectra can be generated from
+mean and covariance matrix using \Rfunction{rmvnorm}\mFun{pooled.cov} (fig.~\ref{fig:sim:spc}). Mean
+spectra and pooled covariance matrix can be calculated using \Rfunction{pooled.cov}\mFun{pooled.cov}:
+
+<<>>=
+pcov <- pooled.cov (chondro, chondro$clusters)
+rnd <- rmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
+@ 
+<<simspc, fig = TRUE, width = 10, height = 5, include=FALSE>>=
+cluster.cols <- c ("dark blue", "orange", "#C02020")
+plot (rnd, col = cluster.cols [rnd$.group])
+@ 
+\begin{figure}[t]
+\subfloat[\label{fig:sim:spc} \Rfunction{rmvnorm}]{\includegraphics[width=.66\linewidth]{introduction-fig--simspc}}
+\subfloat[\label{fig:sim:lda} LDA of simulated spectra. Crosses mark real spectra.]{\includegraphics[width=.33\linewidth]{introduction-fig--simlda}}
+  \caption{Multivariate normally distributed random spectra.}
+  \label{fig:sim}
+\end{figure}
+
+fig.~\ref{fig:sim:lda} shows the linear discriminant analysis (LDA) scores of such  simulated specta in comparison to the real spectra in the \Robject{chondro} object:
+@
+<<lda>>=
+require ("MASS")
+rnd <- rmvnorm (rep (200, 3), mean = pcov$mean, sigma = pcov$COV)
+lda <- lda (clusters ~ spc, rnd)
+ 
+pred.chondro <- predict (lda, chondro)
+pred.sim     <- predict (lda)
+@ 
+<<simlda, fig = TRUE, pnr  width = 5, height = 5, include=FALSE>>=
+colors <- c("#00008040", "#FFA50040", "#C0202040")
+plot (pred.chondro$x, col = colors [chondro$clusters], pch = 3)
+points (pred.sim$x, col = colors [rnd$clusters], pch = 20, cex = 0.5)
+@
+
 \section{The Logbook}
 \label{sec:logbook}
-Slot \Rcode{@log} of \chy objects is intended to keep track of the history of the object.  This
-logbook part of the output of the \Rfunction{summary}, and can also be retrieved by
-\Rfunction{logbook}.
+\warnbox{Deprecated}{The logbook is now DEPRECATED and the functionality will be removed in the future.\\
+  This feature has never seen much use, but slows down \phy considerably.}  Slot \Rcode{@log} of \chy
+objects is intended to keep track of the history of the object.  This logbook part of the output of
+the \Rfunction{summary}, and can also be retrieved by \Rfunction{logbook}.
 <<logbook>>=
 logbook (flu)
 @
@@ -1483,7 +1521,6 @@ levels (chondro$clusters) <- c ("matrix", "lacuna", "cell")
 @
 Then the result may be plotted (figure~\ref{fig:clust:map}):
 <<clustmap, fig = TRUE, width = 7.5, height = 5, include = FALSE, echo = FALSE>>=
-cluster.cols <- c ("dark blue", "orange", "#C02020")
 plotmap (chondro, clusters ~ x * y, col.regions = cluster.cols)
 @
 \begin{figure}

@@ -1,6 +1,5 @@
 \name{normalize01}
 \alias{normalize01}
-\alias{normalize01,AsIs-method}
 \alias{normalize01,hyperSpec-method}
 \alias{normalize01,matrix-method}
 \alias{normalize01,numeric-method}
@@ -8,8 +7,6 @@
 \usage{
   \S4method{normalize01}{matrix}(x,
     eps = .Machine$double.eps)
-
-  \S4method{normalize01}{AsIs}(x, ...)
 
   \S4method{normalize01}{numeric}(x,
     eps = .Machine$double.eps)

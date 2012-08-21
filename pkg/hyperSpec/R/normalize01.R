@@ -23,11 +23,6 @@ setMethod (normalize01, signature (x = "matrix"), function (x, eps = .Machine$do
 })
 
 ##' @rdname normalize01
-setMethod ("normalize01", signature (x = "AsIs"), function (x, ...){
-  normalize01 (unclass (x), ...)
-})
-           
-##' @rdname normalize01
 setMethod ("normalize01", signature (x = "numeric"), function (x, eps = .Machine$double.eps){
   x <- x - min (x)
 
@@ -42,7 +37,7 @@ setMethod ("normalize01", signature (x = "numeric"), function (x, eps = .Machine
 setMethod (normalize01, signature (x = "hyperSpec"), function (x, ...){
   validObject (x)
 
-  x@data$spc <- normalize01 (x@data$spc, ...)
+  x@data$spc <- normalize01 (unclass (x@data$spc), ...)
 
   ## logbook
   x

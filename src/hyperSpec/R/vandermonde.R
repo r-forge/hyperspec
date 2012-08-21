@@ -59,7 +59,7 @@ setMethod ("vanderMonde", signature = signature (x = "hyperSpec"),
   checkTrue (chk.hy (vanderMonde (flu, 0)))
   checkTrue (validObject (vanderMonde (flu, 0)))
   
-  checkEqualsNumeric (vanderMonde (paracetamol, 3, normalize01 = I)[[]],
+  checkEqualsNumeric (vanderMonde (paracetamol, 3, normalize.wl = I)[[]],
                       t (vanderMonde (wl (paracetamol), 3)))
 
   checkEqualsNumeric (vanderMonde (paracetamol, 3, normalize.wl = normalize01)[[]],
