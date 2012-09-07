@@ -23,18 +23,16 @@ message ("Installing faster replacement for base::scale.")
 
 scale <- function(x, center = TRUE, scale = TRUE){
     x <- as.matrix(x)
-    nc <- ncol(x)
-    if (isTRUE (center)) {
-            center <- colMeans(x, na.rm=TRUE)
-    }
+    
+    if (isTRUE (center)) center <- colMeans(x, na.rm=TRUE)
 
-    if (is.numeric(center)) {
+    if (is.numeric (center)){
       if (length (center) != ncol (x))
         stop("length of 'center' must equal the number of columns of 'x'")
-      
-      x <- x - rep (center, each = nrow (x))
+
+      x <- .center (x, center = center)
     }
-          
+    
     if (isTRUE (scale)) {
       scale <- colSums (x^2, na.rm = TRUE)
         
@@ -48,17 +46,19 @@ scale <- function(x, center = TRUE, scale = TRUE){
       if (length (scale) != ncol (x))
         stop("length of 'center' must equal the number of columns of 'x'")
 
-      x <- x * rep (1 / scale, each = nrow (x))
-
+      x <- .scale (x, scale)
     }
        
-    if(is.numeric(center)) attr(x, "scaled:center") <- center
-    if(is.numeric(scale)) attr(x, "scaled:scale") <- scale
+    if (is.numeric (center)) attr(x, "scaled:center") <- center
+    if (is.numeric (scale))  attr(x, "scaled:scale")  <- scale
+    
     x
 }
 
 .test (scale) <- function (){
   m <- matrix (1:12, 3, 4)
+  m [12] <- NA
+  
   checkEquals (scale (m), base::scale (m))
 
   checkEquals (scale (m, center = FALSE), base::scale (m, center = FALSE))
