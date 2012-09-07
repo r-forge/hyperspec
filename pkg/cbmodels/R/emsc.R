@@ -99,7 +99,7 @@ setMethod ("emsc", signature = signature (X = "hyperSpec", Reference = "missing"
 ##' @return hyperSpec method: hyperSpec object containing emsc corrected spectrum of input hyperSpec objects: X and Reference, vectors: bg.comps and norm.comps, indices.
 ##' @rdname emsc 
 ##' @examples
-##' vmflu <- vanderMonde (flu, 2)
+##' vmflu <- vanderMonde (flu, 2, normalize.wl = normalize01)
 ##' Refs <- collapse (normalize01 (flu[6,]), vmflu)
 ##' plot (Refs)
 ##' plot (emsc (flu, Refs, bg.comps = 2 : 4, norm.comps = 1))
