@@ -29,3 +29,4 @@ Vignettes/*/*.pdf
 Vignettes/*/*.rda
 Vignettes/fileio/chondro.txt
 Vignettes/laser/rawdata/laser.txt.gz
+.Rproj.user
