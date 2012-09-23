@@ -1,10 +1,4 @@
-#if (require ("mvtnorm", quietly = TRUE)){
-  setGeneric ("rmvnorm", package = "mvtnorm")
-#} else {
-#  setGeneric ("rmvnorm", function (n, mean, sigma, ...) standardGeneric ("rmvnorm"))
-#}
-
-.rmvnorm <- function (n, mean, sigma = cov (mean)) {
+.rmmvnorm <- function (n, mean, sigma) {
   .group <- rep.int (seq_along (n), n)
 
    ## make indices so that pooled or individual covariance matrices can be used.
@@ -24,6 +18,10 @@
   tmp
 }
 
+## @export
+setGeneric ("rmmvnorm", .rmmvnorm)
+
+
 ##' Multivariate normal random numbers
 ##'
 ##' Interface functions to use \code{\link[mvtnorm]{rmvnorm}} for
@@ -39,17 +37,17 @@
 ##' @seealso \code{\link[mvtnorm]{rmvnorm}}
 ##'
 ##' \code{\link[hyperSpec]{cov}} and \code{\link[hyperSpec]{pooled.cov}} about calculating  covariance of hyperSpec objects.
-##' @rdname rmvnorm
+##' @rdname rmmvnorm
 ##' @examples
 ##' ## multiple groups, common covariance matrix
 ##' 
 ##' pcov <- pooled.cov (chondro, chondro$clusters)
-##' rnd <- rmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
+##' rnd <- rmmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
 ##' plot (rnd, col = rnd$.group)
 
-setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "matrix"),
+setMethod ("rmmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "matrix"),
            function (n, mean, sigma){
-             tmp <- .rmvnorm (n, mean@data$spc, sigma)
+             tmp <- .rmmvnorm (n, mean@data$spc, sigma)
 
            data <- mean [attr (tmp, "group"),, drop = FALSE]
            if (hy.getOption ("gc")) gc ()
@@ -60,11 +58,11 @@ setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "mat
            data
            })
 
-##' @rdname rmvnorm
+##' @rdname rmmvnorm
 ##' @export
-setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "array"),
+setMethod ("rmmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "array"),
            function (n, mean, sigma){
-             tmp <- .rmvnorm (n, mean@data$spc, sigma)
+             tmp <- .rmmvnorm (n, mean@data$spc, sigma)
 
            data <- mean [attr (tmp, "group"),, drop = FALSE]
            if (hy.getOption ("gc")) gc ()
@@ -75,15 +73,15 @@ setMethod ("rmvnorm", signature (n = "numeric", mean = "hyperSpec", sigma = "arr
            data
            })
 
-##' @rdname rmvnorm
+##' @rdname rmmvnorm
 ##' @export
-setMethod ("rmvnorm", signature (n = "numeric", mean = "matrix", sigma = "matrix"),
-           .rmvnorm)
+setMethod ("rmmvnorm", signature (n = "numeric", mean = "matrix", sigma = "matrix"),
+           .rmmvnorm)
 
-##' @rdname rmvnorm
+##' @rdname rmmvnorm
 ##' @export
-setMethod ("rmvnorm", signature (n = "numeric", mean = "matrix", sigma = "array"),
-           .rmvnorm)
+setMethod ("rmmvnorm", signature (n = "numeric", mean = "matrix", sigma = "array"),
+           .rmmvnorm)
 
 
 

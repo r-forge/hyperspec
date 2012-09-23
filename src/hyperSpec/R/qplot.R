@@ -66,7 +66,7 @@ qplotspc <- function (x,
       p <- p + facet_grid (. ~ .wl.range,
                            labeller = function (...) "",
                            scales = "free", space = "free") +
-           opts (strip.text.x = theme_text (size = 0))
+           theme (strip.text.x = element_text (size = 0))
 
   p
 }

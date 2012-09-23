@@ -1,22 +1,21 @@
-\name{rmvnorm}
-\alias{rmvnorm}
-\alias{rmvnorm,numeric,hyperSpec,array-method}
-\alias{rmvnorm,numeric,hyperSpec,matrix-method}
-\alias{rmvnorm,numeric,matrix,array-method}
-\alias{rmvnorm,numeric,matrix,matrix-method}
+\name{rmmvnorm}
+\alias{rmmvnorm}
+\alias{rmmvnorm,numeric,hyperSpec,array-method}
+\alias{rmmvnorm,numeric,hyperSpec,matrix-method}
+\alias{rmmvnorm,numeric,matrix,array-method}
+\alias{rmmvnorm,numeric,matrix,matrix-method}
 \title{Multivariate normal random numbers}
 \usage{
-  \S4method{rmvnorm}{numeric,hyperSpec,matrix}(n, mean,
+  \S4method{rmmvnorm}{numeric,hyperSpec,matrix}(n, mean,
     sigma)
 
-  \S4method{rmvnorm}{numeric,hyperSpec,array}(n, mean,
+  \S4method{rmmvnorm}{numeric,hyperSpec,array}(n, mean,
     sigma)
 
-  \S4method{rmvnorm}{numeric,matrix,matrix}(n, mean,
-    sigma = cov(mean))
+  \S4method{rmmvnorm}{numeric,matrix,matrix}(n, mean,
+    sigma)
 
-  \S4method{rmvnorm}{numeric,matrix,array}(n, mean,
-    sigma = cov(mean))
+  \S4method{rmmvnorm}{numeric,matrix,array}(n, mean, sigma)
 }
 \arguments{
   \item{n}{vector giving the numer of cases to generate for
@@ -43,7 +42,7 @@
 ## multiple groups, common covariance matrix
 
 pcov <- pooled.cov (chondro, chondro$clusters)
-rnd <- rmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
+rnd <- rmmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
 plot (rnd, col = rnd$.group)
 }
 \seealso{

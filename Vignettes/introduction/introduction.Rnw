@@ -323,19 +323,21 @@ The most frequently needed arguments are:
 
 \subsection{Creating Random Spectra}
 If \Rpackage{mvtnorm} is available, multivariate normally distributed spectra can be generated from
-mean and covariance matrix using \Rfunction{rmvnorm}\mFun{pooled.cov} (fig.~\ref{fig:sim:spc}). Mean
-spectra and pooled covariance matrix can be calculated using \Rfunction{pooled.cov}\mFun{pooled.cov}:
+mean and covariance matrix using \Rfunction{rmmvnorm}\mFun{rmmvnorm} (fig.~\ref{fig:sim:spc}). Note
+that the \phy function's name has an additional ``m'': it already takes care of multiple groups.
+Mean spectra and pooled covariance matrix can be calculated using
+\Rfunction{pooled.cov}\mFun{pooled.cov}:
 
 <<>>=
 pcov <- pooled.cov (chondro, chondro$clusters)
-rnd <- rmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
+rnd <- rmmvnorm (rep (10, 3), mean = pcov$mean, sigma = pcov$COV)
 @ 
 <<simspc, fig = TRUE, width = 10, height = 5, include=FALSE>>=
 cluster.cols <- c ("dark blue", "orange", "#C02020")
 plot (rnd, col = cluster.cols [rnd$.group])
 @ 
 \begin{figure}[t]
-\subfloat[\label{fig:sim:spc} \Rfunction{rmvnorm}]{\includegraphics[width=.66\linewidth]{introduction-fig--simspc}}
+\subfloat[\label{fig:sim:spc} \Rfunction{rmmvnorm}]{\includegraphics[width=.66\linewidth]{introduction-fig--simspc}}
 \subfloat[\label{fig:sim:lda} LDA of simulated spectra. Crosses mark real spectra.]{\includegraphics[width=.33\linewidth]{introduction-fig--simlda}}
   \caption{Multivariate normally distributed random spectra.}
   \label{fig:sim}
@@ -345,7 +347,7 @@ fig.~\ref{fig:sim:lda} shows the linear discriminant analysis (LDA) scores of su
 @
 <<lda>>=
 require ("MASS")
-rnd <- rmvnorm (rep (200, 3), mean = pcov$mean, sigma = pcov$COV)
+rnd <- rmmvnorm (rep (200, 3), mean = pcov$mean, sigma = pcov$COV)
 lda <- lda (clusters ~ spc, rnd)
  
 pred.chondro <- predict (lda, chondro)
@@ -357,6 +359,8 @@ plot (pred.chondro$x, col = colors [chondro$clusters], pch = 3)
 points (pred.sim$x, col = colors [rnd$clusters], pch = 20, cex = 0.5)
 @
 
+If individual covariance matrices should be used for each group, \Rfunarg{sigma} should be an array
+with the 3rd dimension corresponding to the group.
 \section{The Logbook}
 \label{sec:logbook}
 \warnbox{Deprecated}{The logbook is now DEPRECATED and the functionality will be removed in the future.\\
