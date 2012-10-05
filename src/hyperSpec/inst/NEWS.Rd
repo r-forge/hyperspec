@@ -1,4 +1,4 @@
-b\name{hyperSpec NEWS}
+\name{hyperSpec NEWS}
 \title{hyperSpec News}
 \encoding{UTF-8}
 
