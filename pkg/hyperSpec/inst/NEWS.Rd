@@ -1,4 +1,4 @@
-b\name{hyperSpec NEWS}
+\name{hyperSpec NEWS}
 \title{hyperSpec News}
 \encoding{UTF-8}
 
@@ -47,7 +47,7 @@ b\name{hyperSpec NEWS}
 
 \subsection{Bug fixes}{
   \itemize{
-	 \item 0.98-20120923: adapt \coe{qplotspc} and \code{qplotmixmap} to
+	 \item 0.98-20120923: adapt \code{qplotspc} and \code{qplotmixmap} to
 	 changes in ggplot2 0.9.2
 
 	 \item \code{apply (MARGIN = 2)} reported the first row without

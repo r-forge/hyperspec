@@ -158,7 +158,7 @@
     
   	# res4Li --> m4
     tmp <- colnames(res4Li[[1]][[1]])
-    m4  <- matrix(NA, nr = 1, nc = length(tmp))
+    m4  <- matrix(NA, nrow = 1, ncol = length(tmp))
     colnames(m4) <- tmp
     m4  <- cbind(header = NA, spectra = NA, m4)         # header number and spectra number as first columns
   	for(header in 1:headers)
