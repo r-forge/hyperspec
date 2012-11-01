@@ -34,6 +34,10 @@
   Ymeans <- rowsum (Y * weights, grouping)
   center.y <- colMeans (Ymeans)
 
+  ## delete rownames to avoid warning
+  rownames (X) <- NULL
+  rownames (Y) <- NULL
+
   list (X = X,
         Y = Y,
         grouping = grouping,
