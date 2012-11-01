@@ -20,9 +20,9 @@
 ##' diff <- pred$posterior - pred.rot$posterior
 ##' summary (diff)
 ##' boxplot (diff)
-rotate.lda <- function (object, R = NULL){
-  if (class (object) != "lda")
-      stop ("object must be of class 'lda', but it is '", class (object), "'.")
+rotate.lda <- function (object, R = NULL, ...){
+  if (nargs () > 2)
+      warning ("argument(s) ", paste (names (list (...)), collapse = ", "), " are ignored.")
   
   ndim <- ncol (object$scaling)
   
@@ -38,7 +38,7 @@ rotate.lda <- function (object, R = NULL){
   object
 }
 
-.test (rotate.lda) <- function {
+.test (rotate.lda) <- function () {
   model <- lda (Species ~ ., data = iris)
   pred <- predict (model)
   ## plot (pred$x, col = iris$Species, pch = 19, cex = 0.5, asp = 1)
