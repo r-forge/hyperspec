@@ -68,7 +68,9 @@
 \seealso{
   \code{\link[pls]{plsr}}, \code{\link[MASS]{lda}}
 
-  \code{link[MASS]{predict.lda}},
-  \code{link[pls]{predict.mvr}}
+  \code{\link[MASS]{predict.lda}},
+  \code{\link[pls]{predict.mvr}}
+  \code{\link[cbmodels]{rotate}} for rotation of the LDA
+  part of the model
 }
 

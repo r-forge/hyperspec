@@ -63,7 +63,8 @@ plslda <- function (X, Y, grouping, comps = TRUE, ncomp = min (dim (X)),
 ##' \code{link[pls]{predict.mvr}} 
 ##' @return list with results from \code{link[MASS]{predict.lda}} plus the pls scores used for LDA
 ##' prediction in element \code{$scores}
-##' @seealso  \code{link[MASS]{predict.lda}},  \code{link[pls]{predict.mvr}}
+##' @seealso  \code{\link[MASS]{predict.lda}},  \code{\link[pls]{predict.mvr}}
+##' \code{\link[cbmodels]{rotate}} for rotation of the LDA part of the model
 ##' @rdname plslda
 ##' @method predict plslda
 ##' @S3method predict plslda
@@ -72,7 +73,12 @@ predict.plslda <- function (object, newdata, ...){
 
   res <- predict (object$lda, newdata = PLSscores, ...)
   res$scores <- PLSscores
-	
+
+  ## avoid duplicated rownames warnings with as.data.frame
+  rownames (res$scores) <- NULL
+  rownames (res$x) <- NULL
+  rownames (res$posterior) <- NULL
+  
   res
 }
 

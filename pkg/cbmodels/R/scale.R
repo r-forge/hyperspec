@@ -21,7 +21,7 @@ scale <- function(x, center = TRUE, scale = TRUE) UseMethod("scale")
 
 message ("Installing faster replacement for base::scale.")
 
-scale <- function(x, center = TRUE, scale = TRUE){
+scale.default <- function(x, center = TRUE, scale = TRUE){
     x <- as.matrix(x)
     
     if (isTRUE (center)) center <- colMeans(x, na.rm=TRUE)
@@ -30,7 +30,7 @@ scale <- function(x, center = TRUE, scale = TRUE){
       if (length (center) != ncol (x))
         stop("length of 'center' must equal the number of columns of 'x'")
 
-      x <- .center (x, center = center)
+      x <- x - rep (center, each = nrow (x))#.center (x, center = center)
     }
     
     if (isTRUE (scale)) {
@@ -46,7 +46,7 @@ scale <- function(x, center = TRUE, scale = TRUE){
       if (length (scale) != ncol (x))
         stop("length of 'center' must equal the number of columns of 'x'")
 
-      x <- .scale (x, scale)
+      x <- x / rep (scale, each = nrow (x))#.scale (x, scale)
     }
        
     if (is.numeric (center)) attr(x, "scaled:center") <- center

@@ -4,6 +4,8 @@
 ##' \code{\link[MASS]{lda}} 
 ##' @export
 ##' @include rotate.R
+##' @method rotate lda
+##' @S3method rotate lda
 ##' @rdname rotate
 ##' @examples
 ##'
