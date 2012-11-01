@@ -2,6 +2,9 @@
 ##' @include cbmodels.R
 .ldapreproc <- function (X, Y, grouping#, subset = TRUE#, na.action
                          ){
+  if (! is.matrix (X))
+    X <- as.matrix (X)
+  
   ## produce both forms of Y data
   if (missing (Y))
     Y <- factor2matrix (grouping)
@@ -33,10 +36,6 @@
   center.x <- colMeans (Xmeans)
   Ymeans <- rowsum (Y * weights, grouping)
   center.y <- colMeans (Ymeans)
-
-  ## delete rownames to avoid warning
-  rownames (X) <- NULL
-  rownames (Y) <- NULL
 
   list (X = X,
         Y = Y,
