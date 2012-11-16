@@ -5,6 +5,7 @@
  pdfsubject={Vignette on hyperSpec's chondro data set},
  pdfkeywords={chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}}
 \SweaveOpts{prefix.string=chondro-fig-}
+%\VignetteDepends{latticeExtra}
 
 \begin{document}
 \title{Raman Spectra of Chondrocytes in Cartilage:\\
@@ -35,6 +36,7 @@ on a Raman map demonstrating frequently needed preprocessing methods
 \item baseline correction
 \item normalization
 \item smoothing / interpolating spectra
+\item preprocessing the spatial grid
 \end{itemize}
 and other basic work techniques
 \begin{itemize}
@@ -111,6 +113,51 @@ spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig--rawspc}}
 
 \section{Preprocessing}
 As usual in Raman spectroscopy of biological tissues, the spectra need some preprocessing.
+
+\subsection{Aligning the Spatial Grid} 
+The spectra were acquired on a regular square grid of measurement positions over the sample. \chy
+however does not store the data on this grid but rather stores the position where the spectra were
+taken. This allows more handling of irregular point patterns, and of sparse measurements where not a
+complete (square) is retained but only few positions on this grid.
+
+Occasionally, numeric or rounding errors will lead to seemingly irregular spacing of the data
+points. This is most obvious in false-colour maps of the sample (fig.~{fig:raw:b}), as
+\Rcode{plotmap} by default uses \Rcode{panel.levelplot.raster} which assumes a regular grid is
+underlying the data. The symptoms are warnings ``'x' values are not equispaced; output may be wrong''
+and white stripes in the false colour map (fig~\ref{fig:irregular:a}) which occur even thought the points are almost at their correct place (fig~\ref{fig:irregular:b})  
+<<>>=
+## disturb a few points
+chondro$x [500] <- chondro$x [500] + rnorm (1, sd = 0.01)
+chondro$y [660] <- chondro$y [660] + rnorm (1, sd = 0.01)
+@
+<<irregular-grid, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+plotmap (chondro, col.regions = seq.palette (20))
+@
+<<irregular-pts, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+require ("latticeExtra")
+plotmap (chondro, col.regions = seq.palette (20), panel = panel.levelplot.points, 
+         col = NA, pch = 22, cex = 1.9)
+@
+
+Such slight rounding errors can be corrected by \Rcode{fitraster} or \Rcode{makeraster}.
+\Rcode{fitraster} needs the step size of the raster and a starting coordinate, whereas
+\Rcode{makeraster} tries to guess these parameters for \Rcode{fitraster}. As long as just a few
+points are affected by rounding errors, \Rcode{makeraster} works fine:
+<<>>=
+chondro$x <- fitraster (chondro$x)$x
+chondro$y <- fitraster (chondro$y)$x
+@
+the result is shown in figure~\ref{fig:irregular:c}.
+<<irregular-corr, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
+plotmap (chondro, col.regions = seq.palette (20))
+@
+
+\begin{figure}[tbh]
+\subfloat[\label{fig:irregular:a}Raster plot with two off-grid points.]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-grid}}
+\subfloat[\label{fig:irregular:b}[Coordinates are slightly wrong only.]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-pts}}
+\subfloat[\label{fig:irregular:c}[Raster plot of corrected grid.]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-corr}}
+\caption{\label{fig:raw} Rounding erros in the point coordinates of lateral measurement grid.}
+\end{figure}
 
 \subsection{Spectral Smoothing}
 As the overview print shows that the spectra contain \Rcode{NA}s (from cosmic spike removal that was done previously), the first step is to remove these. Also, the wavelength axis of the raw spectra is not evenly spaced (the data points are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and \Sexpr{signif (max (diff (wl (chondro))), 2)}\,\rcm{} apart from each other). Furthermore, it would be good to trade some spectral resolution for higher signal to noise ratio. All three of these issues are tackled by interpolating and smoothing of the wavelength axis by \Rfunction{spc.loess}. The resolution is to be reduced to \rcm{8}, or \rcm{4} data point spacing.
