@@ -12,7 +12,7 @@
 ###   algorithm.  \emph{Journal of Chemometrics}, \bold{8}, 169--174.
 
 ## modification: centering via scale.
-##' PLS fitting
+##' PLS fitting: slightly modified version of \code{\link[pls]}}
 ##'
 ##' PLS fitting functions from pacakge pls, enhanced so that custom centering can be given.
 ##'

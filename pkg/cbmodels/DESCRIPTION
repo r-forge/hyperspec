@@ -1,8 +1,8 @@
 Package: cbmodels
 Type: Package
 Title: Collection of "combined" models: PCA-LDA, PLS-LDA, etc.
-Version: 0.5-20121101
-Date: 2012-11-01
+Version: 0.5-20121113
+Date: 2012-11-13
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including
@@ -36,3 +36,7 @@ Collate:
     'rotatelda.R'
     'rotatepcalda.R'
     'rotateplslda.R'
+    'flip.R'
+    'fliplda.R'
+    'flippcalda.R'
+    'flipplslda.R'

@@ -6,7 +6,7 @@
 ##' @param object a model to flip
 ##' @param dims dimensions which should be mirrored 
 ##' @param ... further parameters
-##' @return the rotated model
+##' @return the flipped/mirrored model
 ##' @author Claudia Beleites
 ##' @export
 flip <- function (object, dims, ...) UseMethod ("flip")

@@ -53,7 +53,7 @@ rotate.lda <- function (object, R = NULL, ...){
   object$N*object$prior 
 
   object$counts
-  ob
+  object
 
   pred <- predict (object, iris)$x
   p <- predict (object, as.data.frame (object$means))$x

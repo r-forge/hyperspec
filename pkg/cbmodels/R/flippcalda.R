@@ -31,7 +31,7 @@ flip.pcalda <- function (object, dims = FALSE, ...){
   model <- pcalda (X = iris [, -5], grouping = iris [,5], comps = 1:3)
   pred <- predict (model)
 
-  for (d in list (1, 2, 1 : 2, TRUE, FALSE)){
+  for (d in list (1, 2, 1 : 2, -2, TRUE, FALSE)){
     model.flip <- flip (model, d)
     pred.flip <- predict (model.flip)
     checkEqualsNumeric (pred.flip$posterior, pred$posterior)
