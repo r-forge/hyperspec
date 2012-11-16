@@ -37,7 +37,7 @@ rotate.lda <- function (object, R = NULL, ...){
 
   object$scaling <- object$scaling %*% R
 
-  object$svd <- NA
+  object$svd [TRUE] <- NA
   
   object
 }
