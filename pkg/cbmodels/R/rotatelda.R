@@ -37,11 +37,36 @@ rotate.lda <- function (object, R = NULL, ...){
 
   object$scaling <- object$scaling %*% R
 
-  ## TODO: fix object$svd
-  ## guess: apply (predict (object, as.data.frame (object$means)), 2, sd) / object$counts;
-  ## Was ist mit prior?
+  object$svd <- NA
   
   object
+}
+
+.svdfix <- function (){
+  ## guess:
+  object <- lda (Species ~ ., data = sample (iris, 145), prior = c(3,1,1)/5)
+  object <- lda (Species ~ ., data = iris)
+  apply (predict (object, as.data.frame (object$means))$x, 2, sd)
+  object$svd^2 / apply (predict (object, as.data.frame (object$means))$x, 2, sd)^2
+
+  
+  object$N*object$prior 
+
+  object$counts
+  ob
+
+  pred <- predict (object, iris)$x
+  p <- predict (object, as.data.frame (object$means))$x
+ 
+  xin <- pred - p [as.numeric (iris$Species), ]
+
+  p <- predict (object, iris)$x
+
+
+  
+
+  ## Was ist mit prior?
+
 }
 
 .test (rotate.lda) <- function () {
