@@ -45,7 +45,7 @@ pcalda <- function (X, Y, grouping, comps = TRUE, ...#,
 
 ##' @param object the PCA-LDA model
 ##' @param newdata the new data to apply the model to (matrix)
-##' @param ... \code{predict} ignores further arguments
+##' @param ... \code{predict.pcalda} hands further arguments to \code{\link[MASS]{predict.lda}}
 ##' @rdname pcalda
 ##' @method predict pcalda
 ##' @S3method predict pcalda
@@ -59,7 +59,7 @@ predict.pcalda <- function (object, newdata, ...){
       object$pca$rotation [, object$comps, drop = FALSE]
   }
 
-  res <- predict (object$lda, newdata = pcascores)
+  res <- predict (object$lda, newdata = pcascores, ...)
   res$pcascores <- pcascores
   res$comps = object$comps
 
@@ -107,10 +107,12 @@ center.pcalda <- function (object, ...){
     scores <- scale (X, center = colMeans (grpmeans), scale = FALSE) %*% coef
     checkEqualsNumeric (predict (model)$x, scores,
                         msg = sprintf ("scores with comps = %s", comps))
+
+    scores <- scale (X, center = colMeans (grpmeans), scale = FALSE) %*% coef
+    checkEqualsNumeric (predict (model)$x, scores,
+                        msg = sprintf ("scores with comps = %s", comps))
+    
   }
     
   ## test na.action
-
-  ## test center
-  
 }

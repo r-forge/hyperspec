@@ -14,14 +14,14 @@ License:
 Depends:
     hyperSpec (>= 0.98-20120713),
     methods,
+	 arrayhelpers,
     softclassval,
     MASS,
     pls
 Suggests:
     svUnit,
 	 lattice,
-	 reshape2,
-	 arrayhelpers
+	 reshape2
 Collate:
     'cbmodels.R'
     'pcaadd.R'

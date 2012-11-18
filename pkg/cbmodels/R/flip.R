@@ -16,6 +16,6 @@ flip.default <- function (object, ...){
   stop ("flip is not implemented for class '", class (object), "'.")
 }
 .test (flip.default) <- function (){
-  checkException (flip ()) ## not defined
+  checkException (flip (NULL)) ## not defined
 }
 
