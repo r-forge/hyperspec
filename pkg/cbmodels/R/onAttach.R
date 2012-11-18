@@ -1,5 +1,5 @@
-.onAttach <- function (libname, pkgname){
-  desc <- utils::packageDescription("hyperSpec")
+.onAttach <- function (libname, pkgname = "cbmodels"){
+  desc <- utils::packageDescription("cbmodels")
   vers <- paste("V. ", desc$Version)
 
   packageStartupMessage ("Package ",  desc$Package, ", version ", desc$Version, "\n\n",
