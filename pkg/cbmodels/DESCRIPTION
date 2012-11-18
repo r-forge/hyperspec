@@ -1,8 +1,8 @@
 Package: cbmodels
 Type: Package
 Title: Collection of "combined" models: PCA-LDA, PLS-LDA, etc.
-Version: 0.5-20121113
-Date: 2012-11-13
+Version: 0.5-20121118
+Date: 2012-11-18
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including
@@ -14,14 +14,14 @@ License:
 Depends:
     hyperSpec (>= 0.98-20120713),
     methods,
-	 arrayhelpers,
+    arrayhelpers,
     softclassval,
     MASS,
     pls
 Suggests:
     svUnit,
-	 lattice,
-	 reshape2
+    lattice,
+    reshape2
 Collate:
     'cbmodels.R'
     'pcaadd.R'
@@ -43,3 +43,7 @@ Collate:
     'fliplda.R'
     'flippcalda.R'
     'flipplslda.R'
+    'contributions.R'
+    'contributions.lda.R'
+    'flipprcomp.R'
+    'contributions.pcalda.R'

@@ -3,6 +3,7 @@
 \alias{flip.lda}
 \alias{flip.pcalda}
 \alias{flip.plslda}
+\alias{flip.prcomp}
 \title{flip}
 \usage{
   flip(object, dims, ...)
@@ -12,6 +13,8 @@
   \method{flip}{pcalda} (object, dims = FALSE, ...)
 
   \method{flip}{plslda} (object, dims = FALSE, ...)
+
+  \method{flip}{prcomp} (object, dims = FALSE, ...)
 }
 \arguments{
   \item{object}{a model to flip}
@@ -30,6 +33,9 @@
   i.e. the predicted posterior probabilities and classes do
   not change if the LD scores \code{\link[MASS]{lda}$x} are
   multiplied by -1.
+
+  PCA (\code{\link[stats]{prcomp}}) models are invariant to
+  flipping of both a loading and its score.
 }
 \details{
   \code{flip} is a post-processing method for models. It
@@ -75,6 +81,21 @@ points (pred.flip$x, col = iris$Species, cex = 0.5)
 diff <- pred$posterior - pred.flip$posterior
 summary (diff)
 boxplot (diff)
+## flip 1st dimension (loading & score)
+model <- prcomp (iris [-5])
+model.flip <- flip (model, 1)
+
+pairs (model$x, col = iris$Species, pch = 19, cex = 0.3, asp = 1)
+pairs (model.flip$x, col = iris$Species, pch = 19, cex = 0.3, asp = 1)
+
+matplot (model$rotation, type = "l")
+abline (h = 0)
+matpoints (model.flip$rotation, type = "b")
+
+## check difference between original model's predictions and rotated model's predictions
+diff <- tcrossprod (model$x, model$rotation) - tcrossprod (model.flip$x, model.flip$rotation)
+summary (diff)
+boxplot (diff)
 }
 \author{
   Claudia Beleites
@@ -85,5 +106,7 @@ boxplot (diff)
   \code{\link[cbmodels]{pcalda}}
 
   \code{\link[cbmodels]{plslda}}
+
+  \code{\link[stats]{prcomp}}
 }
 

@@ -28,7 +28,8 @@
   \code{\link[MASS]{lda}} (e.g. \code{subset})
   \code{\link[MASS]{lda}}.
 
-  \code{predict} ignores further arguments}
+  \code{predict.pcalda} hands further arguments to
+  \code{\link[MASS]{predict.lda}}}
 
   \item{comps}{which principal components should be used?}
 

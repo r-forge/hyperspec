@@ -4,7 +4,7 @@
 ##' @seealso 
 ##' \code{\link[MASS]{lda}} 
 ##' @export
-##' @import flip.R
+##' @include flip.R
 ##' @method flip lda
 ##' @S3method flip lda
 ##' @rdname flip
@@ -20,7 +20,7 @@
 ##' points (pred.flip$x, col = iris$Species, cex = 0.5)
 ##'
 ##' ## check difference between original model's predictions and rotated model's predictions
-##' diff <- pred$posterior - pred.rot$posterior
+##' diff <- pred$posterior - pred.flip$posterior
 ##' summary (diff)
 ##' boxplot (diff)
 flip.lda <- function (object, dims = FALSE, ...){

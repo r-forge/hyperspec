@@ -1,7 +1,8 @@
+##' @param prior For \code{\link[MASS]{lda}} models, priors can be given. 
 ##' @seealso 
 ##' \code{\link[MASS]{lda}} 
 ##' @export
-##' @import contributions.R
+##' @include contributions.R
 ##' @method contributions lda
 ##' @S3method contributions lda
 ##' @rdname contributions
@@ -9,7 +10,7 @@
 ##'
 ##' ## contributions 1st discriminant function
 ##' model <- lda (Species ~ ., data = iris)
-##' contrib.LD1 <- contributions (model, dimen = 1)
+##' contrib.LD1 <- contributions (model, dims = 1)
 ##' contrib.LD1[1:6,,]
 ##' dim (contrib.LD1)
 ##' layout (1:3, 3, 1)
@@ -20,10 +21,11 @@
 ##' dim (contrib.LD)
 ##' contrib.LD[1:6,,]
 ##' 
-##' if (require ("reshape2")) 
+##' if (require ("reshape2")) {
 ##'   contrib.df <- melt (contrib.LD, value.name = "contribution")
-##' else
+##' } else {
 ##'   contrib.df <- array2df (contrib.LD, label.x = "contribution")
+##' }
 ##' 
 ##' contrib.df$Species <- iris$Species [contrib.df$row]
 ##' head (contrib.df)
@@ -38,7 +40,9 @@
 ##' boxplot (diff)
 
 
-contributions.lda <- function (object, newdata, prior = object$prior, dimen = TRUE) {
+contributions.lda <- function (object, newdata, dims = TRUE, prior = object$prior, ...) {
+  if (length (c (...)) > 0L)
+      warning ("additional arguments ignored: ", paste (..., collapse = ", "), ".")
 ## largely copied from MASS:::predict.lda
 
     if(!inherits(object, "lda")) stop("object not of class \"lda\"")
@@ -85,7 +89,7 @@ contributions.lda <- function (object, newdata, prior = object$prior, dimen = TR
     means <- colSums(prior*object$means)
 ## end copy from MASS:::predict.lda
 
-    .contributions (x = x, center = means, coef = object$scaling, dimen = dimen)
+    .contributions (x = x, center = means, coef = object$scaling, dims = dims)
 }
 
 .test <- function (){
@@ -96,8 +100,8 @@ contributions.lda <- function (object, newdata, prior = object$prior, dimen = TR
   contributions <- contributions (object)
 
   checkEqualsNumeric (apply (contributions, c (1, 3), sum), pred.lda)
-  checkEqualsNumeric (contributions [,,2], contributions (object, dimen = 2))
-  checkEqualsNumeric (contributions [,,2], contributions (object, dimen = -1))
+  checkEqualsNumeric (contributions [,,2], contributions (object, dims = 2))
+  checkEqualsNumeric (contributions [,,2], contributions (object, dims = -1))
   checkEqualsNumeric (contributions, contributions (object, iris))
-  checkEqualsNumeric (contributions [1:10,,2], contributions (object, iris [1:10,], dimen = -1))
+  checkEqualsNumeric (contributions [1:10,,2], contributions (object, iris [1:10,], dims = -1))
 }

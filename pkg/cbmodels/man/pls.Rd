@@ -1,6 +1,6 @@
 \name{kernelpls.fit}
 \alias{kernelpls.fit}
-\title{PLS fitting}
+\title{PLS fitting: slightly modified version of \code{\link[pls]{kernelpls.fit}}}
 \usage{
   kernelpls.fit(X, Y, ncomp, stripped = FALSE, ...,
     center.x = center, center.y = center, center = TRUE)

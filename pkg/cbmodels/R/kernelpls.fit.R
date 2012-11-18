@@ -12,7 +12,7 @@
 ###   algorithm.  \emph{Journal of Chemometrics}, \bold{8}, 169--174.
 
 ## modification: centering via scale.
-##' PLS fitting: slightly modified version of \code{\link[pls]}}
+##' PLS fitting: slightly modified version of \code{\link[pls]{kernelpls.fit}}
 ##'
 ##' PLS fitting functions from pacakge pls, enhanced so that custom centering can be given.
 ##'
@@ -166,7 +166,7 @@ kernelpls.fit <- function(X, Y, ncomp, stripped = FALSE, ...,
     }
 }
 
-##' @ImportFrom kernelpls.fit pls
+## @importFrom kernelpls.fit pls
 kernelpls.fit.original <- pls:::kernelpls.fit
 
 .test (kernelpls.fit) <- function (){
