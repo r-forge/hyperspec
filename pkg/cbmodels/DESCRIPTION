@@ -18,7 +18,10 @@ Depends:
     MASS,
     pls
 Suggests:
-    svUnit
+    svUnit,
+	 lattice,
+	 reshape2,
+	 arrayhelpers
 Collate:
     'cbmodels.R'
     'pcaadd.R'
