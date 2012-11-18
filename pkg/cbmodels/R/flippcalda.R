@@ -1,33 +1,40 @@
 ##' @seealso 
 ##' \code{\link[cbmodels]{pcalda}} 
 ##' @export
-##' @include contributions.R
-##' @include contributionslda.R
-##' @method contributions pcalda
-##' @S3method contributions pcalda
-##' @rdname contributions
+##' @include flip.R
+##' @include fliplda.R
+##' @method flip pcalda
+##' @S3method flip pcalda
+##' @rdname flip
 ##' @examples
 ##'
-contributions.pcalda <- function (object, newdata = stop ("newdata is required: ",
-                                            "pcalda models do not store the original data"),
-                                  dimen = TRUE){
-  .contributions (x = newdata,
-                  center = center (object),
-                  coef = coef (object) [, dimen, drop = FALSE])
+##' ## mirror x axis
+##' model <- pcalda (X = iris [,1:4], grouping = iris$Species, comps=1:3)
+##' pred <- predict (model)
+##' plot (pred$x, col = iris$Species, pch = 19, cex = 0.3, asp = 1)
+##' 
+##' model.flip <- flip (model, 1)
+##' pred.flip <- predict (model.flip)
+##' points (pred.flip$x, col = iris$Species, cex = 0.5)
+##'
+##' ## check difference between original model's predictions and flipped model's predictions
+##' diff <- pred$posterior - pred.flip$posterior
+##' summary (diff)
+##' boxplot (diff)
+flip.pcalda <- function (object, dims = FALSE, ...){
+  object$lda <- flip (object$lda, dims = dims, ...)
+  
+  object
 }
 
-.test (contributions.pcalda) <- function () {
-  X <- as.matrix (iris [, -5])
-  model <- pcalda (X = X, grouping = iris [,5], comps = 1:3)
-  pred <- predict (model)$x
+.test (flip.pcalda) <- function () {
+  model <- pcalda (X = iris [, -5], grouping = iris [,5], comps = 1:3)
+  pred <- predict (model)
 
-  contributions <- contributions (model, X)
-
-  checkEqualsNumeric (apply (contributions, c (1, 3), sum), pred)
-  checkEqualsNumeric (contributions [,,2], contributions (model, X, dimen = 2))
-  checkEqualsNumeric (contributions [,,2], contributions (model, X, dimen = -1))
-  checkEqualsNumeric (contributions [1:10,,2], contributions (model, X [1:10,], dimen = -1))
-
-  checkException (contributions (model)) # PCA-LDA models do not store the original data
+  for (d in list (1, 2, 1 : 2, -2, TRUE, FALSE)){
+    model.flip <- flip (model, d)
+    pred.flip <- predict (model.flip)
+    checkEqualsNumeric (pred.flip$posterior, pred$posterior)
+  }
 }
 
