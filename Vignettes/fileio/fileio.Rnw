@@ -167,18 +167,17 @@ plot (triazine [1])
 \index{JCAMP-DX!ASCII}
 %
 \label{sec:read.jdx.Shimadzu}
-\index{JCAMP-DX!Shimadzu}
-\index{Shimadzu!JCAMP-DX}
-Rudimentary import of JCAMP-DX files\cite{McDonald1988} is available in function
-\Rfunction{read.jdx.Shimadzu} which will read the JCAMP-DX files produced by the Shimadzu GCxGC-MS
-library:
-
+\index{JCAMP-DX!Shimadzu} \index{Shimadzu!JCAMP-DX} \index{JCAMP-DX!PerkinElmer}
+\index{Shimadzu!PerkinElmer} Rudimentary import of JCAMP-DX files\cite{McDonald1988} is available in
+function \Rfunction{read.jdx}.  These files can contain multiple spectra, supported data formats are
+tabular \texttt{XY..XY} and \texttt{X++(Y..Y)}.
 <<>>=
-read.jdx.Shimadzu ("jcamp-dx/shimadzu.jdx", encoding = "latin1")
+read.jdx ("jcamp-dx/shimadzu.jdx", encoding = "latin1")
+read.jdx ("jcamp-dx/virgilio.jdx")
 @ 
 
-These files can contain multiple spectra, data format is \texttt{XY..XY} whith one X,Y pair per
-line.
+\Rfunction{read.jdx.Shimadzu} is now deprecated.
+
 
 \subsection{ASCII Export} 
 ASCII export can be done in wide and long format using \Rfunction{write.txt.long} and
