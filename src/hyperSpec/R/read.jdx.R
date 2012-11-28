@@ -30,12 +30,17 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
     ## look for header data
     hdr <- modifyList (header, .jdx.readhdr (jdx [hdrstart [s] : (spcstart [s] - 1)]))
 
+    if (s == 1L) ## file header may contain overall settings
+        header <- hdr
+
+    ## evaluate data block
     spc <- switch (hdr$xydata,
                    `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [spcstart [s] : spcend [s]]),
                    `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [spcstart [s] : spcend [s]]),
                    stop ("unknown JCAMP-DX data format: ", hdr$xydata)
                    )
 
+    ## process according to header entries
     spc <- .jdx.processhdr (spc, hdr, keys.hdr2data)
   }
 
@@ -44,7 +49,9 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 
   spc
 }
-  
+
+### HEADER ------------------------------------------------------------------------------------------
+
 .jdx.readhdr <- function (hdr){
   names <- tolower (sub ("^##(.*)=.*$", "\\1", hdr))
   names <- gsub ("[[:blank:]_-]", "", names)
@@ -60,16 +67,19 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 }
 
 .jdx.processhdr <- function (spc, hdr, keys){
-  if (! is.null (hdr$yfactor))
-      spc@data$spc <- spc@data$spc * hdr$yfactor
+
+  if (hdr$jcampdx != 4.24)
+      warning ("Only JCAMP-DX V 4.24 is supported.")
+  
+  ## hdr$xfactor and $yfactor applied by individual reading functions
     
   spc@label$.wavelength <- .jdx.xunits (hdr$xunits)
   spc@label$spc <- .jdx.yunits (hdr$yunits)
 
-
   hdr[c ("jcampdx", "xunits", "yunits", "xfactor", "yfactor", "firstx", "lastx", "npoints",
          "firsty", "xydata", "end", "deltax", "maxy", "miny")] <- NULL
   hdr <- hdr[keys]
+
   if (length (hdr) > 0L)
       spc@data <- cbind (spc@data, hdr)
   
@@ -96,15 +106,26 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
   ## x <- as.numeric (sub ("^([[:digit:]]+)[-+].*$", "\\1", data)) * hdr$xfactor
   ##  if (! all.equal (wl [c (1, head (cumsum (ny) + 1, -1))], x))
 
+  if (! is.null (hdr$yfactor))
+      y <- y * hdr$yfactor
+
   new ("hyperSpec", spc = y, wavelength = wl)
 }
 
 .jdx.TABULAR.AFFN <- function (hdr, data){
   data <- strsplit (data, "[[:blank:]]+")
   data <- unlist (data)
-  read.txt.long  (textConnection (data),
+  spc <- read.txt.long  (textConnection (data),
                   cols = list (.wavelength="", spc=""),
                   header = FALSE, sep = ",")
+
+  if (! is.null (hdr$xfactor))
+      spc@wavelength <- spc@wavelength * hdr$xfactor
+  
+  if (! is.null (hdr$yfactor))
+      spc@data$spc <- spc@data$spc * hdr$yfactor
+
+  spc
 }
 
 ### UNITS -------------------------------------------------------------------------------------------
