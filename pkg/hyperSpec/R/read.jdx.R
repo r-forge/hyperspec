@@ -16,9 +16,18 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
                      header = list (), keys.hdr2data = FALSE){
   jdx <- readLines (filename, encoding = encoding)
 
+  ## BRUKAFFN.DX has ##JCAMPDX= 5.0
+  if (sub ("^[[:blank:]]*##JCAMP-?DX=[[:blank:]]*([0-9.]*)[[:blank:]]*.*$", "\\1",
+           jdx [grepl ("##JCAMP-?DX", jdx)]) != "4.24")
+  stop ("Only a subset of JCAMP-DX v 4.24 is supported so far. ",
+        "Please contact the maintainer about further advise.")
+
   ## start & end of spectra header and data
-  spcstart <-  grep ("^##XYDATA=", jdx) + 1
-  spcend <- grep ("^##END=[[:blank:]]*$", jdx) - 1
+  spcstart <-  grep ("^[[:blank:]]*##(XYDATA=|DATA TABLE=)", jdx) + 1
+      # V 4.24 uses ##XYDATA=
+      # V 5.00 uses ##DATA TABLE= ..., XYDATA
+      
+  spcend <- grep ("^[[:blank:]]*##END=[[:blank:]]*$", jdx) - 1
   hdrstart <- c (1, head (spcend, -1) + 1)
 
   stopifnot (length (spcstart) == length (spcend))
@@ -30,12 +39,21 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
     ## look for header data
     hdr <- modifyList (header, .jdx.readhdr (jdx [hdrstart [s] : (spcstart [s] - 1)]))
 
+    if (s == 1L) ## file header may contain overall settings
+        header <- hdr
+
+    ## evaluate data block
+
+    if (grepl ("[A-Za-z%@]", jdx[spcstart [s]]))
+        stop ("SQZ, DIF, and DIFDUP forms are not yet supported.")
+    
     spc <- switch (hdr$xydata,
                    `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [spcstart [s] : spcend [s]]),
                    `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [spcstart [s] : spcend [s]]),
                    stop ("unknown JCAMP-DX data format: ", hdr$xydata)
                    )
 
+    ## process according to header entries
     spc <- .jdx.processhdr (spc, hdr, keys.hdr2data)
   }
 
@@ -44,14 +62,16 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 
   spc
 }
-  
+
+### HEADER ------------------------------------------------------------------------------------------
+
 .jdx.readhdr <- function (hdr){
-  names <- tolower (sub ("^##(.*)=.*$", "\\1", hdr))
+  names <- tolower (sub ("^[[:blank:]]*##(.*)=.*$", "\\1", hdr))
   names <- gsub ("[[:blank:]_-]", "", names)
   
-  hdr <- sub ("^##.*=[[:blank:]]*(.*)[[:blank:]]*$", "\\1", hdr)
+  hdr <- sub ("^[[:blank:]]*##.*=[[:blank:]]*(.*)[[:blank:]]*$", "\\1", hdr)
   hdr <-   gsub ("^[\"'[:blank:]]*([^\"'[:blank:]].*[^\"'[:blank:]])[\"'[:blank:]]*$", "\\1", hdr)
-  i <- grepl ("^[-.[:digit:]]*[eE]?[-.[:digit:]]*$", hdr)
+  i <- grepl ("^[[:blank:]]*[-.[:digit:]]*[eE]?[-.[:digit:]]*[[:blank:]]*$", hdr)
   hdr <- as.list (hdr)
   hdr [i] <- as.numeric (hdr [i])
   names (hdr) <- names
@@ -60,16 +80,16 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 }
 
 .jdx.processhdr <- function (spc, hdr, keys){
-  if (! is.null (hdr$yfactor))
-      spc@data$spc <- spc@data$spc * hdr$yfactor
+
+  ## hdr$xfactor and $yfactor applied by individual reading functions
     
   spc@label$.wavelength <- .jdx.xunits (hdr$xunits)
   spc@label$spc <- .jdx.yunits (hdr$yunits)
 
-
   hdr[c ("jcampdx", "xunits", "yunits", "xfactor", "yfactor", "firstx", "lastx", "npoints",
          "firsty", "xydata", "end", "deltax", "maxy", "miny")] <- NULL
   hdr <- hdr[keys]
+
   if (length (hdr) > 0L)
       spc@data <- cbind (spc@data, hdr)
   
@@ -79,15 +99,23 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 ### DATA FORMATS ------------------------------------------------------------------------------------
 
 .jdx.TABULAR.PAC <- function (hdr, data){
-  wl <- seq (hdr$firstx, hdr$lastx, length.out = hdr$npoints)
+
+  if (is.null (hdr$firstx))  stop ("##FIRSTX= missing.")
+  if (is.null (hdr$lastx))   stop ("##LASTX= missing.")
+  if (is.null (hdr$npoints)) stop ("##NPOINTS= missing.")
   
-  y <- sub ("^[[:digit:]]+([-+].*)$", "\\1", data)
-  y <- gsub ("[+]", " +", y)
-  y <- gsub ("[-]", " -", y)
-  y <- sub ("^ +", "", y)
+  wl <- seq (hdr$firstx, hdr$lastx, length.out = hdr$npoints)
+
+  ## remove starting X
+  y <- sub ("^[[:blank:]]*[0-9.]+[[:blank:]]*([-+]?.*)$", "\\1", data)
+
+  ## add spaces between numbers if necessary
+  y <- gsub ("([0-9])([+-])", "\\1 \\2", y)
+
   y <- strsplit (y, "[[:blank:]]+")
   y <- as.numeric (unlist (y))
-  ny <- sapply (y, length)
+
+  ny <- length (y)
 
   if (length (y) != hdr$npoints)
       stop ("mismatch between ##NPOINTS and length of Y data.")
@@ -96,15 +124,38 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
   ## x <- as.numeric (sub ("^([[:digit:]]+)[-+].*$", "\\1", data)) * hdr$xfactor
   ##  if (! all.equal (wl [c (1, head (cumsum (ny) + 1, -1))], x))
 
+  if (is.null (hdr$yfactor))
+      hdr$yfactor <- 1
+  
+  y <- y * hdr$yfactor
+
+  if (! is.null (hdr$miny) && abs (hdr$miny - min (y)) > hdr$yfactor)
+      warning (sprintf ("Minimum of spectrum != MINY: difference = %0.3g (%0.3g * YFACTOR)",
+                        min (y) - hdr$miny,
+                        (min (y) - hdr$miny) / hdr$yfactor))
+
+  if (! is.null (hdr$maxy) && abs (hdr$maxy - max (y)) > hdr$yfactor)
+      warning (sprintf ("Maximum of spectrum != MAXY: difference = %0.3g (%0.3g * YFACTOR)",
+                        max (y) - hdr$maxy,
+                        (max (y) - hdr$maxy) / hdr$yfactor))
+
   new ("hyperSpec", spc = y, wavelength = wl)
 }
 
 .jdx.TABULAR.AFFN <- function (hdr, data){
   data <- strsplit (data, "[[:blank:]]+")
   data <- unlist (data)
-  read.txt.long  (textConnection (data),
+  spc <- read.txt.long  (textConnection (data),
                   cols = list (.wavelength="", spc=""),
                   header = FALSE, sep = ",")
+
+  if (! is.null (hdr$xfactor))
+      spc@wavelength <- spc@wavelength * hdr$xfactor
+  
+  if (! is.null (hdr$yfactor))
+      spc@data$spc <- spc@data$spc * hdr$yfactor
+
+  spc
 }
 
 ### UNITS -------------------------------------------------------------------------------------------
