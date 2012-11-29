@@ -9,28 +9,39 @@
 ##' @param header list with manually set header values
 ##' @param keys.hdr2data character vector of labels (lowercase, without and dashes, blanks,
 ##' underscores) whose values should be tranfered into the extra data.
+##' @param \dots further parameters handed to the data import function, e.g.
+##' \tabular{ll}{
+##' \code{xtol} \tab tolerance for checking calculated x values against checkpoints at beginning
+##'                  of line, defaults to XFACTOR\cr
+##' \code{ytol} \tab tolerance for checking Y values against MINY and MAXY, defaults to YFACTOR\cr
+##' }
 ##' @return hyperSpec object
 ##' @author C. Beleites
 ##' @export
 read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
-                     header = list (), keys.hdr2data = FALSE){
+                     header = list (), keys.hdr2data = FALSE, ...){
   jdx <- readLines (filename, encoding = encoding)
-
+  
   ## BRUKAFFN.DX has ##JCAMPDX= 5.0
-  if (sub ("^[[:blank:]]*##JCAMP-?DX=[[:blank:]]*([0-9.]*)[[:blank:]]*.*$", "\\1",
-           jdx [grepl ("##JCAMP-?DX", jdx)]) != "4.24")
-  stop ("Only a subset of JCAMP-DX v 4.24 is supported so far. ",
-        "Please contact the maintainer about further advise.")
+  if (any (sub ("^[[:blank:]]*##JCAMP-?DX=[[:blank:]]*([0-9.]*)[[:blank:]]*.*$", "\\1",
+                jdx [grepl ("##JCAMP-?DX", jdx)]) != "4.24"))
+     stop ("Only a subset of JCAMP-DX v 4.24 is supported so far.")
 
   ## start & end of spectra header and data
-  spcstart <-  grep ("^[[:blank:]]*##(XYDATA=|DATA TABLE=)", jdx) + 1
+  hdrstart <- grep ("^[[:blank:]]*##TITLE=", jdx)
+      
+
+  spcstart <- grep ("^[[:blank:]]*##(XYDATA|DATA TABLE)=", jdx) + 1
       # V 4.24 uses ##XYDATA=
       # V 5.00 uses ##DATA TABLE= ..., XYDATA
       
   spcend <- grep ("^[[:blank:]]*##END=[[:blank:]]*$", jdx) - 1
-  hdrstart <- c (1, head (spcend, -1) + 1)
 
+  ## some checks
+  if (length (hdrstart) == 0L) stop ("No spectra found.")
+  stopifnot (length (spcstart) == length (hdrstart))
   stopifnot (length (spcstart) == length (spcend))
+  stopifnot (all (hdrstart < spcstart))
   stopifnot (all (spcstart < spcend))
 
   spc <- list ()
@@ -44,17 +55,17 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 
     ## evaluate data block
 
-    if (grepl ("[A-Za-z%@]", jdx[spcstart [s]]))
+    if (grepl ("[A-DF-Za-df-z%@]", jdx[spcstart [s]]))
         stop ("SQZ, DIF, and DIFDUP forms are not yet supported.")
     
     spc <- switch (hdr$xydata,
-                   `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [spcstart [s] : spcend [s]]),
-                   `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [spcstart [s] : spcend [s]]),
+                   `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [spcstart [s] : spcend [s]], ...),
+                   `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [spcstart [s] : spcend [s]], ...),
                    stop ("unknown JCAMP-DX data format: ", hdr$xydata)
                    )
 
     ## process according to header entries
-    spc <- .jdx.processhdr (spc, hdr, keys.hdr2data)
+    spc <- .jdx.processhdr (spc, hdr, keys.hdr2data, ...)
   }
 
   if (length (spc) > 1L)  
@@ -75,14 +86,32 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
   hdr <- as.list (hdr)
   hdr [i] <- as.numeric (hdr [i])
   names (hdr) <- names
-  
+
+  ## e.g. Shimadzu does not always save XFACTOR and YFACTOR
+  if (is.null (hdr$yfactor)) hdr$yfactor <- 1
+  if (is.null (hdr$xfactor)) hdr$xfactor <- 1
+
   hdr
 }
 
-.jdx.processhdr <- function (spc, hdr, keys){
+.jdx.processhdr <- function (spc, hdr, keys, ..., ytol = hdr$yfactor){
 
   ## hdr$xfactor and $yfactor applied by individual reading functions
-    
+
+  ## check Y values
+  miny <- min (spc@data$spc)
+  if (! is.null (hdr$miny) && abs (hdr$miny - miny) > ytol)
+      warning (sprintf ("Minimum of spectrum != MINY: difference = %0.3g (%0.3g * YFACTOR)",
+                        miny - hdr$miny,
+                        (miny - hdr$miny) / hdr$yfactor))
+
+  maxy <- max (spc@data$spc)
+  if (! is.null (hdr$maxy) && abs (hdr$maxy - maxy) > ytol)
+      warning (sprintf ("Maximum of spectrum != MAXY: difference = %0.3g (%0.3g * YFACTOR)",
+                        maxy - hdr$maxy,
+                        (maxy - hdr$maxy) / hdr$yfactor))
+
+  
   spc@label$.wavelength <- .jdx.xunits (hdr$xunits)
   spc@label$spc <- .jdx.yunits (hdr$yunits)
 
@@ -98,8 +127,11 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 
 ### DATA FORMATS ------------------------------------------------------------------------------------
 
-.jdx.TABULAR.PAC <- function (hdr, data){
+.jdx.TABULAR.PAC <- function (hdr, data, ..., xtol = hdr$xfactor){
 
+  ## regexp for numbers including scientific notation
+  .PATTERN.number <- "[0-9]*[.]?[0-9]*([eE][+-]?[0-9]+)?"
+  
   if (is.null (hdr$firstx))  stop ("##FIRSTX= missing.")
   if (is.null (hdr$lastx))   stop ("##LASTX= missing.")
   if (is.null (hdr$npoints)) stop ("##NPOINTS= missing.")
@@ -107,53 +139,43 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
   wl <- seq (hdr$firstx, hdr$lastx, length.out = hdr$npoints)
 
   ## remove starting X
-  y <- sub ("^[[:blank:]]*[0-9.]+[[:blank:]]*([-+]?.*)$", "\\1", data)
+  y <- sub (paste0 ("^[[:blank:]]*", .PATTERN.number, "[[:blank:]]*(.*)$"), "\\2", data)
 
   ## add spaces between numbers if necessary
-  y <- gsub ("([0-9])([+-])", "\\1 \\2", y)
+  y <- gsub ("([0-9.])([+-])", "\\1 \\2", y)
 
   y <- strsplit (y, "[[:blank:]]+")
+  ny <- sapply (y, length)
+
   y <- as.numeric (unlist (y))
 
-  ny <- length (y)
 
   if (length (y) != hdr$npoints)
       stop ("mismatch between ##NPOINTS and length of Y data.")
 
-  ## TODO: check X checkpoints
-  ## x <- as.numeric (sub ("^([[:digit:]]+)[-+].*$", "\\1", data)) * hdr$xfactor
-  ##  if (! all.equal (wl [c (1, head (cumsum (ny) + 1, -1))], x))
+  ## X checkpoints
+  x <- sub (paste0 ("^[[:blank:]]*(", .PATTERN.number, ")[[:blank:]]*.*$"), "\\1", data)
+  x <- as.numeric (x) * hdr$xfactor
+  diffx <- abs (wl [c (1, head (cumsum (ny) + 1, -1))] - x)
+  if (any (diffx > xtol))
+      warning ("X axis differs from checkpoints. ",
+               sprintf ("Maximum difference = %0.2g (%0.2g * XFACTOR)",
+                        max (diffx), max (diffx) / hdr$xfactor))
 
-  if (is.null (hdr$yfactor))
-      hdr$yfactor <- 1
-  
   y <- y * hdr$yfactor
-
-  if (! is.null (hdr$miny) && abs (hdr$miny - min (y)) > hdr$yfactor)
-      warning (sprintf ("Minimum of spectrum != MINY: difference = %0.3g (%0.3g * YFACTOR)",
-                        min (y) - hdr$miny,
-                        (min (y) - hdr$miny) / hdr$yfactor))
-
-  if (! is.null (hdr$maxy) && abs (hdr$maxy - max (y)) > hdr$yfactor)
-      warning (sprintf ("Maximum of spectrum != MAXY: difference = %0.3g (%0.3g * YFACTOR)",
-                        max (y) - hdr$maxy,
-                        (max (y) - hdr$maxy) / hdr$yfactor))
 
   new ("hyperSpec", spc = y, wavelength = wl)
 }
 
-.jdx.TABULAR.AFFN <- function (hdr, data){
+.jdx.TABULAR.AFFN <- function (hdr, data, ...){
   data <- strsplit (data, "[[:blank:]]+")
   data <- unlist (data)
   spc <- read.txt.long  (textConnection (data),
                   cols = list (.wavelength="", spc=""),
                   header = FALSE, sep = ",")
 
-  if (! is.null (hdr$xfactor))
-      spc@wavelength <- spc@wavelength * hdr$xfactor
-  
-  if (! is.null (hdr$yfactor))
-      spc@data$spc <- spc@data$spc * hdr$yfactor
+  spc@wavelength <- spc@wavelength * hdr$xfactor
+  spc@data$spc <- spc@data$spc * hdr$yfactor
 
   spc
 }

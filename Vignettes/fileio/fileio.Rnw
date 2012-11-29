@@ -201,14 +201,21 @@ plot (triazine [1])
 \index{Shimadzu!JCAMP-DX} \index{JCAMP-DX!PerkinElmer} \index{PerkinElmer!JCAMP-DX} 
 \index{PerkinElmer!Infrared} \index{Infrared!PerkinElmer}
 \index{JCAMP-DX!Infrared} \index{Infrared!JCAMP-DX}
- Limited import of JCAMP-DX
-files\cite{McDonald1988} is available in function \Rfunction{read.jdx}.  These files can contain
-multiple spectra, supported data formats are tabular \texttt{XY..XY} and \texttt{X++(Y..Y)}.
+%
+Limited import of JCAMP-DX files v. 4.24 \cite{McDonald1988} is available in function
+\Rfunction{read.jdx}.  These files can contain multiple spectra, supported data formats are tabular
+\texttt{XY..XY} and \texttt{X++(Y..Y)}.
 <<>>=
 read.jdx ("jcamp-dx/shimadzu.jdx", encoding = "latin1", keys.hdr2data=TRUE)
+read.jdx ("jcamp-dx/virgilio.jdx")
+@ %
 
-for (file in sprintf ("jcamp-dx/%s", c ("virgilio.jdx", "PE1800.DX", "LABCALC.DX")))
+<<test-read-jdx, echo = FALSE, results = hide>>=
+for (file in sprintf ("jcamp-dx/%s", 
+       c ("virgilio.jdx", "PE1800.DX", "LABCALC.DX", "AMA1.DX", "br_154_1.DX")))
     print (read.jdx (file))
+
+lapply (Sys.glob ("jcamp-dx/PE-IR/*.DX"), read.jdx, ytol = 1e-8)
 @
 
 \warnbox{Note}{\Rfunction{read.jdx.Shimadzu} is deprecated.}
