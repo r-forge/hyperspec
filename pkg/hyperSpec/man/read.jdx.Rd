@@ -40,6 +40,6 @@
   change without notice. See \code{vignette ("fileio")}
 }
 \author{
-  C. Beleites
+  C. Beleites with contributions by Bryan Hanson
 }
 

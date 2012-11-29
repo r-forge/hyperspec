@@ -16,7 +16,7 @@
 ##' \code{ytol} \tab tolerance for checking Y values against MINY and MAXY, defaults to YFACTOR\cr
 ##' }
 ##' @return hyperSpec object
-##' @author C. Beleites
+##' @author C. Beleites with contributions by Bryan Hanson
 ##' @export
 read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
                      header = list (), keys.hdr2data = FALSE, ...){

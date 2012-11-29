@@ -135,6 +135,7 @@ Collate:
     'read.jdx.R'
     'read.jdx.Shimadzu.R'
     'read.txt.Shimadzu.R'
+    'rubberband.R'
     'subset.R'
     'vandermonde.R'
     'wleval.R'
