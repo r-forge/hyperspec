@@ -69,7 +69,7 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
 ##  close.screen(all = TRUE) 
 ##  split.screen (figs = c(1, 2))
   layout (matrix (c (1, 0, 3, 2), nrow = 2))
-  par (mar = c (0,0,1,1))
+  par (mar = c (2,2,0.5, 0.5))
  # X11 (width = 7, height = 4); wspc <- dev.cur ()
  # X11 (width = 7, height = 4); wdetail <- dev.cur () 
 
