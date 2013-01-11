@@ -1,9 +1,8 @@
 \name{read.cytomat}
 \alias{read.cytomat}
-\title{Import for Cytospec mat files
-These functions allow to import .mat (Matlab V5) files written by Cytospec.}
+\title{Import for Cytospec mat files}
 \usage{
-  read.cytomat(file, keys2data = FALSE)
+  read.cytomat(file, keys2data = FALSE, blocks = 1)
 }
 \arguments{
   \item{file}{The complete file name (or a connection to)
@@ -11,6 +10,8 @@ These functions allow to import .mat (Matlab V5) files written by Cytospec.}
 
   \item{keys2data}{specifies which elements of the
   \code{Info} should be transferred into the extra data}
+
+  \item{blocks}{which blocks should be read?}
 }
 \value{
   hyperSpec object if the file contains a single spectra
@@ -18,8 +19,8 @@ These functions allow to import .mat (Matlab V5) files written by Cytospec.}
   each block.
 }
 \description{
-  Import for Cytospec mat files These functions allow to
-  import .mat (Matlab V5) files written by Cytospec.
+  These functions allow to import .mat (Matlab V5) files
+  written by Cytospec.
 }
 \note{
   This function is an ad-hoc implementation and subject to
