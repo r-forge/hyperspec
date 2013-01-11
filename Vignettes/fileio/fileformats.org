@@ -11,6 +11,7 @@
 | ASCII  | JCAMP-DX    | PerkinElmer       | Infrared         | jcamp-dx             | read.jdx             | import for subset of the JCAMP-DX standard             |
 | ACII   | Witec ASCII | Witec             | Raman            | scan.txt.Witec       | scan.txt.Witec       |                                                        |
 | binary | Matlab      | Matlab            |                  | R.matlab::readMat    | readMat              |                                                        |
+| binary | Matlab      | Cytospec          |                  | read.cytomat         | read.cytomat         |                                                        |
 | binary | hol         | Kaiser            | Raman            | -                    | Kaiser               | via Matlab                                             |
 | binary | ENVI        |                   |                  | read.ENVI            | read.ENVI            |                                                        |
 | binary | ENVI        | Bruker            | Infrared Imaging | read.ENVI            | read.ENVI.Bruker     |                                                        |
