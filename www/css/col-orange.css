@@ -1,0 +1,244 @@
+/* Colors */
+body, div#nav a, div.paper h3, li.literature a {
+	 color: #000;
+}
+
+a, a:hover, a:active, a:focus, div.paper h2, span.title { 
+	 color: #F40 
+}
+
+a:hover, a:active, a:focus {
+	 border-color: #F40;
+}
+
+div#header {
+	 background:  #F80;
+}
+
+div.post, span#tag, p#footer, div#address {
+	 border-color: #fb8; /*aad*/
+} 
+
+
+div#header {
+	 box-shadow: 0 0 4em #fca;
+	 -webkit-box-shadow: 0 0 4em #fca;
+	 -moz-box-shadow: 0 0 4em #fca;
+}
+
+div#address, span#tag, pre {
+	 background-color: #fca;
+}
+
+body {
+	 background: #fffbf8;
+}
+
+
+/* font-family */
+body {
+	 font-family: Georgia, "DejaVu Serif", Times, "Times New Roman", serif;
+}
+
+h1, h2, h3, h4, h5, h6, 
+div#nav, div#share, div#address {
+	 font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", 
+	 "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+}
+
+
+/*font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace; */
+
+
+
+body {
+	 font-size: 95%; /* Resets UA 16px common default such that 1em = 10px. Kudos to Richard Rutter. */
+	 line-height: 1.5; /* We can use unitless numbers here; they act as multiples of the font-size. */
+	 width: 75em;
+	 line-height: 1.5;
+	 text-align: justify; /* For IE centering. */
+	 margin: auto;
+	 padding-left: 1ex;
+	 padding-right: 1ex;
+
+}
+
+
+
+div#pagenav {
+}
+
+div#nav {
+	 text-width= 18em;
+	 margin = 1em 1em 0px auto;
+	 float: left;
+}
+div#header {
+	 text-align: center;
+
+	 border-radius:2em;
+	 -webkit-border-radius:2em;
+	 -moz-border-radius:2em;
+
+	 padding: 2em;
+	 margin-top: 1em;
+	 margin-bottom: 2em;
+
+	 text-align: center;
+	 vertical-align: middle;
+}
+
+div#header>h1 {
+display: inline;
+padding: 0.5em;
+text-align: center;
+vertical-align: middle;
+margin-bottom: 0.25em; /* 24 */
+padding-bottom: 0.25em;
+font-size: 4.25em;
+}
+
+div#header>p{
+margin-top: 2em;
+line-height: 1.5;
+font-size: 1.5em;
+align: justify;
+}
+
+div#share{
+float:right;
+width: 18em;
+font-size: 0.9em;
+padding-right: 1em;
+}
+
+tt {
+	 font-size:140%;
+	 letter-spacing: -0.1ex;
+}
+
+code {
+	 font-size:120%;
+}
+
+h1 {
+/*	 position: relative;
+	 text-align: center;*/
+	 line-height: 1.25;
+	 font-size: 3em;
+	 font-weight: bold;
+	 font-style: normal;
+	 
+/*	 letter-spacing: 0.031em; /* 2 */
+}
+
+
+div#container {
+	 margin: 0em 18em 0 auto;
+	 padding: 0;
+	 text-align: justify;
+	 width: 43em; /* 960 minus the gutters (48 on each side). */
+}
+div#content {
+	 margin: 0;
+	 padding: 0;
+}
+
+h1 { font-size: 2em; margin: 0em; margin-bottom: 0.5em; /* 16 */ }
+h2 { font-size: 1.4em; margin: 0; /* 16 */ }
+h3, div.post h2 { font-size: 1.2em; margin: 0; }
+h4, div.post h3  {  font-size: 1em; font-weight: bold; margin: 0;/* 16 */ }
+h5, div.post h4  { text-transform: uppercase; letter-spacing: 1px;  margin: 0em;/* 16 */ }
+
+a, a:hover, a:active, a:focus { 
+	 text-decoration: none; 
+}
+
+div#nav, div#share {
+	 font-size: 85%;
+}
+
+div#nav ul {
+	 margin: 0; padding: 0;
+	 list-style: disc outside;
+}
+div#nav li {
+	 list-style: none;
+}
+div#nav ul ul {
+    margin-left: 1ex; padding: 0;
+}
+
+div#nav ul ul li{
+	list-style: none;
+}
+
+div#share tt { 
+	 font-size: 125%
+}
+
+div#address {
+	 width: 32em;
+	 padding: 1ex;
+	 border-radius:1ex;
+	 -webkit-border-radius:1ex;
+	 -moz-border-radius:1ex;
+}
+div.post {
+	 margin: 0em;
+	 margin-bottom: 1em;
+	 padding: 1ex;
+	 padding-top: -1em;
+	 border-radius:1ex;
+	 -webkit-border-radius:1ex;
+	 -moz-border-radius:1ex;
+}
+
+span#tag {
+	 margin: 0em;
+	 margin-right: 1em;
+	 padding: 1px;
+	 padding-left: 1ex;
+	 padding-right: 1ex;
+	 border-radius:1ex;
+	 -webkit-border-radius:1ex;
+	 -moz-border-radius:1ex;
+	 font-size: 80%;
+	 float: right;
+}
+
+div.paper h2{
+	 font-size: 1.2em; margin: 0em; margin-bottom: 0.5em; /* 16 */ }
+}
+div.paper h3 { font-size: 80%; margin: 0em; margin-bottom: 0.5em;}
+
+span.title {
+	 font-style: italic;
+}
+li.literature {margin-bottom: 1em;}
+
+
+p { padding: 0; text-align: justify; padding-bottom: 1em;}
+p#footer {
+padding: 0;
+padding-top: 2px;
+margin-top: 0;
+margin-bottom: 0;
+}
+
+/* Borders */
+div#address, div.post, span#tag  {
+	 border-width: 1px;
+	 border-style: solid;
+}
+
+a:hover, a:active, a:focus {
+	 border-bottom-width: 1px;
+	 border-bottom-style: solid;
+}
+
+p#footer {
+	 border-top-width: 1px;
+	 border-top-style: solid;
+}

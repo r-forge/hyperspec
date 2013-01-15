@@ -1,0 +1,41 @@
+/* Colors */
+body, div#nav a, div.paper h3, li.literature a {
+	 color: #000;
+}
+
+a, a:hover, a:active, a:focus, div.paper h2, span.title { 
+	 color: #050; 
+}
+
+a:hover, a:active, a:focus {
+	 border-color: #050;
+}
+
+div#header {
+	 background:  #050;
+}
+
+div.post, span#tag, p#footer, div#address {
+	 border-color: #9d9; /*aad*/
+} 
+
+
+div#header {
+	 box-shadow: 0 0 4em #bca;
+	 -webkit-box-shadow: 0 0 4em #bca;
+	 -moz-box-shadow: 0 0 4em #bca;
+}
+pre {
+	 background-color: #ddd;
+}
+div#address, span#tag {
+	 background-color: #dfc;
+}
+
+body {
+	 background: #f8fff8;
+}
+
+div#header, div#header h1 {
+	 color: #fff;
+}
