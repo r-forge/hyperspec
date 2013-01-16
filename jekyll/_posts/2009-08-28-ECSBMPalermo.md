@@ -1,5 +1,5 @@
 ---
-layout: presentation
+layout: poster
 title: 'Chemometric Analysis of Spectroscopic Data in R: hyperSpec'
 tags: 
 - literature
@@ -11,3 +11,4 @@ location: Palermo/I
 type: poster
 pdf: 'Beleites2009.pdf'
 ---
+

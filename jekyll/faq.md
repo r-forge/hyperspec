@@ -1,6 +1,6 @@
 ---
 layout: default
-title: <tt>softclassval</tt> FAQ
+title: hyperSpec FAQ
 ---
 # Frequently asked Questions
 

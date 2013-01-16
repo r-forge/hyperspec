@@ -38,6 +38,14 @@ h5, div.post h4 { text-transform: uppercase; letter-spacing: 1px; }
 
 span#tag { 	 font-size: 80%; }
 
+pre {
+	 font-size: 85%;
+}
+
+
+
+
+
 a {
 	 text-decoration: none;
 }

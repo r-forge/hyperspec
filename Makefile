@@ -256,30 +256,31 @@ src/hyperSpec/vignettes/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
 	@cp -av $< $@
 
 # www ###############################################################################################
-www: www/*.zip www/*.pdf
+www: jekyll/blob/*.zip jekyll/blob/*.pdf
+	cd jekyll && jekyll
 
-www/baseline.pdf: Vignettes/baseline/baseline.pdf
+jekyll/blob/baseline.pdf: Vignettes/baseline/baseline.pdf
 	@cp -av $< $@
-www/chondro.pdf: Vignettes/chondro/chondro.pdf
+jekyll/blob/chondro.pdf: Vignettes/chondro/chondro.pdf
 	@cp -av $< $@
-www/fileio.pdf: Vignettes/fileio/fileio.pdf
+jekyll/blob/fileio.pdf: Vignettes/fileio/fileio.pdf
 	@cp -av $< $@
-www/flu.pdf: Vignettes/flu/flu.pdf
+jekyll/blob/flu.pdf: Vignettes/flu/flu.pdf
 	@cp -av $< $@
-www/introduction.pdf: Vignettes/introduction/introduction.pdf
+jekyll/blob/introduction.pdf: Vignettes/introduction/introduction.pdf
 	@cp -av $< $@
-www/laser.pdf: Vignettes/laser/laser.pdf
+jekyll/blob/laser.pdf: Vignettes/laser/laser.pdf
 	@cp -av $< $@
-www/plotting.pdf: Vignettes/plotting/plotting.pdf
+jekyll/blob/plotting.pdf: Vignettes/plotting/plotting.pdf
 	@cp -av $< $@
 
-www/hyperSpec-prebuilt.zip: # built manually 
+jekyll/blob/hyperSpec-prebuilt.zip: # built manually 
 	touch $@
 
-www/chondro.zip: Vignettes/chondro.zip
+jekyll/blob/chondro.zip: Vignettes/chondro.zip
 	@cp -av $< $@
 
-www/fileio.zip: Vignettes/fileio.zip
+jekyll/blob/fileio.zip: Vignettes/fileio.zip
 	@cp -av $< $@
 
 
@@ -302,11 +303,11 @@ roxy: clean DESCRIPTION src/hyperSpec/R/*.R
 
 build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
-	R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt.tar.gz
+	R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz jekyll/blob/hyperSpec-prebuilt.tar.gz
 
 devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
-	~/r-devel/bin/R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz www/hyperSpec-prebuilt-devel.tar.gz
+	~/r-devel/bin/R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz jekyll/blob/hyperSpec-prebuilt-devel.tar.gz
 
 check: build
 	R CMD check hyperSpec_*.tar.gz --no-rebuild-vignettes --timings

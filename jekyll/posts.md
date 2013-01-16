@@ -1,18 +1,18 @@
 ---
 layout: default
-title: softclassval Posts
+title: hyperSpec Blog Posts
 ---
 # All Posts
 
 {% for post in site.posts %}
-- {{ post.date | date_to_string }} &raquo; <a href="{{ post.url }}">{{ post.title | markdownify }}</a>
+- {{ post.date | date_to_string }} &raquo; <a href="{{ post.url }}">{{ post.title }}</a>
 {% endfor %}
 
 
 # Excerpts
 {% for post in site.posts %}
 <div class="post">
-<h2><a id="{{ post.id }}" href="{{ post.url }}">{{ post.title | markdownify }}</a></h2>
+<h2><a id="{{ post.id }}" href="{{ post.url }}">{{ post.title }}</a></h2>
 {% if post.comment %}
 <i>{{ post.comment }}</i>
 {% endif %}
@@ -29,3 +29,4 @@ title: softclassval Posts
 </div>
 {% endfor %}
 
+ 

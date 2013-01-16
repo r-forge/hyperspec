@@ -140,3 +140,7 @@ p#footer {
 	 border-top-width: 1px;
 	 border-top-style: solid;
 }
+
+img.download {
+	 vertical-align:text-top;
+}

@@ -1,11 +1,14 @@
 --- 
 layout: post
-title: 'File import of [Cytospec]() .mat files'
+title: 'Import Cytospec .mat files'
 tags: fileio, news, R.matlab
 ---
 
 `hyperSpec` gains a new file import filter reading [Matlab](www.mathworks.com/products/matlab/) files
 [Cytospec](www.cytospec.com). 
+
+<!-- end excerpt -->
+
 
 Package [`R.matlab`](http://cran.r-project.org/web/packages/R.matlab/index.html) is needed.
 

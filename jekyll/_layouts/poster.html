@@ -1,0 +1,40 @@
+---
+layout: default
+---
+<div class="content">
+<div class="paper">
+  <h2>{{ page.title | markdownify }}</h2>
+  {% if page.comment %}
+  <i>{{ page.comment }}</i>
+  {% endif %}
+  <p>
+  {{ page.authors }},<br/>
+  {{ page.meeting }},  {{ page.location }}, {{ page.date  | date: "%b %d <strong>%Y</strong>"}}. <br/>
+  ({{ page.type }} presentation)
+  </p>
+  {% if page.keywords %}
+	 <strong>Keywords:</strong>
+	 {{ page.keywords }}
+  <br/>
+  {% endif %}
+  
+  <p>
+	 <strong>Download links:</strong>
+	 {% if page.pdf %}
+	 <a href="/blob/{{ page.pdf }}"><img class="download" src="/images/pdf.png"/></a>
+	 {% endif %}
+	 {% if page.zip %}
+	 <a href="/blob/{{ page.zip }}"><img class="download" src="/images/zip.png"/></a>
+	 {% endif %}
+	 </p> 
+  
+  <div style="float: left; padding-right: 1em">
+  <a href="/blob/{{ page.pdf }}"><img src="/blob/{{ page.pdf | replace: 'pdf','png' }}" /></a>
+  </div>
+  {{ content }}
+
+  <div style="clear:left">
+  {% include postfooter.html %}
+  </div>
+</div>
+</div>
