@@ -189,6 +189,8 @@ triazine
 plot (triazine [1])
 @
 
+Witec also saves ASCII data with spectra in columns, see 
+
 \subsection{JCAMP-DX}
 \label{sec:jcamp-dx}
 \index{ASCII!JCAMP-DX}
@@ -667,11 +669,21 @@ spc
 \index{ASCII!Witec}
 \index{Raman!Witec!ASCII}
 
-In the Witec project software, export the spectra as ASCII X and Y files. These can be read by \Rfunction{scan.txt.Witec}:
+In the Witec project software, export the spectra as ASCII X and Y files. These can be read by \Rfunction{scan.dat.Witec}:
 
-<<witec>>=
-scan.txt.Witec ("txt.Witec/WitecExample-x.dat", points.per.line = 10, lines.per.image = 10)
+<<witec-dat>>=
+scan.dat.Witec ("txt.Witec/WitecExample-x.dat", points.per.line = 10, lines.per.image = 10)
 @
+
+Another option is Witec's txt ASCII export, which produces ASCII files with each row corresponding to
+one wavelength. Such files can be read with \Rfunction{scan.txt.Witec}:
+<<witec-txt>>=
+scan.dat.Witec ("txt.Witec/Witec.txt")
+@ 
+
+\Rfunction{scan.txt.Witec} assumes 1024 wavelengths, but other values may be given as parameter
+\Rfunarg{nwl}. \Rcode{NULL} indicates that the number of wavelengths should be determined
+automaticallly.
 
 
 \section{Writing your own Import Function}

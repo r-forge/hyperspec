@@ -256,7 +256,7 @@ src/hyperSpec/vignettes/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
 	@cp -av $< $@
 
 # www ###############################################################################################
-www: jekyll/blob/*.zip jekyll/blob/*.pdf
+www: jekyll/blob/chondro.zip jekyll/blob/fileio.zip jekyll/blob/*.pdf
 	cd jekyll && jekyll
 
 jekyll/blob/baseline.pdf: Vignettes/baseline/baseline.pdf

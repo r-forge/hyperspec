@@ -38,6 +38,7 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
 
 ##' @rdname scan.dat.Witec
 ##' @param file filename or connection to ASCII file
+##' @export
 scan.txt.Witec <- function (file = stop ("filename or connection needed"),
                             points.per.line = NULL,
                             lines.per.image = NULL,
