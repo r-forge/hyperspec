@@ -304,7 +304,7 @@ labels as well.
 \phy comes with filters for a variety of file formats. These are discussed in detail in a separate
 vignette accessible via \verb+vignette ("fileio")+.
 
-\subsection{Creating a \Rclass{hyperSpec} Object from Spectra Matrix
+\subsection{Creating a \chy Object from Spectra Matrix
 and Wavelength Vector}
 
 If the data is in R's workspace, a \Rclass{hyperSpec} object is created by:\\
@@ -320,6 +320,8 @@ The most frequently needed arguments are:
 \item [{\Rcode{label}}] a list with the proper labels. Do not forget the wavelength axis label in
   \Rcode{\$.wavelength} and the spectral intensity axis label in \Rcode{\$spc}.
 \end{labeling}
+
+More information about converting existing data into \chy objects can be found in \code{vignette ("fileio")}. 
 
 \subsection{Creating Random Spectra}
 If \Rpackage{mvtnorm} is available, multivariate normally distributed spectra can be generated from
@@ -364,9 +366,11 @@ with the 3rd dimension corresponding to the group.
 \section{The Logbook}
 \label{sec:logbook}
 \warnbox{Deprecated}{The logbook is now DEPRECATED and the functionality will be removed in the future.\\
-  This feature has never seen much use, but slows down \phy considerably.}  Slot \Rcode{@log} of \chy
-objects is intended to keep track of the history of the object.  This logbook part of the output of
-the \Rfunction{summary}, and can also be retrieved by \Rfunction{logbook}.
+  This feature has never seen much use, but slows down \phy considerably.}
+
+Slot \Rcode{@log} of \chy objects is intended to keep track of the history of the object.  This
+logbook part of the output of the \Rfunction{summary}, and can also be retrieved by
+\Rfunction{logbook}.
 <<logbook>>=
 logbook (flu)
 @

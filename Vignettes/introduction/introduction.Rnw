@@ -321,53 +321,7 @@ The most frequently needed arguments are:
   \Rcode{\$.wavelength} and the spectral intensity axis label in \Rcode{\$spc}.
 \end{labeling}
 
-\subsection{Creating a \chy Object from a Data Cube (Spectra Array) }
-Roberto Moscetti asked how to convert a hyperspectral data cube into a \chy object:
-\begin{quote}
-  \emph{The problem is that I have a hypercube with the following dimensions: $67 \times 41 \times 256$\\
-\[y = 67\\
-x = 41\\
-wavelengths = 256\]
-
-I do not know the way to import the hypercube.}
-\end{quote}
-
-The solution is to convert the array into a spectra matrix and have separate $x$ and $y$ coordinates.
-
-Assume \code{data} is the data cube, and \code{x}, \code{y} and \code{wl} hold vectors with the proper $x$ and $y$ coordinates and the wavelengths:
-<<array>>=
-data <- array (1 : 24, 4 : 2)
-wl <- c (550, 630)
-x <- c (1000, 1200, 1400)
-y <- c (1800, 1600, 1400, 1200)
-data
-@ 
-
-Such data can be converted into a \chy object by:
-<<array-import>>=
-d <- dim (data)
-dim (data) <- c (d [1] * d [2], d [3])
-
-x <- rep (x, each = d [1])
-y <- rep (y, d [2])
-
-spectra <- new ("hyperSpec", spc = data, 
-   data = data.frame (x, y), wavelength = wl)
-@ 
-
-If no proper coordinates (vectors \code{x}, \code{y} and \code{wl}) are available, they can be left
-out. In the case of $x$ and $y$, map plotting will then be impossible, missing \Rfunarg{wavelength}s
-will be replaced by column indices counting from \code{1} to \code{d [3]} automatically. Of course,
-such sequences (the row/column/pixel numbers) can be used instead of the original \code{x} and
-\code{y} as well:
-<<>>=
-y <- seq_len (d [1])
-x <- seq_len (d [2])
-@ 
-
-Data cubes often come from spectral imaging systems that use an ``image'' coordinate system counting
-$y$ from top to bottom. Note that this should accounted for in the decreasing order of the original
-\code{y} vector.
+More information about converting existing data into \chy objects can be found in \code{vignette ("fileio")}. 
 
 \subsection{Creating Random Spectra}
 If \Rpackage{mvtnorm} is available, multivariate normally distributed spectra can be generated from

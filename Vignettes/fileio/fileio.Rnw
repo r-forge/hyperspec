@@ -79,11 +79,10 @@ p.~\pageref{sec:spectroscopy}).
 \index{create hyperSpec object}
 \index{hyperSpec object!create}
 To create a \Rclass{hyperSpec} object from data in R's workspace, use:
-\begin{Schunk}
-  \begin{Sinput}
-spc <- new ("hyperSpec", spc, wavelength, data, labels)}
-\end{Sinput}
-\end{Schunk}
+<<eval=FALSE>>=
+spc <- new ("hyperSpec", spc, wavelength, data, labels)
+@ 
+
 With the arguments:
 \begin{labeling}{\Rcode{wavelength}}
 \item [\Rcode{spc}] the spectra matrix (may also be given as matrix inside column \Rcode{\$spc} of \Rcode{data})
@@ -99,6 +98,54 @@ Thus, once your data is in R's workspace, creating a \chy object is easy. I sugg
 to import your data and the line joining it into a \chy object by your own import function. You are
 more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import},
 (p.~\pageref{sec:writing-Import}) discusses examples of custom import functions.
+
+\subsection{Creating a \chy Object from a Data Cube (Spectra Array) }
+Roberto Moscetti asked how to convert a hyperspectral data cube into a \chy object:
+\begin{quote}
+  \emph{The problem is that I have a hypercube with the following dimensions: $67 \times 41 \times 256$
+$y = 67$\\
+$x = 41$\\
+$wavelengths = 256$\\
+I do not know the way to import the hypercube.}
+\end{quote}
+
+The solution is to convert the array into a spectra matrix and have separate $x$ and $y$ coordinates.
+
+Assume \Rcode{data} is the data cube, and \Rcode{x}, \Rcode{y} and \Rcode{wl} hold vectors with the proper $x$ and $y$ coordinates and the wavelengths:
+<<array>>=
+data <- array (1 : 24, 4 : 2)
+wl <- c (550, 630)
+x <- c (1000, 1200, 1400)
+y <- c (1800, 1600, 1400, 1200)
+data
+@ 
+
+Such data can be converted into a \chy object by:
+<<array-import>>=
+d <- dim (data)
+dim (data) <- c (d [1] * d [2], d [3])
+
+x <- rep (x, each = d [1])
+y <- rep (y, d [2])
+
+spectra <- new ("hyperSpec", spc = data, 
+   data = data.frame (x, y), wavelength = wl)
+@ 
+
+If no proper coordinates (vectors \Rcode{x}, \Rcode{y} and \Rcode{wl}) are available, they can be left
+out. In the case of $x$ and $y$, map plotting will then be impossible, missing \Rfunarg{wavelength}s
+will be replaced by column indices counting from \Rcode{1} to \Rcode{d [3]} automatically. Of course,
+such sequences (the row/column/pixel numbers) can be used instead of the original \Rcode{x} and
+\Rcode{y} as well:
+<<>>=
+y <- seq_len (d [1])
+x <- seq_len (d [2])
+@ 
+
+Data cubes often come from spectral imaging systems that use an ``image'' coordinate system counting
+$y$ from top to bottom. Note that this should accounted for in the decreasing order of the original
+\Rcode{y} vector.
+
 
 \section{Reading Multiple files into one \chy object}
 \label{sec:read-mult-files}
@@ -189,7 +236,7 @@ triazine
 plot (triazine [1])
 @
 
-Witec also saves ASCII data with spectra in columns, see 
+Witec also saves ASCII data with spectra in columns (Export $\rightarrow$ Table), see \ref{sec:scan.txt.Witec}.
 
 \subsection{JCAMP-DX}
 \label{sec:jcamp-dx}
@@ -274,7 +321,7 @@ However, it may be convenient to transform the saved data according to how it is
 The functions \Rfunction{as.long.df} and \Rfunction{as.wide.df} may prove useful for reshaping the
 data.
 \subsubsection{Import of Matlab files written by Cytospec}
-\label{read.cytomat}
+\label{sec:read.cytomat}
 \index{Cytospec}\index{Cytospec!Matlab}\index{Matlab!Cytospec}
 
 A custom import function for .mat files written by \href{www.cytospec.com}{Cytospec} is available.
@@ -668,14 +715,17 @@ spc
 \index{Witec!ASCII}
 \index{ASCII!Witec}
 \index{Raman!Witec!ASCII}
+\index{Raman!Witec!Save ASCII X, Save ASCII Y}
+\index{Raman!Witec!Export Table}
 
-In the Witec project software, export the spectra as ASCII X and Y files. These can be read by \Rfunction{scan.dat.Witec}:
+In the Witec project software, export the spectra as ASCII X and Y files (Save ASCII X and Save
+ASCII Y) . These can be read by \Rfunction{scan.dat.Witec}:
 
 <<witec-dat>>=
 scan.dat.Witec ("txt.Witec/WitecExample-x.dat", points.per.line = 10, lines.per.image = 10)
 @
 
-Another option is Witec's txt ASCII export, which produces ASCII files with each row corresponding to
+Another option is Witec's txt table ASCII export (Export $\rightarrow$ Table), which produces ASCII files with each row corresponding to
 one wavelength. Such files can be read with \Rfunction{scan.txt.Witec}:
 <<witec-txt>>=
 scan.dat.Witec ("txt.Witec/Witec.txt")
