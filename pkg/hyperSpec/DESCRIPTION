@@ -2,8 +2,8 @@ Package: hyperSpec
 Type: Package
 Title: Interface for hyperspectral data, i.e. spectra + meta info (spatial,
     time, concentration, ...)
-Version: 0.98-20130129
-Date: 2013-01-29
+Version: 0.98-20130207
+Date: 2013-02-07
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
 Description: This package is an interface to handle hyperspectral data sets in
@@ -137,6 +137,7 @@ Collate:
     'read.jdx.Shimadzu.R'
     'read.txt.Shimadzu.R'
     'rubberband.R'
+    'scale.R'
     'subset.R'
     'vandermonde.R'
     'wleval.R'

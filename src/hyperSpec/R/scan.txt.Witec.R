@@ -53,9 +53,9 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
     txt <- scan (file, ...)
   }
 
-  dim (spc) <- c (nwl, length (txt) / nwl)
+  dim (txt) <- c (length (txt) / nwl, nwl)
 
-  spc <- new ("hyperSpec", wavelength = txt [, 1], spc = t (txt [, -1]))
+  spc <- new ("hyperSpec", wavelength = txt [1, ], spc = txt [-1, ])
 
   if (!is.null (points.per.line))
     spc@data$x <- rep (seq_len (points.per.line), lines.per.image)
