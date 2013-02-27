@@ -2,8 +2,8 @@ Package: hyperSpec
 Type: Package
 Title: Interface for hyperspectral data, i.e. spectra + meta info (spatial,
     time, concentration, ...)
-Version: 0.98-20130209
-Date: 2013-02-09
+Version: 0.98-20130227
+Date: 2013-02-27
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
 Description: This package is an interface to handle hyperspectral data sets in
@@ -17,7 +17,7 @@ License: GPL (>= 3)
 LazyLoad: yes
 LazyData: yes
 Depends:
-    R (>= 2.11),
+    R (>= 2.15),
     methods,
     utils,
     lattice,

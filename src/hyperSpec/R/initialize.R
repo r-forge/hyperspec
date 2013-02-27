@@ -24,7 +24,7 @@
 
   ## the wavelength axis
   if (! is.null (wavelength) && ! is.numeric (wavelength))
-    warning ("wavelength is not numeric but", class (wavelength), ".")
+    warning ("wavelength is not numeric but ", class (wavelength), ".")
 
   if (!is.null (spc)){
     if (is.null (dim (spc))){
@@ -81,16 +81,16 @@
   if (.options$gc) gc ()
   
   ## even the logbook may be given...
-  if (is.data.frame (log)) {
-    .Object@log <- log
-  } else {
-    .Object@log <- data.frame ()
-    if (is.null (log))
-      log <- list (short = short, long = long, user = user, date = date)
-    
-    .Object <- .logentry (.Object, .entry = log)
-  }
-  rm (log)
+##  if (is.data.frame (log)) {
+##    .Object@log <- log
+##  } else {
+##    .Object@log <- data.frame ()
+##    if (is.null (log))
+##      log <- list (short = short, long = long, user = user, date = date)
+##    
+##    .Object <- .logentry (.Object, .entry = log)
+##  }
+##  rm (log)
   if (.options$gc) gc ()
         
   if (! is.null (data$spc) && ! (is.null (spc)))
@@ -102,9 +102,9 @@
   } 
 
   if (! is.null (spc) && !is.matrix (spc)) {
-    spc <- structure (spc,
-                      dim = c (1L, length (spc)), # use spc as row vector
-                      dimnames = list (NULL, names (spc))) 
+    spc <- as.matrix (spc)
+    if (ncol (spc) == 1L)
+        spc <- t (spc)
   } 
 
   if (.options$gc) gc ()
@@ -123,8 +123,6 @@
 
     data$spc <- spc
   }
-  if (! is.null (data$spc) && ! is.numeric (data$spc))
-    warning ("spectra matrix is not numeric but", class (wavelength), ".")
 
   rm (spc)
   if (.options$gc) gc ()
@@ -134,7 +132,10 @@
 
   .Object@data <- data
   if (.options$gc) gc ()
-  
+
+  if (! is.null (data$spc) && ! is.numeric (data$spc))
+    warning ("spectra matrix is not numeric but ", class (data$spc), ".")
+
   ## finally: check whether we got a valid hyperSpec object
   validObject (.Object)
 
@@ -263,4 +264,7 @@ setMethod ("initialize", "hyperSpec", .initialize)
   checkEqualsNumeric (dim (h), c (3L, 1L, 4L))
   checkEqualsNumeric (h@wavelength, c(600, 601, 602, 603))
  
+  h <- new ("hyperSpec", spc = as.data.frame (spc))
+  checkEqualsNumeric (h@data$spc, spc)
+  checkEqualsNumeric (dim (h), c (3L, 1L, 4L)) 
 }

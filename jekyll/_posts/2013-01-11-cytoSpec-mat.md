@@ -5,7 +5,7 @@ tags: fileio news R.matlab
 ---
 
 `hyperSpec` gains a new file import filter reading [Matlab](www.mathworks.com/products/matlab/) files
-[Cytospec](www.cytospec.com). 
+written by [Cytospec](http://www.cytospec.com). 
 
 <!-- end excerpt -->
 
