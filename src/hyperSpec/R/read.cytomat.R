@@ -4,7 +4,8 @@
 ##' 
 ##' @param file The complete file name (or a connection to) the .mat file.
 ##' @param keys2data specifies which elements of the \code{Info} should be transferred into the extra data
-##' @param blocks which blocks should be read?
+##' @param blocks which blocks should be read? \code{TRUE} reads all blocks.
+##' @param drop.empty should empty spectra (all elements are \code{NA}) be dropped?
 ##' @note This function is an ad-hoc implementation and subject to changes.
 ##' @return hyperSpec object if the file contains a single spectra block, otherwise a list with one
 ##' hyperSpec object for each block.
@@ -13,7 +14,7 @@
 ##' @seealso \code{R.matlab::readMat}
 ##' @export
 ##' @keywords IO file
-read.cytomat <- function (file, keys2data = FALSE, blocks = 1) {
+read.cytomat <- function (file, keys2data = FALSE, blocks = TRUE, drop.empty = TRUE) {
   if (! require ("R.matlab"))
       stop ("package 'R.matlab' needed.")
   
@@ -30,12 +31,17 @@ read.cytomat <- function (file, keys2data = FALSE, blocks = 1) {
   wn <- seq (lwn, hwn, length.out = dim (spc)[3])
 
   ## x + y coordinates
-  y <- rep (1 : d [1], each = d [2])
-  x <- rep (1 : d [2], d [1])
-
+  x <- rep (1 : d [1], d [2])
+  y <- rep (1 : d [2], each = d [1])
+  
   extra.data <- data.frame (x = x, y = y, file = file)
   
   nblocks <- d [4]
+  if (is.na (nblocks)) { # only one block => 3d array
+    nblocks <- 1
+    dim (spc) <- c (dim (spc), 1L)
+  }
+  
   blocks <- seq (nblocks) [blocks]
 
   if (any (is.na (blocks))) {
@@ -44,23 +50,29 @@ read.cytomat <- function (file, keys2data = FALSE, blocks = 1) {
   }
 
   if (length (blocks) == 1L) {
-    result <- .block2hyperSpec (spc, extra.data, wn, blocks)
+    result <- .block2hyperSpec (spc, extra.data, wn, blocks, drop.empty)
   } else {
     result <- list ()
     for (b in blocks) 
-        result [[b]] <- .block2hyperSpec (spc, extra.data, wn, b)
+        result [[b]] <- .block2hyperSpec (spc, extra.data, wn, b, drop.empty)
   }
   
   result
 }
 
-.block2hyperSpec <- function (spc, df, wn, block = 1) {
+.block2hyperSpec <- function (spc, df, wn, block, drop.empty) {
   spc <- spc [,,, block]
   
   d <- dim (spc)
   dim (spc) <- c (d [1] * d[2], d [3])
 
   df$block <- block
+  
+  if (drop.empty) {
+    empty.spc <- rowSums (is.na (spc)) == ncol (spc)
+    spc <- spc [!empty.spc,, drop = FALSE]
+    df <- df [!empty.spc,]
+  }
   
   new ("hyperSpec", spc = spc, wavelength = wn, data = df)
 }
