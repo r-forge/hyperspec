@@ -46,12 +46,12 @@ Nightly builds of Windows binaries are sometimes a few day delayed.
 <h2 id="tgz">Install from .tar.gz or .zip archive</h2>
 <h3>Download <tt>hyperSpec</tt> prebuilt on my computer</h3>
 <ul>
-<li> <a href="hyperSpec-prebuilt.tar.gz">prebuilt .tar.gz source
-		(<?php echo date ("Y-M-d", filectime ("hyperSpec-prebuilt.tar.gz")) ?>)</a></li>
-<li> Windows users will probably need the <a href="hyperSpec-prebuilt.zip">compiled .zip archive
-		(<?php echo date ("Y-M-d", filectime ("hyperSpec-prebuilt.zip")) ?>)</a><br/></li>
-<li> Versions for r-devel: <a href="hyperSpec-prebuilt-devel.tar.gz">tar.gz
-		(<?php echo date ("Y-M-d", filectime ("hyperSpec-prebuilt-devel.tar.gz")) ?>)</a></li>
+<li> <a href="/blob/hyperSpec-prebuilt.tar.gz">prebuilt .tar.gz source
+		(<?php echo date ("Y-M-d", filectime ("/blob/hyperSpec-prebuilt.tar.gz")) ?>)</a></li>
+<li> Windows users will probably need the <a href="/blob/hyperSpec-prebuilt.zip">compiled .zip archive
+		(<?php echo date ("Y-M-d", filectime ("/blob/hyperSpec-prebuilt.zip")) ?>)</a><br/></li>
+<li> Versions for r-devel: <a href="/blob/hyperSpec-prebuilt-devel.tar.gz">tar.gz
+		(<?php echo date ("Y-M-d", filectime ("/blob/hyperSpec-prebuilt-devel.tar.gz")) ?>)</a></li>
 </ul>
 
 <p>Source (.tar.gz) and Windows binary (.zip) packages can be installed by </p>
