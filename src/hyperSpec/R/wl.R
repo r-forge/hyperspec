@@ -64,7 +64,7 @@ wl <- function (x){
 ##' @param label The label for the new wavelength axis. See \link{initialize}
 ##'   for details.
 ##' @param digits handed to \code{\link[base]{signif}}. See details.
-##' @param short,user,date handed to \code{\link{logentry}}.
+##' @param short,user,date deprecated.
 ##' @return \code{hyperSpec} object
 ##' @examples
 ##' 	# convert from wavelength to frequency 

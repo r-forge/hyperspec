@@ -71,8 +71,6 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
            function (e1, e2){
              validObject (e1)
              validObject (e2)
-             if (.Generic %in% c ("*", "^", "%%", "%/%", "/"))
-               warning (paste ("Do you really want to use", .Generic, "on 2 hyperSpec objects?"))
              e1 [[]] <- callGeneric (e1[[]], e2[[]])
              .logentry (e1, short = .Generic, long = as.character (e2))
            }
