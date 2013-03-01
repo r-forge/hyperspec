@@ -79,18 +79,21 @@
 
   rm (labels, wavelength)
   if (.options$gc) gc ()
-  
+
+  if (! is.null (log))
+      warning ("The logbook is deprecated and soon be removed.")
+
   ## even the logbook may be given...
-##  if (is.data.frame (log)) {
-##    .Object@log <- log
-##  } else {
-##    .Object@log <- data.frame ()
-##    if (is.null (log))
-##      log <- list (short = short, long = long, user = user, date = date)
-##    
-##    .Object <- .logentry (.Object, .entry = log)
-##  }
-##  rm (log)
+  if (is.data.frame (log)) {
+    .Object@log <- log
+  } else {
+    .Object@log <- data.frame ()
+    if (is.null (log))
+      log <- list (short = short, long = long, user = user, date = date)
+    
+    .Object <- .logentry (.Object, .entry = log)
+  }
+  rm (log)
   if (.options$gc) gc ()
         
   if (! is.null (data$spc) && ! (is.null (spc)))

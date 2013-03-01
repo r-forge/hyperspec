@@ -74,12 +74,5 @@ read.txt.wide <- function (file = stop ("file is required"),
   ## enforce colnames given by cols
   colnames (txtfile) <- head (names (cols), -1)
 
-  new ("hyperSpec",
-       data = txtfile,
-       labels = cols,
-       log = list (
-         short = "read.txt.long",
-         long = list (file = file, cols = I (cols), ...)
-         )
-       )
+  new ("hyperSpec", data = txtfile, labels = cols)
 }

@@ -17,8 +17,8 @@
 ##' @param \dots All further arguments to \code{read.spc.KaiserMap} are handed
 ##'   over directly to \code{read.spc}.
 read.spc.KaiserMap <- function (files, 
-		keys.hdr2data = FALSE, keys.hdr2log = TRUE,
-		keys.log2data = NULL, keys.log2log = TRUE, 
+		keys.hdr2data = FALSE, keys.hdr2log = FALSE,
+		keys.log2data = NULL, keys.log2log = FALSE, 
 		glob = TRUE, ...) {
     
 	if (glob)
@@ -55,12 +55,16 @@ read.spc.KaiserMap <- function (files,
 		
 		spc$spc  [f, ] <- tmp$spc
 	}
-	
-	log <- list (short = "read.spc.KaiserMap",
-					long = list (call = match.call (),
-							last.header = tmp$log$long$header,
-							last.log = tmp$log$long$log))
 
+  if (hy.getOption ("log")){
+    log <- list (short = "read.spc.KaiserMap",
+                 long = list (call = match.call (),
+                   last.header = tmp$log$long$header,
+                   last.log = tmp$log$long$log))
+  } else {
+    log <- NULL
+  }
+   
    data$file <- files
    
 	new ("hyperSpec", wavelength = spc$wavelength, spc = spc$spc, data = data, 
