@@ -4,8 +4,7 @@
        spc =  (tcrossprod (.chondro.scores, .chondro.loadings) +
                rep (.chondro.center, each = nrow (.chondro.scores))),
        wavelength = .chondro.wl,
-       data = .chondro.extra, labels = .chondro.labels,
-       log = list (long = "example data chondro reconstructed from 10 principal components."))
+       data = .chondro.extra, labels = .chondro.labels)
 }
 
 ##' Raman spectra of 2 Chondrocytes in Cartilage
@@ -22,7 +21,7 @@
 ##'   in the range of ca. 600 - 1800 cm\eqn{^{-1}}{^-1}.
 ##' @author A. Bonifacio and C. Beleites
 ##' @keywords datasets
-##' @references The raw data is available at \url{http://hyperspec.r-forge.r-project.org/chondro.zip}
+##' @references The raw data is available at \url{http://hyperspec.r-forge.r-project.org/blob/chondro.zip}
 ##' @export chondro
 ##' @examples
 ##' 
