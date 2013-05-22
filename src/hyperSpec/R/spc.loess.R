@@ -55,7 +55,7 @@ spc.loess <- function (spc, newx, enp.target = nwl (spc) / 4,
   .wl(spc) <- newx
 
   if (any (is.na (spc@data$spc)))
-    warning ("NAs were generated. Most probably newx was outside the spectral range covered by spc.")
+    warning ("NAs were generated. Probably newx was outside the spectral range covered by spc.")
 
   spc
 }
