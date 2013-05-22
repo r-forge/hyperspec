@@ -9,6 +9,7 @@
 ##' @param spline logical indicating whether the baseline should be an interpolating spline through
 ##' the support points or piecewise linear.
 ##' @return hyperSpec object containing the baselines
+##' @rdname spc-rubberband
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[hyperSpec]{spc.fit.poly}}, \code{\link[hyperSpec]{spc.fit.poly.below}}
 ##'
