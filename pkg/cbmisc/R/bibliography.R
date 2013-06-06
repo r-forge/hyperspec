@@ -105,12 +105,11 @@ cite.pkg <- function (pkg, entries, citefun = "cite"){
 make.bib <- function (..., file = NULL) {
   pkg <- c (...)
 
-  if (length (pkg) == 0L) {
+  if (length (pkg) == 0L) 
     pkg <- loadedNamespaces()
  
-    pkg <- unique (pkg.or.base (pkg))
-  }
-  
+  pkg <- unique (pkg.or.base (pkg))
+   
   l <- lapply (pkg, citation.with.key)
   l <- do.call ("c", l [! sapply (l, is.null)])
 

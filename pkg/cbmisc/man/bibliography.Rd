@@ -15,13 +15,13 @@
   make.bib(..., file = NULL)
 }
 \arguments{
-  \item{pkg}{
-
-  package
-
-  package}
+  \item{pkg}{}
 
   \item{saved.cit}{CITATION file on harddisk}
+
+  \item{pkg}{package}
+
+  \item{pkg}{package}
 
   \item{entries}{which \code{citation ()} entries to cite?}
 
