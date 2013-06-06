@@ -647,6 +647,7 @@ read.spc <- function (filename,
 			keys.log2data,  keys.log2log)
 
    if (hy.getOption ("log")){
+      warning ("The logbook is deprecated and will soon be removed.")
      log <- list (short = "read.spc",
                   long = list (call = match.call (),
                     log = tmp$log.long,
@@ -662,10 +663,10 @@ read.spc <- function (filename,
 	## if multispectra file with separate wavelength axes, prepare a list
 	if (hdr$ftflgs ['TXYXYS'] && hdr$ftflgs ['TMULTI']) {
 		spc <- list ()		
-		data <- as.data.frame (data)
+		data <- as.data.frame (data, stringsAsFactors = FALSE)
 	} else {
 		spc <- matrix (NA, nrow = hdr$fnsub, ncol = hdr$fnpts)
-		data <- as.data.frame (lapply (data, rep, hdr$fnsub))
+		data <- as.data.frame (lapply (data, rep, hdr$fnsub), stringsAsFactors = FALSE)
 	}
 	
 	## read subfiles
