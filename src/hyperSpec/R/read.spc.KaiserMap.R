@@ -31,32 +31,36 @@ read.spc.KaiserMap <- function (files,
 
 	keys.log2data <- c ('Stage_X_Position','Stage_Y_Position','Stage_Z_Position', keys.log2data)
 	
-	data <- data.frame (x = rep (NA, length (files)),
-			y = rep (NA, length (files)),
-			z = rep (NA, length (files)))
-	
 	f <- files [1]
 	
-	spc <- read.spc (f, keys.log2data = keys.log2data, keys.log2log = keys.log2log, no.object = TRUE, ...)
+	spc <- read.spc (f,
+                    keys.log2data = keys.log2data,
+                    keys.hdr2data = keys.hdr2data,
+                    keys.hdr2log = keys.hdr2log, 
+                    keys.log2log = keys.log2log, no.object = TRUE, ...)
 
-	data [1, 'x'] <- factor2num (spc$data$Stage_X_Position)
-	data [1, 'y'] <- factor2num (spc$data$Stage_Y_Position)
-	data [1, 'z'] <- factor2num (spc$data$Stage_Z_Position)
+   data <- spc$data [rep (1L, length (files)),, drop = FALSE]
 	
-	spc$spc  <- spc$spc  [rep (1, length (files)), , drop = FALSE]
+	spc$spc  <- spc$spc  [rep (1L, length (files)), , drop = FALSE]
 	
 	for (f in seq_along (files)){
-		tmp <- read.spc (files [f], keys.log2data = keys.log2data, keys.log2log = keys.log2log,
-				no.object = TRUE, ...)
-		
-		data [f, 'x'] <- factor2num (tmp$data$Stage_X_Position)
-		data [f, 'y'] <- factor2num (tmp$data$Stage_Y_Position)
-		data [f, 'z'] <- factor2num (tmp$data$Stage_Z_Position)
-		
+		tmp <- read.spc (files [f], keys.log2data = keys.log2data,
+                       keys.hdr2data = keys.hdr2data,
+                       no.object = TRUE, ...)
+      
+      data [f, ] <- tmp$data 
 		spc$spc  [f, ] <- tmp$spc
 	}
 
+   data <- data [, ! colnames (data) %in% c ("z", "z.end"), drop = FALSE]
+   colnames (data) <- gsub ("Stage_(.)_Position", "\\L\\1", colnames (data), perl = TRUE)
+
+
+   for (cln in c ("x", "y", "z"))
+       data [[cln]] <- as.numeric (data [[cln]])
+   
   if (hy.getOption ("log")){
+    warning ("The logbook is deprecated and will soon be removed.")
     log <- list (short = "read.spc.KaiserMap",
                  long = list (call = match.call (),
                    last.header = tmp$log$long$header,
