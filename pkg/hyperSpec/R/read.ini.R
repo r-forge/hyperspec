@@ -13,7 +13,7 @@
 ##' @rdname read-ini
 ##' @param con connection or file name
 ##' @author C. Beleites
-##' @value a list with one element per section in the .ini file, each containing a list with elements
+##' @return a list with one element per section in the .ini file, each containing a list with elements
 ##' for the key-value-pairs.
 ##' @keywords IO file
 

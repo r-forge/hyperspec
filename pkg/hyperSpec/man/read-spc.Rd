@@ -1,34 +1,17 @@
-\name{read.spc.KaiserMap}
+\name{read.spc}
 \alias{read.spc}
-\alias{read.spc.KaiserMap}
-\title{\code{read.spc.KaiserMap} imports sets of .spc files of Raman maps written
-by Kaiser Optical Systems' Hologram software.  It may also serve as an
-example how to write wrapper functions for \code{read.spc} to conveniently
-import specialized sets of .spc files.}
+\title{Import for Thermo Galactic's spc file format
+These functions allow to import .spc files.
+A detailed description of the .spc file format is available at
+\url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.}
 \usage{
-  read.spc.KaiserMap(files, keys.hdr2data = FALSE,
-    keys.hdr2log = FALSE, keys.log2data = NULL,
-    keys.log2log = FALSE, glob = TRUE, ...)
-
   read.spc(filename, keys.hdr2data = FALSE,
     keys.hdr2log = FALSE, keys.log2data = FALSE,
     keys.log2log = FALSE, log.txt = TRUE, log.bin = FALSE,
     log.disk = FALSE, hdr = list(), no.object = FALSE)
 }
 \arguments{
-  \item{glob}{If \code{TRUE} the filename is interpreted as
-  a wildcard containing file name pattern and expanded to
-  all matching file names.}
-
-  \item{\dots}{All further arguments to
-  \code{read.spc.KaiserMap} are handed over directly to
-  \code{read.spc}.}
-
   \item{filename}{The complete file name of the .spc file.}
-
-  \item{files}{If \code{glob = TRUE}, \code{filename} can
-  contain wildcards.  Thus all files matching the name
-  pattern in \code{filename} can be specified.}
 
   \item{keys.hdr2data,keys.log2data}{character vectors with
   the names of parameters in the .spc file's log block
@@ -73,12 +56,6 @@ import specialized sets of .spc files.}
   recorded in the .spc files' log.
 }
 \description{
-  \code{read.spc.KaiserMap} imports sets of .spc files of
-  Raman maps written by Kaiser Optical Systems' Hologram
-  software.  It may also serve as an example how to write
-  wrapper functions for \code{read.spc} to conveniently
-  import specialized sets of .spc files.
-
   Import for Thermo Galactic's spc file format These
   functions allow to import .spc files. A detailed
   description of the .spc file format is available at

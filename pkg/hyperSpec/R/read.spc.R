@@ -534,9 +534,6 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 ##' \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
 ##' 
 ##' @param filename The complete file name of the .spc file.
-##' @param files If \code{glob = TRUE}, \code{filename} can contain wildcards.
-##'   Thus all files matching the name pattern in \code{filename} can be
-##'   specified.
 ##' @param keys.hdr2data,keys.log2data character vectors with the names of parameters in the .spc
 ##' file's log block (log2xxx) or header (hdr2xxx) that should go into the extra data (yyy2data) of
 ##' the returned hyperSpec object.
