@@ -83,10 +83,7 @@ wl <- function (x){
   chk.hy (x)
   validObject (x)
 
-  if (is.numeric (value)){
-    if (is.null (label))
-      warning ("Do not forget to adjust the label of the wavelength axis.")
-  } else if (is.list (value)){
+  if (is.list (value)){
     label <- value$label
     value <- value$wl
   }
@@ -96,6 +93,9 @@ wl <- function (x){
   x@label$.wavelength <- label
 
   validObject (x)
+
   .logentry (x, short = short, long = list (value = value, digits = digits),
              date = date, user = user)
+
+  x
 }
