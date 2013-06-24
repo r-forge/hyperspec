@@ -195,7 +195,7 @@ chondro <- chondro - baselines
 As the spectra are quite similar, area normalization should work well:.
 
 <<norm, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-chondro <- sweep (chondro, 1, apply (chondro, 1, mean), "/")
+chondro <- sweep (chondro, 1, rowMeans (chondro), "/")
 plot (chondro, "spcprctl5")
 @
 
@@ -216,7 +216,7 @@ But the minimum spectrum also picks up a lot of noise. So instead,
 the 5\textsuperscript{th} percentile spectrum is subtracted:
 
 <<perc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-chondro <- sweep (chondro, 2, apply (chondro, 2, quantile, 0.05), "-")
+chondro <- sweep (chondro, 2, quantile (chondro, 0.05), "-")
 plot (chondro, "spcprctl5")
 @
 
@@ -325,7 +325,7 @@ distance for calculating the dendrogram, \textsc{Euclid}ean distance
 also for the distance matrix :
 
 <<hca>>=
-dist <- dist (chondro [[]])
+dist <- dist (chondro)
 dendrogram <- hclust (dist, method = "ward")
 @
 
