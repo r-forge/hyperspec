@@ -11,3 +11,5 @@ hyperSpec now imports multispectra JCAMP-DX files.
 `read.jdx` gains an argument `collapse.multi` that switches behaviour for multispectra files: if
 `TRUE`, the spectra are `collapse`d into one hyperSpec object, otherwise a list of hyperSpec objects
 is returned.
+
+

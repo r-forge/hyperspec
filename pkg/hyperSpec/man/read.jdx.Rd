@@ -17,9 +17,11 @@
 
   \item{header}{list with manually set header values}
 
-  \item{keys.hdr2data}{character vector of labels
-  (lowercase, without and dashes, blanks, underscores)
-  whose values should be tranfered into the extra data.}
+  \item{keys.hdr2data}{index vector indicating which header
+  entries should be tranfered into the extra data. Usually
+  a character vector of labels (lowercase, without and
+  dashes, blanks, underscores). If \code{TRUE}, all header
+  entries are read.}
 
   \item{\dots}{further parameters handed to the data import
   function, e.g. \tabular{ll}{ \code{xtol} \tab tolerance

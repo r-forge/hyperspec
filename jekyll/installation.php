@@ -30,13 +30,13 @@ to install the stable version from <a href="http://cran.r-project.org/web/packag
 
 <div class = "post">
 <h2 id="rforge">Install nightly build</h2>
-To install the nightly build (development version) from <a href="https://r-forge.r-project.org/R/?group_id=891">R-Forge</a>, inside R type:
+To install the nightly build (development version) from <a href="https://r-forge.r-project.org/R/?group_id=366">R-Forge</a>, inside R type:
 
 {% highlight rconsole %}
 > install.packages ("hyperSpec", repos="http://r-forge.r-project.org")
 {% endhighlight %}
 
-Nightly builds of Windows binaries are sometimes a few day delayed.
+Nightly builds of Windows binaries are sometimes a few days delayed.
 
 <br/>&raquo; <a href="#download__installation">top</a>
 

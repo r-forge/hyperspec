@@ -7,8 +7,9 @@
 ##' @param filename file name and path of the .jdx file
 ##' @param encoding encoding of the JCAMP-DX file (used by \code{\link[base]{readLines}})
 ##' @param header list with manually set header values
-##' @param keys.hdr2data character vector of labels (lowercase, without and dashes, blanks,
-##' underscores) whose values should be tranfered into the extra data.
+##' @param keys.hdr2data index vector indicating which header entries should be tranfered into the
+##' extra data. Usually a character vector of labels (lowercase, without and dashes, blanks,
+##' underscores). If \code{TRUE}, all header entries are read.
 ##' @param \dots further parameters handed to the data import function, e.g.
 ##' \tabular{ll}{
 ##' \code{xtol} \tab tolerance for checking calculated x values against checkpoints at beginning
@@ -53,9 +54,11 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
     ## look for header data
     hdr <- modifyList (header, .jdx.readhdr (jdx [hdrstart [s] : (spcstart [s] - 1)]))
 
-    if (s == 1L) ## file header may contain overall settings
+    if (s == 1L) {## file header may contain overall settings
+        hdr <- modifyList (list (file = as.character (filename)), hdr)
         header <- hdr
-
+      }
+    
     ## evaluate data block
 
     if (grepl ("[A-DF-Za-df-z%@]", jdx[spcstart [s]]))
@@ -87,7 +90,7 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
   
   hdr <- sub ("^[[:blank:]]*##.*=[[:blank:]]*(.*)[[:blank:]]*$", "\\1", hdr)
   hdr <-   gsub ("^[\"'[:blank:]]*([^\"'[:blank:]].*[^\"'[:blank:]])[\"'[:blank:]]*$", "\\1", hdr)
-  i <- grepl ("^[[:blank:]]*[-.[:digit:]]*[eE]?[-.[:digit:]]*[[:blank:]]*$", hdr)
+  i <- grepl ("^[[:blank:]]*[-]?[.[:digit:]]*[eE]?[-]?[.[:digit:]]*[[:blank:]]*$", hdr)
   hdr <- as.list (hdr)
   hdr [i] <- as.numeric (hdr [i])
   names (hdr) <- names
