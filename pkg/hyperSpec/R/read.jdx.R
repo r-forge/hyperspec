@@ -15,11 +15,14 @@
 ##'                  of line, defaults to XFACTOR\cr
 ##' \code{ytol} \tab tolerance for checking Y values against MINY and MAXY, defaults to YFACTOR\cr
 ##' }
+##' @param collapse.multi should hyperSpec objects from multispectra files be collapsed into one
+##' hyperSpec object (if \code{FALSE}, a list of hyperSpec objects is returned).
 ##' @return hyperSpec object
 ##' @author C. Beleites with contributions by Bryan Hanson
 ##' @export
 read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
-                     header = list (), keys.hdr2data = FALSE, ...){
+                     header = list (), keys.hdr2data = FALSE, ...,
+                     collapse.multi = TRUE){
   jdx <- readLines (filename, encoding = encoding)
   
   ## BRUKAFFN.DX has ##JCAMPDX= 5.0
@@ -58,18 +61,20 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
     if (grepl ("[A-DF-Za-df-z%@]", jdx[spcstart [s]]))
         stop ("SQZ, DIF, and DIFDUP forms are not yet supported.")
     
-    spc <- switch (hdr$xydata,
-                   `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [spcstart [s] : spcend [s]], ...),
-                   `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [spcstart [s] : spcend [s]], ...),
-                   stop ("unknown JCAMP-DX data format: ", hdr$xydata)
-                   )
+    spc [[s]] <- switch (hdr$xydata,
+                         `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [spcstart [s] : spcend [s]], ...),
+                         `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [spcstart [s] : spcend [s]], ...),
+                         stop ("unknown JCAMP-DX data format: ", hdr$xydata)
+                         )
 
     ## process according to header entries
-    spc <- .jdx.processhdr (spc, hdr, keys.hdr2data, ...)
+    spc [[s]] <- .jdx.processhdr (spc [[s]], hdr, keys.hdr2data, ...)
   }
 
-  if (length (spc) > 1L)  
-      spc <- collapse (spc)
+  if (length (spc) == 1L) 
+    spc <- spc [[1]]
+  else if (collapse.multi)
+    spc <- collapse (spc)
 
   spc
 }
