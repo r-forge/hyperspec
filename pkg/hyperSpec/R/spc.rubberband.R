@@ -4,7 +4,7 @@
 ##' @title Rubberband baseline correction
 ##' @param spc hyperSpec object
 ##' @param ... further parameters handed to \code{\link[stats]{smooth.spline}}
-##' @param lower logical indicating whether the lower or upper part of the hull should be used
+##' @param upper logical indicating whether the lower or upper part of the hull should be used
 ##' @param noise noise level to be taken into account
 ##' @param spline logical indicating whether the baseline should be an interpolating spline through
 ##' the support points or piecewise linear.
@@ -22,33 +22,41 @@
 ##' plot (bl, add = TRUE, col = 2)
 ##' plot (paracetamol [,, 175 ~ 1800] - bl)
 
-spc.rubberband <- function (spc, ..., lower = TRUE, noise = 0, spline = TRUE){
+spc.rubberband <- function (spc, ..., upper = FALSE, noise = 0, spline = TRUE){
   spc <- orderwl (spc)
+
+  if (upper) spc@data$spc <- -spc@data$spc
+  
   spc@data$spc <- .rubberband (spc@wavelength, spc@data$spc, 
-                               lower = lower, noise = noise, spline = spline, ...)
+                               noise = noise, spline = spline, ...)
+
+  if (upper) spc@data$spc <- -spc@data$spc
+
   spc
 }
 
-.rubberband <- function (x, y, lower, noise, spline, ...){
-  
+.rubberband <- function (x, y, noise, spline, ...){
   for (s in seq_len (nrow (y))){
     pts <- chull (x, y [s,])
+
     neg <- which (diff (pts) < 0)
-    if (lower){
-      pts <- c (ncol (y), pts [c (1, neg + 1)])
-    } else {
-      pts <- pts [-neg]
-    }
+    pts <- c (ncol (y), pts [c (1, neg + 1)])
+    pts <- sort (unique (pts))
+
     tmp <- approx (x = x [pts], y = y [s, pts], xout= x, method="linear")$y
+    
     if (spline){
       pts <- which (y [s,] <= tmp + noise)
+
       if (length (pts) > 3)
         tmp <- predict (smooth.spline (x[pts], y[s, pts], ...)$fit, x, 0)$y 
       else 
         tmp <- spline (x [pts], y [s, pts], xout = x)$y
         
     }
+    
     y [s, ] <- tmp
+    
   }
   
   y  

@@ -99,7 +99,13 @@ to import your data and the line joining it into a \chy object by your own impor
 more than welcome to contribute such import code to \phy. Secion~\ref{sec:writing-Import},
 (p.~\pageref{sec:writing-Import}) discusses examples of custom import functions.
 
-\subsection{Creating a \chy Object from a Data Cube (Spectra Array) }
+\subsection{Creating a \chy Object from a Data Matrix (Spectra Matrix)}
+As spectra matices are the internal format of \chy, the consructor can directly be used:
+<<eval=FALSE>>=
+spc <- new ("hyperSpec", spc, wavelength, data, labels)
+@ 
+
+\subsection{Creating a \chy Object from a Data Cube (Spectra Array)}
 Roberto Moscetti asked how to convert a hyperspectral data cube into a \chy object:
 \begin{quote}
   \emph{The problem is that I have a hypercube with the following dimensions: $67 \times 41 \times 256$
@@ -108,6 +114,10 @@ $x = 41$\\
 $wavelengths = 256$\\
 I do not know the way to import the hypercube.}
 \end{quote}
+
+Data cubes (i.e.\ 3-dimensional arrays of spectral data) result from spectal imaging measurements,
+where spectra are supplied for each pixel of an $px.x \times px.y$ imaging area. They have 3
+directions, usually $x$, $y$, and the spectral dimension.
 
 The solution is to convert the array into a spectra matrix and have separate $x$ and $y$ coordinates.
 
@@ -260,14 +270,72 @@ read.jdx ("jcamp-dx/virgilio.jdx")
 @ %
 
 <<test-read-jdx, echo = FALSE, results = hide>>=
-for (file in sprintf ("jcamp-dx/%s", 
-       c ("virgilio.jdx", "PE1800.DX", "LABCALC.DX", "AMA1.DX", "br_154_1.DX")))
-    print (read.jdx (file))
+files <- c (Sys.glob ("jcamp-dx/*.DX"), Sys.glob ("jcamp-dx/*.dx"), 
+            Sys.glob ("jcamp-dx/*.jdx"), Sys.glob ("jcamp-dx/*.JCM"), 
+            Sys.glob ("jcamp-dx/PE-IR/*.DX"), 
+				"jcamp-dx/GMD_20111121_MDN35_ALK_JCAMP.txt" # MPI Golm
+				)
 
-lapply (Sys.glob ("jcamp-dx/PE-IR/*.DX"), read.jdx, ytol = 1e-8)
+## not covered:
+setdiff (c (Sys.glob ("jcamp-dx/*"), Sys.glob ("jcamp-dx/PE-IR/*")), files)
+
+unsupported <- c ("jcamp-dx/BRUKER2.JCM", 
+                  "jcamp-dx/BRUKER1.JCM", 
+                  "jcamp-dx/TESTSPEC.DX",  
+                  "jcamp-dx/TEST32.DX", 
+                  "jcamp-dx/SPECFILE.DX",  
+                  "jcamp-dx/ISAS_MS2.DX", 
+                  "jcamp-dx/ISAS_MS3.DX", # NTUPLES
+                  "jcamp-dx/BRUKSQZ.DX", 
+                  "jcamp-dx/BRUKDIF.DX",
+                  "jcamp-dx/BRUKNTUP.DX", # NTUPLES
+                  "jcamp-dx/ISAS_CDX.DX", # PEAK ASSIGNMENTS= (XYMA)
+                  "jcamp-dx/TESTFID.DX", # NTUPLES
+                  "jcamp-dx/TESTNTUP.DX" # NTUPLES
+                  )
+
+for (file in files [! files %in% unsupported]) {
+  print (file)
+  read.jdx (file, ytol = 1e-6)
+}
 @
 
 \warnbox{Note}{\Rfunction{read.jdx.Shimadzu} is deprecated.}
+
+\subsection{Basic Atomic Spectra from NIST Tables}
+\label{sec:aes-nist}
+\index{ASCII!reference!atomic emission!NIST}
+\index{atomic emission!NIST}
+\index{NIST!atomic emission}
+\index{reference!NIST!atomic emission}
+
+The NIST (National Institute of Standards and Technology) has published a data base of basic atomic
+emission spectra \cite{ HandbookofBasicAtomicSpectroscopicData} with emission lines tabulated in
+ASCII (HTML) files.
+
+<<nist-aes>>=
+file <- readLines("~/Literatur/HandbookofBasicAtomicSpectroscopicData/mercurytable2.htm")
+
+file <- file [- (1 : grep ("Intensity.*Wavelength", file) - 1)]
+file <- file [1 : (grep ("</pre>", file) [1] - 1)]
+file <- gsub ("<[^>]*>", "", file)
+file <- file [! grepl ("^[[:space:]]+$", file)]
+colnames <- file [1]
+colnames <- gsub ("[[:space:]][[:space:]]+", "\t",  file [1])
+colnames <- strsplit (colnames, "\t")
+
+tablestart <- grep ("^[[:blank:]]*[[:alpha:]]+$", file) + 1
+tableend   <- c (tablestart [-1] - 2, length (file))
+tables <- list ()
+for (t in seq_along (tablestart)){
+  tmp <- file [tablestart [t] : tableend [t]]
+  tables [[t]] <- read.fwf (textConnection (tmp), c (5, 8, 12, 15,9))
+}
+names (tables) <- gsub ("[[:space:]]", "", file [tablestart - 1])
+
+new ("hyperSpec")
+
+@ 
 
 
 \subsection{ASCII Export} 

@@ -1,9 +1,15 @@
 ##' JCAMP-DX Import for Shimadzu Library Spectra
 ##'
-##' this is a first rough import function for JCAMP-DX spectra as exported by the
-##' Shimadzu GCxGC-MS library
+##' this is a first rough import function for JCAMP-DX spectra.
+##'
+##' So far, AFFN and PAC formats are supported for simple XYDATA, DATA TABLEs and PEAK TABLEs.
+##'
+##' NTUPLES / PAGES are not (yet) supported.
+##'
+##' DIF, DUF, DIFDUP and SQZ data formats are not (yet) supported. 
+##' 
 ##' @note JCAMP-DX support is incomplete and the functions may change without notice. See
-##' \code{vignette ("fileio")}
+##' \code{vignette ("fileio")}  and the details section.
 ##' @param filename file name and path of the .jdx file
 ##' @param encoding encoding of the JCAMP-DX file (used by \code{\link[base]{readLines}})
 ##' @param header list with manually set header values
@@ -16,6 +22,7 @@
 ##'                  of line, defaults to XFACTOR\cr
 ##' \code{ytol} \tab tolerance for checking Y values against MINY and MAXY, defaults to YFACTOR\cr
 ##' }
+##' @param NA.symbols character vector of text values that should be converted to \code{NA}
 ##' @param collapse.multi should hyperSpec objects from multispectra files be collapsed into one
 ##' hyperSpec object (if \code{FALSE}, a list of hyperSpec objects is returned).
 ##' @return hyperSpec object
@@ -23,55 +30,60 @@
 ##' @export
 read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
                      header = list (), keys.hdr2data = FALSE, ...,
+                     NA.symbols = c ("NA", "N/A", "N.A."),
                      collapse.multi = TRUE){
   jdx <- readLines (filename, encoding = encoding)
   
-  ## BRUKAFFN.DX has ##JCAMPDX= 5.0
-  if (any (sub ("^[[:blank:]]*##JCAMP-?DX=[[:blank:]]*([0-9.]*)[[:blank:]]*.*$", "\\1",
-                jdx [grepl ("##JCAMP-?DX", jdx)]) != "4.24"))
-     stop ("Only a subset of JCAMP-DX v 4.24 is supported so far.")
-
   ## start & end of spectra header and data
   hdrstart <- grep ("^[[:blank:]]*##TITLE=", jdx)
+  if (length (hdrstart) == 0L) stop ("No spectra found.")
       
-
-  spcstart <- grep ("^[[:blank:]]*##(XYDATA|DATA TABLE)=", jdx) + 1
+  datastart <- grep (sprintf ("^[[:blank:]]*##(%s)=", paste (.DATA.START, collapse = "|")), jdx) + 1
       # V 4.24 uses ##XYDATA=
       # V 5.00 uses ##DATA TABLE= ..., XYDATA
+      # V 5.01 MPI Golm files use ##PEAK TABLE=
+
+  if (length (datastart) == 0L) stop ("No data found: unsupported data type.")
       
+  dataend <- grep ("^[[:blank:]]*##", jdx)
+  dataend <- sapply (datastart, function (s) dataend [which (dataend > s)[1]]) - 1
+  
   spcend <- grep ("^[[:blank:]]*##END=[[:blank:]]*$", jdx) - 1
 
   ## some checks
-  if (length (hdrstart) == 0L) stop ("No spectra found.")
-  stopifnot (length (spcstart) == length (hdrstart))
-  stopifnot (length (spcstart) == length (spcend))
-  stopifnot (all (hdrstart < spcstart))
-  stopifnot (all (spcstart < spcend))
+  stopifnot (length (datastart) >= length (hdrstart))
+  stopifnot (length (datastart) == length (dataend))
+  stopifnot (all (hdrstart < spcend))
+  stopifnot (all (datastart < dataend))
 
   spc <- list ()
 
-  for (s in seq_along (spcstart)){
+  for (s in seq_along (datastart)){
     ## look for header data
-    hdr <- modifyList (header, .jdx.readhdr (jdx [hdrstart [s] : (spcstart [s] - 1)]))
+    hdr <- modifyList (header, .jdx.readhdr (jdx [hdrstart [s] : (datastart [s] - 1)]))
 
-    if (s == 1L) {## file header may contain overall settings
+    if (! is.null (hdr$page) || ! is.null (hdr$ntuples))
+        stop ("NTUPLES / PAGEs are not yet supported.")
+
+    if (s == 1L) { ## file header may contain overall settings
         hdr <- modifyList (list (file = as.character (filename)), hdr)
-        header <- hdr
+        header <- hdr [! names (hdr) %in% .key2names (.DATA.START)]
       }
     
     ## evaluate data block
 
-    if (grepl ("[A-DF-Za-df-z%@]", jdx[spcstart [s]]))
+    if (grepl ("[A-DF-Za-df-z%@]", jdx[datastart [s]]))
         stop ("SQZ, DIF, and DIFDUP forms are not yet supported.")
-    
-    spc [[s]] <- switch (hdr$xydata,
-                         `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [spcstart [s] : spcend [s]], ...),
-                         `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [spcstart [s] : spcend [s]], ...),
+
+    spc [[s]] <- switch (hdr$.format,
+                         `(X++(Y..Y))`= .jdx.TABULAR.PAC  (hdr, jdx [datastart [s] : spcend [s]], ...),
+                         `(XY..XY)`   = .jdx.TABULAR.AFFN (hdr, jdx [datastart [s] : spcend [s]], ...),
+
                          stop ("unknown JCAMP-DX data format: ", hdr$xydata)
                          )
 
     ## process according to header entries
-    spc [[s]] <- .jdx.processhdr (spc [[s]], hdr, keys.hdr2data, ...)
+    spc [[s]] <- .jdx.processhdr (spc [[s]], hdr, keys.hdr2data, ..., NA.symbols = NA.symbols)
   }
 
   if (length (spc) == 1L) 
@@ -85,8 +97,20 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 ### HEADER ------------------------------------------------------------------------------------------
 
 .jdx.readhdr <- function (hdr){
-  names <- tolower (sub ("^[[:blank:]]*##(.*)=.*$", "\\1", hdr))
-  names <- gsub ("[[:blank:]_-]", "", names)
+
+  ## get rid of comments. JCAMP-DX comments start with $$ and go to the end of the line.
+  hdr <- hdr [! grepl ("^[[:blank:]]*[$][$]", hdr)]
+  hdr <- gsub ("([[:blank:]][$][$].*)$", "", hdr)
+
+  ## now join lines that are not starting with ##KEY= with the KEYed line before
+  nokey <- grep ("^[[:blank:]]*##.*=", hdr, invert = TRUE)
+  if (length (nokey) > 0) {
+    for (l in rev (nokey)) # these are few, so no optimization needed
+        hdr [l - 1] <- paste (hdr [(l - 1) : l], collapse = " ")
+    hdr <- hdr [-nokey]
+  }
+
+  names <-  .key2names (sub ("^[[:blank:]]*##(.*)=.*$", "\\1", hdr))
   
   hdr <- sub ("^[[:blank:]]*##.*=[[:blank:]]*(.*)[[:blank:]]*$", "\\1", hdr)
   hdr <-   gsub ("^[\"'[:blank:]]*([^\"'[:blank:]].*[^\"'[:blank:]])[\"'[:blank:]]*$", "\\1", hdr)
@@ -99,10 +123,20 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
   if (is.null (hdr$yfactor)) hdr$yfactor <- 1
   if (is.null (hdr$xfactor)) hdr$xfactor <- 1
 
+  ## we treat XYDATA and PEAK TABLEs the same way
+  format <- hdr [names (hdr) %in% .key2names (.DATA.START)]
+  format <- format [! sapply (format, is.null)]
+  if (length (format) != 1)
+      stop ("contradicting format specification: please contact the maintainer (",
+            maintainer ("hyperSpec"), 
+            "supplying the file you just tried to load.")
+  
+  hdr$.format <- format [[1]]
+      
   hdr
 }
 
-.jdx.processhdr <- function (spc, hdr, keys, ..., ytol = hdr$yfactor){
+.jdx.processhdr <- function (spc, hdr, keys, ..., ytol = hdr$yfactor, NA.symbols){
 
   ## hdr$xfactor and $yfactor applied by individual reading functions
 
@@ -123,9 +157,17 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
   spc@label$.wavelength <- .jdx.xunits (hdr$xunits)
   spc@label$spc <- .jdx.yunits (hdr$yunits)
 
+  ## CONCENTRATIONS
+  if ("concentrations" %in% keys)
+      spc <- .jdx.hdr.concentrations (spc, hdr, NA.symbols = NA.symbols)
+
+  # delete header lines already processed
   hdr[c ("jcampdx", "xunits", "yunits", "xfactor", "yfactor", "firstx", "lastx", "npoints",
-         "firsty", "xydata", "end", "deltax", "maxy", "miny")] <- NULL
-  hdr <- hdr[keys]
+         "firsty", "xydata", "end", "deltax", "maxy", "miny", 
+         "concentrations")] <- NULL
+  if (is.character (keys))
+      keys <- keys [keys %in% names (hdr)]
+  hdr <- hdr [keys]
 
   if (length (hdr) > 0L)
       spc@data <- cbind (spc@data, hdr)
@@ -176,16 +218,12 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 }
 
 .jdx.TABULAR.AFFN <- function (hdr, data, ...){
-  data <- strsplit (data, "[[:blank:]]+")
+  #browser ()
+  data <- strsplit (data, "[,;[:blank:]]+")
   data <- unlist (data)
-  spc <- read.txt.long  (textConnection (data),
-                  cols = list (.wavelength="", spc=""),
-                  header = FALSE, sep = ",")
+  data <- matrix (as.numeric (data), nrow = 2)
 
-  spc@wavelength <- spc@wavelength * hdr$xfactor
-  spc@data$spc <- spc@data$spc * hdr$yfactor
-
-  spc
+  new ("hyperSpec", wavelength = data [1,] * hdr$xfactor, spc = data [2,]*hdr$yfactor)
 }
 
 ### UNITS -------------------------------------------------------------------------------------------
@@ -205,6 +243,7 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
 .jdx.yunits <- function (yunits){
   if (is.null (yunits))
       NULL
+
   else 
       switch (tolower (yunits),
               transmittance     = "T",
@@ -213,4 +252,45 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
               `kubelka-munk`    = expression (`/` (1 - R^2, 2*R)),
               `arbitrary units` = "I / a.u.",
               yunits)
+}
+
+## HDR processing functions
+.jdx.hdr.concentrations <- function (spc, hdr, NA.symbols){
+  
+  hdr <- strsplit (hdr$concentrations, "[)][[:blank:]]*[(]")[[1]]
+  hdr [length (hdr)] <- gsub (")$", "", hdr [length (hdr)])
+  if (hdr [1] == "(NCU")
+      hdr <- hdr [-1]
+  else
+      warning ("Unknown type of concentration specification: ", hdr [1], ")")
+
+  hdr <- simplify2array (strsplit (hdr, ","))
+  hdr [hdr %in% NA.symbols] <- NA
+
+  ## names
+  N <- hdr [1,]
+  N <- sub ("^([^[:alpha:]]*)", "", N)
+  N <- sub ("([^[:alpha:]]*)$", "", N)
+  N <- gsub ("([^[:alnum:]_-])", ".", N)
+    
+  ## concentrations
+  C <- t (as.numeric (hdr [2,]))
+  colnames (C) <- N
+  C <- as.data.frame (C)
+  spc@data <- cbind (spc@data, C)
+    
+  ## units
+  U <- as.list (hdr [3,])
+  names (U) <- N
+
+  spc@label <- modifyList (spc@label, U)
+
+  spc
+}
+
+## helpers
+.DATA.START <- c ("XYDATA", "DATA TABLE", "PEAK TABLE")
+
+.key2names <- function (key){
+  gsub ("[[:blank:]_-]", "", tolower (key))
 }

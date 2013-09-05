@@ -69,7 +69,9 @@ There are several ways to obtain <tt>hyperSpec<tt>.
 <p>Inside R type:
 
 <div class="highlight"><pre><code class="rconsole"><span class="gp">&gt; </span>install.packages <span class="p">(</span><span class="s">&quot;hyperSpec&quot;</span><span class="p">)</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 
 to install the stable version from <a href="http://cran.r-project.org/web/packages/hyperspec/index.html">CRAN</a>.</p>
 
@@ -81,7 +83,9 @@ to install the stable version from <a href="http://cran.r-project.org/web/packag
 To install the nightly build (development version) from <a href="https://r-forge.r-project.org/R/?group_id=366">R-Forge</a>, inside R type:
 
 <div class="highlight"><pre><code class="rconsole"><span class="gp">&gt; </span>install.packages <span class="p">(</span><span class="s">&quot;hyperSpec&quot;</span><span class="p">,</span> repos<span class="o">=</span><span class="s">&quot;http://r-forge.r-project.org&quot;</span><span class="p">)</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 
 Nightly builds of Windows binaries are sometimes a few days delayed.
 
@@ -106,7 +110,9 @@ Nightly builds of Windows binaries are sometimes a few days delayed.
 <h3>command line:</h3>
 <p>
 <div class="highlight"><pre><code class="console"><span class="gp">$</span> R CMD INSTALL filename.tar.gz
-</code></pre></div>
+</code></pre>
+</div>
+
 </p>
 
 <h3>in <a href="http://www.rstudio.org/">RStudio</a></h3>
@@ -127,7 +133,9 @@ click "Install Packages" in the package tab and then select "Install from: Packa
 
 <p>checkout using your favourite <tt>svn</tt> client program, or  
 <div class="highlight"><pre><code class="console"><span class="gp">$</span> svn checkout svn://svn.r-forge.r-project.org/svnroot/hyperspec/pkg
-</code></pre></div>
+</code></pre>
+</div>
+
 </p>       
 
 <h3><tt>git</tt> users:</h3>
@@ -136,7 +144,9 @@ click "Install Packages" in the package tab and then select "Install from: Packa
 
 <div class="highlight"><pre><code class="console"><span class="gp">$</span> git svn clone  svn://svn.r-forge.r-project.org/svnroot/hyperspec/pkg <span class="se">\</span>
 <span class="gp">&gt;</span> hyperSpec
-</code></pre></div>
+</code></pre>
+</div>
+
 
 <code>-rHEAD</code> makes a shallow copy retrieving only the most recent revision.
 </p>
@@ -145,7 +155,9 @@ click "Install Packages" in the package tab and then select "Install from: Packa
 Build and install the package:  
 <div class="highlight"><pre><code class="console"><span class="gp">$</span> R CMD build pkg/
 <span class="gp">$</span> R CMD INSTALL hyperSpec_0.xx-yyyymmdd.tar.gz
-</code></pre></div>
+</code></pre>
+</div>
+
 </p>
 &raquo; <a href="#download__installation">top</a>
 </div>

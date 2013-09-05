@@ -5,7 +5,8 @@
 \usage{
   read.jdx(filename = stop("filename is needed"),
     encoding = "", header = list(), keys.hdr2data = FALSE,
-    ..., collapse.multi = TRUE)
+    ..., NA.symbols = c("NA", "N/A", "N.A."),
+    collapse.multi = TRUE)
 
   read.jdx.Shimadzu(filename, encoding = "")
 }
@@ -30,6 +31,9 @@
   \tab tolerance for checking Y values against MINY and
   MAXY, defaults to YFACTOR\cr }}
 
+  \item{NA.symbols}{character vector of text values that
+  should be converted to \code{NA}}
+
   \item{collapse.multi}{should hyperSpec objects from
   multispectra files be collapsed into one hyperSpec object
   (if \code{FALSE}, a list of hyperSpec objects is
@@ -40,11 +44,21 @@
 }
 \description{
   this is a first rough import function for JCAMP-DX
-  spectra as exported by the Shimadzu GCxGC-MS library
+  spectra.
+}
+\details{
+  So far, AFFN and PAC formats are supported for simple
+  XYDATA, DATA TABLEs and PEAK TABLEs.
+
+  NTUPLES / PAGES are not (yet) supported.
+
+  DIF, DUF, DIFDUP and SQZ data formats are not (yet)
+  supported.
 }
 \note{
   JCAMP-DX support is incomplete and the functions may
-  change without notice. See \code{vignette ("fileio")}
+  change without notice. See \code{vignette ("fileio")} and
+  the details section.
 }
 \author{
   C. Beleites with contributions by Bryan Hanson

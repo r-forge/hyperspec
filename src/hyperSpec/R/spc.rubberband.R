@@ -28,19 +28,20 @@ spc.rubberband <- function (spc, ..., upper = FALSE, noise = 0, spline = TRUE){
   if (upper) spc@data$spc <- -spc@data$spc
   
   spc@data$spc <- .rubberband (spc@wavelength, spc@data$spc, 
-                               lower = lower, noise = noise, spline = spline, ...)
+                               noise = noise, spline = spline, ...)
 
   if (upper) spc@data$spc <- -spc@data$spc
 
   spc
 }
 
-.rubberband <- function (x, y, lower, noise, spline, ...){
+.rubberband <- function (x, y, noise, spline, ...){
   for (s in seq_len (nrow (y))){
     pts <- chull (x, y [s,])
 
     neg <- which (diff (pts) < 0)
-    pts <- sort (unique (c (ncol (y), pts [c (1, neg + 1)])))
+    pts <- c (ncol (y), pts [c (1, neg + 1)])
+    pts <- sort (unique (pts))
 
     tmp <- approx (x = x [pts], y = y [s, pts], xout= x, method="linear")$y
     

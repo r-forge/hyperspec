@@ -2,7 +2,7 @@
 \alias{spc.rubberband}
 \title{Rubberband baseline correction}
 \usage{
-  spc.rubberband(spc, ..., lower = TRUE, noise = 0,
+  spc.rubberband(spc, ..., upper = FALSE, noise = 0,
     spline = TRUE)
 }
 \arguments{
@@ -11,7 +11,7 @@
   \item{...}{further parameters handed to
   \code{\link[stats]{smooth.spline}}}
 
-  \item{lower}{logical indicating whether the lower or
+  \item{upper}{logical indicating whether the lower or
   upper part of the hull should be used}
 
   \item{noise}{noise level to be taken into account}

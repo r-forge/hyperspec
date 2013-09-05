@@ -61,6 +61,10 @@
 
 <ul>
 <li>
+<p>05 Sep 2013 &#187; <a href='/2013/2013-09-05-bugfix-spcrubberband.html'>Bugfix <tt>spc.rubberband</tt> baseline fitting</a></p>
+</li>
+
+<li>
 <p>25 Jun 2013 &#187; <a href='/2013/2013-06-25-readmultijdx.html'>Import Multispectra JCAMP-DX files</a></p>
 </li>
 
@@ -91,6 +95,24 @@
 
 <h3 id='excerpts'>Excerpts</h3>
 <div class='post'>
+<h2><a id='/2013/bugfix-spcrubberband' href='/2013/2013-09-05-bugfix-spcrubberband.html'>Bugfix <tt>spc.rubberband</tt> baseline fitting</a></h2>
+
+<p><code>spc.rubberband</code> was not working correctly for data where the baseline is /above/ (e.g. transmittance, reflectance).</p>
+
+<p>This was corrected. The argument to switch to upper baselines is now <code>upper = TRUE</code> (instead of <code>lower = FALSE</code> as it was before).</p>
+
+<a href='/2013/2013-09-05-bugfix-spcrubberband.html'>... read more ...</a>
+<p id='footer'>
+
+	<span id='tag'> news </span>
+
+	<span id='tag'> bugfix </span>
+	 
+05 Sep 2013
+<br />
+&raquo; <a href='#all_posts'>top</a>
+</p>
+</div><div class='post'>
 <h2><a id='/2013/readmultijdx' href='/2013/2013-06-25-readmultijdx.html'>Import Multispectra JCAMP-DX files</a></h2>
 
 <p>hyperSpec now imports multispectra JCAMP-DX files.</p>

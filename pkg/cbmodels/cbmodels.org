@@ -1,0 +1,20 @@
+* cbmodels
+** TODO formula interface
+
+* Abhängigkeiten
+** patch für pls?
+** patch für lda?
+** TODO scale
+*** TODO build on windows
+
+* Paper
+** Example data?
+
+* Literatur
+** Boulestix 2007 
+ Literaturübersicht!
+ Überblick + andere packages.
+ nicht nur PLS-LDA, auch PLS-LR, PLS-QDA.
+
+** Barker2003
+
