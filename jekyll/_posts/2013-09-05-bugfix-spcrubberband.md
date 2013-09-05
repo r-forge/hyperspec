@@ -11,8 +11,7 @@ This was corrected. The argument to switch to upper baselines is now `upper = TR
 `lower = FALSE` as it was before).
 
 <!-- end excerpt --> 
-
-
 The prebuilt [source package](/blob/hyperSpec-prebuilt.tar.gz)
 and [windows binary](/blob/hyperSpec-prebuilt.zip) have been
 renewed.
+ 
