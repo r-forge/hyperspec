@@ -54,7 +54,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
                            scores = TRUE, retain.columns = FALSE,
                            short = "decomposition", user = NULL, date = NULL,
                            ...){
-  warning ("decomposition is deprecated: please change your code to use `loadings` or `scores` instead.")
+  message ("decomposition will be deprecated: please change your code to use `loadings` or `scores` instead.")
   
   validObject (object)
 
@@ -121,18 +121,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
   rm (flu)
 }
 
-##' @export
-##' @rdname decomposition
-##' @examples
-##' pca <- prcomp (~ spc, data = flu)
-##'
-##' pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]))
-##' pca.center <- loadings (flu, pca$center)
-##'
-##' plot (pca.center)
-##' plot (pca.loadings, col = c ("red", "gray50"))
-##' 
-loadings <- function (object, x, label.spc, retain.columns = FALSE){
+.loadings <- function (object, x, label.spc, retain.columns = FALSE){
   validObject (object)
 
   if (is.vector (x))
@@ -174,15 +163,24 @@ loadings <- function (object, x, label.spc, retain.columns = FALSE){
   object
 }
 
+##' @noRd
+setGeneric ("loadings", function (object, ...) standardGeneric ("loadings"))
 
 ##' @export
 ##' @rdname decomposition
 ##' @examples
+##' pca <- prcomp (~ spc, data = flu)
 ##'
-##' pca.scores <- scores (flu, pca$x)
-##' plotc (pca.scores, groups = .wavelength)
+##' pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]))
+##' pca.center <- loadings (flu, pca$center)
+##'
+##' plot (pca.center)
+##' plot (pca.loadings, col = c ("red", "gray50"))
 ##' 
-scores <- function (object, x, wavelength = seq_len (ncol (x)),
+setMethod ("loadings", signature = signature (object = "hyperSpec"), .loadings)
+
+
+.scores <- function (object, x, wavelength = seq_len (ncol (x)),
                            label.wavelength, label.spc) {
   validObject (object)
 
@@ -208,3 +206,15 @@ scores <- function (object, x, wavelength = seq_len (ncol (x)),
 
   object
 }
+
+##' @noRd
+setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
+
+##' @export
+##' @rdname decomposition
+##' @examples
+##'
+##' pca.scores <- scores (flu, pca$x)
+##' plotc (pca.scores, groups = .wavelength)
+##' 
+setMethod ("scores", signature = signature (object = "hyperSpec"), .scores)
