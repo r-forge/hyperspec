@@ -47,14 +47,14 @@
 ##' See e.g. \code{\link[stats]{prcomp}} and \code{\link[stats]{princomp}} for principal component
 ##' analysis, and package \code{pls} for Partial Least Squares Regression.
 ##' @keywords methods manip
-##' @include apply.R 
+##' @include apply.R
 ##' @export
 decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
                            label.wavelength, label.spc,
                            scores = TRUE, retain.columns = FALSE,
                            short = "decomposition", user = NULL, date = NULL,
                            ...){
-  message ("decomposition will be deprecated: please change your code to use `loadings` or `scores` instead.")
+#  message ("decomposition will be deprecated: please change your code to use `loadings` or `scores` instead.")
   
   validObject (object)
 
@@ -121,7 +121,15 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
   rm (flu)
 }
 
-.loadings <- function (object, x, label.spc, retain.columns = FALSE){
+## package pls defines S3 methods `scores` and `loadings`.  When loading pls after hyperSpec, this
+## would mask hyperSpec's S4 generic, so define S3 methods as well.
+
+## laodings causes chaos. => use latentvars instead
+
+##' @noRd
+setGeneric ("latentvars", function (object, ...) standardGeneric ("latentvars"))
+
+.latentvars <- function (object, x, label.spc, retain.columns = FALSE, ...){
   validObject (object)
 
   if (is.vector (x))
@@ -163,25 +171,66 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
   object
 }
 
-##' @noRd
-setGeneric ("loadings", function (object, ...) standardGeneric ("loadings"))
+.test (.latentvars) <- function (){
+  rm (flu)
+  
+  pca <- prcomp (~ spc, data = flu)
+  # retain.columns = FALSE
+  pca.loadings <- latentvars (flu, t (pca$rotation [, 1 : 2]))
+  checkEquals (ncol (pca.loadings$..), 0) 
+  checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
+
+  pca.loadings <- latentvars (flu, t (pca$rotation [, 1 : 2]), retain.columns = TRUE)
+  checkEquals (ncol (pca.loadings$..), ncol (flu$..))
+  checkTrue (all (is.na (pca.loadings$..)))
+  checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
+  
+  ## POSIXct
+  flu$ct <- as.POSIXct(Sys.time()) 
+  checkEquals (latentvars (flu, flu [[]])$ct, flu$ct)
+
+  ## POSIXlt
+  flu$lt <- as.POSIXlt(Sys.time()) 
+  checkEquals (latentvars (flu, flu [[]])$lt, flu$lt)
+
+  rm (flu)
+}
 
 ##' @export
 ##' @rdname decomposition
+##' @method scores hyperSpec
+##' @S3method scores hyperSpec
 ##' @examples
 ##' pca <- prcomp (~ spc, data = flu)
 ##'
-##' pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]))
-##' pca.center <- loadings (flu, pca$center)
+##' pca.loadings <- latentvars (flu, t (pca$rotation [, 1 : 2]))
+##' pca.center <- latentvars (flu, pca$center)
 ##'
 ##' plot (pca.center)
 ##' plot (pca.loadings, col = c ("red", "gray50"))
+##'
+setGeneric ("latentvars")
+setMethod ("latentvars", signature = signature (object = "hyperSpec"), .latentvars)
+
+## because of package pls using S3 method scores, define both S4 and S3 method
+##' @noRd
+setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
+
+##' @noRd
+##' @export
+scores <- function(object, ...) UseMethod("scores")
+
+##' @export
+##' @method scores hyperSpec
+##' @S3method scores hyperSpec
+##' @rdname decomposition
+##' @examples
+##'
+##' pca.scores <- scores (flu, pca$x)
+##' plotc (pca.scores, groups = .wavelength)
 ##' 
-setMethod ("loadings", signature = signature (object = "hyperSpec"), .loadings)
-
-
-.scores <- function (object, x, wavelength = seq_len (ncol (x)),
-                           label.wavelength, label.spc) {
+scores.hyperSpec <- function (object, x, wavelength = seq_len (ncol (x)),
+                              label.wavelength, label.spc) {
   validObject (object)
 
   if (is.vector (x))
@@ -208,13 +257,33 @@ setMethod ("loadings", signature = signature (object = "hyperSpec"), .loadings)
 }
 
 ##' @noRd
-setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
+##' @export
+setMethod ("scores", signature = signature (object = "hyperSpec"), scores.hyperSpec)
+
+
+.test (scores.hyperSpec) <- function (){
+  rm (flu)
+  rownames (flu) <- rownames (flu) # turns numeric into character
+  
+  pca <- prcomp (~ spc, data = flu)
+
+  pca.scores <- scores (flu, pca$x [, 1 : 2])
+  checkEquals (pca.scores$.., flu$.., check.attributes = FALSE)
+  checkEqualsNumeric (wl (pca.scores), 1 : 2)
+  checkEqualsNumeric (pca.scores [[]], pca$x [, 1 : 2])
+  
+  ## POSIXct
+  flu$ct <- as.POSIXct(Sys.time()) 
+  checkEquals (scores (flu, flu [[]])$ct, flu$ct)
+
+  ## POSIXlt
+  flu$lt <- as.POSIXlt(Sys.time()) 
+  checkEquals (scores (flu, flu [[]])$lt, flu$lt)
+
+  rm (flu)
+}
 
 ##' @export
-##' @rdname decomposition
-##' @examples
-##'
-##' pca.scores <- scores (flu, pca$x)
-##' plotc (pca.scores, groups = .wavelength)
-##' 
-setMethod ("scores", signature = signature (object = "hyperSpec"), .scores)
+##' @noRd
+#setMethod ("scores", signature = signature (object = "hyperSpec"), scores.hyperSpec)
+

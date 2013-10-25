@@ -1,9 +1,7 @@
 \name{decomposition}
 \alias{decomposition}
-\alias{loadings}
-\alias{loadings,hyperSpec-method}
-\alias{scores}
-\alias{scores,hyperSpec-method}
+\alias{latentvars}
+\alias{scores.hyperSpec}
 \title{Convert Principal Component Decomposition or the like into a hyperSpec Object Decomposition of
 the spectra matrix is a common procedure in chemometric data analysis. \code{scores} and
 \code{loadings} convert the result matrices into new \code{hyperSpec} objects.}
@@ -13,10 +11,7 @@ the spectra matrix is a common procedure in chemometric data analysis. \code{sco
     retain.columns = FALSE, short = "decomposition",
     user = NULL, date = NULL, ...)
 
-  \S4method{loadings}{hyperSpec}(object, x, label.spc,
-    retain.columns = FALSE)
-
-  \S4method{scores}{hyperSpec}(object, x,
+  \method{scores}{hyperSpec} (object, x,
     wavelength = seq_len(ncol(x)), label.wavelength,
     label.spc)
 }
@@ -93,8 +88,8 @@ the spectra matrix is a common procedure in chemometric data analysis. \code{sco
 \examples{
 pca <- prcomp (~ spc, data = flu)
 
-pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]))
-pca.center <- loadings (flu, pca$center)
+pca.loadings <- latentvars (flu, t (pca$rotation [, 1 : 2]))
+pca.center <- latentvars (flu, pca$center)
 
 plot (pca.center)
 plot (pca.loadings, col = c ("red", "gray50"))

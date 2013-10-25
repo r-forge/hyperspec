@@ -2,8 +2,8 @@ Package: hyperSpec
 Type: Package
 Title: Interface for hyperspectral data, i.e. spectra + meta info (spatial,
     time, concentration, ...)
-Version: 0.98-20130920
-Date: 2013-09-20
+Version: 0.98-20131025
+Date: 2013-10-25
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
 Description: This package is an interface to handle hyperspectral data sets in
@@ -77,7 +77,6 @@ Collate:
     'levelplot.R'
     'logbook.R'
     'logentry.R'
-    'log.R'
     'map.identify.R'
     'map.sel.poly.R'
     'mark.dendrogram.R'
@@ -98,7 +97,7 @@ Collate:
     'rbind.fill.R'
     'read.ENVI.Nicolet.R'
     'read.ENVI.R'
-    'read.spc.KaiserMap.R'
+    'read.spc.Kaiser.R'
     'read.spc.R'
     'read.txt.long.R'
     'read.txt.wide.R'
