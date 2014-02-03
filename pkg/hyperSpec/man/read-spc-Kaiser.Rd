@@ -41,9 +41,7 @@
   \code{read.spc.Kaiser} for raw data that is saved in
   separate files for low and high wavenumber range.  The
   wavelength axis holds the pixel numbers, which repeat for
-  low and high wavenumber ranges. This is how the
-  wavelength calibration in \code{\link{wlcal.Kaiser}}
-  expects it.
+  low and high wavenumber ranges.
 }
 \details{
   \code{read.spc.Kaiser} imports sets of .spc files written

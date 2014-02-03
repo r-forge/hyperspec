@@ -85,8 +85,7 @@ read.spc.KaiserMap <- function (files, keys.log2data = NULL, ...) {
 
 ##' \code{read.spc.KaiserLowHigh} is a wrapper for \code{read.spc.Kaiser} for raw data that is saved
 ##' in separate files for low and high wavenumber range.  The wavelength axis holds the pixel
-##' numbers, which repeat for low and high wavenumber ranges. This is how the wavelength calibration
-##' in \code{\link{wlcal.Kaiser}} expects it.
+##' numbers, which repeat for low and high wavenumber ranges. 
 ##' 
 ##' @rdname read-spc-Kaiser
 ##' @param type what kind of measurement was done? If \code{"map"}, \code{read.spc.KaiserMap} is used
