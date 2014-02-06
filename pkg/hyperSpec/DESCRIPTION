@@ -41,7 +41,8 @@ Suggests:
     compiler,
     inline,
     Rcpp,
-    MASS
+    MASS,
+    fastcluster
 URL: http://hyperSpec.r-forge.r-project.org/
 Collate:
     'hyperspec-package.R'

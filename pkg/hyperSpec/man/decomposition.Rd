@@ -1,5 +1,6 @@
 \name{decomposition}
 \alias{decomposition}
+\alias{loadings.hyperSpec}
 \alias{scores.hyperSpec}
 \title{Convert Principal Component Decomposition or the like into a hyperSpec Object}
 \usage{
@@ -7,6 +8,9 @@
     label.wavelength, label.spc, scores = TRUE,
     retain.columns = FALSE, short = "decomposition",
     user = NULL, date = NULL, ...)
+
+  \method{loadings}{hyperSpec} (object, x, label.spc,
+    retain.columns = FALSE, ...)
 
   \method{scores}{hyperSpec} (object, x,
     wavelength = seq_len(ncol(x)), label.wavelength,
@@ -89,6 +93,13 @@
   of the spectrum any longer.
 }
 \examples{
+pca <- prcomp (flu)
+
+pca.loadings <- loadings (flu, t (pca$rotation))
+pca.center <- loadings (flu, pca$center)
+
+plot (pca.center)
+plot (pca.loadings, col = c ("red", "gray50"))
 pca <- prcomp (flu)
 
 pca.scores <- scores (flu, pca$x)
