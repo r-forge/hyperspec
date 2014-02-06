@@ -2,10 +2,6 @@
 ##' @noRd
 setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
 
-## ' @rdname decomposition
-## ' @export
-#scores <- function(object, ...) UseMethod("scores")
-
 ##' @export
 ##' @rdname decomposition
 ##' @method scores hyperSpec
@@ -45,10 +41,6 @@ scores.hyperSpec <- function (object, x, wavelength = seq_len (ncol (x)),
 }
 
 
-## ' @export
-#setMethod ("scores", signature = signature (object = "hyperSpec"), scores.hyperSpec)
-
-
 .test (scores.hyperSpec) <- function (){
   rm (flu)
   rownames (flu) <- rownames (flu) # turns numeric into character
@@ -70,8 +62,3 @@ scores.hyperSpec <- function (object, x, wavelength = seq_len (ncol (x)),
 
   rm (flu)
 }
-
-## ' @export
-## ' @noRd
-#setMethod ("scores", signature = signature (object = "hyperSpec"), scores.hyperSpec)
-
