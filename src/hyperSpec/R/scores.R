@@ -9,6 +9,8 @@ setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
 ##' @include loadings.R
 ##' @import pls
 ##' @examples
+##' 
+##' pca <- prcomp (flu)
 ##'
 ##' pca.scores <- scores (flu, pca$x)
 ##' plotc (pca.scores, groups = .wavelength)
