@@ -67,8 +67,7 @@
 <span class='go'>   1. spc:  [matrix181] 27.15000 66.80133 ... 294.6495 </span>
 <span class='go'>Warnmeldung:</span>
 <span class='go'>In .local(.Object, ...) : NAs durch Umwandlung erzeugt</span>
-</code></pre>
-</div>
+</code></pre></div>
 <p>The warning is supposed to be there: <code>hyperSpec</code> tries to guess the wavelengths from the colnames of the <code>data.frame</code>, which fails. The resulting <code>hyperSpec</code> object therefore gets dummy wavelengths that just count up from 1 to 181 (<code>ncol</code>).</p>
 
 <p>The prebuilt <a href='/blob/hyperSpec-prebuilt.tar.gz'>source package</a> and <a href='/blob/hyperSpec-prebuilt.zip'>windows binary</a> have been renewed.</p>
