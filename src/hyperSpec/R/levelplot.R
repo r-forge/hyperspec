@@ -59,6 +59,19 @@
   do.call(levelplot, c (list (x, data), dots))
 }
 
+.test (.levelplot) <- function (){
+
+  ## just check that no errors occur
+  levelplot (laser, contour = TRUE, col = "#00000080")
+  
+  ## applying a function before plotting
+  plotmap (chondro, func = max, col.regions = gray (seq (0, 1, 0.05)))
+
+  plotmap (chondro, clusters ~ x * y, transform.factor = FALSE)
+  plotmap (chondro, clusters ~ x * y, col.regions = gray (seq (0, 1, 0.05)))
+
+}
+
 ##' @include plotmap.R
 ##' @rdname levelplot
 ##' @import lattice
