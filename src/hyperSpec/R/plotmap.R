@@ -86,10 +86,7 @@
 ##' 
 ##' # plot spectra matrix
 ##' levelplot (spc ~ .wavelength * t, laser, contour = TRUE, col = "#00000080")
-##' 
-##' plot (flu, "mat") # use base graphics
-##' plotmat (flu)
-##' plotmat (flu, contour = TRUE, add = TRUE) 
+##' # see also plotmat
 ##' 
 ##' plotmap (chondro, clusters ~ x * y)
 ##' 
