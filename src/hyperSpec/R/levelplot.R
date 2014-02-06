@@ -70,12 +70,12 @@
 ##' @seealso  \code{\link[lattice]{levelplot}}
 ##'
 ##'  \code{\link{trellis.factor.key}} for improved color coding of factors
-setMethod ("levelplot", signature = signature (x = "formula", data = "hyperSpec"), .levelplot)
-
-##' @rdname levelplot
-##' @export
-
 setMethod ("levelplot", signature = signature (x = "hyperSpec", data = "missing"),
            function (x, data, ...) {
              .levelplot (x = formula (spc ~ .wavelength * .row), data = x, ...)
            })
+
+##' @rdname levelplot
+##' @export
+setMethod ("levelplot", signature = signature (x = "formula", data = "hyperSpec"), .levelplot)
+
