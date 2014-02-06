@@ -6,6 +6,7 @@ setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
 ##' @method scores hyperSpec
 ##' @S3method scores hyperSpec
 ##' @include decomposition.R
+##' @include loadings.R
 ##' @import pls
 ##' @examples
 ##'
