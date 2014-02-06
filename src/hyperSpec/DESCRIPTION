@@ -2,8 +2,8 @@ Package: hyperSpec
 Type: Package
 Title: Interface for hyperspectral data, i.e. spectra + meta info (spatial,
     time, concentration, ...)
-Version: 0.98-20140203
-Date: 2014-02-03
+Version: 0.98-20140205
+Date: 2014-02-05
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
 Description: This package is an interface to handle hyperspectral data sets in
@@ -22,7 +22,8 @@ Depends:
     utils,
     lattice,
     grid,
-	 mvtnorm
+	 mvtnorm,
+	 pls
 Suggests:
     R.matlab,
     latticeExtra,
@@ -32,7 +33,6 @@ Suggests:
     plotrix,
     testthat,
     ggplot2 (>= 0.9.2),
-    pls,
     playwith,
     latticist,
     svUnit,

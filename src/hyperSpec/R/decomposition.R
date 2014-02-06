@@ -1,6 +1,8 @@
-##' Convert Principal Component Decomposition or the like into a hyperSpec Object Decomposition of
-##' the spectra matrix is a common procedure in chemometric data analysis. \code{scores} and
-##' \code{loadings} convert the result matrices into new \code{hyperSpec} objects.
+##' Convert Principal Component Decomposition or the like into a hyperSpec Object
+##'
+##' Decomposition of the spectra matrix is a common procedure in chemometric data
+##' analysis. \code{scores} and \code{loadings} convert the result matrices into new \code{hyperSpec}
+##' objects.
 ##' 
 ##' Multivariate data are frequently decomposed by methods like principal component analysis, partial
 ##' least squares, linear discriminant analysis, and the like.  These methods yield loadings (or
@@ -28,7 +30,8 @@
 ##' @param object A \code{hyperSpec} object.
 ##' @param x matrix with the new content for \code{object@@data$spc}.
 ##' 
-##' May correspond to rows (for \code{scores}) or columns (for \code{loadings}) of \code{object}.
+##' Its size must correspond to rows (for \code{scores}) and to either columns or rows (for
+##' \code{loadings}) of \code{object}.
 ##' @param wavelength for a scores-like \code{x}: the new \code{object@@wavelength}.
 ##' @param label.wavelength The new label for the wavelength axis (if \code{x} is scores-like)
 ##' @param label.spc The new label for the spectra matrix

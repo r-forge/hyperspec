@@ -1,10 +1,7 @@
 \name{decomposition}
 \alias{decomposition}
-\alias{latentvars}
 \alias{scores.hyperSpec}
-\title{Convert Principal Component Decomposition or the like into a hyperSpec Object Decomposition of
-the spectra matrix is a common procedure in chemometric data analysis. \code{scores} and
-\code{loadings} convert the result matrices into new \code{hyperSpec} objects.}
+\title{Convert Principal Component Decomposition or the like into a hyperSpec Object}
 \usage{
   decomposition(object, x, wavelength = seq_len(ncol(x)),
     label.wavelength, label.spc, scores = TRUE,
@@ -13,7 +10,7 @@ the spectra matrix is a common procedure in chemometric data analysis. \code{sco
 
   \method{scores}{hyperSpec} (object, x,
     wavelength = seq_len(ncol(x)), label.wavelength,
-    label.spc)
+    label.spc, ...)
 }
 \arguments{
   \item{object}{A \code{hyperSpec} object.}
@@ -21,8 +18,9 @@ the spectra matrix is a common procedure in chemometric data analysis. \code{sco
   \item{x}{matrix with the new content for
   \code{object@data$spc}.
 
-  May correspond to rows (for \code{scores}) or columns
-  (for \code{loadings}) of \code{object}.}
+  Its size must correspond to rows (for \code{scores}) and
+  to either columns or rows (for \code{loadings}) of
+  \code{object}.}
 
   \item{wavelength}{for a scores-like \code{x}: the new
   \code{object@wavelength}.}
@@ -50,6 +48,12 @@ the spectra matrix is a common procedure in chemometric data analysis. \code{sco
   A \code{hyperSpec} object, updated according to \code{x}
 }
 \description{
+  Decomposition of the spectra matrix is a common procedure
+  in chemometric data analysis. \code{scores} and
+  \code{loadings} convert the result matrices into new
+  \code{hyperSpec} objects.
+}
+\details{
   Multivariate data are frequently decomposed by methods
   like principal component analysis, partial least squares,
   linear discriminant analysis, and the like.  These
@@ -57,8 +61,7 @@ the spectra matrix is a common procedure in chemometric data analysis. \code{sco
   \dots{}) that are linear combination coefficients along
   the wavelength axis and scores for each spectrum and
   loading.
-}
-\details{
+
   The loadings matrix gives a coordinate transformation,
   and the scores are values in that new coordinate system.
 
@@ -86,13 +89,8 @@ the spectra matrix is a common procedure in chemometric data analysis. \code{sco
   of the spectrum any longer.
 }
 \examples{
-pca <- prcomp (~ spc, data = flu)
+pca <- prcomp (flu)
 
-pca.loadings <- latentvars (flu, t (pca$rotation [, 1 : 2]))
-pca.center <- latentvars (flu, pca$center)
-
-plot (pca.center)
-plot (pca.loadings, col = c ("red", "gray50"))
 pca.scores <- scores (flu, pca$x)
 plotc (pca.scores, groups = .wavelength)
 }

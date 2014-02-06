@@ -53,9 +53,14 @@
 	 <div id="container">
 		<div class="content">
   <h2>Extended binary arithmetic operators</h2>
-  <p><code>hyperSpec</code>&#8217;s binary arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) now working for calculations on spectra matrix plus row or column-vector objects as well, so that many calls to <code>sweep</code> can now be more easily expressed:</p>
+  <p><code>hyperSpec</code>&#8217;s binary arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) now working for calculations on spectra matrix plus row or column-vector objects as well, so that many calls to <code>sweep</code> can now be more easily expressed, e.g.</p>
+
+<p>Centering:</p>
 <div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>-</span> colMeans <span class='p'>(</span>flu<span class='p'>))</span>
-<span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>/</span> rowMeans <span class='p'>(</span>flu<span class='p'>))</span>
+</code></pre>
+</div>
+<p>Normalization:</p>
+<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>/</span> rowMeans <span class='p'>(</span>flu<span class='p'>))</span>
 </code></pre>
 </div><!-- end excerpt -->
 
