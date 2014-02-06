@@ -1,4 +1,3 @@
-## because of package pls using S3 method scores, define both S4 and S3 method
 ##' @noRd
 setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
 
@@ -6,9 +5,9 @@ setGeneric ("scores", function (object, ...) standardGeneric ("scores"))
 ##' @rdname decomposition
 ##' @method scores hyperSpec
 ##' @S3method scores hyperSpec
+##' @include decomposition.R
 ##' @import pls
 ##' @examples
-##' pca <- prcomp (~ spc, data = flu)
 ##'
 ##' pca.scores <- scores (flu, pca$x)
 ##' plotc (pca.scores, groups = .wavelength)
