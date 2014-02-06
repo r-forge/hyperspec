@@ -1,10 +1,11 @@
 ## loadings needs special care: its interface is redefined by package pls.
 ## => Depend on pls, so interface is clear
 
-##' @noRd
 ##' @export
 ##' @rdname decomposition
 ##' @S3method loadings hyperSpec
+##' @usage
+##' \method{loadings}{hyperSpec} (object, x, label.spc, retain.columns = FALSE, ...)
 ##' @include decomposition.R
 ##' @import pls
 ##' @examples
