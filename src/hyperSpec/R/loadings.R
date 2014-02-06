@@ -2,15 +2,12 @@
 ## => Depend on pls, so interface is clear
 
 ##' @noRd
-setGeneric ("loadings", function (object, ...) standardGeneric ("loadings"))
-
 ##' @export
 ##' @rdname decomposition
-##' @method loadings hyperSpec
 ##' @S3method loadings hyperSpec
-##' @import pls
 ##' @include decomposition.R
 ##' @examples
+##' pca <- prcomp (flu)
 ##' 
 ##' pca.loadings <- loadings (flu, t (pca$rotation))
 ##' pca.center <- loadings (flu, pca$center)
@@ -24,7 +21,7 @@ loadings.hyperSpec <- function (object, x, label.spc, retain.columns = FALSE, ..
       dim (x) <- c(1, length (x))
 
   if (ncol (x) != nwl (object)){
-      ## shortcut: many methods will return the loadings-like results in columns
+      ## shortcut: many methods will return the latentvars-like results in columns
       if (nrow (x) == nwl (object)){
         x <- t (x)
         if (hy.getOption ("debuglevel") >= 1L)
@@ -90,5 +87,4 @@ loadings.hyperSpec <- function (object, x, label.spc, retain.columns = FALSE, ..
 
   rm (flu)
 }
-
 
