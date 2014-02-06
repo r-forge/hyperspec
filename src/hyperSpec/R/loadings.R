@@ -6,6 +6,7 @@
 ##' @rdname decomposition
 ##' @S3method loadings hyperSpec
 ##' @include decomposition.R
+##' @import pls
 ##' @examples
 ##' pca <- prcomp (flu)
 ##' 
@@ -65,17 +66,32 @@ loadings.hyperSpec <- function (object, x, label.spc, retain.columns = FALSE, ..
 
 .test (loadings.hyperSpec) <- function (){
   rm (flu)
+
+  ## needed because of import chaos between pls and stats
+  loadings <- pls::loadings
   
   pca <- prcomp (~ spc, data = flu)
-  # retain.columns = FALSE
+  
+  ## retain.columns == FALSE
   pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]))
   checkEquals (ncol (pca.loadings$..), 0) 
   checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
 
+  ## retain.colums == TRUE
   pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]), retain.columns = TRUE)
   checkEquals (ncol (pca.loadings$..), ncol (flu$..))
   checkTrue (all (is.na (pca.loadings$..)))
   checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
+
+  ## loadings should transpose as needed
+  pca.loadings <- loadings (flu, pca$rotation [, 1 : 2])
+  checkEquals (ncol (pca.loadings$..), 0) 
+  checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
+
+  ## single vector
+  pca.loadings <- loadings (flu, pca$center)
+  checkEquals (ncol (pca.loadings$..), 0) 
+  checkEqualsNumeric (pca.loadings [[]], pca$center)
   
   ## POSIXct
   flu$ct <- as.POSIXct(Sys.time()) 
