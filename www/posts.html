@@ -55,6 +55,10 @@
 
 <ul>
 <li>
+<p>25 Oct 2013 &#187; <a href='/2013/2013-10-25-decomposition.html'>Decomposition of Matrices and Bilinear Models</a></p>
+</li>
+
+<li>
 <p>25 Oct 2013 &#187; <a href='/2013/2013-10-25-arithmetic.html'>Extended binary arithmetic operators</a></p>
 </li>
 
@@ -109,16 +113,42 @@
 
 <h1 id='excerpts'>Excerpts</h1>
 <div class='post'>
+<h2><a id='/2013/decomposition' href='/2013/2013-10-25-decomposition.html'>Decomposition of Matrices and Bilinear Models</a></h2>
+
+<p><code>hyperSpec</code> gained two methods, <code>scores</code> and <code>latentvars</code> which re-import result matrices from matrix decomposition or bilinear models into hyperSpec objects.</p>
+
+<p>binary arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) now working for calculations on spectra matrix plus row or column-vector objects as well, so that many calls to <code>sweep</code> can now be more easily expressed, e.g.</p>
+
+<p>Centering:</p>
+<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>-</span> colMeans <span class='p'>(</span>flu<span class='p'>))</span>
+</code></pre>
+</div>
+<p>Normalization:</p>
+<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>/</span> rowMeans <span class='p'>(</span>flu<span class='p'>))</span>
+</code></pre>
+</div>
+<a href='/2013/2013-10-25-decomposition.html'>... read more ...</a>
+<p id='footer'>
+
+	<span id='tag'> news </span>
+	 
+25 Oct 2013
+<br />
+&raquo; <a href='#all_posts'>top</a>
+</p>
+</div><div class='post'>
 <h2><a id='/2013/arithmetic' href='/2013/2013-10-25-arithmetic.html'>Extended binary arithmetic operators</a></h2>
 
 <p><code>hyperSpec</code>&#8217;s binary arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) now working for calculations on spectra matrix plus row or column-vector objects as well, so that many calls to <code>sweep</code> can now be more easily expressed, e.g.</p>
 
 <p>Centering:</p>
 <div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>-</span> colMeans <span class='p'>(</span>flu<span class='p'>))</span>
-</code></pre></div>
+</code></pre>
+</div>
 <p>Normalization:</p>
 <div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>/</span> rowMeans <span class='p'>(</span>flu<span class='p'>))</span>
-</code></pre></div>
+</code></pre>
+</div>
 <a href='/2013/2013-10-25-arithmetic.html'>... read more ...</a>
 <p id='footer'>
 

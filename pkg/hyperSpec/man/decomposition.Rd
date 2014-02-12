@@ -1,20 +1,11 @@
 \name{decomposition}
 \alias{decomposition}
-\alias{loadings.hyperSpec}
-\alias{scores.hyperSpec}
 \title{Convert Principal Component Decomposition or the like into a hyperSpec Object}
 \usage{
   decomposition(object, x, wavelength = seq_len(ncol(x)),
     label.wavelength, label.spc, scores = TRUE,
     retain.columns = FALSE, short = "decomposition",
     user = NULL, date = NULL, ...)
-
-  \method{loadings}{hyperSpec} (object, x, label.spc,
-    retain.columns = FALSE, ...)
-
-  \method{scores}{hyperSpec} (object, x,
-    wavelength = seq_len(ncol(x)), label.wavelength,
-    label.spc, ...)
 }
 \arguments{
   \item{object}{A \code{hyperSpec} object.}
@@ -61,25 +52,26 @@
   Multivariate data are frequently decomposed by methods
   like principal component analysis, partial least squares,
   linear discriminant analysis, and the like.  These
-  methods yield loadings (or latent variables, components,
-  \dots{}) that are linear combination coefficients along
-  the wavelength axis and scores for each spectrum and
-  loading.
+  methods yield latent spectra (or latent variables,
+  loadings, components, \dots{}) that are linear
+  combination coefficients along the wavelength axis and
+  scores for each spectrum and loading.
 
   The loadings matrix gives a coordinate transformation,
   and the scores are values in that new coordinate system.
 
-  The obtained loadings are spectra-like objects: a loading
-  has a coefficient for each wavelength. If such a matrix
-  (with the same number of columns as \code{object} has
-  wavelengths) is given to \code{loadings}, the spectra
-  matrix is replaced by \code{x}. Moreover, all columns of
-  \code{object@data} that did not contain the same value
-  for all spectra are set to \code{NA}. Thus, for the
-  resulting \code{hyperSpec} object, \code{\link{plotspc}}
-  and related functions are meaningful.
-  \code{\link[hyperSpec]{plotmap}} cannot be applied as the
-  loadings are not laterally resolved.
+  The obtained latent variables are spectra-like objects: a
+  latent variable has a coefficient for each wavelength. If
+  such a matrix (with the same number of columns as
+  \code{object} has wavelengths) is given to
+  \code{decomposition} (also setting \code{scores =
+  FALSE}), the spectra matrix is replaced by \code{x}.
+  Moreover, all columns of \code{object@data} that did not
+  contain the same value for all spectra are set to
+  \code{NA}.  Thus, for the resulting \code{hyperSpec}
+  object, \code{\link{plotspc}} and related functions are
+  meaningful. \code{\link[hyperSpec]{plotmap}} cannot be
+  applied as the loadings are not laterally resolved.
 
   The scores matrix needs to have the same number of rows
   as \code{object} has spectra. If such a matrix is given,
@@ -95,14 +87,12 @@
 \examples{
 pca <- prcomp (flu)
 
-pca.loadings <- loadings (flu, t (pca$rotation))
-pca.center <- loadings (flu, pca$center)
+pca.loadings <- decomposition (flu, t (pca$rotation), scores = FALSE)
+pca.center <- decomposition (flu, pca$center, scores = FALSE)
+pca.scores <- decomposition (flu, pca$x)
 
 plot (pca.center)
 plot (pca.loadings, col = c ("red", "gray50"))
-pca <- prcomp (flu)
-
-pca.scores <- scores (flu, pca$x)
 plotc (pca.scores, groups = .wavelength)
 }
 \author{

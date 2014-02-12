@@ -40,9 +40,9 @@
 ##' 
 ##' ## PCA
 ##' pca <- prcomp (~ spc, data = chondro, center = TRUE)
-##' scores <- scores (chondro, pca$x, label.wavelength = "PC", label.spc = "score / a.u.")
-##' loadings <- loadings (chondro, pca$rotation, scores = FALSE, label.spc = "loading I / a.u.")
-##' center <- loadings (chondro, pca$center)
+##' scores <- decomposition (chondro, pca$x, label.wavelength = "PC", label.spc = "score / a.u.")
+##' loadings <- decomposition (chondro, pca$rotation, scores = FALSE, label.spc = "loading I / a.u.")
+##' center <- decomposition (chondro, pca$center, scores = FALSE)
 ##' 
 ##' # remove outliers
 ##' out <- c(105, 140, 216, 289, 75, 69)
