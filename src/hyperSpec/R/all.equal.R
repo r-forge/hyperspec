@@ -51,6 +51,8 @@ setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),
              }
 
              if (check.log) {
+               warning ("hyperSpec's logbook is deprecated and will be removed.")
+             
                cmp <- all.equal (target = target@log, current = current@log, ...,
                                  check.attributes = check.attributes, check.names = check.names)
                if (! isTRUE (cmp)) result <- c (result, "@log:", cmp)
