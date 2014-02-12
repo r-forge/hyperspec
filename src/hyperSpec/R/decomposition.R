@@ -9,16 +9,16 @@
 ##' (or latent variables, loadings, components, \dots{}) that are linear combination coefficients
 ##' along the wavelength axis and scores for each spectrum and loading.
 ##' 
-##' The latent variable matrix gives a coordinate transformation, and the scores are values in that
+##' The loadings matrix gives a coordinate transformation, and the scores are values in that
 ##' new coordinate system.
 ##' 
 ##' The obtained latent variables are spectra-like objects: a latent variable has a coefficient for
 ##' each wavelength. If such a matrix (with the same number of columns as \code{object} has
-##' wavelengths) is given to \code{latentspc}, the spectra matrix is replaced by \code{x}. Moreover,
-##' all columns of \code{object@@data} that did not contain the same value for all spectra are set to
-##' \code{NA}.  Thus, for the resulting \code{hyperSpec} object, \code{\link{plotspc}} and related
-##' functions are meaningful.  \code{\link[hyperSpec]{plotmap}} cannot be applied as the loadings are
-##' not laterally resolved.
+##' wavelengths) is given to \code{decomposition} (also setting \code{scores = FALSE}), the spectra
+##' matrix is replaced by \code{x}. Moreover, all columns of \code{object@@data} that did not contain
+##' the same value for all spectra are set to \code{NA}.  Thus, for the resulting \code{hyperSpec}
+##' object, \code{\link{plotspc}} and related functions are meaningful.
+##' \code{\link[hyperSpec]{plotmap}} cannot be applied as the loadings are not laterally resolved.
 ##' 
 ##' The scores matrix needs to have the same number of rows as \code{object} has spectra. If such a
 ##' matrix is given, \code{scores} will replace the spectra matrix is replaced by \code{x} and
@@ -51,6 +51,16 @@
 ##' analysis, and package \code{pls} for Partial Least Squares Regression.
 ##' @keywords methods manip
 ##' @include apply.R
+##' @examples
+##' pca <- prcomp (flu)
+##' 
+##' pca.loadings <- decomposition (flu, t (pca$rotation), scores = FALSE)
+##' pca.center <- decomposition (flu, pca$center, scores = FALSE)
+##' pca.scores <- decomposition (flu, pca$x)
+##'
+##' plot (pca.center)
+##' plot (pca.loadings, col = c ("red", "gray50"))
+##' plotc (pca.scores, groups = .wavelength)
 ##' @export
 decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
                            label.wavelength, label.spc,
