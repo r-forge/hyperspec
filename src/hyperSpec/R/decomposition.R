@@ -5,20 +5,20 @@
 ##' objects.
 ##' 
 ##' Multivariate data are frequently decomposed by methods like principal component analysis, partial
-##' least squares, linear discriminant analysis, and the like.  These methods yield loadings (or
-##' latent variables, components, \dots{}) that are linear combination coefficients along the
-##' wavelength axis and scores for each spectrum and loading.
+##' least squares, linear discriminant analysis, and the like.  These methods yield latent spectra
+##' (or latent variables, loadings, components, \dots{}) that are linear combination coefficients
+##' along the wavelength axis and scores for each spectrum and loading.
 ##' 
-##' The loadings matrix gives a coordinate transformation, and the scores are values in that new
-##' coordinate system.
+##' The latent variable matrix gives a coordinate transformation, and the scores are values in that
+##' new coordinate system.
 ##' 
-##' The obtained loadings are spectra-like objects: a loading has a coefficient for each
-##' wavelength. If such a matrix (with the same number of columns as \code{object} has wavelengths)
-##' is given to \code{loadings}, the spectra matrix is replaced by \code{x}. Moreover, all columns of
-##' \code{object@@data} that did not contain the same value for all spectra are set to \code{NA}.
-##' Thus, for the resulting \code{hyperSpec} object, \code{\link{plotspc}} and related functions are
-##' meaningful.  \code{\link[hyperSpec]{plotmap}} cannot be applied as the loadings are not laterally
-##' resolved.
+##' The obtained latent variables are spectra-like objects: a latent variable has a coefficient for
+##' each wavelength. If such a matrix (with the same number of columns as \code{object} has
+##' wavelengths) is given to \code{latentspc}, the spectra matrix is replaced by \code{x}. Moreover,
+##' all columns of \code{object@@data} that did not contain the same value for all spectra are set to
+##' \code{NA}.  Thus, for the resulting \code{hyperSpec} object, \code{\link{plotspc}} and related
+##' functions are meaningful.  \code{\link[hyperSpec]{plotmap}} cannot be applied as the loadings are
+##' not laterally resolved.
 ##' 
 ##' The scores matrix needs to have the same number of rows as \code{object} has spectra. If such a
 ##' matrix is given, \code{scores} will replace the spectra matrix is replaced by \code{x} and
