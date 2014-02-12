@@ -41,8 +41,8 @@
 ##' ## PCA
 ##' pca <- prcomp (~ spc, data = chondro, center = TRUE)
 ##' scores <- scores (chondro, pca$x, label.wavelength = "PC", label.spc = "score / a.u.")
-##' loadings <- loadings (chondro, pca$rotation, scores = FALSE, label.spc = "loading I / a.u.")
-##' center <- loadings (chondro, pca$center)
+##' loadings <- latentspc (chondro, pca$rotation, scores = FALSE, label.spc = "loading I / a.u.")
+##' center <- latentspc (chondro, pca$center)
 ##' 
 ##' # remove outliers
 ##' out <- c(105, 140, 216, 289, 75, 69)
