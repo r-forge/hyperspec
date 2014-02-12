@@ -55,7 +55,7 @@ setGeneric ("latentspc", function (object, ...) standardGeneric ("latentspc"))
   object
 }
 
-.test (latentspc.hyperSpec) <- function (){
+.test (.loadings) <- function (){
   rm (flu)
 
   pca <- prcomp (~ spc, data = flu)
