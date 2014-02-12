@@ -1,22 +1,12 @@
 ## loadings needs special care: its interface is redefined by package pls.
 ## => Depend on pls, so interface is clear
+## => still trouble, so do not provide a loadings method for now
+## use function latentspc instead.
 
-##' @export
-##' @rdname decomposition
-##' @S3method loadings hyperSpec
-##' @usage
-##' \method{loadings}{hyperSpec} (object, x, label.spc, retain.columns = FALSE, ...)
-##' @include decomposition.R
-##' @import pls
-##' @examples
-##' pca <- prcomp (flu)
-##' 
-##' pca.loadings <- loadings (flu, t (pca$rotation))
-##' pca.center <- loadings (flu, pca$center)
-##'
-##' plot (pca.center)
-##' plot (pca.loadings, col = c ("red", "gray50"))
-loadings.hyperSpec <- function (object, x, label.spc, retain.columns = FALSE, ...){
+##' @noRd
+setGeneric ("latentspc", function (object, ...) standardGeneric ("latentspc"))
+
+.loadings <- function (object, x, label.spc, retain.columns = FALSE, ...){
   validObject (object)
 
   if (is.vector (x))
@@ -65,43 +55,57 @@ loadings.hyperSpec <- function (object, x, label.spc, retain.columns = FALSE, ..
   object
 }
 
-.test (loadings.hyperSpec) <- function (){
+.test (latentspc.hyperSpec) <- function (){
   rm (flu)
 
-  ## needed because of import chaos between pls and stats
-  loadings <- pls::loadings
-  
   pca <- prcomp (~ spc, data = flu)
   
   ## retain.columns == FALSE
-  pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]))
+  pca.loadings <- latentspc (flu, t (pca$rotation [, 1 : 2]))
   checkEquals (ncol (pca.loadings$..), 0) 
   checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
 
   ## retain.colums == TRUE
-  pca.loadings <- loadings (flu, t (pca$rotation [, 1 : 2]), retain.columns = TRUE)
+  pca.loadings <- latentspc (flu, t (pca$rotation [, 1 : 2]), retain.columns = TRUE)
   checkEquals (ncol (pca.loadings$..), ncol (flu$..))
   checkTrue (all (is.na (pca.loadings$..)))
   checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
 
-  ## loadings should transpose as needed
-  pca.loadings <- loadings (flu, pca$rotation [, 1 : 2])
+  ## latentspc should transpose as needed
+  pca.loadings <- latentspc (flu, pca$rotation [, 1 : 2])
   checkEquals (ncol (pca.loadings$..), 0) 
   checkEqualsNumeric (pca.loadings [[]], t (pca$rotation [, 1 : 2]))
 
   ## single vector
-  pca.loadings <- loadings (flu, pca$center)
+  pca.loadings <- latentspc (flu, pca$center)
   checkEquals (ncol (pca.loadings$..), 0) 
   checkEqualsNumeric (pca.loadings [[]], pca$center)
   
   ## POSIXct
   flu$ct <- as.POSIXct(Sys.time()) 
-  checkEquals (loadings (flu, flu [[]])$ct, flu$ct)
+  checkEquals (latentspc (flu, flu [[]])$ct, flu$ct)
 
   ## POSIXlt
   flu$lt <- as.POSIXlt(Sys.time()) 
-  checkEquals (loadings (flu, flu [[]])$lt, flu$lt)
+  checkEquals (latentspc (flu, flu [[]])$lt, flu$lt)
 
   rm (flu)
 }
 
+##' @export
+##' @rdname decomposition
+##' @method latentspc hyperSpec
+##' @docType methods
+##' @include decomposition.R
+##' @examples
+##' pca <- prcomp (flu)
+##' 
+##' pca.loadings <- latentspc (flu, t (pca$rotation))
+##' pca.center <- latentspc (flu, pca$center)
+##'
+##' plot (pca.center)
+##' plot (pca.loadings, col = c ("red", "gray50"))
+setMethod ("latentspc", signature = signature (object = "hyperSpec", x = "matrix"),  .loadings)
+
+##' @noRd
+setMethod ("latentspc", signature = signature (object = "hyperSpec", x = "numeric"), .loadings)
