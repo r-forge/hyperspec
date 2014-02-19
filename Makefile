@@ -309,7 +309,7 @@ devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
 	~/r-devel/bin/R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz jekyll/blob/hyperSpec-prebuilt-devel.tar.gz
 
-buildfast: DESCRIPTION $(SRC) $(MAN) data roxy
+buildfast: DESCRIPTION roxy
 	rm -f hyperSpec_*.tar.gz
 	R CMD build --no-build-vignettes pkg/hyperSpec
 
