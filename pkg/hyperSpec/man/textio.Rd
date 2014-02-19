@@ -15,7 +15,7 @@ ways to import and export data into \code{hyperSpec} objects exist.}
 
   read.txt.wide(file = stop("file is required"),
     cols = list(spc = "I / a.u.", .wavelength = expression(lambda/nm)),
-    check.names = FALSE, ...)
+    sep = "\t", row.names = NULL, check.names = FALSE, ...)
 
   write.txt.long(object, file = "",
     order = c(".rownames", ".wavelength"), na.last = TRUE,
@@ -50,6 +50,11 @@ ways to import and export data into \code{hyperSpec} objects exist.}
   \code{\link[utils]{read.table}}. Make sure this is
   \code{FALSE}, if the column names of the spectra are the
   wavelength values.}
+
+  \item{row.names}{handed to
+  \code{\link[utils]{read.table}}. Should usually be
+  \code{NULL} so the first column becomes a extra data
+  column (as opposed to row names of the extra data).}
 
   \item{object}{the \code{hyperSpec} object}
 

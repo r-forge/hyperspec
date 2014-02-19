@@ -484,17 +484,22 @@ in the \chy object:
 \begin{labeling}{\Rcode{keys.hdr2data}}
 \item[\Rcode{keys.hdr2data}] parameters from the spc file and subfile headers that should become
   extra data columns
-\item[\Rcode{keys.hdr2log}] parameters from the spc file and subfile headers that should be stored as
-  list entries in the \Rfunarg{long.description} of the log entry
 \item[\Rcode{keys.log2data}] parameters from the spc file log block that should become extra data
   columns
-\item[\Rcode{keys.log2log}] parameters from the spc file log block that should be stored as list
-  entries in the \Rfunarg{long.description} of the log entry
+\item[\Rcode{keys.*2log}] parameters are deprecated because the logbook itself is depecated
 \end{labeling}
 The value of these arguments can either be logical (amounting to either use all or none of the
 information in the file) or a character vector giving the names of the parameters that should be
-used. Note that the header file field names are always lowercase, while the log entries are treated
-case sensitive.
+used. Note that the header file field names are always lowercase.
+
+Here's how to find out what extra information could be read from the header and log:
+
+<<>>=
+read.spc ("spc.Kaisermap/ebroAVII.spc", keys.hdr2data = TRUE)
+read.spc ("spc.Kaisermap/ebroAVII.spc", keys.log2data = TRUE)
+@ 
+
+
 
 .spc files may contain multiple spectra that do \emph{not} share a common wavelength axis. In this
 case, \Rfunction{read.spc} returns a list of \chy objects with one spectrum
@@ -747,13 +752,19 @@ For .zip packed files, however, a connection must be used:
 scan.txt.Renishaw (unzip ("txt.Renishaw/chondro.zip"))
 @
 
-\subsection{Horiba Jobin Yvon}
+\subsection{Horiba / Jobin Yvon (e.\,g. LabRAM) }
 \label{sec:read.txt.Horiba}
 \index{Horiba Jobin Yvon!ASCII!wide}
 \index{ASCII!wide!Horiba Jobin Yvon}
 \index{Raman!Horiba Jobin Yvon!ASCII wide}
+\index{Horiba!ASCII!wide}
+\index{ASCII!wide!Horiba}
+\index{Raman!Horiba!ASCII wide}
+\index{LabRAM|see{Horiba}}
+\index{ASCII!wide!LabRAM|see{Horiba}}
+\index{Raman!LabRAM|see{Horiba}}
 
-Horiba Jobin Yvon's Labspec software saves spectra in a wide ASCII format which is read by
+Horiba's Labspec software (e.\,g. LabRAM spectrometers) saves spectra in a wide ASCII format which is read by
 \Rfunction{read.txt.wide}, e.\,g.:
 <<Horiba>>=
 spc <- read.txt.wide ("txt.HoribaJobinYvon/test.txt", 
@@ -777,6 +788,11 @@ rectangular grid even if only part of it was measured. These spectra can be remo
 spc <- spc [! apply (spc [[]] %~=% 0, 1, all)]
 spc
 @
+
+For convenience, two functions to import maps (\Rfunction{read.txt.Horiba.xy}) and time series
+(\Rfunction{read.txt.Horiba.t}) provide already appropriate settings.
+
+
 
 \subsection{Witec}
 \label{sec:scan.txt.Witec}
@@ -872,7 +888,6 @@ information like the excitation wavelength is lost.
 \index{Nicolet!ENVI}
 \index{Nicolet!Map}
 \index{Nicolet!Infrared}
-
 The function \Rfunction{read.ENVI.Nicolet} is a good example for a more specific import filter
 derived from a general filter for the respective file type.
 Nicolet FT-IR Imaging software saves some non-standard keywords in the header file of the ENVI data.
