@@ -663,6 +663,16 @@ read.spc <- function (filename,
 		data <- as.data.frame (data, stringsAsFactors = FALSE)
 	} else {
 		spc <- matrix (NA, nrow = hdr$fnsub, ncol = hdr$fnpts)
+
+      ## the *type header elements are expressions. They need to be converted to character.
+      data <- sapply (data, function (x) {
+        if (mode (x) == "expression")
+            as.character (x)
+        else
+            x
+      })
+                       
+      
 		data <- as.data.frame (lapply (data, rep, hdr$fnsub), stringsAsFactors = FALSE)
 	}
 	
