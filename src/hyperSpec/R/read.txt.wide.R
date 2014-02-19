@@ -44,12 +44,15 @@
 ##' @param check.names handed to \code{\link[utils]{read.table}}. Make sure
 ##'   this is \code{FALSE}, if the column names of the spectra are the
 ##'   wavelength values.
+##' @param row.names handed to \code{\link[utils]{read.table}}. Should usually be \code{NULL} so the
+##' first column becomes a extra data column (as opposed to row names of the extra data).
 ##' @export
 read.txt.wide <- function (file = stop ("file is required"),
                            cols = list (
                              spc = "I / a.u.",
                              .wavelength = expression (lambda / nm)),
                            check.names = FALSE,
+                           row.names = NULL,
                            ...){
   .wavelength <- match (".wavelength", names (cols))
   if (is.na (.wavelength))
@@ -63,7 +66,7 @@ read.txt.wide <- function (file = stop ("file is required"),
   if (is.na (spc))
     stop ("cols$spc must exist.")
 
-  txtfile <- read.table (file = file, ..., check.names = FALSE)
+  txtfile <- read.table (file = file, check.names = check.names, row.names = row.names, ...)
 
   spc <- 0 : (ncol (txtfile) - length (cols) + 1) + spc
 
