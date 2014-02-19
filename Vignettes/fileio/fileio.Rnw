@@ -764,35 +764,47 @@ scan.txt.Renishaw (unzip ("txt.Renishaw/chondro.zip"))
 \index{ASCII!wide!LabRAM|see{Horiba}}
 \index{Raman!LabRAM|see{Horiba}}
 
-Horiba's Labspec software (e.\,g. LabRAM spectrometers) saves spectra in a wide ASCII format which is read by
-\Rfunction{read.txt.wide}, e.\,g.:
+Horiba's Labspec software (e.\,g. LabRAM spectrometers) saves spectra in a wide ASCII format which is
+read by \Rfunction{read.txt.Horiba}, e.\,g.:
 <<Horiba>>=
-spc <- read.txt.wide ("txt.HoribaJobinYvon/test.txt", 
-                      cols = list (
-                        x = expression (`/` (x, mu * m)), 
-                        y = expression (`/` (y, mu * m)), 
-                        spc = "I / a.u.", 
-                        .wavelength = expression (Delta * tilde (nu) / cm^-1)), 
-                      sep = '\t', header = TRUE)
+spc <- read.txt.Horiba ("txt.HoribaJobinYvon/ts.txt", 
+                      cols = list (t = "t / s", spc = "I / a.u.", 
+                        .wavelength = expression (Delta * tilde (nu) / cm^-1))
+                      )
 spc
 @
 
-Note that this data set contains lots of spectra with zero intensity: Labspec saves a complete
-rectangular grid even if only part of it was measured. These spectra can be removed by
+Note that Labspec .txt files can contains lots of spectra with zero intensity: Labspec saves a
+complete rectangular grid even if only part of a map was measured. These spectra are by removed
+(\code{remove.zerospc = TRUE}).
 
-<<>>=
-## a floating point precision tolerant version of ==
-`%~=%` <- function (x, y, tolerance = .Machine$double.eps^0.5)
-  abs (x - y) < tolerance
+For convenience, functions to further wrappers to import maps (\Rfunction{read.txt.Horiba.xy}) and
+time series (\Rfunction{read.txt.Horiba.t}) are provided.
 
-spc <- spc [! apply (spc [[]] %~=% 0, 1, all)]
-spc
-@
+<<testHoriba, echo=FALSE, results='hide'>>=
+spc <- read.txt.Horiba.xy ("txt.HoribaJobinYvon/map.txt")
+if (any (dim (spc) != c (141, 3, 616)) || 
+    any (abs (spc) < .Machine$double.eps^.5) ||
+    is.null (spc$x) || any (is.na (spc$x)) || 
+    is.null (spc$y) || any (is.na (spc$y)) ||
+    length (setdiff (wl (spc), 1 : 616)) == 0L)
+  stop ("error in testing read.txt.Horiba.xy. Please contact ", maintainer ("hyperSpec"))
 
-For convenience, two functions to import maps (\Rfunction{read.txt.Horiba.xy}) and time series
-(\Rfunction{read.txt.Horiba.t}) provide already appropriate settings.
+spc <- read.txt.Horiba.xy ("txt.HoribaJobinYvon/map.txt", remove.zerospc = FALSE)
+if (any (dim (spc) != c (398, 3, 616)) || 
+    is.null (spc$x) || any (is.na (spc$x)) || 
+    is.null (spc$y) || any (is.na (spc$y)) ||
+    length (setdiff (wl (spc), 1 : 616)) == 0L)
+  stop ("error in testing read.txt.Horiba.xy. Please contact ", maintainer ("hyperSpec"))
 
+spc <- read.txt.Horiba.t ("txt.HoribaJobinYvon/ts.txt", remove.zerospc = FALSE)
+if (any (dim (spc) != c (100, 2, 1024)) || 
+    is.null (spc$t) || any (is.na (spc$t)) ||
+    length (setdiff (wl (spc), 1 : 1024)) == 0L)
+  stop ("error in testing read.txt.Horiba.xy. Please contact ", maintainer ("hyperSpec"))
 
+rm (spc)
+@ 
 
 \subsection{Witec}
 \label{sec:scan.txt.Witec}
