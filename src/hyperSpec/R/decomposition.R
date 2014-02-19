@@ -21,10 +21,10 @@
 ##' \code{\link[hyperSpec]{plotmap}} cannot be applied as the loadings are not laterally resolved.
 ##'  
 ##' The scores matrix needs to have the same number of rows as \code{object} has spectra. If such a
-##' matrix is given, \code{scores} will replace the spectra matrix is replaced by \code{x} and
+##' matrix is given, \code{decomposition} will replace the spectra matrix is replaced by \code{x} and
 ##' \code{object@@wavelength} by \code{wavelength}. The information related to each of the spectra is
 ##' retained. For such a \code{hyperSpec} object, \code{\link{plotmap}} and \code{\link{plotc}} and
-##' the like can be applied. Of couse, it is also possible to use the spectra plotting, but the
+##' the like can be applied. It is also possible to use the spectra plotting, but the
 ##' interpretation is not that of the spectrum any longer.
 ##' 
 ##' @param object A \code{hyperSpec} object.
