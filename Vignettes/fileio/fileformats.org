@@ -1,7 +1,7 @@
 ﻿| Type   | Name                  | Manufacturer      | Spectroscopy     | Function             | Link                 | Notes                                                  |
 | ASCII  | ASCII long            |                   |                  | read.txt.long        | read.txt.long        |                                                        |
 | ASCII  | ASCII wide            |                   |                  | read.txt.wide        | read.txt.wide        |                                                        |
-| ASCII  | ASCII wide            | Horiba Jobin Yvon |                  | read.txt.wide        | read.txt.Horiba      |                                                        |
+| ASCII  | ASCII wide            | Horiba Jobin Yvon |                  | read.txt.wide        | read.txt.Horiba      | e.\,g. LabRAM spectrometers                            |
 | ASCII  | ASCII long            | Renishaw          | Raman            | scan.txt.Renishaw    | scan.txt.Renishaw    |                                                        |
 | ASCII  | ASCII long            | Kaiser            | Raman            | read.txt.long        | KaiserASCII          | \emph{Not} recommended, see discussion                 |
 | ASCII  | ASCII long            | Perkin Elmer      | Fluorescence     | read.txt.PerkinElmer | read.txt.PerkinElmer | Reads multiple files, needs to be sourced.             |
