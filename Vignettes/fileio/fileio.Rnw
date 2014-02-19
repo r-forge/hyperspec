@@ -752,9 +752,9 @@ For .zip packed files, however, a connection must be used:
 scan.txt.Renishaw (unzip ("txt.Renishaw/chondro.zip"))
 @
 
-\subsection{Horiba / Jobin Yvon (e.\,g. LabRAM) }
+\subsection{Horiba / Jobin Yvon (e.g. LabRAM) }
 \label{sec:read.txt.Horiba}
-\index{Horiba Jobin Yvon!ASCII!wide}
+\index{Horiba Jobin Yvon!ASCII!wide} 
 \index{ASCII!wide!Horiba Jobin Yvon}
 \index{Raman!Horiba Jobin Yvon!ASCII wide}
 \index{Horiba!ASCII!wide}
@@ -776,12 +776,12 @@ spc
 
 Note that Labspec .txt files can contains lots of spectra with zero intensity: Labspec saves a
 complete rectangular grid even if only part of a map was measured. These spectra are by removed
-(\code{remove.zerospc = TRUE}).
+(\Rcode{remove.zerospc = TRUE}).
 
 For convenience, functions to further wrappers to import maps (\Rfunction{read.txt.Horiba.xy}) and
 time series (\Rfunction{read.txt.Horiba.t}) are provided.
 
-<<testHoriba, echo=FALSE, results='hide'>>=
+<<testHoriba, echo=FALSE, results=hide>>=
 spc <- read.txt.Horiba.xy ("txt.HoribaJobinYvon/map.txt")
 if (any (dim (spc) != c (141, 3, 616)) || 
     any (abs (spc) < .Machine$double.eps^.5) ||
@@ -804,13 +804,13 @@ if (any (dim (spc) != c (100, 2, 1024)) ||
   stop ("error in testing read.txt.Horiba.xy. Please contact ", maintainer ("hyperSpec"))
 
 rm (spc)
-@ 
+@  
 
 \subsection{Witec}
 \label{sec:scan.txt.Witec}
 \index{Witec!ASCII}
 \index{ASCII!Witec}
-\index{Raman!Witec!ASCII}
+\index{Raman!Witec!ASCII} 
 \index{Raman!Witec!Save ASCII X, Save ASCII Y}
 \index{Raman!Witec!Export Table}
 
