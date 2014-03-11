@@ -1,8 +1,8 @@
 Package: cbmodels
 Type: Package
 Title: Collection of "combined" models: PCA-LDA, PLS-LDA, etc.
-Version: 0.5-20130424
-Date: 2013-04-24
+Version: 0.5-20140311
+Date: 2014-03-11
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection including
@@ -10,7 +10,7 @@ Description: Function collection including
     * PLS-LDA
     * PCA-LDA
     * EMSC
-License: 
+License: to be specified
 Depends:
     hyperSpec (>= 0.98-20120713),
     methods,
