@@ -1,3 +1,0 @@
-library (cbmodels)
-cbmodels.unittest ()
-
