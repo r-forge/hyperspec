@@ -23,7 +23,7 @@
   zeros only if e.g. a map was aborted. The default is to
   remove these spectra.}
 
-  \item{cols,header,sep,row.namescheck.names,...}{further
+  \item{cols,header,sep,row.names,check.names,...}{further
   parameters are handed over to
   \code{\link[hyperSpec]{read.txt.wide}}}
 }

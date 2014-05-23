@@ -14,6 +14,8 @@ setGeneric ("normalize01", function (x, ...) standardGeneric ("normalize01"))
 ##' @return vector with \code{x} values mapped to the interval [0, 1]
 ##' @author C. Beleites
 ##' @seealso \code{\link[hyperSpec]{wl.eval}}, \code{\link[hyperSpec]{vanderMonde}}
+##' @docType method
+##' @aliases normalize01,matrix-method
 ##' @export 
 setMethod (normalize01, signature (x = "matrix"), function (x, eps = .Machine$double.eps){
   m <- apply (x, 1, min)

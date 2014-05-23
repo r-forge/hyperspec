@@ -1,4 +1,5 @@
 \name{plotmap}
+\alias{levelplot}
 \alias{levelplot,formula,hyperSpec-method}
 \alias{levelplot,hyperSpec,missing-method}
 \alias{map.identify}
@@ -13,7 +14,9 @@ value of each spectrum is plotted. Spectra may be identified by mouse click.}
 
   \S4method{levelplot}{hyperSpec,missing}(x, data, ...)
 
-  \S4method{levelplot}{formula,hyperSpec}(x, data, ...)
+  \S4method{levelplot}{formula,hyperSpec}(x, data,
+    transform.factor = TRUE, ..., contour = FALSE,
+    useRaster = !contour)
 
   map.identify(object, model = spc ~ x * y,
     voronoi = FALSE, ..., tol = 0.02, warn = TRUE)
@@ -66,39 +69,6 @@ value of each spectrum is plotted. Spectra may be identified by mouse click.}
   experienced errors if the data was spatially ordered.
   Randomly rearrangig the rows of the hyperSpec object
   circumvents this problem.}
-
-  \item{x}{ for the \code{formula} method, a formula of the
-  form \code{z ~ x * y | g1 * g2 * \dots}, where \code{z}
-  is a numeric response, and \code{x}, \code{y} are numeric
-  values evaluated on a rectangular grid.  \code{g1, g2,
-  \dots} are optional conditional variables, and must be
-  either factors or shingles if present.
-
-  Calculations are based on the assumption that all x and y
-  values are evaluated on a grid (defined by their unique
-  values). The function will not return an error if this is
-  not true, but the display might not be meaningful.
-  However, the x and y values need not be equally spaced.
-
-  Both \code{levelplot} and \code{wireframe} have methods
-  for \code{matrix}, \code{array}, and \code{table}
-  objects, in which case \code{x} provides the \code{z}
-  vector described above, while its rows and columns are
-  interpreted as the \code{x} and \code{y} vectors
-  respectively.  This is similar to the form used in
-  \code{filled.contour} and \code{image}.  For
-  higher-dimensional arrays and tables, further dimensions
-  are used as conditioning variables.  Note that the
-  dimnames may be duplicated; this is handled by calling
-  \code{\link{make.unique}} to make the names unique
-  (although the original labels are used for the x- and
-  y-axes).  }
-
-  \item{data}{ For the \code{formula} methods, an optional
-  data frame in which variables in the formula (as well as
-  \code{groups} and \code{subset}, if any) are to be
-  evaluated.  Usually ignored with a warning in other
-  cases.  }
 }
 \value{
   \code{map.identify} returns a vector of row indices into

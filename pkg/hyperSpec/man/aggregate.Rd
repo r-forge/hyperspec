@@ -1,8 +1,16 @@
+\docType{methods}
 \name{aggregate}
 \alias{aggregate}
 \alias{aggregate,hyperSpec-method}
 \alias{ave,hyperSpec-method}
 \title{aggregate hyperSpec objects}
+\usage{
+  \S4method{aggregate}{hyperSpec}(x,
+    by = stop("by is needed"),
+    FUN = stop("FUN is needed."), ..., out.rows = NULL,
+    append.rows = NULL, by.isindex = FALSE,
+    short = "aggregate", date = NULL, user = NULL)
+}
 \arguments{
   \item{x}{a \code{hyperSpec} object}
 

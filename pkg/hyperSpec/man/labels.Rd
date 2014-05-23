@@ -1,4 +1,6 @@
+\docType{methods}
 \name{labels<-}
+\alias{labels}
 \alias{labels<-}
 \alias{labels<-,hyperSpec-method}
 \alias{labels,hyperSpec-method}
@@ -8,6 +10,9 @@ each of the entries specified by \code{which}.}
 \usage{
   labels (object, which = NULL, ..., short = "labels<-",
     user = NULL, date = NULL) <- value
+
+  \S4method{labels}{hyperSpec}(object, which = bquote(),
+    drop = TRUE, ..., use.colnames = TRUE)
 }
 \arguments{
   \item{value}{the new label(s)}

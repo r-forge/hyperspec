@@ -5,15 +5,15 @@
 \usage{
   vanderMonde(x, order, ...)
 
-  \S4method{vanderMonde}{hyperSpec}(x, order, ...)
+  \S4method{vanderMonde}{hyperSpec}(x, order, ...,
+    normalize.wl = normalize01)
 }
 \arguments{
-  \item{x}{vector with values to evaluate the polynomial
-  on}
+  \item{x}{vector with values to evaluate the polynomial on
+
+  hyperSpec object}
 
   \item{order}{of the polynomial}
-
-  \item{x}{hyperSpec object}
 
   \item{normalize.wl}{function to transorm the wavelengths
   before evaluating the polynomial (or other function).

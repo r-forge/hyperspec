@@ -1,22 +1,28 @@
 \name{colSums}
+\alias{colMeans}
 \alias{colMeans,hyperSpec-method}
 \alias{colSums}
 \alias{colSums,hyperSpec-method}
+\alias{rowMeans}
 \alias{rowMeans,hyperSpec-method}
+\alias{rowSums}
 \alias{rowSums,hyperSpec-method}
 \title{functions for hyperSpec objects}
 \usage{
-  \S4method{colMeans}{hyperSpec}(x, na.rm = TRUE, dims = 1,
-    ...)
+  \S4method{colMeans}{hyperSpec}(x, na.rm = TRUE, ...,
+    label.spc, user = NULL, short = "colMeans",
+    date = NULL)
 
-  \S4method{colSums}{hyperSpec}(x, na.rm = TRUE, dims = 1,
-    ...)
+  \S4method{colSums}{hyperSpec}(x, na.rm = TRUE, ...,
+    label.spc, user = NULL, short = "colSums", date = NULL)
 
-  \S4method{rowMeans}{hyperSpec}(x, na.rm = TRUE, dims = 1,
-    ...)
+  \S4method{rowMeans}{hyperSpec}(x, na.rm = TRUE, ...,
+    label.wavelength, user = NULL, short = "rowMeans",
+    date = NULL)
 
-  \S4method{rowSums}{hyperSpec}(x, na.rm = TRUE, dims = 1,
-    ...)
+  \S4method{rowSums}{hyperSpec}(x, na.rm = TRUE, ...,
+    label.wavelength, user = NULL, short = "rowSums",
+    date = NULL)
 }
 \arguments{
   \item{x}{hyperSpec object}
@@ -32,15 +38,6 @@
 
   \item{na.rm,...}{further parameters to the base
   functions}
-
-  \item{na.rm}{logical.  Should missing values (including
-  \code{NaN}) be omitted from the calculations?}
-
-  \item{dims}{integer: Which dimensions are regarded as
-  \sQuote{rows} or \sQuote{columns} to sum over.  For
-  \code{row*}, the sum or mean is over dimensions
-  \code{dims+1, \dots}; for \code{col*} it is over
-  dimensions \code{1:dims}.}
 }
 \description{
   hyperSpec objects can use the base functions

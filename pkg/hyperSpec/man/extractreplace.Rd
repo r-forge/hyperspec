@@ -1,16 +1,25 @@
-\name{[,hyperSpec-method}
+\docType{methods}
+\name{[}
+\alias{[}
 \alias{[<-}
 \alias{[[}
 \alias{[[<-}
+\alias{$}
 \alias{$<-}
 \alias{[<-,hyperSpec-method}
 \alias{[,hyperSpec-method}
 \alias{[[<-,hyperSpec-method}
+\alias{[[,hyperSpec-method}
 \alias{$<-,hyperSpec-method}
 \alias{$,hyperSpec-method}
 \title{Extract and Replace parts of hyperSpec objects}
 \usage{
-  \S4method{[[}{hyperSpec}(x, i, j, ...)
+  \S4method{[}{hyperSpec}(x, i, j, l, ...,
+    wl.index = FALSE, short = "[", date = NULL,
+    user = NULL, drop = FALSE)
+
+  \S4method{[[}{hyperSpec}(x, i, j, l, ...,
+    wl.index = FALSE, drop = FALSE)
 
   \S4method{$}{hyperSpec}(x, name)
 

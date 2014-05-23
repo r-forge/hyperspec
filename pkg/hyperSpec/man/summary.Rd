@@ -1,6 +1,8 @@
+\docType{methods}
 \name{Summary}
 \alias{all,hyperSpec-method}
 \alias{any,hyperSpec-method}
+\alias{is.na}
 \alias{is.na,hyperSpec-method}
 \alias{max,hyperSpec-method}
 \alias{min,hyperSpec-method}
@@ -11,6 +13,8 @@
 \alias{Summary,hyperSpec-method}
 \title{The functions}
 \usage{
+  \S4method{Summary}{hyperSpec}(x, ..., na.rm = FALSE)
+
   \S4method{is.na}{hyperSpec}(x)
 }
 \arguments{

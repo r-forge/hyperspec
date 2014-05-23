@@ -1,6 +1,8 @@
-\name{all.equal,hyperSpec,hyperSpec-method}
+\docType{methods}
+\name{all.equal}
 \alias{all.equal}
 \alias{all.equal,hyperSpec,hyperSpec-method}
+\alias{Compare}
 \alias{Compare,hyperSpec,hyperSpec-method}
 \alias{Compare,hyperSpec,matrix-method}
 \alias{Compare,hyperSpec-method}
@@ -18,7 +20,11 @@
 \title{Comparison of hyperSpec objects}
 \usage{
   \S4method{all.equal}{hyperSpec,hyperSpec}(target,
-    current, ...)
+    current, ..., check.attributes = FALSE,
+    check.names = FALSE, check.column.order = FALSE,
+    check.label = FALSE, check.log = FALSE)
+
+  \S4method{Compare}{hyperSpec,hyperSpec}(e1, e2)
 
   \S4method{Compare}{hyperSpec,numeric}(e1, e2)
 
@@ -56,11 +62,6 @@
   As \code{hyperSpec} objects must have numeric spectra
   matrices, the resulting matrix of the comparison is
   returned directly.}
-
-  \item{target}{\R object.}
-
-  \item{current}{other \R object, to be compared with
-  \code{target}.}
 }
 \value{
   \code{all.equal} returns either \code{TRUE}, or a

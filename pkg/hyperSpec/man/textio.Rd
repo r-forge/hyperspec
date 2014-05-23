@@ -51,11 +51,6 @@ ways to import and export data into \code{hyperSpec} objects exist.}
   \code{FALSE}, if the column names of the spectra are the
   wavelength values.}
 
-  \item{row.names}{handed to
-  \code{\link[utils]{read.table}}. Should usually be
-  \code{NULL} so the first column becomes a extra data
-  column (as opposed to row names of the extra data).}
-
   \item{object}{the \code{hyperSpec} object}
 
   \item{order}{which columns should be

@@ -223,7 +223,8 @@ setMethod ("[", signature = signature (x = "hyperSpec"),
 
 ##' @rdname extractreplace
 ##' @export "[["
-##' @name [[
+##' @aliases [[,hyperSpec-method
+## ' @name [[
 setMethod ("[[", signature = signature (x = "hyperSpec"),
            function (x, i, j, l, ...,
                      wl.index = FALSE,

@@ -1,4 +1,5 @@
-\name{mean_sd,numeric-method}
+\name{mean_sd}
+\alias{mean}
 \alias{mean,hyperSpec-method}
 \alias{mean_pm_sd}
 \alias{mean_pm_sd,hyperSpec-method}
@@ -8,6 +9,7 @@
 \alias{mean_sd,hyperSpec-method}
 \alias{mean_sd,matrix-method}
 \alias{mean_sd,numeric-method}
+\alias{quantile}
 \alias{quantile,hyperSpec-method}
 \title{Mean and Standard Deviation
 Calculate mean and standard deviation, and mean, mean \eqn{\pm}{+-} one
@@ -17,17 +19,22 @@ standard deviation, respectively.}
 
   \S4method{mean_sd}{matrix}(x, na.rm = TRUE, ...)
 
-  \S4method{mean_sd}{hyperSpec}(x, na.rm = TRUE, ...)
+  \S4method{mean_sd}{hyperSpec}(x, na.rm = TRUE, ...,
+    short = "mean_sd", user = NULL, date = NULL)
 
   \S4method{mean_pm_sd}{numeric}(x, na.rm = TRUE, ...)
 
   \S4method{mean_pm_sd}{matrix}(x, na.rm = TRUE, ...)
 
-  \S4method{mean_pm_sd}{hyperSpec}(x, na.rm = TRUE, ...)
+  \S4method{mean_pm_sd}{hyperSpec}(x, na.rm = TRUE, ...,
+    short = "mean_sd", user = NULL, date = NULL)
 
-  \S4method{mean}{hyperSpec}(x, ...)
+  \S4method{mean}{hyperSpec}(x, na.rm = TRUE, ...,
+    short = "mean", user = NULL, date = NULL)
 
-  \S4method{quantile}{hyperSpec}(x, ...)
+  \S4method{quantile}{hyperSpec}(x,
+    probs = seq(0, 1, 0.25), na.rm = TRUE, names = "num",
+    ..., short = "quantile", user = NULL, date = NULL)
 }
 \arguments{
   \item{x}{a numeric vector}

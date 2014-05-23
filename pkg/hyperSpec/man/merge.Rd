@@ -1,7 +1,12 @@
-\name{merge,hyperSpec,hyperSpec-method}
+\docType{methods}
+\name{merge}
 \alias{merge}
 \alias{merge,hyperSpec,hyperSpec-method}
 \title{Merge hyperSpec objects}
+\usage{
+  \S4method{merge}{hyperSpec,hyperSpec}(x, y, ...,
+    short = "merge", user = NULL, date = NULL)
+}
 \arguments{
   \item{x}{a hyperSpec object}
 

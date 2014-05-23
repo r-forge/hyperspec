@@ -1,8 +1,15 @@
+\docType{methods}
 \name{apply}
 \alias{apply}
 \alias{apply,hyperSpec-method}
 \title{apply
 Computes summary statistics for the spectra of a \code{hyperSpec} object.}
+\usage{
+  \S4method{apply}{hyperSpec}(X, MARGIN, FUN, ...,
+    label.wl = NULL, label.spc = NULL,
+    new.wavelength = NULL, short = "apply", long = NULL,
+    user = NULL, date = NULL)
+}
 \arguments{
   \item{X,spc}{a \code{hyperSpec} object}
 
@@ -37,8 +44,6 @@ Computes summary statistics for the spectra of a \code{hyperSpec} object.}
 
   \item{short,long,user,date}{aguments passed to
   \code{logentry}}
-
-  \item{X}{an array, including a matrix.}
 }
 \value{
   A \code{hyperSpec} object

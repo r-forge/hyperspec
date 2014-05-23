@@ -1,8 +1,10 @@
 \name{bind}
 \alias{bind}
+\alias{cbind2}
 \alias{cbind2,hyperSpec,hyperSpec-method}
 \alias{cbind2,hyperSpec,missing-method}
 \alias{cbind.hyperSpec}
+\alias{rbind2}
 \alias{rbind2,hyperSpec,hyperSpec-method}
 \alias{rbind2,hyperSpec,missing-method}
 \alias{rbind.hyperSpec}
@@ -19,13 +21,13 @@ of \code{cbind} and \code{rbind} do work at the moment.}
 
   rbind.hyperSpec(..., short = "rbind", deparse.level)
 
-  \S4method{cbind2}{hyperSpec,hyperSpec}(x, y, ...)
+  \S4method{cbind2}{hyperSpec,hyperSpec}(x, y)
 
-  \S4method{cbind2}{hyperSpec,missing}(x, y, ...)
+  \S4method{cbind2}{hyperSpec,missing}(x, y)
 
-  \S4method{rbind2}{hyperSpec,hyperSpec}(x, y, ...)
+  \S4method{rbind2}{hyperSpec,hyperSpec}(x, y)
 
-  \S4method{rbind2}{hyperSpec,missing}(x, y, ...)
+  \S4method{rbind2}{hyperSpec,missing}(x, y)
 }
 \arguments{
   \item{\dots}{The \code{hyperSpec} objects to be combined.
@@ -40,11 +42,6 @@ of \code{cbind} and \code{rbind} do work at the moment.}
   \item{direction}{"r" or "c" to bind rows or columns}
 
   \item{x,y}{\code{hyperSpec} objects}
-
-  \item{x}{any \R object, typically matrix-like.}
-
-  \item{y}{any \R object, typically similar to \code{x}, or
-  missing completely.}
 }
 \value{
   a \code{hyperSpec} object, possibly with different row
