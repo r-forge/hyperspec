@@ -1,4 +1,4 @@
-\name{Math2}
+\name{Math2,hyperSpec-method}
 \alias{abs,hyperSpec-method}
 \alias{acosh,hyperSpec-method}
 \alias{acos,hyperSpec-method}
@@ -40,8 +40,7 @@
 \usage{
   \S4method{Math2}{hyperSpec}(x, digits)
 
-  \S4method{log}{hyperSpec}(x, base = exp(1), ...,
-    short = "log", user = NULL, date = NULL)
+  \S4method{log}{hyperSpec}(x, ...)
 
   \S4method{Math}{hyperSpec}(x)
 }

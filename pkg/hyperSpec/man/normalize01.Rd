@@ -1,15 +1,12 @@
 \name{normalize01}
 \alias{normalize01}
 \alias{normalize01,hyperSpec-method}
-\alias{normalize01,matrix-method}
 \alias{normalize01,numeric-method}
-\title{Normalize numbers -> [0, 1]}
+\title{normalization for mixed colors}
 \usage{
-  \S4method{normalize01}{matrix}(x,
-    eps = .Machine$double.eps)
+  \S4method{normalize01}{matrix}(x, ...)
 
-  \S4method{normalize01}{numeric}(x,
-    eps = .Machine$double.eps)
+  \S4method{normalize01}{numeric}(x, ...)
 
   \S4method{normalize01}{hyperSpec}(x, ...)
 }
@@ -26,6 +23,9 @@
   vector with \code{x} values mapped to the interval [0, 1]
 }
 \description{
+  Normalize numbers -> [0, 1]
+}
+\details{
   The input \code{x} is mapped to [0, 1] by subtracting the
   minimum and subsequently dividing by the maximum. If all
   elements of \code{x} are equal, 1 is returned.

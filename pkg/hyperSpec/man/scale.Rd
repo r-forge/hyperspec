@@ -1,13 +1,8 @@
-\docType{methods}
 \name{scale,hyperSpec-method}
 \alias{scale}
 \alias{scale,hyperSpec-method}
 \alias{scale-methods}
 \title{Center and scale hyperSpec object}
-\usage{
-  \S4method{scale}{hyperSpec}(x, center = TRUE,
-    scale = TRUE)
-}
 \arguments{
   \item{x}{the \code{hyperSpec} object}
 

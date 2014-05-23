@@ -1,27 +1,20 @@
-\docType{methods}
-\name{as.character}
+\name{as.character,hyperSpec-method}
 \alias{as.character}
 \alias{as.character,hyperSpec-method}
 \alias{print}
 \alias{print,hyperSpec-method}
 \alias{show}
-\alias{show,hyperSpec-method}
 \alias{summary}
 \alias{summary,hyperSpec-method}
 \title{Convert a hyerSpec object to character strings for Display
 \code{print}, \code{show}, and \code{summary} show the result of
 \code{as.character}.}
 \usage{
-  \S4method{as.character}{hyperSpec}(x,
-    digits = getOption("digits"), range = TRUE,
-    max.print = 5, shorten.to = c(2, 1), log = TRUE)
-
   \S4method{show}{hyperSpec}(object)
 
-  \S4method{print}{hyperSpec}(x, log = FALSE,
-    range = FALSE, ...)
+  \S4method{print}{hyperSpec}(x, ...)
 
-  \S4method{summary}{hyperSpec}(object, log = TRUE, ...)
+  \S4method{summary}{hyperSpec}(object, ...)
 }
 \arguments{
   \item{digits}{number of digits handed over to

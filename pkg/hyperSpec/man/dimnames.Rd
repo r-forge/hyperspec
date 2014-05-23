@@ -1,5 +1,4 @@
-\docType{methods}
-\name{dimnames}
+\name{dimnames,hyperSpec-method}
 \alias{colnames}
 \alias{colnames<-}
 \alias{colnames<-,hyperSpec-method}
@@ -12,8 +11,6 @@
 \alias{rownames,hyperSpec-method}
 \title{Dimnames for hyperSpec objects}
 \usage{
-  \S4method{dimnames}{hyperSpec}(x)
-
   \S4method{rownames}{hyperSpec}(x, do.NULL = TRUE,
     prefix = "row")
 

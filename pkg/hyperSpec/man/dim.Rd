@@ -1,19 +1,12 @@
-\docType{methods}
-\name{ncol}
-\alias{dim}
+\name{ncol,hyperSpec-method}
 \alias{dim,hyperSpec-method}
-\alias{length}
 \alias{length,hyperSpec-method}
-\alias{ncol}
 \alias{ncol,hyperSpec-method}
-\alias{nrow}
 \alias{nrow,hyperSpec-method}
 \alias{nwl}
 \title{The Number of Rows (Spectra), Columns, and Data Points per Spectrum of an
 hyperSpec Object)}
 \usage{
-  \S4method{ncol}{hyperSpec}(x)
-
   \S4method{nrow}{hyperSpec}(x)
 
   nwl(x)

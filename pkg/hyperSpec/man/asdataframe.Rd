@@ -1,4 +1,3 @@
-\docType{methods}
 \name{as.data.frame}
 \alias{as.data.frame}
 \alias{as.data.frame.hyperSpec}
@@ -13,9 +12,6 @@
 \code{as.data.frame} returns \code{x@data} (as data.frame) \code{as.matrix}
 returns the spectra matrix \code{x@data$spc} as matrix}
 \usage{
-  \method{as.data.frame}{hyperSpec} (x, row.names = TRUE,
-    optional = NULL, ...)
-
   \method{as.matrix}{hyperSpec} (x, ...)
 
   as.wide.df(x)

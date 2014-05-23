@@ -1,10 +1,11 @@
-\name{cov}
-\alias{cov}
+\name{cov,hyperSpec,missing-method}
 \alias{cov,hyperSpec,missing-method}
 \alias{pooled.cov}
 \title{Covariance matrices for hyperSpec objects}
 \usage{
-  \S4method{cov}{hyperSpec,missing}(x, y, use, method)
+  \S4method{cov}{hyperSpec,missing}(x, y = NULL,
+    use = "everything",
+    method = c("pearson", "kendall", "spearman"))
 
   pooled.cov(x, groups, ...,
     regularize = 1e-05 * max(abs(COV)))
@@ -16,9 +17,7 @@
 
   \item{use,method}{handed to \code{\link[stats]{cov}}}
 
-  \item{groups}{factor giving the groups
-
-  factor indicating the groups}
+  \item{groups}{factor giving the groups}
 
   \item{...}{ignored}
 
@@ -27,6 +26,21 @@
 
   \code{pooled.cov} calculates pooled covariance like e.g.
   in LDA.}
+
+  \item{groups}{factor indicating the groups}
+
+  \item{use}{an optional character string giving a method
+  for computing covariances in the presence of missing
+  values.  This must be (an abbreviation of) one of the
+  strings \code{"everything"}, \code{"all.obs"},
+  \code{"complete.obs"}, \code{"na.or.complete"}, or
+  \code{"pairwise.complete.obs"}.}
+
+  \item{method}{a character string indicating which
+  correlation coefficient (or covariance) is to be
+  computed.  One of \code{"pearson"} (default),
+  \code{"kendall"}, or \code{"spearman"}, can be
+  abbreviated.}
 }
 \value{
   covariance matrix of size \code{nwl (x)} x \code{nwl (x)}
