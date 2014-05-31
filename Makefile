@@ -311,7 +311,7 @@ buildfast: DESCRIPTION roxy
 	R CMD build --no-build-vignettes pkg/hyperSpec
 
 check: build
-	R CMD check hyperSpec_*.tar.gz --no-rebuild-vignettes --timings
+	R CMD check hyperSpec_*.tar.gz --no-build-vignettes --timings
 
 devcheck: devbuild
 	~/r-devel/bin/R CMD check hyperSpec_*.tar.gz
