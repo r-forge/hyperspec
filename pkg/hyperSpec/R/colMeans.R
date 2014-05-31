@@ -1,4 +1,4 @@
-##'  functions for hyperSpec objects
+##' colSums, colMeans, rowSums and rowMeans functions for hyperSpec objects
 ##'
 ##' hyperSpec objects can use the base functions \code{\link[base]{colMeans}},
 ##' \code{\link[base]{colSums}}, \code{\link[base]{rowMeans}} and \code{\link[base]{rowSums}}.
@@ -6,12 +6,12 @@
 ##' @param x hyperSpec object
 ##' @param label.spc labels for the intensity axis for loadings-like (col) statistics
 ##' @param label.wavelength labels for the wavelength axis for scores-like (row) statistics
-##' @param user,short,date handed to \code{\link[hyperSpec]{logentry}}
 ##' @param na.rm,... further parameters to the base functions
+##'
+##' \code{na.rm} defaults to \code{TRUE} for hyperSpec objects.
 ##' @seealso \link[base]{colSums}
 ##' @rdname colSums
 ##' @name colSums
-##' 
 NULL
  
 ##' @noRd
@@ -19,6 +19,8 @@ setGeneric ('colMeans')#, package = 'matrixStats')
 
 ##' @rdname colSums
 ##' @export
+##' @examples
+##' colMeans (flu)
  setMethod ("colMeans", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
    result <- colMeans (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
@@ -39,7 +41,9 @@ setGeneric ('colSums') #, package = 'matrixStats')
 
 ##' @rdname colSums
 ##' @export
- setMethod ("colSums", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
+##' @examples
+##' colSums (flu)
+setMethod ("colSums", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
    result <- colSums (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
       result <- t (result)
@@ -59,7 +63,9 @@ setGeneric ('rowMeans') #, package = 'matrixStats')
 
 ##' @rdname colSums
 ##' @export
- setMethod ("rowMeans", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
+##' @examples
+##' colSums (flu)
+setMethod ("rowMeans", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
    result <- rowMeans (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
       result <- t (result)
@@ -72,7 +78,6 @@ setGeneric ('rowMeans') #, package = 'matrixStats')
 
   checkEqualsNumeric (rowMeans (fluNA)[[]], rowMeans (fluNA [[]], na.rm = TRUE))
   checkEqualsNumeric (rowMeans (fluNA, na.rm = FALSE)[[]], rowMeans (fluNA [[]], na.rm = FALSE))
-
 }
 
 ##' @noRd
@@ -80,7 +85,9 @@ setGeneric ('rowSums') #, package = 'matrixStats')
 
 ##' @rdname colSums
 ##' @export
- setMethod ("rowSums", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
+##' @examples
+##' rowSums (flu)
+setMethod ("rowSums", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
    result <- rowSums (x@data$spc, na.rm = na.rm, ...)
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
       result <- t (result)
