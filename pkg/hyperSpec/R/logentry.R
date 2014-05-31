@@ -28,7 +28,8 @@ logentry <- function (x, short = NULL, long = NULL, date = NULL, user = NULL){
   chk.hy (x)
   validObject (x)
   if (hy.getOption ("log")){
-    warning ("The logbook is deprecated and will soon be removed.")
+      .Deprecated (new = "", package = "hyperSpec",
+                   msg = "hyperSpec's logbook has been deprecated and will soon be removed.")
     .logentry (x, short = short, long = long, date = date, user = user)
   } else {
     x
