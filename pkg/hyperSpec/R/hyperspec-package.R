@@ -24,6 +24,11 @@
 ##' \code{class?hyperSpec} for details on the S4 class provided by this
 ##'   package.
 ##' @rdname hyperSpec-package
+##' @include flu.R
+##' @include chondro.R
+##' @include laser.R
+##' @include paracetamol.R
+##' @include barbiturates.R
 ##' @keywords package
 if (!require ("svUnit", quietly = TRUE)){
   `.test<-` <- function (f, value) {
