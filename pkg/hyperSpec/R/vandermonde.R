@@ -5,7 +5,7 @@
 ##'
 ##' It is often numerically preferrable to map \code{wl (x)} to [0, 1], see the example.
 ##' 
-##' @param x vector with values to evaluate the polynomial on
+##' @param x object to evaluate the polynomial on 
 ##' @param order of the polynomial
 ##' @rdname vanderMonde
 ##' @return van der Monde matrix
@@ -22,7 +22,6 @@ vanderMonde <- function (x, order, ...){
 ##' @noRd
 setGeneric ("vanderMonde")
 
-##' @param x hyperSpec object
 ##' @param normalize.wl function to transorm the wavelengths before evaluating the polynomial (or
 ##' other function). \code{\link[hyperSpec]{normalize01}} maps the wavelength range to the interval
 ##' [0, 1]. Use \code{\link[base]{I}} to turn off. 

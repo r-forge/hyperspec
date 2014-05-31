@@ -20,7 +20,7 @@ read.txt.Horiba.t(file, header = TRUE, sep = "\\t", row.names = NULL,
 \item{remove.zerospc}{LabRAM saves spectra consisting of zeros only if e.g. a map was
 aborted. The default is to remove these spectra.}
 
-\item{cols,header,sep,row.namescheck.names,...}{further parameters are handed over to \code{\link[hyperSpec]{read.txt.wide}}}
+\item{cols,header,sep,row.names,check.names,...}{further parameters are handed over to \code{\link[hyperSpec]{read.txt.wide}}}
 }
 \value{
 hyperSpec object

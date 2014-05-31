@@ -95,6 +95,7 @@
 ##' @title Extract and Replace parts of hyperSpec objects
 ##' @rdname extractreplace
 ##' @docType methods
+##' @aliases [ [,hyperSpec-method
 ##' @rdname extractreplace
 ##' @param x a \code{hyperSpec} Object
 ##' @param i row index: selects spectra
@@ -223,7 +224,8 @@ setMethod ("[", signature = signature (x = "hyperSpec"),
 
 ##' @rdname extractreplace
 ##' @export "[["
-##' @name [[
+##' @aliases [[ [[,hyperSpec-method
+## ' @name [[
 setMethod ("[[", signature = signature (x = "hyperSpec"),
            function (x, i, j, l, ...,
                      wl.index = FALSE,
@@ -257,6 +259,7 @@ setMethod ("[[", signature = signature (x = "hyperSpec"),
 
 ##' @rdname extractreplace
 ##' @param name name of the data column to extract. \code{$spc} yields the spectra matrix.
+##' @aliases $ $,hyperSpec-method
 ##' @export "$"
 setMethod ("$", signature = signature (x = "hyperSpec"),
            function (x, name){

@@ -6,10 +6,11 @@
 \usage{
 scan.dat.Witec(filex = stop("filename or connection needed"),
   filey = sub("-x", "-y", filex), points.per.line = NULL,
-  lines.per.image = NULL, ...)
+  lines.per.image = NULL, remove.zerospc = TRUE, ...)
 
 scan.txt.Witec(file = stop("filename or connection needed"),
-  points.per.line = NULL, lines.per.image = NULL, ..., nwl = 1024)
+  points.per.line = NULL, lines.per.image = NULL, nwl = 1024,
+  remove.zerospc = TRUE, ...)
 }
 \arguments{
 \item{filex}{filename wavelength axis file}
@@ -24,6 +25,9 @@ scan.txt.Witec(file = stop("filename or connection needed"),
 
 \item{nwl}{number of wavelengths, if \code{NULL}, \code{readLines} is used to determine
 \code{nwl} automatically.}
+
+\item{remove.zerospc}{WiTEC Control saves spectra consisting of zeros only if e.g. a map was
+aborted. The default is to remove these spectra.}
 
 \item{file}{filename or connection to ASCII file}
 }
