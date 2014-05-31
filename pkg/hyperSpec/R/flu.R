@@ -23,6 +23,6 @@
 ##' 
 {
   fluNA <- flu
-  fluNA [[1,]] <- NA
-  fluNA [[,,405]] <- NA
+  fluNA [[2,]] <- NA
+  fluNA [[,,406]] <- NA
 }
