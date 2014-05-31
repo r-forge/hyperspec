@@ -58,7 +58,7 @@
 ##'   point to label, see details.
 ##' @param formatter \code{function (i, wl, spc)} that produces the labels. If
 ##'   \code{NULL}, no labels are displayed.
-##' @param \dots passed to \code{\link[graphics]{text}} in order to produce the
+##' @param ... passed to \code{\link[graphics]{text}} in order to produce the
 ##'   labels
 ##' @param  cex,adj,srt see \code{\link[graphics]{par}}
 ##' @param warn Should the user be warned if no point is in the considered

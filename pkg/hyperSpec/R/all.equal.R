@@ -2,7 +2,7 @@
 ##' @rdname Comparison
 ##' @param target,current two \code{hyperSpec} objects that are tested for
 ##'   equality
-##' @param \dots handed to \code{\link[base]{all.equal}} when testing the slots of the
+##' @param ... handed to \code{\link[base]{all.equal}} when testing the slots of the
 ##'   \code{hyperSpec} objects
 ##' @param check.column.order If two objects have the same data, but the order
 ##'   of the columns (determined by the names) differs, should they be regarded

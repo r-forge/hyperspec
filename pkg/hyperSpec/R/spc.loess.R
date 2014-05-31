@@ -9,7 +9,7 @@
 ##' 
 ##' @param spc the \code{hyperSpec} object
 ##' @param newx wavelengh axis to interpolate on
-##' @param enp.target,surface,\dots parameters for \code{\link[stats]{loess}} and
+##' @param enp.target,surface,... parameters for \code{\link[stats]{loess}} and
 ##' \code{\link[stats]{loess.control}}. 
 ##' @param short,user,date handed to \code{\link{logentry}}.
 ##' @return a new \code{hyperspec} object.

@@ -8,7 +8,7 @@
 ##' @author C. Beleites
 ##' @title Collapse hyperSpec objects
 ##' @export
-##' @param \dots hyperSpec objects to be collapsed into one object. Instead of giving several
+##' @param ... hyperSpec objects to be collapsed into one object. Instead of giving several
 ##' arguments, a list with all objects to be collapsed may be given.
 ##' @param short.log,short,user,date deprecated
 ##' @aliases collapse collapse.hyperSpec

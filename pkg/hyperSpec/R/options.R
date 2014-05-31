@@ -19,7 +19,7 @@
 ##' name.
 ##' 
 ##' @rdname options
-##' @param \dots \code{hy.setOptions}: pairs of argument names and values.
+##' @param ... \code{hy.setOptions}: pairs of argument names and values.
 ##'
 ##' \code{hy.getOptions}: indices (or names) of the options.
 ##' @return

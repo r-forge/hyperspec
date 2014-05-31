@@ -10,7 +10,7 @@ setGeneric ("normalize01", function (x, ...) standardGeneric ("normalize01"))
 ##' @name normalize01
 ##' @param x  vector with values to transform
 ##' @param eps tolerance level for determining what is 0 and 1
-##' @param \dots additional parameters such as \code{eps} handed down.
+##' @param ... additional parameters such as \code{eps} handed down.
 ##' @return vector with \code{x} values mapped to the interval [0, 1]
 ##' @author C. Beleites
 ##' @seealso \code{\link[hyperSpec]{wl.eval}}, \code{\link[hyperSpec]{vanderMonde}}

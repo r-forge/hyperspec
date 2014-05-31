@@ -14,7 +14,7 @@
 ##' @aliases seq seq,hyperSpec-method
 ##' @param x the hyperSpec object
 ##' @param from,to arguments handed to \code{\link[base]{seq.int}}
-##' @param \dots arguments for \code{\link[base]{seq}}, namely \code{by}, \code{length.out}
+##' @param ... arguments for \code{\link[base]{seq}}, namely \code{by}, \code{length.out}
 ##' @param index should a vector with indices be returned rather than a hyperSpec object?
 ##' @param short,user,date handed to \code{\link{logentry}}.
 ##' @return a numeric or hyperSpec object, depending on \code{index}.

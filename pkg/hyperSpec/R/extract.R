@@ -114,7 +114,7 @@
 ##' @param drop For \code{[[}: drop unnecessary dimensions, see
 ##'   \code{\link[base]{drop}} and \code{\link[base]{Extract}}. Ignored for
 ##'   \code{[}, as otherwise invalid \code{hyperSpec} objects might result.
-##' @param \dots ignored
+##' @param ... ignored
 ##' @return For \code{[}, \code{[<-}, \code{[[<-}, and \code{$<-} a \code{hyperSpec} object,
 ##' 
 ##' for \code{[[} a matrix or \code{data.frame}, and

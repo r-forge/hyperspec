@@ -26,7 +26,7 @@ setGeneric ("vanderMonde")
 ##' @param normalize.wl function to transorm the wavelengths before evaluating the polynomial (or
 ##' other function). \code{\link[hyperSpec]{normalize01}} maps the wavelength range to the interval
 ##' [0, 1]. Use \code{\link[base]{I}} to turn off. 
-##' @param \dots hyperSpec method: further arguments to \code{\link{decomposition}}
+##' @param ... hyperSpec method: further arguments to \code{\link{decomposition}}
 ##' @return hyperSpec method: hyperSpec object containing van der Monde matrix as spectra and an additional column ".vdm.order" giving the order of each spectrum (term).
 ##' @rdname vanderMonde
 ##' @seealso \code{\link[hyperSpec]{wl.eval}} for calculating arbitrary functions of the wavelength,

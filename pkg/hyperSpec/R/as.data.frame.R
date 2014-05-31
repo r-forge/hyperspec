@@ -42,7 +42,7 @@ as.data.frame.hyperSpec <- function (x, row.names = TRUE, optional =  NULL, ...)
 ##' @method as.matrix hyperSpec
 ##' @S3method as.matrix hyperSpec
 ##' @rdname asdataframe
-##' @param \dots ignored 
+##' @param ... ignored 
 ##' @aliases as.matrix as.matrix,hyperSpec-method
 ##' @export
 ##' @seealso and \code{\link[base]{as.matrix}}

@@ -33,7 +33,7 @@
 ##'   must be at least the number of data points per spectrum. Reasonable
 ##'   values start at \code{1e6}.
 ##' @param nspc number of spectra in the file
-##' @param \dots Arguments for \code{scan.txt.Renishaw}
+##' @param ... Arguments for \code{scan.txt.Renishaw}
 ##' @param short,user,date deprecated
 ##' @return the \code{hyperSpec} object
 ##' @rdname scan-txt-Renishaw

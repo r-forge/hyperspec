@@ -11,7 +11,7 @@
 ##' @aliases merge,hyperSpec,hyperSpec-method merge
 ##' @param x a hyperSpec object
 ##' @param y a hyperSpec object
-##' @param \dots handed to \code{\link[base]{merge.data.frame}}
+##' @param ... handed to \code{\link[base]{merge.data.frame}}
 ##' @param short,user,date  handed to \code{\link{logentry}}
 ##' @author C. Beleites
 ##' @export 

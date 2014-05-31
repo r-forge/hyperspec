@@ -12,7 +12,7 @@
 ##' \code{bind} does the common work for both column- and row-wise binding.
 ##' 
 ##' @aliases bind
-##' @param \dots The \code{hyperSpec} objects to be combined.
+##' @param ... The \code{hyperSpec} objects to be combined.
 ##' 
 ##' Alternatively, \emph{one} list of \code{hyperSpec} objects can be given to
 ##'   \code{bind}.

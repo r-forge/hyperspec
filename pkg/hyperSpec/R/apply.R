@@ -85,7 +85,7 @@
 ##' If \code{MARGIN} is missing, the whole spectra matrix is handed to
 ##'   \code{FUN}, see also the examples.
 ##' @param FUN function to compute the summary statistics
-##' @param \dots further arguments passed to \code{FUN}
+##' @param ... further arguments passed to \code{FUN}
 ##' @param label.wl,label.spc new labels for wavelength and spectral intensity
 ##'   axes
 ##' @param new.wavelength for \code{MARGIN = 2}: numeric vector or name of the

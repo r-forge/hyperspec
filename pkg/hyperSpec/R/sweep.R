@@ -26,7 +26,7 @@
 ##'   dimensions of \code{STATS} do not match the specified dimensions of
 ##'   \code{x}.  Set to \code{FALSE} for a small speed gain when you
 ##'   \emph{know} that dimensions match.
-##' @param \dots further arguments for \code{FUN}
+##' @param ... further arguments for \code{FUN}
 ##' @param short,user,date handed over to \code{\link{logentry}}.
 ##' @return A \code{hyperSpec} object.
 ##' @author C. Beleites

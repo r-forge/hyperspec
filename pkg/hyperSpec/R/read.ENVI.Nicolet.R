@@ -14,7 +14,7 @@
 ##' pixel size values (i.e. the step sizes) are multiplied by 1000.
 ##' 
 ##' @param nicolet.correction see details
-##' @param \dots handed to \code{read.ENVI}
+##' @param ... handed to \code{read.ENVI}
 ##' @rdname readENVI
 ##' @export
 

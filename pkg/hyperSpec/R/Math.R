@@ -60,7 +60,7 @@ setMethod ("Math2", signature (x = "hyperSpec"),
            )
 
 ##' @rdname math
-##' @param \dots ignored
+##' @param ... ignored
 ##' @param base base of logarithm
 ##' @param short,user,date handed to \code{\link[hyperSpec]{logentry}}
 ##' @export

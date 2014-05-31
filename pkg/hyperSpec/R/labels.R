@@ -96,7 +96,7 @@
 ##' 
 ##' @param object a hyperSpec object
 ##' @param which numeric or character to specify the label(s)
-##' @param \dots ignored
+##' @param ... ignored
 ##' @param drop if the result would be a list with only one element, should the
 ##'   element be returned instead?
 ##' @param use.colnames should missing labels be replaced by column names of

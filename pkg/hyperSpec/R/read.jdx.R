@@ -16,7 +16,7 @@
 ##' @param keys.hdr2data index vector indicating which header entries should be tranfered into the
 ##' extra data. Usually a character vector of labels (lowercase, without and dashes, blanks,
 ##' underscores). If \code{TRUE}, all header entries are read.
-##' @param \dots further parameters handed to the data import function, e.g.
+##' @param ... further parameters handed to the data import function, e.g.
 ##' \tabular{ll}{
 ##' \code{xtol} \tab tolerance for checking calculated x values against checkpoints at beginning
 ##'                  of line, defaults to XFACTOR\cr

@@ -14,7 +14,7 @@ setGeneric ("mean_pm_sd", function (x, na.rm = TRUE, ...) standardGeneric ("mean
 ##' @rdname mean_sd
 ##' @param x a numeric vector
 ##' @param na.rm handed to \code{\link[base]{mean}} and \code{\link[stats]{sd}}
-##' @param \dots ignored (needed to make function generic)
+##' @param ... ignored (needed to make function generic)
 ##' @return \code{mean_sd} returns a vector with two values (mean and standard
 ##'   deviation) of \code{x}.
 ##' @seealso \code{\link[base]{mean}}, \code{\link[stats]{sd}}

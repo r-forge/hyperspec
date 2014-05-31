@@ -42,7 +42,7 @@
 ##' Columns with different values across the rows will be set to \code{NA} if \code{retain.columns}
 ##' is \code{TRUE}, otherwise they will be deleted.
 ##' @param short,user,date ignored: logbook is deprecated
-##' @param \dots ignored.
+##' @param ... ignored.
 ##' @return A \code{hyperSpec} object, updated according to \code{x}
 ##' @author C. Beleites
 ##' @seealso See \code{\link{\%*\%}} for matrix multiplication of \code{hyperSpec} objects.

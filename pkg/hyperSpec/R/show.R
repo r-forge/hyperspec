@@ -132,7 +132,7 @@ setMethod ("show", signature = signature (object = "hyperSpec"), function (objec
 ##' @param log should the log be printed?
 ##' @aliases print
 ##' @param x a \code{hyperSpec} object
-##' @param \dots \code{print} and \code{summary}  hand further arguments to \code{as.character}
+##' @param ... \code{print} and \code{summary}  hand further arguments to \code{as.character}
 ##' @return \code{print} invisibly returns \code{x} after printing, \code{show} returns
 ##'   an invisible \code{NULL}.
 ##' @rdname show

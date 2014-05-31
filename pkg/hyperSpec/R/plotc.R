@@ -33,7 +33,7 @@
 ##' @param func.args further arguments to \code{func}
 ##' @param groups grouping variable, e.g. \code{.wavelength} if intensities of
 ##'   more than one wavelength should be plotted
-##' @param \dots further arguments to \code{\link[lattice]{xyplot}}.
+##' @param ... further arguments to \code{\link[lattice]{xyplot}}.
 ##' @author C. Beleites
 ##' @seealso \code{\link[lattice]{xyplot}}
 ##' @keywords hplot
