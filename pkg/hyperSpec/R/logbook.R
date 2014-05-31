@@ -19,6 +19,9 @@
 ##' logbook (flu)
 ##' 
 logbook <- function (x){
+  .Deprecated (new = "", package = "hyperSpec",
+               msg = "hyperSpec's logbook has been deprecated and will soon be removed.")
+  
   chk.hy (x)
   validObject (x)
 
