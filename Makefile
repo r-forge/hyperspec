@@ -46,7 +46,7 @@ Vignettes/chondro/chondro.Rnw:          Vignettes/chondro/vignettes.defs $(SRC) 
 	touch $@
 
 Vignettes/chondro/*.rda:	                    Vignettes/chondro/chondro.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<) && \
+	cd $(dir $<) && Rscript -e "Sweave ('$(notdir $<)')" 
 
 
 # fileio ............................................................................................
@@ -66,7 +66,7 @@ Vignettes/fileio/fileio.Rnw:                      Vignettes/fileio/vignettes.def
 	touch $@
 
 Vignettes/fileio/*.rda:                           Vignettes/fileio/fileio.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<)
+	cd $(dir $<) && Rscript -e "Sweave ('$(notdir $<)')"
 
 # flu ...............................................................................................
 flu:                                              Vignettes/flu/flu.pdf
@@ -84,7 +84,7 @@ Vignettes/flu/scan.txt.PerkinElmer.R:             Vignettes/fileio/scan.txt.Perk
 	cp -av $< $@
 
 Vignettes/flu/*.rda:  	                          Vignettes/flu/flu.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<)
+	cd $(dir $<) && Rscript -e "Sweave ('$(notdir $<)')"
 
 # introduction ......................................................................................
 introduction:                                     Vignettes/introduction/introduction.pdf 
@@ -107,7 +107,7 @@ Vignettes/introduction/introduction.Rnw:          Vignettes/introduction/vignett
 #	@cp -av $< $@ 
 
 #Vignettes/fileio/paracetamol.rda:	        Vignettes/fileio/fileio.Rnw
-#	cd $(dir $<) && R CMD Sweave $(notdir $<) 
+#	cd $(dir $<) && Rscript -e "Sweave ('$(notdir $<)')"
 
 # laser .............................................................................................
 laser:                                     	  	  Vignettes/laser/laser.pdf 
@@ -153,7 +153,7 @@ Vignettes/%.zip: .FORCE
 
 # general rules .....................................................................................
 %.tex: %.Rnw
-	cd $(dir $<) && R CMD Sweave $(notdir $<) 
+	cd $(dir $<) && Rscript -e "Sweave ('$(notdir $<)')"
 
 %.pdf: %.tex
 #	cd $(dir $<) && rubber --pdf -s $(basename $(notdir $<)).tex
