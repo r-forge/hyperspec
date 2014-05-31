@@ -32,9 +32,7 @@ Defaults to 100 or an estimate based on the percentage of groups that are
 contain the row indices of the groups? If \code{FALSE}, the list in
 \code{by} is computed first (as in \code{\link[stats]{aggregate}}).}
 
-\item{\dots}{further arguments passed to \code{FUN}}
-
-\item{...}{further arguments passed to or used by methods.}
+\item{...}{further arguments passed to \code{FUN}}
 }
 \value{
 A \code{hyperSpec} object with an additional column

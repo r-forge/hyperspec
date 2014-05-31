@@ -21,7 +21,7 @@ read.jdx.Shimadzu(...)
 extra data. Usually a character vector of labels (lowercase, without and dashes, blanks,
 underscores). If \code{TRUE}, all header entries are read.}
 
-\item{\dots}{further parameters handed to the data import function, e.g.
+\item{...}{further parameters handed to the data import function, e.g.
 \tabular{ll}{
 \code{xtol} \tab tolerance for checking calculated x values against checkpoints at beginning
                  of line, defaults to XFACTOR\cr
