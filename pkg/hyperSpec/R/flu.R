@@ -21,8 +21,8 @@
 ##' 
 ##' \dontrun{vignette ("flu", package = "hyperSpec")}
 ##' 
-{
+delayedAssign ("fluNA", {
   fluNA <- flu
   fluNA [[2,]] <- NA
   fluNA [[,,406]] <- NA
-}
+})
