@@ -1,5 +1,4 @@
-##' @name aggregate
-##' @title aggregate hyperSpec objects
+##' aggregate hyperSpec objects
 ##' 
 ##' Compute summary statistics for subsets of a \code{hyperSpec} object.
 ##' 
@@ -19,6 +18,7 @@
 ##'
 ##' @include hyperspec-class.R
 ##' @aliases aggregate,hyperSpec-method ave,hyperSpec-method
+##' @name aggregate
 ##' @docType methods
 ##' @param x a \code{hyperSpec} object
 ##' @param by grouping for the rows of \code{x@@data}.
@@ -35,7 +35,7 @@
 ##' @param by.isindex If a list is given in \code{by}: does the list already
 ##'   contain the row indices of the groups? If \code{FALSE}, the list in
 ##'   \code{by} is computed first (as in \code{\link[stats]{aggregate}}).
-##' @param \dots further arguments passed to \code{FUN}
+##' @param ... further arguments passed to \code{FUN}
 ##' @return A \code{hyperSpec} object with an additional column
 ##'   \code{@@data$.aggregate} tracing which group the rows belong to.
 ##' @author C. Beleites

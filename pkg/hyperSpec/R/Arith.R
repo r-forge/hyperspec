@@ -1,6 +1,8 @@
 
 ### use manually generated .Rd as aliases are not properly escaped.
 
+##' Arithmetical Operators
+##'
 ##' Arithmetical Operators: +, -, *, /, ^, \%\%, \%/\%, \%*\% for hyperSpec objects
 ##'
 ##' The arithmetical operators \code{+}, \code{-}, \code{*}, \code{/}, \code{\^}, \code{\%\%},
@@ -27,7 +29,6 @@
 ##' directly or \code{\link[hyperSpec]{as.data.frame} (x)}.
 ##' @author C. Beleites
 ##' 
-##' @noRd
 ##' @param e1,e2 or
 ##' @param x,y either two \code{hyperSpec} objects or one \code{hyperSpec} object and  matrix of same
 ##' size as \code{hyperSpec[[]]} or a scalar (numeric of length 1).
@@ -40,6 +41,9 @@
 ##' Arith,numeric,hyperSpec-method
 ##' @keywords methods
 ##' @include paste.row.R
+##' @include hyperspec-package.R
+##' @include hyperspec-class.R
+##' @rdname Arith
 ##' @docType methods
 ##' @concept hyperSpec arithmetic
 ##' @concept hyperSpec arithmetical operators
