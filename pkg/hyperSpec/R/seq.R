@@ -25,7 +25,6 @@
 ##' @rdname seq
 ##' @export
 ##' @method seq hyperSpec
-##' @S3method seq hyperSpec
 ##' @keywords manip
 ##' @examples
 ##' 
