@@ -1,6 +1,3 @@
-## @noRd
-setGeneric ("normalize01", function (x, ...) standardGeneric ("normalize01"))
-
 ##' Normalize numbers -> [0, 1]
 ##'
 ##' The input \code{x} is mapped to [0, 1] by subtracting the minimum and subsequently dividing by
@@ -15,6 +12,10 @@ setGeneric ("normalize01", function (x, ...) standardGeneric ("normalize01"))
 ##' @author C. Beleites
 ##' @seealso \code{\link[hyperSpec]{wl.eval}}, \code{\link[hyperSpec]{vanderMonde}}
 ##' @export 
+setGeneric ("normalize01", function (x, ...) standardGeneric ("normalize01"))
+
+##' @export
+##' @rdname normalize01
 setMethod (normalize01, signature (x = "matrix"), function (x, eps = .Machine$double.eps){
   m <- apply (x, 1, min)
   x <- sweep (x, 1, m, `-`)
@@ -24,6 +25,7 @@ setMethod (normalize01, signature (x = "matrix"), function (x, eps = .Machine$do
   x
 })
 
+##' @export
 ##' @rdname normalize01
 setMethod ("normalize01", signature (x = "numeric"), function (x, eps = .Machine$double.eps){
   x <- x - min (x)
@@ -35,6 +37,7 @@ setMethod ("normalize01", signature (x = "numeric"), function (x, eps = .Machine
     x / m
 })
 
+##' @export
 ##' @rdname normalize01
 setMethod (normalize01, signature (x = "hyperSpec"), function (x, ...){
   validObject (x)

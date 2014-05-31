@@ -18,6 +18,7 @@
 ##' @param ... handed to \code{\link[base]{subset}} (data.frame method)
 ##' @param short,user,date passed to \code{\link[hyperSpec]{logentry}}
 ##' @docType methods
+##' @aliases subset subset,hyperSpec-method
 ##' @return hyperSpec object containing the respective subset of spectra.
 ##' @author Claudia Beleites
 ##' @seealso \code{\link[base]{subset}}

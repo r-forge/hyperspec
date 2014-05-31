@@ -103,7 +103,7 @@ setMethod ("as.character", signature = signature (x = "hyperSpec"),
 ##' \code{show} displays the range of values instead,
 ##' @name show
 ##' @rdname show
-##' @aliases show
+##' @aliases show show,hyperSpec-method
 ##' @param object a \code{hyperSpec} object
 ##' @seealso \code{\link[methods]{show}}
 ##' @keywords methods print
@@ -130,7 +130,7 @@ setMethod ("show", signature = signature (object = "hyperSpec"), function (objec
 ##' \code{print} shows the overview giving the first and last values of each
 ##' data column (fastest).
 ##' @param log should the log be printed?
-##' @aliases print
+##' @aliases print print,hyperSpec-method
 ##' @param x a \code{hyperSpec} object
 ##' @param ... \code{print} and \code{summary}  hand further arguments to \code{as.character}
 ##' @return \code{print} invisibly returns \code{x} after printing, \code{show} returns
@@ -149,7 +149,7 @@ setMethod ("print", signature = signature (x = "hyperSpec"),
 ##' 
 ##' \code{summary} displays the logbook in addition.
 ##' 
-##' @aliases summary
+##' @aliases summary summary,hyperSpec-method
 ##' @seealso \code{\link[base]{summary}}
 ##' @export
 ##' @rdname show
