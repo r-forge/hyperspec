@@ -1,2 +1,0 @@
-library ("hyperSpec")
-hy.unittest ()
