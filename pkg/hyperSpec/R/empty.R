@@ -25,4 +25,6 @@ empty <- function (x, nrow = 0, spc = NA, extra = NA) {
     x@data$spc [TRUE] <- spc
     x@data[, ! grepl ("^spc$", colnames (x@data))] <- extra
   }
+
+  x
 }
