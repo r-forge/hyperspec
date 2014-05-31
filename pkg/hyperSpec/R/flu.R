@@ -21,4 +21,8 @@
 ##' 
 ##' \dontrun{vignette ("flu", package = "hyperSpec")}
 ##' 
-NULL
+{
+  fluNA <- flu
+  fluNA [[1,]] <- NA
+  fluNA [[,,405]] <- NA
+}
