@@ -135,6 +135,7 @@ setGeneric ("plot", package = 'stats4')
 ##' plot (spc, "spcprctile")
 ##' plot (spc, "spcmeansd")
 ##'
+##' @importMethodsFrom hyperSpec plot
 ### use plotspc as default plot function
 setMethod ("plot",
            signature (x = "hyperSpec", y = "missing"),

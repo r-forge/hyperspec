@@ -7,7 +7,6 @@
 ##' @param x hyperSpec object
 ##' @param label.spc labels for the intensity axis for loadings-like statistics
 ##' @param label.wavelength labels for the wavelength axis for scores-like statistics
-##' @param user,short,date handed to \code{\link[hyperSpec]{logentry}}
 ##' @param drop,na.rm,... further parameters to the \link[matrixStats]{matrixStats-package} function
 ##' @rdname matrixStats
 ##' @name matrixStats
@@ -15,755 +14,663 @@ NULL
  
 ##' @rdname matrixStats
 ##' @export
- setMethod ("anyMissing", signature = signature (x = "hyperSpec"), function (x, ...){
-                 anyMissing (x@data$spc, ...)
-               }) 
+ setMethod ("anyMissing", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE){
+anyMissing (x = x@data$spc, ..., na.rm = na.rm)
+}) 
 
 .test (anyMissing) <- function (){
-   anyMissing (chondro)
+   anyMissing (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
  setMethod ("colAlls", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-                 colAlls (x@data$spc, na.rm = na.rm, ...)
-               }) 
+colAlls (x = x@data$spc, na.rm = na.rm, ...)
+}) 
 
 .test (colAlls) <- function (){
-   colAlls (chondro)
+   colAlls (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
  setMethod ("colAnys", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-                 colAnys (x@data$spc, na.rm = na.rm, ...)
-               }) 
+colAnys (x = x@data$spc, na.rm = na.rm, ...)
+}) 
 
 .test (colAnys) <- function (){
-   colAnys (chondro)
+   colAnys (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
  setMethod ("rowAlls", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-                 rowAlls (x@data$spc, na.rm = na.rm, ...)
-               }) 
+rowAlls (x = x@data$spc, na.rm = na.rm, ...)
+}) 
 
 .test (rowAlls) <- function (){
-   rowAlls (chondro)
+   rowAlls (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
  setMethod ("rowAnys", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-                 rowAnys (x@data$spc, na.rm = na.rm, ...)
-               }) 
+rowAnys (x = x@data$spc, na.rm = na.rm, ...)
+}) 
 
 .test (rowAnys) <- function (){
-   rowAnys (chondro)
-}
-
-##' @noRd
-setGeneric ('colMeans', package = 'matrixStats')
-
-##' @rdname matrixStats
-##' @export
- setMethod ("colMeans", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colMeans", date = NULL){
-   result <- colMeans (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
-}) 
-
-.test (colMeans) <- function (){
-   colMeans (chondro)
-}
-
-##' @noRd
-setGeneric ('colSums', package = 'matrixStats')
-
-##' @rdname matrixStats
-##' @export
- setMethod ("colSums", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colSums", date = NULL){
-   result <- colSums (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
-}) 
-
-.test (colSums) <- function (){
-   colSums (chondro)
+   rowAnys (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colCollapse", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colCollapse", date = NULL){
-   result <- colCollapse (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colCollapse", signature = signature (x = "hyperSpec"), function (x, idxs, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colCollapse (x = x@data$spc, idxs = idxs, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colCollapse) <- function (){
-   colCollapse (chondro)
+   colCollapse (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colCounts", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colCounts", date = NULL){
-   result <- colCounts (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colCounts", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colCounts (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colCounts) <- function (){
-   colCounts (chondro)
+   colCounts (fluNA)
 }
-
-##' @noRd
-setGeneric ('colDiffs', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colDiffs", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colDiffs", date = NULL){
-   result <- colDiffs (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colDiffs", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colDiffs (x = x@data$spc, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colDiffs) <- function (){
-   colDiffs (chondro)
+   colDiffs (fluNA)
 }
-
-##' @noRd
-setGeneric ('colIQRs', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colIQRs", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colIQRs", date = NULL){
-   result <- colIQRs (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colIQRs", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colIQRs (x = x@data$spc, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colIQRs) <- function (){
-   colIQRs (chondro)
+   colIQRs (fluNA)
 }
-
-##' @noRd
-setGeneric ('colMads', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colMads", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colMads", date = NULL){
-   result <- colMads (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colMads", signature = signature (x = "hyperSpec"), function (x, centers = colMedians(x, ...), constant = 1.4826, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colMads (x = x@data$spc, centers = centers, constant = constant, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colMads) <- function (){
-   colMads (chondro)
+   colMads (fluNA)
 }
-
-##' @noRd
-setGeneric ('colMaxs', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colMaxs", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colMaxs", date = NULL){
-   result <- colMaxs (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colMaxs", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colMaxs (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colMaxs) <- function (){
-   colMaxs (chondro)
+   colMaxs (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colMedians", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colMedians", date = NULL){
-   result <- colMedians (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colMedians", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colMedians (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colMedians) <- function (){
-   colMedians (chondro)
+   colMedians (fluNA)
 }
-
-##' @noRd
-setGeneric ('colMins', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colMins", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colMins", date = NULL){
-   result <- colMins (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colMins", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colMins (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colMins) <- function (){
-   colMins (chondro)
+   colMins (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colOrderStats", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colOrderStats", date = NULL){
-   result <- colOrderStats (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colOrderStats", signature = signature (x = "hyperSpec"), function (x, which, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colOrderStats (x = x@data$spc, which = which, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colOrderStats) <- function (){
-   colOrderStats (chondro)
+   colOrderStats (fluNA)
 }
-
-##' @noRd
-setGeneric ('colProds', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colProds", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colProds", date = NULL){
-   result <- colProds (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colProds", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colProds (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colProds) <- function (){
-   colProds (chondro)
+   colProds (fluNA)
 }
-
-##' @noRd
-setGeneric ('colQuantiles', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colQuantiles", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colQuantiles", date = NULL){
-   result <- colQuantiles (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colQuantiles", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colQuantiles (x = x@data$spc, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colQuantiles) <- function (){
-   colQuantiles (chondro)
+   colQuantiles (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colRanges", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colRanges", date = NULL){
-   result <- colRanges (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colRanges", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colRanges (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colRanges) <- function (){
-   colRanges (chondro)
+   colRanges (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colRanks", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colRanks", date = NULL){
-   result <- colRanks (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colRanks", signature = signature (x = "hyperSpec"), function (x, ties.method = c("max", "average", "min"), preserveShape = FALSE, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colRanks (x = x@data$spc, ties.method = ties.method, preserveShape = preserveShape, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colRanks) <- function (){
-   colRanks (chondro)
+   colRanks (fluNA)
 }
-
-##' @noRd
-setGeneric ('colSds', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colSds", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colSds", date = NULL){
-   result <- colSds (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+ setMethod ("colSds", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colSds (x = x@data$spc, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 }) 
 
 .test (colSds) <- function (){
-   colSds (chondro)
+   colSds (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colTabulates", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colTabulates", date = NULL){
-   result <- colTabulates (x@data$spc, ...)
+ setMethod ("colVars", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.spc){
+
+   result <- colVars (x = x@data$spc, ..., na.rm = na.rm)
+
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+       result <- t (result)
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
-}) 
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
 
-.test (colTabulates) <- function (){
-   colTabulates (chondro)
-}
-
-##' @noRd
-setGeneric ('colVars', package = 'matrixStats')
-
-##' @rdname matrixStats
-##' @export
- setMethod ("colVars", signature = signature (x = "hyperSpec"), function (x, ..., label.spc, 
-         user = NULL, short = "colVars", date = NULL){
-   result <- colVars (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
 }) 
 
 .test (colVars) <- function (){
-   colVars (chondro)
+   colVars (fluNA)
 }
 
 ##' @rdname matrixStats
-## ' @S3method colWeightedMeans hyperSpec
-##' @method colWeightedMeans hyperSpec
-##' @export colWeightedMeans.hyperSpec
-colWeightedMeans.hyperSpec <- function (x, ..., label.spc, 
-         user = NULL, short = "colWeightedMeans", date = NULL){
-   result <- colWeightedMeans (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+##' @export
+ colWeightedMeans.hyperSpec <- function (..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colWeightedMeans (..., na.rm = na.rm, x = x@data$spc)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 } 
 
 .test (colWeightedMeans.hyperSpec) <- function (){
-   colWeightedMeans (chondro)
+   colWeightedMeans (fluNA)
 }
 
 ##' @rdname matrixStats
-## ' @S3method colWeightedMedians hyperSpec
-##' @method colWeightedMedians hyperSpec
-##' @export colWeightedMedians.hyperSpec
- colWeightedMedians.hyperSpec <- function (x, ..., label.spc, 
-         user = NULL, short = "colWeightedMedians", date = NULL){
-   result <- colWeightedMedians (x@data$spc, ...)
-   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
-      result <- t (result)
+##' @export
+ colWeightedMedians.hyperSpec <- function (..., na.rm = TRUE, label.spc){
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   result <- colWeightedMedians (..., na.rm = na.rm, x = x@data$spc)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
 } 
 
 .test (colWeightedMedians.hyperSpec) <- function (){
-   colWeightedMedians (chondro)
-}
-
-##' @noRd
-setGeneric ('rowMeans', package = 'matrixStats')
-
-##' @rdname matrixStats
-##' @export
- setMethod ("rowMeans", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowMeans", date = NULL){
-   result <- rowMeans (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
-}) 
-
-.test (rowMeans) <- function (){
-   rowMeans (chondro)
-}
-
-##' @noRd
-setGeneric ('rowSums', package = 'matrixStats')
-
-##' @rdname matrixStats
-##' @export
- setMethod ("rowSums", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowSums", date = NULL){
-   result <- rowSums (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
-
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
-}) 
-
-.test (rowSums) <- function (){
-   rowSums (chondro)
+   colWeightedMedians (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowCollapse", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowCollapse", date = NULL){
-   result <- rowCollapse (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowCollapse", signature = signature (x = "hyperSpec"), function (x, idxs, ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowCollapse (x = x@data$spc, idxs = idxs, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowCollapse) <- function (){
-   rowCollapse (chondro)
+   rowCollapse (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowCounts", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowCounts", date = NULL){
-   result <- rowCounts (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowCounts", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowCounts (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowCounts) <- function (){
-   rowCounts (chondro)
+   rowCounts (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowDiffs', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowDiffs", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowDiffs", date = NULL){
-   result <- rowDiffs (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowDiffs", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowDiffs (x = x@data$spc, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowDiffs) <- function (){
-   rowDiffs (chondro)
+   rowDiffs (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowIQRs', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowIQRs", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowIQRs", date = NULL){
-   result <- rowIQRs (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowIQRs", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowIQRs (x = x@data$spc, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowIQRs) <- function (){
-   rowIQRs (chondro)
+   rowIQRs (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowMads', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowMads", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowMads", date = NULL){
-   result <- rowMads (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowMads", signature = signature (x = "hyperSpec"), function (x, centers = rowMedians(x, ...), constant = 1.4826, ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowMads (x = x@data$spc, centers = centers, constant = constant, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowMads) <- function (){
-   rowMads (chondro)
+   rowMads (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowMaxs', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowMaxs", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowMaxs", date = NULL){
-   result <- rowMaxs (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowMaxs", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowMaxs (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowMaxs) <- function (){
-   rowMaxs (chondro)
+   rowMaxs (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowMedians", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowMedians", date = NULL){
-   result <- rowMedians (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowMedians", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowMedians (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowMedians) <- function (){
-   rowMedians (chondro)
+   rowMedians (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowMins', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowMins", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowMins", date = NULL){
-   result <- rowMins (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowMins", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowMins (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowMins) <- function (){
-   rowMins (chondro)
+   rowMins (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowOrderStats", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowOrderStats", date = NULL){
-   result <- rowOrderStats (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowOrderStats", signature = signature (x = "hyperSpec"), function (x, which, ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowOrderStats (x = x@data$spc, which = which, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowOrderStats) <- function (){
-   rowOrderStats (chondro)
+   rowOrderStats (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowProds', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowProds", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowProds", date = NULL){
-   result <- rowProds (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowProds", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowProds (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowProds) <- function (){
-   rowProds (chondro)
+   rowProds (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowQuantiles', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowQuantiles", signature = signature (x = "hyperSpec"),
-            function (x, ..., label.wavelength, 
-                      user = NULL, short = "rowQuantiles", date = NULL,
-                      drop = FALSE){
+ setMethod ("rowQuantiles", signature = signature (x = "hyperSpec"), function (x, probs = seq(from = 0, to = 1, by = 0.25), ..., na.rm = TRUE, label.wavelength, drop = TRUE){
 
-   if (drop) warning ("rowQuantiles for hyperSpec objects ignores drop = TRUE.")
+   result <- rowQuantiles (x = x@data$spc, probs = probs, ..., na.rm = na.rm, drop = drop)
 
-   result <- rowQuantiles (x@data$spc, ..., drop = FALSE)
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
 }) 
 
-
 .test (rowQuantiles) <- function (){
-   rowQuantiles (chondro)
+   rowQuantiles (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowRanges", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowRanges", date = NULL){
-   result <- rowRanges (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowRanges", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowRanges (x = x@data$spc, na.rm = na.rm, ...)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowRanges) <- function (){
-   rowRanges (chondro)
+   rowRanges (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowRanks", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowRanks", date = NULL){
-   result <- rowRanks (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowRanks", signature = signature (x = "hyperSpec"), function (x, ties.method = c("max", "average", "min"), ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowRanks (x = x@data$spc, ties.method = ties.method, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowRanks) <- function (){
-   rowRanks (chondro)
+   rowRanks (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowSds', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowSds", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowSds", date = NULL){
-   result <- rowSds (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowSds", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowSds (x = x@data$spc, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowSds) <- function (){
-   rowSds (chondro)
+   rowSds (fluNA)
 }
-
-##' @noRd
-setGeneric ('rowVars', package = 'matrixStats')
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowVars", signature = signature (x = "hyperSpec"), function (x, ..., label.wavelength,
-          user = NULL, short = "rowVars", date = NULL){
-   result <- rowVars (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+ setMethod ("rowVars", signature = signature (x = "hyperSpec"), function (x, center = NULL, ..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowVars (x = x@data$spc, center = center, ..., na.rm = na.rm)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 }) 
 
 .test (rowVars) <- function (){
-   rowVars (chondro)
+   rowVars (fluNA)
 }
 
 ##' @rdname matrixStats
-## ' @S3method rowWeightedMeans hyperSpec
-##' @method rowWeightedMeans hyperSpec
-##' @export rowWeightedMeans.hyperSpec
- rowWeightedMeans.hyperSpec <- function (x, ..., label.wavelength,
-          user = NULL, short = "rowWeightedMeans", date = NULL){
-   result <- rowWeightedMeans (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+##' @export
+ rowWeightedMeans.hyperSpec <- function (..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowWeightedMeans (..., na.rm = na.rm, x = x@data$spc)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 } 
 
 .test (rowWeightedMeans.hyperSpec) <- function (){
-   rowWeightedMeans (chondro)
+   rowWeightedMeans (fluNA)
 }
 
 ##' @rdname matrixStats
-## ' @S3method  rowWeightedMedians hyperSpec
-##' @method  rowWeightedMedians hyperSpec
-##' @export rowWeightedMedians.hyperSpec
- rowWeightedMedians.hyperSpec <- function (x, ..., label.wavelength,
-          user = NULL, short = "rowWeightedMedians", date = NULL){
-   result <- rowWeightedMedians (x@data$spc, ...)
-   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
-      result <- t (result)
+##' @export
+ rowWeightedMedians.hyperSpec <- function (..., na.rm = TRUE, label.wavelength){
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   result <- rowWeightedMedians (..., na.rm = na.rm, x = x@data$spc)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
 } 
 
 .test (rowWeightedMedians.hyperSpec) <- function (){
-   rowWeightedMedians (chondro)
+   rowWeightedMedians (fluNA)
+}
+
+##' @rdname matrixStats
+##' @export
+ rowAvgsPerColSet.hyperSpec <- function (..., na.rm = TRUE, label.wavelength){
+
+   result <- rowAvgsPerColSet (..., na.rm = na.rm, x = x@data$spc)
+
+   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+         result <- t (result)
+         
+         decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+
+} 
+
+.test (rowAvgsPerColSet.hyperSpec) <- function (){
+   rowAvgsPerColSet (fluNA)
+}
+
+##' @rdname matrixStats
+##' @export
+ colAvgsPerRowSet.hyperSpec <- function (..., na.rm = TRUE, label.spc){
+
+   result <- colAvgsPerRowSet (..., na.rm = na.rm, x = x@data$spc)
+
+   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+       result <- t (result)
+
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+
+} 
+
+.test (colAvgsPerRowSet.hyperSpec) <- function (){
+   colAvgsPerRowSet (fluNA)
 }
 

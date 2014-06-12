@@ -13,6 +13,9 @@
 ##' \code{package?hyperSpec.matrixStats} for information about the package
 ##' @rdname hyperSpec.matrixStats-package
 ##' @keywords package
+##' @import matrixStats
+##' @importClassesFrom hyperSpec hyperSpec
+{
 if (!require (svUnit, quietly = TRUE))
   `.test<-` <- function (f, value) {
     attr (f, "test") <- value
@@ -20,5 +23,6 @@ if (!require (svUnit, quietly = TRUE))
  } else {
  `.test<-` <- svUnit::`test<-`
  }
-
+fluNA <- hyperSpec:::fluNA
+}
 
