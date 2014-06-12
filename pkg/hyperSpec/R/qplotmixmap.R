@@ -100,7 +100,7 @@ qmixtile <- function (object,
 ##' @param n of colours to produce in legend
 ##' @return list with components ymin, max and fill to specify value and fill colour value (still
 ##' numeric!) for the legend, otherwise the normalized values
-normalize.colrange <- function (x, na.rm = TRUE, legend = FALSE, n = 100){
+normalize.colrange <- function (x, na.rm = TRUE, legend = FALSE, n = 100, ...){
   ## legend
   if (legend){
     y <- apply (x, 2, function (x) seq (min (x), max (x), length.out = n))
@@ -120,7 +120,7 @@ normalize.colrange <- function (x, na.rm = TRUE, legend = FALSE, n = 100){
 ##' @rdname qplotmix
 ##' @export
 ##' 
-normalize.range <- function (x, na.rm = TRUE, legend = FALSE, n = 100){
+normalize.range <- function (x, na.rm = TRUE, legend = FALSE, n = 100, ...){
   if (legend){
     y <- matrix (seq (min (x), max (x), length.out = n), nrow = n, ncol = ncol (x))
      dy2 <- abs (y [2,] - y [1,]) / 2
@@ -134,12 +134,27 @@ normalize.range <- function (x, na.rm = TRUE, legend = FALSE, n = 100){
   }
 }
 
+##' \code{normalize.null} does not touch the values 
+##' @rdname qplotmix
+##' @export
+##' 
+normalize.null <- function (x, na.rm = TRUE, legend = FALSE, n = 100, ...){
+  if (legend){
+    y <- apply (x, 2, function (x) seq (min (x), max (x), length.out = n))
+
+    list (ymin = sweep (y, 2, dy2, `-`),
+          ymax = sweep (y, 2, dy2, `+`),
+          fill = apply (x, 2, function (x) seq (      0,       1, length.out = n)))
+  } else {
+    x 
+  }
+}
 ##' \code{normalize.minmax} normalizes the range of each column j to [min_j, max_j]
 ##' @rdname qplotmix
 ##' @export
 ##' @param min numeric with value corresponding to "lowest" colour for each column
 ##' @param max numeric with value corresponding to "hightest" colour for each column
-normalize.minmax <- function (x, min = 0, max = 1, legend = FALSE, n = 100){
+normalize.minmax <- function (x, min = 0, max = 1, legend = FALSE, n = 100, ...){
   if (legend){
     y <- matrix (seq (0, 1, length.out = n), nrow = n, ncol = ncol (x))
     y <- sweep (y, 2, max - min, `*`)
@@ -180,11 +195,14 @@ qmixlegend <- function (x, purecol, dx = 0.33, ny = 100, labels = names (purecol
   if (is.null (labels))
     labels <- seq_len (ncol (x))
 
-  l <- normalize (x, ..., legend = TRUE)
+  if (! is.null (normalize))
+      l <- normalize (x, ..., legend = TRUE)
+  else
+      l <- x
   
   df <- data.frame ()
   for (column in seq_along (purecol)){
-    tmp <- colmix.rgb (l$fill [, column, drop = FALSE], purecol [column], normalize = NULL)
+    tmp <- colmix.rgb (l$fill [, column, drop = FALSE], purecol [column], normalize = NULL, ...)
     df <- rbind (df, data.frame (column = labels [column],
                                  col = tmp,
                                  ymin = l$ymin [, column],
