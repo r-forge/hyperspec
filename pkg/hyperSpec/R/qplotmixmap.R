@@ -142,8 +142,8 @@ normalize.null <- function (x, na.rm = TRUE, legend = FALSE, n = 100, ...){
   if (legend){
     y <- apply (x, 2, function (x) seq (min (x), max (x), length.out = n))
 
-    list (ymin = sweep (y, 2, dy2, `-`),
-          ymax = sweep (y, 2, dy2, `+`),
+    list (ymin = sweep (y, 2, min),
+          ymax = sweep (y, 2, max),
           fill = apply (x, 2, function (x) seq (      0,       1, length.out = n)))
   } else {
     x 
