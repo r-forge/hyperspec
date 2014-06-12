@@ -108,7 +108,6 @@ weightedMedian     exclude            FALSE
 ##' @param x hyperSpec object
 ##' @param label.spc labels for the intensity axis for loadings-like statistics
 ##' @param label.wavelength labels for the wavelength axis for scores-like statistics
-##' @param user,short,date handed to \\code{\\link[hyperSpec]{logentry}}
 ##' @param drop,na.rm,... further parameters to the \\link[matrixStats]{matrixStats-package} function
 ##' @rdname matrixStats
 ##' @name matrixStats
@@ -121,24 +120,20 @@ NULL
                    directresult =  sprintf ('function (x, ...){
                  %s (x@data$spc, ...)
                }', .funcs$f [f], .funcs$f [f]),
-                   loadings =  sprintf ('function (x, ..., label.spc, 
-         user = NULL, short = "%s", date = NULL){
+                   loadings =  sprintf ('function (x, ..., label.spc){
    result <- %s (x@data$spc, ...)
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
       result <- t (result)
 
-   decomposition (x, result, scores = FALSE, label.spc = label.spc, 
-                  user = user, short = short, date = date)
+   decomposition (x, result, scores = FALSE, label.spc = label.spc)
 }', .funcs$f [f], .funcs$f [f]),
 
-                   scores = sprintf ('function (x, ..., label.wavelength,
-          user = NULL, short = "%s", date = NULL){
+                   scores = sprintf ('function (x, ..., label.wavelength){
    result <- %s (x@data$spc, ...)
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
       result <- t (result)
 
-   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength, 
-                  user = user, short = short, date = date)
+   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
 }', .funcs$f [f], .funcs$f [f]),
 
                    stop ("unknown function type: ", .funcs$type [f])
