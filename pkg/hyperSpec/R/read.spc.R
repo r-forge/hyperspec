@@ -186,8 +186,8 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 			fsampin  = readBin       (raw.data [259 : 260], "integer", 1, 2, signed = FALSE),
 			ffactor  = readBin       (raw.data [261 : 264], "numeric", 1, 4                ),
 			fmethod  = raw.split.nul (raw.data [265 : 312]),
-			fzinc    = readBin       (raw.data [313 : 316], "numeric", 1, 4), #, signed = FALSE),
-			fwplanes = readBin       (raw.data [317 : 320], "integer", 1, 4), #, signed = FALSE),
+			fzinc    = readBin       (raw.data [313 : 316], "numeric", 1, 4), 
+      fwplanes = readBin       (raw.data [317 : 320], "integer", 1, 4), #, signed = FALSE),
 			fwinc    = readBin       (raw.data [321 : 324], "numeric", 1, 4                ),
 			fwtype   = readBin       (raw.data [      325], "integer", 1, 1, signed = TRUE ),
 			## 187 bytes reserved
@@ -195,7 +195,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 	)
 	
 	## R doesn't have unsigned long int .................................
-   if (any (unlist (hdr [c ("flogoff", "fmods", "fzinc", "fwplanes")]) < 0))
+   if (any (unlist (hdr [c ("flogoff", "fmods", "fwplanes")]) < 0))
      stop ("error reading header: R does not support unsigned long integers.",
            "Please contact the maintainer of the package.")
    
@@ -336,7 +336,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 		warning ("subfile ", subhdr$subindx,  " specifies data type float, but file header doesn't.",
 				"\nData will be interpreted as float.")
 	
-	if (subhdr$subnpts > 0 && ! hdr$ftflgs ['TXYXYS'])
+	if (subhdr$subnpts > 0 && subhdr$subnpts != hdr$fnpts && ! hdr$ftflgs ['TXYXYS'])
 		warning ('subfile ', subhdr$subindx, ": number of points in subfile should be 0 if file",
 				" header flags do not specify TXYXYS.")
 	
@@ -457,7 +457,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 		log$.log.disk <- raw.data [loghdr$.last.read + loghdr$logbins + seq_len (loghdr$logdsks)]
 	
 	## read text part of log
-	if (log.txt) {
+	if (log.txt & loghdr$logsizd > loghdr$logtxto) {
 		log.txt <- raw.data [pos + loghdr$logtxto + seq_len (loghdr$logsizd - loghdr$logtxto)]
       if (tail (log.txt, 1) ==  .nul)   # throw away nul at the end
         log.txt <- head (log.txt, -1)
