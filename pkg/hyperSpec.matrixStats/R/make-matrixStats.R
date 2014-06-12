@@ -1,29 +1,98 @@
 
 ####################################################################################################
-.funcs <- structure(list(f = structure(c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 13L, 11L, 12L,
-  14L, 15L, 1L, 2L, 16L, 17L, 18L, 19L, 20L, 21L, 22L, 23L, 24L, 25L, 26L, 27L, 28L, 29L, 10L, 30L,
-  31L, 32L, 3L, 4L, 33L, 34L, 35L, 36L, 37L, 38L, 39L, 40L, 41L, 42L, 43L, 44L, 45L, 46L, 47L, 48L,
-  49L), .Label = c("colMeans", "colSums", "rowMeans", "rowSums", "anyMissing", "colAlls", "colAnys",
-  "rowAlls", "rowAnys", "colTabulates", "indexByRow", "madDiff", "rowTabulates", "sdDiff", "varDiff",
-  "colCollapse", "colCounts", "colDiffs", "colIQRs", "colMads", "colMaxs", "colMedians", "colMins",
-  "colOrderStats", "colProds", "colQuantiles", "colRanges", "colRanks", "colSds", "colVars",
-  "colWeightedMeans", "colWeightedMedians", "rowCollapse", "rowCounts", "rowDiffs", "rowIQRs",
-  "rowMads", "rowMaxs", "rowMedians", "rowMins", "rowOrderStats", "rowProds", "rowQuantiles",
-  "rowRanges", "rowRanks", "rowSds", "rowVars", "rowWeightedMeans", "rowWeightedMedians" ), class =
-  "factor"), type = structure(c(3L, 3L, 4L, 4L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 3L, 3L,
-  3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 4L, 4L, 4L, 4L, 4L, 4L, 4L,
-  4L, 4L, 4L, 4L, 4L, 2L, 4L, 4L, 4L, 4L, 4L, 4L), .Label = c("directresult", "exclude", "loadings",
-  "scores" ), class = "factor"), s3 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE,
-  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-  FALSE, FALSE, TRUE, TRUE)), .Names = c("f", "type", "s3"), row.names = c(NA, 54L), class =
-  "data.frame")
+# .funcs <-structure(list(f = structure(c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 13L, 11L, 12L,
+#   14L, 15L, 1L, 2L, 16L, 17L, 18L, 19L, 20L, 21L, 22L, 23L, 24L, 25L, 26L, 27L, 28L, 29L, 10L, 30L,
+#   31L, 32L, 3L, 4L, 33L, 34L, 35L, 36L, 37L, 38L, 39L, 40L, 41L, 42L, 43L, 44L, 45L, 46L, 47L, 48L,
+#   49L), .Label = c("colMeans", "colSums", "rowMeans", "rowSums", "anyMissing", "colAlls", "colAnys",
+#   "rowAlls", "rowAnys", "colTabulates", "indexByRow", "madDiff", "rowTabulates", "sdDiff", "varDiff",
+#   "colCollapse", "colCounts", "colDiffs", "colIQRs", "colMads", "colMaxs", "colMedians", "colMins",
+#   "colOrderStats", "colProds", "colQuantiles", "colRanges", "colRanks", "colSds", "colVars",
+#   "colWeightedMeans", "colWeightedMedians", "rowCollapse", "rowCounts", "rowDiffs", "rowIQRs",
+#   "rowMads", "rowMaxs", "rowMedians", "rowMins", "rowOrderStats", "rowProds", "rowQuantiles",
+#   "rowRanges", "rowRanks", "rowSds", "rowVars", "rowWeightedMeans", "rowWeightedMedians" ), class =
+#   "factor"), type = structure(c(3L, 3L, 4L, 4L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 3L, 3L,
+#   3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 4L, 4L, 4L, 4L, 4L, 4L, 4L,
+#   4L, 4L, 4L, 4L, 4L, 2L, 4L, 4L, 4L, 4L, 4L, 4L), .Label = c("directresult", "exclude", "loadings",
+#   "scores" ), class = "factor"), s3 = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+#   FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+#   FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE,
+#   FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+#   FALSE, FALSE, TRUE, TRUE)), .Names = c("f", "type", "s3"), row.names = c(NA, 54L), class =
+#   "data.frame")
+
+.funcs <-read.table (textConnection ("
+f type s3
+colMeans           loadings           FALSE             
+colSums            loadings           FALSE             
+rowMeans           scores             FALSE             
+rowSums            scores             FALSE             
+anyMissing         directresult       FALSE             
+colAlls            directresult       FALSE             
+colAnys            directresult       FALSE             
+rowAlls            directresult       FALSE             
+rowAnys            directresult       FALSE             
+colTabulates       exclude            FALSE             
+rowTabulates       exclude            FALSE             
+indexByRow         exclude            FALSE             
+madDiff            exclude            FALSE             
+sdDiff             exclude            FALSE             
+varDiff            exclude            FALSE             
+colMeans           loadings           FALSE             
+colSums            loadings           FALSE             
+colCollapse        loadings           FALSE             
+colCounts          loadings           FALSE             
+colDiffs           loadings           FALSE             
+colIQRs            loadings           FALSE             
+colMads            loadings           FALSE             
+colMaxs            loadings           FALSE             
+colMedians         loadings           FALSE             
+colMins            loadings           FALSE             
+colOrderStats      loadings           FALSE             
+colProds           loadings           FALSE             
+colQuantiles       loadings           FALSE             
+colRanges          loadings           FALSE             
+colRanks           loadings           FALSE             
+colSds             loadings           FALSE             
+colTabulates       loadings           FALSE             
+colVars            loadings           FALSE             
+colWeightedMeans   loadings            TRUE             
+colWeightedMedians loadings            TRUE             
+rowMeans           scores             FALSE             
+rowSums            scores             FALSE             
+rowCollapse        scores             FALSE             
+rowCounts          scores             FALSE             
+rowDiffs           scores             FALSE             
+rowIQRs            scores             FALSE             
+rowMads            scores             FALSE             
+rowMaxs            scores             FALSE             
+rowMedians         scores             FALSE             
+rowMins            scores             FALSE             
+rowOrderStats      scores             FALSE             
+rowProds           scores             FALSE             
+rowQuantiles       exclude            FALSE             
+rowRanges          scores             FALSE             
+rowRanks           scores             FALSE             
+rowSds             scores             FALSE             
+rowVars            scores             FALSE             
+rowWeightedMeans   scores              TRUE             
+rowWeightedMedians scores              TRUE
+rowAvgsPerColSet   scores             FALSE
+colAvgsPerRowSet   loadings           FALSE
+binCounts          exclude            FALSE
+binMeans           exclude            FALSE
+logSumExp          exclude            FALSE
+colLogSumExps      exclude            FALSE
+rowLogSumExps      exclude            FALSE
+weightedMad        exclude            FALSE
+weightedMedian     exclude            FALSE
+"), header = TRUE)
 
 # excludes:
 # rowQuantile - own function in rowQuantile.R
 # *Tabulates - don't make sense for hyperSpec objects
 # *Diff - don't make sense for hyperSpec objects
+# *LogSumExps - don't make sense for hyperSpec objects
+# weightedMad, weightedMedian - for hyperSpec, provide row* and col* functions
 
 .make.matrixStats <- function (file = "matrixStats.R"){
   file <- file (file, "w")
