@@ -18,6 +18,6 @@ title: Mailing lists
 		<a href="http://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/hyperspec-help">subscribe</a>,
 		<a href="http://lists.r-forge.r-project.org/pipermail/hyperspec-help/">read the archives</a>, or
 		<a href="https://lists.r-forge.r-project.org/cgi-bin/mailman/swish.cgi?query=listname%3D%22hyperspec-help%22+">search</a></li>
-  <li>Trackers for <a href="http://r-forge.r-project.org/tracker/?atid=1504&group_id=366&func=browse">feature requests</a> and </li>
-  <li><a href="http://r-forge.r-project.org/tracker/?atid=1501&group_id=366&func=browse">bugs</a> are also found on r-forge.</li>
+  <li>Trackers for <a href="http://r-forge.r-project.org/tracker/?atid=1504%26group_id=366%26func=browse">feature requests</a> and </li>
+  <li><a href="http://r-forge.r-project.org/tracker/?atid=1501%26group_id=366%26func=browse">bugs</a> are also found on r-forge.</li>
 </ul>
