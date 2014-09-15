@@ -24,47 +24,47 @@ anyMissing (x = x@data$spc, ..., na.rm = na.rm)
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colAlls", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-colAlls (x = x@data$spc, na.rm = na.rm, ...)
-}) 
+ colAlls.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+colAlls (x = x@data$spc, value = value, na.rm = na.rm, ...)
+} 
 
-.test (colAlls) <- function (){
+.test (colAlls.hyperSpec) <- function (){
    colAlls (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colAnys", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-colAnys (x = x@data$spc, na.rm = na.rm, ...)
-}) 
+ colAnys.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+colAnys (x = x@data$spc, value = value, na.rm = na.rm, ...)
+} 
 
-.test (colAnys) <- function (){
+.test (colAnys.hyperSpec) <- function (){
    colAnys (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowAlls", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-rowAlls (x = x@data$spc, na.rm = na.rm, ...)
-}) 
+ rowAlls.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+rowAlls (x = x@data$spc, value = value, na.rm = na.rm, ...)
+} 
 
-.test (rowAlls) <- function (){
+.test (rowAlls.hyperSpec) <- function (){
    rowAlls (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowAnys", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ...){
-rowAnys (x = x@data$spc, na.rm = na.rm, ...)
-}) 
+ rowAnys.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+rowAnys (x = x@data$spc, value = value, na.rm = na.rm, ...)
+} 
 
-.test (rowAnys) <- function (){
+.test (rowAnys.hyperSpec) <- function (){
    rowAnys (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colCollapse", signature = signature (x = "hyperSpec"), function (x, idxs, ..., na.rm = TRUE, label.spc){
+ colCollapse.hyperSpec <- function (x, idxs, ..., na.rm = TRUE, label.spc){
 
    result <- colCollapse (x = x@data$spc, idxs = idxs, ..., na.rm = na.rm)
 
@@ -73,26 +73,26 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
    decomposition (x, result, scores = FALSE, label.spc = label.spc)
 
-}) 
+} 
 
-.test (colCollapse) <- function (){
+.test (colCollapse.hyperSpec) <- function (){
    colCollapse (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colCounts", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
+ colCounts.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ..., label.spc){
 
-   result <- colCounts (x = x@data$spc, na.rm = na.rm, ...)
+   result <- colCounts (x = x@data$spc, value = value, na.rm = na.rm, ...)
 
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
        result <- t (result)
 
    decomposition (x, result, scores = FALSE, label.spc = label.spc)
 
-}) 
+} 
 
-.test (colCounts) <- function (){
+.test (colCounts.hyperSpec) <- function (){
    colCounts (fluNA)
 }
 
@@ -217,9 +217,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colProds", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.spc){
+ setMethod ("colProds", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, method = c("expSumLog", "direct"), ..., label.spc){
 
-   result <- colProds (x = x@data$spc, na.rm = na.rm, ...)
+   result <- colProds (x = x@data$spc, na.rm = na.rm, method = method, ...)
 
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
        result <- t (result)
@@ -302,9 +302,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("colVars", signature = signature (x = "hyperSpec"), function (x, ..., na.rm = TRUE, label.spc){
+ setMethod ("colVars", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, center = NULL, ..., label.spc){
 
-   result <- colVars (x = x@data$spc, ..., na.rm = na.rm)
+   result <- colVars (x = x@data$spc, na.rm = na.rm, center = center, ...)
 
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
        result <- t (result)
@@ -319,9 +319,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- colWeightedMeans.hyperSpec <- function (..., na.rm = TRUE, label.spc){
+ colWeightedMeans.hyperSpec <- function (x, w = NULL, na.rm = TRUE, ..., label.spc){
 
-   result <- colWeightedMeans (..., na.rm = na.rm, x = x@data$spc)
+   result <- colWeightedMeans (x = x@data$spc, w = w, na.rm = na.rm, ...)
 
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
        result <- t (result)
@@ -336,9 +336,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- colWeightedMedians.hyperSpec <- function (..., na.rm = TRUE, label.spc){
+ colWeightedMedians.hyperSpec <- function (x, w = NULL, na.rm = TRUE, ..., label.spc){
 
-   result <- colWeightedMedians (..., na.rm = na.rm, x = x@data$spc)
+   result <- colWeightedMedians (x = x@data$spc, w = w, na.rm = na.rm, ...)
 
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
        result <- t (result)
@@ -353,7 +353,7 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowCollapse", signature = signature (x = "hyperSpec"), function (x, idxs, ..., na.rm = TRUE, label.wavelength){
+ rowCollapse.hyperSpec <- function (x, idxs, ..., na.rm = TRUE, label.wavelength){
 
    result <- rowCollapse (x = x@data$spc, idxs = idxs, ..., na.rm = na.rm)
 
@@ -362,26 +362,26 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
          
          decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
 
-}) 
+} 
 
-.test (rowCollapse) <- function (){
+.test (rowCollapse.hyperSpec) <- function (){
    rowCollapse (fluNA)
 }
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowCounts", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
+ rowCounts.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ..., label.wavelength){
 
-   result <- rowCounts (x = x@data$spc, na.rm = na.rm, ...)
+   result <- rowCounts (x = x@data$spc, value = value, na.rm = na.rm, ...)
 
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
          result <- t (result)
          
          decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
 
-}) 
+} 
 
-.test (rowCounts) <- function (){
+.test (rowCounts.hyperSpec) <- function (){
    rowCounts (fluNA)
 }
 
@@ -506,9 +506,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowProds", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, ..., label.wavelength){
+ setMethod ("rowProds", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, method = c("expSumLog", "direct"), ..., label.wavelength){
 
-   result <- rowProds (x = x@data$spc, na.rm = na.rm, ...)
+   result <- rowProds (x = x@data$spc, na.rm = na.rm, method = method, ...)
 
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
          result <- t (result)
@@ -591,9 +591,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- setMethod ("rowVars", signature = signature (x = "hyperSpec"), function (x, center = NULL, ..., na.rm = TRUE, label.wavelength){
+ setMethod ("rowVars", signature = signature (x = "hyperSpec"), function (x, na.rm = TRUE, center = NULL, ..., label.wavelength){
 
-   result <- rowVars (x = x@data$spc, center = center, ..., na.rm = na.rm)
+   result <- rowVars (x = x@data$spc, na.rm = na.rm, center = center, ...)
 
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
          result <- t (result)
@@ -608,9 +608,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- rowWeightedMeans.hyperSpec <- function (..., na.rm = TRUE, label.wavelength){
+ rowWeightedMeans.hyperSpec <- function (x, w = NULL, na.rm = TRUE, ..., label.wavelength){
 
-   result <- rowWeightedMeans (..., na.rm = na.rm, x = x@data$spc)
+   result <- rowWeightedMeans (x = x@data$spc, w = w, na.rm = na.rm, ...)
 
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
          result <- t (result)
@@ -625,9 +625,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- rowWeightedMedians.hyperSpec <- function (..., na.rm = TRUE, label.wavelength){
+ rowWeightedMedians.hyperSpec <- function (x, w = NULL, na.rm = TRUE, ..., label.wavelength){
 
-   result <- rowWeightedMedians (..., na.rm = na.rm, x = x@data$spc)
+   result <- rowWeightedMedians (x = x@data$spc, w = w, na.rm = na.rm, ...)
 
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
          result <- t (result)
@@ -642,9 +642,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- rowAvgsPerColSet.hyperSpec <- function (..., na.rm = TRUE, label.wavelength){
+ rowAvgsPerColSet.hyperSpec <- function (X, W = NULL, S, FUN = rowMeans, ..., na.rm = TRUE, label.wavelength, tFUN = FALSE){
 
-   result <- rowAvgsPerColSet (..., na.rm = na.rm, x = x@data$spc)
+   result <- rowAvgsPerColSet (X = X, W = W, S = S, FUN = FUN, ..., na.rm = na.rm, tFUN = tFUN, x = x@data$spc)
 
    if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
          result <- t (result)
@@ -659,9 +659,9 @@ rowAnys (x = x@data$spc, na.rm = na.rm, ...)
 
 ##' @rdname matrixStats
 ##' @export
- colAvgsPerRowSet.hyperSpec <- function (..., na.rm = TRUE, label.spc){
+ colAvgsPerRowSet.hyperSpec <- function (X, W = NULL, S, FUN = colMeans, tFUN = FALSE, ..., na.rm = TRUE, label.spc){
 
-   result <- colAvgsPerRowSet (..., na.rm = na.rm, x = x@data$spc)
+   result <- colAvgsPerRowSet (X = X, W = W, S = S, FUN = FUN, tFUN = tFUN, ..., na.rm = na.rm, x = x@data$spc)
 
    if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
        result <- t (result)

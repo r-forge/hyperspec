@@ -68,8 +68,113 @@ setMethod ("rowMads", signature = signature (x = "hyperSpec", centers = "missing
   colCollapse (fluNA, 1 : 6)
 }
 
+# ##' @rdname matrixStats
+# ##' @export
+# colAlls.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+#   colAlls (x = x@data$spc, value = value, na.rm = na.rm, ...)
+# } 
+# 
+# .test (colAlls.hyperSpec) <- function (){
+#   colAlls (fluNA)
+# }
+# 
+# ##' @rdname matrixStats
+# ##' @export
+# colAnys.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+#   colAnys (x = x@data$spc, value = value, na.rm = na.rm, ...)
+# } 
+# 
+# .test (colAnys.hyperSpec) <- function (){
+#   colAnys (fluNA)
+# }
+# 
+# ##' @rdname matrixStats
+# ##' @export
+# rowAlls.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+#   rowAlls (x = x@data$spc, value = value, na.rm = na.rm, ...)
+# } 
+# 
+# .test (rowAlls.hyperSpec) <- function (){
+#   rowAlls (fluNA)
+# }
+# 
+# ##' @rdname matrixStats
+# ##' @export
+# rowAnys.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ...){
+#   rowAnys (x = x@data$spc, value = value, na.rm = na.rm, ...)
+# } 
+# 
+# .test (rowAnys.hyperSpec) <- function (){
+#   rowAnys (fluNA)
+# }
+# 
+# ##' @rdname matrixStats
+# ##' @export
+# colCounts.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ..., label.spc){
+#   
+#   result <- colCounts (x = x@data$spc, value = value, na.rm = na.rm, ...)
+#   
+#   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+#     result <- t (result)
+#   
+#   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+#   
+# } 
+# 
+# .test (colCounts.hyperSpec) <- function (){
+#   colCounts (fluNA)
+# }
+# 
+# ##' @rdname matrixStats
+# ##' @export
+# rowCounts.hyperSpec <- function (x, value = TRUE, na.rm = TRUE, ..., label.wavelength){
+#   
+#   result <- rowCounts (x = x@data$spc, value = value, na.rm = na.rm, ...)
+#   
+#   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+#     result <- t (result)
+#   
+#   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+#   
+# } 
+# 
+# .test (rowCounts.hyperSpec) <- function (){
+#   rowCounts (fluNA)
+# }
 
+# ##' @rdname matrixStats
+# ##' @export
+# colCollapse.hyperSpec <- function (x, idxs, ..., na.rm = TRUE, label.spc){
+#   
+#   result <- colCollapse (x = x@data$spc, idxs = idxs, ..., na.rm = na.rm)
+#   
+#   if (is.matrix (result) && ncol (result) != nwl (x) && nrow (result) == nwl (x))
+#     result <- t (result)
+#   
+#   decomposition (x, result, scores = FALSE, label.spc = label.spc)
+#   
+# } 
+# 
+# .test (colCollapse.hyperSpec) <- function (){
+#   colCollapse (fluNA)
+# }
 
+# ##' @rdname matrixStats
+# ##' @export
+# rowCollapse.hyperSpec <- function (x, idxs, ..., na.rm = TRUE, label.wavelength){
+#   
+#   result <- rowCollapse (x = x@data$spc, idxs = idxs, ..., na.rm = na.rm)
+#   
+#   if (is.matrix (result) && nrow (result) != nrow (x) && ncol (result) == nrow (x))
+#     result <- t (result)
+#   
+#   decomposition (x, result, scores = TRUE, label.wavelength = label.wavelength)
+#   
+# } 
+# 
+# .test (rowCollapse.hyperSpec) <- function (){
+#   rowCollapse (fluNA)
+# }
 # test(colCollapse)   **ERROR**      0 2014-05-31 22:58:51         
 # test(rowCollapse)   **ERROR**      0 2014-05-31 22:58:51         
 # test(colTabulates)  **ERROR**      0 2014-05-31 22:58:51         
