@@ -14,7 +14,7 @@
 % \VignetteIndexEntry{hyperSpec plotting functions}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
-% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2, playwith, latticist}
+% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2, playwith}
 
 \newcommand{\plottab}[2]{
 \vspace{1ex}\tabularnewline
@@ -64,7 +64,7 @@ for (p in required.pkgs [! required.pkgs %in% c("latticeExtra", "deldir")])
   check.req.pkg (p, donothing = "")
 @
 \end{labeling}
-In addition \Rpackage{tripack}, \Rpackage{playwith}, and \Rpackage{latticist} are mentioned, but not
+In addition \Rpackage{tripack} and  \Rpackage{playwith} are mentioned, but not
 used in this vignette.
 }
 \section*{Preliminary Calculations}
@@ -864,9 +864,7 @@ of the plot directly. Note that the returned indices correspond to the plotted o
 \subsection{Interactively changing graphics}
 \label{sec:inter-chang-graph}
 
-\phy's lattice functions work with \Rpackage{playwith}\Sexpr{cite.pkg("playwith")} and
-\Rpackage{latticist} \Sexpr{cite.pkg("latticist")}. These packages allow easy customization of the
-plots and also identification of points.
+\phy's lattice functions work with \Rpackage{playwith}\Sexpr{cite.pkg("playwith")} which allows easy customization of the plots and also identification of points.
 
 \bibliographystyle{unsrtnat}
 \bibliography{plotting-pkg}
@@ -874,7 +872,7 @@ plots and also identification of points.
 \section*{Session Info}
 \begin{footnotesize}
 <<bib, echo = FALSE>>=
-make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith", "latticist", "plotrix", "deldir", "tripack"), 
+make.bib (c("latticeExtra", "rgl", "ggplot2", "playwith",  "plotrix", "deldir", "tripack"), 
           file = "plotting-pkg.bib")
 print (as.matrix(Sys.info()))
 <<cleanup>>
