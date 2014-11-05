@@ -186,8 +186,8 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 			fsampin  = readBin       (raw.data [259 : 260], "integer", 1, 2, signed = FALSE),
 			ffactor  = readBin       (raw.data [261 : 264], "numeric", 1, 4                ),
 			fmethod  = raw.split.nul (raw.data [265 : 312]),
-			fzinc    = readBin       (raw.data [313 : 316], "numeric", 1, 4), 
-      fwplanes = readBin       (raw.data [317 : 320], "integer", 1, 4), #, signed = FALSE),
+			fzinc    = readBin       (raw.data [313 : 316], "numeric", 1, 4), #, signed = FALSE),
+			fwplanes = readBin       (raw.data [317 : 320], "integer", 1, 4), #, signed = FALSE),
 			fwinc    = readBin       (raw.data [321 : 324], "numeric", 1, 4                ),
 			fwtype   = readBin       (raw.data [      325], "integer", 1, 1, signed = TRUE ),
 			## 187 bytes reserved

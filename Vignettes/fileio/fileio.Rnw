@@ -447,7 +447,7 @@ Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI fi
 
 Thermo Galactic's .spc file format\cite{Galactic1997} can be imported by \Rfunction{read.spc}. 
 
-A variety of sub-formats exists. \phy's import\Rfunction{read.spc} function does \emph{not} support
+A variety of sub-formats exists. \phy's import function \Rfunction{read.spc} does \emph{not} support
 the old file format that was used before 1996. In addition, no test data with \emph{w planes} was
 available --- thus the import of such files could not be tested. If you come across such files,
 please contact the package maintainer (\mailme).
@@ -813,13 +813,22 @@ rm (spc)
 \index{Raman!Witec!ASCII} 
 \index{Raman!Witec!Save ASCII X, Save ASCII Y}
 \index{Raman!Witec!Export Table}
+\index{Raman!Witec!spc}
+\index{spc!Witec}
 
-In the Witec project software, export the spectra as ASCII X and Y files (Save ASCII X and Save
-ASCII Y) . These can be read by \Rfunction{scan.dat.Witec}:
+The Witec project software supports exporting spectra as Thermo Galactic \texttt{.spc} files.  
+<<witec-spc>>=
+read.spc ("spc/Witec-timeseries.spc")
+@
+\texttt{.spc} is in general the recommended format for \phy import, but this export option is not supported for imaging data. 
+
+Imaging data can be exported as ASCII X and Y files (Save ASCII X and Save
+ASCII Y). These can be read by \Rfunction{scan.dat.Witec}:
 
 <<witec-dat>>=
-scan.dat.Witec ("txt.Witec/WitecExample-x.dat", points.per.line = 10, lines.per.image = 10)
+scan.dat.Witec (filex = "txt.Witec/WitecExample-x.dat", points.per.line = 10, lines.per.image = 10)
 @
+Note that the Y data files also contain a wavelength information, but (at least Witec Project 2.10) this information is always wavelength in nm, not Raman shift in wavenumbers: this is provided by the X data file only.
 
 Another option is Witec's txt table ASCII export (Export $\rightarrow$ Table), which produces ASCII files with each row corresponding to
 one wavelength. Such files can be read with \Rfunction{scan.txt.Witec}:

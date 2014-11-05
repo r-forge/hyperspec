@@ -1,4 +1,4 @@
-﻿| Type   | Name                  | Manufacturer      | Spectroscopy     | Function             | Link                 | Notes                                                  |
+| Type   | Name                  | Manufacturer      | Spectroscopy     | Function             | Link                 | Notes                                                  |
 | ASCII  | ASCII long            |                   |                  | read.txt.long        | read.txt.long        |                                                        |
 | ASCII  | ASCII wide            |                   |                  | read.txt.wide        | read.txt.wide        |                                                        |
 | ASCII  | ASCII wide            | Horiba Jobin Yvon |                  | read.txt.wide        | read.txt.Horiba      | e.\,g. LabRAM spectrometers                            |
@@ -22,5 +22,6 @@
 | binary | spc                   | Kaiser            | Raman Map        | read.spc.KaiserMap   | read.spc.KaiserMap   | Reads multiple files                                   |
 | binary | spc                   | Kaiser            | Raman            | read.spc             | read.spc             | Reads multiple files                                   |
 | binary | spc                   | Renishaw          | Raman            | read.spc             | scan.txt.Renishaw    | \emph{Not} recommended, see discussion of ASCII files. |
+| binary | spc                   | Witec             | Raman            | read.spc             | read.spc             | spc export not available for images                    |
 | binary | array                 |                   |                  | -                    | new                  |                                                        |
 | binary | matrix                |                   |                  | -                    | new                  |                                                        |
