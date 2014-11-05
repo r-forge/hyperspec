@@ -14,7 +14,7 @@
 % \VignetteIndexEntry{hyperSpec plotting functions}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
-% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2, playwith}
+% \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2}
 
 \newcommand{\plottab}[2]{
 \vspace{1ex}\tabularnewline
@@ -64,7 +64,7 @@ for (p in required.pkgs [! required.pkgs %in% c("latticeExtra", "deldir")])
   check.req.pkg (p, donothing = "")
 @
 \end{labeling}
-In addition \Rpackage{tripack}, \Rpackage{playwith}, and \Rpackage{latticist} are mentioned, but not
+In addition \Rpackage{tripack}, and \Rpackage{latticist} are mentioned, but not
 used in this vignette.
 }
 \section*{Preliminary Calculations}
@@ -781,7 +781,7 @@ geom_ribbon (aes (ymin = mean + sd,
 @
 Note that \Rfunction{qpotspc} specifies aesthetics \texttt{y = spc} and \texttt{groups = .rownames}, which do not have corresponding columns in the \texttt{data.frame} returned by \Rfunction{as.t.df}. These aesthetics must therefore be set manually in the aesthetics definition in \Rfunction{geom\_ribbon} (or any other \Rfunction{geom\_} that uses \Rfunction{as.t.df}). Otherwise, errors occur that object \texttt{spc} (and/or \texttt{.rownames}) cannot be found.
 \\\plottab{Cut spectra with \Rpackage{ggplot2}}{ggplotspccut} %
-Cut axes can be simulated by faceting. A factor is needed that indicates the respective ranges:
+Cut axes can be implemented by faceting:
 <<ggplotspccut, eval = FALSE>>=
 qplotspc (paracetamol / 1e4, 
           wl.range = c( min ~ 1800, 2800 ~ max)) +
@@ -874,11 +874,6 @@ grid.locator ()
 
 \Rfunction{identify} (or \Rfunction{panel.identify} for lattice graphics) allows to identify points
 of the plot directly. Note that the returned indices correspond to the plotted object.
-
-\subsection{Interactively changing graphics}
-\label{sec:inter-chang-graph}
-
-\phy's lattice functions work with \Rpackage{playwith}\Sexpr{cite.pkg("playwith")} which allows easy customization of the plots and also identification of points.
 
 \bibliographystyle{unsrtnat}
 \bibliography{plotting-pkg}
