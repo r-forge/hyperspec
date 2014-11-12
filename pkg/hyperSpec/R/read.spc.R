@@ -157,7 +157,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 	## NEW.MSB = 76 not supported (neither by many Grams software according to spc doc)
 	## OLD     = 77 not supported (replaced by new format in 1996)
 	if (raw.data [2] != 75)  
-		stop ("Wrong spc file format version.\n",
+		stop ("Wrong spc file format version (or no spc file at all).\n",
 				"Only 'new' spc files (1996 file format) with LSB word order are supported.") 
 	
 	hdr <- list (ftflgs   = readBin          (raw.data [        1], "integer", 1, 1, signed = FALSE),
