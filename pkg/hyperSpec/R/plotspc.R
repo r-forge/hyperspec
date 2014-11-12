@@ -343,7 +343,7 @@ plotspc <- function  (object,
 
     ## y-axis labels & ticks
     if (bty %in% c("o", "l", "c", "u", "y")){
-      axis.args$y <- modifyList (axis.args [! names (axis.args) %in% c ("x", "y")],
+      axis.args$y <- modifyList (axis.args [! names (axis.args) %in% c ("x", "y", "main", "sub")],
                                  axis.args$y)
 
       ## default for stacked plots is marking the groups
@@ -365,13 +365,18 @@ plotspc <- function  (object,
 
     ## Title: axis labels ---------------------------------------------------------------------------
 
-    tmp <- title.args [! names (title.args) %in% c ("x","y", "ylab")]
+    tmp <- title.args [! names (title.args) %in% c ("x","y", "ylab", "main", "sub")]
     tmp <- modifyList (tmp, as.list (title.args$x))
     tmp <- modifyList (list (xlab = I(object@label$.wavelength), line = 2.5), tmp)
     do.call (title, tmp)
     
-    tmp <- title.args [! names (title.args) %in% c ("x","y", "xlab")]
+    tmp <- title.args [! names (title.args) %in% c ("x","y", "xlab", "main", "sub")]
     tmp <- modifyList (tmp, as.list (title.args$y))
+    tmp <- modifyList (list (ylab = I(object@label$spc)), tmp)
+    do.call (title, tmp)
+  
+    tmp <- title.args [! names (title.args) %in% c ("x","y", "xlab", "ylab")]
+    tmp <- modifyList (tmp, as.list (title.args [c ("main", "sub")]))
     tmp <- modifyList (list (ylab = I(object@label$spc)), tmp)
     do.call (title, tmp)
   }
