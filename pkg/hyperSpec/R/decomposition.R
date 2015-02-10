@@ -90,8 +90,8 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
     spc <- match ("spc", colnames(object@data))
     
     ## apply changes type of retained columns to character!!!
-    ## must be done in a loop one column after the other otherwise a matrix in a column
-    ## (e.g. for the independent variate of PLS) will cause an error 
+    ## must be done in a loop one column after the other otherwise a matrix or a list in a column
+    ## (e.g. for the independent variate of PLS, POSIXlt) will cause an error 
 
     cols <- rep (TRUE, ncol (object@data)) # columns to keep
 
@@ -146,10 +146,7 @@ decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
   ## check loadings-like
 
   tmp <- flu [1, c ("spc"),]
-  tmp@label <- tmp@label [c (".wavelength", "spc")]
-  tmp@label$spc <- "spc"
-  # TODO: update after extract label bugfix
-  
+  tmp@label$spc <- "spc"  
   loadings <- decomposition (flu, flu [[1,,]])
   checkEquals (loadings, tmp)
   
