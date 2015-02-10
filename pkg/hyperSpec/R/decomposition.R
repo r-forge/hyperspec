@@ -41,7 +41,6 @@
 ##' 
 ##' Columns with different values across the rows will be set to \code{NA} if \code{retain.columns}
 ##' is \code{TRUE}, otherwise they will be deleted.
-##' @param short,user,date ignored: logbook is deprecated
 ##' @param ... ignored.
 ##' @return A \code{hyperSpec} object, updated according to \code{x}
 ##' @author C. Beleites
@@ -65,7 +64,6 @@
 decomposition <- function (object, x, wavelength = seq_len (ncol (x)),
                            label.wavelength, label.spc,
                            scores = TRUE, retain.columns = FALSE,
-                           short = "decomposition", user = NULL, date = NULL,
                            ...){
 #  message ("decomposition will be deprecated: please change your code to use `loadings` or `scores` instead.")
   
