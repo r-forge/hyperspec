@@ -12,9 +12,11 @@
   if (! missing (i))
     x@data <- x@data[i,, drop = FALSE]
 
-  if (!missing (j))
+  if (!missing (j)){
     x@data <- x@data[, j, drop = FALSE]
-
+    x@label <- x@label [c (".wavelength", colnames (x@data))]
+  }
+    
   if (!missing (l)) {
     if (is.null (x@data$spc))
       warning ("Selected columns do not contain specta. l ignored.")
