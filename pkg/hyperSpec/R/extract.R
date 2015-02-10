@@ -113,7 +113,6 @@
 ##'   treated as column indices for the spectral matrix. Otherwise, the numbers
 ##'   in \code{l} are treated as wavelengths and the corresponding column
 ##'   indices are looked up first via \code{\link{wl2i}}.
-##' @param short,user,date handed to \code{\link{logentry}}.
 ##' @param drop For \code{[[}: drop unnecessary dimensions, see
 ##'   \code{\link[base]{drop}} and \code{\link[base]{Extract}}. Ignored for
 ##'   \code{[}, as otherwise invalid \code{hyperSpec} objects might result.
@@ -219,9 +218,7 @@ setMethod ("[", signature = signature (x = "hyperSpec"),
     x@wavelength <- numeric (0)
   }
 
-  .logentry (x, short = short,
-             long = .call.list (match.call (call = sys.call (-1))),
-             date = date, user = user)
+  x
 })
 
 ##' @rdname extractreplace
