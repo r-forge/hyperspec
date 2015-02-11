@@ -1,12 +1,10 @@
 
-.subset <- function (x, ..., short = "subset", date = NULL, user = NULL){
+.subset <- function (x, ...){
   validObject (x)
   x@data <- subset (x@data, ...)
   validObject (x)
-
-  long <- match.call (call = sys.call(sys.parent(1)))
-  long <- as.character (long) [-(1:2)]
-  .logentry (x, long = long, short = short, date = date, user = user)  
+  
+	x
 }
 
 
