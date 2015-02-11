@@ -6,8 +6,7 @@
 \alias{merge,hyperSpec,hyperSpec-method}
 \title{Merge hyperSpec objects}
 \usage{
-\S4method{merge}{hyperSpec,hyperSpec}(x, y, ..., short = "merge",
-  user = NULL, date = NULL)
+\S4method{merge}{hyperSpec,hyperSpec}(x, y, ...)
 }
 \arguments{
 \item{x}{a hyperSpec object}
@@ -15,8 +14,6 @@
 \item{y}{a hyperSpec object}
 
 \item{...}{handed to \code{\link[base]{merge.data.frame}}}
-
-\item{short,user,date}{handed to \code{\link{logentry}}}
 }
 \description{
 Merges two hyperSpec objects and \code{\link[base]{cbind}}s their spectra
@@ -34,10 +31,6 @@ tmp <- merge (chondro [1:10,, 610], chondro [5:15,, 610],
               by = c("x", "y"), all = TRUE)
 tmp$.
 wl (tmp)
-\dontshow{
- stopifnot (nrow (merge (chondro [1:10], chondro [5:15], all = TRUE)) == 15)
- stopifnot (nrow (merge (chondro [1:10], chondro [5:15])) == 6)
-}
 
 ## remove duplicated wavelengths:
 approxfun <- function (y, wl, new.wl){

@@ -7,8 +7,7 @@
 import Raman measurements from Renishaw (possibly compressed) .txt file.}
 \usage{
 scan.txt.Renishaw(file = stop("file is required"), data = "xyspc",
-  nlines = 0, nspc = NULL, short = "scan.txt.Renishaw", user = NULL,
-  date = NULL)
+  nlines = 0, nspc = NULL)
 
 scan.zip.Renishaw(file = stop("filename is required"),
   txt.file = sub("[.]zip", ".txt", basename(file)), ...)
@@ -27,8 +26,6 @@ details.}
   values start at \code{1e6}.}
 
 \item{nspc}{number of spectra in the file}
-
-\item{short,user,date}{deprecated}
 
 \item{txt.file}{name of the .txt file in the .zip archive. Defaults to zip
 file's name with suffix .txt instead of .zip}

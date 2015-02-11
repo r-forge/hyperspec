@@ -62,31 +62,29 @@ setMethod ("Math2", signature (x = "hyperSpec"),
 ##' @rdname math
 ##' @param ... ignored
 ##' @param base base of logarithm
-##' @param short,user,date handed to \code{\link[hyperSpec]{logentry}}
 ##' @export
 ##' @aliases log log,hyperSpec-method
 setMethod ("log", signature (x = "hyperSpec"),
-           function (x, base = exp (1), ...,
-                     short = "log", user = NULL, date = NULL){
-             validObject (x)
-
-             x [[]] <-  log (x[[]], base = base)
-             .logentry (x, short = "log", long = list (base = base))
-           }
-           )
+					 function (x, base = exp (1), ...){
+					 	validObject (x)
+					 	
+					 	x [[]] <-  log (x[[]], base = base)
+					 	x
+					 }
+)
 
 ##' @rdname math
 ##' @export
 setMethod ("Math", signature (x = "hyperSpec"),
-           function (x){
-             validObject (x)
-
-             if (grepl ("^cum", .Generic) || grepl ("gamma$", .Generic))
-               warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
-
-             x [[]] <- callGeneric (x[[]])
-             .logentry (x, short = .Generic, long = list())
-           }
-           )
+					 function (x){
+					 	validObject (x)
+					 	
+					 	if (grepl ("^cum", .Generic) || grepl ("gamma$", .Generic))
+					 		warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
+					 	
+					 	x [[]] <- callGeneric (x[[]])
+					 	x)
+					 }
+)
 
 

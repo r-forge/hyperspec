@@ -9,7 +9,7 @@
 \code{\link[base]{sweep}} for \code{hyperSpec} objects.}
 \usage{
 \S4method{sweep}{hyperSpec}(x, MARGIN, STATS, FUN = "-",
-  check.margin = TRUE, ..., short = "sweep", user = NULL, date = NULL)
+  check.margin = TRUE, ...)
 }
 \arguments{
 \item{x}{a \code{hyperSpec object.}}
@@ -33,8 +33,6 @@ dimensions of \code{STATS} do not match the specified dimensions of
 \emph{know} that dimensions match.}
 
 \item{...}{further arguments for \code{FUN}}
-
-\item{short,user,date}{handed over to \code{\link{logentry}}.}
 }
 \value{
 A \code{hyperSpec} object.

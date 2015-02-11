@@ -6,15 +6,12 @@
 Rearranges the \code{hyperSpec} object so that the wavelength vector is in increasing (or
 decreasing) order.}
 \usage{
-orderwl(x, na.last = TRUE, decreasing = FALSE, short = "orderwl",
-  date = NULL, user = NULL)
+orderwl(x, na.last = TRUE, decreasing = FALSE)
 }
 \arguments{
 \item{x}{The \code{hyperSpec} object.}
 
 \item{na.last,decreasing}{Handed to \code{\link[base]{order}}.}
-
-\item{short,date,user}{Handed to \code{\link{logentry}}.}
 }
 \value{
 A \code{hyperSpec} object.

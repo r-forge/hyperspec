@@ -6,15 +6,12 @@
 \alias{subset,hyperSpec-method}
 \title{subset}
 \usage{
-\S4method{subset}{hyperSpec}(x, ..., short = "subset", date = NULL,
-  user = NULL)
+\S4method{subset}{hyperSpec}(x, ...)
 }
 \arguments{
 \item{x}{hyperSpec object}
 
 \item{...}{handed to \code{\link[base]{subset}} (data.frame method)}
-
-\item{short,user,date}{passed to \code{\link[hyperSpec]{logentry}}}
 }
 \value{
 hyperSpec object containing the respective subset of spectra.

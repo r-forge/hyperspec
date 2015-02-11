@@ -8,7 +8,7 @@
 \usage{
 wl(x)
 
-wl (x, label=NULL, digits=6, short="wl<-", user = NULL, date = NULL) <- value
+wl (x, label=NULL, digits=6) <- value
 }
 \arguments{
 \item{x}{a \code{hyperSpec} object}
@@ -17,8 +17,6 @@ wl (x, label=NULL, digits=6, short="wl<-", user = NULL, date = NULL) <- value
 for details.}
 
 \item{digits}{handed to \code{\link[base]{signif}}. See details.}
-
-\item{short,user,date}{deprecated.}
 
 \item{value}{either a numeric containing the new wavelength vector, or a
 list with \code{value$wl} containing the new wavelength vector and

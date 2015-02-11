@@ -7,8 +7,7 @@ In order to reduce the spectral resolution and thus gain signal to noise
 ratio or to reduce the dimensionality of the spectral data set, the
 spectral resolution can be reduced.}
 \usage{
-spc.bin(spc, by = stop("reduction factor needed"), na.rm = TRUE, ...,
-  short = "spc.bin", user = NULL, date = NULL)
+spc.bin(spc, by = stop("reduction factor needed"), na.rm = TRUE, ...)
 }
 \arguments{
 \item{spc}{the \code{hyperSpec} object}
@@ -25,8 +24,6 @@ if \code{2}, the binning is done using \code{na.rm = FALSE}, and resulting \code
 corrected with \code{mean(\dots{}, na.rm = TRUE)}.}
 
 \item{...}{ignored}
-
-\item{short,user,date}{handed to \code{\link[hyperSpec]{logentry}}.}
 }
 \value{
 A \code{hyperSpec} object with \code{ceiling (nwl (spc) / by)} data points per spectrum.

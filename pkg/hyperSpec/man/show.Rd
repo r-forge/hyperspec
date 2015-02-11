@@ -15,13 +15,13 @@
 \code{as.character}.}
 \usage{
 \S4method{as.character}{hyperSpec}(x, digits = getOption("digits"),
-  range = TRUE, max.print = 5, shorten.to = c(2, 1), log = TRUE)
+  range = TRUE, max.print = 5, shorten.to = c(2, 1))
 
 \S4method{show}{hyperSpec}(object)
 
-\S4method{print}{hyperSpec}(x, log = FALSE, range = FALSE, ...)
+\S4method{print}{hyperSpec}(x, range = FALSE, ...)
 
-\S4method{summary}{hyperSpec}(object, log = TRUE, ...)
+\S4method{summary}{hyperSpec}(object, ...)
 }
 \arguments{
 \item{x}{a \code{hyperSpec} object}
@@ -36,8 +36,6 @@ last elements?}
 \item{shorten.to}{if a vector is longer than \code{max.print}, only the
 first \code{shorten.to[1]} and the last \code{shorten.to[2]} elements are
 printed}
-
-\item{log}{should the log be printed?}
 
 \item{object}{a \code{hyperSpec} object}
 
@@ -66,10 +64,7 @@ show (chondro)
 
 summary (chondro)
 
-print (chondro, log = TRUE)
 print (chondro, range = TRUE)
-
-logbook (chondro)
 }
 \seealso{
 \code{\link[base]{as.character}}

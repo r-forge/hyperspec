@@ -11,7 +11,7 @@ Take a sample of the specified size from the elements of x with or without
 replacement.}
 \usage{
 \S4method{sample}{hyperSpec}(x, size = nrow(x), replace = FALSE,
-  prob = NULL, short = "sample", user = NULL, date = NULL)
+  prob = NULL)
 
 isample(x, size = nrow(x), replace = FALSE, prob = NULL)
 
@@ -30,12 +30,6 @@ isample(x, size = nrow(x), replace = FALSE, prob = NULL)
 
 \item{prob}{A vector of probability weights for obtaining the elements of
 the vector being sampled.}
-
-\item{short}{date are handed to \code{\link{logentry}}}
-
-\item{user}{date are handed to \code{\link{logentry}}}
-
-\item{date}{are handed to \code{\link{logentry}}}
 
 \item{drop}{see \code{\link[base]{drop}}: by default, do not drop dimensions of the result}
 }

@@ -77,7 +77,7 @@ wl <- function (x){
 ##' 	wl (chondro) <- list (wl = 1e7 / (1e7/785 - wl (chondro)), label = expression (lambda / nm))
 ##' 	plot (chondro [1])
 ##' 
-"wl<-" <- function (x, label = NULL, digits = 6, short = "wl<-", user = NULL, date = NULL, value){
+"wl<-" <- function (x, label = NULL, digits = 6, value){
 
   chk.hy (x)
   validObject (x)

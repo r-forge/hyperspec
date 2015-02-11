@@ -4,8 +4,7 @@
 \alias{spc.NA.linapprox}
 \title{Impute missing data points}
 \usage{
-spc.NA.linapprox(spc, neighbours = 1, ..., short = "spc.NA.linapprox",
-  user = NULL, date = NULL)
+spc.NA.linapprox(spc, neighbours = 1, ...)
 }
 \arguments{
 \item{spc}{hyperSpec object with spectra matrix containing \code{NA}s}
@@ -13,8 +12,6 @@ spc.NA.linapprox(spc, neighbours = 1, ..., short = "spc.NA.linapprox",
 \item{neighbours}{how many neighbour data points should be used to fit the line}
 
 \item{...}{ignored}
-
-\item{short,user,date}{handed to \code{\link{logentry}}}
 }
 \value{
 hyperSpec object

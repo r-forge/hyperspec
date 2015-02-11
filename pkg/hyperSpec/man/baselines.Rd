@@ -6,12 +6,10 @@
 \title{Polynomial Baseline Fitting
 These functions fit polynomal baselines.}
 \usage{
-spc.fit.poly(fit.to, apply.to = NULL, poly.order = 1,
-  short = "spc.fit.poly", user = NULL, date = NULL)
+spc.fit.poly(fit.to, apply.to = NULL, poly.order = 1)
 
 spc.fit.poly.below(fit.to, apply.to = fit.to, poly.order = 1,
-  npts.min = NULL, noise = 0, short = "spc.fit.poly.below", user = NULL,
-  date = NULL)
+  npts.min = NULL, noise = 0)
 }
 \arguments{
 \item{fit.to}{\code{hyperSpec} object on which the baselines are fitted}
@@ -21,8 +19,6 @@ If \code{NULL}, a \code{hyperSpec} object containing the polynomial
 coefficients rather than evaluted baselines is returned.}
 
 \item{poly.order}{order of the polynomial to be used}
-
-\item{short,user,date}{handed to \code{logentry}}
 
 \item{npts.min}{minmal number of points used for fitting the polynomial}
 

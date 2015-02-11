@@ -10,8 +10,7 @@
 \code{split} divides the \code{hyperSpec} object into a list of
 \code{hyperSpec} objects according to the groups given by \code{f}.}
 \usage{
-\S4method{split}{hyperSpec}(x, f, drop = TRUE, short = NULL, user = NULL,
-  date = NULL)
+\S4method{split}{hyperSpec}(x, f, drop = TRUE)
 }
 \arguments{
 \item{x}{the \code{hyperSpec} object}
@@ -21,8 +20,6 @@ into a factor by \code{as.factor})}
 
 \item{drop}{if \code{TRUE}, levels of\code{f} that do not occur are
 dropped.}
-
-\item{short,user,date}{handed to \code{\link{logentry}}}
 }
 \value{
 A list of \code{hyperSpec} objects.

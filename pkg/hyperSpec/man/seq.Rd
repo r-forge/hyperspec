@@ -7,8 +7,7 @@
 \title{Sequence generation along spectra or wavelengths
 This function generates sequences along the spectra (rows) or wavelengths of hyperSpec objects.}
 \usage{
-\method{seq}{hyperSpec}(x, from = 1, to = nrow(x), ..., index = FALSE,
-  short = "seq", user = NULL, date = NULL)
+\method{seq}{hyperSpec}(x, from = 1, to = nrow(x), ..., index = FALSE)
 }
 \arguments{
 \item{x}{the hyperSpec object}
@@ -18,8 +17,6 @@ This function generates sequences along the spectra (rows) or wavelengths of hyp
 \item{...}{arguments for \code{\link[base]{seq}}, namely \code{by}, \code{length.out}}
 
 \item{index}{should a vector with indices be returned rather than a hyperSpec object?}
-
-\item{short,user,date}{handed to \code{\link{logentry}}.}
 }
 \value{
 a numeric or hyperSpec object, depending on \code{index}.
