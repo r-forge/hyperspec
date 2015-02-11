@@ -14,7 +14,6 @@
 ##'   into a factor by \code{as.factor})
 ##' @param drop if \code{TRUE}, levels of\code{f} that do not occur are
 ##'   dropped.
-##' @param short,user,date handed to \code{\link{logentry}}
 ##' @return A list of \code{hyperSpec} objects.
 ##' @author C. Beleites
 ##' @seealso \code{\link[base]{split}}
@@ -36,8 +35,7 @@
 
 
 setMethod ("split", signature = signature (x = "hyperSpec"),
-           function (x, f, drop = TRUE, #...,
-                     short = NULL, user = NULL, date = NULL){
+           function (x, f, drop = TRUE){
   validObject (x)
 
   hyperlist <- split (seq (x, index = TRUE), f, drop)
