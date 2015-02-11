@@ -34,7 +34,6 @@ qplotspc <- function (x,
                       map.lineonly = FALSE){
   chk.hy (x)
   validObject (x)
-  require (ggplot2)
   
   ## cut away everything that isn't asked for _before_ transforming to data.frame
   if (nrow (x) > spc.nmax) {
@@ -105,7 +104,6 @@ qplotmap <- function (object, mapping = aes_string (x = "x", y = "y", fill = "sp
                       map.tileonly = FALSE){
   chk.hy (object)
   validObject (object)
-  require (ggplot2)
 
   if (nwl (object) > 1 & ! is.null (func))
     object <- do.call (apply, c (list (object, 1, func), func.args))
@@ -171,7 +169,6 @@ qplotc <- function (object, mapping = aes_string(x = "c", y = "spc"), ...,
                     map.pointonly = FALSE){
   chk.hy (object)
   validObject (object)
-  require (ggplot2)
 
   dots <- list (...)
 

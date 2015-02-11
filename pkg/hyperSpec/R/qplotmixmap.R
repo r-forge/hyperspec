@@ -7,9 +7,8 @@
 ##' @return invisible list with ggplot2 objects map and legend
 ##' @seealso \code{\link[hyperSpec]{qmixtile}}
 ##' @author Claudia Beleites
-##' @importFrom grid pushViewport
-##' @importFrom grid viewport
-##' @importFrom grid popViewport
+##' @importFrom grid pushViewport viewport popViewport grid.layout unit
+##' @import ggplot2
 ##' @export
 ##' @examples
 ##' chondro <- chondro - spc.fit.poly.below (chondro)
@@ -23,9 +22,8 @@
 ##'              purecol = c (colg = "red", Phe = "green", Lipid = "blue"))
 ##' 
 qplotmixmap <- function (object, ...){
-  require (ggplot2)
 
-  p <- qmixtile (object@data, ...) +
+	p <- qmixtile (object@data, ...) +
        coord_equal ()
   
   p <- p +
@@ -77,7 +75,6 @@ qmixtile <- function (object,
                       mapping = aes_string (x = "x", y = "y", fill = "spc"),
                       ...,
                       map.tileonly = FALSE) {
-  require (ggplot2)
 
   ## calculate fill colours
   fill <- colmix.rgb (object  [[as.character (mapping$fill)]], purecol, ...)
