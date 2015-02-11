@@ -1,11 +1,3 @@
-.make.fluNA <- function (){
-  fluNA <- flu
-  fluNA [[2,]] <- NA
-  fluNA [[,,406]] <- NA
-
-  fluNA
-}
-
 ##' Quinine Fluorescence Spectra
 ##' Fluorescence spectra of different dilutions of quinine forming a
 ##' calibration set.
@@ -27,4 +19,15 @@
 ##' 
 ##' plotc (flu)
 ##' 
+NULL
+
+.make.fluNA <- function (){
+	
+	fluNA <- hyperSpec::flu
+	fluNA [[2,]] <- NA
+	fluNA [[,,406]] <- NA
+	
+	fluNA
+}
+
 delayedAssign ("fluNA", .make.fluNA ())
