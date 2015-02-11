@@ -10,7 +10,7 @@ calibration set.}
   quinine concentrations between 0.05 mg/l and 0.30 mg/l.  Each spectrum
   consists of 181 data points in the range of 405 nm to 495 nm.}
 \description{
-See the vignette.
+See the vignette: \code{vignette ("flu", package = "hyperSpec")}
 }
 \examples{
 flu
@@ -18,8 +18,6 @@ flu
 plot (flu)
 
 plotc (flu)
-
-\dontrun{vignette ("flu", package = "hyperSpec")}
 }
 \author{
 M. Kammer and C. Beleites
