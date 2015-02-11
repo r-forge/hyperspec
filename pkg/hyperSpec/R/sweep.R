@@ -27,7 +27,6 @@
 ##'   \code{x}.  Set to \code{FALSE} for a small speed gain when you
 ##'   \emph{know} that dimensions match.
 ##' @param ... further arguments for \code{FUN}
-##' @param short,user,date handed over to \code{\link{logentry}}.
 ##' @return A \code{hyperSpec} object.
 ##' @author C. Beleites
 ##' @seealso \code{\link[base]{sweep}}
@@ -61,8 +60,7 @@
 ##' stopifnot (all (mm.corrected2 == mm.corrected))
 ##' 
 setMethod ("sweep", signature = signature (x = "hyperSpec"), function (x, MARGIN, STATS, FUN = "-",
-                                           check.margin = TRUE, ...,
-                                           short = "sweep", user = NULL, date = NULL){
+                                           check.margin = TRUE, ...){
   validObject (x)
 
   if (is (STATS, "hyperSpec")){
@@ -75,9 +73,5 @@ setMethod ("sweep", signature = signature (x = "hyperSpec"), function (x, MARGIN
   x@data$spc <- sweep (x = x@data$spc, MARGIN = MARGIN, STATS = STATS,
                        FUN = FUN, check.margin = check.margin, ...)
 
-  .logentry (x, short = short,
-             long = list (MARGIN = MARGIN, FUN = FUN, STATS = STATS,  FUN = FUN,
-                          check.margin = check.margin, ...),
-             date = date, user = user)
-                      
+  x
 })
