@@ -18,7 +18,7 @@ read.cytomat <- function (file, keys2data = FALSE, blocks = TRUE, drop.empty = T
   if (! require ("R.matlab"))
       stop ("package 'R.matlab' needed.")
   
-  tmp <- readMat(file)
+  tmp <- R.matlab::readMat(file)
   
   ## read spectra matrix
   spc <- tmp$C

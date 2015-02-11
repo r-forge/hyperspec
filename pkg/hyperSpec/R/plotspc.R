@@ -334,7 +334,7 @@ plotspc <- function  (object,
           cat ("hyperSpec will use its own replacement for plotrix' axis.break\n\n")
           break.fun <- .axis.break
         } else {
-          break.fun <- axis.break
+          break.fun <- plotrix::axis.break
         }
         for (i in cuts$cut)
           do.call (break.fun, c (list (axis = 1, breakpos = i), break.args))
