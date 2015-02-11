@@ -48,7 +48,7 @@ map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
   
   poly <- sel.poly (pch = pch, size = size, ...)
   
-  pts <- point.in.polygon (data$x, data$y, poly [, 1], poly [, 2]) 
+  pts <- sp::point.in.polygon (data$x, data$y, poly [, 1], poly [, 2]) 
 
   ind <- pts > 0
 
@@ -66,6 +66,7 @@ map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
 ##' @export
 ##' @keywords iplot
 ##' @rdname map-sel-poly
+##' @importFrom grid grid.lines grid.points
 sel.poly <- function (pch = 19, size = 0.3, ...){
   trellis.focus ()
   

@@ -8,6 +8,7 @@
 ##'   (i.e. in "npc" \link[grid]{unit}s)
 ##' @param warn should a warning be issued if no point is within the specified
 ##'   tolerance? See also details.
+##' @importFrom grid convertX convertY grid.locator grid.circle gpar 
 map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...,
                           tol = .02, warn = TRUE){
   chk.hy (object)
