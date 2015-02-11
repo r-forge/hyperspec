@@ -33,8 +33,7 @@
 ##' baselines <- spc.fit.poly(chondro[,, c (625 ~ 640, 1785 ~ 1800)], chondro)
 ##' plot(chondro - baselines, "spcprctl5")
 ##' 
-spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
-                          short = "spc.fit.poly", user = NULL, date = NULL){
+spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1){
   chk.hy (fit.to)
   if (! is.null (apply.to))
     chk.hy (apply.to)
@@ -57,10 +56,6 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
     x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
     apply.to@data$spc <- I (t (apply (p[[]], 1, function (p, x) {x %*% p}, x)))
     if (is.null (short)) short <- "spc.fit.poly: spectra" 
-    apply.to <- .logentry (apply.to, short = short,
-                           long = list (apply = match.call()$apply, poly.order = poly.order),
-                           user = user, date = date)
-
 
     .wl(apply.to) <- wl
     colnames (apply.to@data$spc) <- format (wl, digits = 4)
@@ -85,9 +80,7 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1,
 ##' plot(chondro - baselines, "spcprctl5")
 ##' 
 spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1,
-                                npts.min = NULL, noise = 0,
-                                short = "spc.fit.poly.below", user = NULL,
-                                date = NULL){
+                                npts.min = NULL, noise = 0){
   chk.hy (fit.to)
   if (! is.null (apply.to))
     chk.hy (apply.to)
@@ -129,10 +122,6 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1,
     colnames (fit.to@data$spc) <- paste ("x^", 0 : poly.order, sep="")
 
     validObject (fit.to)
-    .logentry (fit.to, short = short,
-               long = list (apply = NULL, poly.order = poly.order,
-                 npts.min = npts.min, noise = noise),
-               user = user, date = date)
   } else {
     x <- apply.to@wavelength
 
@@ -144,9 +133,5 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1,
     colnames (apply.to@data$spc) <- format (x, digits = 4)
 
     validObject (apply.to)
-    .logentry (apply.to, short = short,
-               long = list (apply = match.call()$apply, poly.order = poly.order,
-                 npts.min = npts.min, noise = noise),
-               user = user, date = date)
   }
 }
