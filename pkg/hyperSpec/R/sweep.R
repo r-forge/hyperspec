@@ -1,3 +1,20 @@
+.sweep <- function (x, MARGIN, STATS, FUN = "-",
+										check.margin = TRUE, ...){
+	validObject (x)
+	
+	if (is (STATS, "hyperSpec")){
+		validObject (STATS)
+		STATS <- STATS@data$spc
+	} else if (is (STATS, "function")) {
+		STATS <- apply (x, MARGIN, STATS)@data$spc
+	}
+	
+	x@data$spc <- sweep (x = x@data$spc, MARGIN = MARGIN, STATS = STATS,
+											 FUN = FUN, check.margin = check.margin, ...)
+	
+	x
+}
+
 ##' Sweep Summary Statistic out of an hyperSpec Object
 ##' \code{\link[base]{sweep}} for \code{hyperSpec} objects.
 ##' 
@@ -59,19 +76,4 @@
 ##' ## checking
 ##' stopifnot (all (mm.corrected2 == mm.corrected))
 ##' 
-setMethod ("sweep", signature = signature (x = "hyperSpec"), function (x, MARGIN, STATS, FUN = "-",
-                                           check.margin = TRUE, ...){
-  validObject (x)
-
-  if (is (STATS, "hyperSpec")){
-    validObject (STATS)
-    STATS <- STATS@data$spc
-  } else if (is (STATS, "function")) {
-    STATS <- apply (x, MARGIN, STATS)@data$spc
-  }
-
-  x@data$spc <- sweep (x = x@data$spc, MARGIN = MARGIN, STATS = STATS,
-                       FUN = FUN, check.margin = check.margin, ...)
-
-  x
-})
+setMethod ("sweep", signature = signature (x = "hyperSpec"), .sweep)
