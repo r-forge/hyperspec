@@ -40,8 +40,6 @@ spc.bin <- function (spc, by = stop ("reduction factor needed"), na.rm = TRUE, .
   chk.hy (spc)
   validObject (spc)
 
-  long <- list (by = deparse (by), na.rm = na.rm)
-
   n <- ceiling (nwl (spc) / by)
 
   small <- nwl (spc) %% by

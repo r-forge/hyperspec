@@ -10,7 +10,6 @@
 ##' @export
 ##' @param ... hyperSpec objects to be collapsed into one object. Instead of giving several
 ##' arguments, a list with all objects to be collapsed may be given.
-##' @param short.log,short,user,date deprecated
 ##' @aliases collapse collapse.hyperSpec
 ##' @seealso \code{\link[base]{merge}} to merge hyperSpec objects that share wavelengths but contain different spectra,  \code{\link[base]{rbind}}, and  \code{\link[plyr]{rbind.fill}} for 
 ##' @return a hyperSpec object
@@ -30,7 +29,7 @@
 ##' collapse (a, b, c)
 ##' 
 
-collapse <- function (..., short.log = TRUE, short = "collapse", user = NULL, date = NULL){
+collapse <- function (...){
   dots <- list (...)
 
   ## accept also a list of hyperSpec objects
@@ -40,23 +39,6 @@ collapse <- function (..., short.log = TRUE, short = "collapse", user = NULL, da
   ## check the arguments
   lapply (dots, chk.hy)
   lapply (dots, validObject)
-
-  logs <- list()
-
-  ## prepare log ?
-  if (hy.getOption ("log")){
-
-    if (short.log)
-      logs <- paste ("hyperSpec [",
-                     unlist (lapply (dots, function (x) paste (dim (x), collapse = " x "))),
-                     "]", sep = "")
-    else
-      logs <- unlist (lapply (dots, function (x) paste (as.character (x, range = FALSE), "\n", collapse = "")))
-
-    logs <- list (short = short, long = logs, user = user, date = date)
-  } else {
-    logs <- NULL
-  }
 
   ## prepare new labels
   labels <- unlist (lapply (dots, slot, "label"))
@@ -68,8 +50,7 @@ collapse <- function (..., short.log = TRUE, short = "collapse", user = NULL, da
   wl <- as.numeric (colnames (dots$spc))
 
   ## make a new hyperSpec object
-  x <- new ("hyperSpec", wavelength = wl, data = dots, labels = labels,
-            log = logs)
+  x <- new ("hyperSpec", wavelength = wl, data = dots, labels = labels)
   
   x
 }

@@ -15,12 +15,11 @@ an interfaces to \code{cbind2} and \code{rbind2} because neither
 \code{\link[Matrix]{rBind}} and \code{\link[Matrix]{cBind}} nor S4 versions
 of \code{cbind} and \code{rbind} do work at the moment.}
 \usage{
-bind(direction = stop("direction ('c' or 'r') required"), ...,
-  short = "bind", user = NULL, date = NULL)
+bind(direction = stop("direction ('c' or 'r') required"), ...)
 
-cbind.hyperSpec(..., short = "cbind", deparse.level)
+cbind.hyperSpec(...)
 
-rbind.hyperSpec(..., short = "rbind", deparse.level)
+rbind.hyperSpec(...)
 
 \S4method{cbind2}{hyperSpec,hyperSpec}(x, y)
 
@@ -37,10 +36,6 @@ rbind.hyperSpec(..., short = "rbind", deparse.level)
 
 Alternatively, \emph{one} list of \code{hyperSpec} objects can be given to
   \code{bind}.}
-
-\item{short,user,date}{for the log}
-
-\item{deparse.level}{ignored.}
 
 \item{x,y}{\code{hyperSpec} objects}
 }

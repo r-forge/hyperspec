@@ -1,5 +1,4 @@
-.options <- list (log = FALSE,           # for .logentry
-                  debuglevel = 0L,      # for spc.identify, map.identify
+.options <- list (debuglevel = 0L,      # for spc.identify, map.identify
                   gc = FALSE            # frequent calling of gc in read.ENVI & initialize
                   )
 
@@ -12,7 +11,6 @@
 ##' \bold{Name} \tab \bold{Default Value (range)} \tab \bold{Description} \                      tab \bold{Used by}\cr
 ##' debuglevel \ tab 0 (1L 2L) \                   tab amount of debugging information produced \tab \code{\link{spc.identify}} \code{\link{map.identify}}\cr
 ##' gc \         tab FALSE \                       tab triggers frequent calling of gc () \      tab \code{\link{read.ENVI}}, \code{new ("hyperSpec")}\cr
-##' log \        tab FALSE \                       tab automatically create entries \            tab \code{\link{logbook}}\cr
 ##' }
 ##' 
 ##' \code{hy.setOptions} will discard any values that were given without a

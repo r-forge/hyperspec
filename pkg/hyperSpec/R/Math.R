@@ -54,8 +54,7 @@ setMethod ("Math2", signature (x = "hyperSpec"),
              
              x [[]] <- callGeneric (x[[]], digits)
              
-             .logentry (x, short = .Generic,
-                        long = list(if (exists ("digits")) digits = digits))
+             x
            }
            )
 
@@ -83,7 +82,7 @@ setMethod ("Math", signature (x = "hyperSpec"),
 					 		warning (paste ("Do you really want to use", .Generic, "on a hyperSpec object?"))
 					 	
 					 	x [[]] <- callGeneric (x[[]])
-					 	x)
+					 	x
 					 }
 )
 

@@ -45,6 +45,6 @@ software.  It may also serve as an example how to write wrapper functions for \c
 conveniently import specialized sets of .spc files.
 }
 \examples{
-## for examples, please see `vignette ("fileio")`.
+## for examples, please see `vignette ("fileio", package = "hyperSpec")`.
 }
 

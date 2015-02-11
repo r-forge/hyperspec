@@ -44,20 +44,17 @@
 
 ##' @rdname labels
 ##' @usage
-##' labels (object, which = NULL, ..., short = "labels<-", user = NULL, date = NULL) <- value
+##' labels (object, which = NULL, ...) <- value
 ##' 
 ##' @aliases labels<-,hyperSpec-method
 ##' @export "labels<-"
 ##' @param value the new label(s)
-##' @param short,user,date handed to \code{\link[hyperSpec]{logentry}}
 ##' @return  \code{labels<-} returns a \code{hyperSpec} object.
 ##' @examples
 ##' 
 ##' labels (flu, "c") <- expression ("/" ("c", "mg / l"))
 ##' 
-`labels<-` <- function (object, which = NULL, ...,
-                        short = "labels<-", user = NULL, date = NULL,
-                        value){
+`labels<-` <- function (object, which = NULL, ..., value){
   chk.hy (object)
   validObject (object)
 
@@ -77,8 +74,7 @@
   }
 
   validObject (object)
-  .logentry (object, short = short, long = list (which = which, value = value),
-             user = user, date = date)
+  object
 }
 
 

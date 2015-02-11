@@ -8,8 +8,7 @@
 Computes summary statistics for the spectra of a \code{hyperSpec} object.}
 \usage{
 \S4method{apply}{hyperSpec}(X, MARGIN, FUN, ..., label.wl = NULL,
-  label.spc = NULL, new.wavelength = NULL, short = "apply", long = NULL,
-  user = NULL, date = NULL)
+  label.spc = NULL, new.wavelength = NULL)
 }
 \arguments{
 \item{X,spc}{a \code{hyperSpec} object}
@@ -38,8 +37,6 @@ axes}
 \item{new.wavelength}{for \code{MARGIN = 2}: numeric vector or name of the
 argument in \dots{} that is to be used (character) as wavelength axis of
 the resulting object.}
-
-\item{short,long,user,date}{aguments passed to \code{logentry}}
 }
 \value{
 A \code{hyperSpec} object

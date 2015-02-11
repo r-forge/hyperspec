@@ -9,7 +9,7 @@
 \code{value} may be a list or vector of labels giving the new label for
 each of the entries specified by \code{which}.}
 \usage{
-labels (object, which = NULL, ..., short = "labels<-", user = NULL, date = NULL) <- value
+labels (object, which = NULL, ...) <- value
 
 \S4method{labels}{hyperSpec}(object, which = bquote(), drop = TRUE, ...,
   use.colnames = TRUE)
@@ -20,8 +20,6 @@ labels (object, which = NULL, ..., short = "labels<-", user = NULL, date = NULL)
 \item{which}{numeric or character to specify the label(s)}
 
 \item{...}{ignored}
-
-\item{short,user,date}{handed to \code{\link[hyperSpec]{logentry}}}
 
 \item{value}{the new label(s)}
 

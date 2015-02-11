@@ -5,14 +5,11 @@
 \alias{collapse.hyperSpec}
 \title{Collapse hyperSpec objects}
 \usage{
-collapse(..., short.log = TRUE, short = "collapse", user = NULL,
-  date = NULL)
+collapse(...)
 }
 \arguments{
 \item{...}{hyperSpec objects to be collapsed into one object. Instead of giving several
 arguments, a list with all objects to be collapsed may be given.}
-
-\item{short.log,short,user,date}{deprecated}
 }
 \value{
 a hyperSpec object

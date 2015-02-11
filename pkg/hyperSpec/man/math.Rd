@@ -43,8 +43,7 @@
 \usage{
 \S4method{Math2}{hyperSpec}(x, digits)
 
-\S4method{log}{hyperSpec}(x, base = exp(1), ..., short = "log",
-  user = NULL, date = NULL)
+\S4method{log}{hyperSpec}(x, base = exp(1), ...)
 
 \S4method{Math}{hyperSpec}(x)
 }
@@ -56,8 +55,6 @@
 \item{base}{base of logarithm}
 
 \item{...}{ignored}
-
-\item{short,user,date}{handed to \code{\link[hyperSpec]{logentry}}}
 }
 \value{
 a \code{hyperSpec} object

@@ -26,16 +26,6 @@ setReplaceMethod("[", signature = signature (x = "hyperSpec"),
                            value){
   validObject (x)
 
-  long <- list (i = if (missing (i)) "" else i ,
-                j = if (missing (j)) "" else j,
-                drop = drop,
-                ...,
-                value = if (is (value, "hyperSpec"))
-                           as.character (value)
-                        else
-                           .paste.row (value, val = TRUE)
-                )
-
   if (missing (i)) i <- row.seq (x)
   if (missing (j)) j <- col.seq (x)
 
@@ -90,14 +80,7 @@ setReplaceMethod ("[[", signature = signature (x = "hyperSpec"),
                             ..., value){
   validObject (x)
 
-  long <- list (i = if (missing (i)) "" else i ,
-                l = if (missing (l)) "" else l,
-                wl.index = wl.index,
-                ...,
-                value = if (is (value, "hyperSpec")) as.character (value)
-                else .paste.row (value, val = TRUE)
-                )
-  
+ 
   if (is (value, "hyperSpec")){
     validObject (value)
     value <- value@data$spc

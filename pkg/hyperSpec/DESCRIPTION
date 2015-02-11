@@ -79,8 +79,6 @@ Collate:
     'labels.R'
     'plotmap.R'
     'levelplot.R'
-    'logbook.R'
-    'logentry.R'
     'makeraster.R'
     'map.identify.R'
     'map.sel.poly.R'

@@ -4,32 +4,24 @@
 \alias{read.ENVI}
 \alias{read.ENVI.Nicolet}
 \title{Nicolet uses some more keywords in their header file.
-\code{read.ENVI.Nicolet} therefore appends "description", "z plot titles",
-and "pixel size" to \code{keys.hdr2log} before calling \code{read.ENVI}.
-They are then interpreted as follows:
+They are interpreted as follows:
 \tabular{ll}{
 description   \tab giving the position of the first spectrum \cr
 z plot titles \tab wavelength and intensity axis units, comma separated \cr
 pixel size    \tab interpreted as x and y step size
-}}
+}
+These parameters can be overwritten by giving a list with the respective
+elements in parameter \code{header}.}
 \usage{
-read.ENVI.Nicolet(..., x = NA, y = NA, log = list(),
-  keys.hdr2log = FALSE, nicolet.correction = FALSE)
+read.ENVI.Nicolet(file = stop("read.ENVI: file name needed"),
+  headerfile = NULL, header = list(), ..., x = NA, y = NA,
+  nicolet.correction = FALSE)
 
 read.ENVI(file = stop("read.ENVI: file name needed"), headerfile = NULL,
-  header = list(), keys.hdr2data = FALSE, keys.hdr2log = FALSE, x = 0:1,
-  y = x, wavelength = NULL, label = list(), log = list())
+  header = list(), keys.hdr2data = FALSE, x = 0:1, y = x,
+  wavelength = NULL, label = list())
 }
 \arguments{
-\item{...}{handed to \code{read.ENVI}}
-
-\item{x,y}{vectors of form c(offset, step size) for the position vectors,
-see details.}
-
-\item{keys.hdr2log}{deprecated}
-
-\item{nicolet.correction}{see details}
-
 \item{file}{complete name of the binary file}
 
 \item{headerfile}{name of the ASCII header file. If \code{NULL}, the name
@@ -38,13 +30,20 @@ basename but different suffix as \code{file}.}
 
 \item{header}{list with the respective information, see details.}
 
+\item{...}{handed to \code{read.ENVI}}
+
+\item{x,y}{vectors of form c(offset, step size) for the position vectors,
+see details.}
+
+\item{nicolet.correction}{see details}
+
 \item{keys.hdr2data}{determines which fields of the header file should be put into the extra
 data. Defaults to none.
 
 To specify certain entries, give character vectors containing the lowercase
   names of the header file entries.}
 
-\item{wavelength,label,log}{lists that overwrite the respective information
+\item{wavelength,label}{lists that overwrite the respective information
 from the ENVI header file. These data is then handed to
 \code{\link[hyperSpec]{initialize}}}
 }

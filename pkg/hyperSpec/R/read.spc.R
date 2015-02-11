@@ -642,19 +642,9 @@ read.spc <- function (filename,
 	tmp <- .spc.log (f, hdr$flogoff,
 			log.bin, log.disk, log.txt,
 			keys.log2data,  keys.log2log)
-
-   if (hy.getOption ("log")){
-      warning ("The logbook is deprecated and will soon be removed.")
-     log <- list (short = "read.spc",
-                  long = list (call = match.call (),
-                    log = tmp$log.long,
-                    header = getbynames (hdr, keys.hdr2log)))
-   } else {
-     log <- NULL  
-   }
+	## TODO: remove keys.log2log data2log
 
 	data <- c (data, tmp$extra.data, getbynames (hdr, keys.hdr2data))
-	
 	
 	## try to preallocate spectra matrix and extra data data.frame
 	## if multispectra file with separate wavelength axes, prepare a list
@@ -705,7 +695,6 @@ read.spc <- function (filename,
 					spc = y$y, 
 					wavelength = wavelength$x,
 					data = data,
-					log = log,
 					labels = label)
 		}
 		
@@ -731,7 +720,7 @@ read.spc <- function (filename,
 		list (spc = spc, wavelength = wavelength, data = data, log = log, labels = label)
 	else 
 		new ("hyperSpec",  spc = spc, wavelength = wavelength,
-				data = data [rep (1, hdr$fnsub), ], log = log, labels = label)
+				data = data [rep (1, hdr$fnsub), ], labels = label)
 }
 
 

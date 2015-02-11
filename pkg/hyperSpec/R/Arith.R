@@ -85,7 +85,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
              e2 <- .expand (e2, dim (e1) [c (1, 3)])
              
              e1 [[]] <- callGeneric (e1[[]], e2[[]])
-             .logentry (e1, short = .Generic, long = as.character (e2))
+             e1
            }
            )
 
@@ -94,7 +94,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
 
   if (missing (e2)){
     e1  [[]] <- callGeneric (e1 [[]])
-    .logentry (e1, short = .Generic, long = list ())
+    e1
   } else {
     e2 <- as.matrix (e2)
 
@@ -103,8 +103,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "hyperSpec"),
     e2 <- .expand (e2, dim (e1) [c (1, 3)])
     
     e1  [[]] <- callGeneric (e1 [[]], e2)
-    .logentry (e1, short = .Generic,
-               long = list (e2 = .paste.row (e2, val = TRUE)))
+    e1
   }
 }
 ##' @rdname Arith
@@ -123,7 +122,7 @@ setMethod ("Arith", signature (e1 = "hyperSpec", e2 = "missing"), .arithx)
   e2 <- .expand (e2, dim (e1))
     
   e2  [[]] <- callGeneric (e1, e2 [[]])
-  .logentry (e2, short = .Generic, long = list (e1 = .paste.row (e1, val = TRUE)))
+  e2
 }
 ##' @rdname Arith
 setMethod ("Arith", signature (e1 = "numeric", e2 = "hyperSpec"), .arithy)
@@ -170,7 +169,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "hyperSpec"),
              .wl (x) <- y@wavelength
              x@label$.wavelength = y@label$.wavelength
 
-             .logentry (x, short = "%*%", long = as.character (y))
+             x
            }
            )
 
@@ -181,7 +180,7 @@ setMethod ("%*%", signature (x = "hyperSpec", y = "matrix"),
              x@data$spc <-  x@data$spc %*% y
              .wl (x) <- seq_len (ncol (y))
              x@label$.wavelength = NA
-             .logentry (x, short = "%*%", long = list (y = .paste.row (y, val = TRUE)))
+             x
            }
            )
 
@@ -199,7 +198,7 @@ setMethod ("%*%", signature (x = "matrix", y = "hyperSpec"),
                        log = y@log
                        )
 
-             .logentry (y, short = "%*%", long = list (x = .paste.row (x, val = TRUE)))
+             y
            }
            )
 

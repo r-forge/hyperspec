@@ -13,8 +13,7 @@ Like other S4 objects, a hyperSpec object can be created by \code{new}. The
 hyperSpec object is then \code{initialize}d using the given parameters.}
 \usage{
 \S4method{initialize}{hyperSpec}(.Object, spc = NULL, data = NULL,
-  wavelength = NULL, labels = NULL, log = NULL, short = "initialize",
-  user = NULL, date = NULL)
+  wavelength = NULL, labels = NULL)
 }
 \arguments{
 \item{.Object}{the new \code{hyperSpec} object.}
@@ -44,13 +43,6 @@ possible, \code{1 : ncol (data$spc)} is used instead.}
 
 If \code{label} is not given, a list containing \code{NULL} for each of the
   columns of\code{data} and \code{wavelength} is used.}
-
-\item{log}{A \code{list} used to fill into the first entry of
-\code{.Object@log}. The elements \code{log$short}, \code{log$long},
-\code{log$date}, and \code{log$user} are handed down to
-\code{\link{logentry}}.}
-
-\item{short,user,date}{passed to \code{\link[hyperSpec]{logentry}}}
 }
 \description{
 If option \code{gc} is \code{TRUE}, the initialization will have frequent
@@ -80,10 +72,6 @@ h <- new ("hyperSpec", spc = spc, data = data.frame (pos = 1 : 3),
 
 plot (h)
 plotc (h, spc ~ pos)
-
-# giving a log entry
-new ("hyperSpec", log = list (short = "measurement parameters",
-     long = list ("exposure / s" = 10, sample = "327a")))
 }
 \author{
 C.Beleites

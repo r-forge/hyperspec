@@ -41,7 +41,7 @@ split.line <- function (x, separator, trim.blank = TRUE) {
 ### some ENVI-specific helper functions .............................................................
 
 
-.read.ENVI.header  <- function (file, headerfilename) {
+.find.ENVI.header  <- function (file, headerfilename) {
   if (is.null (headerfilename)) {
     headerfilename <- paste (dirname (file), sub ("[.][^.]+$", ".*", basename (file)), sep = "/")
     tmp <- Sys.glob (headerfilename)
@@ -62,7 +62,7 @@ split.line <- function (x, separator, trim.blank = TRUE) {
   if (!file.exists(headerfilename)) 
     stop("Could not open header file: ", headerfilename)
 
-  readLines (headerfilename)
+  headerfilename
 }
 
 # ...................................................................................................
@@ -254,7 +254,7 @@ split.line <- function (x, separator, trim.blank = TRUE) {
 ##' @param header list with the respective information, see details.
 ##' @param x,y vectors of form c(offset, step size) for the position vectors,
 ##'   see details.
-##' @param wavelength,label,log lists that overwrite the respective information
+##' @param wavelength,label lists that overwrite the respective information
 ##'   from the ENVI header file. These data is then handed to
 ##'   \code{\link[hyperSpec]{initialize}}
 ##' @param keys.hdr2data determines which fields of the header file should be put into the extra
@@ -262,7 +262,6 @@ split.line <- function (x, separator, trim.blank = TRUE) {
 ##' 
 ##' To specify certain entries, give character vectors containing the lowercase
 ##'   names of the header file entries.
-##' @param keys.hdr2log deprecated
 ##' @return a \code{hyperSpec} object
 ##' @author C. Beleites, testing for the Nicolet files C. Dicko
 ##' @seealso \code{\link[caTools]{read.ENVI}}
@@ -278,9 +277,9 @@ split.line <- function (x, separator, trim.blank = TRUE) {
 ##' @keywords IO file
 read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile = NULL, 
 							  header = list (), 
-							  keys.hdr2data = FALSE, keys.hdr2log = FALSE,
-                       x = 0 : 1, y = x, 
-                       wavelength = NULL, label = list (), log = list ()) {
+							  keys.hdr2data = FALSE, 
+							  x = 0 : 1, y = x, 
+							  wavelength = NULL, label = list ()) {
   force (y)
 
   if (! file.exists (file))
@@ -291,8 +290,11 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
       stop ("header must be a list of parameters. Did you mean headerfile instead?")
     else
       stop ("header must be a list of parameters.")
-						  
-  tmp <- .read.ENVI.header (file, headerfile)
+				
+  if (is.null (headerfile))
+  	headerfile <- .find.ENVI.header (file, headerfile)
+  
+  tmp <- readLines (headerfile)
   tmp <- .read.ENVI.split.header (tmp)
   header <- modifyList (tmp, header)  
 
@@ -315,17 +317,8 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
   x <- rep (seq (0, header$samples - 1), each = header$lines)   * x [2] + x [1]
   y <- rep (seq (0, header$lines   - 1),        header$samples) * y [2] + y [1]
   
-  ## header lines => extra data columns or log entries
+  ## header lines => extra data columns 
   extra.data <- header [keys.hdr2data]
-
-  if (hy.getOption ("log")){
-    log <- modifyList (list (short = "read.ENVI", 
-                             long = list (call = match.call (),
-                               header = getbynames (header, keys.hdr2log))),
-                       log)
-  } else {
-      log = NULL
-  }
 
   if (.options$gc) gc ()
   
@@ -340,6 +333,6 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
 
   ## finally put together the hyperSpec object
   new ("hyperSpec", data = data, spc = spc,
-       wavelength = wavelength, labels = label, log = log)
+       wavelength = wavelength, labels = label)
 }
 
