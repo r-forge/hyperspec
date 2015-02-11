@@ -66,10 +66,10 @@
 ##' \emph{Replacing: \code{[<-}, \code{[[<-}, and \code{$<-}}.
 ##' \preformatted{
 ##' ## S4 method for signature 'hyperSpec':
-##' x [i, j, l, short = NULL, \dots] <- value
+##' x [i, j, l, \dots] <- value
 ##' 
 ##' ## S4 method for signature 'hyperSpec':
-##' x [[i, j, l, wl.index = FALSE, short = NULL, \dots]] <- value
+##' x [[i, j, l, wl.index = FALSE, \dots]] <- value
 ##' 
 ##' ## S4 method for signature 'hyperSpec':
 ##' x$name <- value
@@ -199,7 +199,6 @@
 setMethod ("[", signature = signature (x = "hyperSpec"),
            function (x, i, j, l, ..., 
                      wl.index = FALSE, 
-                     short = "[", date = NULL, user = NULL,
                      drop = FALSE  # drop has to be at end
                      ){
   validObject (x)

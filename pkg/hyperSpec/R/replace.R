@@ -2,7 +2,7 @@
 ##' @name [<-
 ##' @usage
 ##' 
-##' \S4method{[}{hyperSpec}(x, i, j, short = "[<-", date = NULL, user = NULL, \dots) <- value
+##' \S4method{[}{hyperSpec}(x, i, j, \dots) <- value
 ##' 
 ##' @aliases [<-,hyperSpec-method
 ##' @param value the replacement value
@@ -23,7 +23,6 @@
 setReplaceMethod("[", signature = signature (x = "hyperSpec"),
                  function (x, i, j,
                            ...,
-                           short = "[<-", user = NULL, date = NULL,
                            value){
   validObject (x)
 
@@ -49,13 +48,13 @@ setReplaceMethod("[", signature = signature (x = "hyperSpec"),
 
   validObject (x)
 
-  .logentry (x, short = short, long = long, date = date, user = user)
+  x
 })
 
 ##' @rdname extractreplace
 ##' @usage
 ##' 
-##' \S4method{[[}{hyperSpec}(x, i, j, l, wl.index = FALSE, short = "[<-", date = NULL, user = NULL, \dots) <- value
+##' \S4method{[[}{hyperSpec}(x, i, j, l, wl.index = FALSE, \dots) <- value
 ##' 
 ##' @aliases [[<-,hyperSpec-method
 ##' @name [[<-
@@ -88,7 +87,6 @@ setReplaceMethod("[", signature = signature (x = "hyperSpec"),
 ##' 
 setReplaceMethod ("[[", signature = signature (x = "hyperSpec"),
                   function (x, i, j, l, wl.index = FALSE,
-                            short = "[[<-", user = NULL, date = NULL,
                             ..., value){
   validObject (x)
 
@@ -133,7 +131,7 @@ setReplaceMethod ("[[", signature = signature (x = "hyperSpec"),
 
   validObject (x)
 
-  .logentry (x, short = short, long = long, date = date, user = user)
+  x
 })
 
 ##' @rdname extractreplace
@@ -184,7 +182,6 @@ setReplaceMethod ("$", signature = signature (x = "hyperSpec"),
     x@label[[name]] <- label
   }
 
-  .logentry (x, short = "$<-", 
-             long = list (name = name, value = .paste.row (value, val = TRUE)))
+  x
 })
 

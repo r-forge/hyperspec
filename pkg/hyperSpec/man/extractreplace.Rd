@@ -16,16 +16,15 @@
 \alias{[[<-,hyperSpec-method}
 \title{Extract and Replace parts of hyperSpec objects}
 \usage{
-\S4method{[}{hyperSpec}(x, i, j, l, ..., wl.index = FALSE, short = "[",
-  date = NULL, user = NULL, drop = FALSE)
+\S4method{[}{hyperSpec}(x, i, j, l, ..., wl.index = FALSE, drop = FALSE)
 
 \S4method{[[}{hyperSpec}(x, i, j, l, ..., wl.index = FALSE, drop = FALSE)
 
 \S4method{$}{hyperSpec}(x, name)
 
-\S4method{[}{hyperSpec}(x, i, j, short = "[<-", date = NULL, user = NULL, \dots) <- value
+\S4method{[}{hyperSpec}(x, i, j, \dots) <- value
 
-\S4method{[[}{hyperSpec}(x, i, j, l, wl.index = FALSE, short = "[<-", date = NULL, user = NULL, \dots) <- value
+\S4method{[[}{hyperSpec}(x, i, j, l, wl.index = FALSE, \dots) <- value
 
 \S4method{$}{hyperSpec}(x, name) <- value
 }
@@ -109,10 +108,10 @@ defined:
 \emph{Replacing: \code{[<-}, \code{[[<-}, and \code{$<-}}.
 \preformatted{
 ## S4 method for signature 'hyperSpec':
-x [i, j, l, short = NULL, \dots] <- value
+x [i, j, l, \dots] <- value
 
 ## S4 method for signature 'hyperSpec':
-x [[i, j, l, wl.index = FALSE, short = NULL, \dots]] <- value
+x [[i, j, l, wl.index = FALSE, \dots]] <- value
 
 ## S4 method for signature 'hyperSpec':
 x$name <- value
