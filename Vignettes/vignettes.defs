@@ -10,7 +10,6 @@
 \usepackage{fourier}
 \usepackage[]{helvet}
 
-
 \usepackage{array}
 \usepackage{textcomp}
 \usepackage{url}
@@ -30,6 +29,7 @@
             linkcolor=blue!50!black          % color of internal links
            ]{hyperref}
 \usepackage{hyphenat}
+\usepackage{paralist}
 
 \AtBeginDocument{
   	\setlength{\parskip}{\medskipamount}

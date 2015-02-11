@@ -6,15 +6,18 @@
  pdfkeywords={chondro, hyperSpec, cluster analysis, preprocessing, Raman, principal component analysis, PCA}}
 \SweaveOpts{prefix.string=chondro-fig-}
 %\VignetteDepends{latticeExtra}
+\usepackage{fourier}
+\usepackage[]{helvet}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \title{Raman Spectra of Chondrocytes in Cartilage:\\
 \Rpackage{hyperSpec}'s \texttt{chondro} data set }
 \maketitle
 
 \warnbox{Reproducing this vignette}{ The data set and source file of this vignette are available as a
   zipped archive at \Rpackage{hyperSpec}'s homepage,
-  \url{http://hyperspec.r-forge.r-project.org/chondrocytes.zip} (ca. 9 MB).  The original data file
+  \url{http://hyperspec.r-forge.r-project.org/blob/chondro.zip} (ca. 9 MB).  The original data file
   (ca. 31 MB) is far too large to be included in the package.
 
   In order to reproduce the examples by typing in the commands, have a look at the definitions of
@@ -32,38 +35,38 @@ options ("width" = 100)
 
 This vignette describes the \Robject{chondro} data set. It shows a complete data analysis work flow
 on a Raman map demonstrating frequently needed preprocessing methods
-\begin{itemize}
+\begin{compactitem}
 \item baseline correction
 \item normalization
 \item smoothing / interpolating spectra
 \item preprocessing the spatial grid
-\end{itemize}
+\end{compactitem}
 and other basic work techniques
-\begin{itemize}
+\begin{compactitem}
 \item plotting spectra
 \item plotting false color maps
 \item cutting the spectral range,
 \item selecting (extracting) or deleting spectra, and
 \item \emph{aggregating} spectra (e.g. calculating cluster mean spectra).
-\end{itemize}
+\end{compactitem}
 The chemometric methods used are
-\begin{itemize}
+\begin{compactitem}
 \item Principal Component Analysis (PCA) and
-\item hierarchical cluster analysis,
-\end{itemize}
+\item Hierarchical Cluster Analysis,
+\end{compactitem}
 showing how to use data analysis procedures provided by R and other
 packages.
 
 
 \section{The Data Set}
-\begin{figure}[tbh]
+\begin{figure}
 \noindent 
 \begin{centering}
   \includegraphics[width=0.5\textwidth]{080606d-flip-ausw}
   \par
 \end{centering}
 \caption{\label{fig:vis-all}Microphotograph of the cartilage section. The frame indicates the
-  measurement area (\mum{35~\times~21}).}
+  measurement area (\mum{35~\times~25}).}
 \end{figure}
 
 Raman spectra of a cartilage section were measured on each point of a grid, resulting in a so-called
@@ -71,13 +74,13 @@ Raman spectra of a cartilage section were measured on each point of a grid, resu
 surroundings.
 
 The measurement parameters were:
-\begin{description}
+\begin{compactdesc}
 \item [Excitation wavelength:] 633 nm
 \item [Exposure time:] 10 s per spectrum
 \item [Objective:] 100$\times$, NA 0.85
 \item [Measurement grid:] 35 $\times$21 \mum{}, 1 \mum{} step size
 \item [Spectrometer:] Renishaw InVia
-\end{description}
+\end{compactdesc}
 
 \section{Data Import}
 Renishaw provides a converter to export their proprietary data in a so-called long format ASCII
@@ -85,8 +88,8 @@ file. Raman maps are exported having four columns, \emph{y}, \emph{x}, \emph{ram
 \emph{intensity}.  \Rpackage{hyperSpec} comes with a function to import such files,
 \Rfunction{scan.txt.Renishaw}. The function assumes a map as default, but can also handle single
 spectra (\Rcode{data = \textquotedbl{}spc\textquotedbl{}}), time series (\Rcode{data =
-  \textquotedbl{}ts\textquotedbl{}}), and depth profiles (data =
-\textquotedbl{}depth\textquotedbl{}).  In addition, large files may be processed in chunks. In order
+  \textquotedbl{}ts\textquotedbl{}}), and depth profiles (\Rcode{data =
+\textquotedbl{}depth\textquotedbl{}}).  In addition, large files may be processed in chunks. In order
 to speed up the reading \Rfunction{scan.txt.Renishaw} does not allow missing values, but it does work
 with \Rcode{NA}.
 <<import>>=
@@ -107,8 +110,8 @@ plotmap (chondro, func.args = list (na.rm = TRUE), col.regions = seq.palette (20
 \begin{figure}[tbh]
 \subfloat[\label{fig:raw:a}The raw spectra: median, 16\textsuperscript{th} and 84\textsuperscript{th}, and 5\textsuperscript{th} and 95\textsuperscript{th} percentile
 spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig--rawspc}}
-\subfloat[\label{fig:raw:b}[The sum intensity of the raw spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig--rawmap}}
-\caption{\label{fig:raw} The raw data.}
+\subfloat[\label{fig:raw:b}The sum intensity of the raw spectra.]{\includegraphics[width=0.5\textwidth]{chondro-fig--rawmap}}
+\caption{\label{fig:raw} The raw spectra.}
 \end{figure}
 
 \section{Preprocessing}
@@ -153,14 +156,14 @@ plotmap (chondro, col.regions = seq.palette (20))
 @
 
 \begin{figure}[tbh]
-\subfloat[\label{fig:irregular:a}Raster plot with two off-grid points.]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-grid}}
-\subfloat[\label{fig:irregular:b}[Coordinates are slightly wrong only.]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-pts}}
-\subfloat[\label{fig:irregular:c}[Raster plot of corrected grid.]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-corr}}
+\subfloat[\label{fig:irregular:a}Off-grid points cause stripes]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-grid}}
+\subfloat[\label{fig:irregular:b}Slightly wrong coordinages]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-pts}}
+\subfloat[\label{fig:irregular:c}Corrected grid]{\includegraphics[width=0.3\textwidth]{chondro-fig--irregular-corr}}
 \caption{\label{fig:raw} Rounding erros in the point coordinates of lateral measurement grid.}
 \end{figure}
 
 \subsection{Spectral Smoothing}
-As the overview print shows that the spectra contain \Rcode{NA}s (from cosmic spike removal that was done previously), the first step is to remove these. Also, the wavelength axis of the raw spectra is not evenly spaced (the data points are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and \Sexpr{signif (max (diff (wl (chondro))), 2)}\,\rcm{} apart from each other). Furthermore, it would be good to trade some spectral resolution for higher signal to noise ratio. All three of these issues are tackled by interpolating and smoothing of the wavelength axis by \Rfunction{spc.loess}. The resolution is to be reduced to \rcm{8}, or \rcm{4} data point spacing.
+As the overview shows that the spectra contain \Rcode{NA}s (from cosmic spike removal that was done previously), the first step is to remove these. Also, the wavelength axis of the raw spectra is not evenly spaced (the data points are between \Sexpr{signif (min (diff (wl (chondro))), 2)} and \Sexpr{signif (max (diff (wl (chondro))), 2)}\,\rcm{} apart from each other). Furthermore, it would be good to trade some spectral resolution for higher signal to noise ratio. All three of these issues are tackled by interpolating and smoothing of the wavelength axis by \Rfunction{spc.loess}. The resolution is to be reduced to \rcm{8}, or \rcm{4} data point spacing.
 
 <<interp>>= 
 chondro <- spc.loess (chondro, seq (602, 1800, 4))
@@ -195,7 +198,7 @@ chondro <- chondro - baselines
 As the spectra are quite similar, area normalization should work well:.
 
 <<norm, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-chondro <- sweep (chondro, 1, rowMeans (chondro), "/")
+chondro <- chondro / rowMeans (chondro)
 plot (chondro, "spcprctl5")
 @
 
@@ -206,7 +209,6 @@ multiple collinearities as only the first 10 principal components are shipped (s
 
 For the results of these preprocessing steps, see figure~\ref{fig:bl-bl}.
 
-
 \subsection{Subtracting the Overall Composition}
 
 The spectra are very homogeneous, but I'm interested in the differences
@@ -216,7 +218,7 @@ But the minimum spectrum also picks up a lot of noise. So instead,
 the 5\textsuperscript{th} percentile spectrum is subtracted:
 
 <<perc, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
-chondro <- sweep (chondro, 2, quantile (chondro, 0.05), "-")
+chondro <- chondro - quantile (chondro, 0.05)
 plot (chondro, "spcprctl5")
 @
 
@@ -233,9 +235,13 @@ I use it for outlier detection. The resulting scores and loadings
 are put again into \Rclass{hyperSpec} objects by \Rfunction{decomposition}:
 
 <<pca>>=
-pca <- prcomp (~ spc, data = chondro$., center = TRUE)
-scores <- decomposition (chondro, pca$x, label.wavelength = "PC", label.spc = "score / a.u.")
-loadings <- decomposition (chondro, t(pca$rotation), scores = FALSE, label.spc = "loading I / a.u.")
+pca <- prcomp (chondro, center = TRUE)
+
+scores <- decomposition (chondro, pca$x, label.wavelength = "PC", 
+												 label.spc = "score / a.u.")
+
+loadings <- decomposition (chondro, t(pca$rotation), scores = FALSE, 
+													 label.spc = "loading I / a.u.")
 @
 
 Plotting the scores of each PC against all other gives a good idea
@@ -249,9 +255,10 @@ Now the spectra can be found either by plotting two scores against
 each other (by \Rfunction{plot}) and identifying with \Rfunction{identify},
 or they can be identified in the score map by \Rfunction{map.identify}.
 There is also a function to identify spectra in a spectra plot, \Rfunction{spc.identify},
-but this is not helpful here.
+which could be used to identify principal components that are heavily influenced \eg by cosmic ray spikes.
 
 <<pca-identify, eval = FALSE>>=
+## omit the first 4 PCs
 out <- map.identify (scores [,,5])
 out <- c (out, map.identify (scores [,,6]))
 out <- c (out, map.identify (scores [,,7]))
@@ -270,18 +277,22 @@ cols [out] <- outcols
 @
 
 We can check our findings by comparing the spectra to the bulk of
-spectra (figure~):
+spectra (figure~\ref{PCA:b}):
 
 <<pca-outspc, fig = TRUE, width = 7.5, height = 7.5, include = FALSE>>=
-plot(chondro[1], plot.args = list (ylim = c (1, length (out) + .7)), lines.args = list(  type = "n"))
+plot(chondro[1], plot.args = list (ylim = c (1, length (out) + .7)), 
+		 lines.args = list(  type = "n"))
+
 for (i in seq (along = out)){
    plot(chondro, "spcprctl5", yoffset = i, add = TRUE, col = "gray")
-   plot (chondro [out[i]], yoffset = i, col = outcols[i] , add = TRUE, lines.args = list (lwd = 2))
-   text (600, i + .33, out [i])  }
+   plot (chondro [out[i]], yoffset = i, col = outcols[i] , add = TRUE, 
+   			lines.args = list (lwd = 2))
+   text (600, i + .33, out [i])  
+}
 @
 
 and also by looking where these spectra appear in the scores \Rfunction{pairs}
-plot (figure~):
+plot (figure~\ref{PCA:a}):
 
 <<pca-pairs2, include = FALSE, results = hide>>=
 png ("chondro-fig--pca-pairs2.png", width = 500, height = 500)
@@ -299,16 +310,15 @@ chondro <- chondro [- out]
 
 %
 \begin{figure}[tbh]
-\subfloat[\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{chondro-fig--pca-pairs2}}%
-\subfloat[The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{chondro-fig--pca-outspc}}
-\caption{Outlier removal by PCA}
+\subfloat[\label{PCA:b}The suspected outlier spectra.]{\includegraphics[width=0.495\textwidth]{chondro-fig--pca-outspc}}
+\subfloat[\label{PCA:a}\Rfunction{pairs} plot of the first 7 scores.]{\includegraphics[width=0.495\textwidth]{chondro-fig--pca-pairs2}}%
 \end{figure}
 
 
 
 \section{Hierarchical Cluster Analysis (HCA)}
 
-HCA fuses objects according to their (dis)similarity. The result is
+HCA merges objects according to their (dis)similarity into clusters. The result is
 a dendrogram, a graph stating at which level two objects are similar
 and thus grouped together.
 
@@ -317,10 +327,10 @@ The first step in HCA is the choice of the distance. The R function
 The so-called \textsc{Pearson} distance \global\long\def\COR{COR}
 $D^2_{Pearson}=\frac{1-\COR\left(X\right)}{2}$
 is popular in data analysis of vibrational spectra and is provided
-by \Rpackage{hyperSpec}.
+by \phy's \Rfunction{pearson.dist} function.
 
 Also for computing the dendrogram, a number of choices are available.
-I choose \textsc{Ward}'s method, and, as it uses \textsc{Euclid}ean
+Here we choose \textsc{Ward}'s method, and, as it uses \textsc{Euclid}ean
 distance for calculating the dendrogram, \textsc{Euclid}ean distance
 also for the distance matrix :
 
@@ -366,13 +376,12 @@ matrix, the lacuna and the cells. The left cell is destroyed and its
 contents are leaking into the matrix, while the right cells looks
 intact.
 
-We can calculate the cluster mean spectra using \Rfunction{aggregate}.
-However, we can do even better and plot the cluster mean spectra $\pm$
-1 standard deviation (see figure~\ref{fig:clustmeans}): 
+We can plot the cluster mean spectra $\pm$
+1 standard deviation using \Rfunction{aggregate} (see figure~\ref{fig:clustmeans}): 
 
 <<clustmeans, fig = TRUE, width = 7.5, height = 5, include = FALSE>>=
 cluster.means <- aggregate (chondro, chondro$clusters, mean_pm_sd)
-plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", col = cols)
+plot (cluster.means, stacked = ".aggregate", fill = ".aggregate", col = cols)
 @
 
 %
@@ -382,7 +391,7 @@ plot(cluster.means, stacked = ".aggregate", fill = ".aggregate", col = cols)
 \begin{figure}[tbh]
 \includegraphics[width=0.495\textwidth]{chondro-fig--clustmeans}
 \caption{\label{fig:clustmeans} The cluster mean $\pm$ 1 standard deviation
-spectra. The blue cluster shows distinct lipid bands, the green cluster
+spectra. The blue cluster shows distinct lipid bands, the yellow cluster
 collagen, and the red cluster proteins and nucleic acids.}
 \end{figure}
 
@@ -390,7 +399,7 @@ collagen, and the red cluster proteins and nucleic acids.}
 
 \Rclass{hyperSpec} comes with a sophisticated interface for specifying
 spectral ranges. Expressing things like 1000~cm\textsuperscript{-1}
-$\pm$~1 data points are easily possible. Thus, we can have a fast
+$\pm$~1 data points is easily possible. Thus, we can have a fast
 look at the nucleic acid distribution, using the DNA bands at 728,
 782, 1098, 1240, 1482, and 1577~cm\textsuperscript{-1}: 
 
@@ -416,7 +425,7 @@ only a PCA-compressed version with 10 PCs is shipped as example data set of the 
 spectra.to.save$clusters <- factor (NA, levels = levels (chondro$clusters))
 spectra.to.save$clusters[- out] <- chondro$clusters
 
-pca <- prcomp (spectra.to.save [[]])
+pca <- prcomp (spectra.to.save)
 .chondro.scores   <- pca$x      [, seq_len (10)]
 .chondro.loadings <- pca$rot    [, seq_len (10)]
 .chondro.center   <- pca$center

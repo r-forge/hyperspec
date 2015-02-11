@@ -83,7 +83,6 @@
 ##' @seealso  \code{\link[lattice]{levelplot}}
 ##'
 ##'  \code{\link{trellis.factor.key}} for improved color coding of factors
-##'  @importFrom lattice levelplot
 setMethod (f = "levelplot", signature = signature (x = "hyperSpec", data = "missing"),
            definition = function (x, data, ...) {
              .levelplot (x = formula (spc ~ .wavelength * .row), data = x, ...)
