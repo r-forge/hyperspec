@@ -119,6 +119,8 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1,
     colnames (fit.to@data$spc) <- paste ("x^", 0 : poly.order, sep="")
 
     validObject (fit.to)
+    
+    fit.to
   } else {
     x <- apply.to@wavelength
 
@@ -130,5 +132,7 @@ spc.fit.poly.below <- function (fit.to, apply.to = fit.to, poly.order = 1,
     colnames (apply.to@data$spc) <- format (x, digits = 4)
 
     validObject (apply.to)
+    
+    apply.to
   }
 }
