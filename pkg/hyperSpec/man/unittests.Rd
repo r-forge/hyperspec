@@ -19,9 +19,7 @@ If \code{\link[svUnit]{svUnit}} is available, run the unit tests and
 display the results.
 }
 \examples{
-if (require (svUnit)){
-  hy.unittest ()
-}
+hy.unittest ()
 }
 \author{
 C. Beleites
