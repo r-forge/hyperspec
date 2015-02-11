@@ -18,7 +18,6 @@
 ##'   If \code{NULL}, a \code{hyperSpec} object containing the polynomial
 ##'   coefficients rather than evaluted baselines is returned.
 ##' @param poly.order order of the polynomial to be used
-##' @param short,user,date handed to \code{logentry}
 ##' @return \code{hyperspec} object containing the baselines in the spectra
 ##'   matrix, either as polynomial coefficients or as polynomials evaluted on
 ##'   the spectral range of \code{apply.to}
@@ -43,9 +42,8 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1){
 
   x <- fit.to@wavelength
   x <- outer(x, 0 : poly.order, "^")             # Vandermonde matrix of x
-  if (is.null (short)) short <- "spc.fit.poly: coefficients" 
-  p <- apply (fit.to, 1, function (y, x){qr.solve (x, y)}, x,
-              short = short, user = user, date = date)
+  
+  p <- apply (fit.to, 1, function (y, x){qr.solve (x, y)}, x)
 
   if (is.null (apply.to)){
     colnames (p@data$spc) <- paste ("x^", 0 : poly.order, sep="")
@@ -55,7 +53,6 @@ spc.fit.poly <- function (fit.to, apply.to = NULL, poly.order = 1){
     wl <- apply.to@wavelength;
     x <- outer(wl, 0 : poly.order, "^")             # Vandermonde matrix of x
     apply.to@data$spc <- I (t (apply (p[[]], 1, function (p, x) {x %*% p}, x)))
-    if (is.null (short)) short <- "spc.fit.poly: spectra" 
 
     .wl(apply.to) <- wl
     colnames (apply.to@data$spc) <- format (wl, digits = 4)
