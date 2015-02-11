@@ -11,6 +11,7 @@
 \renewcommand{\textfraction}{0.1} 
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \title{Fitting Baselines to Spectra}
 \maketitle
 
