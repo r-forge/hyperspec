@@ -19,8 +19,6 @@
 
 split.line <- function (x, separator, trim.blank = TRUE) {
   tmp <- regexpr (separator, x)
-  #if (length (tmp) == 1 && tmp [[1]] == -1)
-  #  warning ("line without separator", separator)
 
   key   <- substr (x, 1, tmp - 1)
   value <- substr (x, tmp + 1, nchar (x))
@@ -125,14 +123,14 @@ split.line <- function (x, separator, trim.blank = TRUE) {
 
   if (is.null (header$`byte order`)){
     header$`byte order` <- .Platform$endian
-    message (".read.ENVI.bin: 'byte order' not given or incorrect. Guessing '",
+    message (".read.ENVI.bin: 'byte order' not given => Guessing '",
              .Platform$endian, "'\n", sep = '')
   }
   if (! header$`byte order` %in% c ("big", "little", "swap")) {
     header$`byte order` <- as.numeric (header$`byte order`)
     if (! header$`byte order` %in% 0 : 1) {
       header$`byte order` <- .Platform$endian
-      warning ("byte order not given or incorrect. Guessing '", .Platform$endian, "'")
+      warning ("byte order incorrect. Guessing '", .Platform$endian, "'")
     } else if (header$`byte order` == 0)
       header$`byte order` <- "little"
     else 
