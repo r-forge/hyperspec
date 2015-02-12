@@ -8,7 +8,7 @@
 ##' @param filey filename intensity file
 ##' @param points.per.line number of spectra in x direction of the map
 ##' @param lines.per.image number of spectra in y direction
-##' @param ... handed to \code{\link[base]{scan}}
+##' @param ...,quiet handed to \code{\link[base]{scan}}
 ##' @param nwl number of wavelengths, if \code{NULL}, \code{readLines} is used to determine
 ##' \code{nwl} automatically.
 ##' @param remove.zerospc WiTEC Control saves spectra consisting of zeros only if e.g. a map was
@@ -22,9 +22,10 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
                             points.per.line = NULL,
                             lines.per.image = NULL,
                             remove.zerospc = TRUE,
-                            ...){
-  wl <- scan (file = filex, ...)
-  spc <- scan (file = filey, ...)
+                            ..., 
+                            quiet = hy.getOption ("debuglevel") < 1L){
+  wl <- scan (file = filex, ..., quiet = quiet)
+  spc <- scan (file = filey, ..., quiet = quiet)
 
   dim (spc) <- c (length (wl), length (spc) / length (wl))
 
