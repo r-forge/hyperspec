@@ -22,7 +22,7 @@
 ##' all.equal (flu, --flu);
 setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),
            function (target, current, ..., check.attributes = FALSE, check.names = FALSE, 
-                     check.column.order = FALSE, check.label = FALSE{
+                     check.column.order = FALSE, check.label = FALSE){
              validObject (target)
              validObject (current)
 
