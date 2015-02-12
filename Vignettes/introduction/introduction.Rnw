@@ -1534,23 +1534,6 @@ system.time ({
 })
 @ 
 
-\index{options!log} A first possibility is switching of the automatic logging of how the objects are
-transformed. This is now the default setting of the option as the logbook is deprecated and will be
-completely removed.
-
-Logging involves appending rows to the \df in slot \Rcode{@log}.  While the absolute
-amount of time needed to add a logbook entry is small, it may be executed very often (e.g. during
-each call of \Rfunction{[}). 
-<<speed2>>=
-hy.setOptions (log = FALSE)
-tmp <- chondro [1 : 50]
-system.time ({
-  for (i in seq_len (nrow (tmp)))
-    tmp [[i]] <- interpolate (tmp [[i]], shifts [i], wl = wl (tmp))
-})
-hy.setOptions (log = TRUE)
-@
-
 Calculations that involve a lot of subsetting (\ie extracting or changing the spectra matrix or extra
 data) can be sped up considerably if the required parts of the \chy object are extracted
 beforehand. This is somewhat similar to model fitting in R in general: many model fitting functions
