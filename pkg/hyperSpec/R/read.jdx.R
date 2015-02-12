@@ -32,7 +32,11 @@ read.jdx <- function(filename = stop ("filename is needed"), encoding = "",
                      header = list (), keys.hdr2data = FALSE, ...,
                      NA.symbols = c ("NA", "N/A", "N.A."),
                      collapse.multi = TRUE){
-  jdx <- readLines (filename, encoding = encoding)
+  
+  ## see readLines help: this way, encoding is translated to standard encoding on current system.
+  file <- file (filename, "r", encoding = encoding, blocking = FALSE)
+  jdx <- readLines (file)
+  close (file)
   
   ## start & end of spectra header and data
   hdrstart <- grep ("^[[:blank:]]*##TITLE=", jdx)
