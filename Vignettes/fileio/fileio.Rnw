@@ -17,6 +17,7 @@
 % \VignettePackage{hyperSpec}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \title{Import and Export of Spectra Files}
 \subtitle{Vignette for the R package \Rpackage{hyperSpec}}
 \maketitle
@@ -38,19 +39,22 @@
   \item Documentation, particularly the description of the data format
   \end{itemize}
 
-  If you need help finding out how to import your data, \phy has a mailing list
-  \href{mailto:hyperspec-help@lists.r-forge.r-project.org}{\nolinkurl{hyperspec-help@lists.r-forge.r-project.org}},
-  subscription and archives are available at \url{http://r-forge.r-project.org/mail/?group_id=366}.
+  If you need help finding out how to import your data, please search and eventually ask on 
+  \href{http://stackoverflow.com/questions/tagged/r+spectroscopy}{Stackexchange} 
+  with tags [r] and [spectroscopy]. While I reqularly check these tags, consder dropping ma \mailme 
+  an email in addition.
 }\\[1cm]
-\warnbox{Reproducing the Examples in this Vignette}{ The source code of this vignette including the
+\warnbox{Reproducing the Examples in this Vignette}{The source code of this vignette including the
   spectra files are available as .zip file at \phy's home page:
-  \url{http://hyperspec.r-forge.r-project.org/fileio.zip}
+  \url{http://hyperspec.r-forge.r-project.org/blob/fileio.zip}
  
  Note that some definitions are in file \texttt{vignettes.defs}.
 }
 
 \tableofcontents
-
+<<echo = FALSE, results=hide>>=
+options (warn = 1)
+@
 \section{Introduction}
 This document describes how spectra can be imported into \chy objects. Some possibilities to export
 \chy objects as files are mentioned, too.
@@ -269,7 +273,16 @@ read.jdx ("jcamp-dx/shimadzu.jdx", encoding = "latin1", keys.hdr2data=TRUE)
 read.jdx ("jcamp-dx/virgilio.jdx")
 @ %
 
-<<test-read-jdx, echo = FALSE, results = hide>>=
+The last file has a slight inconsistenty between its meta data and spectroscopic data, 
+causing a message.
+However, the difference is minute compared to the intensities. If this is known in advance, an 
+appropriate tolerance can be chosen:
+<<>>=
+read.jdx ("jcamp-dx/virgilio.jdx", ytol = 1e-9)
+@ 
+
+To test the import, read a number of test files: 
+<<test-read-jdx, echo = FALSE>>=
 files <- c (Sys.glob ("jcamp-dx/*.DX"), Sys.glob ("jcamp-dx/*.dx"), 
             Sys.glob ("jcamp-dx/*.jdx"), Sys.glob ("jcamp-dx/*.JCM"), 
             Sys.glob ("jcamp-dx/PE-IR/*.DX"), 
@@ -277,7 +290,10 @@ files <- c (Sys.glob ("jcamp-dx/*.DX"), Sys.glob ("jcamp-dx/*.dx"),
 				)
 
 ## not covered:
-setdiff (c (Sys.glob ("jcamp-dx/*"), Sys.glob ("jcamp-dx/PE-IR/*")), files)
+# setdiff (c (Sys.glob ("jcamp-dx/*"), Sys.glob ("jcamp-dx/PE-IR/*")), files)
+
+## exclude files already checked with the visible examples: 
+files <- setdiff (files, c ("jcamp-dx/shimadzu.jdx", "jcamp-dx/virgilio.jdx"))
 
 unsupported <- c ("jcamp-dx/BRUKER2.JCM", 
                   "jcamp-dx/BRUKER1.JCM", 
@@ -295,8 +311,9 @@ unsupported <- c ("jcamp-dx/BRUKER2.JCM",
                   )
 
 for (file in files [! files %in% unsupported]) {
-  print (file)
+  cat (file)
   read.jdx (file, ytol = 1e-6)
+  cat ("\n")
 }
 @
 
@@ -310,31 +327,47 @@ for (file in files [! files %in% unsupported]) {
 \index{reference!NIST!atomic emission}
 
 The NIST (National Institute of Standards and Technology) has published a data base of basic atomic
-emission spectra \cite{ HandbookofBasicAtomicSpectroscopicData} with emission lines tabulated in
+emission spectra (see \url{http://physics.nist.gov/PhysRefData/Handbook/periodictable.htm})\cite{HandbookofBasicAtomicSpectroscopicData} with emission lines tabulated in
 ASCII (HTML) files.
 
+Here's an example how to extract the data of the Hg strong lines file:
 <<nist-aes>>=
-file <- readLines("~/Literatur/HandbookofBasicAtomicSpectroscopicData/mercurytable2.htm")
+file <- readLines("NIST/mercurytable2.htm")
+#file <- readLines("http://physics.nist.gov/PhysRefData/Handbook/Tables/mercurytable2.htm")
 
 file <- file [- (1 : grep ("Intensity.*Wavelength", file) - 1)]
 file <- file [1 : (grep ("</pre>", file) [1] - 1)]
 file <- gsub ("<[^>]*>", "", file)
 file <- file [! grepl ("^[[:space:]]+$", file)]
+
 colnames <- file [1]
 colnames <- gsub ("[[:space:]][[:space:]]+", "\t",  file [1])
-colnames <- strsplit (colnames, "\t")
+colnames <- strsplit (colnames, "\t")[[1]]
+if (colnames != c ("Intensity", "Wavelength (&Aring;)", "Spectrum", "Ref. "))
+  stop ("file format changed!")
 
 tablestart <- grep ("^[[:blank:]]*[[:alpha:]]+$", file) + 1
 tableend   <- c (tablestart [-1] - 2, length (file))
 tables <- list ()
 for (t in seq_along (tablestart)){
   tmp <- file [tablestart [t] : tableend [t]]
-  tables [[t]] <- read.fwf (textConnection (tmp), c (5, 8, 12, 15,9))
+  tables [[t]] <- read.fwf (textConnection (tmp), c (5, 8, 12, 15, 9))
+  colnames (tables [[t]]) <- c("Intensity", "persistent", "Wavelength", "Spectrum", "Ref. ")
+  tables [[t]]$type <- gsub ("[[:space:]]", "", file [tablestart [t] - 1])
 }
-names (tables) <- gsub ("[[:space:]]", "", file [tablestart - 1])
+tables <- do.call (rbind, tables)
+levels (tables$Spectrum) <- gsub (" ", "", levels (tables$Spectrum))
 
-new ("hyperSpec")
 
+Hg.AES <- list ()
+for (s in levels (tables$Spectrum))
+  Hg.AES [[s]] <- new ("hyperSpec", wavelength = tables$Wavelength [tables$Spectrum == s],
+                       spc = tables$Intensity [tables$Spectrum == s],
+                       data = data.frame (Spectrum = s),
+                       label = list (.wavelength = expression (lambda / ring (A)),
+                                      spc = "I"))
+
+plot (collapse (Hg.AES), lines.args = list (type = "h"), col = 1 : 2)
 @ 
 
 
@@ -624,15 +657,15 @@ The ASCII files are long format that can be imported by \Rfunction{read.txt.long
 section~\ref{sec:read.txt.long}, p.~\pageref{sec:read.txt.long}). 
 
 We experienced two different problems with these files:
-\begin{enumerate}
+\begin{compactenum}
 \item If the instrument computer's locale is set so that also the decimal separator is a comma,
   commas are used both as decimal and as column separator.
 \item Values with a decimal fraction of $0$ are written with decimal separator but no further digits
   (\eg \texttt{2,}). This may be a problem for certain conversion functions (\Rfunction{read.table}
   works fine, though).
-\end{enumerate}
+\end{compactenum}
 
-Still the files may be imported, though care must be taken:
+Thus care must be taken:
 <<Kaiser.txt.comma>>=
 ## 1. import as character
 tmp <- scan ("txt.Kaiser/test-lo-4.txt", what = rep ("character",4), sep = ",")
@@ -745,11 +778,8 @@ scan.txt.Renishaw ("txt.Renishaw/chondro.xz")
 scan.txt.Renishaw ("txt.Renishaw/chondro.lzma")
 scan.txt.Renishaw ("txt.Renishaw/chondro.gz")
 scan.txt.Renishaw ("txt.Renishaw/chondro.bz2")
-@
 
-For .zip packed files, however, a connection must be used:
-<<scan.txt.Renishaw-zip, results = hide>>=
-scan.txt.Renishaw (unzip ("txt.Renishaw/chondro.zip"))
+scan.zip.Renishaw ("txt.Renishaw/chondro.zip")
 @
 
 \subsection{Horiba / Jobin Yvon (e.g. LabRAM) }
