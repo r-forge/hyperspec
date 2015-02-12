@@ -160,6 +160,7 @@ Data cubes often come from spectral imaging systems that use an ``image'' coordi
 $y$ from top to bottom. Note that this should accounted for in the decreasing order of the original
 \Rcode{y} vector.
 
+% TODO \section{General behaviour of file import functions: Options file.keep.name and file.remove.emptyspc}
 
 \section{Reading Multiple files into one \chy object}
 \label{sec:read-mult-files}
