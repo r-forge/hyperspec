@@ -723,7 +723,7 @@ read.spc <- function (filename,
 	if (hdr$ftflgs ['TXYXYS'] && hdr$ftflgs ['TMULTI']) 
 		spc
 	else if (no.object)
-		list (spc = spc, wavelength = wavelength, data = data, log = log, labels = label)
+		list (spc = spc, wavelength = wavelength, data = data, labels = label)
 	else 
 		new ("hyperSpec",  spc = spc, wavelength = wavelength,
 				data = data [rep (1, hdr$fnsub), ], labels = label)
