@@ -22,7 +22,7 @@
 ##' all.equal (flu, --flu);
 setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),
            function (target, current, ..., check.attributes = FALSE, check.names = FALSE, 
-                     check.column.order = FALSE, check.label = FALSE, check.log = FALSE){
+                     check.column.order = FALSE, check.label = FALSE{
              validObject (target)
              validObject (current)
 
@@ -48,14 +48,6 @@ setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"),
                                  ...,
                                  check.attributes = check.attributes, check.names = check.names)
                if (! isTRUE (cmp)) result <- c (result, "@label:", cmp)
-             }
-
-             if (check.log) {
-               warning ("hyperSpec's logbook is deprecated and will be removed.")
-             
-               cmp <- all.equal (target = target@log, current = current@log, ...,
-                                 check.attributes = check.attributes, check.names = check.names)
-               if (! isTRUE (cmp)) result <- c (result, "@log:", cmp)
              }
 
              if (length (result) == 0)
