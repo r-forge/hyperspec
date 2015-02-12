@@ -198,7 +198,7 @@ retrieved with \Rfunction{hy.getOptions} and \Rfunction{hy.getOption}, and chang
     \cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-3} \cmidrule(lr){4-4}
     debuglevel    & 0 (1L 2L)                      & amount of debugging information produced   & \Rfunction{spc.identify}, \Rfunction{map.identify}, various file import functions      \\
     gc            & FALSE                          & triggers frequent calling of \Rcode{gc ()} & \Rfunction{read.ENVI},\newline\Rcode{new ("hyperSpec")} \\
-    tolerance & $\sqrt{\Rcode{.Machine\$.double.eps}} & tolerance for numerical comparisons & file import functions (removing empty spectra), \Rfunction{normalize01}\\
+    tolerance & $\sqrt{\Rcode{.Machine\$.double.eps}}$ & tolerance for numerical comparisons & file import functions (removing empty spectra), \Rfunction{normalize01}\\
     file.remove.emptyspc & TRUE & automatic removing of empty spectra & file import functions, see \Rcode{vignette ("fileio")}\\
     file.keep.name & TRUE & automatic recording of file name in column \Rcode{\$filename} & file import functions, see \Rcode{vignette ("fileio")}\\
     \hline
