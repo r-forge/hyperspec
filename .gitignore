@@ -3,6 +3,8 @@ hyperSpec_*.tar.gz
 *~
 *.backup
 .project
+*.Rproj
+dev
 .settings
 #*#
 *.bak
@@ -16,6 +18,7 @@ hyperSpec_*.tar.gz
 *.idx
 *.fls
 *.toc
+*.tex
 *-pkg.bib
 *.lyx.emergency
 *.fdb_latexmk
