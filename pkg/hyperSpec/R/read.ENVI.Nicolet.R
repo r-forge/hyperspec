@@ -20,16 +20,14 @@
 
 read.ENVI.Nicolet <- function (file = stop ("read.ENVI: file name needed"), headerfile = NULL, 
 															 header = list (), ..., # goes to read.ENVI
-		x = NA, y = NA, # NA means: use the specifications from the header file if possible
-		nicolet.correction = FALSE) {
-	## TODO: check why x and y exist without @param
-	
+															 x = NA, y = NA, # NA means: use the specifications from the header file if possible
+															 nicolet.correction = FALSE) {
 
   ## the additional keywords to interprete must be read from headerfile
 	headerfile <- .find.ENVI.header (file, headerfile)
 	keys <- readLines (headerfile)
 	keys <- .read.ENVI.split.header (keys)
-  keys <- headerfile [c ("description", "z plot titles", "pixel size")]
+  keys <- keys [c ("description", "z plot titles", "pixel size")]
 	
 	header <- modifyList (keys, header)  
   
