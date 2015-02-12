@@ -1,5 +1,6 @@
-.options <- list (debuglevel = 0L,      # for spc.identify, map.identify
-                  gc = FALSE            # frequent calling of gc in read.ENVI & initialize
+.options <- list (debuglevel = 0L,              
+                  gc = FALSE,                   
+                  tolerance = sqrt (.Machine$double.eps)
                   )
 
 
@@ -8,9 +9,11 @@
 ##' 
 ##' Currently, the following options are defined:
 ##' \tabular{llll}{
-##' \bold{Name} \tab \bold{Default Value (range)} \tab \bold{Description} \                      tab \bold{Used by}\cr
-##' debuglevel \ tab 0 (1L 2L) \                   tab amount of debugging information produced \tab \code{\link{spc.identify}} \code{\link{map.identify}}  \code{\link{read.spc}}\cr
-##' gc \         tab FALSE \                       tab triggers frequent calling of gc () \      tab \code{\link{read.ENVI}}, \code{new ("hyperSpec")}\cr
+##' \bold{Name} \tab \bold{Default Value (range)} \tab \bold{Description} \tab \bold{Used by}\cr
+##' debuglevel \ tab 0 (1L 2L) \tab amount of debugging information produced \tab \code{\link{spc.identify}} \code{\link{map.identify}}\cr
+##' \tab \tab  various file import functions\cr
+##' gc \tab FALSE \tab triggers frequent calling of gc () \tab \code{\link{read.ENVI}}, \code{new ("hyperSpec")}\cr
+##' tolerance \tab \code{sqrt (.Machine$double.eps)} \tab tolerance for numerical comparisons \tab  \code{\link{normalize01}}, file import: \code{file.remove.emptyspc}\cr
 ##' }
 ##' 
 ##' \code{hy.setOptions} will discard any values that were given without a
