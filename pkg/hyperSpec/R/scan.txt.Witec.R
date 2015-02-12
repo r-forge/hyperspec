@@ -16,12 +16,14 @@
 ##' @return a hyperSpec object
 ##' @author Claudia Beleites
 ##' @seealso \code{vignette ("fileio")} for more information on file import.
+##' 
+##' \code{\link{options}} for details on options, and 
+##' \code{\link{fileio}} for general behaviour of hyperSpec's file import functions.
 ##' @export 
 scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
                             filey = sub ("-x", "-y", filex),
                             points.per.line = NULL,
                             lines.per.image = NULL,
-                            remove.zerospc = TRUE,
                             ..., 
                             quiet = hy.getOption ("debuglevel") < 1L){
   wl <- scan (file = filex, ..., quiet = quiet)
@@ -36,11 +38,9 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
 
   if (!is.null (points.per.line))
     spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
-
-  if (remove.zerospc)
-      spc <- spc [rowSums (spc == 0) < nwl (spc)]
-
-  spc
+    
+  ## consistent file import behaviour across import functions
+  .fileio.optional (spc, filey)
 }
 
 ##' @rdname scan.dat.Witec
@@ -71,8 +71,6 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
   if (!is.null (points.per.line))
     spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
 
-  if (remove.zerospc)
-      spc <- spc [rowSums (spc == 0) < nwl (spc)]
-
-  spc
+  ## consistent file import behaviour across import functions
+  .fileio.optional (spc, file)
 }

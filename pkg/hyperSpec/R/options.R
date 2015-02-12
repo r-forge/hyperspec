@@ -1,5 +1,7 @@
 .options <- list (debuglevel = 0L,              
                   gc = FALSE,                   
+                  file.remove.emptyspc = TRUE, 
+                  file.keep.name = TRUE,
                   tolerance = sqrt (.Machine$double.eps)
                   )
 
@@ -13,6 +15,8 @@
 ##' debuglevel \ tab 0 (1L 2L) \tab amount of debugging information produced \tab \code{\link{spc.identify}} \code{\link{map.identify}}\cr
 ##' \tab \tab  various file import functions\cr
 ##' gc \tab FALSE \tab triggers frequent calling of gc () \tab \code{\link{read.ENVI}}, \code{new ("hyperSpec")}\cr
+##' file.remove.emptyspc \tab TRUE \tab remove empty spectra directly on file import \tab  various file import functions\cr
+##' file.keep.name \tab TRUE \tab always create filename column \tab  various file import functions\cr
 ##' tolerance \tab \code{sqrt (.Machine$double.eps)} \tab tolerance for numerical comparisons \tab  \code{\link{normalize01}}, file import: \code{file.remove.emptyspc}\cr
 ##' }
 ##' 
