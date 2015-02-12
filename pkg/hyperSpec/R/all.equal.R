@@ -75,6 +75,4 @@
 ##' \code{\link[base]{isTRUE}}.
 ##' @seealso \code{\link[base]{all.equal}} and \code{\link[base]{isTRUE}}
 ##' @export
-##' @examples
-##' 
 setMethod ("all.equal", signature (target = "hyperSpec", current = "hyperSpec"), .all.equal)
