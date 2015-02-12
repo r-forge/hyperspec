@@ -1,3 +1,5 @@
+## TODO: blog post after feature is finished
+
 ## consistent optional treatment during file import
 
 .fileio.optional <- function (spc, filename, ..., 

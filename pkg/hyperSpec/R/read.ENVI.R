@@ -330,7 +330,9 @@ read.ENVI <- function (file = stop ("read.ENVI: file name needed"), headerfile =
   if (.options$gc) gc ()
 
   ## finally put together the hyperSpec object
-  new ("hyperSpec", data = data, spc = spc,
-       wavelength = wavelength, labels = label)
+  spc <- new ("hyperSpec", data = data, spc = spc, wavelength = wavelength, labels = label)
+  
+  ## consistent file import behaviour across import functions
+  .fileio.optional (spc, file)
 }
 
