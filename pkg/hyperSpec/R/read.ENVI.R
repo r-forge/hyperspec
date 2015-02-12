@@ -48,13 +48,13 @@ split.line <- function (x, separator, trim.blank = TRUE) {
     if (length (headerfilename) > 1) {
       headerfilename <- headerfilename [grepl ("[.][hH][dD][rR]$", headerfilename)]
       if (length (headerfilename == 1))
-        message ("Guessing header file name ", headerfilename)
+        message (".read.ENVI.header: Guessing header file name ", headerfilename)
     }
     
     if (length (headerfilename) != 1)
       stop ("Cannot guess header file name")
     else
-      cat (".read.ENVI.header: Guessing header file name (", headerfilename, ")\n", sep = '')
+      message (".read.ENVI.header: Guessing header file name ", headerfilename)
   }
     
   if (!file.exists(headerfilename)) 
