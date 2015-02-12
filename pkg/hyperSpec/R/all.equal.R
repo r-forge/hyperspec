@@ -34,6 +34,27 @@
 }
 
 
+.test (.all.equal) <- function () {
+  checkTrue (all.equal (flu, --flu))
+  checkTrue (all.equal (flu, --flu, check.attributes = TRUE)) 
+  checkTrue (all.equal (flu, --flu, check.names = TRUE))
+  
+  ## labels
+  checkTrue (all.equal (flu, --flu, check.label = TRUE))
+  ## order of labels does *not* matter
+  tmp <- flu
+  tmp@label <- rev (tmp@label)
+  checkTrue (all.equal (flu, tmp, check.label = TRUE))
+  ## whether character or expression does matter:
+  tmp@label <- lapply (tmp@label, as.expression)
+  checkTrue (! isTRUE (all.equal (flu, tmp, check.label = TRUE)))
+  
+  ## column order
+  checkTrue ( all.equal (flu, --flu, check.column.order = TRUE))
+  checkTrue (! isTRUE (all.equal (flu, flu [, rev (colnames (flu))], check.column.order = TRUE)))
+  checkTrue (          all.equal (flu, flu [, rev (colnames (flu))], check.column.order = FALSE))
+}
+
 
 ##' @aliases all.equal  all.equal,hyperSpec,hyperSpec-method
 ##' @rdname Comparison
