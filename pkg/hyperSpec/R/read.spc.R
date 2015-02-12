@@ -134,10 +134,10 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 	
 	if (length (out) > 1L){
      if (firstonly){
-       warning ("multiple strings encountered: ", paste (out, collapse = ", "), " but using only the first one.")
+       message ("multiple strings encountered in spc file ", paste (out, collapse = ", "), ": using only the first one.")
        out <- out [1]
      } else if (! is.null (paste.collapse)){
-       warning ("multiple strings encountered: ", paste (out, collapse = ", "), " => pasting.")
+       message ("multiple strings encountered in spc file ", paste (out, collapse = ", "), " => pasting.")
        out <- paste (out, collapse = paste.collapse)
      }
 	}
@@ -272,37 +272,37 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 	if (hdr$ftflgs ['TMULTI']){
 		## multiple spectra in file
 		if (hdr$fnsub <= 1)
-			warning ("spc file header specifies multiple spectra but only zero or one subfile.")
+			message ("spc file header specifies multiple spectra but only zero or one subfile.")
 	} else {
 		## single spectrum file
 		if (hdr$fnsub == 0)
 			hdr$fnsub <- 1
 		
 		if (hdr$fnsub >  1) {
-			warning ("spc file header specifies single spectrum file  but", hdr$fnsub,
-					"subfiles (spectra).\nOnly first subfile will be read.")
+			warning ("spc file header specifies single spectrum file  but ", hdr$fnsub,
+					" subfiles (spectra).\nOnly first subfile will be read.")
 			hdr$fnsub <- 1
 		}
 		
 		if (hdr$ftflgs ['TRANDM']) 
-			warning ("spc file header: file type flag TRANDM does not make sense without TMULTI.")
+			message ("spc file header: file type flag TRANDM encountered => Enforcing TMULTI.")
 		
 		if (hdr$ftflgs ['TORDRD'])
-			warning ("spc file header: file type flag TORDRD does not make sense without TMULTI.")
+			message ("spc file header: file type flag TORDRD encountered => Enforcing TMULTI.")
 		
 		if ((hdr$ftflgs ['TRANDM'] || hdr$ftflgs ['TORDRD']) && hdr$fnsub > 1)
 			hdr$ftflgs ['TMULTI'] <- TRUE
 	}
 	
 	if (hdr$ftflgs ['TXYXYS'] && ! hdr$ftflgs ['TXVALS']) {
-		warning ("spc file header: file type flag TXYXYS does not make sense without TXVALS.")
+		warning ("spc file header: file type flag TXYXYS encountered => Enforcing TXVALS.")
 		hdr$ftflgs ['TXVALS'] <- TRUE
 	}
 	
 	if (hdr$fwplanes > 0)
 	warning ("w planes found! This is not yet tested as the developer didn't have access to such files.\n",
-			"Please contact the package maintainer (cbeleites@units.it)",
-			"stating whether the file was imported successfully or not.")
+			"Please contact the package maintainer ", maintainer ("hyperSpec"), 
+			" stating whether the file was imported successfully or not.")
 	
 	hdr
 }
@@ -333,17 +333,17 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 	
 	## checking
 	if (subhdr$subexp == -128 && hdr$fexp != -128)
-		warning ("subfile ", subhdr$subindx,  " specifies data type float, but file header doesn't.",
-				"\nData will be interpreted as float.")
+		message ("subfile ", subhdr$subindx,  " specifies data type float, but file header doesn't.",
+				"\n=> Data will be interpreted as float.")
 	
 	if (subhdr$subnpts > 0 && subhdr$subnpts != hdr$fnpts && ! hdr$ftflgs ['TXYXYS'])
-		warning ('subfile ', subhdr$subindx, ": number of points in subfile should be 0 if file",
-				" header flags do not specify TXYXYS.")
+		message ('subfile ', subhdr$subindx, ": number of points in file header and subfile header ",
+             "inconsistent. => Going to use subheader.")
 	
 	if (subhdr$subnpts == 0){
 		if (hdr$ftflgs ['TXYXYS'])
-			warning ('subfile ', subhdr$subindx, ': number of data points per spectrum not specified. ',
-					'Using fnpts (', hdr$fnpts, ').')
+			message ('subfile ', subhdr$subindx, ': number of data points per spectrum not specified. ',
+					'=> Using file header information (', hdr$fnpts, ').')
 		subhdr$subnpts <- hdr$fnpts
 	}
 	
@@ -365,8 +365,8 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 	if (! hdr$ftflgs ['TMULTI'])
 		subhdr$subexp <- hdr$fexp
    else if (hdr$fexp == -128 && subhdr$subexp != -128) {
-     warning ("Header file specifies float data format, but subfile uses integer exponent.",
-              " Subfile settings are overwritten.")
+     message ("Header file specifies float data format, but subfile uses integer exponent. ",
+              "=> Using file header settings.")
      subhdr$subexp <- -128
    }
 	
