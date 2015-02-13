@@ -33,3 +33,15 @@ Vignettes/*/*.rda
 Vignettes/fileio/chondro.txt
 Vignettes/laser/rawdata/laser.txt.gz
 .Rproj.user
+jekyll/blob/baseline.pdf
+jekyll/blob/chondro.pdf
+jekyll/blob/chondro.zip
+jekyll/blob/fileio.pdf
+jekyll/blob/fileio.zip
+jekyll/blob/flu.pdf
+jekyll/blob/hyperSpec-prebuilt.tar.gz
+jekyll/blob/hyperSpec-prebuilt.zip
+jekyll/blob/introduction.pdf
+jekyll/blob/laser.pdf
+jekyll/blob/plotting.pdf
+tmp.pdf
