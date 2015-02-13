@@ -32,7 +32,7 @@
 
 \S4method{all.equal}{hyperSpec,hyperSpec}(target, current, ...,
   check.attributes = FALSE, check.names = FALSE,
-  check.column.order = FALSE, check.label = FALSE, check.log = FALSE)
+  check.column.order = FALSE, check.label = FALSE)
 }
 \arguments{
 \item{e1,e2}{Either two \code{hyperSpec} objects or one \code{hyperSpec}
@@ -91,7 +91,6 @@ you have to do this directly on \code{hyperSpec@data}.
 flu [,,445 ~ 450] > 300
 
 all (flu == flu[[]])
-all.equal (flu, --flu);
 }
 \author{
 C. Beleites

@@ -10,18 +10,18 @@
 \usage{
 normalize01(x, ...)
 
-\S4method{normalize01}{matrix}(x, eps = .Machine$double.eps)
+\S4method{normalize01}{matrix}(x, tolerance = hy.getOption("tolerance"))
 
-\S4method{normalize01}{numeric}(x, eps = .Machine$double.eps)
+\S4method{normalize01}{numeric}(x, tolerance = hy.getOption("tolerance"))
 
 \S4method{normalize01}{hyperSpec}(x, ...)
 }
 \arguments{
 \item{x}{vector with values to transform}
 
-\item{...}{additional parameters such as \code{eps} handed down.}
+\item{...}{additional parameters such as \code{tolerance} handed down.}
 
-\item{eps}{tolerance level for determining what is 0 and 1}
+\item{tolerance}{tolerance level for determining what is 0 and 1}
 }
 \value{
 vector with \code{x} values mapped to the interval [0, 1]

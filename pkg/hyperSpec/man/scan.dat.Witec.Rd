@@ -7,7 +7,7 @@
 \usage{
 scan.dat.Witec(filex = stop("filename or connection needed"),
   filey = sub("-x", "-y", filex), points.per.line = NULL,
-  lines.per.image = NULL, remove.zerospc = TRUE, ...)
+  lines.per.image = NULL, ..., quiet = hy.getOption("debuglevel") < 1L)
 
 scan.txt.Witec(file = stop("filename or connection needed"),
   points.per.line = NULL, lines.per.image = NULL, nwl = 1024,
@@ -22,15 +22,15 @@ scan.txt.Witec(file = stop("filename or connection needed"),
 
 \item{lines.per.image}{number of spectra in y direction}
 
-\item{remove.zerospc}{WiTEC Control saves spectra consisting of zeros only if e.g. a map was
-aborted. The default is to remove these spectra.}
-
-\item{...}{handed to \code{\link[base]{scan}}}
+\item{...,quiet}{handed to \code{\link[base]{scan}}}
 
 \item{file}{filename or connection to ASCII file}
 
 \item{nwl}{number of wavelengths, if \code{NULL}, \code{readLines} is used to determine
 \code{nwl} automatically.}
+
+\item{remove.zerospc}{WiTEC Control saves spectra consisting of zeros only if e.g. a map was
+aborted. The default is to remove these spectra.}
 }
 \value{
 a hyperSpec object
@@ -48,5 +48,8 @@ Claudia Beleites
 }
 \seealso{
 \code{vignette ("fileio")} for more information on file import.
+
+\code{\link{options}} for details on options, and
+\code{\link{fileio}} for general behaviour of hyperSpec's file import functions.
 }
 

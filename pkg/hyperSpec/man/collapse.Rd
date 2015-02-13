@@ -22,6 +22,8 @@ The spectra from all objects will be put into one object.
 The resulting object has all wavelengths that occur in the input objects.
 Data points corresponding to wavelengths not in the original spectrum will be set to NA.
 Extra data is combined in the same manner.
+
+If the objects are named, the names will be preserved in extra data column \code{$.name}.
 }
 \examples{
 barbiturates [1:3]
@@ -41,7 +43,8 @@ collapse (a, b, c)
 C. Beleites
 }
 \seealso{
-\code{\link[base]{merge}} to merge hyperSpec objects that share wavelengths but contain different spectra,  \code{\link[base]{rbind}}, and  \code{\link[plyr]{rbind.fill}} for
+\code{\link[base]{merge}} to merge hyperSpec objects that share wavelengths but contain
+  different spectra,  \code{\link[base]{rbind}}, and  \code{\link[plyr]{rbind.fill}} for
 }
 \keyword{manip}
 
