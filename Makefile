@@ -373,7 +373,7 @@ clean: .FORCE
 
 
 install:
-		sudo R CMD INSTALL pkg/hyperSpec	
+		R CMD INSTALL pkg/hyperSpec	
 
 test: install
 	Rscript --vanilla -e "library (hyperSpec); hy.unittest ()"
