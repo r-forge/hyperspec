@@ -275,6 +275,8 @@ jekyll/blob/plotting.pdf: Vignettes/plotting/plotting.pdf
 
 jekyll/blob/hyperSpec-prebuilt.zip: # built manually 
 	touch $@
+jekyll/blob/hyperSpec-prebuilt.tar.gz: hyperSpec_*.tar.gz
+	@cp -av $< $@
 
 jekyll/blob/chondro.zip: Vignettes/chondro.zip
 	@cp -av $< $@
