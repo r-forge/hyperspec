@@ -278,7 +278,7 @@ jekyll/blob/plotting.pdf: Vignettes/plotting/plotting.pdf
 
 jekyll/blob/hyperSpec-prebuilt.zip: # built manually 
 	touch $@
-jekyll/blob/hyperSpec-prebuilt.tar.gz: hyperSpec_*.tar.gz
+jekyll/blob/hyperSpec-prebuilt.tar.gz: build
 	@cp -av $< $@
 
 jekyll/blob/chondro.zip: Vignettes/chondro.zip
@@ -305,7 +305,18 @@ roxy: clean DESCRIPTION pkg/hyperSpec/R/*.R
 
 build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
-	R CMD build pkg/hyperSpec --compact-vignettes=both && cp hyperSpec_*.tar.gz jekyll/blob/hyperSpec-prebuilt.tar.gz
+	R CMD build pkg/hyperSpec --compact-vignettes=both 
+	gunzip hyperSpec_*.tar.gz
+	tar -xvf hyperSpec_*.tar 
+	rm -f hyperSpec/vignettes/*.aux 
+	rm -f hyperSpec/vignettes/*.log 
+	rm -f hyperSpec/vignettes/*.out 
+	rm -f hyperSpec/vignettes/*.toc 
+	rm -f hyperSpec/vignettes/Rplots.pdf
+	tar -czf `ls hyperSpec_*.tar`.gz hyperSpec 
+	rm hyperSpec_*.tar
+  rm -rf hyperSpec/
+	cp hyperSpec_*.tar.gz jekyll/blob/hyperSpec-prebuilt.tar.gz
 
 devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
@@ -339,6 +350,7 @@ clean: .FORCE
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.idx) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.ilg) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.ind) 
+	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.fls) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/*.fdb_latexmk) 
 	@rm -f $(foreach V,$(VIGNETTES),Vignettes/$(V)/Rplots.pdf) 
 	@rm -f pkg/hyperSpec/vignettes/*.aux
@@ -351,6 +363,7 @@ clean: .FORCE
 	@rm -f pkg/hyperSpec/vignettes/*.idx 
 	@rm -f pkg/hyperSpec/vignettes/*.ilg 
 	@rm -f pkg/hyperSpec/vignettes/*.ind
+	@rm -f pkg/hyperSpec/vignettes/*.fls
 	@rm -f pkg/hyperSpec/vignettes/Rplots.pdf
 	@rm -f pkg/hyperSpec/vignettes/*.fdb_latexmk
 #	@rm -f pkg/hyperSpec/vignettes/*/*.aux
