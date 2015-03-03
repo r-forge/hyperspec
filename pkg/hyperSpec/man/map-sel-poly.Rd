@@ -34,7 +34,7 @@ and \code{\link[sp]{point.in.polygon}}. If more customized plotting is required,
 \code{sel.poly} should be used (see example).
 }
 \examples{
-\donttest{
+if (interactive ()){
 ## convenience wrapper
 map.sel.poly (chondro)
 

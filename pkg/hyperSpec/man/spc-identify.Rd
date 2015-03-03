@@ -129,11 +129,12 @@ You may want to adjust the plot's \code{ylim} to ensure that the labels are
 not clipped. As a dirty shortcut, \code{xpd = NA} may help.
 }
 \examples{
-\donttest{
+if (interactive ()){
 ispc <- sample (nrow (laser), 10)
 ispc
 
 identified <- spc.identify (plotspc (laser[ispc]))
+
 ## convert to the "real" spectra indices
 ispc [identified$ispc]
 identified$wl
