@@ -278,6 +278,7 @@ jekyll/blob/plotting.pdf: Vignettes/plotting/plotting.pdf
 
 jekyll/blob/hyperSpec-prebuilt.zip: # built manually 
 	touch $@
+
 jekyll/blob/hyperSpec-prebuilt.tar.gz: build
 	@cp -av $< $@
 
@@ -312,10 +313,12 @@ build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec/vignettes/*.log 
 	rm -f hyperSpec/vignettes/*.out 
 	rm -f hyperSpec/vignettes/*.toc 
+	rm -f hyperSpec/vignettes/*.bbl 
+	rm -f hyperSpec/vignettes/*.blg 
 	rm -f hyperSpec/vignettes/Rplots.pdf
 	tar -czf `ls hyperSpec_*.tar`.gz hyperSpec 
 	rm hyperSpec_*.tar
-  rm -rf hyperSpec/
+	rm -rf hyperSpec/
 	cp hyperSpec_*.tar.gz jekyll/blob/hyperSpec-prebuilt.tar.gz
 
 devbuild: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
