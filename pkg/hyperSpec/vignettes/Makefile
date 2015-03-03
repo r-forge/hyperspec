@@ -55,6 +55,7 @@ flu.pdf: flu.Rnw
 	rm -f $(basename $(<F)).out
 	rm -f $(basename $(<F)).toc
 	rm -f $(basename $(<F)).rda
+	rm -f $(basename $(<F))-fig*.pdf
 	rm -f Rplots.pdf
 	rm -f *concordance.tex
 	rm -f $(basename $(<F))-fig-*.*	
