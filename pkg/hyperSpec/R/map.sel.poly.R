@@ -19,7 +19,7 @@
 ##' @rdname map-sel-poly
 ##' @keywords iplot
 ##' @examples
-##' \donttest{
+##' if (interactive ()){
 ##' ## convenience wrapper
 ##' map.sel.poly (chondro)
 ##' 
@@ -40,9 +40,13 @@
 ##' grid.points (unit (data$x [i.sel], "native"), unit (data$y [i.sel], "native"))
 ##' }
 map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
-  ## sp is only suggested, not required. 
+
+	if (! interactive ())
+		stop ("map.sel.poly works only on interactive graphics devices.")
+	
+	## sp is only suggested, not required. 
   if (! require ("sp"))  
-    stop ("Error: sp package required for point.in.polygon ()")
+    stop ("package sp required for point.in.polygon ()")
 
   print (plotmap (data))
   
@@ -68,7 +72,10 @@ map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
 ##' @rdname map-sel-poly
 ##' @importFrom grid grid.lines grid.points
 sel.poly <- function (pch = 19, size = 0.3, ...){
-  trellis.focus ()
+	if (! interactive ())
+		stop ("sel.poly works only on interactive graphics devices.")
+		
+  trellis.focus () 
   
   pts <- matrix (NA, nrow = 0, ncol = 2)
   

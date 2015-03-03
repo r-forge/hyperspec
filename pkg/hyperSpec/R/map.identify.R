@@ -11,6 +11,10 @@
 ##' @importFrom grid convertX convertY grid.locator grid.circle gpar 
 map.identify <- function (object, model = spc ~ x * y, voronoi = FALSE, ...,
                           tol = .02, warn = TRUE){
+	
+	if (! interactive ())
+		stop ("map.identify works only on interactive graphics devices.")
+	
   chk.hy (object)
   validObject (object)
 
