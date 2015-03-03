@@ -57,8 +57,6 @@ as different?}
 \item{check.label}{Should the slot \code{label} be checked? \cr If the
 labels differ only in the order of their entries, they are conidered
 equal.}
-
-\item{check.log}{Should the slot \code{label} be checked?}
 }
 \value{
 a logical matrix for the comparison operators.
