@@ -1,0 +1,28 @@
+--- 
+layout: post
+title: 'knitr jekyll test'
+tags: news 
+---
+
+`hyperSpec`'s binary arithmetic operators (`+`, `-`, `*`, `/`) now working for calculations on
+spectra matrix plus row or column-vector objects as well, so that many calls to `sweep` can now be
+more easily expressed, e.g.
+
+Centering:
+```{r, prompt=TRUE, comment=""}
+iris [1:3, ]
+```
+
+```{r}
+pairs (iris, col = as.numeric (iris$Species) + 1, pch = 19)
+```
+
+bla `levels (iris$Species)`
+
+asflksfa
+
+```{r blubb}
+"sdklfjsalj"
+```
+
+<!-- end excerpt -->
