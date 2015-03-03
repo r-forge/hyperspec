@@ -47,9 +47,8 @@ axes and the other columns the spectra.
 Claudia Beleites
 }
 \seealso{
-\code{vignette ("fileio")} for more information on file import.
+\code{vignette ("fileio")} for more information on file import and
 
-\code{\link{options}} for details on options, and
-\code{\link{fileio}} for general behaviour of hyperSpec's file import functions.
+\code{\link{options}} for details on options.
 }
 

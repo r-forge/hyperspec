@@ -15,10 +15,9 @@
 ##' aborted. The default is to remove these spectra.
 ##' @return a hyperSpec object
 ##' @author Claudia Beleites
-##' @seealso \code{vignette ("fileio")} for more information on file import.
+##' @seealso \code{vignette ("fileio")} for more information on file import and
 ##' 
-##' \code{\link{options}} for details on options, and 
-##' \code{\link{fileio}} for general behaviour of hyperSpec's file import functions.
+##' \code{\link{options}} for details on options. 
 ##' @export 
 scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
                             filey = sub ("-x", "-y", filex),
