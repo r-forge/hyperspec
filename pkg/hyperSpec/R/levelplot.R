@@ -1,3 +1,4 @@
+##' @importFrom lattice latticeParseFormula
 setGeneric ("levelplot", package = "lattice")
 
 #################################################################################

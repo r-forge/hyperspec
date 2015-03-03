@@ -39,6 +39,7 @@
 ##' @keywords hplot
 ##' @export
 ##' @import graphics
+##' @importFrom lattice xyplot
 ##' @examples
 ##' 
 ##' 
