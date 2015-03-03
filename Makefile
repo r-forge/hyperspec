@@ -280,7 +280,7 @@ jekyll/blob/hyperSpec-prebuilt.zip: # built manually
 	touch $@
 
 jekyll/blob/hyperSpec-prebuilt.tar.gz: build
-	@cp -av $< $@
+	@cp -av hyperSpec_*.tar.gz $@
 
 jekyll/blob/chondro.zip: Vignettes/chondro.zip
 	@cp -av $< $@
