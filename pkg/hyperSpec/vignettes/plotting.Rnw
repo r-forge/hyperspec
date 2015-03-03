@@ -6,12 +6,12 @@
 \usepackage{longtable}
 \usepackage{array}
 
-\hypersetup{pdftitle={hyperSpec plotting functions},
+\hypersetup{pdftitle={plotting},
  pdfauthor={C. Beleites},
  pdfsubject={Introduction on the hyperSpec plotting functions},
  pdfkeywords={hyperSpec}}
 
-% \VignetteIndexEntry{hyperSpec plotting functions}
+% \VignetteIndexEntry{plotting: graphical manual of hyperSpec's plotting functions}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
 % \VignetteDepends{latticeExtra, tripack, deldir, rgl, ggplot2}

@@ -4,12 +4,12 @@
 
 \SweaveInput{vignettes.defs}
 \SweaveOpts{prefix.string=introduction-fig-}
-\hypersetup{pdftitle={hyperSpec Introduction},
+\hypersetup{pdftitle={hyperSpec Manual},
  pdfauthor={C. Beleites},
  pdfsubject={Introduction on the R package hyperSpec},
  pdfkeywords={hyperSpec}}
 
-% \VignetteIndexEntry{hyperSpec Introduction}
+% \VignetteIndexEntry{introduction: hyperSpec's main manual}
 % \VignetteKeywords{hyperspec}
 % \VignettePackage{hyperSpec}
 % \VignetteDepends{MASS}
