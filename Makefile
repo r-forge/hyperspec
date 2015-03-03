@@ -255,7 +255,10 @@ pkg/hyperSpec/vignettes/plotting.Rnw: Vignettes/plotting/plotting.Rnw \
 	@cp -av $< $@
 
 # www ###############################################################################################
-www: jekyll/blob/chondro.zip jekyll/blob/fileio.zip jekyll/blob/*.pdf
+www: jekyll/blob/chondro.zip jekyll/blob/fileio.zip \
+     jekyll/blob/baseline.pdf jekyll/blob/chondro.pdf jekyll/blob/fileio.pdf jekyll/blob/flu.pdf \
+     jekyll/blob/introduction.pdf jekyll/blob/laser.pdf jekyll/blob/plotting.pdf \
+     jekyll/blob/hyperSpec-prebuilt.tar.gz
 	cd jekyll && jekyll
 
 jekyll/blob/baseline.pdf: Vignettes/baseline/baseline.pdf
