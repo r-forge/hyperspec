@@ -1,27 +1,23 @@
-read.ENVI.Nicolet <- function (..., # goes to read.ENVI
-		# file headerfile, header
-		x = NA, y = NA, # NA means: use the specifications from the header file if possible
-		log = list (),
-		keys.hdr2log = TRUE,
-		nicolet.correction = FALSE) {
+## TODO: get Makefile to care care of this if the version in pkg changes
+
+read.ENVI.Nicolet <- function (file = stop ("read.ENVI: file name needed"), headerfile = NULL, 
+															 header = list (), ..., # goes to read.ENVI
+															 x = NA, y = NA, # NA means: use the specifications from the header file if possible
+															 nicolet.correction = FALSE) {
+
+  ## the additional keywords to interprete must be read from headerfile
+	headerfile <- .find.ENVI.header (file, headerfile)
+	keys <- readLines (headerfile)
+	keys <- .read.ENVI.split.header (keys)
+  keys <- keys [c ("description", "z plot titles", "pixel size")]
 	
-  ## set some defaults
-  log <- modifyList (list (short = "read.ENVI.Nicolet", 
-                           long = list (call = match.call ())),
-                     log)
-  ## the additional keywords to interprete must be read
-  if (! isTRUE (keys.hdr2log))
-    keys.hdr2log <- unique (c ("description", "z plot titles", "pixel size", keys.hdr2log))
-	
-  ## most work is done by read.ENVI
-  spc <- read.ENVI (..., keys.hdr2log = keys.hdr2log,
-                    x = if (is.na (x)) 0 : 1 else x,
-                    y = if (is.na (y)) 0 : 1 else y,
-                    log = log)
+	header <- modifyList (keys, header)  
   
-  ## get the header for post-processing
-  header <-spc@log$long.description [[1]]$header 
-	
+	## most work is done by read.ENVI
+  spc <- read.ENVI (file = file, headerfile = headerfile, header = header, ...,
+                    x = if (is.na (x)) 0 : 1 else x,
+                    y = if (is.na (y)) 0 : 1 else y)
+
 ### From here on processing the additional keywords in Nicolet's ENVI header ************************
   
   ## z plot titles ----------------------------------------------------------------------------------
@@ -86,5 +82,6 @@ read.ENVI.Nicolet <- function (..., # goes to read.ENVI
     if (! any (is.na (y)))
       spc@data$y <- y
   }
+
   spc
 }
