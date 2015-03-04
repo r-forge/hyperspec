@@ -575,8 +575,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 ##' @rdname read-spc
 ##' @seealso \code{\link[hyperSpec]{textio}}
 ##' @references Source development kit and file format specification of .spc
-##'   files:
-##'   \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+##'   files.
 ##' @export
 ##' @keywords IO file
 ##' @examples

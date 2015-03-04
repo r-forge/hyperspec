@@ -80,8 +80,7 @@ C. Beleites
 }
 \references{
 Source development kit and file format specification of .spc
-  files:
-  \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+  files.
 }
 \seealso{
 \code{\link[hyperSpec]{textio}}
