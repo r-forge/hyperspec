@@ -67,7 +67,7 @@ plotmat <- function (object, y = ".row", ylab, col = alois.palette (20), ...,
     par (mar = mar)
 
     ## color legend
-    if (require ("plotrix")){
+    if (requireNamespace ("plotrix")){
     
       usr <- par()$usr
 

@@ -44,8 +44,8 @@ map.sel.poly <- function (data, pch = 19, size = 0.3, ...){
 	if (! interactive ())
 		stop ("map.sel.poly works only on interactive graphics devices.")
 	
-	## sp is only suggested, not required. 
-  if (! require ("sp"))  
+	## sp is only in Suggests, not a strict Dependency. 
+  if (! requireNamespace ("sp"))  
     stop ("package sp required for point.in.polygon ()")
 
   print (plotmap (data))
