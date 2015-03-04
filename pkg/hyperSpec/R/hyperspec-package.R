@@ -37,6 +37,6 @@ if (!requireNamespace ("svUnit", quietly = TRUE)){
     f
   }
 } else {
- `.test<-` <- svUnit::`test<-`
+ `.test<-` <- `test<-`
 }
 

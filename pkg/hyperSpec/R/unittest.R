@@ -10,6 +10,7 @@
 ##' @author C. Beleites
 ##' @seealso \code{\link[svUnit]{svUnit}}
 ##' @keywords programming utilities
+##' @import svUnit 
 ##' @export
 ##' @examples
 ##' 
@@ -27,18 +28,18 @@ hy.unittest <- function (){
   tests <- names (tests [tests])
   tests <- sapply (tests, get, envir = getNamespace ("hyperSpec"))
 
-  svUnit::clearLog ()
+  clearLog ()
   warnlevel <- options()$warn
   options (warn = 0)
   for (t in seq_along (tests))
-  	svUnit::runTest (tests [[t]], names (tests) [t])
+  	runTest (tests [[t]], names (tests) [t])
   options (warn = warnlevel)
 
   if (interactive ())
-    print (svUnit::stats (svUnit::Log()))
+    print (stats (Log()))
   else
-    print (svUnit::stats (svUnit::Log ())[,c ("kind", "msg")])
+    print (stats (Log ())[,c ("kind", "msg")])
 
-  svUnit::errorLog (summarize = FALSE)
+  errorLog (summarize = FALSE)
   invisible (TRUE)
 }

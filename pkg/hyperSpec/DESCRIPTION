@@ -2,11 +2,11 @@ Package: hyperSpec
 Type: Package
 Title: Work with Hyperspectral Data, i.e. Spectra + Meta Information (Spatial,
     Time, Concentration, ...)
-Version: 0.98-20150303
-Date: 2015-03-03
+Version: 0.98-20150304
+Date: 2015-03-04
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
-Description: Comfortable ways to work with hyperspectral data sets.  
+Description: Comfortable ways to work with hyperspectral data sets.
     I.e. spatially or time-resolved spectra, or spectra with any other kind
     of information associated with each of the spectra. The spectra can be data
     as obtained in XRF, UV/VIS, Fluorescence, AES, NIR, IR, Raman, NMR, MS,
@@ -26,7 +26,6 @@ Depends:
     mvtnorm
 Suggests:
     R.matlab,
-    latticeExtra,
     tripack,
     deldir,
     rgl,
@@ -39,7 +38,9 @@ Suggests:
     Rcpp,
     MASS,
     fastcluster,
-    pls,
+    pls
+Imports:
+    latticeExtra,
     svUnit
 URL: http://hyperSpec.r-forge.r-project.org/
 Collate:
