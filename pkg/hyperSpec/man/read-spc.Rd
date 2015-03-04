@@ -3,9 +3,7 @@
 \name{read.spc}
 \alias{read.spc}
 \title{Import for Thermo Galactic's spc file format
-These functions allow to import .spc files.
-A detailed description of the .spc file format is available at
-\url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.}
+These functions allow to import Thermo Galactic/Grams .spc files.}
 \usage{
 read.spc(filename, keys.hdr2data = FALSE, keys.hdr2log = FALSE,
   keys.log2data = FALSE, keys.log2log = FALSE, log.txt = TRUE,
@@ -51,9 +49,7 @@ If the file contains multiple spectra with individual wavelength
 }
 \description{
 Import for Thermo Galactic's spc file format
-These functions allow to import .spc files.
-A detailed description of the .spc file format is available at
-\url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+These functions allow to import Thermo Galactic/Grams .spc files.
 }
 \note{
 Only a restricted set of test files was available for development.

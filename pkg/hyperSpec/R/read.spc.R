@@ -535,9 +535,7 @@ raw.split.nul <- function (raw, trunc = c (TRUE, TRUE), firstonly = FALSE, paste
 
 
 ##' Import for Thermo Galactic's spc file format
-##' These functions allow to import .spc files.
-##' A detailed description of the .spc file format is available at
-##' \url{https://ftirsearch.com/features/converters/SPCFileFormat.htm}.
+##' These functions allow to import Thermo Galactic/Grams .spc files.
 ##' 
 ##' @param filename The complete file name of the .spc file.
 ##' @param keys.hdr2data,keys.log2data character vectors with the names of parameters in the .spc

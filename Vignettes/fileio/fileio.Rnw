@@ -479,7 +479,11 @@ Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI fi
 \index{TriVista!spc}
 \index{Kaiser!spc}
 
-Thermo Galactic's .spc file format\cite{Galactic1997} can be imported by \Rfunction{read.spc}. 
+Thermo Galactic's .spc file format can be imported by \Rfunction{read.spc}. 
+
+\emph{The specification used to be available at Thermo Scientific. Anyone knowing where it moved 
+please contact me (\mailme) --- I'm looking for a reasonably official website (i.e. at Thermo) 
+rather than some random site with a copy.}
 
 A variety of sub-formats exists. \phy's import function \Rfunction{read.spc} does \emph{not} support
 the old file format that was used before 1996. In addition, no test data with \emph{w planes} was
