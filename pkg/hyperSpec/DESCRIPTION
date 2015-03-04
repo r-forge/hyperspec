@@ -1,13 +1,13 @@
 Package: hyperSpec
 Type: Package
-Title: Interface for hyperspectral data, i.e. spectra + meta info (spatial,
-    time, concentration, ...)
+Title: Work with Hyperspectral Data, i.e. Spectra + Meta Information (Spatial,
+    Time, Concentration, ...)
 Version: 0.98-20150303
 Date: 2015-03-03
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
-Description: This package is an interface to handle hyperspectral data sets in
-    R.  I.e. spatially or time-resolved spectra, or spectra with any other kind
+Description: Comfortable ways to work with hyperspectral data sets.  
+    I.e. spatially or time-resolved spectra, or spectra with any other kind
     of information associated with each of the spectra. The spectra can be data
     as obtained in XRF, UV/VIS, Fluorescence, AES, NIR, IR, Raman, NMR, MS,
     etc. More generally, any data that is recorded over a discretized variable,
