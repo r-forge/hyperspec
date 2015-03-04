@@ -181,7 +181,7 @@ C. Beleites
 
 Manufacturer specific file formats: \code{\link{scan.txt.Renishaw}}
 
-\code{vignette ("fileio")} and \url{http://hyperspec.r-forge.r-project.org/fileio.pdf},
+\code{vignette ("fileio")} and \url{http://hyperspec.r-forge.r-project.org/blob/fileio.pdf},
 respectively
 }
 \keyword{IO}

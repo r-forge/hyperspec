@@ -37,7 +37,7 @@
 ##' 
 ##' For further information, see the examples below, \code{vignette ("fileio")} and the documentation
 ##' of \code{\link[R.matlab]{R.matlab}}.
-##' @seealso \code{vignette ("fileio")} and \url{http://hyperspec.r-forge.r-project.org/fileio.pdf},
+##' @seealso \code{vignette ("fileio")} and \url{http://hyperspec.r-forge.r-project.org/blob/fileio.pdf},
 ##' respectively
 ##' @aliases read.txt.wide 
 ##' @rdname textio
