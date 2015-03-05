@@ -15,7 +15,8 @@ an interfaces to \code{cbind2} and \code{rbind2} because neither
 \code{\link[Matrix]{rBind}} and \code{\link[Matrix]{cBind}} nor S4 versions
 of \code{cbind} and \code{rbind} do work at the moment.}
 \usage{
-bind(direction = stop("direction ('c' or 'r') required"), ...)
+bind(direction = stop("direction ('c' or 'r') required"), ...,
+  wl.tolerance = hy.getOption("wl.tolerance"))
 
 cbind.hyperSpec(...)
 
@@ -25,9 +26,10 @@ rbind.hyperSpec(...)
 
 \S4method{cbind2}{hyperSpec,missing}(x, y)
 
-\S4method{rbind2}{hyperSpec,hyperSpec}(x, y)
+\S4method{rbind2}{hyperSpec,hyperSpec}(x, y,
+  wl.tolerance = hy.getOption("wl.tolerance"))
 
-\S4method{rbind2}{hyperSpec,missing}(x, y)
+\S4method{rbind2}{hyperSpec,missing}(x, y, wl.tolerance)
 }
 \arguments{
 \item{direction}{"r" or "c" to bind rows or columns}
@@ -36,6 +38,9 @@ rbind.hyperSpec(...)
 
 Alternatively, \emph{one} list of \code{hyperSpec} objects can be given to
   \code{bind}.}
+
+\item{wl.tolerance}{\code{rbind} and \code{rbind2} check for equal wavelengths
+with this tolerance.}
 
 \item{x,y}{\code{hyperSpec} objects}
 }
