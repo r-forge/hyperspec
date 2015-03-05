@@ -1,15 +1,15 @@
 ---
 layout: default
-title: Literature about softclassval
+title: Literature about <tt>hyperSpec</tt>
 ---
 
-If you use `softclassval`, please cite it.  
+If you use `hyperSpec`, please cite it.  
 {% highlight rconsole%}
-> citation ("softclassval")
+> citation ("hyperSpec")
 {% endhighlight %}
 gives the citations both in readable text and BibTeX.
 
-### Papers about `softclassval`:
+### Papers about `hyperSpec`:
 
 <ul>
 {% for post in site.posts%}
@@ -29,7 +29,7 @@ gives the citations both in readable text and BibTeX.
 {% endfor %}
 </ul>
 
-### Presentations about `softclassval`:
+### Presentations about `hyperSpec`:
 
 <ul>
 {% for post in site.posts%}

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: <tt>softclassval</tt> News
+title: <tt>hyperSpec</tt> News
 ---
 
 <ul>

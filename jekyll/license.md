@@ -8,8 +8,8 @@ title: License
 You can check the license of an R package typing:
 
 {% highlight rconsole %}
->  packageDescription ("softclassval")$License
-[1] "GPL"
+>  packageDescription ("hyperSpec")$License
+[1] "GPL (>= 3)"
 {% endhighlight %}
 
 {% highlight rconsole %}
