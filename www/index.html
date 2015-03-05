@@ -22,15 +22,22 @@
 	 <ul>
 		<li><a href="/index.html">Home</a></li>
 		<li><a href="/news.html">NEWS</a></li>
+		
+		<li id="newsection"><a href="/installation.php">Download &amp; Installation</a></li>
 		<li><a href="/license.html">License</a></li>
-		<li><a href="/installation.php">Download &amp; Installation</a></li>
+		
+		<li id="newsection"><a href="/documentation.html">Documentation</a></li> 
 		<li><a href="/literature.html">Literature about <tt>hyperSpec</tt></a></li>
-<!--		<li><a href="/applications.html">Applications/Use Cases</a></li> -->
-		<li><a href="/documentation.html">Documentation</a></li> 
 		<li><a href="/help.html">Help</a></li> 
-      <li><a href="/devel.html">Development</a></li>
-		<li><a href="/contact.html">Contact</a></li>
-		<li><a href="/posts.html">All <tt>hyperSpec</tt> blog posts</a></li>
+<!--		<li><a href="/applications.html">Applications/Use Cases</a></li> -->
+    
+    <li id="newsection"><a href="/devel.html">Development</a></li>
+		<li><a href="/help.html">Feature Request</a></li> 
+		<li><a href="/help.html">Report Bug/Issue</a></li> 
+		
+		<li id="newsection"><a href="/posts.html">All <tt>hyperSpec</tt> blog posts</a></li>
+		
+		<li id="newsection"><a href="/contact.html">Contact</a></li>
 		<li><a href="/credits.html">Credits</a></li>
 	 </ul>
   </div>
@@ -61,170 +68,91 @@
 
 <ul>
 <li>
-<p>25 Oct 2013 &#187; <a href='/2013/2013-10-25-arithmetic.html'>Extended binary arithmetic operators</a></p>
+<p>04 Mar 2015 &#187; <a href='/2015/2015-03-04-CRAN.html'>New Version of <tt>hyperSpec</tt> on CRAN</a></p>
 </li>
 
 <li>
-<p>12 Sep 2013 &#187; <a href='/2013/2013-09-12-cytospecimport.html'>Import Cytospec .mat files: bugfix in `R.matlab` 2.0.4</a></p>
+<p>13 Feb 2015 &#187; <a href='/2015/2015-02-13-deprecateLogbook3.html'>Deprecate logbook III</a></p>
 </li>
 
 <li>
-<p>05 Sep 2013 &#187; <a href='/2013/2013-09-05-bugfix-spcrubberband.html'>Bugfix <tt>spc.rubberband</tt> baseline fitting</a></p>
+<p>02 Jun 2014 &#187; <a href='/2014/2014-06-02-deprecate_logbook.html'>Deprecate logbook II</a></p>
 </li>
 
 <li>
-<p>25 Jun 2013 &#187; <a href='/2013/2013-06-25-readmultijdx.html'>Import Multispectra JCAMP-DX files</a></p>
+<p>31 May 2014 &#187; <a href='/2014/2014-05-31-readjdxShimadzu-defunct.html'><tt>read.jdx.Shimadzu</tt> superseeded by <tt>read.jdx</tt></a></p>
 </li>
 
 <li>
-<p>16 May 2013 &#187; <a href='/2013/2013-05-16-Smoothing.html'>Spectral smoothing: splines and Savitzky-Golay filters</a></p>
-</li>
-
-<li>
-<p>16 May 2013 &#187; <a href='/2013/2013-05-16-Shimadzu.html'>Shimadzu GS-MS import</a></p>
-</li>
-
-<li>
-<p>01 Mar 2013 &#187; <a href='/2013/2013-03-01-cytospec.html'>Deprecate logbook</a></p>
-</li>
-
-<li>
-<p>27 Feb 2013 &#187; <a href='/2013/2013-02-27-initialize.html'>Bugfix hyperSpec initialization</a></p>
-</li>
-
-<li>
-<p>28 Jan 2013 &#187; <a href='/2013/2013-01-28-Witecfiles.html'>Witec ASCII file import</a></p>
-</li>
-
-<li>
-<p>11 Jan 2013 &#187; <a href='/2013/2013-01-11-cytoSpec-mat.html'>Import Cytospec .mat files</a></p>
+<p>20 Feb 2014 &#187; <a href='/2014/2014-02-20-LabramImport.html'>LabRAM ASCII File Import: <tt>read.txt.Horiba</tt></a></p>
 </li>
 </ul>
 
 <h3 id='excerpts'>Excerpts</h3>
 <div class='post'>
-<h2><a href='/2013/2013-10-25-arithmetic.html' id='/2013/arithmetic'>Extended binary arithmetic operators</a></h2>
+<h2><a href='/2015/2015-03-04-CRAN.html' id='/2015/CRAN'>New Version of <tt>hyperSpec</tt> on CRAN</a></h2>
 
-<p><code>hyperSpec</code>&#8217;s binary arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) now working for calculations on spectra matrix plus row or column-vector objects as well, so that many calls to <code>sweep</code> can now be more easily expressed, e.g.</p>
+<p>A new version of <code>hyperSpec</code> is available on CRAN. This is mostly a maintenance and bugfix version.</p>
 
-<p>Centering:</p>
-<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>-</span> colMeans <span class='p'>(</span>flu<span class='p'>))</span>
+<p>Install:</p>
+<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>install.packages <span class='p'>(</span><span class='s'>&quot;hyperSpec&quot;</span><span class='p'>)</span>
 </code></pre>
 </div>
-<p>Normalization:</p>
-<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>/</span> rowMeans <span class='p'>(</span>flu<span class='p'>))</span>
+<p>or update:</p>
+<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>update.packages <span class='p'>(</span>oldPkgs <span class='o'>=</span> <span class='s'>&quot;hyperSpec&quot;</span><span class='p'>)</span>
 </code></pre>
 </div>
-<a href='/2013/2013-10-25-arithmetic.html'>... read more ...</a>
+<a href='/2015/2015-03-04-CRAN.html'>... read more ...</a>
 <p id='footer'>
 
 	<span id='tag'> news </span>
 	 
-25 Oct 2013
+04 Mar 2015
 <br />
 &raquo; <a href='#all_posts'>top</a>
 </p>
 </div><div class='post'>
-<h2><a href='/2013/2013-09-12-cytospecimport.html' id='/2013/cytospecimport'>Import Cytospec .mat files: bugfix in `R.matlab` 2.0.4</a></h2>
-
-<p>A recent update from <code>R.matlab</code> version 1.7.0 to 2.0.1 broke the import of Cytospec-saved Matlab files due to different handling of Matlab structs.</p>
-
-<p>Thanks to Henrik Bengtsson for taking immediately care of it, the import seamlessly works again wiht version 2.0.4.</p>
-
-<a href='/2013/2013-09-12-cytospecimport.html'>... read more ...</a>
-<p id='footer'>
-
-	<span id='tag'> fileio </span>
-
-	<span id='tag'> news </span>
-
-	<span id='tag'> R.matlab </span>
-
-	<span id='tag'> bugfix </span>
-	 
-12 Sep 2013
-<br />
-&raquo; <a href='#all_posts'>top</a>
-</p>
-</div><div class='post'>
-<h2><a href='/2013/2013-09-05-bugfix-spcrubberband.html' id='/2013/bugfix-spcrubberband'>Bugfix <tt>spc.rubberband</tt> baseline fitting</a></h2>
-
-<p><code>spc.rubberband</code> was not working correctly for data where the baseline is /above/ (e.g. transmittance, reflectance).</p>
-
-<p>This was corrected. The argument to switch to upper baselines is now <code>upper = TRUE</code> (instead of <code>lower = FALSE</code> as it was before).</p>
-
-<a href='/2013/2013-09-05-bugfix-spcrubberband.html'>... read more ...</a>
-<p id='footer'>
-
-	<span id='tag'> news </span>
-
-	<span id='tag'> bugfix </span>
-	 
-05 Sep 2013
-<br />
-&raquo; <a href='#all_posts'>top</a>
-</p>
-</div><div class='post'>
-<h2><a href='/2013/2013-06-25-readmultijdx.html' id='/2013/readmultijdx'>Import Multispectra JCAMP-DX files</a></h2>
-
-<p>hyperSpec now imports multispectra JCAMP-DX files.</p>
-
-<a href='/2013/2013-06-25-readmultijdx.html'>... read more ...</a>
-<p id='footer'>
-
-	<span id='tag'> fileio </span>
-
-	<span id='tag'> news </span>
-
-	<span id='tag'> JCAMP-DX </span>
-	 
-25 Jun 2013
-<br />
-&raquo; <a href='#all_posts'>top</a>
-</p>
-</div><div class='post'>
-<h2><a href='/2013/2013-05-16-Smoothing.html' id='/2013/Smoothing'>Spectral smoothing: splines and Savitzky-Golay filters</a></h2>
-
-<p><code>hyperSpec</code> offers several ways for spectral smoothing:</p>
-
-<a href='/2013/2013-05-16-Smoothing.html'>... read more ...</a>
-<p id='footer'>
-
-	<span id='tag'> news </span>
-
-	<span id='tag'> baseline </span>
-
-	<span id='tag'> smoothing </span>
-	 
-16 May 2013
-<br />
-&raquo; <a href='#all_posts'>top</a>
-</p>
-</div><div class='post'>
-<h2><a href='/2013/2013-05-16-Shimadzu.html' id='/2013/Shimadzu'>Shimadzu GS-MS import</a></h2>
-
-<p>Björn Egert sent a new version of <code>read.txt.Shimadzu</code>.</p>
-<a href='/2013/2013-05-16-Shimadzu.html'>... read more ...</a>
-<p id='footer'>
-
-	<span id='tag'> fileio </span>
-
-	<span id='tag'> news </span>
-
-	<span id='tag'> Shimadzu </span>
-	 
-16 May 2013
-<br />
-&raquo; <a href='#all_posts'>top</a>
-</p>
-</div><div class='post'>
-<h2><a href='/2013/2013-03-01-cytospec.html' id='/2013/cytospec'>Deprecate logbook</a></h2>
+<h2><a href='/2015/2015-02-13-deprecateLogbook3.html' id='/2015/deprecateLogbook3'>Deprecate logbook III</a></h2>
 
 <p>The next step has been taken to deprecate the loogbook (see the explanation in <code>vignette
 (&quot;introduction&quot;)</code>).</p>
 
-<p>From now on, <code>new (&quot;hyperSpec&quot;, ...)</code> yields a warning if data for the logbook is handed over, and the file import functions do not create logbook entries by default any more.</p>
-<a href='/2013/2013-03-01-cytospec.html'>... read more ...</a>
+<p>Functions <code>logbook</code> and <code>logentry</code> have now been removed. The <code>@logbook</code> slot still exists but cannot be accessed any more by getter and setter functions. It should stay an empty <code>data.frame</code> from now on.</p>
+<a href='/2015/2015-02-13-deprecateLogbook3.html'>... read more ...</a>
+<p id='footer'>
+
+	<span id='tag'> news </span>
+
+	<span id='tag'> deprecated </span>
+	 
+13 Feb 2015
+<br />
+&raquo; <a href='#all_posts'>top</a>
+</p>
+</div><div class='post'>
+<h2><a href='/2014/2014-06-02-deprecate_logbook.html' id='/2014/deprecate_logbook'>Deprecate logbook II</a></h2>
+
+<p>The next step has been taken to deprecate the loogbook (see the explanation in <code>vignette
+(&quot;introduction&quot;)</code>).</p>
+
+<p>From now on, functions <code>logbook</code> and <code>logentry</code> yield a warning that this functionality is deprecated.</p>
+<a href='/2014/2014-06-02-deprecate_logbook.html'>... read more ...</a>
+<p id='footer'>
+
+	<span id='tag'> news </span>
+
+	<span id='tag'> deprecated </span>
+	 
+02 Jun 2014
+<br />
+&raquo; <a href='#all_posts'>top</a>
+</p>
+</div><div class='post'>
+<h2><a href='/2014/2014-05-31-readjdxShimadzu-defunct.html' id='/2014/readjdxShimadzu-defunct'><tt>read.jdx.Shimadzu</tt> superseeded by <tt>read.jdx</tt></a></h2>
+
+<p><code>read.jdx.Shimadzu</code> is no longer needed <code>read.jdx</code> is now available with more general functionality.</p>
+
+<a href='/2014/2014-05-31-readjdxShimadzu-defunct.html'>... read more ...</a>
 <p id='footer'>
 
 	<span id='tag'> news </span>
@@ -233,67 +161,22 @@
 
 	<span id='tag'> fileio </span>
 	 
-01 Mar 2013
+31 May 2014
 <br />
 &raquo; <a href='#all_posts'>top</a>
 </p>
 </div><div class='post'>
-<h2><a href='/2013/2013-02-27-initialize.html' id='/2013/initialize'>Bugfix hyperSpec initialization</a></h2>
+<h2><a href='/2014/2014-02-20-LabramImport.html' id='/2014/LabramImport'>LabRAM ASCII File Import: <tt>read.txt.Horiba</tt></a></h2>
 
-<p><code>hyperSpec</code>s initialization method has been fixed that prevented creation of <code>hyperSpec</code> objects when the <code>spc=</code> argument to <code>new</code> was a data.frame.</p>
-
-<a href='/2013/2013-02-27-initialize.html'>... read more ...</a>
+<p>Horiba(-Jobin-Yvon) LabRAM <code>.txt</code> files can now be imported directly using <code>read.txt.Horiba</code>.</p>
+<a href='/2014/2014-02-20-LabramImport.html'>... read more ...</a>
 <p id='footer'>
 
 	<span id='tag'> news </span>
-
-	<span id='tag'> bugfix </span>
-	 
-27 Feb 2013
-<br />
-&raquo; <a href='#all_posts'>top</a>
-</p>
-</div><div class='post'>
-<h2><a href='/2013/2013-01-28-Witecfiles.html' id='/2013/Witecfiles'>Witec ASCII file import</a></h2>
-
-<p>Witec supports two types of ASCII export, which now can both be read by <code>hyperSpec</code>:</p>
-
-<ul>
-<li>storing x (wavelength) and y (intensity) information in separate files (&#8220;dat&#8221;), and</li>
-
-<li>storing the wavelengths as the first column and the intensities as the following columns (&#8220;txt&#8221;).</li>
-</ul>
-
-<p><strong>ATTENTION:</strong> the ASCII import functions have been renamed:</p>
-
-<a href='/2013/2013-01-28-Witecfiles.html'>... read more ...</a>
-<p id='footer'>
 
 	<span id='tag'> fileio </span>
-
-	<span id='tag'> news </span>
-
-	<span id='tag'> Witec </span>
 	 
-28 Jan 2013
-<br />
-&raquo; <a href='#all_posts'>top</a>
-</p>
-</div><div class='post'>
-<h2><a href='/2013/2013-01-11-cytoSpec-mat.html' id='/2013/cytoSpec-mat'>Import Cytospec .mat files</a></h2>
-
-<p><code>hyperSpec</code> gains a new file import filter reading <a href='www.mathworks.com/products/matlab/'>Matlab</a> files written by <a href='http://www.cytospec.com'>Cytospec</a>.</p>
-
-<a href='/2013/2013-01-11-cytoSpec-mat.html'>... read more ...</a>
-<p id='footer'>
-
-	<span id='tag'> fileio </span>
-
-	<span id='tag'> news </span>
-
-	<span id='tag'> R.matlab </span>
-	 
-11 Jan 2013
+20 Feb 2014
 <br />
 &raquo; <a href='#all_posts'>top</a>
 </p>

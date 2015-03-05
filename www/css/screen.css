@@ -79,6 +79,9 @@ div#nav ul ul li{
 	list-style: none;
 }
 
+div#nav * li#newsection {
+	margin-top:6px;
+}
 
 div#address {
 	 width: 32em;

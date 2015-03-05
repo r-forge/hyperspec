@@ -3,7 +3,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Extended binary arithmetic operators</title>
+    <title>Deprecate logbook III</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta http-equiv="content-language" content="en" />
     <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
@@ -59,25 +59,21 @@
   
 	 <div id="container">
 		<div class="content">
-  <h2>Extended binary arithmetic operators</h2>
-  <p><code>hyperSpec</code>&#8217;s binary arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) now working for calculations on spectra matrix plus row or column-vector objects as well, so that many calls to <code>sweep</code> can now be more easily expressed, e.g.</p>
+  <h2>Deprecate logbook III</h2>
+  <p>The next step has been taken to deprecate the loogbook (see the explanation in <code>vignette
+(&quot;introduction&quot;)</code>).</p>
 
-<p>Centering:</p>
-<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>-</span> colMeans <span class='p'>(</span>flu<span class='p'>))</span>
-</code></pre>
-</div>
-<p>Normalization:</p>
-<div class='highlight'><pre><code class='rconsole'><span class='gp'>&gt; </span>plot <span class='p'>(</span>flu <span class='o'>/</span> rowMeans <span class='p'>(</span>flu<span class='p'>))</span>
-</code></pre>
-</div><!-- end excerpt -->
+<p>Functions <code>logbook</code> and <code>logentry</code> have now been removed. The <code>@logbook</code> slot still exists but cannot be accessed any more by getter and setter functions. It should stay an empty <code>data.frame</code> from now on.</p>
 
 	<hr/>
     
-  <span id="postdate">Published: 2013-10-25</span>
+  <span id="postdate">Published: 2015-02-13</span>
   
   
   
   <span id="tag">news </span>
+  
+  <span id="tag">deprecated </span>
   
   <br/>
   

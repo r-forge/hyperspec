@@ -22,15 +22,22 @@
 	 <ul>
 		<li><a href="/index.html">Home</a></li>
 		<li><a href="/news.html">NEWS</a></li>
+		
+		<li id="newsection"><a href="/installation.php">Download &amp; Installation</a></li>
 		<li><a href="/license.html">License</a></li>
-		<li><a href="/installation.php">Download &amp; Installation</a></li>
+		
+		<li id="newsection"><a href="/documentation.html">Documentation</a></li> 
 		<li><a href="/literature.html">Literature about <tt>hyperSpec</tt></a></li>
-<!--		<li><a href="/applications.html">Applications/Use Cases</a></li> -->
-		<li><a href="/documentation.html">Documentation</a></li> 
 		<li><a href="/help.html">Help</a></li> 
-      <li><a href="/devel.html">Development</a></li>
-		<li><a href="/contact.html">Contact</a></li>
-		<li><a href="/posts.html">All <tt>hyperSpec</tt> blog posts</a></li>
+<!--		<li><a href="/applications.html">Applications/Use Cases</a></li> -->
+    
+    <li id="newsection"><a href="/devel.html">Development</a></li>
+		<li><a href="/help.html">Feature Request</a></li> 
+		<li><a href="/help.html">Report Bug/Issue</a></li> 
+		
+		<li id="newsection"><a href="/posts.html">All <tt>hyperSpec</tt> blog posts</a></li>
+		
+		<li id="newsection"><a href="/contact.html">Contact</a></li>
 		<li><a href="/credits.html">Credits</a></li>
 	 </ul>
   </div>

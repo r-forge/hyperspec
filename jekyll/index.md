@@ -13,22 +13,12 @@ Such data are frequently encountered in Raman, IR, NIR, UV/VIS, NMR, mass spectr
 chemometric data analysis provided by R and other R packages.
 
 ## News
-{% for post in site.posts %}
-{% for tag in post.tags %}
-{% if tag == 'news' %}
-
+{% for post in site.posts limit:5%}
 - {{ post.date | date_to_string }} &raquo; <a href="{{ post.url }}">{{ post.title }}</a>
-
-{% endif %}
-{% endfor %}
 {% endfor %}
 
 
 ### Excerpts
-{% for post in site.posts %}
-{% for tag in post.tags %}
-{% if tag == 'news' %}
+{% for post in site.posts limit:5 %}
 {% include excerpt.md %}
-{% endif %}
-{% endfor %}
 {% endfor %}
