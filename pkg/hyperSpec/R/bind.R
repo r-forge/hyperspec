@@ -89,6 +89,22 @@ bind <- function (direction = stop ("direction ('c' or 'r') required"), ...,
 	wl (tmp) <- wl (tmp) + 0.01
 	checkException (bind ("r", tmp, flu))
 	checkEqualsNumeric (nwl (bind ("r", tmp, flu, tmp, flu, wl.tolerance = 0.1)), nwl (flu))
+	
+	
+	tmp.list <- list (flu, tmp, flu)
+
+	checkException (bind ("r", tmp.list))
+	checkTrue (all.equal (bind ("r", tmp.list, wl.tolerance = 0.1), 
+												flu [rep (row.seq (flu), 3)], 
+												check.label = TRUE))
+
+	checkTrue (all.equal (do.call ("bind", list ("r", tmp.list, wl.tolerance = 0.1)), 
+												flu [rep (row.seq (flu), 3)], 
+												check.label = TRUE))
+
+	checkTrue (all.equal (do.call ("bind", c ("r", tmp.list, wl.tolerance = 0.1)), 
+												flu [rep (row.seq (flu), 3)], 
+												check.label = TRUE))						 
 }
 
 
@@ -123,6 +139,11 @@ rbind.hyperSpec <- function (...) bind ("r", ...)
 	wl (tmp) <- wl (tmp) + 0.01
 	checkException (rbind (tmp, flu))
 	checkEqualsNumeric (nwl (rbind (tmp, flu, flu, wl.tolerance = 0.1)), nwl (flu))
+	
+	tmp.list <- list (flu, tmp, flu)
+	checkTrue (all.equal (do.call ("rbind", c (tmp.list, wl.tolerance = 0.1)), 
+												flu [rep (row.seq (flu), 3)], 
+												check.label = TRUE))			
 }
 
 
