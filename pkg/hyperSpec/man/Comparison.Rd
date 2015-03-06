@@ -32,7 +32,9 @@
 
 \S4method{all.equal}{hyperSpec,hyperSpec}(target, current, ...,
   check.attributes = FALSE, check.names = FALSE,
-  check.column.order = FALSE, check.label = FALSE)
+  check.column.order = FALSE, check.label = FALSE,
+  tolerance = hy.getOption("tolerance"),
+  wl.tolerance = hy.getOption("wl.tolerance"))
 }
 \arguments{
 \item{e1,e2}{Either two \code{hyperSpec} objects or one \code{hyperSpec}
@@ -57,6 +59,8 @@ as different?}
 \item{check.label}{Should the slot \code{label} be checked? \cr If the
 labels differ only in the order of their entries, they are conidered
 equal.}
+
+\item{tolerance,wl.tolerance}{tolerances for checking wavelengths and data, respectively}
 }
 \value{
 a logical matrix for the comparison operators.

@@ -17,6 +17,8 @@ spc.rubberband(spc, ..., upper = FALSE, noise = 0, spline = TRUE)
 
 \item{spline}{logical indicating whether the baseline should be an interpolating spline through
 the support points or piecewise linear.}
+
+\item{debuglevel}{if \code{>= 1}, produce debug plots}
 }
 \value{
 hyperSpec object containing the baselines

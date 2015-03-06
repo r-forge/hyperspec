@@ -196,7 +196,7 @@ retrieved with \Rfunction{hy.getOptions} and \Rfunction{hy.getOption}, and chang
     \hline
     \textbf{name} & \textbf{default value} (range) & \textbf{description}                       & \textbf{used by}                                        \\
     \cmidrule(lr){1-1} \cmidrule(lr){2-2} \cmidrule(lr){3-3} \cmidrule(lr){4-4}
-    debuglevel    & 0 (1L 2L)                      & amount of debugging information produced   & \Rfunction{spc.identify}, \Rfunction{map.identify}, various file import functions      \\
+    debuglevel    & 0 (1L 2L)                      & amount of debugging information produced   & \Rfunction{spc.identify}, \Rfunction{map.identify}, \Rfunction{spc.rubberband}, various file import functions      \\
     gc            & FALSE                          & triggers frequent calling of \Rcode{gc ()} & \Rfunction{read.ENVI},\newline\Rcode{new ("hyperSpec")} \\
     tolerance & $\sqrt{\Rcode{.Machine\$.double.eps}}$ & tolerance for numerical comparisons & file import functions (removing empty spectra), \Rfunction{normalize01}\\
     wl.tolerance & $\sqrt{\Rcode{.Machine\$.double.eps}}$ & tolerance for comparisons of the wavelength axis & \Rfunction{rbind}, \Rfunction{rbind2}, \Rfunction{bind}\Rcode{ ("r", ...)}, \Rfunction{all.equal}, \Rfunction{collapse}\\
