@@ -39,6 +39,7 @@
 ##' 
 
 collapse <- function (..., wl.tolerance = hy.getOption ("wl.tolerance")){
+	wl.tolerance <- .checkpos (wl.tolerance, "wl.tolerance")
   dots <- list (...)
 
   ## accept also a list of hyperSpec objects

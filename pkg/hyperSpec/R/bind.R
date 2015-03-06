@@ -56,6 +56,8 @@
 ##' 
 bind <- function (direction = stop ("direction ('c' or 'r') required"), ..., 
 									wl.tolerance = hy.getOption ("wl.tolerance")){
+	
+	wl.tolerance <- .checkpos (wl.tolerance, "wl.tolerance")
   dots <- list (...)
 
   if ((length (dots) == 1) & is.list (dots [[1]]))
@@ -192,6 +194,7 @@ setMethod("cbind2", signature = signature (x = "hyperSpec", y = "missing"), func
 .rbind2 <- function (x, y, wl.tolerance = hy.getOption ("wl.tolerance")) {
 	validObject (x)
 	validObject (y)
+	wl.tolerance <- .checkpos (wl.tolerance, "wl.tolerance")
 	
 	if (! isTRUE (all.equal (x@wavelength, y@wavelength, tolerance = wl.tolerance)))
 		stop ("The wavelengths of the objects differ (with respect to tolerance ", wl.tolerance, ").\n",

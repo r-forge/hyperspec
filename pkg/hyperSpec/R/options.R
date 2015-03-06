@@ -1,4 +1,5 @@
 
+
 .options <- list (debuglevel = 0L,              
                   gc = FALSE,                   
                   file.remove.emptyspc = TRUE, 
@@ -77,8 +78,8 @@ hy.setOptions <- function (...){
   
   opts <- modifyList (.options, new [names])
   
-  opts <- .checkfinite (opts, "tolerance")
-  opts <- .checkfinite (opts, "wl.tolerance")
+  opts$tolerance <- .checkpos (opts$tolerance, "tolerance")
+  opts$wl.tolerance <- .checkpos (opts$wl.tolerance, "wl.tolerance")
   
   if (sys.parent() == 0) 
     env <- asNamespace ("hyperSpec")
@@ -90,14 +91,14 @@ hy.setOptions <- function (...){
   invisible (opts)
 }
 
-## check particular options that should exist and be finite
-.checkfinite <- function (opts, name){
-	if (length (opts [[name]]) != 1L || ! is.finite (opts[[name]])){
-		warning ("hyperSpec option ", name, " must be a finite number => set to 0.")
-		opts [[name]] <- 0
+## check particular options that should exist and be finite and strictly positive
+.checkpos <- function (opt, name){
+	if (length (opt) != 1L || ! is.finite (opt) || opt < .Machine$double.eps){
+		warning (name, " must be a strictly positive finite number => set to .Machine$double.eps (", .Machine$double.eps, ").")
+		opt <- .Machine$double.eps
 	}
 
-	opts
+	opt
 }
 
 ## todo unit tests
