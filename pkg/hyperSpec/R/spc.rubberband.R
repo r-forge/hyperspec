@@ -8,6 +8,7 @@
 ##' @param noise noise level to be taken into account
 ##' @param spline logical indicating whether the baseline should be an interpolating spline through
 ##' the support points or piecewise linear.
+##' @param debuglevel if \code{>= 1}, produce debug plots
 ##' @return hyperSpec object containing the baselines
 ##' @rdname spc-rubberband
 ##' @author Claudia Beleites
