@@ -2,8 +2,8 @@ Package: hyperSpec
 Type: Package
 Title: Work with Hyperspectral Data, i.e. Spectra + Meta Information (Spatial,
     Time, Concentration, ...)
-Version: 0.98-20150306
-Date: 2015-03-06
+Version: 0.98-20150313
+Date: 2015-03-13
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
 Description: Comfortable ways to work with hyperspectral data sets.

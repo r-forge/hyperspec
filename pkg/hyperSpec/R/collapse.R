@@ -82,9 +82,9 @@ collapse <- function (..., wl.tolerance = hy.getOption ("wl.tolerance")){
 }
 
 .wl2cln <- function (x, wl.tolerance){
-	if (min (diff (x@wavelength)) < wl.tolerance)
-		warning ("wl.tolerance (", wl.tolerance, ") larger than smallest wavelength difference within object (", 
-						 min (diff (x@wavelength)), ").")
+	if (min (abs (diff (x@wavelength))) < wl.tolerance)
+		warning ("wl.tolerance (", wl.tolerance, ") larger than smallest wavelength difference within object (|", 
+						 min (diff (x@wavelength)), "|).")
 	
 	x@wavelength <- round (x@wavelength / wl.tolerance)
 	colnames (x@data$spc) <- formatC (x@wavelength, format = "f", digits = 0)
@@ -116,6 +116,12 @@ collapse <- function (..., wl.tolerance = hy.getOption ("wl.tolerance")){
   warnlevel <- options()$warn
   options (warn = 2)
   checkException (collapse (flu, wl.tolerance = 0.5 + .Machine$double.eps))
+  
+  ## bugfix: wl.tolerance generated warning for negative diff (wl (spc))
+  tmp <- flu
+  wl (tmp) <- rev (wl (tmp))
+  collapse (tmp, tmp)
+  
   options (warn = warnlevel)
 }
 
