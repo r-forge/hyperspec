@@ -48,10 +48,11 @@ Thus \code{fit.to} needs to be cut appropriately.
 \examples{
 \dontrun{vignette ("baseline", package = "hyperSpec")}
 
-baselines <- spc.fit.poly(chondro[,, c (625 ~ 640, 1785 ~ 1800)], chondro)
-plot(chondro - baselines, "spcprctl5")
-baselines <- spc.fit.poly.below(chondro)
-plot(chondro - baselines, "spcprctl5")
+spc <- chondro [1 : 10]
+baselines <- spc.fit.poly(spc [,, c (625 ~ 640, 1785 ~ 1800)], spc)
+plot(spc - baselines)
+baselines <- spc.fit.poly.below (spc)
+plot (spc - baselines)
 }
 \author{
 C. Beleites
