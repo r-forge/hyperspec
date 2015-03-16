@@ -17,8 +17,6 @@ spc.rubberband(spc, ..., upper = FALSE, noise = 0, spline = TRUE)
 
 \item{spline}{logical indicating whether the baseline should be an interpolating spline through
 the support points or piecewise linear.}
-
-\item{debuglevel}{if \code{>= 1}, produce debug plots}
 }
 \value{
 hyperSpec object containing the baselines
@@ -28,6 +26,8 @@ Rubberband baseline
 }
 \details{
 Baseline with support points determined from a convex hull of the spectrum.
+
+Use \code{debuglevel >= 1} to obtain debug plots, either directly via function argument or by setting hyperSpec's \code{debuglevel} option.
 }
 \note{
 This function is still experimental
@@ -36,6 +36,7 @@ This function is still experimental
 plot (paracetamol [,, 175 ~ 1800])
 bl <- spc.rubberband (paracetamol [,, 175 ~ 1800], noise = 300, df = 20)
 plot (bl, add = TRUE, col = 2)
+
 plot (paracetamol [,, 175 ~ 1800] - bl)
 }
 \author{
@@ -45,5 +46,7 @@ Claudia Beleites
 \code{\link[hyperSpec]{spc.fit.poly}}, \code{\link[hyperSpec]{spc.fit.poly.below}}
 
 \code{vignette ("baseline")}
+
+\code{\link[hyperSpec]{hy.setOptions}}
 }
 
