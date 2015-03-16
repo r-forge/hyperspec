@@ -22,8 +22,8 @@ values range from 0 (prefectly correlated) over 0.5 (uncorrelated) to 1
 (perfectly anti-correlated).
 }
 \examples{
-dist <- pearson.dist (flu[[]])
-dist <- pearson.dist (flu)
+pearson.dist (flu [[]])
+pearson.dist (flu)
 }
 \author{
 C. Beleites
