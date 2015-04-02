@@ -10,7 +10,7 @@ map.sel.poly(data, pch = 19, size = 0.3, ...)
 sel.poly(pch = 19, size = 0.3, ...)
 }
 \arguments{
-\item{data}{hyperSpec object for plotting map}
+\item{data}{hyperSpec object for plotting map or list returned by \code{\link{plotmap}}}
 
 \item{pch}{symbol to display the points of the polygon for \code{\link{sel.poly}}}
 
@@ -30,8 +30,11 @@ Click the points that should be connected as polygon. Input ends with right clic
 }
 \details{
 \code{map.sel.poly} is a convenience wrapper for \code{\link{plotmap}}, \code{sel.poly},
-and \code{\link[sp]{point.in.polygon}}. If more customized plotting is required,
-\code{sel.poly} should be used (see example).
+and \code{\link[sp]{point.in.polygon}}. For custiomized plotting, the plot can be produced by
+\code{\link{plotmap}}, \code{\link{plotvoronoi}} or \code{\link{levelplot}}, and the result of
+that plot command handed over to \coe{map.sel.poly}, see the example below.
+
+If even more customized plotting is required,\code{sel.poly} should be used (see example).
 }
 \examples{
 if (interactive ()){
@@ -39,9 +42,13 @@ if (interactive ()){
 map.sel.poly (chondro)
 
 ## customized version
-data <- sample (chondro, 300)
+data <- sample (chondro [,, 1004 - 2i ~ 1004 + 2i], 300)
 
-## plot as needed
+plotdata <- plotvoronoi (data, clusters ~ y * x, col.regions = alois.palette ())
+print (plotdata)
+map.sel.poly (plotdata)
+
+## even more customization:
 plotvoronoi (data)
 
 ## interactively retrieve polygon
