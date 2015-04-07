@@ -1,0 +1,183 @@
+---
+title: "`hyperSpec` user statistics"
+author: "Claudia Beleites"
+date: "7. April 2015"
+output: html_document
+---
+# RStudio CRAN mirror
+
+Aggregated server logs of the [RStudio CRAN mirror](http://cran-logs.rstudio.com) are publicly available. The provided data is likely not really representative for R users as I expect that only package installations/updates via the RStudio IDEs are covered. However, logs of other CRAN mirrors are AFAIK not publicly available.
+
+```{r knitinit, echo = FALSE, results = 'hide', message = FALSE}
+require ("knitr")
+opts_chunk$set (echo = FALSE, results = 'hide', message = FALSE, warning = FALSE,
+                dev='png', fig.width = 8, fig.height = 4.25, dpi = 100)
+```
+```{r}
+start_date <- as.Date("2012-10-01")
+yesterday <- as.Date (Sys.Date()) - 1
+```
+```{r load}
+load ("logs.RData")
+```
+```{r download, echo=FALSE, eval = FALSE}
+for (d in seq (start_date, yesterday, by = 1)){
+  class (d) <- "Date"
+  
+  if (! d %in% levels (logs$date)) {
+    cat (format (d), "-------------------------------------------------------------------------------\n")
+    
+    system (format (d, "wget -O log.gz http://cran-logs.rstudio.com/%Y/%Y-%m-%d.csv.gz"))
+    system ("gunzip log.gz")
+    system ("head -1 log > log.csv")
+    system ("egrep hyperSpec log >> log.csv")
+    
+    logs <- rbind (logs, read.csv("log.csv"))
+    
+    save (logs, file = "logs.RData", compress = FALSE)
+    unlink ("log")
+    unlink ("log.csv")
+  }
+}
+
+```
+
+```{r}
+require ("ggplot2")
+require ("arrayhelpers")
+require ("plyr")
+
+summary (logs)
+
+levels (logs$r_os)[grep ("darwin", levels (logs$r_os))] <- "Mac"
+levels (logs$r_os)[grep ("linux-gnu", levels (logs$r_os))] <- "Linux"
+levels (logs$r_os)[grep ("bsd", levels (logs$r_os))] <- "Linux"
+levels (logs$r_os)[grep ("mingw", levels (logs$r_os))] <- "Win"
+```
+
+### Total downloads per month
+
+```{r dl_month}
+logs$month <- format (as.Date (as.character (logs$date)), "%Y-%m-01")
+logs$month <- as.Date (as.character (logs$month))
+ggplot (count (logs, "month"), aes (x = month, y = freq, group = 1)) + geom_bar(stat= "identity", width = 31) +
+  #geom_point () + geom_line (size = 0.1) +
+  ylim (0, NA) +
+  ylab ("total no. of downloads via RStudio")
+```
+
+
+```{r}
+monthly_os <- table(logs$month, logs$r_os, useNA = "always")
+monthly_os <- monthly_os / rowSums (monthly_os)
+monthly_os <- as.data.frame (monthly_os)
+colnames (monthly_os) <- c ("month", "OS", "fraction")
+monthly_os$month <- as.Date (as.character (monthly_os$month))
+monthly_os$OS <- as.character(monthly_os$OS)
+monthly_os$OS [is.na (monthly_os$OS)] <- "NA"
+monthly_os$OS <- factor (monthly_os$OS, levels = c ("Linux", "Mac", "Win", "NA"))
+monthly_os <- monthly_os [! is.na (monthly_os$month), ]
+```
+
+
+## Download statistics per country
+
+```{r dl_country}
+library(maptools)
+library(mapproj)
+library(rgeos)
+library(rgdal)
+library(ggplot2)
+library(jsonlite)
+library(RCurl)
+require ("grid")
+
+
+# naturalearth world map geojson
+world <- readOGR (dsn = "ne_50m_admin_0_countries.geojson", layer = "OGRGeoJSON")
+
+# remove antarctica
+world <- world[!world$iso_a3 %in% c("ATA"),]
+world <- spTransform(world, CRS("+proj=wintri"))
+
+ccount <- count (logs, "country")
+ccount <- ccount [order (-ccount$freq),]
+rownames (ccount) <- NULL
+
+## population data
+## http://api.worldbank.org/v2/en/indicator/sp.pop.totl?downloadformat=csv
+pop <- read.csv("sp.pop.totl_Indicator_en_csv_v2.csv", skip = 2, check.names = FALSE)
+pop <- pop [, c ("Country Name", "Country Code", "2013"), ]
+pop <- merge (pop, y = world@data [, c ("iso_a2", "iso_a3")], by.x = "Country Code", by.y = "iso_a3")
+ccount <- merge (ccount, pop, by.x = "country", by.y = "iso_a2", all.x = TRUE)
+ccount$dl.per.1e5capita <- ccount$freq / ccount$`2013` * 1e5
+
+map <- fortify(world, region="iso_a2")
+
+gg <- ggplot()
+gg <- gg + geom_map (data=map, map=map, aes(x = long, y = lat, map_id = id, group = group), fill = "#ffffff", color = NA) 
+gg <- gg + geom_map (data=ccount, map=map, color="white", size=0.15, aes (fill = freq, group = country, map_id = country))  
+gg <- gg + scale_fill_gradientn(name="Downloads", colours = c ("#ffffa0", "darkgreen", rep ("#004000", 5)))
+gg <- gg + coord_equal()
+gg <- gg + theme(axis.line=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
+                 axis.title=element_blank(), panel.background=element_rect(fill = "#e0e0ff"),
+                 panel.border=element_blank(), panel.grid=element_blank(), panel.margin=unit(0, "lines"),
+                 plot.background=element_blank(), legend.justification = c(0,0), legend.position = c (0, 0),
+                 legend.key.size = unit (1.5, "cm"), legend.key.width = unit (0.5, "cm")) 
+print (gg)
+```
+Here are the download numbers for the top 15 countries (since start of the server logs in October 2012):
+```{r, results='markup'}
+ccount [1:15, c ("country", "Country Name", "freq", "dl.per.1e5capita")]
+```
+
+
+And the downloads per population:
+```{r}
+gg <- ggplot()
+gg <- gg + geom_map (data=map, map=map, aes(x = long, y = lat, map_id = id, group = group), fill = "#ffffff", color = NA) 
+gg <- gg + geom_map (data=ccount, map=map, color="white", size=0.15, aes (fill = dl.per.1e5capita, group = country, map_id = country))  
+gg <- gg + scale_fill_gradientn(name="Downloads\nper 100 000\ninhabitants", colours = c ("#ffffb0", "blue", "darkblue", "#000040", "#000040", "#000040"))
+gg <- gg + coord_equal()
+gg <- gg + theme(axis.line=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
+                 axis.title=element_blank(), panel.background=element_rect(fill = "#e0e0ff"),
+                 panel.border=element_blank(), panel.grid=element_blank(), panel.margin=unit(0, "lines"),
+                 plot.background=element_blank(), legend.justification = c(0,0), legend.position = c (0, 0),
+                 legend.key.size = unit (1.5, "cm"), legend.key.width = unit (0.5, "cm")) 
+print (gg)
+```
+
+
+... and the top 15 countries in terms of downloads per population:
+```{r, results='markup'}
+ccount [order (-ccount$dl.per.1e5capita)[1:15], c ("country", "Country Name", "freq", "dl.per.1e5capita")]
+```
+
+### Version statistics
+
+```{r}
+vdf <- as.data.frame (table (logs$month, logs$version))
+colnames (vdf) <- c ("month", "version", "freq")
+vdf$month <- as.Date (as.character (vdf$month))
+vdf$version <- factor (vdf$version, levels = sort (levels (vdf$version)))
+
+ggplot (vdf, aes (x = month, y = freq, col = version, group = version)) + geom_point () + geom_line () 
+```
+
+### Operating System statistics
+```{r}
+ggplot (logs) + geom_bar(aes (x = r_os, fill = r_os)) +
+  scale_fill_manual (values = c(Linux = "red", Mac = "darkblue", Win = "darkgreen"), na.value = "#808080") +
+  theme (legend.position = "none")
+```
+
+I expect that the OS-dependent data may be quite distorted: I'd expect that installations on servers a) more frequently use Linux/Unix systems which b) install/update via closeby CRAN mirrors rather than the RStudio CRAN mirror. On the other hand, download statistics anyways underestimate the number of users for server systems.
+
+```{r}
+ggplot (monthly_os, aes (x = month, y = fraction, col = OS)) + 
+  geom_point () + geom_line () +
+  ylim (0, 1) +
+  scale_color_manual (values = c(Linux = "red", Mac = "darkblue", Win = "darkgreen", `NA` = "#808080"))
+```
+
+In any case, the vast majority of `hyperSpec` users downloading via the RStudio CRAN mirror works on Windows.
