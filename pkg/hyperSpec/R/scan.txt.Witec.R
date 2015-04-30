@@ -1,3 +1,4 @@
+
 ##' Import Raman Spectra/Maps from Witec Instrument via ASCII files
 ##'
 ##' \code{scan.dat.Witec} reads Witec's ASCII exported data which comes in separate files with x and
@@ -16,14 +17,14 @@
 ##' @return a hyperSpec object
 ##' @author Claudia Beleites
 ##' @seealso \code{vignette ("fileio")} for more information on file import and
-##' 
-##' \code{\link{options}} for details on options. 
-##' @export 
+##'
+##' \code{\link{options}} for details on options.
+##' @export
 scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
                             filey = sub ("-x", "-y", filex),
                             points.per.line = NULL,
                             lines.per.image = NULL,
-                            ..., 
+                            ...,
                             quiet = hy.getOption ("debuglevel") < 1L){
   wl <- scan (file = filex, ..., quiet = quiet)
   spc <- scan (file = filey, ..., quiet = quiet)
@@ -37,7 +38,7 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
 
   if (!is.null (points.per.line))
     spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
-    
+
   ## consistent file import behaviour across import functions
   .fileio.optional (spc, filey)
 }
@@ -61,6 +62,11 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
   }
 
   dim (txt) <- c (length (txt) / nwl, nwl)
+
+  ## fix: Witec/Andor may have final comma without values -> last line is NA only
+  ## => delete last row if this happens for a map
+  if (!is.null (points.per.line) & !is.null (lines.per.image) & all (is.na (txt [nrow (txt), ])))
+    txt <- txt [- nrow (txt), ]
 
   spc <- new ("hyperSpec", wavelength = txt [1, ], spc = txt [-1, ])
 
