@@ -11,6 +11,7 @@
 | ASCII  | JCAMP-DX              | PerkinElmer       | Infrared         | jcamp-dx             | read.jdx             | import for subset of the JCAMP-DX standard             |
 | ASCII  | Witec ASCII           | Witec             | Raman            | scan.dat.Witec       | scan.txt.Witec       | Save ASCII X, Save ASCII Y                             |
 | ASCII  | ASCII wide transposed | Witec             | Raman            | scan.txt.Witec       | scan.txt.Witec       | Export Table                                           |
+| ASCII  | Andor Solis ASCII 	 | Andor 	     | Raman 		| scan.txt.Witec       | scan.txt.Witec       | 						       |
 | binary | Matlab                | Matlab            |                  | R.matlab::readMat    | readMat              |                                                        |
 | binary | Matlab                | Cytospec          |                  | read.cytomat         | read.cytomat         |                                                        |
 | binary | hol                   | Kaiser            | Raman            | -                    | Kaiser               | via Matlab                                             |
@@ -23,5 +24,6 @@
 | binary | spc                   | Kaiser            | Raman            | read.spc             | read.spc             | Reads multiple files                                   |
 | binary | spc                   | Renishaw          | Raman            | read.spc             | scan.txt.Renishaw    | \emph{Not} recommended, see discussion of ASCII files. |
 | binary | spc                   | Witec             | Raman            | read.spc             | read.spc             | spc export not available for images                    |
+| binary | spc                   | Horiba            | Raman            | read.spc             | read.spc             |                                                        |
 | binary | array                 |                   |                  | -                    | new                  |                                                        |
 | binary | matrix                |                   |                  | -                    | new                  |                                                        |
