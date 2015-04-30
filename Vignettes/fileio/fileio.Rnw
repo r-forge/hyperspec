@@ -370,7 +370,10 @@ for (s in levels (tables$Spectrum))
 
 plot (collapse (Hg.AES), lines.args = list (type = "h"), col = 1 : 2)
 @ 
-
+\subsection{Further ASCII Formats} 
+Further import filters are provided for manufacturer/software specific ASCII formats,
+see table~\ref{sec:format} (p.~\pageref{sec:format}) and section~\ref{sec:manuf-spec-import} 
+(p.~\pageref{sec:manuf-spec-import}). 
 
 \subsection{ASCII Export} 
 ASCII export can be done in wide and long format using \Rfunction{write.txt.long} and
@@ -474,14 +477,21 @@ Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI fi
 \index{spc!TriVista}
 \index{Raman!spc}
 \index{Raman!Kaiser}
+\index{Raman!HoloGram}
+\index{Raman!LabRam}
+\index{Raman!LabSpec}
+\index{Raman!Horiba}
 \index{Raman!Renishaw}
 \index{Renishaw!spc}
 \index{TriVista!spc}
+\index{Horiba!spc}
+\index{LabSpec!spc}
+\index{LabRam!spc}
 \index{Kaiser!spc}
 
 Thermo Galactic's .spc file format can be imported by \Rfunction{read.spc}. 
 
-\emph{The specification used to be available at Thermo Scientific. Anyone knowing where it moved 
+\warnbox[blue]{Official File Format Documentation}{The specification used to be available at Thermo Scientific. Anyone knowing where it moved 
 please contact me (\mailme) --- I'm looking for a reasonably official website (i.e. at Thermo) 
 rather than some random site with a copy.}
 % TODO: find out via Massimiliano
@@ -841,6 +851,12 @@ if (any (dim (spc) != c (100, 2, 1024)) ||
 
 rm (spc)
 @  
+\subsection{Andor Solis}
+\index{Andor Solis!ASCII}
+\index{ASCII!Andor Solis}
+\index{Raman!Andor Solis!ASCII} 
+
+Andor Solis exports ASCII files that can be read with \Rfunction{scan.txt.Witec}, see below.
 
 \subsection{Witec}
 \label{sec:scan.txt.Witec}
@@ -869,7 +885,7 @@ Note that the Y data files also contain a wavelength information, but (at least 
 Another option is Witec's txt table ASCII export (Export $\rightarrow$ Table), which produces ASCII files with each row corresponding to
 one wavelength. Such files can be read with \Rfunction{scan.txt.Witec}:
 <<witec-txt>>=
-scan.dat.Witec ("txt.Witec/Witec.txt")
+scan.txt.Witec ("txt.Witec/Witec.txt")
 @ 
 
 \Rfunction{scan.txt.Witec} assumes 1024 wavelengths, but other values may be given as parameter
