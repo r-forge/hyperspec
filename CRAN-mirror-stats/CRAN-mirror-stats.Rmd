@@ -24,9 +24,9 @@ load ("logs.RData")
 for (d in seq (start_date, yesterday, by = 1)){
   class (d) <- "Date"
   
-  if (! d %in% levels (logs$date)) {
-    cat (format (d), "-------------------------------------------------------------------------------\n")
+  cat (format (d), "-------------------------------------------------------------------------------\n")
     
+  if (! d %in% levels (logs$date)) {
     system (format (d, "wget -O log.gz http://cran-logs.rstudio.com/%Y/%Y-%m-%d.csv.gz"))
     system ("gunzip log.gz")
     system ("head -1 log > log.csv")
@@ -126,7 +126,9 @@ gg <- gg + theme(axis.line=element_blank(), axis.text=element_blank(), axis.tick
                  legend.key.size = unit (1.5, "cm"), legend.key.width = unit (0.5, "cm")) 
 print (gg)
 ```
+
 Here are the download numbers for the top 15 countries (since start of the server logs in October 2012):
+
 ```{r, results='markup'}
 ccount [1:15, c ("country", "Country Name", "freq", "dl.per.1e5capita")]
 ```
