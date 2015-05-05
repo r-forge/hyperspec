@@ -215,6 +215,8 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
 spikes.NA.linapprox <- function (spc, neighbours = 1, ...){
   ispc <- which (is.na (spc@data$spc), arr.ind = TRUE)
   ispc <- unique (ispc[,"row"]) 
+  ispc <- setdiff (ispc, which (rowSums (is.na (spc@data$spc)) == ncol (spc@data$spc)))
+  
 
   for (i in ispc){
     nas <- which (is.na (spc@data$spc[i,]))
