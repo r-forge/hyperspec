@@ -240,6 +240,7 @@ spikes.NA.linapprox <- function (spc, neighbours = 1, ...){
       
     }
   } 
-  return (spc) 
+
+  spc
 } 
 
