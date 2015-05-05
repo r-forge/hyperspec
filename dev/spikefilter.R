@@ -212,37 +212,3 @@ spikes.interactive <- function (spc, spikiness, npts = 10, nspc = 1,
   
 }
 
-spikes.NA.linapprox <- function (spc, neighbours = 1, ...){
-  ispc <- which (is.na (spc@data$spc), arr.ind = TRUE)
-  ispc <- unique (ispc[,"row"]) 
-  ispc <- setdiff (ispc, which (rowSums (is.na (spc@data$spc)) == ncol (spc@data$spc)))
-  
-
-  for (i in ispc){
-    nas <- which (is.na (spc@data$spc[i,]))
-    start <- c (0, which (diff (nas) > 1)) + 1
-    end <- c (start[-1] - 1, length (nas)) 
-    for (j in seq (along = start)) {
-      pts <- nas[start[j]] : nas[end[j]]
-      xneighbours <- c(-(1:neighbours) + nas[start[j]],
-                        (1:neighbours) + nas[end  [j]]) 
-      xneighbours <- xneighbours[xneighbours > 0]
-      xneighbours <- xneighbours[xneighbours < nwl(spc)]
-
-      if (length (xneighbours) == 0)
-        stop ("No data to interpolate from.")
-      else if (length (xneighbours) == 1)
-        spc@data$spc[i, pts] <- spc@data$spc [i, xneighbours]
-      else
-        spc@data$spc[i, pts] <- approx (x = spc@wavelength  [xneighbours],
-                                        y = spc@data$spc [i, xneighbours],
-                                        xout = spc@wavelength  [pts],
-                                        method = "linear",
-                                        rule = 2)$y
-      
-    }
-  } 
-
-  spc
-} 
-
