@@ -240,12 +240,6 @@ spikes.NA.linapprox <- function (spc, neighbours = 1, ...){
       
     }
   } 
-  spc@log <- logentry (spc,
-                       long = list (
-                         "neighbours" = neighbours
-                         ),              
-                       ...            # name and user?
-                       );
-  
   return (spc) 
 } 
+
