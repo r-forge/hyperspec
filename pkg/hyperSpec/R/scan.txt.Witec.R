@@ -12,8 +12,7 @@
 ##' @param ...,quiet handed to \code{\link[base]{scan}}
 ##' @param nwl number of wavelengths, if \code{NULL}, \code{readLines} is used to determine
 ##' \code{nwl} automatically.
-##' @param remove.zerospc WiTEC Control saves spectra consisting of zeros only if e.g. a map was
-##' aborted. The default is to remove these spectra.
+##' @param remove.zerospc is deprecated and will be removed soon. Use \code{\link{hy.setOptions} (file.remove.emptyspc = TRUE)} instead.
 ##' @return a hyperSpec object
 ##' @author Claudia Beleites
 ##' @seealso \code{vignette ("fileio")} for more information on file import and
