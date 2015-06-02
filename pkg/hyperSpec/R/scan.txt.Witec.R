@@ -70,7 +70,7 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
 
   ## fix: Witec/Andor may have final comma without values -> last line is NA only
   ## => delete last row if this happens for a map
-  if (!is.null (points.per.line) & !is.null (lines.per.image) & all (is.na (txt [nrow (txt), ])))
+  if (all (is.na (txt [nrow (txt), ])))
     txt <- txt [- nrow (txt), ]
 
   spc <- new ("hyperSpec", wavelength = txt [1, ], spc = txt [-1, ])
