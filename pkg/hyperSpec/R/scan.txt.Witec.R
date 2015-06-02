@@ -53,6 +53,12 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
                             remove.zerospc = TRUE,
                             ...){
 
+    if (!missing (remove.zerospc))
+        .Deprecated (new = "hy.setOptions (file.remove.emptyspc = TRUE)", 
+                     package = "hyperSpec",
+                     old = "remove.zerospc"
+                     )
+        
   if (is.null (nwl)){
     txt <- readLines (file)
     nwl <- length (txt)
