@@ -36,7 +36,7 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
   if (!is.null (points.per.line))
     spc@data$x <- rep (seq_len (points.per.line), lines.per.image)
 
-  if (!is.null (points.per.line))
+  if (!is.null (lines.per.image))
     spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
 
   ## consistent file import behaviour across import functions
@@ -73,7 +73,7 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
   if (!is.null (points.per.line))
     spc@data$x <- rep (seq_len (points.per.line), lines.per.image)
 
-  if (!is.null (points.per.line))
+  if (!is.null (lines.per.image))
     spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
 
   ## consistent file import behaviour across import functions
