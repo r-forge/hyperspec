@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+TEL;TYPE=WORK,VOICE;X-EVOLUTION-UI-SLOT=1:+49 (1 51) 50 01 29 31
+ROLE:Chemist
+FN:Dr. Claudia Beleites
+N:Beleites;Claudia;;Dr.;
+ADR;TYPE=WORK:;;Am Eichberg 9;Bad Nauheim;;61231;Germany
+LABEL;TYPE=WORK:chemometrische Beratung\nAm Eichberg 9\n61231 Bad Nauheim\n\nGermany
+ORG:Claudia Beleites chemometrische Beratung;;
+EMAIL;TYPE=WORK;X-EVOLUTION-UI-SLOT=1:chemometrie@beleites.de
+X-SKYPE;TYPE=HOME;X-EVOLUTION-UI-SLOT=1:chemometrie.beleites
+END:VCARD
