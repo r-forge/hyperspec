@@ -307,7 +307,7 @@ roxy: clean DESCRIPTION pkg/hyperSpec/R/*.R
 build: DESCRIPTION $(SRC) vignettes $(RNW) $(MAN) data roxy install
 	rm -f hyperSpec_*.tar.gz
 	R CMD build pkg/hyperSpec --compact-vignettes=both 
-	gunzip hyperSpec_*.tar.gz
+	gzip -d hyperSpec_*.tar.gz
 	tar -xvf hyperSpec_*.tar 
 	rm -f hyperSpec/vignettes/*.aux 
 	rm -f hyperSpec/vignettes/*.log 
