@@ -23,8 +23,8 @@ read.ini <- function (con = stop ("Connection con needed.")){
   sections <- grep ("[[].*[]]", Lines)
   
   content <- Lines [- sections]
-  ini <- as.list (gsub ("^.*=", "", content))
-  names (ini) <- .sanitize.name (gsub ("=.*$", "", content))
+  ini <- as.list (gsub ("^.*=[[:blank:]]*", "", content)) # removes blanks behind equal sign
+  names (ini) <- .sanitize.name (gsub ("[[:blank:]]*=.*$", "", content)) # see above: removes in front of equal sign
 
   # try converting to numeric
   tmp <- lapply (ini, function (x) strsplit (x, ",") [[1]])
