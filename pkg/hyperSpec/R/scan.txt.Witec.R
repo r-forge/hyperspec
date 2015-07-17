@@ -7,8 +7,7 @@
 ##' @param file filename or connection to ASCII file
 ##' @param points.per.line number of spectra in x direction of the map
 ##' @param lines.per.image number of spectra in y direction
-##' @param nwl number of wavelengths, if \code{NULL}, \code{readLines} is used to determine
-##' \code{nwl} automatically.
+##' @param nwl is deprecated and will be removed soon. Number of wavelengths is calculated automatically.
 ##' @param remove.zerospc is deprecated and will be removed soon. Use \code{\link{hy.setOptions} (file.remove.emptyspc = TRUE)} instead.
 ##' @param type type of spectra: \code{single} for single spectra (including time series), \code{map} for imaging data.
 ##' @param hdr.label WITec Project exports the spectra names (contain information of map position or number of spectra) within the \code{file}.
@@ -23,7 +22,7 @@
 scan.txt.Witec <- function (file = stop ("filename or connection needed"),
                             points.per.line = NULL,
                             lines.per.image = NULL,
-                            nwl = 1024,
+                            nwl = NULL,
                             remove.zerospc = TRUE,
                             type = c ("single", "map"),
                             hdr.label = FALSE,
@@ -34,13 +33,8 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
     if (!missing (remove.zerospc))
         warning ("Option 'remove.zerospc' is deprecated and will be removed soon. Use 'hy.setOptions (file.remove.emptyspc = TRUE)' instead.")
     
-    if (is.null (nwl)){
-        txt <- readLines (file)
-        nwl <- length (txt)
-        txt <- scan (text = txt, ...)
-    } else {
-        txt <- scan (file, ...)
-    }
+    if (!missing (nwl))
+        warning ("nwl is deprecated! The length of wavelength axis is calculated automatically.")
     
     ## check for valid data connection
     .check.con (file = file)    
