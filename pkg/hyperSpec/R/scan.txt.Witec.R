@@ -104,3 +104,20 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
     if (!missing (file) && !file.exists (file))
         stop ("Spectra file not found!")
 }
+
+###checking for valid input
+.check.valid <- function (type, hdr, points.per.line, lines.per.image){
+    ## check valid input
+    type <- match.arg (type, c ("single", "map"))
+    
+    if (type == "single" && !missing (points.per.line) && !is.null (points.per.line) && points.per.line != 1)#TODO: better to prove for values > 1?
+        warning ("points.per.line != 1 given for single spectrum")
+    
+    if (type == "single" && !missing (lines.per.image) && !is.null (lines.per.image) && lines.per.image != 1)#TODO: see above
+        warning ("lines.per.image != 1 are defined for single spectrum")
+    
+    if (type == "single" && !missing (hdr) && !is.null (hdr) && hdr ["SizeY", ] != 1)
+        warning ("header provides spatial information in y direction for single spectra")
+    
+    return (type)
+}
