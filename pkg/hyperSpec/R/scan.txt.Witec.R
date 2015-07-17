@@ -132,3 +132,28 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
     
     return (type)
 }
+
+### parsing header information
+.parse.hdr <- function (spc, hdr, hdr.label) {
+    if (!missing (hdr) && !missing (hdr.label)){
+        hdr <- strsplit (hdr, "\t")
+        
+        if (length (hdr) == 2){
+            spc@data$spcname <- hdr [[1]][-1]
+            labels (spc, ".wavelength") <- hdr [[2]] [1]
+            labels (spc, "spc") <- unique (hdr [[2]] [-1])
+        } else if (length (hdr) == 1 && hdr.label){
+            spc@data$spcname <- hdr [[1]][-1]
+        } else {
+            labels (spc, ".wavelength") <- hdr [[1]] [1]
+            labels (spc, "spc") <- unique (hdr [[1]] [-1])
+        }
+    }
+    
+    if (!missing (hdr) && missing (hdr.label)){
+        spc@data$spcname <- hdr ["GraphName", ]
+        spc@data$WIPname <- hdr ["FileName", ]
+        labels (spc, "spc") <- hdr ["DataUnit", ]
+    }
+    return (spc)
+}
