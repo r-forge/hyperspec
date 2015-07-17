@@ -14,7 +14,7 @@
 ##' @param hdr.units WITec Project exports the spectra units within the \code{file}.
 ##' @param ...,quiet handed to \code{\link[base]{scan}}
 ##' @return a hyperSpec object
-##' @author Claudia Beleites
+##' @author Claudia Beleites and Marcel Dahms
 ##' @seealso \code{vignette ("fileio")} for more information on file import and
 ##'
 ##' \code{\link{options}} for details on options.
@@ -105,6 +105,51 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
     
     ## consistent file import behaviour across import functions
     .fileio.optional (spc, filey)
+}
+
+##' @rdname scan.txt.Witec
+##' @param headerfile filename or connection to ASCII file with header information 
+##' @export
+scan.txt.Witec.Graph <- function (headerfile = stop ("filename or connection needed"),
+                                  filex = gsub ("Header", "X-Axis", headerfile),
+                                  filey = gsub ("Header", "Y-Axis", headerfile),
+                                  type = c ("single", "map"),
+                                  ...){
+    ## check for valid data connection
+    .check.con (headerfile, filex, filey)    
+    
+    ## processing headerfile
+    hdr <- read.ini (headerfile, skip = 1) 
+    hdr <- sapply (hdr, function (x) unlist (x, recursive = FALSE)) # returns a matrix with colnames and rownames for better adressing
+    
+    ## check valid input
+    type <- .check.valid (type = type, hdr = hdr,
+                          ...)
+    
+    ## read spectra and header
+    wl <- scan (filex)
+    nwl <- length (wl)
+    
+    txt <- scan (filey)
+    dim (txt) <- c (length (txt) / nwl, nwl) # cols: wl, rows: spc
+    
+    
+    spc <- new ("hyperSpec", wavelength = wl, spc = txt)
+    
+    ## cross validation of parameters and information provided by header file
+    if (nwl != hdr["SizeGraph", ])
+        stop (paste ("length of wavelength axis in file '", filex, 
+                     "' differs from 'SizeGraph' in header file '", headerfile, "'", sep =""))
+    
+    ## add header information
+    spc <- .parse.hdr (spc, hdr)
+    
+    ## add map information
+    if (type == "map")
+        spc <- .parse.xy (spc, hdr, ...)
+    
+    ## consistent file import behaviour across import functions
+    .fileio.optional (spc, filex)
 }
 
 ###checking file connection
