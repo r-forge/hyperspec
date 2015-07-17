@@ -24,11 +24,9 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
                             remove.zerospc = TRUE,
                             ...){
     
+    ## Deprecated parameters
     if (!missing (remove.zerospc))
-        .Deprecated (new = "hy.setOptions (file.remove.emptyspc = TRUE)", 
-                     package = "hyperSpec",
-                     old = "remove.zerospc"
-        )
+        warning ("Option 'remove.zerospc' is deprecated and will be removed soon. Use 'hy.setOptions (file.remove.emptyspc = TRUE)' instead.")
     
     if (is.null (nwl)){
         txt <- readLines (file)
