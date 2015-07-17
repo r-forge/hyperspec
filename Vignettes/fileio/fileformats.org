@@ -11,7 +11,8 @@
 | ASCII  | JCAMP-DX              | PerkinElmer       | Infrared         | jcamp-dx             | read.jdx             | import for subset of the JCAMP-DX standard             |
 | ASCII  | Witec ASCII           | Witec             | Raman            | scan.dat.Witec       | scan.txt.Witec       | Save ASCII X, Save ASCII Y                             |
 | ASCII  | ASCII wide transposed | Witec             | Raman            | scan.txt.Witec       | scan.txt.Witec       | Export Table                                           |
-| ASCII  | Andor Solis ASCII 	 | Andor 	     | Raman 		| scan.txt.Witec       | scan.txt.Witec       | 						       |
+| ASCII  | Witec Graph ASCII     | Witec             | Raman            | scan.txt.Witec.Graph | scan.txt.Witec       | Export Table in 3 separate files (Header, X-Axis, Y-Axis)|
+| ASCII  | Andor Solis ASCII 	 | Andor             | Raman            | scan.txt.Witec       | scan.txt.Witec       | 						                               |
 | binary | Matlab                | Matlab            |                  | R.matlab::readMat    | readMat              |                                                        |
 | binary | Matlab                | Cytospec          |                  | read.cytomat         | read.cytomat         |                                                        |
 | binary | hol                   | Kaiser            | Raman            | -                    | Kaiser               | via Matlab                                             |
