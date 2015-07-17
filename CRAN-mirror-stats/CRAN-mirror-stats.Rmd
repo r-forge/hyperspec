@@ -1,7 +1,7 @@
 ---
-title: "`hyperSpec` user statistics"
+title: "`hyperSpec` download statistics"
 author: "Claudia Beleites"
-date: "7. April 2015"
+date:  "`r format(Sys.time(), '%d.%m.%Y')`"
 output: html_document
 ---
 # RStudio CRAN mirror
@@ -18,6 +18,9 @@ start_date <- as.Date("2012-10-01")
 yesterday <- as.Date (Sys.Date()) - 1
 ```
 ```{r load}
+require ("dplyr")
+require ("magrittr")
+
 load ("logs.RData")
 ```
 ```{r download, echo=FALSE, eval = FALSE}
@@ -111,6 +114,7 @@ pop <- read.csv("sp.pop.totl_Indicator_en_csv_v2.csv", skip = 2, check.names = F
 pop <- pop [, c ("Country Name", "Country Code", "2013"), ]
 pop <- merge (pop, y = world@data [, c ("iso_a2", "iso_a3")], by.x = "Country Code", by.y = "iso_a3")
 ccount <- merge (ccount, pop, by.x = "country", by.y = "iso_a2", all.x = TRUE)
+ccount <- ccount [order (ccount$freq, decreasing = TRUE),]
 ccount$dl.per.1e5capita <- ccount$freq / ccount$`2013` * 1e5
 
 map <- fortify(world, region="iso_a2")
