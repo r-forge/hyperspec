@@ -7,10 +7,11 @@
 ##' @param file filename or connection to ASCII file
 ##' @param points.per.line number of spectra in x direction of the map
 ##' @param lines.per.image number of spectra in y direction
-##' @param ...,quiet handed to \code{\link[base]{scan}}
+##' @param type type of spectra: \code{single} for single spectra (including time series), \code{map} for imaging data.
 ##' @param nwl number of wavelengths, if \code{NULL}, \code{readLines} is used to determine
 ##' \code{nwl} automatically.
 ##' @param remove.zerospc is deprecated and will be removed soon. Use \code{\link{hy.setOptions} (file.remove.emptyspc = TRUE)} instead.
+##' @param ...,quiet handed to \code{\link[base]{scan}}
 ##' @return a hyperSpec object
 ##' @author Claudia Beleites
 ##' @seealso \code{vignette ("fileio")} for more information on file import and
@@ -22,6 +23,7 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
                             lines.per.image = NULL,
                             nwl = 1024,
                             remove.zerospc = TRUE,
+                            type = c ("single", "map"),
                             ...){
     
     ## Deprecated parameters
@@ -38,6 +40,9 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
     
     ## check for valid data connection
     .check.con (file = file)    
+    
+    ## check for valid input
+    type <- .check.valid (type, hdr = NULL, points.per.line, lines.per.image)
     
     dim (txt) <- c (length (txt) / nwl, nwl)
     
@@ -67,11 +72,17 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
                             filey = sub ("-x", "-y", filex),
                             points.per.line = NULL,
                             lines.per.image = NULL,
+                            type = c ("single", "map"),
                             ...,
                             quiet = hy.getOption ("debuglevel") < 1L){
     ## check valid data connection
     .check.con (filex = filex, filey = filey)
     
+    ## check valid input
+    type <- .check.valid (type = type, points.per.line = points.per.line, 
+                          lines.per.image = lines.per.image)
+    
+    ## read data
     wl <- scan (file = filex, ..., quiet = quiet)
     spc <- scan (file = filey, ..., quiet = quiet)
     
