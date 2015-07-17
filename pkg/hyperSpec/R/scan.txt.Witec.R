@@ -61,11 +61,11 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
 ##' @param filey filename intensity file
 ##' @export
 scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
-filey = sub ("-x", "-y", filex),
-points.per.line = NULL,
-lines.per.image = NULL,
-...,
-quiet = hy.getOption ("debuglevel") < 1L){
+                            filey = sub ("-x", "-y", filex),
+                            points.per.line = NULL,
+                            lines.per.image = NULL,
+                            ...,
+                            quiet = hy.getOption ("debuglevel") < 1L){
     wl <- scan (file = filex, ..., quiet = quiet)
     spc <- scan (file = filey, ..., quiet = quiet)
     
@@ -81,4 +81,20 @@ quiet = hy.getOption ("debuglevel") < 1L){
     
     ## consistent file import behaviour across import functions
     .fileio.optional (spc, filey)
+}
+
+###checking file connection
+.check.con <- function (headerfile, filex, filey, file){
+    ## check for valid data connection
+    if (!missing (headerfile) && !file.exists (headerfile))
+        stop ("Header file not found!")
+    
+    if (!missing (filex) && !file.exists (filex))
+        stop ("Wavelength axis file not found!")
+    
+    if (!missing (filey) && !file.exists (filey))
+        stop ("Intensity file not found!")
+    
+    if (!missing (file) && !file.exists (file))
+        stop ("Spectra file not found!")
 }
