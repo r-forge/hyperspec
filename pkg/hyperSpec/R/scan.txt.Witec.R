@@ -36,6 +36,9 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
         txt <- scan (file, ...)
     }
     
+    ## check for valid data connection
+    .check.con (file = file)    
+    
     dim (txt) <- c (length (txt) / nwl, nwl)
     
     ## fix: Witec/Andor may have final comma without values -> last line is NA only
@@ -66,6 +69,9 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
                             lines.per.image = NULL,
                             ...,
                             quiet = hy.getOption ("debuglevel") < 1L){
+    ## check valid data connection
+    .check.con (filex = filex, filey = filey)
+    
     wl <- scan (file = filex, ..., quiet = quiet)
     spc <- scan (file = filey, ..., quiet = quiet)
     
