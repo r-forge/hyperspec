@@ -4,10 +4,12 @@
 \alias{read.ini}
 \title{Read INI files}
 \usage{
-read.ini(con = stop("Connection con needed."))
+read.ini(con = stop("Connection con needed."), skip = NULL)
 }
 \arguments{
 \item{con}{connection or file name}
+
+\item{skip}{number of lines to skip before first \code{[section]} starts}
 }
 \value{
 a list with one element per section in the .ini file, each containing a list with elements
