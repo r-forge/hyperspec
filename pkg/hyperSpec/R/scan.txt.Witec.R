@@ -168,3 +168,41 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
     }
     return (spc)
 }
+
+### parsing map information
+.parse.xy <- function (spc, hdr, hdr.label, points.per.line, lines.per.image, ...){
+    
+    ## set points.per.line and lines.per.image, if at least one is set unequal NULL
+    if (xor (!missing (points.per.line) && !is.null (points.per.line), 
+             !missing (lines.per.image) && !is.null(lines.per.image))){
+        if ((missing (points.per.line) || is.null (points.per.line)) && 
+            !is.null (lines.per.image)) {
+            points.per.line <- nrow (spc) / lines.per.image
+        } else {
+            lines.per.image <- nrow (spc) / points.per.line
+        }
+        
+    } else if (!missing (points.per.line) && !missing (lines.per.image) && 
+               is.null (points.per.line) && is.null (points.per.line) && 
+               !missing (hdr.label) && hdr.label) {#TODO: only read, if not yet calculated?
+        x <- sub ("^.*\\(([[:digit:]]+)/[[:digit:]]+\\)$", "\\1",  hdr[1])
+        y <- sub ("^.*\\([[:digit:]]+/([[:digit:]]+)\\)$", "\\1", hdr[1])
+        points.per.line <- as.numeric (x) + 1
+        lines.per.image <- as.numeric (y) + 1
+    } else if ((missing (points.per.line) || missing (lines.per.image)) &&
+               !missing (hdr) && missing (hdr.label)){#TODO: only read, if not yet calculated?
+        points.per.line <- as.numeric (hdr ["SizeX", ])
+        lines.per.image <- as.numeric (hdr ["SizeY", ])
+    } else if (is.null (points.per.line) && is.null (lines.per.image)) {
+        warning ("no spatial information provided")
+        return (spc)
+    }
+    
+    if (points.per.line * lines.per.image == nrow (spc)){
+        spc@data$x <- rep (seq_len (points.per.line), lines.per.image)
+        spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
+    } else
+        warning ("number of spectra and number of points in map are not equal!")
+    
+    return (spc)
+}
