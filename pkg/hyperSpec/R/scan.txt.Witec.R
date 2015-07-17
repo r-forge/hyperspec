@@ -64,11 +64,9 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
     if (hdr.label | hdr.units)
         spc <- .parse.hdr (spc, hdr, hdr.label)
     
-    if (!is.null (points.per.line))
-        spc@data$x <- rep (seq_len (points.per.line), lines.per.image)
-    
-    if (!is.null (lines.per.image))
-        spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
+    ## add map information
+    if (type == "map")
+        spc <- .parse.xy (spc, hdr, hdr.label, points.per.line, lines.per.image)
     
     ## consistent file import behaviour across import functions
     .fileio.optional (spc, file)
@@ -101,11 +99,9 @@ scan.dat.Witec <- function (filex = stop ("filename or connection needed"),
     
     spc <- new ("hyperSpec", wavelength = wl, spc = t (spc))
     
-    if (!is.null (points.per.line))
-        spc@data$x <- rep (seq_len (points.per.line), lines.per.image)
-    
-    if (!is.null (lines.per.image))
-        spc@data$y <- rep (- seq_len (lines.per.image), each = points.per.line)
+    ## add map information
+    if (type == "map")
+        spc <- .parse.xy (spc = spc, points.per.line = points.per.line, lines.per.image = lines.per.image)
     
     ## consistent file import behaviour across import functions
     .fileio.optional (spc, filey)
