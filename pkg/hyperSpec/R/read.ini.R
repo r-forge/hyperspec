@@ -12,13 +12,17 @@
 ##' @export
 ##' @rdname read-ini
 ##' @param con connection or file name
+##' @param skip number of lines to skip before first \code{[section]} starts
 ##' @author C. Beleites
 ##' @return a list with one element per section in the .ini file, each containing a list with elements
 ##' for the key-value-pairs.
 ##' @keywords IO file
 
-read.ini <- function (con = stop ("Connection con needed.")){
-  Lines  <- readLines(con)
+read.ini <- function (con = stop ("Connection con needed."), skip = NULL){
+  Lines  <- readLines (con)
+  ## remove leading lines, if they are not a section
+  if (!is.null (skip))
+      Lines  <- Lines [-seq_len (skip)]
   
   sections <- grep ("[[].*[]]", Lines)
   
