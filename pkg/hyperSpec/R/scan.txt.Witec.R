@@ -7,10 +7,12 @@
 ##' @param file filename or connection to ASCII file
 ##' @param points.per.line number of spectra in x direction of the map
 ##' @param lines.per.image number of spectra in y direction
-##' @param type type of spectra: \code{single} for single spectra (including time series), \code{map} for imaging data.
 ##' @param nwl number of wavelengths, if \code{NULL}, \code{readLines} is used to determine
 ##' \code{nwl} automatically.
 ##' @param remove.zerospc is deprecated and will be removed soon. Use \code{\link{hy.setOptions} (file.remove.emptyspc = TRUE)} instead.
+##' @param type type of spectra: \code{single} for single spectra (including time series), \code{map} for imaging data.
+##' @param hdr.label WITec Project exports the spectra names (contain information of map position or number of spectra) within the \code{file}.
+##' @param hdr.units WITec Project exports the spectra units within the \code{file}.
 ##' @param ...,quiet handed to \code{\link[base]{scan}}
 ##' @return a hyperSpec object
 ##' @author Claudia Beleites
@@ -24,6 +26,8 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
                             nwl = 1024,
                             remove.zerospc = TRUE,
                             type = c ("single", "map"),
+                            hdr.label = FALSE,
+                            hdr.units = FALSE,
                             ...){
     
     ## Deprecated parameters
@@ -44,14 +48,27 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
     ## check for valid input
     type <- .check.valid (type, hdr = NULL, points.per.line, lines.per.image)
     
+    ## manage possible header lines by export function 'Table' in WITec Control/Project (version 4) 
+    skip <- hdr.label + hdr.units
+    
+    ## read spectra
+    tmp <- readLines (file) 
+    nwl <- length (tmp) - skip
+    txt <- scan (text = tmp, skip = skip)
+    
     dim (txt) <- c (length (txt) / nwl, nwl)
     
-    ## fix: Witec/Andor may have final comma without values -> last line is NA only
-    ## => delete last row if this happens for a map
+    hdr <- head (tmp, skip)
+    
+    ## fix: Witec/Andor may have final comma without values
     if (all (is.na (txt [nrow (txt), ])))
         txt <- txt [- nrow (txt), ]
     
     spc <- new ("hyperSpec", wavelength = txt [1, ], spc = txt [-1, ])
+    
+    ## add header information
+    if (hdr.label | hdr.units)
+        spc <- .parse.hdr (spc, hdr, hdr.label)
     
     if (!is.null (points.per.line))
         spc@data$x <- rep (seq_len (points.per.line), lines.per.image)
