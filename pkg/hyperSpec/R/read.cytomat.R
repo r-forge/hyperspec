@@ -14,7 +14,7 @@
 ##' @seealso \code{R.matlab::readMat}
 ##' @export
 ##' @keywords IO file
-read.cytomat <- function (file, keys2data = FALSE, blocks = TRUE, drop.empty = TRUE) {
+read.mat.Cytospec <- function (file, keys2data = FALSE, blocks = TRUE, drop.empty = TRUE) {
   if (! requireNamespace ("R.matlab"))
       stop ("package 'R.matlab' needed.")
   
@@ -57,7 +57,8 @@ read.cytomat <- function (file, keys2data = FALSE, blocks = TRUE, drop.empty = T
         result [[b]] <- .block2hyperSpec (spc, extra.data, wn, b, drop.empty)
   }
   
-  result
+  ## consistent file import behaviour across import functions
+  .fileio.optional (result, file)
 }
 
 .block2hyperSpec <- function (spc, df, wn, block, drop.empty) {
@@ -75,4 +76,11 @@ read.cytomat <- function (file, keys2data = FALSE, blocks = TRUE, drop.empty = T
   }
   
   new ("hyperSpec", spc = spc, wavelength = wn, data = df)
+}
+
+##' @export 
+##' @rdname read.mat.Cytospec
+read.cytomat <- function (...){
+  warning("read.cytomat has been renamed and is now deprecated.\nPlease use read.mat.Cytospec instead.")
+  read.mat.Cytospec (...)
 }

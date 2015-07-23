@@ -14,7 +14,7 @@
 | ASCII  | Witec Graph ASCII     | Witec             | Raman            | scan.txt.Witec.Graph | scan.txt.Witec       | Export Table in 3 separate files (Header, X-Axis, Y-Axis)|
 | ASCII  | Andor Solis ASCII 	 | Andor             | Raman            | scan.txt.Witec       | scan.txt.Witec       | 						                               |
 | binary | Matlab                | Matlab            |                  | R.matlab::readMat    | readMat              |                                                        |
-| binary | Matlab                | Cytospec          |                  | read.cytomat         | read.cytomat         |                                                        |
+| binary | Matlab                | Cytospec          |                  | read.mat.Cytospec         | read.mat.Cytospec         |                                                        |
 | binary | hol                   | Kaiser            | Raman            | -                    | Kaiser               | via Matlab                                             |
 | binary | ENVI                  |                   |                  | read.ENVI            | read.ENVI            |                                                        |
 | binary | ENVI                  | Bruker            | Infrared Imaging | read.ENVI            | read.ENVI.Bruker     |                                                        |

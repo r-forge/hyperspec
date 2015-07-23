@@ -426,7 +426,7 @@ However, it may be convenient to transform the saved data according to how it is
 The functions \Rfunction{as.long.df} and \Rfunction{as.wide.df} may prove useful for reshaping the
 data.
 \subsubsection{Import of Matlab files written by Cytospec}
-\label{sec:read.cytomat}
+\label{sec:read.mat.Cytospec}
 \index{Cytospec}\index{Cytospec!Matlab}\index{Matlab!Cytospec}
 
 A custom import function for .mat files written by \href{www.cytospec.com}{Cytospec} is available.
@@ -435,8 +435,8 @@ Note that Cytospec files can contain multiple versions of the data, the so-calle
 to be read can be specified with the \Rfunarg{block} argument. \Rcode{TRUE} will read all blocks into
 a list:
 
-<<read.cytomat>>=
-read.cytomat ("mat.cytospec/cytospec.mat", blocks = TRUE)
+<<read.mat.Cytospec>>=
+read.mat.Cytospec ("mat.cytospec/cytospec.mat", blocks = TRUE)
 @ 
 
 \subsection{ENVI Files}
