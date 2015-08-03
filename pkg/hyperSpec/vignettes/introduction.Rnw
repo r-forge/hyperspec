@@ -1268,6 +1268,22 @@ factors <- 1 / apply (chondro [, , 1600 ~ 1700], 1, mean)
 chondro <- sweep (chondro, 1, factors, "*")
 @
 
+For the special case of area normalization using the \code{mean} spectra, the factors can be more conveniently calculated by
+<<norm-rowmeans>>=
+factors <- 1 / rowMeans (chondro [, , 1600 ~ 1700])
+@
+
+and instead of \code{sweep} the arithmetic operators (here \code{*}) can be used directly with the normalization factor: 
+
+<<norm>>=
+chondro <- chondro * factors
+@
+
+Put together, this results in: 
+<<areanorm-shortcut>>=
+chondro <- chondro / rowMeans (chondro [, , 1600 ~ 1700])
+@
+
 For minimum-maximum-normalization, first do an offset- or baseline correction, then normalize using
 \Rfunction{max}.
 
