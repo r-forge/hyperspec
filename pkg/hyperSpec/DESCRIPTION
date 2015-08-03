@@ -2,8 +2,8 @@ Package: hyperSpec
 Type: Package
 Title: Work with Hyperspectral Data, i.e. Spectra + Meta Information (Spatial,
     Time, Concentration, ...)
-Version: 0.98-20150717
-Date: 2015-07-17
+Version: 0.98-20150803
+Date: 2015-08-03
 Author: Claudia Beleites
 Maintainer: Claudia Beleites <chemometrie@beleites.de>
 Description: Comfortable ways to work with hyperspectral data sets.
@@ -108,6 +108,7 @@ Collate:
     'read.ini.R'
     'read.jdx.R'
     'read.jdx.Shimadzu.R'
+    'read.mat.Witec.R'
     'read.spc.Kaiser.R'
     'read.spc.R'
     'read.txt.Horiba.R'
@@ -117,8 +118,9 @@ Collate:
     'replace.R'
     'sample.R'
     'scale.R'
-    'scan.txt.Renishaw.R'
     'scan.txt.Witec.R'
+    'scan.asc.Andor.R'
+    'scan.txt.Renishaw.R'
     'seq.R'
     'show.R'
     'spc.NA.approx.R'

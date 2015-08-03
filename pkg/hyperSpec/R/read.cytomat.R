@@ -10,7 +10,7 @@
 ##' @return hyperSpec object if the file contains a single spectra block, otherwise a list with one
 ##' hyperSpec object for each block.
 ##' @author C. Beleites
-##' @rdname read-cytomat
+##' @rdname read.mat.Cytospec
 ##' @seealso \code{R.matlab::readMat}
 ##' @export
 ##' @keywords IO file
@@ -58,7 +58,10 @@ read.mat.Cytospec <- function (file, keys2data = FALSE, blocks = TRUE, drop.empt
   }
   
   ## consistent file import behaviour across import functions
-  .fileio.optional (result, file)
+  if (is.list (result))
+    lapply (result, .fileio.optional, file = file)
+  else
+    .fileio.optional (result, file)
 }
 
 .block2hyperSpec <- function (spc, df, wn, block, drop.empty) {
