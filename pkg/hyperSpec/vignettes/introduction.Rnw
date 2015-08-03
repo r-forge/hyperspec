@@ -1268,12 +1268,12 @@ factors <- 1 / apply (chondro [, , 1600 ~ 1700], 1, mean)
 chondro <- sweep (chondro, 1, factors, "*")
 @
 
-For the special case of area normalization using the \code{mean} spectra, the factors can be more conveniently calculated by
+For the special case of area normalization using the \Rcode{mean} spectra, the factors can be more conveniently calculated by
 <<norm-rowmeans>>=
 factors <- 1 / rowMeans (chondro [, , 1600 ~ 1700])
 @
 
-and instead of \code{sweep} the arithmetic operators (here \code{*}) can be used directly with the normalization factor: 
+and instead of \Rcode{sweep} the arithmetic operators (here \Rcode{*}) can be used directly with the normalization factor: 
 
 <<norm>>=
 chondro <- chondro * factors

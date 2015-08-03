@@ -92,8 +92,5 @@ setMethod ("rmmvnorm", signature (n = "numeric", mean = "matrix", sigma = "matri
 setMethod ("rmmvnorm", signature (n = "numeric", mean = "matrix", sigma = "array"),
            .rmmvnorm)
 
-
-
-
 ## produces matrices instead of hyperSpec objects. 
 ## mapply (rmvnorm, n = 1:3, mean = pcov$mean, MoreArgs= list (sigma = pcov$COV), SIMPLIFY = FALSE))
