@@ -2,7 +2,7 @@ Package: cbmisc
 Type: Package
 Title: Claudia's collection of miscellaneous functions
 Version: 1.0
-Date: 2013-04-24
+Date: 2015-08-03
 Author: C. Beleites
 Maintainer: C. Beleites <Claudia.Beleites@ipht-jena.de>
 Description: Function collection
