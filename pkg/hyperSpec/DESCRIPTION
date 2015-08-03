@@ -108,6 +108,7 @@ Collate:
     'read.ini.R'
     'read.jdx.R'
     'read.jdx.Shimadzu.R'
+    'read.mat.Witec.R'
     'read.spc.Kaiser.R'
     'read.spc.R'
     'read.txt.Horiba.R'

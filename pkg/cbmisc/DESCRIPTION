@@ -12,6 +12,7 @@ Suggests:
     MASS,
     pls
 Collate:
-    'lscb.R'
     'bibliography.R'
+    'lscb.R'
+    'make.R'
     'which.quantile.R'
