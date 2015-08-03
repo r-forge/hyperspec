@@ -5,6 +5,7 @@
 #' @param target Makefile target, use \code{make_geteasytargets} to get a list of possible targets.
 #' @param path path where makefile resides
 #' @param makefile the Makefile to be used
+#' @include make.R
 #' @export 
 #' @examples
 #' \dontrun{
