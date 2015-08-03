@@ -18,8 +18,6 @@ LazyLoad: yes
 LazyData: yes
 Depends:
     R (>= 2.15),
-    methods,
-    utils,
     lattice,
     grid,
     ggplot2 (>= 0.9.2)
@@ -40,6 +38,8 @@ Suggests:
     pls,
     mvtnorm
 Imports:
+    methods,
+    utils,
     latticeExtra,
     svUnit
 URL: http://hyperSpec.r-forge.r-project.org/
