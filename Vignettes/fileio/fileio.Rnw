@@ -272,7 +272,7 @@ Limited import of JCAMP-DX files v. 4.24 \cite{McDonald1988} is available in fun
 <<>>=
 read.jdx ("jcamp-dx/shimadzu.jdx", encoding = "latin1", keys.hdr2data=TRUE)
 read.jdx ("jcamp-dx/virgilio.jdx")
-@ %
+@ 
 
 The last file has a slight inconsistenty between its meta data and spectroscopic data, 
 causing a message.
@@ -857,11 +857,15 @@ if (any (dim (spc) != c (100, 2, 1024)) ||
 rm (spc)
 @  
 \subsection{Andor Solis}
+\label{sec:scan.asc.Andor}
 \index{Andor Solis!ASCII}
 \index{ASCII!Andor Solis}
 \index{Raman!Andor Solis!ASCII} 
 
-Andor Solis exports ASCII files that can be read with \Rfunction{scan.txt.Witec}, see below.
+Andor Solis exports ASCII files that can be read with \Rfunction{scan.asc.Andor}:
+<<>>=
+scan.asc.Andor("asc.Andor/ASCII-Andor-Solis.asc")
+@
 
 \subsection{Witec}
 \label{sec:scan.txt.Witec}
