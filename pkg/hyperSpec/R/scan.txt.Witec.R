@@ -131,11 +131,10 @@ scan.txt.Witec.Graph <- function (headerfile = stop ("filename or connection nee
     wl <- scan (filex, quiet = quiet)
     nwl <- length (wl)
     
-    dim (txt) <- c (length (txt) / nwl, nwl) # cols: wl, rows: spc
-    
     txt <- scan (filey, quiet = quiet)
+    dim (txt) <- c (nwl, length (txt) / nwl) 
     
-    spc <- new ("hyperSpec", wavelength = wl, spc = txt)
+    spc <- new ("hyperSpec", wavelength = wl, spc = t (txt))
     
     ## cross validation of parameters and information provided by header file
     if (nwl != hdr["SizeGraph", ])
