@@ -13,18 +13,27 @@ read.cytomat(...)
 \arguments{
 \item{file}{The complete file name (or a connection to) the .mat file.}
 
-\item{keys2data}{specifies which elements of the \code{Info} should be transferred into the extra data}
+\item{keys2data}{specifies which elements of the \code{Info} should be
+transferred into the extra data}
 
 \item{blocks}{which blocks should be read? \code{TRUE} reads all blocks.}
 
-\item{drop.empty}{should empty spectra (all elements are \code{NA}) be dropped?}
+\item{drop.empty}{should empty spectra (all elements are \code{NA}) be
+dropped?}
+
+\item{...}{\code{read.cytomat} for now hands all arguments to
+\code{read.mat.Cytospec} for backwards compatibility.}
 }
 \value{
-hyperSpec object if the file contains a single spectra block, otherwise a list with one
-hyperSpec object for each block.
+hyperSpec object if the file contains a single spectra block,
+  otherwise a list with one hyperSpec object for each block.
 }
 \description{
 These functions allow to import .mat (Matlab V5) files written by Cytospec.
+}
+\details{
+\code{read.cytomat} has been renamed to \code{read.mat.Cytospec} and is now
+deprecated. Use \code{read.mat.Cytospec} instead.
 }
 \note{
 This function is an ad-hoc implementation and subject to changes.
