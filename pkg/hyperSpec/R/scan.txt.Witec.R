@@ -27,7 +27,8 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
                             type = c ("single", "map"),
                             hdr.label = FALSE,
                             hdr.units = FALSE,
-                            ...){
+                            ...,
+                            quiet = TRUE){
     
     ## Deprecated parameters
     if (!missing (remove.zerospc))
@@ -48,7 +49,7 @@ scan.txt.Witec <- function (file = stop ("filename or connection needed"),
     ## read spectra
     tmp <- readLines (file) 
     nwl <- length (tmp) - skip
-    txt <- scan (text = tmp, skip = skip)
+    txt <- scan (text = tmp, skip = skip, quiet = quiet, ...)
     
     dim (txt) <- c (length (txt) / nwl, nwl)
     
@@ -114,7 +115,7 @@ scan.txt.Witec.Graph <- function (headerfile = stop ("filename or connection nee
                                   filex = gsub ("Header", "X-Axis", headerfile),
                                   filey = gsub ("Header", "Y-Axis", headerfile),
                                   type = c ("single", "map"),
-                                  ...){
+                                  ..., quiet = TRUE){
     ## check for valid data connection
     .check.con (headerfile, filex, filey)    
     
@@ -127,12 +128,12 @@ scan.txt.Witec.Graph <- function (headerfile = stop ("filename or connection nee
                           ...)
     
     ## read spectra and header
-    wl <- scan (filex)
+    wl <- scan (filex, quiet = quiet)
     nwl <- length (wl)
     
-    txt <- scan (filey)
     dim (txt) <- c (length (txt) / nwl, nwl) # cols: wl, rows: spc
     
+    txt <- scan (filey, quiet = quiet)
     
     spc <- new ("hyperSpec", wavelength = wl, spc = txt)
     
