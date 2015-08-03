@@ -9,7 +9,7 @@
 scan.txt.Witec(file = stop("filename or connection needed"),
   points.per.line = NULL, lines.per.image = NULL, nwl = NULL,
   remove.zerospc = TRUE, type = c("single", "map"), hdr.label = FALSE,
-  hdr.units = FALSE, ...)
+  hdr.units = FALSE, ..., quiet = TRUE)
 
 scan.dat.Witec(filex = stop("filename or connection needed"),
   filey = sub("-x", "-y", filex), points.per.line = NULL,
@@ -18,7 +18,7 @@ scan.dat.Witec(filex = stop("filename or connection needed"),
 
 scan.txt.Witec.Graph(headerfile = stop("filename or connection needed"),
   filex = gsub("Header", "X-Axis", headerfile), filey = gsub("Header",
-  "Y-Axis", headerfile), type = c("single", "map"), ...)
+  "Y-Axis", headerfile), type = c("single", "map"), ..., quiet = TRUE)
 }
 \arguments{
 \item{file}{filename or connection to ASCII file}
