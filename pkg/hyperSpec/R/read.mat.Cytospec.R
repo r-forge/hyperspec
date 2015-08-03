@@ -9,8 +9,6 @@
 ##' @param keys2data specifies which elements of the \code{Info} should be
 ##'   transferred into the extra data
 ##' @param blocks which blocks should be read? \code{TRUE} reads all blocks.
-##' @param drop.empty should empty spectra (all elements are \code{NA}) be
-##'   dropped?
 ##' @param ... \code{read.cytomat} for now hands all arguments to
 ##'   \code{read.mat.Cytospec} for backwards compatibility.
 ##' @note This function is an ad-hoc implementation and subject to changes.
@@ -21,7 +19,7 @@
 ##' @seealso \code{R.matlab::readMat}
 ##' @export
 ##' @keywords IO file
-read.mat.Cytospec <- function (file, keys2data = FALSE, blocks = TRUE, drop.empty = TRUE) {
+read.mat.Cytospec <- function (file, keys2data = FALSE, blocks = TRUE) {
   if (! requireNamespace ("R.matlab"))
       stop ("package 'R.matlab' needed.")
   
@@ -41,7 +39,7 @@ read.mat.Cytospec <- function (file, keys2data = FALSE, blocks = TRUE, drop.empt
   x <- rep (1 : d [1], d [2])
   y <- rep (1 : d [2], each = d [1])
   
-  extra.data <- data.frame (x = x, y = y, file = file)
+  extra.data <- data.frame (x = x, y = y)
   
   nblocks <- d [4]
   if (is.na (nblocks)) { # only one block => 3d array
@@ -57,21 +55,20 @@ read.mat.Cytospec <- function (file, keys2data = FALSE, blocks = TRUE, drop.empt
   }
 
   if (length (blocks) == 1L) {
-    result <- .block2hyperSpec (spc, extra.data, wn, blocks, drop.empty)
+    result <- .block2hyperSpec (spc, extra.data, wn, blocks, file)
   } else {
     result <- list ()
     for (b in blocks) 
-        result [[b]] <- .block2hyperSpec (spc, extra.data, wn, b, drop.empty)
+        result [[b]] <- .block2hyperSpec (spc, extra.data, wn, b, file)
   }
   
   ## consistent file import behaviour across import functions
-  if (is.list (result))
-    lapply (result, .fileio.optional, file = file)
-  else
-    .fileio.optional (result, file)
+  ## .fileio.optional is called inside .block2hyperSpec
+  
+  result  
 }
 
-.block2hyperSpec <- function (spc, df, wn, block, drop.empty) {
+.block2hyperSpec <- function (spc, df, wn, block, file) {
   spc <- spc [,,, block]
   
   d <- dim (spc)
@@ -79,13 +76,9 @@ read.mat.Cytospec <- function (file, keys2data = FALSE, blocks = TRUE, drop.empt
 
   df$block <- block
   
-  if (drop.empty) {
-    empty.spc <- rowSums (is.na (spc)) == ncol (spc)
-    spc <- spc [!empty.spc,, drop = FALSE]
-    df <- df [!empty.spc,]
-  }
-  
-  new ("hyperSpec", spc = spc, wavelength = wn, data = df)
+  ## consistent file import behaviour across import functions
+  .fileio.optional (new ("hyperSpec", spc = spc, wavelength = wn, data = df),
+                    filename = file)
 }
 
 ##' @export 

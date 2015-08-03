@@ -429,16 +429,29 @@ data.
 \label{sec:read.mat.Cytospec}
 \index{Cytospec}\index{Cytospec!Matlab}\index{Matlab!Cytospec}
 
-A custom import function for .mat files written by \href{www.cytospec.com}{Cytospec} is available.
+A custom import function for .mat files written by \href{www.cytospec.com}{Cytospec} is available:
 
 Note that Cytospec files can contain multiple versions of the data, the so-called blocks. The block
 to be read can be specified with the \Rfunarg{block} argument. \Rcode{TRUE} will read all blocks into
 a list:
 
-<<read.mat.Cytospec>>=
-read.mat.Cytospec ("mat.cytospec/cytospec.mat", blocks = 1)
+<<read.mat.Cytospec-blocks>>=
 read.mat.Cytospec ("mat.cytospec/cytospec.mat", blocks = TRUE)
 @ 
+
+otherwise, select a block:
+<<read.mat.Cytospec>>=
+read.mat.Cytospec ("mat.cytospec/cytospec.mat", blocks = 1)
+@
+
+
+
+\warnbox{\Rcode{read.cytomat} is \textbf{deprecated}.}{%
+\Rcode{read.cytomat} has been renamed to  \Rcode{read.mat.Cytospec} to be more 
+consistent with the general naming scheme of the file import functions. 
+
+Please use \Rcode{read.mat.Cytospec} instead.
+}
 
 \subsection{ENVI Files}
 \label{sec:read.ENVI}
