@@ -10,7 +10,8 @@ License: GPL-3
 Suggests:
     hyperSpec,
     MASS,
-    pls
+    pls,
+    testthat
 Collate:
     'bibliography.R'
     'lscb.R'
