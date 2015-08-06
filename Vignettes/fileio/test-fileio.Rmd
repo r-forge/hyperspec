@@ -1,0 +1,28 @@
+---
+title: "fileio tests"
+author: "Claudia Beleites"
+date: "5. August 2015"
+output: html_document
+---
+
+```{r, message=FALSE}
+library (hyperSpec)
+library (testthat)
+library (digest)
+```
+
+```{r eval=FALSE, echo = FALSE}
+reporter <- SummaryReporter$new ()
+lister <- ListReporter$new()
+```
+
+```{r}
+test_dir(".")
+```
+
+
+```{r, eval = FALSE, echo = FALSE}
+testthat:::end_context ()
+testthat:::testthat_results(lister$results)
+testthat:::testthat_results(reporter$results)
+```
