@@ -59,6 +59,20 @@ if (!require ("testthat") || !require ("digest")){
   test_dir <- test_file
 }
 @
+<<testthat-setup, echo = FALSE, results=hide>>=
+reporter <- SummaryReporter$new ()
+reporter$start_reporter()
+tests <- character (0L)
+test_file_keep <- function (file, reporter, tests) {
+  result <- capture.output(test_file(file, reporter = reporter, start_end_reporter = FALSE))
+  result <- paste (result, collapse = "\n")
+  names (result) <- file
+  
+  cat (result)
+  c (tests, result)
+}
+@
+
 \section{Introduction}
 This document describes how spectra can be imported into \chy objects. Some possibilities to export
 \chy objects as files are mentioned, too.
@@ -482,6 +496,11 @@ spc
 Please see also the manufacturer specific notes in section~\ref{sec:manuf-spec-import},
 p.~\pageref{sec:manuf-spec-import}.
 
+\paragraph{Unit Tests}
+<<test-read.ENVI, echo=FALSE>>=
+tests <- test_file_keep ("test-read.ENVI.R", reporter, tests)
+@
+
 \subsubsection{ENVI Export}
 \label{sec:envi-export}
 Use package \Rpackage{caTools} or \Rpackage{rgdal} with GDAL for writing ENVI files.
@@ -561,8 +580,9 @@ barbiturates
 barbiturates [[1:10, , 25 ~ 30]]
 @
 
-<<spc-tests>>=
-test_file("test-read.spc.R", reporter = "minimal")
+\paragraph{Unit Tests}
+<<spc-tests, echo = FALSE>>=
+tests <- test_file_keep ("test-read.spc.R", reporter, tests)
 @
 
 \paragraph{Deriving manufacturer specific import filters.}
@@ -1133,8 +1153,20 @@ res <- apply (fileformats [i,][fileformats$Spectroscopy [i] != "",], 1,
 \end{footnotesize}
 
 \section{Unit Test Results}
-<<unittest, echo = FALSE>>=
-test_dir(".")
+<<catch-missing-tests, echo=FALSE>>=
+test_files <- find_test_scripts(".")
+not_done <- setdiff (basename (test_files), names (tests))
+
+if (length (not_done) > 0L)
+  warning ("found unexecuted test files: ", not_done)
+
+for (f in not_done)
+  tests <- test_file_keep (f, reporter, tests)
+@
+
+<<unittest-summary, echo = FALSE>>=
+cat (tests, sep = "\n")
+reporter$end_reporter()
 @
 
 \begin{footnotesize}
