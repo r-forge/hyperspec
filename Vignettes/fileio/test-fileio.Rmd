@@ -1,28 +1,53 @@
 ---
-title: "fileio tests"
+title: "fileio Unit Tests"
 author: "Claudia Beleites"
-date: "5. August 2015"
+date: "`r Sys.Date()`"
 output: html_document
 ---
+Unit tests on file import (and export) depend on the example files available as
+[fileio.zip](fileio.zip). They are thus run external of the package building 
+process.
 
-```{r, message=FALSE}
+Here are the current results:
+```{r, message=FALSE, echo=FALSE}
 library (hyperSpec)
 library (testthat)
 library (digest)
-```
 
-```{r eval=FALSE, echo = FALSE}
-reporter <- SummaryReporter$new ()
-lister <- ListReporter$new()
-```
-
-```{r}
 test_dir(".")
 ```
 
+```{r, echo = FALSE, eval=FALSE}
+reporter <- SummaryReporter$new ()
+reporter$start_reporter()
+tests <- character (0L)
+test_file_keep <- function (file, reporter, tests) {
+  result <- capture.output(test_file(file, reporter = reporter, start_end_reporter = FALSE))
+  result <- paste (result, collapse = "\n")
+  names (result) <- file
+  
+  cat (result)
+  c (tests, result)
+}
+```
 
-```{r, eval = FALSE, echo = FALSE}
-testthat:::end_context ()
-testthat:::testthat_results(lister$results)
-testthat:::testthat_results(reporter$results)
+```{r, echo = FALSE, eval=FALSE}
+tests <- test_file_keep ("test-read.spc.R", reporter, tests)
+tests <- test_file_keep ("test-read.ENVI.R", reporter, tests)
+```
+
+```{r not-yet-tested, echo = FALSE, eval=FALSE}
+test_files <- find_test_scripts(".")
+not_done <- setdiff (basename (test_files), names (tests))
+
+if (length (not_done) > 0L)
+  warning ("found unexecuted test files: ", not_done)
+
+for (f in not_done)
+  tests <- test_file_keep (f, reporter, tests)
+```
+
+```{r, echo = FALSE, eval=FALSE}
+cat (tests, sep = "\n")
+reporter$end_reporter()
 ```
